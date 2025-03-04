@@ -1,0 +1,193 @@
+import { useEffect, useState } from 'react';
+import { GetSystemRequest } from '../../apis/system';
+import { Col, Form, Progress, Row, Statistic, Tag } from 'antd';
+import { System } from '../../types/system';
+import { ColorHealth } from '../../constants/color';
+import { Content } from 'antd/es/layout/layout';
+import { isMobile } from '../../utils/deviceDetection';
+import { PageTitle } from '../../components/pageTitle';
+import intl from 'react-intl-universal';
+import { Card, Chart } from '../../components';
+
+const SystemPage = () => {
+  const [data, setData] = useState<System>();
+
+  useEffect(() => {
+    GetSystemRequest().then(setData);
+  }, []);
+
+  const renderUsedChart = (value: number) => {
+    if (data) {
+      const option = {
+        series: [
+          {
+            name: 'Pressure',
+            type: 'gauge',
+            progress: {
+              show: true
+            },
+            pointer: {
+              show: false //是否显示指针
+            },
+            itemStyle: {
+              color: ColorHealth
+            },
+            detail: {
+              fontSize: 28,
+              valueAnimation: true,
+              offsetCenter: [0, 0],
+              formatter: '{value}%'
+            },
+            axisTick: false,
+            axisLabel: false,
+            splitLine: {
+              show: false
+            },
+            data: [
+              {
+                value
+              }
+            ],
+            label: {
+              show: true
+            }
+          }
+        ]
+      };
+      //@ts-ignore
+      return <Chart options={option} style={{ height: '180px' }} />;
+    }
+  };
+
+  const renderCores = () => {
+    if (data) {
+      return data.server.cpu.cpus.map((item, index) => {
+        return (
+          <Form.Item
+            label={`${intl.get('CPU_CORE')}${index}`}
+            labelAlign={'left'}
+            labelCol={{ span: 12 }}
+            style={{ marginBottom: '2px' }}
+            key={item}
+          >
+            <Progress
+              status={'normal'}
+              strokeColor={ColorHealth}
+              percent={Number(item.toFixed(0))}
+              size={'small'}
+              style={{ margin: '2px', width: '50%' }}
+            />
+          </Form.Item>
+        );
+      });
+    }
+    return null;
+  };
+
+  return (
+    <Content>
+      <PageTitle items={[{ title: intl.get('MENU_SYSTEM_STATUS') }]} />
+      <Row justify={'space-between'} gutter={isMobile ? [0, 10] : [10, 10]} align='stretch'>
+        <Col span={isMobile ? 24 : 12}>
+          <Card title={intl.get('SYSTEM_INFO')} size={'small'}>
+            <Form.Item
+              label={intl.get('OEPRATING_SYSTEM')}
+              labelAlign={'left'}
+              labelCol={{ span: 12 }}
+              style={{ marginBottom: '4px' }}
+            >
+              {data ? data.server.os.goos : ''}
+            </Form.Item>
+            <Form.Item
+              label={intl.get('STATUS')}
+              labelAlign={'left'}
+              labelCol={{ span: 12 }}
+              style={{ marginBottom: '4px' }}
+            >
+              <Tag color={ColorHealth}>{intl.get('RUNNING')}</Tag>
+            </Form.Item>
+            <Form.Item
+              label={intl.get('MQTT_ADDRESS')}
+              labelAlign={'left'}
+              labelCol={{ span: 12 }}
+              style={{ marginBottom: '4px' }}
+            >
+              {data ? data.mqtt.address : ''}
+            </Form.Item>
+            <Form.Item
+              label={intl.get('MQTT_ACCOUNT')}
+              labelAlign={'left'}
+              labelCol={{ span: 12 }}
+              style={{ marginBottom: '4px' }}
+            >
+              {data ? data.mqtt.username : ''}
+            </Form.Item>
+            <Form.Item
+              label={intl.get('MQTT_PASSWORD')}
+              labelAlign={'left'}
+              labelCol={{ span: 12 }}
+              style={{ marginBottom: '4px' }}
+            >
+              {data ? data.mqtt.password : ''}
+            </Form.Item>
+          </Card>
+        </Col>
+        <Col
+          span={isMobile ? 24 : 12}
+          style={{ paddingLeft: isMobile ? 0 : '4px', marginBottom: isMobile ? 8 : 0 }}
+        >
+          <Card title={intl.get('HARD_DISK_STATUS')} size={'small'}>
+            <Row justify={'start'}>
+              <Col span={6}>
+                <Statistic title={intl.get('TOTAL_AMOUNT_MB')} value={data?.server.disk.totalMB} />
+                <Statistic title={intl.get('TOTAL_AMOUNT_GB')} value={data?.server.disk.totalGB} />
+              </Col>
+              <Col span={6}>
+                <Statistic title={intl.get('USED_AMOUNT_MB')} value={data?.server.disk.usedMB} />
+                <Statistic title={intl.get('USED_AMOUNT_GB')} value={data?.server.disk.usedGB} />
+              </Col>
+              <Col span={12}>{renderUsedChart(data ? data.server.disk.usedPercent : 0)}</Col>
+            </Row>
+          </Card>
+        </Col>
+        <Col span={isMobile ? 24 : 12}>
+          <Card title={intl.get('CPU_RUNNING_STATUS')} size={'small'}>
+            <Form.Item
+              label={intl.get('NUMBER_OF_CPU_CORES')}
+              labelAlign={'left'}
+              labelCol={{ span: 12 }}
+              style={{ marginBottom: '2px' }}
+            >
+              {data ? data.server.cpu.cores : ''}
+            </Form.Item>
+            <Form.Item
+              label={intl.get('NUMBER_OF_CPUS')}
+              labelAlign={'left'}
+              labelCol={{ span: 12 }}
+              style={{ marginBottom: '2px' }}
+            >
+              {data ? data.server.cpu.cpus.length : ''}
+            </Form.Item>
+            {renderCores()}
+          </Card>
+        </Col>
+        <Col
+          span={isMobile ? 24 : 12}
+          style={{ paddingLeft: isMobile ? 0 : '4px', marginBottom: isMobile ? 8 : 0 }}
+        >
+          <Card title={intl.get('MEMORY_STATUS')} size={'small'}>
+            <Row justify={'start'}>
+              <Col span={12}>
+                <Statistic title={intl.get('TOTAL_AMOUNT_MB')} value={data?.server.ram.totalMB} />
+                <Statistic title={intl.get('USED_AMOUNT_MB')} value={data?.server.ram.usedMB} />
+              </Col>
+              <Col span={12}>{renderUsedChart(data ? data.server.ram.usedPercent : 0)}</Col>
+            </Row>
+          </Card>
+        </Col>
+      </Row>
+    </Content>
+  );
+};
+
+export default SystemPage;

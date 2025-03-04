@@ -1,0 +1,28 @@
+.ant-tabs {
+  border-radius: 8px;
+  background-color: #fff;
+}
+.ant-tabs .ant-tabs-nav {
+  margin-bottom: 0 !important;
+  padding: 0 var(--space);
+}
+.ant-tabs .ant-tabs-nav-list .ant-tabs-tab {
+  padding: 13px 0;
+}
+.ant-tabs.ant-tabs-righted > .tabs-bar .ant-tabs-nav .ant-tabs-nav-wrap {
+  justify-content: flex-end;
+}
+.ant-tabs .ant-tabs-content-holder {
+  padding: var(--space);
+}
+.ant-tabs.ant-tabs-content-no-style > .ant-tabs-content-holder {
+  padding: 0;
+  background-color: var(--body-bg-color);
+}
+.ant-tabs.ant-tabs-content-no-style .ant-tabs {
+  border-radius: 0;
+}
+.ant-tabs.ant-tabs-content-no-style .ant-card {
+  border: 0;
+  border-radius: 0;
+}

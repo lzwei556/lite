@@ -1,0 +1,40 @@
+@import 'antd/dist/reset.css';
+:root {
+  --space: 16px;
+  --body-bg-color: rgb(240, 242, 245);
+}
+body {
+  color: rgba(0, 0, 0, 0.88);
+  background-color: var(--body-bg-color);
+}
+tbody.ant-table-tbody > tr.ant-table-row:hover > td {
+  background-color: #eee;
+}
+.ant-form fieldset {
+  margin-bottom: var(--space);
+  padding: 20px;
+  border: solid 1px #d9d9d9;
+}
+.ant-form fieldset legend {
+  width: initial;
+  border: initial;
+}
+.overview-statistic .ant-statistic {
+  max-width: 15em;
+  text-align: center;
+}
+.ant-statistic .ant-statistic-content-suffix {
+  font-size: 14px;
+}
+.ant-tree .ant-tree-switcher {
+  margin-inline-end: 0;
+}
+.ant-tree .ant-tree-node-content-wrapper {
+  padding-inline: 4px;
+}
+.ant-select.unselected .ant-select-prefix {
+  margin-inline-end: 0;
+}
+.corrosion-analysis-forecast .ant-descriptions .ant-descriptions-view {
+  border-radius: 0;
+}

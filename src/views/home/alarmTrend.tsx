@@ -1,0 +1,99 @@
+import * as React from 'react';
+import { Spin } from 'antd';
+import intl from 'react-intl-universal';
+import dayjs from '../../utils/dayjsUtils';
+import { GetAlertStatisticsRequest } from '../../apis/statistic';
+import { Card, Chart, getBarPieOption, getOptions } from '../../components';
+import { AlarmLevel, getColorByValue, getLabelByValue } from '../alarm';
+
+type Statistics = { timestamp: number; info: number; warn: number; critical: number };
+export const AlarmTrend = ({ title, id }: { id?: number; title: string }) => {
+  const [loading, setLoading] = React.useState(true);
+  const [countAlarm, setCountAlarm] = React.useState<Statistics[]>([]);
+
+  const hasValidData = (data: Statistics[]) => {
+    if (data.length === 0) return false;
+    if (
+      data.map(({ info }) => info).every((n) => n === 0) &&
+      data.map(({ warn }) => warn).every((n) => n === 0) &&
+      data.map(({ critical }) => critical).every((n) => n === 0)
+    )
+      return false;
+    return true;
+  };
+
+  const options = hasValidData(countAlarm)
+    ? getOptions(getBarPieOption(), {
+        title: {
+          text: '',
+          left: 'center',
+          top: 'center'
+        },
+        tooltip: { trigger: 'axis' },
+        xAxis: {
+          type: 'category',
+          data: getData(countAlarm).xAxisData
+        },
+        yAxis: { type: 'value', minInterval: 1 },
+        series: [
+          {
+            type: 'bar',
+            name: intl.get(getLabelByValue(AlarmLevel.Minor)),
+            data: getData(countAlarm).info,
+            color: getColorByValue(AlarmLevel.Minor)
+          },
+          {
+            type: 'bar',
+            name: intl.get(getLabelByValue(AlarmLevel.Major)),
+            data: getData(countAlarm).warn,
+            color: getColorByValue(AlarmLevel.Major)
+          },
+          {
+            type: 'bar',
+            name: intl.get(getLabelByValue(AlarmLevel.Critical)),
+            data: getData(countAlarm).danger,
+            color: getColorByValue(AlarmLevel.Critical)
+          }
+        ]
+      })
+    : undefined;
+  React.useEffect(() => {
+    GetAlertStatisticsRequest(id !== undefined ? { asset_id: id } : undefined).then((data) => {
+      setLoading(false);
+      setCountAlarm(data);
+    });
+  }, [id]);
+
+  function getData(data: Statistics[]) {
+    const xAxisData: string[] = [],
+      info: number[] = [],
+      warn: number[] = [],
+      danger: number[] = [];
+    if (data.length > 0) {
+      xAxisData.push(...data.map(({ timestamp }) => dayjs.unix(timestamp).local().format('MM/DD')));
+      info.push(...data.map(({ info }) => info));
+      warn.push(...data.map(({ warn }) => warn));
+      danger.push(...data.map(({ critical }) => critical));
+    }
+
+    return {
+      xAxisData,
+      info,
+      warn,
+      danger
+    };
+  }
+
+  if (loading) return <Spin />;
+  return (
+    <Card
+      styles={{
+        header: { border: 0, position: 'absolute', top: 6, width: '100%', textAlign: 'center' },
+        body: { height: '100%' }
+      }}
+      title={title}
+    >
+      <Chart options={options} />
+    </Card>
+  );
+};
