@@ -24,11 +24,12 @@ import DownloadModal from './downloadModal';
 import SettingPage from './setting';
 import { GatewayDetail } from './gatewayDetail';
 import { SensorDetail } from './sensorDetail';
+import { DeleteDeviceRequest } from '../../../apis/device';
 
 const DeviceDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { device, network, loading, refresh } = useContext();
+  const { device, setDevice, network, loading, refresh } = useContext();
   const tabs = useDeviceTabs(device?.typeId);
   const [open, setOpen] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
@@ -171,6 +172,28 @@ const DeviceDetailPage = () => {
                       />
                     )}
                   </>
+                )}
+                {DeviceType.isRootDevice(device.typeId) && !DeviceType.isGateway(device.typeId) && (
+                  <HasPermission value={Permission.DeviceDelete}>
+                    <Tooltip
+                      title={intl.get('DELETE_SOMETHING_PROMPT', {
+                        something: intl.get('DEVICE')
+                      })}
+                    >
+                      <Popconfirm
+                        title={intl.get('DELETE_SOMETHING_PROMPT', { something: device.name })}
+                        onConfirm={() => {
+                          DeleteDeviceRequest(device.id).then(() => {
+                            refresh(true);
+                            navigate(`/devices/0`);
+                            setDevice(undefined);
+                          });
+                        }}
+                      >
+                        <Button type='primary' onClick={() => {}} icon={<DeleteOutlined />} />
+                      </Popconfirm>
+                    </Tooltip>
+                  </HasPermission>
                 )}
                 {DeviceType.isSensor(device.typeId) && (
                   <HasPermission value={Permission.DeviceData}>
