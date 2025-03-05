@@ -28,7 +28,6 @@ export const AddModal = (props: ModalFormProps) => {
 
   const fetchDeviceDefaultSettings = (type: any) => {
     setDeviceType(type);
-    form.setFieldsValue({ protocol: 3 });
     if (type === DeviceType.Gateway) {
       form.setFieldsValue({
         mode: NetworkProvisioningMode.Mode2,
@@ -64,12 +63,10 @@ export const AddModal = (props: ModalFormProps) => {
             ? {
                 ...values,
                 network,
-                protocol: 3,
                 sensors: processArrayValuesInSensorSetting(values.sensors)
               }
             : {
                 ...values,
-                protocol: 3,
                 sensors: processArrayValuesInSensorSetting(values.sensors)
               };
           AddDeviceRequest(data).then((_) => {
@@ -84,7 +81,7 @@ export const AddModal = (props: ModalFormProps) => {
   const renderNetwork = () => {
     if (DeviceType.isRootDevice(deviceType ?? 0)) {
       return (
-        <Form.Item label={intl.get('wan.interface.protocol')} name='protocol'>
+        <Form.Item label={intl.get('wan.interface.protocol')} name='protocol' initialValue={3}>
           <Select
             options={[
               { label: intl.get('wan.interface.protocol.protobuf'), value: 2 },
