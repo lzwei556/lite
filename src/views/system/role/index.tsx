@@ -21,7 +21,7 @@ const RolePage = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const { hasPermission } = usePermission();
 
-  const fetchRoles = useCallback((current, size) => {
+  const fetchRoles = useCallback((current: number, size: number) => {
     PagingRolesRequest(current, size).then(setDataSource);
   }, []);
 

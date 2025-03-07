@@ -1,17 +1,16 @@
-import { Checkbox, Form, ModalProps, Row, Col, Button } from 'antd';
-import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import * as React from 'react';
+import { Checkbox, Form, ModalProps, Row, Col, Button } from 'antd';
+import intl from 'react-intl-universal';
+import { ModalWrapper } from '../../../components/modalWrapper';
 import { getFilename } from '../../../utils/format';
 import { exportAlarmRules } from './services';
 import { AlarmRule } from './types';
-import intl from 'react-intl-universal';
-import { ModalWrapper } from '../../../components/modalWrapper';
 
 export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void } & ModalProps> = (
   props
 ) => {
   const [form] = Form.useForm();
-  const [selected, setSelected] = React.useState<CheckboxValueType[]>([]);
+  const [selected, setSelected] = React.useState<number[]>([]);
   const [loading, setLoading] = React.useState(false);
 
   const handleUpload = (ruleIds?: number[]) => {

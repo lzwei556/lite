@@ -144,7 +144,7 @@ function SettingsButton<T>({
               .filter((c) => c.hasOwnProperty('hidden'))
               .map((c) => (
                 <Col span={24} key={c.key}>
-                  <Checkbox value={c.key}>{c.title}</Checkbox>
+                  <Checkbox value={c.key}>{c.title as React.ReactNode}</Checkbox>
                 </Col>
               ))}
           </Grid>

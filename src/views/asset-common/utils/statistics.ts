@@ -1,7 +1,7 @@
 import { getColorByValue, getLabelByValue } from '../assetStatus';
 import { INVALID_MONITORING_POINT, MONITORING_POINT } from '../monitoring-point';
 
-type AssetChildrenStatistics = {
+export type AssetChildrenStatistics = {
   alarmNum?: [number, number, number];
   assetId: number;
   deviceNum: number;

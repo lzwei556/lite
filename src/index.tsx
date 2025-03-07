@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { persistor, store } from './store';
 import { PersistGate } from 'redux-persist/integration/react';
 import './index.css';
@@ -8,7 +8,8 @@ import AppRouter from './routers';
 import { LocaleProvider } from './localeProvider';
 import { AppProvider } from './config';
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement);
+root.render(
   <StoreContext.Provider value={store}>
     <PersistGate loading={null} persistor={persistor}>
       <LocaleProvider>
@@ -17,8 +18,7 @@ ReactDOM.render(
         </AppProvider>
       </LocaleProvider>
     </PersistGate>
-  </StoreContext.Provider>,
-  document.getElementById('root')
+  </StoreContext.Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
