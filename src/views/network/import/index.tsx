@@ -75,7 +75,7 @@ const ImportNetworkPage = () => {
         };
         ImportNetworkRequest(req).then((_) => {
           setSuccess(true);
-          devicesContext.refresh(true);
+          devicesContext.refresh();
         });
       });
     } else {

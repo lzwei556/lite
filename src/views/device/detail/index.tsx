@@ -90,7 +90,7 @@ const DeviceDetailPage = () => {
         label: intl.get('SETTINGS'),
         children: device && (
           <Card>
-            <SettingPage device={device} onUpdate={() => refresh(true)} network={network} />
+            <SettingPage device={device} onUpdate={() => refresh(device.id)} network={network} />
           </Card>
         )
       });
@@ -146,7 +146,7 @@ const DeviceDetailPage = () => {
                           title={intl.get('DELETE_SOMETHING_PROMPT', { something: network.name })}
                           onConfirm={() => {
                             DeleteNetworkRequest(network.id).then(() => {
-                              refresh(true);
+                              refresh();
                               navigate(`/devices/0`);
                             });
                           }}
@@ -184,7 +184,7 @@ const DeviceDetailPage = () => {
                         title={intl.get('DELETE_SOMETHING_PROMPT', { something: device.name })}
                         onConfirm={() => {
                           DeleteDeviceRequest(device.id).then(() => {
-                            refresh(true);
+                            refresh();
                             navigate(`/devices/0`);
                             setDevice(undefined);
                           });

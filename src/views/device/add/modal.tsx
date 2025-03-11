@@ -56,7 +56,7 @@ export const AddModal = (props: ModalFormProps) => {
             }
           }).then((_) => {
             setSuccess(true);
-            refresh(true);
+            refresh();
           });
         } else {
           const data = network
@@ -71,7 +71,7 @@ export const AddModal = (props: ModalFormProps) => {
               };
           AddDeviceRequest(data).then((_) => {
             setSuccess(true);
-            refresh(true);
+            refresh();
           });
         }
       }

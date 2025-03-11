@@ -39,7 +39,6 @@ export const DeviceSettingsModal = (props: ModalFormProps & { device: Device }) 
               setSubmitedValues(settings);
             });
           }}
-          loading={loading}
         >
           {intl.get('save.and.apply.settings.to.the.devices.of.the.same.type')}
         </Button>,
@@ -51,7 +50,7 @@ export const DeviceSettingsModal = (props: ModalFormProps & { device: Device }) 
               UpdateDeviceSettingRequest(device.id, {
                 ...values,
                 sensors: processArrayValuesInSensorSetting(values.sensors)
-              });
+              }).then(() => setLoading(false));
             });
           }}
           loading={loading}

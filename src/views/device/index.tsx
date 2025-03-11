@@ -45,7 +45,7 @@ type ContextProps = {
   setDevices: React.Dispatch<React.SetStateAction<Device[]>>;
   devicesLoading: boolean;
   loading: boolean;
-  refresh: (flag?: boolean) => void;
+  refresh: (id?: number) => void;
   device: Device | undefined;
   setDevice: React.Dispatch<React.SetStateAction<Device | undefined>>;
   network: Network | undefined;
@@ -107,14 +107,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [id, fetchDevice]);
 
   const refresh = React.useCallback(
-    (flag?: boolean) => {
-      if (flag) {
+    (id?: number) => {
+      if (id) {
+        fetchDevice(id);
         fetchDevices();
       } else {
-        fetchDevice(id);
+        fetchDevices();
       }
     },
-    [id, fetchDevice]
+    [fetchDevice]
   );
 
   return (

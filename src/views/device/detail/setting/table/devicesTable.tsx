@@ -115,7 +115,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
               <Popconfirm
                 placement='left'
                 title={intl.get('DELETE_DEVICE_PROMPT')}
-                onConfirm={() => DeleteDeviceRequest(device.id).then(() => refresh(true))}
+                onConfirm={() => DeleteDeviceRequest(device.id).then(() => refresh())}
               >
                 <Button danger={true} icon={<DeleteOutlined />} size='small' type='text' />
               </Popconfirm>
