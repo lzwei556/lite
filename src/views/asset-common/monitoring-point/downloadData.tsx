@@ -12,11 +12,12 @@ export interface DownloadModalProps extends ModalProps {
   onSuccess: () => void;
   assetId?: number;
   virtualPoint?: MonitoringPointRow | undefined;
+  range?: [number, number];
 }
 
 export const DownloadData: React.FC<DownloadModalProps> = (props) => {
   const { measurement, onSuccess, assetId } = props;
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
+  const [range, setRange] = React.useState<[number, number]>(props.range ?? oneWeekNumberRange);
   const [form] = Form.useForm();
   const { language } = useLocaleContext();
 
@@ -58,17 +59,21 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
         <Form.Item
           label={intl.get('PROPERTY')}
           name={'properties'}
-          rules={[{ required: true, message: intl.get('PLEASE_SELECT_PEROPRY') }]}
+          rules={[{ required: true, message: intl.get('PLEASE_SELECT_PROPERTY') }]}
         >
           <Select
-            options={properties.map((p) => ({ ...p, label: intl.get(p.name).d(p.name) }))}
+            options={properties.map((p) => ({
+              ...p,
+              value: p.key,
+              label: intl.get(p.name).d(p.name)
+            }))}
             placeholder={intl.get('PLEASE_SELECT_PROPERTY')}
             mode={'multiple'}
             maxTagCount={2}
           />
         </Form.Item>
         <Form.Item label={intl.get('DATE_RANGE')} required>
-          <RangeDatePicker onChange={setRange} />
+          <RangeDatePicker onChange={setRange} value={range} />
         </Form.Item>
       </Form>
     </ModalWrapper>

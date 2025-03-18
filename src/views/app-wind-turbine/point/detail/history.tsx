@@ -155,6 +155,7 @@ export const History = (point: MonitoringPointRow) => {
           open={open}
           onSuccess={() => setVisible(false)}
           onCancel={() => setVisible(false)}
+          range={range}
         />
       )}
     </Grid>

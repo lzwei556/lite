@@ -16,7 +16,7 @@ import {
   MarkPointComponent
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { useSize } from 'ahooks';
+import { useDeepCompareEffect, useSize } from 'ahooks';
 import type { ComposeOption } from 'echarts/core';
 import type {
   TooltipComponentOption,
@@ -133,7 +133,9 @@ const EChart = React.forwardRef(function EChart(
     };
   }, [chartIns, props.onEvents]);
 
-  React.useEffect(() => {
+  const { tooltip, ...rest } = props.options || {};
+
+  useDeepCompareEffect(() => {
     if (chartIns) {
       chartIns.setOption(props.options!, { replaceMerge: ['dataset', 'series'] });
       if (props.loading) {
@@ -142,7 +144,7 @@ const EChart = React.forwardRef(function EChart(
         chartIns.hideLoading();
       }
     }
-  }, [chartIns, props.options, props.loading]);
+  }, [chartIns, rest, props.loading]); //ignore tooltip property when props.options is compared with prev
 
   React.useEffect(() => {
     const handleResize = () => {

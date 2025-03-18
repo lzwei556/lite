@@ -107,6 +107,7 @@ export const History = (point: MonitoringPointRow) => {
                   open={open}
                   onSuccess={() => setOpen(false)}
                   onCancel={() => setOpen(false)}
+                  range={range}
                 />
               )}
             </Space>
