@@ -9,6 +9,7 @@ import { isMobile } from '../../../../utils/deviceDetection';
 import dayjs from '../../../../utils/dayjsUtils';
 import HasPermission from '../../../../permission';
 import { Permission } from '../../../../permission/permission';
+import { HistoryDataFea } from '../../../../features';
 import {
   clearHistory,
   DownloadData,
@@ -19,7 +20,6 @@ import {
   Point,
   PropertyLightSelectFilter
 } from '../../../asset-common';
-import { PropertyChart } from '../../../historyData';
 import * as Tower from '../../tower';
 
 export const History = (point: MonitoringPointRow) => {
@@ -114,7 +114,7 @@ export const History = (point: MonitoringPointRow) => {
         }
         title={name}
       >
-        <PropertyChart
+        <HistoryDataFea.PropertyChart
           config={{ opts: { yAxis: { name: property?.unit } } }}
           data={historyData}
           property={property!}

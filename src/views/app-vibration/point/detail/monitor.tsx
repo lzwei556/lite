@@ -5,13 +5,13 @@ import { Card, Grid } from '../../../../components';
 import { oneWeekNumberRange } from '../../../../components/rangeDatePicker';
 import { DisplayProperty, displayPropertyGroup } from '../../../../constants/properties';
 import { generateColProps } from '../../../../utils/grid';
+import { HistoryDataFea } from '../../../../features';
 import {
   getDataOfMonitoringPoint,
   HistoryData,
   MonitoringPointRow,
   Point
 } from '../../../asset-common';
-import { PropertyChartCard } from '../../../historyData';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;
@@ -54,7 +54,7 @@ export const Monitor = (point: MonitoringPointRow) => {
                 .map((p: DisplayProperty, index: number) => {
                   return (
                     <Col {...colProps} key={index}>
-                      <PropertyChartCard data={historyData} property={p} />
+                      <HistoryDataFea.PropertyChartCard data={historyData} property={p} />
                     </Col>
                   );
                 })}

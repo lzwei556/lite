@@ -6,6 +6,7 @@ import HasPermission from '../../../../permission';
 import { Permission } from '../../../../permission/permission';
 import { Card } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
+import { HistoryDataFea } from '../../../../features';
 import {
   AssetRow,
   DownloadData,
@@ -16,7 +17,6 @@ import {
   PropertyLightSelectFilter
 } from '../../../asset-common';
 import { isFlangePreloadCalculation } from '../common';
-import { HistoryDataListPropertyChart } from '../../../historyData';
 
 export const PointsLineChart = ({
   flange,
@@ -81,7 +81,7 @@ export const PointsLineChart = ({
       title={getTitle()}
     >
       {property && (
-        <HistoryDataListPropertyChart
+        <HistoryDataFea.PropertyChartList
           data={historyDatas}
           property={property}
           style={{ height: 600 }}

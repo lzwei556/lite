@@ -2,6 +2,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Card } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
+import { HistoryDataFea } from '../../../../features';
 import {
   AssetRow,
   hasData,
@@ -10,7 +11,6 @@ import {
   Points,
   PropertyLightSelectFilter
 } from '../../../asset-common';
-import { HistoryDataListPropertyChart } from '../../../historyData';
 
 export const PointsLineChart = ({
   asset,
@@ -48,7 +48,7 @@ export const PointsLineChart = ({
       title={getTitle()}
     >
       {property && (
-        <HistoryDataListPropertyChart
+        <HistoryDataFea.PropertyChartList
           data={historyDatas}
           property={property}
           style={{ height: 600 }}

@@ -8,8 +8,8 @@ import { DeviceType } from '../../types/device_type';
 import { Card, Grid, LightSelectFilter } from '../../components';
 import { DisplayProperty, displayPropertyGroup } from '../../constants/properties';
 import { generateColProps } from '../../utils/grid';
+import { HistoryDataFea } from '../../features';
 import { HistoryData } from '../asset-common';
-import { PropertyChartCard } from '../historyData';
 import { getDisplayProperties } from './util';
 
 export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
@@ -59,7 +59,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                 .map((p: DisplayProperty, index: number) => {
                   return (
                     <Col {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })} key={index}>
-                      <PropertyChartCard data={historyData} property={p} />
+                      <HistoryDataFea.PropertyChartCard data={historyData} property={p} />
                     </Col>
                   );
                 })}
@@ -77,7 +77,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
           (p: DisplayProperty, index: number) => {
             return (
               <Col {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })} key={index}>
-                <PropertyChartCard data={historyData} property={p} />
+                <HistoryDataFea.PropertyChartCard data={historyData} property={p} />
               </Col>
             );
           }

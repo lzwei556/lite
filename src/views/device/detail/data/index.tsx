@@ -16,8 +16,8 @@ import { RangeDatePicker, oneWeekNumberRange } from '../../../../components/rang
 import { DeviceType } from '../../../../types/device_type';
 import { DisplayProperty } from '../../../../constants/properties';
 import { Card, Flex, Grid, LightSelectFilter, LineChart } from '../../../../components';
+import { HistoryDataFea } from '../../../../features';
 import { HistoryData } from '../../../asset-common';
-import { PropertyChart } from '../../../historyData';
 import { getDisplayProperties } from '../../util';
 
 export interface DeviceDataProps {
@@ -99,7 +99,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
         }
       } else {
         return (
-          <PropertyChart
+          <HistoryDataFea.PropertyChart
             config={{ opts: { yAxis: { name: property.unit } } }}
             data={dataSource}
             property={property}

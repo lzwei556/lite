@@ -8,6 +8,7 @@ import { oneWeekNumberRange, RangeDatePicker } from '../../../../components/rang
 import dayjs from '../../../../utils/dayjsUtils';
 import HasPermission from '../../../../permission';
 import { Permission } from '../../../../permission/permission';
+import { HistoryDataFea } from '../../../../features';
 import {
   clearHistory,
   DownloadData,
@@ -18,7 +19,6 @@ import {
   Point,
   PropertyLightSelectFilter
 } from '../../../asset-common';
-import { PropertyChart } from '../../../historyData';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type } = point;
@@ -116,7 +116,7 @@ export const History = (point: MonitoringPointRow) => {
         title={name}
       >
         {property && (
-          <PropertyChart
+          <HistoryDataFea.PropertyChart
             config={{ opts: { yAxis: { name: property.unit } } }}
             data={historyData}
             property={property}

@@ -2,10 +2,10 @@ import React from 'react';
 import { DisplayProperty } from '../../constants/properties';
 import { LineChart, LineChartProps, SeriesOption } from '../../components';
 import dayjs from '../../utils/dayjsUtils';
-import { hasData, HistoryData } from '../asset-common';
+import { hasData, HistoryData } from '../../views/asset-common';
 import { transform } from './propertyChart';
 
-export const HistoryDataListPropertyChart = (
+export const PropertyChartList = (
   props: {
     data?: {
       name: string;

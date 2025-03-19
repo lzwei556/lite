@@ -5,7 +5,7 @@ import { DisplayProperty } from '../../../constants/properties';
 import { roundValue } from '../../../utils/format';
 import { ChartMark } from '../../../components';
 import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../asset-common';
-import { transform } from '../../historyData';
+import { HistoryDataFea } from '../../../features';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
 
 export const ThicknessChart = (
@@ -13,7 +13,7 @@ export const ThicknessChart = (
 ) => {
   const { marks, visibledMarks, dispatchMarks } = ChartMark.useContext();
   const { history, property, id, attributes } = props;
-  const { series: initialSeries, min, max } = transform(history, property);
+  const { series: initialSeries, min, max } = HistoryDataFea.transform(history, property);
   const defaultSeries = initialSeries.map((s) => ({
     ...s,
     raw: { animation: false, markLine: getMarkLine() }
