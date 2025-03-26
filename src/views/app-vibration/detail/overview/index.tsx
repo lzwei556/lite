@@ -5,11 +5,12 @@ import { Card, Grid } from '../../../../components';
 import { AssetRow, MonitoringPointsTable } from '../../../asset-common';
 import { SettingsDetail } from '../../../asset-variant';
 import { AlarmTrend } from '../../../home/alarmTrend';
-import DianJi from './dianji.png';
 import { MonitoringPointsStatistics } from './monitoringPointsStatistics';
+import { DianJiImage } from './dianJiImage';
 
 export const Index = (props: { asset: AssetRow }) => {
   const { asset } = props;
+
   return (
     <Grid>
       <Col span={24}>
@@ -24,24 +25,8 @@ export const Index = (props: { asset: AssetRow }) => {
               </Col>
             </Grid>
           </Col>
-          <Col flex='auto'>
-            <Card
-              style={{ height: '100%' }}
-              styles={{
-                body: {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  height: '100%'
-                }
-              }}
-            >
-              <img
-                src={DianJi}
-                alt=''
-                style={{ display: 'block', maxWidth: '100%', objectFit: 'contain' }}
-              />
-            </Card>
+          <Col flex='auto' style={{ minWidth: 560 }}>
+            <DianJiImage asset={asset} key={asset.id} />
           </Col>
           <Col flex='300px'>
             <Card style={{ height: '100%' }} title={intl.get('BASIC_INFORMATION')}>
