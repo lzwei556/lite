@@ -1250,5 +1250,6 @@
   "corrosion.analysis.forecast.diff": "减薄量",
   "corrosion.analysis.begin": "起始日期",
   "corrosion.analysis.end": "结束日期",
-  "leveled.alarm": "{alarmLevel}报警"
+  "leveled.alarm": "{alarmLevel}报警",
+  "calibrate.type": "校准类型"
 }

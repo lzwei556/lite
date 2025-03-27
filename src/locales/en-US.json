@@ -1250,5 +1250,6 @@
   "corrosion.analysis.forecast.diff": "Diff",
   "corrosion.analysis.begin": "Begin",
   "corrosion.analysis.end": "End",
-  "leveled.alarm": "{alarmLevel} Alarm"
+  "leveled.alarm": "{alarmLevel} Alarm",
+  "calibrate.type": "Calibrate Type"
 }
