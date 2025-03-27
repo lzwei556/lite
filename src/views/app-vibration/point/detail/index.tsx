@@ -36,7 +36,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'analysis',
       label: intl.get('intelligent.analysis'),
-      children: <Analysis id={id} />
+      children: <Analysis id={id} key={id} />
     });
   } else {
     items.push({
