@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
+import intl from 'react-intl-universal';
 import {
   oneYearNumberRange,
   oneYearRange,
@@ -12,6 +13,7 @@ import { Forecast } from './forecast';
 import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
+import { AnalysisSidebarCollapse } from '../../../features';
 
 export const Analysis = (props: MonitoringPointRow) => {
   const [range, setRange] = React.useState<Range>(oneYearNumberRange);
@@ -57,15 +59,29 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
         </Col>
       )}
       <Col flex='300px'>
-        <Grid>
-          <Col span={24}>
-            <Overview point={props} history={history} />
-          </Col>
-          <Col span={24}>
-            <Forecast point={props} range={range} />
-          </Col>
-          <ChartMark.List />
-        </Grid>
+        <AnalysisSidebarCollapse
+          items={[
+            {
+              key: 'overview',
+              label: intl.get('OVERVIEW'),
+              children: <Overview point={props} history={history} />,
+              style: { border: 0 }
+            },
+            {
+              key: 'forecast',
+              label: intl.get('corrosion.analysis.forecast'),
+              children: <Forecast point={props} range={range} />,
+              style: { border: 0 }
+            },
+            {
+              key: 'marklist',
+              label: intl.get('mark'),
+              children: <ChartMark.List />,
+              style: { border: 0 },
+              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+            }
+          ]}
+        />
       </Col>
     </Grid>
   );

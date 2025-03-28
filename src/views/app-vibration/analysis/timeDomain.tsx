@@ -3,6 +3,7 @@ import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisCommonProps } from './analysisContent';
+import { AnalysisSidebarCollapse } from '../../../features';
 
 export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
@@ -74,36 +75,51 @@ export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) 
         />
       </Col>
       <Col flex='300px'>
-        <Grid>
-          <Col span={24}>
-            <Card title='基本信息' style={{ border: 'solid 1px #d3d3d3' }}>
-              <Descriptions
-                items={[
-                  { label: intl.get('SETTING_RANGE'), children: `${range}g` },
-                  {
-                    label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                    children: `${frequency}Hz`
-                  },
-                  { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
-                ]}
-              />
-            </Card>
-          </Col>
-          <Col span={24}>
-            <Card title='数据统计' style={{ border: 'solid 1px #d3d3d3' }}>
-              <Descriptions
-                items={[
-                  { label: '峰值', children: '-' },
-                  { label: '峰峰值', children: '-' },
-                  { label: '有效值', children: '-' },
-                  { label: '歪度', children: '-' },
-                  { label: '峭度', children: '-' }
-                ]}
-              />
-            </Card>
-          </Col>
-          <ChartMark.List cardProps={{ style: { border: 'solid 1px #d3d3d3' } }} />
-        </Grid>
+        <AnalysisSidebarCollapse
+          items={[
+            {
+              key: 'overview',
+              label: intl.get('BASIC_INFORMATION'),
+              children: (
+                <Card>
+                  <Descriptions
+                    items={[
+                      { label: intl.get('SETTING_RANGE'), children: `${range}g` },
+                      {
+                        label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                        children: `${frequency}Hz`
+                      },
+                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                    ]}
+                  />
+                </Card>
+              )
+            },
+            {
+              key: 'forecast',
+              label: intl.get('data.analysis'),
+              children: (
+                <Card>
+                  <Descriptions
+                    items={[
+                      { label: '峰值', children: '-' },
+                      { label: '峰峰值', children: '-' },
+                      { label: '有效值', children: '-' },
+                      { label: '歪度', children: '-' },
+                      { label: '峭度', children: '-' }
+                    ]}
+                  />
+                </Card>
+              )
+            },
+            {
+              key: 'marklist',
+              label: intl.get('mark'),
+              children: <ChartMark.List />,
+              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+            }
+          ]}
+        />
       </Col>
     </Grid>
   );

@@ -6,6 +6,7 @@ import { roundValue } from '../../../utils/format';
 import { envelope } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
+import { AnalysisSidebarCollapse } from '../../../features';
 
 export const Envelope = ({ axis, property, timeDomain, originalDomain }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
@@ -87,56 +88,67 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
         />
       </Col>
       <Col flex='300px'>
-        <Grid>
-          <Col span={24}>
-            <Card title='基本信息' style={{ border: 'solid 1px #d3d3d3' }}>
-              <Descriptions
-                items={[
-                  { label: intl.get('SETTING_RANGE'), children: `${range}g` },
-                  {
-                    label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                    children: `${timeDomainFrequency}Hz`
-                  },
-                  { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
-                ]}
-              />
-            </Card>
-          </Col>
-          <Col span={24}>
-            <Card
-              title='分析数据'
-              style={{ border: 'solid 1px #d3d3d3' }}
-              styles={{ body: { overflowY: 'auto', maxHeight: 300 } }}
-            >
-              <Descriptions
-                items={[
-                  { label: '1x倍频', children: '-' },
-                  { label: '2x倍频', children: '-' },
-                  { label: '3x倍频', children: '-' },
-                  { label: '4x倍频', children: '-' },
-                  { label: '5x倍频', children: '-' },
-                  { label: '6x倍频', children: '-' },
-                  { label: '7x倍频', children: '-' },
-                  { label: '8x倍频', children: '-' },
-                  { label: '9x倍频', children: '-' },
-                  { label: '10x倍频', children: '-' }
-                ]}
-              />
-              <Divider />
-              <Descriptions
-                items={[
-                  { label: 'BPFI', children: '-' },
-                  { label: 'BPFO', children: '-' },
-                  { label: 'BSF', children: '-' },
-                  { label: 'FTF', children: '-' }
-                ]}
-              />
-              <Divider />
-              <Descriptions items={[{ label: '边频', children: '-' }]} />
-            </Card>
-          </Col>
-          <ChartMark.List cardProps={{ style: { border: 'solid 1px #d3d3d3' } }} />
-        </Grid>
+        <AnalysisSidebarCollapse
+          items={[
+            {
+              key: 'overview',
+              label: intl.get('BASIC_INFORMATION'),
+              children: (
+                <Card>
+                  <Descriptions
+                    items={[
+                      { label: intl.get('SETTING_RANGE'), children: `${range}g` },
+                      {
+                        label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                        children: `${timeDomainFrequency}Hz`
+                      },
+                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                    ]}
+                  />
+                </Card>
+              )
+            },
+            {
+              key: 'forecast',
+              label: intl.get('data.analysis'),
+              children: (
+                <Card styles={{ body: { overflowY: 'auto', maxHeight: 300 } }}>
+                  <Descriptions
+                    items={[
+                      { label: '1x倍频', children: '-' },
+                      { label: '2x倍频', children: '-' },
+                      { label: '3x倍频', children: '-' },
+                      { label: '4x倍频', children: '-' },
+                      { label: '5x倍频', children: '-' },
+                      { label: '6x倍频', children: '-' },
+                      { label: '7x倍频', children: '-' },
+                      { label: '8x倍频', children: '-' },
+                      { label: '9x倍频', children: '-' },
+                      { label: '10x倍频', children: '-' }
+                    ]}
+                  />
+                  <Divider />
+                  <Descriptions
+                    items={[
+                      { label: 'BPFI', children: '-' },
+                      { label: 'BPFO', children: '-' },
+                      { label: 'BSF', children: '-' },
+                      { label: 'FTF', children: '-' }
+                    ]}
+                  />
+                  <Divider />
+                  <Descriptions items={[{ label: '边频', children: '-' }]} />
+                </Card>
+              )
+            },
+            {
+              key: 'marklist',
+              label: intl.get('mark'),
+              children: <ChartMark.List />,
+              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+            }
+          ]}
+        />
       </Col>
     </Grid>
   );

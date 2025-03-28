@@ -1251,5 +1251,7 @@
   "corrosion.analysis.begin": "Begin",
   "corrosion.analysis.end": "End",
   "leveled.alarm": "{alarmLevel} Alarm",
-  "calibrate.type": "Calibrate Type"
+  "calibrate.type": "Calibrate Type",
+  "mark": "Mark",
+  "data.analysis": "Data Analysis"
 }

@@ -74,10 +74,15 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>
-      <ChartMark.List
-        cardProps={{ style: { border: 'solid 1px #d3d3d3' } }}
-        colProps={{ flex: '300px' }}
-      />
+      <Col flex='300px'>
+        <ChartMark.List
+          cardProps={{
+            title: intl.get('mark'),
+            style: { border: 'solid 1px #d3d3d3' },
+            styles: { body: { overflowY: 'auto', maxHeight: 500 } }
+          }}
+        />
+      </Col>
     </Grid>
   );
 };

@@ -34,7 +34,7 @@ export const Overview = (props: {
   const diff = history[0].values[0].data['FIELD_THICKNESS'] - crt;
 
   return (
-    <Card title='总览' styles={{ body: { padding: 0 } }}>
+    <Card styles={{ body: { padding: 0 } }}>
       <Card.Grid hoverable={false} style={{ width: '50%' }}>
         <PropertyCardedContent label={intl.get('INITIAL_THICKNESS')} unit='mm' value={initial} />
       </Card.Grid>

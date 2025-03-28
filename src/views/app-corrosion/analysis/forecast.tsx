@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, DatePicker, Descriptions, Empty, Space, Typography } from 'antd';
+import { DatePicker, Descriptions, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card } from '../../../components';
 import dayjs from '../../../utils/dayjsUtils';
@@ -51,16 +51,7 @@ export const Forecast = ({
   };
 
   return (
-    <Card
-      className='corrosion-analysis-forecast'
-      extra={
-        <Button color='primary' variant='outlined'>
-          {intl.get('corrosion.analysis.forecast.generate.repport')}
-        </Button>
-      }
-      styles={{ body: { padding: 0 } }}
-      title={intl.get('corrosion.analysis.forecast')}
-    >
+    <Card className='corrosion-analysis-forecast' styles={{ body: { padding: 0 } }}>
       <Descriptions
         column={1}
         colon={false}
