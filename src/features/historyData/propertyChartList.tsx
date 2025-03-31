@@ -1,7 +1,7 @@
 import React from 'react';
 import { DisplayProperty } from '../../constants/properties';
 import { LineChart, LineChartProps, SeriesOption } from '../../components';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import { hasData, HistoryData } from '../../views/asset-common';
 import { transform } from './propertyChart';
 
@@ -32,7 +32,7 @@ export const PropertyChartList = (
       xAxis: {
         data: Array.from(new Set(xAxisValues))
           .sort((prev, crt) => prev - crt)
-          .map((t) => dayjs.unix(t).local().format('YYYY-MM-DD HH:mm:ss'))
+          .map((t) => Dayjs.format(t))
       }
     };
   };

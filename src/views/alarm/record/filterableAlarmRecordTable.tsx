@@ -3,9 +3,14 @@ import { Button, Input, Popconfirm, Space, Tag, Typography } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { PageResult } from '../../../types/page';
-import dayjs from '../../../utils/dayjsUtils';
-import { RangeDatePicker, oneWeekNumberRange } from '../../../components/rangeDatePicker';
-import { LightSelectFilter, Table, transformPagedresult } from '../../../components';
+import { Dayjs } from '../../../utils';
+import {
+  RangeDatePicker,
+  useRange,
+  LightSelectFilter,
+  Table,
+  transformPagedresult
+} from '../../../components';
 import { PagingAlarmRecordRequest, RemoveAlarmRecordRequest } from '../../../apis/alarm';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
@@ -29,7 +34,7 @@ export const FilterableAlarmRecordTable: React.FC<{
   const [dataSource, setDataSource] = React.useState<PageResult<any[]>>();
   const [status, setStatus] = React.useState<Status[]>([]);
   const [store, setStore, gotoPage] = useStore(storeKey);
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const statusOptions = pickOptionsFromNumericEnum(Status, 'alarm.record').map(
     ({ label, value }) => ({ text: intl.get(label), value })
   );
@@ -78,8 +83,8 @@ export const FilterableAlarmRecordTable: React.FC<{
   };
 
   React.useEffect(() => {
-    fetchAlarmRecords(alarmName, monitoringPointType, status, store, range, sourceId);
-  }, [alarmName, monitoringPointType, status, sourceId, store, range]);
+    fetchAlarmRecords(alarmName, monitoringPointType, status, store, numberedRange, sourceId);
+  }, [alarmName, monitoringPointType, status, sourceId, store, numberedRange]);
 
   const onDelete = (id: number) => {
     RemoveAlarmRecordRequest(id).then((_) => {
@@ -130,9 +135,7 @@ export const FilterableAlarmRecordTable: React.FC<{
       dataIndex: 'createdAt',
       key: 'createdAt',
       width: 160,
-      render: (createdAt: number) => {
-        return dayjs.unix(createdAt).local().format('YYYY-MM-DD HH:mm:ss');
-      }
+      render: (createdAt: number) => Dayjs.format(createdAt)
     },
     {
       title: intl.get('ALARM_DURATION'),
@@ -143,12 +146,12 @@ export const FilterableAlarmRecordTable: React.FC<{
         switch (record.status) {
           case 1:
           case 2:
-            return dayjs
+            return Dayjs.dayjs
               .unix(record.createdAt)
               .local()
-              .from(dayjs.unix(record.updatedAt).local(), true);
+              .from(Dayjs.dayjs.unix(record.updatedAt).local(), true);
           default:
-            return dayjs.unix(record.createdAt).local().fromNow(true);
+            return Dayjs.dayjs.unix(record.createdAt).local().fromNow(true);
         }
       }
     },

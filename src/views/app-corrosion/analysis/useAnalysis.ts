@@ -1,6 +1,6 @@
 import React from 'react';
 import { floor } from 'lodash';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { ColorHealth } from '../../../constants/color';
 import {
   getThicknessAnalysis,
@@ -79,10 +79,7 @@ export function transformAnalysis(origin: {
   const end = times[times.length - 1];
   // algorithm: y = kx+b
   return {
-    line: [times[0], end].map((x) => [
-      dayjs.unix(x).local().format('YYYY-MM-DD HH:mm:ss'),
-      k_all * x + b_all
-    ]) as Line,
+    line: [times[0], end].map((x) => [Dayjs.format(x), k_all * x + b_all]) as Line,
     rate: corrosion_rate_all,
     life: residual_life_all
   };

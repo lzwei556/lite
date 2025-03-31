@@ -9,8 +9,25 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 dayjs.extend(timezone);
 
+export type Range = [number, number];
 export type RangeValue = [dayjs.Dayjs, dayjs.Dayjs];
 
-export default dayjs;
+export { dayjs };
 
 export type Dayjs = dayjs.Dayjs;
+
+export function format(timestamp: number, format = 'YYYY-MM-DD HH:mm:ss') {
+  return dayjs.unix(timestamp).local().format(format);
+}
+
+export function toTimestamp(date: Dayjs) {
+  return date.utc().unix();
+}
+
+export function toDayjs(timestamp: number) {
+  return dayjs.unix(timestamp).utc();
+}
+
+export function toRange(range: RangeValue) {
+  return range.map((r) => toTimestamp(r)) as Range;
+}

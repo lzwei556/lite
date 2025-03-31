@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { PagedOption } from '../types/props';
 import { Filters } from '../views/device/util';
-import { oneWeekNumberRange } from '../components/rangeDatePicker';
 
 export type Store = {
   deviceList: {
@@ -50,13 +49,11 @@ export function useStore<ReturnType extends keyof Store>(
     firmwareList: { ...defaultOptions },
     alarmRecordList: {
       ...defaultOptions,
-      alertLevels: [1, 2, 3],
-      range: oneWeekNumberRange
+      alertLevels: [1, 2, 3]
     },
     monitoringPointAlarmRecordList: {
       ...defaultOptions,
-      alertLevels: [1, 2, 3],
-      range: oneWeekNumberRange
+      alertLevels: [1, 2, 3]
     },
     projectList: { ...defaultOptions },
     accountList: { ...defaultOptions },

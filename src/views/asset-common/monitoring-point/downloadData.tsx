@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Form, ModalProps, Select } from 'antd';
 import intl from 'react-intl-universal';
-import { RangeDatePicker, oneWeekNumberRange } from '../../../components/rangeDatePicker';
+import { RangeDatePicker, useRange } from '../../../components';
+import { Dayjs } from '../../../utils';
 import { getFilename } from '../../../utils/format';
 import { useLocaleContext } from '../../../localeProvider';
 import { ModalWrapper } from '../../../components/modalWrapper';
@@ -12,20 +13,20 @@ export interface DownloadModalProps extends ModalProps {
   onSuccess: () => void;
   assetId?: number;
   virtualPoint?: MonitoringPointRow | undefined;
-  range?: [number, number];
+  range?: Dayjs.RangeValue;
 }
 
 export const DownloadData: React.FC<DownloadModalProps> = (props) => {
   const { measurement, onSuccess, assetId } = props;
-  const [range, setRange] = React.useState<[number, number]>(props.range ?? oneWeekNumberRange);
+  const { range, numberedRange, setRange } = useRange(props.range);
   const [form] = Form.useForm();
   const { language } = useLocaleContext();
 
   const properties = Point.getPropertiesByType(measurement.properties, measurement.type);
   const onDownload = () => {
     form.validateFields().then((values) => {
-      if (range) {
-        const [from, to] = range;
+      if (numberedRange) {
+        const [from, to] = numberedRange;
         downloadHistory(
           measurement.id,
           from,

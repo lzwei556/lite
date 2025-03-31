@@ -6,7 +6,7 @@ import { DownOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import '../../assets/iconfont.css';
 import { persistor, store } from '../../store';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import ProjectSelect from '../../components/select/projectSelect';
 import { GetMyProjectRequest } from '../../apis/project';
 import { Language, useLocaleContext } from '../../localeProvider';
@@ -21,11 +21,11 @@ const HeaderLayout = (props: any) => {
   const { setLocale, language } = useLocaleContext();
   const { menus } = props;
   const [currentUser] = useState<any>(store.getState().auth.data.user);
-  const [now, setNow] = useState<string>(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  const [now, setNow] = useState<string>(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
   const [open, setVisible] = useState(false);
 
   setInterval(() => {
-    setNow(dayjs().format('YYYY-MM-DD HH:mm:ss'));
+    setNow(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
   }, 1000);
 
   const onLogout = () => {

@@ -7,7 +7,7 @@ import {
   RemoveFirmwareRequest,
   UploadFirmwareRequest
 } from '../../apis/firmware';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
 import { PageResult } from '../../types/page';
@@ -89,7 +89,7 @@ const FirmwarePage = () => {
       title: intl.get('BUILD_DATE'),
       dataIndex: 'buildTime',
       key: 'buildTime',
-      render: (text: number) => dayjs.unix(text).local().format('YYYY-MM-DD HH:mm:ss')
+      render: (text: number) => Dayjs.format(text)
     },
     {
       title: intl.get('OPERATION'),

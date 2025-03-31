@@ -2,7 +2,7 @@ import React from 'react';
 import { DatePicker, Descriptions, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card } from '../../../components';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { getValue, roundValue } from '../../../utils/format';
 import { MonitoringPointRow } from '../../asset-common';
 import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
@@ -62,9 +62,9 @@ export const Forecast = ({
             children: (
               <DatePicker
                 allowClear={false}
-                defaultValue={dayjs(range[0] * 1000)}
-                minDate={dayjs(initialRange[0] * 1000)}
-                maxDate={dayjs(initialRange[1] * 1000).endOf('day')}
+                defaultValue={Dayjs.dayjs(range[0] * 1000)}
+                minDate={Dayjs.dayjs(initialRange[0] * 1000)}
+                maxDate={Dayjs.dayjs(initialRange[1] * 1000).endOf('day')}
                 onChange={(date) => setRange((prev) => [date.utc().unix(), prev[1]])}
                 variant='borderless'
               />
@@ -74,7 +74,7 @@ export const Forecast = ({
             label: intl.get('corrosion.analysis.end'),
             children: (
               <span style={{ paddingLeft: 11, lineHeight: '30px' }}>
-                {dayjs(range[1] * 1000).format('YYYY-MM-DD')}
+                {Dayjs.dayjs(range[1] * 1000).format('YYYY-MM-DD')}
               </span>
             )
           }

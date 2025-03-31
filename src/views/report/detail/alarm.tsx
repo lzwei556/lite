@@ -1,7 +1,7 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { getAlarmDetail } from '../../alarm/alarm-group';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { Report } from './report';
 import { Table } from '../../../components';
 import { getLabelByValue } from '../../alarm';
@@ -181,9 +181,7 @@ function AlarmRecordTable<T>({
           dataIndex: 'createdAt',
           width: 90,
           title: intl.get('ALARM_TIMESTAMP'),
-          render: (createdAt: number) => {
-            return dayjs.unix(createdAt).local().format('YYYY-MM-DD HH:mm:ss');
-          }
+          render: (createdAt: number) => Dayjs.format(createdAt)
         },
         {
           dataIndex: 'status',

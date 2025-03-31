@@ -9,7 +9,7 @@ import { SelfLink } from '../../components/selfLink';
 import { Card, Flex, Grid } from '../../components';
 import { DeviceNS, getValueOfFirstClassProperty } from './util';
 import { generateColProps } from '../../utils/grid';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import { AddModal } from './add/modal';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
@@ -50,11 +50,7 @@ export const Virtual = () => {
                       description={
                         <Space>
                           {intl.get('LAST_CONNECTION_TIME')}
-                          <span>
-                            {connectedAt
-                              ? dayjs.unix(state.connectedAt).local().format('YYYY-MM-DD HH:mm:ss')
-                              : '-'}
-                          </span>
+                          <span>{connectedAt ? Dayjs.format(state.connectedAt) : '-'}</span>
                         </Space>
                       }
                     />

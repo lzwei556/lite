@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
-import dayjs from '../../../../utils/dayjsUtils';
-import { Card, Flex, Grid, Table } from '../../../../components';
-import { RangeDatePicker, oneWeekNumberRange } from '../../../../components/rangeDatePicker';
+import { Dayjs } from '../../../../utils';
+import { Card, Flex, Grid, Table, useRange, RangeDatePicker } from '../../../../components';
 import { AssetRow, getDataOfAsset, getFlangeData, Point } from '../../../asset-common';
 import { SingleStatus, StatusData } from './single';
 
 export const Status: React.FC<AssetRow> = (props) => {
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const [timestamps, setTimestamps] = React.useState<{ timestamp: number }[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [timestamp, setTimestamp] = React.useState<number>();
@@ -16,14 +15,14 @@ export const Status: React.FC<AssetRow> = (props) => {
   const [flangeData, setFlangeData] = React.useState<StatusData>();
 
   React.useEffect(() => {
-    if (range) {
-      const [from, to] = range;
+    if (numberedRange) {
+      const [from, to] = numberedRange;
       getDataOfAsset(props.id, from, to).then((data) => {
         setTimestamps(data);
         setLoading(false);
       });
     }
-  }, [range, props.id]);
+  }, [numberedRange, props.id]);
 
   React.useEffect(() => {
     if (timestamps.length > 0) {
@@ -72,8 +71,7 @@ export const Status: React.FC<AssetRow> = (props) => {
             dataIndex: 'timestamp',
             key: 'timestamp',
             width: '80%',
-            render: (timestamp: number) =>
-              dayjs.unix(timestamp).local().format('YYYY-MM-DD HH:mm:ss')
+            render: (timestamp: number) => Dayjs.format(timestamp)
           }
         ]}
         pagination={false}

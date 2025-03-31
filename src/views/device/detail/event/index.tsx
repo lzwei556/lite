@@ -1,10 +1,17 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import { Col, Button } from 'antd';
 import intl from 'react-intl-universal';
-import { RangeDatePicker, oneWeekNumberRange } from '../../../../components/rangeDatePicker';
-import { Card, Flex, Grid, Table, transformPagedresult } from '../../../../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  Table,
+  transformPagedresult,
+  useRange,
+  RangeDatePicker
+} from '../../../../components';
 import { Device } from '../../../../types/device';
-import dayjs from '../../../../utils/dayjsUtils';
+import { Dayjs } from '../../../../utils';
 import { BatchDeleteDeviceEventsRequest, PagingDeviceEventsRequest } from '../../../../apis/device';
 import HasPermission from '../../../../permission';
 import usePermission, { Permission } from '../../../../permission/permission';
@@ -16,7 +23,7 @@ export interface DeviceEventProps {
 }
 
 const DeviceEvent: FC<DeviceEventProps> = ({ device }) => {
-  const [range, setRange] = useState<[number, number]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const [dataSource, setDataSource] = useState<PageResult<any[]>>();
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   const { hasPermission } = usePermission();
@@ -26,12 +33,12 @@ const DeviceEvent: FC<DeviceEventProps> = ({ device }) => {
 
   const fetchDeviceEvents = useCallback(
     (current: number, size: number) => {
-      if (range) {
-        const [from, to] = range;
+      if (numberedRange) {
+        const [from, to] = numberedRange;
         PagingDeviceEventsRequest(device.id, from, to, current, size).then(setDataSource);
       }
     },
-    [range, device.id]
+    [numberedRange, device.id]
   );
 
   useEffect(() => {
@@ -70,9 +77,7 @@ const DeviceEvent: FC<DeviceEventProps> = ({ device }) => {
     title: intl.get('TIMESTAMP'),
     dataIndex: 'timestamp',
     key: 'timestamp',
-    render: (timestamp: number) => {
-      return dayjs.unix(timestamp).local().format('YYYY-MM-DD HH:mm:ss');
-    }
+    render: (timestamp: number) => Dayjs.format(timestamp)
   });
 
   const onBatchDelete = () => {

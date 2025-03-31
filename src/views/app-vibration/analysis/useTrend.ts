@@ -1,15 +1,5 @@
 import React from 'react';
-import { oneWeekNumberRange } from '../../../components/rangeDatePicker';
 import { getTrend, TrendData } from '../../asset-common';
-
-export type Range = [number, number];
-
-export type setRange = React.Dispatch<React.SetStateAction<Range>>;
-
-export function useDateRange() {
-  const [range, setRange] = React.useState<Range>(oneWeekNumberRange);
-  return { range, setRange };
-}
 
 export type Property = {
   label: string;
@@ -50,7 +40,7 @@ export type TrendDataProps = {
   data: TrendData[];
 };
 
-export function useTrendData(id: number, range: Range) {
+export function useTrendData(id: number, range: [number, number]) {
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<TrendData[]>([]);
   const [from, to] = range;

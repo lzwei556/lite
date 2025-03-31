@@ -4,7 +4,6 @@ import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../../utils/grid';
 import { Card, Grid, Tabs, Table } from '../../../../components';
-import { oneWeekNumberRange } from '../../../../components/rangeDatePicker';
 import { useLocaleContext } from '../../../../localeProvider';
 import {
   StatisticBar,
@@ -39,8 +38,7 @@ export const Index = (props: {
   const { asset, onSuccess } = props;
   const { id, alertLevel, monitoringPoints } = asset;
   const [type, setType] = React.useState('basic');
-  const range = React.useRef<[number, number]>(oneWeekNumberRange);
-  const historyDatas = useHistoryDatas(asset, range.current);
+  const historyDatas = useHistoryDatas(asset);
   const items: TabsProps['items'] = [
     {
       label: intl.get('MONITOR'),

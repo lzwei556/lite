@@ -2,7 +2,7 @@ import React from 'react';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
 import { LightSelectFilter, SeriesOption, ChartMark } from '../../../components';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { ValuesPropertyName } from '../../asset-common';
 import { TrendDataProps, useProperties } from './useTrend';
 import { AXIS_OPTIONS } from './useAxis';
@@ -23,7 +23,7 @@ export const Trend = ({
 
   const getSeries = () => {
     const series: SeriesOption[] = [];
-    const xAxisValues = timestamps.map((t) => dayjs.unix(t).local().format('YYYY-MM-DD HH:mm:ss'));
+    const xAxisValues = timestamps.map((t) => Dayjs.format(t));
     if (data.length > 0) {
       series.push(
         ...AXIS_OPTIONS.map((o) => ({
@@ -41,7 +41,7 @@ export const Trend = ({
   };
 
   function handleClick(timestamp: number) {
-    const data = dayjs.unix(timestamp).local().format('YYYY-MM-DD HH:mm:ss');
+    const data = Dayjs.format(timestamp);
     dispatchMarks({
       type: 'append_single',
       mark: { name: data, data }
@@ -70,7 +70,7 @@ export const Trend = ({
               <LightSelectFilter
                 allowClear={false}
                 options={timestamps.map((t) => ({
-                  label: dayjs.unix(t).local().format('YYYY-MM-DD HH:mm:ss'),
+                  label: Dayjs.format(t),
                   value: t
                 }))}
                 onChange={(t) => handleClick(t)}
@@ -81,7 +81,7 @@ export const Trend = ({
         )
       }}
       config={{ opts: { yAxis: { name: property.unit }, grid: { top: 30 } } }}
-      onEvents={{ click: (coord: [string, number]) => handleClick(dayjs(coord[0]).unix()) }}
+      onEvents={{ click: (coord: [string, number]) => handleClick(Dayjs.dayjs(coord[0]).unix()) }}
       series={ChartMark.mergeMarkDatas(getSeries(), visibledMarks)}
       style={{ height: 130 }}
       toolbar={{ visibles: [] }}

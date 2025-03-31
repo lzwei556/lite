@@ -27,7 +27,7 @@ import en_US from '../locales/en-US.json';
 import zh_CN from '../locales/zh-CN.json';
 import zhCN from 'antd/es/locale/zh_CN';
 import enUS from 'antd/es/locale/en_US';
-import dayjs from '../utils/dayjsUtils';
+import { Dayjs } from '../utils';
 import 'dayjs/locale/zh-cn';
 import { App, useAppType } from '../config';
 import { ASSET_PATHNAME } from '../views/asset-common';
@@ -105,9 +105,9 @@ const AppRouter = () => {
     });
     setInitDone(true);
     if (language === 'zh-CN') {
-      dayjs.locale('zh-cn');
+      Dayjs.dayjs.locale('zh-cn');
     } else {
-      dayjs.locale('en');
+      Dayjs.dayjs.locale('en');
     }
     document.title = intl.get(App.getSiteName(config));
   }, [language, config]);

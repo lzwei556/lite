@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { Firmware } from '../../../types/firmware';
 import { Device } from '../../../types/device';
 import { GetDeviceFirmwaresRequest } from '../../../apis/firmware';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { DeviceUpgradeRequest } from '../../../apis/device';
 import { DeviceCommand } from '../../../types/device_command';
 import intl from 'react-intl-universal';
@@ -45,7 +45,7 @@ const UpgradeModal: FC<UpgradeModalProps> = ({ open, device, onCancel, onSuccess
                 { label: intl.get('HARDWARE_VERSION'), children: firmware.productId },
                 {
                   label: intl.get('BUILD_DATE'),
-                  children: dayjs.unix(firmware.buildTime).local().format('YYYY-MM-DD HH:mm:ss')
+                  children: Dayjs.format(firmware.buildTime)
                 }
               ]}
             />

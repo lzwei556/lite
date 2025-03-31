@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
 import { AlarmPage } from './alarm';
 import { Status } from './status';
 import { A4_SIZE, PREFACES } from './report';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import Cover from './cover.jpg';
 import './style.css';
 import { useLocation } from 'react-router-dom';
@@ -20,10 +20,10 @@ export default function Report() {
   const report = state;
   const reportRef = React.useRef<HTMLDivElement>(null);
   const [loading, setLoading] = React.useState(false);
-  const duration = `${dayjs.unix(report.start).local().format('YYYY/MM/DD')}-${dayjs
-    .unix(report.end)
-    .local()
-    .format('YYYY/MM/DD')}`;
+  const duration = `${Dayjs.format(report.start, 'YYYY/MM/DD')}-${Dayjs.format(
+    report.end,
+    'YYYY/MM/DD'
+  )}`;
 
   const renderCover = () => {
     return (
@@ -37,7 +37,7 @@ export default function Report() {
             <br />
             报告周期：{duration}
             <br />
-            报告日期：{dayjs.unix(report.reportDate).local().format('YYYY/MM/DD')}
+            报告日期：{Dayjs.format(report.reportDate, 'YYYY/MM/DD')}
           </p>
         </section>
       </section>

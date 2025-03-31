@@ -2,11 +2,14 @@ import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
 import {
-  oneYearNumberRange,
-  oneYearRange,
-  RangeDatePicker
-} from '../../../components/rangeDatePicker';
-import { Card, ChartMark, Flex, Grid } from '../../../components';
+  Card,
+  ChartMark,
+  commonRange,
+  Flex,
+  Grid,
+  RangeDatePicker,
+  useRange
+} from '../../../components';
 import { Space } from '../../../common';
 import { MonitoringPointRow, Point } from '../../asset-common';
 import { Forecast } from './forecast';
@@ -16,7 +19,7 @@ import { ThicknessChart } from './thicknessChart';
 import { AnalysisSidebarCollapse } from '../../../features';
 
 export const Analysis = (props: MonitoringPointRow) => {
-  const [range, setRange] = React.useState<Range>(oneYearNumberRange);
+  const { numberedRange, setRange } = useRange();
 
   return (
     <ChartMark.Context>
@@ -24,12 +27,12 @@ export const Analysis = (props: MonitoringPointRow) => {
         <Col span={24}>
           <Card>
             <Flex>
-              <RangeDatePicker onChange={setRange} defaultRange={oneYearRange} showFooter={true} />
+              <RangeDatePicker onChange={setRange} defaultValue={commonRange.PastYear} />
             </Flex>
           </Card>
         </Col>
         <Col span={24}>
-          <Content {...props} range={range} />
+          <Content {...props} range={numberedRange} />
         </Col>
       </Grid>
     </ChartMark.Context>

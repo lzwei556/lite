@@ -1,19 +1,18 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { oneWeekNumberRange } from '../../../components/rangeDatePicker';
 import { Card, Descriptions } from '../../../components';
+import { SelfLink } from '../../../components/selfLink';
 import { ASSET_PATHNAME, AssetRow, Asset, Points } from '../../asset-common';
 import * as Flange from '../flange';
 import * as Tower from '../tower';
 import { useHistoryDatas } from '../utils';
 import { flange } from '../constants';
 import { Icon } from '../icon';
-import { SelfLink } from '../../../components/selfLink';
 
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, name, statistics: flangeStatistics, type } = asset;
   const realPoints = Points.filter(asset.monitoringPoints);
-  const historyData = useHistoryDatas(asset, oneWeekNumberRange);
+  const historyData = useHistoryDatas(asset);
 
   const statistics = Asset.Statistics.resolveDescendant(flangeStatistics);
   const style = { left: '-24px', top: '-20px', height: 450 };

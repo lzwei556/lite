@@ -1,65 +1,45 @@
-import { Button, DatePicker, Space } from 'antd';
 import * as React from 'react';
-import dayjs, { RangeValue } from '../utils/dayjsUtils';
+import { Button, DatePicker, Space } from 'antd';
+import { RangePickerProps } from 'antd/es/date-picker';
 import intl from 'react-intl-universal';
+import { Dayjs } from '../utils';
 
-export const oneYearRange: RangeValue = [
-  dayjs().startOf('day').subtract(1, 'y'),
-  dayjs().endOf('day')
-];
+export const RangeDatePicker = ({
+  defaultValue = commonRange.PastWeek,
+  onChange,
+  showQuickRanges = true,
+  value
+}: Omit<RangePickerProps, 'defaultValue' | 'onChange'> & {
+  defaultValue?: Dayjs.RangeValue;
+  onChange: (range: Dayjs.RangeValue) => void;
+  showQuickRanges?: boolean;
+}) => {
+  const { range, setRange } = useRange(defaultValue as Dayjs.RangeValue);
 
-export const oneWeekRange: RangeValue = [
-  dayjs().startOf('day').subtract(6, 'd'),
-  dayjs().endOf('day')
-];
-
-export const oneWeekNumberRange: [number, number] = [
-  oneWeekRange[0].utc().unix(),
-  oneWeekRange[1].utc().unix()
-];
-
-export const oneYearNumberRange: [number, number] = [
-  oneYearRange[0].utc().unix(),
-  oneYearRange[1].utc().unix()
-];
-
-export const RangeDatePicker: React.FC<{
-  defaultRange?: RangeValue;
-  onChange?: (range: [number, number]) => void;
-  showFooter?: boolean;
-  value?: [number, number];
-}> = ({ defaultRange = oneWeekRange, onChange, showFooter, value }) => {
-  const [range, setRange] = React.useState<RangeValue>(defaultRange);
-  const handleChange = (range: RangeValue) => {
-    setRange(range);
-    const [start, end] = range;
-    if (start && end) {
-      onChange?.([start.utc().unix(), end.endOf('day').utc().unix()]);
-    }
+  const handleChange = (date: Dayjs.RangeValue) => {
+    setRange(date);
+    onChange(date);
   };
 
   return (
     <DatePicker.RangePicker
       allowClear={false}
-      defaultValue={defaultRange}
-      value={value ? [dayjs.unix(value[0]), dayjs.unix(value[1])] : range}
+      defaultValue={defaultValue}
+      value={value ?? range}
       renderExtraFooter={() => {
-        const calculateRange = (months: number): RangeValue => {
-          return [dayjs().startOf('day').subtract(months, 'months'), dayjs().endOf('day')];
-        };
         return (
-          showFooter && (
+          showQuickRanges && (
             <Space>
-              <Button type='text' onClick={() => handleChange(calculateRange(1))}>
+              <Button type='text' onClick={() => handleChange(commonRange.PastMonth)}>
                 {intl.get('OPTION_LAST_MONTH')}
               </Button>
-              <Button type='text' onClick={() => handleChange(calculateRange(3))}>
+              <Button type='text' onClick={() => handleChange(commonRange.PastThreeMonths)}>
                 {intl.get('OPTION_LAST_3_MONTHS')}
               </Button>
-              <Button type='text' onClick={() => handleChange(calculateRange(6))}>
+              <Button type='text' onClick={() => handleChange(commonRange.PastHalfYear)}>
                 {intl.get('OPTION_LAST_HALF_YEAR')}
               </Button>
-              <Button type='text' onClick={() => handleChange(calculateRange(12))}>
+              <Button type='text' onClick={() => handleChange(commonRange.PastYear)}>
                 {intl.get('OPTION_LAST_YEAR')}
               </Button>
             </Space>
@@ -68,10 +48,34 @@ export const RangeDatePicker: React.FC<{
       }}
       onChange={(date) => {
         if (date) {
-          handleChange(date as RangeValue);
+          handleChange(date as Dayjs.RangeValue);
         }
       }}
-      disabledDate={(current) => current && current > dayjs().endOf('day')}
+      disabledDate={(current) => current && current > Dayjs.dayjs().endOf('day')}
     />
   );
 };
+
+export const commonRange = {
+  PastWeek: getRange(6, 'days'),
+  PastMonth: getRange(1, 'months'),
+  PastThreeMonths: getRange(3, 'months'),
+  PastHalfYear: getRange(6, 'months'),
+  PastYear: getRange(1, 'years')
+};
+
+function getRange(value: number, unit: Dayjs.dayjs.ManipulateType): Dayjs.RangeValue {
+  return [Dayjs.dayjs().startOf('day').subtract(value, unit), Dayjs.dayjs().endOf('day')];
+}
+
+export function useRange(initialRange?: Dayjs.RangeValue) {
+  const [range, setRange] = React.useState<Dayjs.RangeValue>(initialRange ?? commonRange.PastWeek);
+  return React.useMemo(
+    () => ({
+      range,
+      numberedRange: Dayjs.toRange(range),
+      setRange
+    }),
+    [range]
+  );
+}

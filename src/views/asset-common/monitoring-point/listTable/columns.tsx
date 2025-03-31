@@ -2,7 +2,7 @@ import React from 'react';
 import { TableProps } from 'antd';
 import intl from 'react-intl-universal';
 import { SelfLink } from '../../../../components/selfLink';
-import dayjs from '../../../../utils/dayjsUtils';
+import { Dayjs } from '../../../../utils';
 import { getDisplayName, getValue, roundValue } from '../../../../utils/format';
 import { Language } from '../../../../localeProvider';
 import { ASSET_PATHNAME } from '../../constants';
@@ -51,9 +51,7 @@ const time = {
   title: () => intl.get('SAMPLING_TIME'),
   key: 'timestamp',
   render: (time: string, row: MonitoringPointRow) => {
-    return row.data && row.data.timestamp
-      ? dayjs(row.data.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss')
-      : '-';
+    return row.data && row.data.timestamp ? Dayjs.format(row.data.timestamp) : '-';
   },
   width: 120
 };

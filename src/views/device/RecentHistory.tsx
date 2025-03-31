@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Col, Collapse, Empty } from 'antd';
 import intl from 'react-intl-universal';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import { FindDeviceDataRequest } from '../../apis/device';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
@@ -20,8 +20,8 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   React.useEffect(() => {
     FindDeviceDataRequest(
       device.id,
-      dayjs().startOf('day').subtract(13, 'd').utc().unix(),
-      dayjs().endOf('day').utc().unix(),
+      Dayjs.dayjs().startOf('day').subtract(13, 'd').utc().unix(),
+      Dayjs.dayjs().endOf('day').utc().unix(),
       channels.length > 0 ? { channel } : {}
     ).then(setHistoryData);
   }, [device.id, channel, channels.length]);

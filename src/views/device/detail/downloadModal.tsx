@@ -3,7 +3,7 @@ import { Form, ModalProps, Select } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
 import { Device } from '../../../types/device';
-import { oneWeekNumberRange, RangeDatePicker } from '../../../components/rangeDatePicker';
+import { useRange, RangeDatePicker } from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { getDisplayProperties } from '../util';
@@ -42,7 +42,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
   }
   properties.push(signalStrength);
   const channels = DeviceType.isMultiChannel(device.typeId, true);
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const [form] = Form.useForm();
   const { language } = useLocaleContext();
 
@@ -50,8 +50,8 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
     form.validateFields(['properties']).then((values) => {
       const pids = JSON.stringify(values.properties);
       const filter = values.channel ? { pids, channel: values.channel } : { pids };
-      if (range) {
-        const [from, to] = range;
+      if (numberedRange) {
+        const [from, to] = numberedRange;
         DownloadDeviceDataRequest(
           device.id,
           from,

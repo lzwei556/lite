@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Button, Col, Empty, Modal, Space } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import { GetDeviceRuntimeRequest, RemoveDeviceRuntimeRequest } from '../../apis/device';
-import { Card, Flex, Grid, LineChart } from '../../components';
-import { oneWeekNumberRange, RangeDatePicker } from '../../components/rangeDatePicker';
+import { Card, Flex, Grid, LineChart, useRange, RangeDatePicker } from '../../components';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
 import { Device } from '../../types/device';
@@ -18,23 +17,23 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
       timestamp: number;
     }[]
   >([]);
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const { id, name } = device;
 
   React.useEffect(() => {
-    const [from, to] = range;
+    const [from, to] = numberedRange;
     GetDeviceRuntimeRequest(id, from, to).then(setRuntimes);
-  }, [id, range]);
+  }, [id, numberedRange]);
 
   const onRemoveDeviceData = () => {
-    if (range) {
-      const [from, to] = range;
+    if (numberedRange) {
+      const [from, to] = numberedRange;
       Modal.confirm({
         title: intl.get('PROMPT'),
         content: intl.get('DELETE_DEVICE_DATA_PROMPT', {
           device: name,
-          start: dayjs.unix(from).local().format('YYYY-MM-DD'),
-          end: dayjs.unix(to).local().format('YYYY-MM-DD')
+          start: Dayjs.format(from, 'YYYY-MM-DD'),
+          end: Dayjs.format(to, 'YYYY-MM-DD')
         }),
         okText: intl.get('OK'),
         cancelText: intl.get('CANCEL'),
@@ -54,9 +53,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
         </Card>
       );
     }
-    const xAxisValues = runtimes.map((item) =>
-      dayjs.unix(item.timestamp).local().format('YYYY-MM-DD HH:mm:ss')
-    );
+    const xAxisValues = runtimes.map((item) => Dayjs.format(item.timestamp));
 
     return (
       <Card
@@ -95,7 +92,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
         <Card>
           <Flex>
             <Space>
-              <RangeDatePicker onChange={setRange} showFooter={true} />
+              <RangeDatePicker onChange={setRange} />
             </Space>
           </Flex>
         </Card>

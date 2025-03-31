@@ -1,5 +1,5 @@
 import { round } from 'lodash';
-import dayjs from './dayjsUtils';
+import { dayjs } from './dayjsUtils';
 import { Language } from '../localeProvider';
 
 export const getFilename = (res: any, identifier?: number) => {

@@ -8,7 +8,7 @@ import { toMac } from '../../../utils/format';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
 import { Network } from '../../../types/network';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { Topology } from '../../network';
 
 export const GatewayDetail = ({ device, network }: { device: Device; network?: Network }) => {
@@ -35,9 +35,7 @@ export const GatewayDetail = ({ device, network }: { device: Device; network?: N
     {
       key: 'time',
       label: intl.get('LAST_CONNECTION_TIME'),
-      children: state.connectedAt
-        ? dayjs(state.connectedAt * 1000).format('YYYY-MM-DD HH:mm:ss')
-        : '-'
+      children: state.connectedAt ? Dayjs.format(state.connectedAt) : '-'
     }
   ];
   if (information.ip_address) {

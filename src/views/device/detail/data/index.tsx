@@ -3,7 +3,7 @@ import { Button, Col, Modal, Space as AntSpace, Empty } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Device } from '../../../../types/device';
-import dayjs from '../../../../utils/dayjsUtils';
+import { Dayjs } from '../../../../utils';
 import {
   FindDeviceDataRequest,
   GetDeviceRuntimeRequest,
@@ -12,10 +12,17 @@ import {
 } from '../../../../apis/device';
 import HasPermission from '../../../../permission';
 import { Permission } from '../../../../permission/permission';
-import { RangeDatePicker, oneWeekNumberRange } from '../../../../components/rangeDatePicker';
 import { DeviceType } from '../../../../types/device_type';
 import { DisplayProperty } from '../../../../constants/properties';
-import { Card, Flex, Grid, LightSelectFilter, LineChart } from '../../../../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  LightSelectFilter,
+  LineChart,
+  useRange,
+  RangeDatePicker
+} from '../../../../components';
 import { HistoryDataFea } from '../../../../features';
 import { HistoryData } from '../../../asset-common';
 import { getDisplayProperties } from '../../util';
@@ -46,7 +53,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
   const [property, setProperty] = useState<DisplayProperty | undefined>(
     properties.length > 0 ? properties[0] : undefined
   );
-  const [range, setRange] = useState<[number, number]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const [dataSource, setDataSource] = useState<HistoryData>();
   const channels = DeviceType.isMultiChannel(device.typeId, true);
   const [channel, setChannel] = useState('1');
@@ -59,14 +66,14 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
   >([]);
 
   const fetchDeviceData = useCallback(() => {
-    if (range) {
-      const [from, to] = range;
+    if (numberedRange) {
+      const [from, to] = numberedRange;
       FindDeviceDataRequest(device.id, from, to, channels.length > 0 ? { channel } : {}).then(
         setDataSource
       );
       GetDeviceRuntimeRequest(device.id, from, to).then(setRuntimes);
     }
-  }, [device.id, range, channel, channels.length]);
+  }, [device.id, numberedRange, channel, channels.length]);
 
   useEffect(() => {
     fetchDeviceData();
@@ -76,9 +83,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
     if (dataSource && dataSource.length > 0 && property) {
       if ([batteryVoltage, signalStrength].map(({ key }) => key).includes(property.key)) {
         if (runtimes.length > 0) {
-          const xAxisValues = runtimes.map((item) =>
-            dayjs.unix(item.timestamp).local().format('YYYY-MM-DD HH:mm:ss')
-          );
+          const xAxisValues = runtimes.map((item) => Dayjs.format(item.timestamp));
           const { key, name } = property;
           return (
             <LineChart
@@ -113,14 +118,14 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
 
   const onRemoveDeviceData = () => {
     if (device) {
-      if (range) {
-        const [from, to] = range;
+      if (numberedRange) {
+        const [from, to] = numberedRange;
         Modal.confirm({
           title: intl.get('PROMPT'),
           content: intl.get('DELETE_DEVICE_DATA_PROMPT', {
             device: device.name,
-            start: dayjs.unix(from).local().format('YYYY-MM-DD'),
-            end: dayjs.unix(to).local().format('YYYY-MM-DD')
+            start: Dayjs.format(from, 'YYYY-MM-DD'),
+            end: Dayjs.format(to, 'YYYY-MM-DD')
           }),
           okText: intl.get('OK'),
           cancelText: intl.get('CANCEL'),
@@ -139,7 +144,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
       <Col span={24}>
         <Card>
           <Flex>
-            <RangeDatePicker onChange={setRange} showFooter={true} />
+            <RangeDatePicker onChange={setRange} />
           </Flex>
         </Card>
       </Col>

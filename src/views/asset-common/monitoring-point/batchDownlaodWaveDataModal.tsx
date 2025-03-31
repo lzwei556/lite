@@ -5,7 +5,7 @@ import { getFilename } from '../../../utils/format';
 import { Table } from '../../../components';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { isMobile } from '../../../utils/deviceDetection';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { batchDownload } from './services';
 
 export const BatchDownlaodWaveDataModal = ({
@@ -75,8 +75,7 @@ export const BatchDownlaodWaveDataModal = ({
             dataIndex: 'timestamp',
             key: 'timestamp',
             width: '80%',
-            render: (timestamp: number) =>
-              dayjs.unix(timestamp).local().format('YYYY-MM-DD HH:mm:ss')
+            render: (timestamp: number) => Dayjs.format(timestamp)
           }
         ]}
         pagination={false}

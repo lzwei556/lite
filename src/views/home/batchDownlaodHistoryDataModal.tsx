@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Col, ModalProps, Row, Tree, message } from 'antd';
 import intl from 'react-intl-universal';
 import JSZip from 'jszip';
-import { oneWeekNumberRange, RangeDatePicker } from '../../components/rangeDatePicker';
+import { useRange, RangeDatePicker } from '../../components';
 import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { useLocaleContext } from '../../localeProvider';
@@ -16,7 +16,7 @@ export const BatchDownlaodHistoryDataModal = ({
   assets,
   ...rest
 }: { assets: AssetRow[] } & ModalProps) => {
-  const [range, setRange] = React.useState<number[]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const [selectedIds, setSelectedIds] = React.useState<[number, number][]>([]);
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
@@ -37,7 +37,7 @@ export const BatchDownlaodHistoryDataModal = ({
   const treeData = getTreedata(assets);
 
   const handleDownload = (ids: [number, number][]) => {
-    const [from, to] = range;
+    const [from, to] = numberedRange;
 
     const fetchs = ids.map(([id, type]) => {
       const properties =

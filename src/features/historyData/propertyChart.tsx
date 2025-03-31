@@ -2,7 +2,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { HistoryData } from '../../views/asset-common';
 import { DisplayProperty } from '../../constants/properties';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import { roundValue } from '../../utils/format';
 import { Chart, useLinedSeriesOptions, ChartProps, getOptions } from '../../components';
 
@@ -37,9 +37,7 @@ export function transform(
   naming?: { replace?: string; prefix?: string }
 ) {
   if (!origin || origin.length === 0) return { series: [], values: [] };
-  const xAxisValues = origin.map(({ timestamp }) =>
-    dayjs.unix(timestamp).local().format('YYYY-MM-DD HH:mm:ss')
-  );
+  const xAxisValues = origin.map(({ timestamp }) => Dayjs.format(timestamp));
   const series =
     property.fields
       ?.filter((f) => (property.onlyShowFirstField ? f.first : true))

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Col, Collapse, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Grid } from '../../../../components';
-import { oneWeekNumberRange } from '../../../../components/rangeDatePicker';
+import { Dayjs } from '../../../../utils';
+import { Card, Grid, commonRange } from '../../../../components';
 import { DisplayProperty, displayPropertyGroup } from '../../../../constants/properties';
 import { generateColProps } from '../../../../utils/grid';
 import { HistoryDataFea } from '../../../../features';
@@ -20,7 +20,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const colProps = generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 });
 
   React.useEffect(() => {
-    const [from, to] = oneWeekNumberRange;
+    const [from, to] = Dayjs.toRange(commonRange.PastWeek);
     getDataOfMonitoringPoint(id, from, to).then((data) => {
       setLoading(false);
       if (data.length > 0) {

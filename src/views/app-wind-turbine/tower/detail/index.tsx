@@ -2,7 +2,6 @@ import React from 'react';
 import { Radio } from 'antd';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { oneWeekNumberRange } from '../../../../components/rangeDatePicker';
 import { Card, Table, Tabs } from '../../../../components';
 import { useLocaleContext } from '../../../../localeProvider';
 import {
@@ -36,8 +35,7 @@ export const Index = (props: {
   const { asset, onSuccess } = props;
   const { id, alertLevel, monitoringPoints } = asset;
   const [type, setType] = React.useState('basic');
-  const range = React.useRef<[number, number]>(oneWeekNumberRange);
-  const historyDatas = useHistoryDatas(asset, range.current);
+  const historyDatas = useHistoryDatas(asset);
   const ref = React.useRef<HTMLDivElement>(null);
   const size = useSize(ref);
 

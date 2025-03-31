@@ -1,9 +1,9 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
-import { Card, Grid } from '../../../../components';
-import { oneWeekNumberRange } from '../../../../components/rangeDatePicker';
+import { Card, Grid, commonRange } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
 import { generateColProps } from '../../../../utils/grid';
+import { Dayjs } from '../../../../utils';
 import { HistoryDataFea } from '../../../../features';
 import {
   getDataOfMonitoringPoint,
@@ -19,7 +19,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const colProps = generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 });
 
   React.useEffect(() => {
-    const [from, to] = oneWeekNumberRange;
+    const [from, to] = Dayjs.toRange(commonRange.PastWeek);
     getDataOfMonitoringPoint(id, from, to).then((data) => {
       setLoading(false);
       if (data.length > 0) {

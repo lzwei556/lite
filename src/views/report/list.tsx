@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import intl from 'react-intl-universal';
-import { Table, transformPagedresult } from '../../components';
-import { RangeDatePicker, oneWeekNumberRange } from '../../components/rangeDatePicker';
+import { Table, transformPagedresult, RangeDatePicker, useRange } from '../../components';
 import { Store, useStore } from '../../hooks/store';
 import { PageResult } from '../../types/page';
 import request from '../../utils/request';
 import { GetResponse } from '../../utils/response';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import { Report } from './detail/report';
 
 export default function ReportList() {
   const [dataSource, setDataSource] = useState<PageResult<Report[]>>();
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
+  const { numberedRange, setRange } = useRange();
   const [store, setStore] = useStore('reportList');
 
   const fetchReports = (store: Store['reportList'], from: number, to: number) => {
@@ -23,11 +22,11 @@ export default function ReportList() {
   };
 
   useEffect(() => {
-    if (range) {
-      const [from, to] = range;
+    if (numberedRange) {
+      const [from, to] = numberedRange;
       fetchReports(store, from, to);
     }
-  }, [store, range]);
+  }, [store, numberedRange]);
 
   const columns = [
     {
@@ -40,7 +39,7 @@ export default function ReportList() {
       title: intl.get('REPORT_DATE'),
       dataIndex: 'reportDate',
       key: 'reportDate',
-      render: (text: number) => dayjs.unix(text).local().format('YYYY-MM-DD HH:mm:ss')
+      render: (text: number) => Dayjs.format(text)
     },
     {
       title: intl.get('OPERATION'),

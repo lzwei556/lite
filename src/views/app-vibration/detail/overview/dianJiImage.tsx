@@ -5,7 +5,7 @@ import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
 import { getValue, roundValue, truncate } from '../../../../utils/format';
 import { DisplayProperty } from '../../../../constants/properties';
-import dayjs from '../../../../utils/dayjsUtils';
+import { Dayjs } from '../../../../utils';
 import { ImageAnnotation } from '../../../../features';
 import { Card, Descriptions, Grid } from '../../../../components';
 import { SelfLink } from '../../../../components/selfLink';
@@ -63,9 +63,7 @@ export const DianJiImage = ({ asset }: { asset: AssetRow }) => {
                 size='small'
               />
             ),
-            footer: m.data?.timestamp
-              ? dayjs.unix(m.data.timestamp).local().format('YYYY-MM-DD HH:mm:ss')
-              : undefined
+            footer: m.data?.timestamp ? Dayjs.format(m.data.timestamp) : undefined
           }))}
           textSettingBtn={
             <SettingsButton

@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import dayjs from '../../../utils/dayjsUtils';
+import { Dayjs } from '../../../utils';
 import { DisplayProperty } from '../../../constants/properties';
 import { roundValue } from '../../../utils/format';
 import { ChartMark } from '../../../components';
@@ -56,9 +56,7 @@ export const ThicknessChart = (
                       valueFormatter: (rate) => `${intl.get('FIELD_CORROSION_RATE')} ${rate} mm/a`,
                       lineStyle: { color: '#fa8c16', width: 3, type: 'solid' }
                     },
-                    description: `${areaValues[i]
-                      .map((t) => dayjs.unix(t).format('YYYY-MM-DD HH:mm:ss'))
-                      .join()}`
+                    description: `${areaValues[i].map((t) => Dayjs.format(t)).join()}`
                   }
                 });
               });

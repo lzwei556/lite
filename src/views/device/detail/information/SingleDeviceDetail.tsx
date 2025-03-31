@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Typography } from 'antd';
 import intl from 'react-intl-universal';
-import dayjs from '../../../../utils/dayjsUtils';
+import { Dayjs } from '../../../../utils';
 import { Device } from '../../../../types/device';
 import { DeviceType } from '../../../../types/device_type';
 import { getDisplayName, toMac } from '../../../../utils/format';
@@ -71,9 +71,7 @@ export const SingleDeviceDetail: React.FC<{ device: Device }> = ({ device }) => 
 
   items.push({
     name: intl.get('LAST_CONNECTION_TIME'),
-    value: device.state.connectedAt
-      ? dayjs(device.state.connectedAt * 1000).format('YYYY-MM-DD HH:mm:ss')
-      : '-'
+    value: device.state.connectedAt ? Dayjs.format(device.state.connectedAt) : '-'
   });
 
   if (DeviceType.isSensor(device.typeId)) {
@@ -81,7 +79,7 @@ export const SingleDeviceDetail: React.FC<{ device: Device }> = ({ device }) => 
       name: intl.get('LAST_SAMPLING_TIME'),
       value:
         device.data && device.data.timestamp && device.data.timestamp > 0
-          ? dayjs.unix(device.data.timestamp).local().format('YYYY-MM-DD HH:mm:ss')
+          ? Dayjs.format(device.data.timestamp)
           : '-'
     });
   }

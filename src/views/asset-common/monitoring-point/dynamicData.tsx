@@ -1,9 +1,8 @@
 import React from 'react';
 import { Button, Col, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Flex, Grid, Table } from '../../../components';
-import { oneWeekNumberRange, RangeDatePicker } from '../../../components/rangeDatePicker';
-import dayjs from '../../../utils/dayjsUtils';
+import { Card, Flex, Grid, Table, useRange, RangeDatePicker } from '../../../components';
+import { Dayjs } from '../../../utils';
 import usePermission, { Permission } from '../../../permission/permission';
 import { getFilename } from '../../../utils/format';
 import { useLocaleContext } from '../../../localeProvider';
@@ -21,8 +20,8 @@ type TimestampObj = { timestamp: number };
 
 export function DynamicData<T>(props: DynamicDataProps<T>) {
   const { dataType, id } = props;
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
-  const { loading, timestamps } = useFetchingTimestamps(id, range, dataType);
+  const { numberedRange, setRange } = useRange();
+  const { loading, timestamps } = useFetchingTimestamps(id, numberedRange, dataType);
   const render = (timestamps: TimestampObj[]) => {
     if (timestamps.length === 0) {
       return (
@@ -138,9 +137,7 @@ function TimestampsTable<T>(
             title: intl.get('TIMESTAMP'),
             dataIndex: 'timestamp',
             key: 'timestamp',
-
-            render: (timestamp: number) =>
-              dayjs.unix(timestamp).local().format('YYYY-MM-DD HH:mm:ss')
+            render: (timestamp: number) => Dayjs.format(timestamp)
           },
           {
             title: intl.get('OPERATION'),

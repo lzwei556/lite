@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import { Card, Flex, Grid } from '../../../../components';
-import { oneWeekNumberRange, RangeDatePicker } from '../../../../components/rangeDatePicker';
+import { Card, Flex, Grid, useRange, RangeDatePicker } from '../../../../components';
 import { AssetRow, HistoryData, Points } from '../../../asset-common';
 import { useHistoryDatas } from '../../utils';
 import { PointsLineChart } from './pointsLineChart';
@@ -15,8 +14,8 @@ export const History = ({
   historyDatas: { name: string; data: HistoryData; height?: number; radius?: number }[] | undefined;
 }) => {
   const realPoints = Points.filter(asset.monitoringPoints);
-  const [range, setRange] = React.useState<[number, number]>(oneWeekNumberRange);
-  const internalHistorys = useHistoryDatas(asset, range) ?? historyDatas;
+  const { numberedRange, setRange } = useRange();
+  const internalHistorys = useHistoryDatas(asset, numberedRange) ?? historyDatas;
   const firstPoint = realPoints[0];
 
   return (
@@ -24,7 +23,7 @@ export const History = ({
       <Col span={24}>
         <Card>
           <Flex>
-            <RangeDatePicker onChange={setRange} showFooter={true} />
+            <RangeDatePicker onChange={setRange} />
           </Flex>
         </Card>
       </Col>

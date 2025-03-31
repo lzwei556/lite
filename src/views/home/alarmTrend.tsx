@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Spin } from 'antd';
 import intl from 'react-intl-universal';
-import dayjs from '../../utils/dayjsUtils';
+import { Dayjs } from '../../utils';
 import { GetAlertStatisticsRequest } from '../../apis/statistic';
 import { Card, Chart, getBarPieOption, getOptions } from '../../components';
 import { AlarmLevel, getColorByValue, getLabelByValue } from '../alarm';
@@ -70,7 +70,7 @@ export const AlarmTrend = ({ title, id }: { id?: number; title: string }) => {
       warn: number[] = [],
       danger: number[] = [];
     if (data.length > 0) {
-      xAxisData.push(...data.map(({ timestamp }) => dayjs.unix(timestamp).local().format('MM/DD')));
+      xAxisData.push(...data.map(({ timestamp }) => Dayjs.format(timestamp, 'MM/DD')));
       info.push(...data.map(({ info }) => info));
       warn.push(...data.map(({ warn }) => warn));
       danger.push(...data.map(({ critical }) => critical));

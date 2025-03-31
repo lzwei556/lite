@@ -1,16 +1,15 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
-import { ChartMark, Card, Flex, Grid } from '../../../components';
-import { RangeDatePicker } from '../../../components/rangeDatePicker';
-import dayjs from '../../../utils/dayjsUtils';
+import { ChartMark, Card, Flex, Grid, useRange, RangeDatePicker } from '../../../components';
+import { Dayjs } from '../../../utils';
 import { TrendData } from '../../asset-common';
-import { useDateRange, useTrendData } from './useTrend';
+import { useTrendData } from './useTrend';
 import { AnalysisContent } from './analysisContent';
 import { Trend } from './trend';
 
 export const Index = ({ id }: { id: number }) => {
-  const { range, setRange } = useDateRange();
-  const { loading, data } = useTrendData(id, range);
+  const { numberedRange, setRange } = useRange();
+  const { loading, data } = useTrendData(id, numberedRange);
 
   return (
     <Grid>
@@ -36,7 +35,7 @@ function Content({ data, id }: { data: TrendData[]; id: number }) {
   );
   const lines: string[] = [];
   if (selected) {
-    lines.push(dayjs.unix(selected).local().format('YYYY-MM-DD HH:mm:ss'));
+    lines.push(Dayjs.format(selected));
   }
   if (lines.length === 0) {
     return (
