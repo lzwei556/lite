@@ -26,21 +26,19 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
     ).then(setHistoryData);
   }, [device.id, channel, channels.length]);
 
+  const channelsSelect = channels.length > 0 && (
+    <LightSelectFilter
+      allowClear={false}
+      onChange={setChannel}
+      options={channels}
+      value={channel}
+      prefix={intl.get('CURRENT_CHANNEL')}
+    />
+  );
+
   if (!historyData || historyData.length === 0) {
     return (
-      <Card
-        extra={
-          channels.length > 0 && (
-            <LightSelectFilter
-              allowClear={false}
-              onChange={setChannel}
-              options={channels}
-              value={channel}
-              prefix={intl.get('CURRENT_CHANNEL')}
-            />
-          )
-        }
-      >
+      <Card extra={channelsSelect}>
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       </Card>
     );
@@ -71,7 +69,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
       />
     );
   } else {
-    return (
+    const chartGrid = (
       <Grid>
         {getDisplayProperties(device.properties, device.typeId).map(
           (p: DisplayProperty, index: number) => {
@@ -84,5 +82,10 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
         )}
       </Grid>
     );
+    if (channels.length > 0) {
+      return <Card extra={channelsSelect}>{chartGrid}</Card>;
+    } else {
+      return chartGrid;
+    }
   }
 };

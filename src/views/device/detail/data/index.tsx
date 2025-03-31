@@ -146,42 +146,43 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
       <Col span={24}>
         <Card
           extra={
-            dataSource &&
-            dataSource.length > 0 && (
-              <AntSpace style={{ textAlign: 'center' }} wrap={true}>
-                {channels.length > 0 && (
-                  <LightSelectFilter
-                    allowClear={false}
-                    onChange={setChannel}
-                    options={channels}
-                    value={channel}
-                    prefix={intl.get('CURRENT_CHANNEL')}
-                  />
-                )}
-                {properties && property && (
-                  <LightSelectFilter
-                    allowClear={false}
-                    onChange={(value) => {
-                      setProperty(properties.find((item: any) => item.key === value));
-                    }}
-                    options={properties.map(({ name, key }) => ({
-                      label: intl.get(name),
-                      value: key
-                    }))}
-                    prefix={intl.get('PROPERTY')}
-                    value={property.key}
-                  />
-                )}
-                <HasPermission value={Permission.DeviceDataDelete}>
-                  <Button
-                    color='danger'
-                    icon={<DeleteOutlined />}
-                    onClick={onRemoveDeviceData}
-                    variant='filled'
-                  />
-                </HasPermission>
-              </AntSpace>
-            )
+            <AntSpace style={{ textAlign: 'center' }} wrap={true}>
+              {channels.length > 0 && (
+                <LightSelectFilter
+                  allowClear={false}
+                  onChange={setChannel}
+                  options={channels}
+                  value={channel}
+                  prefix={intl.get('CURRENT_CHANNEL')}
+                />
+              )}
+              {dataSource && dataSource.length > 0 && (
+                <>
+                  {properties && property && (
+                    <LightSelectFilter
+                      allowClear={false}
+                      onChange={(value) => {
+                        setProperty(properties.find((item: any) => item.key === value));
+                      }}
+                      options={properties.map(({ name, key }) => ({
+                        label: intl.get(name),
+                        value: key
+                      }))}
+                      prefix={intl.get('PROPERTY')}
+                      value={property.key}
+                    />
+                  )}
+                  <HasPermission value={Permission.DeviceDataDelete}>
+                    <Button
+                      color='danger'
+                      icon={<DeleteOutlined />}
+                      onClick={onRemoveDeviceData}
+                      variant='filled'
+                    />
+                  </HasPermission>
+                </>
+              )}
+            </AntSpace>
           }
           title={device.name}
         >
