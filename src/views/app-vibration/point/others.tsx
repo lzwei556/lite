@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Input, Select } from 'antd';
 import intl from 'react-intl-universal';
 import { FormInputItem } from '../../../components/formInputItem';
 
@@ -16,7 +16,7 @@ export const Others = (props: FieldProps) => {
 
   if (mode === 'create') {
     return (
-      <Row>
+      <>
         <Col span={12}>
           <Position {...props} />
         </Col>
@@ -29,7 +29,7 @@ export const Others = (props: FieldProps) => {
         <Col span={12}>
           <Horizontal {...props} />
         </Col>
-      </Row>
+      </>
     );
   } else {
     return (
@@ -54,6 +54,7 @@ function Position(props: FieldProps) {
       {...restFields}
       label={intl.get('POSITION')}
       name={nameProp}
+      requiredMessage={intl.get('PLEASE_ENTER_POSITION')}
       style={isModeCreate ? { display: 'inline-block', width: 200, marginRight: 20 } : undefined}
     >
       <Input />

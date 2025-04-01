@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Col, Form, Input, Popover, Row } from 'antd';
+import { Button, Col, Form, Input, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
+import { Grid } from '../../../components';
 import { Device } from '../../../types/device';
 import { FormInputItem } from '../../../components/formInputItem';
 import { isMobile } from '../../../utils/deviceDetection';
@@ -60,7 +61,7 @@ export const PointItemList = ({
                   onRemove(index);
                 }}
               />
-              <Row>
+              <Grid>
                 <Col span={12}>
                   <FormInputItem
                     {...restFields}
@@ -74,7 +75,7 @@ export const PointItemList = ({
                   </FormInputItem>
                 </Col>
                 <Others mode='create' nameIndex={name} restFields={restFields} />
-              </Row>
+              </Grid>
             </div>
           ))}
           <Form.Item>
