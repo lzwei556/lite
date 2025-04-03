@@ -55,7 +55,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
   );
   const { numberedRange, setRange } = useRange();
   const [dataSource, setDataSource] = useState<HistoryData>();
-  const channels = DeviceType.isMultiChannel(device.typeId, true);
+  const channels = DeviceType.getChannels(device.typeId);
   const [channel, setChannel] = useState('1');
   const [runtimes, setRuntimes] = useState<
     {

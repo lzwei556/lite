@@ -41,7 +41,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
     properties.push(batteryVoltage);
   }
   properties.push(signalStrength);
-  const channels = DeviceType.isMultiChannel(device.typeId, true);
+  const channels = DeviceType.getChannels(device.typeId);
   const { numberedRange, setRange } = useRange();
   const [form] = Form.useForm();
   const { language } = useLocaleContext();

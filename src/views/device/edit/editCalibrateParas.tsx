@@ -24,6 +24,8 @@ const EditCalibrateParas = ({
   const [form] = Form.useForm();
   const typeParaMapping = new Map();
   typeParaMapping.set(DeviceType.SAS, 'preload');
+  typeParaMapping.set(DeviceType.SAS120D, 'preload');
+  typeParaMapping.set(DeviceType.SAS120Q, 'preload');
   typeParaMapping.set(DeviceType.DS4, 'preload');
   typeParaMapping.set(DeviceType.DS8, 'preload');
   typeParaMapping.set(DeviceType.DC110, 'thickness');
@@ -39,7 +41,7 @@ const EditCalibrateParas = ({
   const property = properties.find((pro) => pro.key === typeParaMapping.get(typeId))!;
   const isSVT = DeviceType.isVibration(typeId);
   const isSPT = DeviceType.isSPT(typeId);
-  const channels = DeviceType.isMultiChannel(typeId, true);
+  const channels = DeviceType.getChannels(typeId);
 
   function handleSubmit(param?: number) {
     if (param !== undefined) {

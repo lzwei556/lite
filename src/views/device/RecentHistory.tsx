@@ -13,7 +13,7 @@ import { HistoryData } from '../asset-common';
 import { getDisplayProperties } from './util';
 
 export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
-  const channels = DeviceType.isMultiChannel(device.typeId, true);
+  const channels = DeviceType.getChannels(device.typeId);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const [channel, setChannel] = React.useState('1');
 

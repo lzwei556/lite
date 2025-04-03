@@ -137,6 +137,8 @@
   "DEVICE_TYPE": "Device Type",
   "DEVICE_TYPE_DS4": "4 channels Bolt Preload",
   "DEVICE_TYPE_DS8": "8 channels Bolt Preload",
+  "DEVICE_TYPE_SAS120D": "Wireless Dual-Channel Bolt Preload Sensor",
+  "DEVICE_TYPE_SAS120Q": "Wireless Quad-Channel Bolt Preload Sensor",
   "DEVICE_TYPE_SA": "Wireless Bolt Loosening Sensor",
   "DEVICE_TYPE_SAS": "Wireless Bolt Preload Sensor",
   "DEVICE_TYPE_DC110": "Wireless Corrosion Sensor",

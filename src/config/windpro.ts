@@ -9,7 +9,9 @@ export const SENSORS = [
   DeviceType.SAS,
   DeviceType.DS4,
   DeviceType.DS8,
-  DeviceType.SQ100
+  DeviceType.SQ100,
+  DeviceType.SAS120D,
+  DeviceType.SAS120Q
 ];
 export const MONITORING_POINTS = [
   {

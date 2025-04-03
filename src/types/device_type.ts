@@ -9,6 +9,8 @@ export enum DeviceType {
   SAS = 0x30001,
   DS4 = 0x30003,
   DS8 = 0x30004,
+  SAS120D = 0x30005,
+  SAS120Q = 0x30006,
   DC110 = 0x40001,
   DC110C = 0x40003,
   DC210 = 0x40101,
@@ -54,6 +56,10 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_DS4';
       case DeviceType.DS8:
         return 'DEVICE_TYPE_DS8';
+      case DeviceType.SAS120D:
+        return 'DEVICE_TYPE_SAS120D';
+      case DeviceType.SAS120Q:
+        return 'DEVICE_TYPE_SAS120Q';
       case DeviceType.DC110:
         return 'DEVICE_TYPE_DC110';
       case DeviceType.DC110C:
@@ -122,6 +128,8 @@ export namespace DeviceType {
       DeviceType.SAS,
       DeviceType.DS4,
       DeviceType.DS8,
+      DeviceType.SAS120D,
+      DeviceType.SAS120Q,
       DeviceType.DC110,
       DeviceType.DC110C,
       DeviceType.DC210,
@@ -149,27 +157,33 @@ export namespace DeviceType {
     ];
   }
 
-  export function isMultiChannel(type: number): boolean;
-  export function isMultiChannel(
-    type: number,
-    returnChannels: boolean
-  ): { label: string; value: number }[];
-  export function isMultiChannel(type: number, returnChannels: boolean = false) {
+  export function isMultiChannel(type: number) {
+    return type === DeviceType.DS4 || type === DeviceType.DS8;
+  }
+
+  export function isSASMultiChannel(type: number) {
+    return type === DeviceType.SAS120D || type === DeviceType.SAS120Q;
+  }
+
+  export function getChannels(type: number) {
     const channels = [1, 2, 3, 4, 5, 6, 7, 8].map((v) => ({ label: v.toString(), value: v }));
-    const is4Channel = type === DeviceType.DS4;
-    const is8Channel = type === DeviceType.DS8;
-    if (returnChannels) {
-      if (is4Channel) return channels.filter((c) => c.value < 5);
-      if (is8Channel) return channels;
-      return [];
+    switch (type) {
+      case DeviceType.SAS120D:
+        return channels.slice(0, 2);
+      case DeviceType.SAS120Q:
+      case DeviceType.DS4:
+        return channels.slice(0, 4);
+      case DeviceType.DS8:
+        return channels.slice();
+      default:
+        return [];
     }
-    return is4Channel || is8Channel;
   }
 
   export function isWiredSensor(type: number) {
     return (
       type === DeviceType.SA_S ||
-      (isMultiChannel(type) as boolean) ||
+      isMultiChannel(type) ||
       type === DeviceType.SVT210S ||
       type === DeviceType.SVT220S1 ||
       type === DeviceType.SVT220S3 ||
@@ -215,6 +229,7 @@ export namespace DeviceType {
   export function canSupportingCalibrate(type: number) {
     return (
       type === DeviceType.SAS ||
+      DeviceType.isSASMultiChannel(type) ||
       DeviceType.isMultiChannel(type) ||
       type === DeviceType.DC110 ||
       type === DeviceType.DC110C ||
@@ -231,7 +246,10 @@ export namespace DeviceType {
   }
 
   export function hasGroupedSettings(type: number) {
-    return (type === DeviceType.SAS || isMultiChannel(type)) && !isVibration(type);
+    return (
+      (type === DeviceType.SAS || isSASMultiChannel(type) || isMultiChannel(type)) &&
+      !isVibration(type)
+    );
   }
 
   export function getNonSensorDeviceTypes() {
@@ -277,6 +295,8 @@ export const SENSOR_DISPLAY_PROPERTIES = {
   [DeviceType.SA]: PROPERTY_CATEGORIES.SA,
   [DeviceType.SA_S]: PROPERTY_CATEGORIES.SA,
   [DeviceType.SAS]: PROPERTY_CATEGORIES.SAS,
+  [DeviceType.SAS120D]: PROPERTY_CATEGORIES.DS,
+  [DeviceType.SAS120Q]: PROPERTY_CATEGORIES.DS,
   [DeviceType.DS4]: PROPERTY_CATEGORIES.DS,
   [DeviceType.DS8]: PROPERTY_CATEGORIES.DS,
   [DeviceType.DC110]: PROPERTY_CATEGORIES.DC_NORMAL,

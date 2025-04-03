@@ -80,12 +80,21 @@ export function useParents(asset?: AssetRow) {
 export const getRelatedDeviceTypes = (type: number) => {
   const relatedDeviceTypes = new Map([
     [MonitoringPointTypeValue.BoltLoosening, [DeviceType.SA, DeviceType.SA_S]],
-    [MonitoringPointTypeValue.BoltPreload, [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8]],
+    [
+      MonitoringPointTypeValue.BoltPreload,
+      [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8, DeviceType.SAS120D, DeviceType.SAS120Q]
+    ],
     [MonitoringPointTypeValue.AnchorPreload, [DeviceType.SAS]],
     [MonitoringPointTypeValue.TopInclination, [DeviceType.SQ100, DeviceType.SQ110C]],
     [MonitoringPointTypeValue.BaseInclination, [DeviceType.SQ100, DeviceType.SQ110C]],
-    [MonitoringPointTypeValue.FlangeBoltPreload, [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8]],
-    [MonitoringPointTypeValue.FlangeAnchorPreload, [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8]]
+    [
+      MonitoringPointTypeValue.FlangeBoltPreload,
+      [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8, DeviceType.SAS120D, DeviceType.SAS120Q]
+    ],
+    [
+      MonitoringPointTypeValue.FlangeAnchorPreload,
+      [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8, DeviceType.SAS120D, DeviceType.SAS120Q]
+    ]
   ]);
   return relatedDeviceTypes.get(type);
 };

@@ -34,7 +34,7 @@ export const CommandDropdown = ({
   const [upgradeVisible, setUpgradeVisible] = useState(false);
   const [openCalibrate, setVisibleCalibrate] = useState(false);
   const { hasPermissions } = userPermission();
-  const chanels = DeviceType.isMultiChannel(typeId, true);
+  const chanels = DeviceType.getChannels(typeId);
 
   useEffect(() => {
     PubSub.subscribe(SocketTopic.upgradeStatus, (msg: string, status: any) => {

@@ -18,7 +18,7 @@ export const UpdateFormItems = (monitoringPoint: MonitoringPointRow) => {
       ? monitoringPoint?.bindingDevices[0].typeId
       : 0;
   const [channels, setChannels] = React.useState<{ label: string; value: number }[]>(
-    DeviceType.isMultiChannel(deviceTypeId, true)
+    DeviceType.getChannels(deviceTypeId)
   );
 
   return (
@@ -70,7 +70,7 @@ export const UpdateFormItems = (monitoringPoint: MonitoringPointRow) => {
           filters={{
             types: deviceTypes?.join(',')
           }}
-          onTypeChange={(type) => setChannels(DeviceType.isMultiChannel(type ?? 0, true))}
+          onTypeChange={(type) => setChannels(DeviceType.getChannels(type ?? 0))}
         />
       </Form.Item>
       {channels.length > 0 && (

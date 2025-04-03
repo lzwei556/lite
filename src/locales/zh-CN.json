@@ -137,6 +137,8 @@
   "DEVICE_TYPE": "设备类型",
   "DEVICE_TYPE_DS4": "4通道螺栓预紧力采集器",
   "DEVICE_TYPE_DS8": "8通道螺栓预紧力采集器",
+  "DEVICE_TYPE_SAS120D": "无线双通道螺栓预紧力传感器",
+  "DEVICE_TYPE_SAS120Q": "无线四通道螺栓预紧力传感器",
   "DEVICE_TYPE_SA": "无线螺栓松动传感器",
   "DEVICE_TYPE_SA_S": "RS485 螺栓松动传感器",
   "DEVICE_TYPE_SAS": "无线螺栓预紧力传感器",
