@@ -2,17 +2,21 @@ import React from 'react';
 import { Col, Divider } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
-import { roundValue } from '../../../utils/format';
+import { AnalysisSidebarCollapse } from '../../../features';
 import { frequency } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
-import { AnalysisSidebarCollapse } from '../../../features';
+import { MarkList, SingleDoubleToggle, useInitialMarks, useMarkChartProps } from './mark';
 
 export const Frequency = ({ axis, property, timeDomain, originalDomain }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
-  const { visibledMarks, dispatchMarks } = ChartMark.useContext();
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
+  const [activeKey, setActiveKey] = React.useState('overview');
+  const { marks, handleClick } = useMarkChartProps();
+
+  useInitialMarks(x, y);
+
   React.useEffect(() => {
     if (property.value && originalDomain) {
       const { frequency: fs, fullScale, range, values } = originalDomain;
@@ -25,7 +29,7 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
         range,
         window: 'hann'
       })
-        .then(({ x, y }) => setData({ x: x.map((n) => `${roundValue(n)}`), y }))
+        .then(({ x, y }) => setData({ x: x.map((n) => `${n}`), y }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
@@ -37,23 +41,22 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
-            style: { border: 'solid 1px #d3d3d3' }
+            extra: <SingleDoubleToggle />,
+            style: { position: 'relative', border: 'solid 1px #d3d3d3' }
           }}
           config={{
             opts: {
               xAxis: { name: 'Hz' },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
-              grid: { top: 30, bottom: 60, right: 30 }
+              grid: { top: 60, bottom: 60, right: 30 }
             }
           }}
           loading={loading}
           onEvents={{
-            click: ([x, y]: [x: string, y: number]) => {
-              dispatchMarks({
-                type: 'append_multiple',
-                mark: { name: `${x}${y}`, data: [x, y], value: y, description: x }
-              });
+            click: (coord: [string, number], xIndex?: number) => {
+              handleClick(coord, x, y, xIndex);
+              setActiveKey('marklist');
             }
           }}
           series={ChartMark.mergeMarkDatas(
@@ -64,15 +67,16 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
                 raw: { animation: false }
               }
             ],
-            visibledMarks
+            marks
           )}
           style={{ height: 450 }}
-          toolbar={{ visibles: ['refresh', 'save_image'] }}
+          toolbar={{ visibles: ['save_image'] }}
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>
       <Col flex='300px'>
         <AnalysisSidebarCollapse
+          activeKey={activeKey}
           items={[
             {
               key: 'overview',
@@ -128,10 +132,13 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
             {
               key: 'marklist',
               label: intl.get('mark'),
-              children: <ChartMark.List />,
+              children: <MarkList />,
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}
+          onChange={(keys) => {
+            setActiveKey(keys[0]);
+          }}
         />
       </Col>
     </Grid>

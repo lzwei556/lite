@@ -42,6 +42,7 @@ export const Analysis = (props: MonitoringPointRow) => {
 const Content = (props: MonitoringPointRow & { range: Range }) => {
   const { id, range, properties, type } = props;
   const { history, loading } = useAnalysisData(id, range);
+  const [activeKey, setActiveKey] = React.useState('overview');
   if (loading) return <Spin />;
   if (!history || history.length === 0) {
     return (
@@ -58,11 +59,17 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
     <Grid gutter={[Space, Space]}>
       {property && (
         <Col flex='auto'>
-          <ThicknessChart {...props} history={history} property={property} />
+          <ThicknessChart
+            {...props}
+            history={history}
+            property={property}
+            onDispatchMark={() => setActiveKey('marklist')}
+          />
         </Col>
       )}
       <Col flex='300px'>
         <AnalysisSidebarCollapse
+          activeKey={activeKey}
           items={[
             {
               key: 'overview',
@@ -84,6 +91,9 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}
+          onChange={(keys) => {
+            setActiveKey(keys[0]);
+          }}
         />
       </Col>
     </Grid>

@@ -9,10 +9,14 @@ import { HistoryDataFea } from '../../../features';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
 
 export const ThicknessChart = (
-  props: MonitoringPointRow & { history?: HistoryData; property: DisplayProperty }
+  props: MonitoringPointRow & {
+    history?: HistoryData;
+    property: DisplayProperty;
+    onDispatchMark?: () => void;
+  }
 ) => {
   const { marks, visibledMarks, dispatchMarks } = ChartMark.useContext();
-  const { history, property, id, attributes } = props;
+  const { history, property, id, attributes, onDispatchMark } = props;
   const { series: initialSeries, min, max } = HistoryDataFea.transform(history, property);
   const defaultSeries = initialSeries.map((s) => ({
     ...s,
@@ -59,6 +63,7 @@ export const ThicknessChart = (
                     description: `${areaValues[i].map((t) => Dayjs.format(t)).join()}`
                   }
                 });
+                onDispatchMark?.();
               });
             });
           }
@@ -68,6 +73,7 @@ export const ThicknessChart = (
             type: 'append_multiple',
             mark: { name: `${x}${y}`, data: [x, y], value: roundValue(y), description: x }
           });
+          onDispatchMark?.();
         }
       }}
       style={{ height: 600 }}

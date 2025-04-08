@@ -15,6 +15,7 @@ import { Zoom } from './zoom';
 import { Axis, useAxis } from './useAxis';
 import { Cross } from './cross';
 import { TimeFrequency } from './timeFrequency';
+import { MarkContext } from './mark';
 
 export type AnalysisCommonProps = {
   id: number;
@@ -32,6 +33,7 @@ export type OriginalDomainResponse = {
   range: number;
   values: number[];
   xAxis: number[];
+  xAxisUnit?: string;
 };
 
 export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'property'>) => {
@@ -52,18 +54,18 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
           key: 'time-domain',
           label: 'time.domain',
           children: (
-            <ChartMark.Context>
+            <MarkContext>
               <TimeDomain {...{ ...props, axis, property, timeDomain }} />
-            </ChartMark.Context>
+            </MarkContext>
           )
         },
         {
           key: 'frequency',
           label: 'spectrum',
           children: (
-            <ChartMark.Context>
+            <MarkContext>
               <Frequency {...{ ...props, axis, property, timeDomain, originalDomain }} />
-            </ChartMark.Context>
+            </MarkContext>
           )
         },
         {
@@ -79,18 +81,18 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
           key: 'envelope',
           label: 'envelope.spectrum',
           children: (
-            <ChartMark.Context>
+            <MarkContext>
               <Envelope {...{ ...props, axis, property, timeDomain, originalDomain }} />
-            </ChartMark.Context>
+            </MarkContext>
           )
         },
         {
           key: 'power',
           label: 'power.spectrum',
           children: (
-            <ChartMark.Context>
+            <MarkContext>
               <Power {...{ ...props, axis, property, originalDomain }} />
-            </ChartMark.Context>
+            </MarkContext>
           )
         },
         {
@@ -106,18 +108,18 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
           key: 'zoom',
           label: 'zoom.fft',
           children: (
-            <ChartMark.Context>
+            <MarkContext>
               <Zoom {...{ ...props, axis, property, originalDomain }} />
-            </ChartMark.Context>
+            </MarkContext>
           )
         },
         {
           key: 'cepstrum',
           label: 'cepstrum',
           children: (
-            <ChartMark.Context>
+            <MarkContext>
               <Cepstrum {...{ ...props, axis, property, originalDomain }} />
-            </ChartMark.Context>
+            </MarkContext>
           )
         },
         {
@@ -150,6 +152,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
           />
         </Space>
       }
+      tabBarGutter={24}
     />
   );
 };

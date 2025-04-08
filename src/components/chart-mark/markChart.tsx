@@ -13,7 +13,6 @@ import { Card, CardProps } from '../card';
 import { useChartContext } from '../charts';
 import { SaveImageIconButton } from '../charts/saveImageIconButton';
 import { useContext } from './context';
-import { Mark } from './types';
 import {
   AreaMarkSwitcherIconButton,
   PointMarkSwitcherIconButton,
@@ -31,10 +30,13 @@ type PresetToolbarProps = {
   onRestore?: (ins: EChartsType | undefined) => void;
   imageFilename?: string;
   extra?: React.ReactNode;
+  noSplit?: boolean;
 };
 
 export const MarkChart = (
-  props: LineChartProps & { toolbar?: PresetToolbarProps } & { cardProps?: CardProps }
+  props: LineChartProps & { toolbar?: PresetToolbarProps } & { cardProps?: CardProps } & {
+    children?: React.ReactNode;
+  }
 ) => {
   const ref = useChartContext();
   const { setCursor, dispatchMarks } = useContext();
@@ -69,7 +71,7 @@ export const MarkChart = (
 
   const restoreHandle = () => {
     reset();
-    dispatchMarks({ type: 'clear', mark: {} as Mark });
+    dispatchMarks({ type: 'clear' });
     toolbar?.onRestore?.(ref.current.getInstance());
   };
 
@@ -77,20 +79,29 @@ export const MarkChart = (
     <Card
       {...cardProps}
       extra={
-        <Space>
-          {toolbar?.extra}
-          {toolbar?.extra && (
-            <Divider key='separation' type='vertical' style={{ borderColor: '#d3d3d3' }} />
-          )}
-          {visibles?.includes('enable_point') && (
-            <PointMarkSwitcherIconButton onClick={enablePointMark} />
-          )}
-          {visibles?.includes('enable_area') && (
-            <AreaMarkSwitcherIconButton onClick={enableAreaMark} />
-          )}
-          {visibles?.includes('refresh') && <ReloadIconButton onClick={restoreHandle} />}
-          {visibles?.includes('save_image') && <SaveImageIconButton chartHandler={ref.current} />}
-          {cardProps?.extra}
+        <Space
+          split={
+            !toolbar?.noSplit && (
+              <Divider
+                key='separation'
+                type='vertical'
+                style={{ marginInline: 4, borderColor: '#d3d3d3' }}
+              />
+            )
+          }
+        >
+          {toolbar?.extra && <Space>{toolbar?.extra}</Space>}
+          {cardProps?.extra && <Space>{cardProps?.extra}</Space>}
+          <Space>
+            {visibles?.includes('enable_point') && (
+              <PointMarkSwitcherIconButton onClick={enablePointMark} />
+            )}
+            {visibles?.includes('enable_area') && (
+              <AreaMarkSwitcherIconButton onClick={enableAreaMark} />
+            )}
+            {visibles?.includes('refresh') && <ReloadIconButton onClick={restoreHandle} />}
+            {visibles?.includes('save_image') && <SaveImageIconButton chartHandler={ref.current} />}
+          </Space>
         </Space>
       }
     >
@@ -100,6 +111,7 @@ export const MarkChart = (
         options={options}
         ref={ref}
       />
+      {props.children}
     </Card>
   );
 };
@@ -111,15 +123,16 @@ function useClick(props: LineChartProps, ref: React.MutableRefObject<ChartHandle
     const handleChartClick = (paras: any) => {
       const pointInPixel = [paras.offsetX, paras.offsetY];
       if (ins?.containPixel('grid', pointInPixel) && series) {
+        let xIndex;
         const coords: [string | number, number][] = series.map((s, i) => {
-          const xIndex = ins.convertFromPixel({ seriesIndex: i }, pointInPixel)[0];
+          xIndex = ins.convertFromPixel({ seriesIndex: i }, pointInPixel)[0];
           const yAxisValues = Object.values(s.data)[0];
           const x = s.xAxisValues[xIndex];
           const y = yAxisValues[xIndex];
           return [x, y];
         });
         if (coords.length > 0) {
-          onEvents?.click?.(coords[0]);
+          onEvents?.click?.(coords[0], xIndex);
         }
       }
     };

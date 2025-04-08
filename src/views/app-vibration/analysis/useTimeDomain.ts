@@ -9,6 +9,7 @@ export type TimeDomainData = {
   range: number;
   frequency: number;
   number: number;
+  xAxisUnit?: string;
 };
 
 export function useTimeDomain({ id, timestamp, axis, property }: AnalysisCommonProps) {
@@ -22,14 +23,15 @@ export function useTimeDomain({ id, timestamp, axis, property }: AnalysisCommonP
     })
       .then((data) => {
         if (data) {
-          const { xAxis, values, range, frequency, number } = data.values;
+          const { xAxis, values, range, frequency, number, xAxisUnit } = data.values;
           if (xAxis.length > 0)
             setData({
               x: xAxis.map((n) => `${roundValue(n)}`),
               y: values,
               range,
               frequency,
-              number
+              number,
+              xAxisUnit
             });
         }
       })

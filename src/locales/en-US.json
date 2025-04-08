@@ -1255,5 +1255,19 @@
   "leveled.alarm": "{alarmLevel} Alarm",
   "calibrate.type": "Calibrate Type",
   "mark": "Mark",
-  "data.analysis": "Data Analysis"
+  "data.analysis": "Data Analysis",
+  "analysis.select.single": "Single",
+  "analysis.select.double": "Double",
+  "analysis.save.as.image": "Save As Image",
+  "analysis.refresh": "Refresh",
+  "analysis.vibration.filter": "Filters",
+  "analysis.vibration.window": "Windows",
+  "analysis.vibration.zoom.range": "Zoom Range",
+  "analysis.vibration.window.length": "Window Len",
+  "analysis.vibration.cursor.peak": "Peak Cursor",
+  "analysis.vibration.cursor.double": "Double Peak",
+  "analysis.vibration.cursor.multiple": "Multi-Peak",
+  "analysis.vibration.cursor.harmonic": "Harmonic Cursor",
+  "analysis.vibration.cursor.sideband": "Sideband Cursor",
+  "analysis.vibration.cursor.top10": "TOP10"
 }

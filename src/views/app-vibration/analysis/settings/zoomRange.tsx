@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, InputNumber, Popover, Space } from 'antd';
+import { Button, Form, InputNumber, Popover, Space, Tooltip } from 'antd';
 import { ZoomInOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Flex } from '../../../../components';
@@ -68,12 +68,14 @@ export const ZoomRange = ({ onOk }: { onOk: (values: RangeProps) => void }) => {
       placement='leftTop'
       trigger='click'
     >
-      <Button
-        color='primary'
-        icon={<ZoomInOutlined />}
-        onClick={() => setOpen(true)}
-        variant='filled'
-      />
+      <Tooltip title={intl.get('analysis.vibration.zoom.range')}>
+        <Button
+          color='primary'
+          icon={<ZoomInOutlined />}
+          onClick={() => setOpen(true)}
+          variant='filled'
+        />
+      </Tooltip>
     </Popover>
   );
 };

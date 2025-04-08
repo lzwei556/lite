@@ -1255,5 +1255,19 @@
   "leveled.alarm": "{alarmLevel}报警",
   "calibrate.type": "校准类型",
   "mark": "标注",
-  "data.analysis": "数据统计"
+  "data.analysis": "数据统计",
+  "analysis.select.single": "单选",
+  "analysis.select.double": "框选",
+  "analysis.save.as.image": "保存为图片",
+  "analysis.refresh": "还原",
+  "analysis.vibration.filter": "滤波器",
+  "analysis.vibration.window": "窗口类型",
+  "analysis.vibration.zoom.range": "频率缩放参数",
+  "analysis.vibration.window.length": "窗口长度",
+  "analysis.vibration.cursor.peak": "Peak Cursor",
+  "analysis.vibration.cursor.double": "Double Peak",
+  "analysis.vibration.cursor.multiple": "Multi-Peak",
+  "analysis.vibration.cursor.harmonic": "Harmonic Cursor",
+  "analysis.vibration.cursor.sideband": "Sideband Cursor",
+  "analysis.vibration.cursor.top10": "TOP10"
 }

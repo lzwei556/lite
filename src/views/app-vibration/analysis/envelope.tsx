@@ -2,20 +2,24 @@ import React from 'react';
 import { Col, Divider } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
-import { roundValue } from '../../../utils/format';
+import { AnalysisSidebarCollapse } from '../../../features';
 import { envelope } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
-import { AnalysisSidebarCollapse } from '../../../features';
+import CenterSide from './centerSide';
+import { useInitialMarks, useMarkChartProps, MarkList, Toolbar } from './mark';
 
 export const Envelope = ({ axis, property, timeDomain, originalDomain }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
-  const { visibledMarks, dispatchMarks } = ChartMark.useContext();
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
+  const [activeKey, setActiveKey] = React.useState('overview');
   const { window, setWindow } = useWindow();
   const { filter_type_related, setFilter_type_related } = useFilterTypeRelated();
+  const { marks, handleClick, isTypeSideband } = useMarkChartProps();
+
+  useInitialMarks(x, y);
   React.useEffect(() => {
     if (originalDomain) {
       const { frequency, fullScale, range, values } = originalDomain;
@@ -29,7 +33,7 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
         window,
         ...filter_type_related
       })
-        .then(({ x, y }) => setData({ x: x.map((n) => `${roundValue(n)}`), y }))
+        .then(({ x, y }) => setData({ x: x.map((n) => `${n}`), y }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
@@ -41,23 +45,22 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
-            style: { border: 'solid 1px #d3d3d3' }
+            extra: <Toolbar />,
+            style: { position: 'relative', border: 'solid 1px #d3d3d3' }
           }}
           config={{
             opts: {
               xAxis: { name: 'Hz' },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
-              grid: { top: 30, bottom: 60, right: 30 }
+              grid: { top: 60, bottom: 60, right: 30 }
             }
           }}
           loading={loading}
           onEvents={{
-            click: ([x, y]: [x: string, y: number]) => {
-              dispatchMarks({
-                type: 'append_multiple',
-                mark: { name: `${x}${y}`, data: [x, y], value: y, description: x }
-              });
+            click: (coord: [string, number], xIndex?: number) => {
+              handleClick(coord, x, y, xIndex);
+              setActiveKey('marklist');
             }
           }}
           series={ChartMark.mergeMarkDatas(
@@ -67,11 +70,11 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
                 xAxisValues: x
               }
             ],
-            visibledMarks
+            marks
           )}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['refresh', 'save_image'],
+            visibles: ['save_image'],
             extra: [
               <Window onOk={setWindow} key='window' />,
               <FilterTypeRelated
@@ -85,10 +88,13 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
             ]
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
-        />
+        >
+          {isTypeSideband && <CenterSide.Switcher />}
+        </ChartMark.Chart>
       </Col>
       <Col flex='300px'>
         <AnalysisSidebarCollapse
+          activeKey={activeKey}
           items={[
             {
               key: 'overview',
@@ -144,10 +150,13 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
             {
               key: 'marklist',
               label: intl.get('mark'),
-              children: <ChartMark.List />,
+              children: <MarkList />,
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}
+          onChange={(keys) => {
+            setActiveKey(keys[0]);
+          }}
         />
       </Col>
     </Grid>

@@ -50,7 +50,11 @@ function Content({ data, id }: { data: TrendData[]; id: number }) {
           <ChartMark.Context
             initial={{
               cursor: 'line',
-              marks: lines.map((line) => ({ name: line, data: line }))
+              marks: lines.map((line) => ({
+                name: line,
+                data: line,
+                style: { label: { position: 'start', color: '' } }
+              }))
             }}
           >
             <Trend data={data} onClick={setSelected} />
@@ -58,7 +62,7 @@ function Content({ data, id }: { data: TrendData[]; id: number }) {
         </Col>
         {selected && (
           <Col span={24}>
-            <AnalysisContent id={id} timestamp={selected} key={selected} />
+            <AnalysisContent id={id} timestamp={selected} />
           </Col>
         )}
       </Grid>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Popover, Select, Space } from 'antd';
+import { Button, Form, Popover, Select, Space, Tooltip } from 'antd';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Flex } from '../../../../components';
@@ -78,12 +78,14 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
       placement='leftTop'
       trigger='click'
     >
-      <Button
-        color='primary'
-        icon={<PlusSquareOutlined />}
-        onClick={() => setOpen(true)}
-        variant='filled'
-      />
+      <Tooltip title={intl.get('analysis.vibration.window')}>
+        <Button
+          color='primary'
+          icon={<PlusSquareOutlined />}
+          onClick={() => setOpen(true)}
+          variant='filled'
+        />
+      </Tooltip>
     </Popover>
   );
 };

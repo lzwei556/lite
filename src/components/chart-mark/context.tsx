@@ -6,7 +6,7 @@ import { isMarkLine } from './utils';
 type AppendingMode = `append_${'single' | 'double' | 'multiple'}`;
 type Action = {
   type: AppendingMode | 'remove' | 'change_label' | 'clear';
-  mark: Mark;
+  mark?: Mark;
 };
 type Cursor = 'point' | 'line';
 type ContextProps = {
@@ -43,6 +43,9 @@ export const useContext = () => React.useContext(MarkContext);
 
 function marksReducer(marks: Mark[], action: Action) {
   const { type, mark } = setDefaultLabel(marks, action);
+  if (!mark) {
+    return action.type === 'clear' ? [] : marks;
+  }
   const { name, label } = mark;
   switch (type) {
     case 'append_single':
@@ -72,6 +75,9 @@ function marksReducer(marks: Mark[], action: Action) {
 
 function setDefaultLabel(marks: Mark[], action: Action): Action {
   const { mark } = action;
+  if (!mark) {
+    return action;
+  }
   return { ...action, mark: { ...mark, label: mark.label ?? marks.length + 1 } };
 }
 

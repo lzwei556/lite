@@ -5,13 +5,18 @@ import { ChartMark, Grid } from '../../../components';
 import { cepstrum } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window } from './settings';
+import { MarkList, SingleDoubleToggle, useInitialMarks, useMarkChartProps } from './mark';
+import { AnalysisSidebarCollapse } from '../../../features';
 
 export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
-  const { visibledMarks, dispatchMarks } = ChartMark.useContext();
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
+  const [activeKey, setActiveKey] = React.useState('marklist');
+  const { marks, handleClick } = useMarkChartProps();
+
+  useInitialMarks(x, y);
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -37,6 +42,7 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
+            extra: <SingleDoubleToggle />,
             style: { border: 'solid 1px #d3d3d3' }
           }}
           config={{
@@ -44,16 +50,14 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
               xAxis: { name: 's' },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
-              grid: { top: 30, bottom: 60, right: 30 }
+              grid: { top: 60, bottom: 60, right: 30 }
             }
           }}
           loading={loading}
           onEvents={{
-            click: ([x, y]: [x: string, y: number]) => {
-              dispatchMarks({
-                type: 'append_multiple',
-                mark: { name: `${x}${y}`, data: [x, y], value: y, description: x }
-              });
+            click: (coord: [string, number], xIndex?: number) => {
+              handleClick(coord, x, y, xIndex);
+              setActiveKey('marklist');
             }
           }}
           series={ChartMark.mergeMarkDatas(
@@ -64,22 +68,29 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
                 raw: { animation: false }
               }
             ],
-            visibledMarks
+            marks
           )}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['refresh', 'save_image'],
+            visibles: ['save_image'],
             extra: <Window onOk={setWindow} key='window' />
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>
       <Col flex='300px'>
-        <ChartMark.List
-          cardProps={{
-            title: intl.get('mark'),
-            style: { border: 'solid 1px #d3d3d3' },
-            styles: { body: { overflowY: 'auto', maxHeight: 500 } }
+        <AnalysisSidebarCollapse
+          activeKey={activeKey}
+          items={[
+            {
+              key: 'marklist',
+              label: intl.get('mark'),
+              children: <MarkList />,
+              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+            }
+          ]}
+          onChange={(keys) => {
+            setActiveKey(keys[0]);
           }}
         />
       </Col>

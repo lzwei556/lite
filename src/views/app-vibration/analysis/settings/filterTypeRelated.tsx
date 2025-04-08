@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, InputNumber, Popover, Select, Space } from 'antd';
+import { Button, Form, InputNumber, Popover, Select, Space, Tooltip } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Flex } from '../../../../components';
@@ -106,12 +106,14 @@ export const FilterTypeRelated = ({
       placement='leftTop'
       trigger='click'
     >
-      <Button
-        color='primary'
-        icon={<FilterOutlined />}
-        onClick={() => setOpen(true)}
-        variant='filled'
-      />
+      <Tooltip title={intl.get('analysis.vibration.filter')}>
+        <Button
+          color='primary'
+          icon={<FilterOutlined />}
+          onClick={() => setOpen(true)}
+          variant='filled'
+        />
+      </Tooltip>
     </Popover>
   );
 };

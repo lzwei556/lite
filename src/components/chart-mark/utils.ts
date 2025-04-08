@@ -35,19 +35,21 @@ export function isMarkLine(mark: Mark) {
 type PointDataItem = NonNullable<MarkPointOption['data']>[0];
 
 function buildPointData(mark: PointMark): PointDataItem {
-  const { data: coord, name, label, value } = mark;
+  const { data: coord, name, label, value, style } = mark;
+  const color = style?.color ?? '#FF0000';
+  const labelFormatter = style?.labelFormatter;
   return {
     label: {
       show: true,
-      color: '#FF0000',
+      color,
       position: 'top',
-      formatter: `${label}\n${value ?? ''}`
+      formatter: labelFormatter ?? (label && value ? `${label}\n${value ?? ''}` : undefined)
     },
     symbol:
       'path://M392.448255 0h238.494873v635.98633h-238.494873zM495.00105 1016.783145L155.543347 677.325441A23.849487 23.849487 0 0 1 172.237988 635.98633h678.915407a23.849487 23.849487 0 0 1 16.694641 41.339111l-338.662721 339.457704a23.849487 23.849487 0 0 1-34.184265 0zM392.448255 0h238.494873v635.98633h-238.494873zM495.00105 1016.783145L155.543347 677.325441A23.849487 23.849487 0 0 1 172.237988 635.98633h678.915407a23.849487 23.849487 0 0 1 16.694641 41.339111l-338.662721 339.457704a23.849487 23.849487 0 0 1-34.184265 0z',
     symbolSize: [8, 32],
     symbolOffset: [0, -20],
-    itemStyle: { color: '#FF0000' },
+    itemStyle: { color },
     name,
     coord
   };
@@ -57,12 +59,13 @@ function buildPointData(mark: PointMark): PointDataItem {
 type LineDataItem = NonNullable<MarkLineOption['data']>[0];
 
 function buildLineData(mark: LineMark): LineDataItem {
-  const { name, label, value, data, dataProps } = mark;
+  const { name, label, value, data, dataProps, style } = mark;
   const { valueFormatter, lineStyle } = dataProps || {};
   if (typeof data === 'string') {
     return {
       symbol: 'none',
       lineStyle: { color: '#FF0000', width: 2 },
+      label: style?.label,
       name,
       xAxis: data
     };

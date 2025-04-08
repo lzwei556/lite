@@ -1,12 +1,12 @@
 import React from 'react';
 import { Collapse, CollapseProps } from 'antd';
 
-export const AnalysisSidebarCollapse = ({ items }: { items: CollapseProps['items'] }) => {
+export const AnalysisSidebarCollapse = ({ items, ...rest }: CollapseProps) => {
   return (
     <Collapse
+      {...rest}
       accordion={true}
       bordered={false}
-      defaultActiveKey='overview'
       expandIconPosition='end'
       items={items?.map((item) => ({
         ...item,
