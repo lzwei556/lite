@@ -32,6 +32,9 @@ export const DeviceTree = ({
           treeData={treeData}
           titleRender={(node) => {
             const title = truncate(node.title as string, 14);
+            if (node.id === VIRTUAL_ROOT_DEVICE.id) {
+              return title;
+            }
             return <Badge status={node?.state?.isOnline ? 'success' : 'default'} text={title} />;
           }}
           height={height}

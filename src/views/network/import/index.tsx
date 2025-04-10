@@ -189,8 +189,8 @@ const ImportNetworkPage = () => {
             title={intl.get('NETWORK_IMPORTED_SUCCESSFUL')}
             subTitle={intl.get('NETWORK_IMPORTED_NEXT_PROMPT')}
             extra={[
-              <Button type='primary' key='devices' onClick={() => navigate('/networks')}>
-                {intl.get('BACK_TO_NETWORKS')}
+              <Button type='primary' key='devices' onClick={() => navigate('/devices/0')}>
+                {intl.get('RETURN')}
               </Button>,
               <Button
                 key='add'

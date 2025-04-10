@@ -108,7 +108,7 @@ function Marks({
         <ConnectedLine
           key={index}
           starting={starting}
-          end={ends[index]}
+          end={ends[index] ?? ends[0]}
           setCursor={setCursor}
           onDragMove={(point) =>
             setEnds((prev) =>

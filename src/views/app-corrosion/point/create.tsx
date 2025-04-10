@@ -30,7 +30,10 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
   return (
     <ModalWrapper
       {...{
-        afterClose: () => form.resetFields(),
+        afterClose: () => {
+          form.resetFields();
+          setSelectPoints([]);
+        },
         title: intl.get('CREATE_SOMETHING', { something: intl.get(MONITORING_POINT) }),
         okText: intl.get('CREATE'),
         ...props,
