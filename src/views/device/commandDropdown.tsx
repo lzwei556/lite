@@ -119,7 +119,6 @@ export const CommandDropdown = ({
     }
     items.push({ key: DeviceCommand.Reboot, label: intl.get('RESTART') });
     if (DeviceType.isSensor(typeId)) {
-      items.push({ key: DeviceCommand.AcquireSensorData, label: intl.get('ACQUIRE_SENSOR_DATA') });
       const resetItem: MenuItem = { key: DeviceCommand.ResetData, label: intl.get('RESET_DATA') };
       if (chanels.length > 0) {
         items.push({
@@ -130,6 +129,10 @@ export const CommandDropdown = ({
           }))
         });
       } else {
+        items.push({
+          key: DeviceCommand.AcquireSensorData,
+          label: intl.get('ACQUIRE_SENSOR_DATA')
+        });
         items.push(resetItem);
       }
     }
