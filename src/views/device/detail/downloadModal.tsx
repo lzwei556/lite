@@ -21,26 +21,9 @@ export interface DownloadModalProps extends ModalProps {
   channel?: string;
 }
 
-const batteryVoltage: DisplayProperty = {
-  key: 'batteryVoltage',
-  name: 'BATTERY_VOLTAGE',
-  precision: 0,
-  unit: 'mV'
-};
-const signalStrength: DisplayProperty = {
-  key: 'signalStrength',
-  name: 'SIGNAL_STRENGTH',
-  precision: 0,
-  unit: 'dBm'
-};
-
 export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
   const { device, onSuccess, ...rest } = props;
   const properties = getDisplayProperties(device.properties, device.typeId);
-  if (!DeviceType.isWiredDevice(device.typeId)) {
-    properties.push(batteryVoltage);
-  }
-  properties.push(signalStrength);
   const channels = DeviceType.getChannels(device.typeId);
   const { numberedRange, setRange } = useRange();
   const [form] = Form.useForm();
