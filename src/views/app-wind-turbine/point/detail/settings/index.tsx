@@ -26,7 +26,9 @@ export const Settings = ({
         optionType='button'
         buttonStyle='solid'
       />
-      {type === 'basic' && <Basic monitoringPoint={point} onSuccess={onUpdateSuccess} />}
+      {type === 'basic' && (
+        <Basic monitoringPoint={point} onSuccess={onUpdateSuccess} key={point.id} />
+      )}
       {type === 'alarm' && <AlarmRuleSetting {...point} key={point.id} />}
     </>
   );
