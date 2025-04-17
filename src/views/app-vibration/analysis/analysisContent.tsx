@@ -16,6 +16,9 @@ import { Axis, useAxis } from './useAxis';
 import { Cross } from './cross';
 import { TimeFrequency } from './timeFrequency';
 import { MarkContext } from './mark';
+import { WaterFall } from './waterFall';
+import { OrbitPlot } from './orbitPlot';
+import { TrendAnalysis } from './trendAnalysis';
 
 export type AnalysisCommonProps = {
   id: number;
@@ -24,6 +27,7 @@ export type AnalysisCommonProps = {
   property: Property;
   timeDomain?: { loading: boolean; data?: TimeDomainData };
   originalDomain?: OriginalDomainResponse;
+  timestamps: number[];
 };
 
 export type OriginalDomainResponse = {
@@ -130,7 +134,34 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
               <TimeFrequency {...{ ...props, axis, property, originalDomain }} />
             </ChartMark.Context>
           )
+        },
+        {
+          key: 'water-fall',
+          label: 'water.fall',
+          children: (
+            <ChartMark.Context>
+              <WaterFall {...{ ...props, axis, property, originalDomain }} />
+            </ChartMark.Context>
+          )
+        },
+        {
+          key: 'orbit-plot',
+          label: 'orbit.plot',
+          children: (
+            <ChartMark.Context>
+              <OrbitPlot {...{ ...props, axis, property, originalDomain }} />
+            </ChartMark.Context>
+          )
         }
+        // {
+        //   key: 'trend-analysis',
+        //   label: 'trend.analysis',
+        //   children: (
+        //     <ChartMark.Context>
+        //       <TrendAnalysis {...{ ...props, axis, property, originalDomain }} />
+        //     </ChartMark.Context>
+        //   )
+        // }
       ].map((item) => ({ ...item, label: intl.get(item.label) }))}
       tabBarExtraContent={
         <Space>

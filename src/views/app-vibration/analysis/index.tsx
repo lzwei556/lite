@@ -62,7 +62,11 @@ function Content({ data, id }: { data: TrendData[]; id: number }) {
         </Col>
         {selected && (
           <Col span={24}>
-            <AnalysisContent id={id} timestamp={selected} />
+            <AnalysisContent
+              id={id}
+              timestamp={selected}
+              timestamps={data.map(({ timestamp }) => timestamp)}
+            />
           </Col>
         )}
       </Grid>

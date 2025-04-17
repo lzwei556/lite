@@ -1,7 +1,7 @@
 import React from 'react';
-import { Col, Space } from 'antd';
+import { Space } from 'antd';
 import intl from 'react-intl-universal';
-import { CardChart, Grid, LightSelectFilter } from '../../../components';
+import { CardChart, LightSelectFilter } from '../../../components';
 import { roundValue } from '../../../utils/format';
 import { cross } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
@@ -44,116 +44,112 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
   }, [originalDomain, property.value, window, targetOriginalDomain]);
 
   return (
-    <Grid>
-      <Col flex='auto'>
-        <CardChart
-          cardProps={{
-            extra: <Window onOk={setWindow} key='window' />,
-            title: (
-              <Space>
-                <LightSelectFilter
-                  allowClear={false}
-                  options={points}
-                  onChange={(value) =>
-                    setPoints((prev) => prev?.map((p) => ({ ...p, selected: p.value === value })))
-                  }
-                  value={selectedPointId}
-                />
-                {selectedPointId && (
-                  <LightSelectFilter
-                    allowClear={false}
-                    options={targetAxis.axies.map((a) => ({ ...a, label: intl.get(a.label) }))}
-                    onChange={(value) =>
-                      targetAxis.setAxies((prev) =>
-                        prev.map((a) => ({ ...a, selected: a.value === value }))
-                      )
-                    }
-                    value={targetAxis.axis.value}
-                  />
-                )}
-              </Space>
-            ),
-            style: { border: 'solid 1px #d3d3d3' }
-          }}
-          options={{
-            axisPointer: {
-              link: [
-                {
-                  xAxisIndex: 'all'
+    <CardChart
+      cardProps={{
+        extra: <Window onOk={setWindow} key='window' />,
+        title: (
+          <Space>
+            <LightSelectFilter
+              allowClear={false}
+              options={points}
+              onChange={(value) =>
+                setPoints((prev) => prev?.map((p) => ({ ...p, selected: p.value === value })))
+              }
+              value={selectedPointId}
+            />
+            {selectedPointId && (
+              <LightSelectFilter
+                allowClear={false}
+                options={targetAxis.axies.map((a) => ({ ...a, label: intl.get(a.label) }))}
+                onChange={(value) =>
+                  targetAxis.setAxies((prev) =>
+                    prev.map((a) => ({ ...a, selected: a.value === value }))
+                  )
                 }
-              ]
-            },
-            legend: {},
-            grid: [
-              {
-                top: 60,
-                bottom: 60,
-                left: 60,
-                right: 30,
-                height: '35%'
-              },
-              {
-                top: '65%',
-                height: '35%',
-                bottom: 60,
-                left: 60,
-                right: 30
-              }
-            ],
-            series: [
-              {
-                type: 'line',
-                data: density,
-                name: intl.get('cross.power.spectral.density') + ' (dB/Hz)'
-              },
-              {
-                type: 'line',
-                xAxisIndex: 1,
-                yAxisIndex: 1,
-                data: phase,
-                name: intl.get('cross.power.spectral.phase') + ' (xπ rad)'
-              }
-            ],
-            tooltip: {
-              trigger: 'axis',
-              valueFormatter: (value) => {
-                const suffix = property.unit;
-                const roundedValue = roundValue(value as number);
-                return suffix ? `${roundedValue} ${suffix}` : `${roundedValue}`;
-              }
-            },
-            xAxis: [
-              {
-                type: 'category',
-                boundaryGap: false,
-                axisLine: { onZero: true },
-                data: x,
-                name: 'Hz'
-              },
-              {
-                gridIndex: 1,
-                type: 'category',
-                boundaryGap: false,
-                axisLine: { onZero: true },
-                data: x,
-                position: 'top'
-              }
-            ],
-            yAxis: [
-              {
-                type: 'value'
-              },
-              {
-                gridIndex: 1,
-                type: 'value',
-                inverse: true
-              }
-            ]
-          }}
-          loading={loading}
-          style={{ height: 450 }}
-        />
-      </Col>
-    </Grid>
+                value={targetAxis.axis.value}
+              />
+            )}
+          </Space>
+        ),
+        style: { border: 'solid 1px #d3d3d3' }
+      }}
+      options={{
+        axisPointer: {
+          link: [
+            {
+              xAxisIndex: 'all'
+            }
+          ]
+        },
+        legend: {},
+        grid: [
+          {
+            top: 60,
+            bottom: 60,
+            left: 60,
+            right: 30,
+            height: '35%'
+          },
+          {
+            top: '65%',
+            height: '35%',
+            bottom: 60,
+            left: 60,
+            right: 30
+          }
+        ],
+        series: [
+          {
+            type: 'line',
+            data: density,
+            name: intl.get('cross.power.spectral.density') + ' (dB/Hz)'
+          },
+          {
+            type: 'line',
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            data: phase,
+            name: intl.get('cross.power.spectral.phase') + ' (xπ rad)'
+          }
+        ],
+        tooltip: {
+          trigger: 'axis',
+          valueFormatter: (value) => {
+            const suffix = property.unit;
+            const roundedValue = roundValue(value as number);
+            return suffix ? `${roundedValue} ${suffix}` : `${roundedValue}`;
+          }
+        },
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            axisLine: { onZero: true },
+            data: x,
+            name: 'Hz'
+          },
+          {
+            gridIndex: 1,
+            type: 'category',
+            boundaryGap: false,
+            axisLine: { onZero: true },
+            data: x,
+            position: 'top'
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          },
+          {
+            gridIndex: 1,
+            type: 'value',
+            inverse: true
+          }
+        ]
+      }}
+      loading={loading}
+      style={{ height: 450 }}
+    />
   );
 };

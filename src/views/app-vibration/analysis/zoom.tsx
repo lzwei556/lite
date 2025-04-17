@@ -5,8 +5,7 @@ import { ChartMark, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { zoom } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
-import { useWindow, Window } from './settings';
-import { useZoomRange, ZoomRange } from './settings/zoomRange';
+import { useWindow, Window, useZoomRange, ZoomRange } from './settings';
 import { MarkList, Toolbar, useInitialMarks, useMarkChartProps } from './mark';
 import CenterSide from './centerSide';
 
