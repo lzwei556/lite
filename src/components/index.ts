@@ -9,3 +9,4 @@ export * from './table/table';
 export * from './tabs/tabs';
 export * from './rangeDatePicker';
 export * from './term';
+export * from './titleSection';

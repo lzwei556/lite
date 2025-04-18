@@ -45,6 +45,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   } else if (DeviceType.isVibration(device.typeId)) {
     return (
       <Collapse
+        bordered={false}
         defaultActiveKey={displayPropertyGroup[0]}
         expandIconPosition='end'
         items={displayPropertyGroup.map((g) => ({
@@ -57,7 +58,11 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                 .map((p: DisplayProperty, index: number) => {
                   return (
                     <Col {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })} key={index}>
-                      <HistoryDataFea.PropertyChartCard data={historyData} property={p} />
+                      <HistoryDataFea.PropertyChartCard
+                        data={historyData}
+                        property={p}
+                        cardprops={{ style: { background: '#f0f0f0' } }}
+                      />
                     </Col>
                   );
                 })}
@@ -65,7 +70,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
           )
         }))}
         size='small'
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.01)' }}
+        style={{ backgroundColor: '#fff' }}
       />
     );
   } else {

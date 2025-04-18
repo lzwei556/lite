@@ -26,6 +26,8 @@ export type MonitoringPointRow = {
     initial_thickness_enabled?: boolean;
     critical_thickness?: number;
     critical_thickness_enabled?: boolean;
+    corrosion_rate_short_term?: number;
+    corrosion_rate_long_term?: number;
     axial?: string;
     horizontal?: string;
     vertical?: string;

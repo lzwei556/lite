@@ -40,29 +40,32 @@ export const Monitor = (point: MonitoringPointRow) => {
     );
 
   return (
-    <Card>
-      <Collapse
-        defaultActiveKey={displayPropertyGroup[0]}
-        expandIconPosition='end'
-        items={displayPropertyGroup.map((g) => ({
-          key: g,
-          label: intl.get(g),
-          children: (
-            <Grid>
-              {Point.getPropertiesByType(properties, type)
-                .filter((p) => p.group === g)
-                .map((p: DisplayProperty, index: number) => {
-                  return (
-                    <Col {...colProps} key={index}>
-                      <HistoryDataFea.PropertyChartCard data={historyData} property={p} />
-                    </Col>
-                  );
-                })}
-            </Grid>
-          )
-        }))}
-        style={{ backgroundColor: 'rgba(0, 0, 0, 0.01)' }}
-      />
-    </Card>
+    <Collapse
+      bordered={false}
+      defaultActiveKey={displayPropertyGroup[0]}
+      expandIconPosition='end'
+      items={displayPropertyGroup.map((g) => ({
+        key: g,
+        label: intl.get(g),
+        children: (
+          <Grid>
+            {Point.getPropertiesByType(properties, type)
+              .filter((p) => p.group === g)
+              .map((p: DisplayProperty, index: number) => {
+                return (
+                  <Col {...colProps} key={index}>
+                    <HistoryDataFea.PropertyChartCard
+                      data={historyData}
+                      property={p}
+                      cardprops={{ style: { background: '#f0f0f0' } }}
+                    />
+                  </Col>
+                );
+              })}
+          </Grid>
+        )
+      }))}
+      style={{ backgroundColor: '#fff' }}
+    />
   );
 };

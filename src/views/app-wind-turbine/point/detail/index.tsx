@@ -1,16 +1,18 @@
 import React from 'react';
-import { TabsProps } from 'antd';
+import { Col, TabsProps } from 'antd';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { Card, Tabs } from '../../../../components';
+import { Card, Grid, Tabs, TitleSection } from '../../../../components';
 import { FilterableAlarmRecordTable } from '../../../alarm';
 import usePermission, { Permission } from '../../../../permission/permission';
 import { MonitoringPointTypeValue } from '../../../../config';
 import {
   AssetNavigator,
+  BasicCard,
   DynamicData,
   MonitoringPointRow,
   Point,
+  RelatedDeviceCard,
   TabBarExtraLeftContent
 } from '../../../asset-common';
 import { Monitor } from './monitor';
@@ -28,9 +30,34 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   const { alertLevel, id, type } = monitoringPoint;
   const items: TabsProps['items'] = [
     {
-      key: 'real.time.data',
-      label: intl.get('real.time.data'),
-      children: <Monitor {...monitoringPoint} key={id} />
+      key: 'overview',
+      label: intl.get('OVERVIEW'),
+      children: (
+        <div style={{ marginTop: 16 }}>
+          <Grid wrap={false}>
+            <Col flex='auto'>
+              <TitleSection
+                title={intl.get('real.time.data')}
+                body={
+                  <Card>
+                    <Monitor {...monitoringPoint} key={id} />
+                  </Card>
+                }
+              />
+            </Col>
+            <Col flex='300px'>
+              <Grid>
+                <Col span={24}>
+                  <BasicCard monitoringPoint={monitoringPoint} />
+                </Col>
+                <Col span={24}>
+                  <RelatedDeviceCard {...monitoringPoint} />
+                </Col>
+              </Grid>
+            </Col>
+          </Grid>
+        </div>
+      )
     },
     {
       key: 'history',

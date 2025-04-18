@@ -1,22 +1,27 @@
 import React from 'react';
 import { Select, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Term } from '../../components';
+import { Card, CardProps, Term } from '../../components';
 import { DisplayProperty } from '../../constants/properties';
 import { useLocaleContext } from '../../localeProvider';
 import { getDisplayName, getValue, roundValue } from '../../utils/format';
 import { HistoryData } from '../../views/asset-common';
 import { PropertyChart, transform } from './propertyChart';
 
-export const PropertyChartCard = (props: { data?: HistoryData; property: DisplayProperty }) => {
+export const PropertyChartCard = (props: {
+  data?: HistoryData;
+  property: DisplayProperty;
+  cardprops?: CardProps;
+}) => {
   return (
-    <Card title={<PropertyChartTitle {...props} />}>
+    <Card {...props.cardprops} title={<PropertyChartTitle {...props} />}>
       <PropertyChart
         {...props}
         config={{
           opts: { grid: { bottom: 16 } },
           switchs: { noDataZoom: true }
         }}
+        style={{ height: 240 }}
       />
     </Card>
   );

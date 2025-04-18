@@ -1272,5 +1272,7 @@
   "analysis.vibration.cursor.multiple": "Multi-Peak",
   "analysis.vibration.cursor.harmonic": "Harmonic Cursor",
   "analysis.vibration.cursor.sideband": "Sideband Cursor",
-  "analysis.vibration.cursor.top10": "TOP10"
+  "analysis.vibration.cursor.top10": "TOP10",
+  "asset.parent": "父资产",
+  "bindings.device": "关联设备"
 }
