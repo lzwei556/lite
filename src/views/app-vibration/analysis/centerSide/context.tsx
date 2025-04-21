@@ -71,7 +71,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
           label: 'Center',
           data: coord,
           type: markType,
-          style: { color: '#fa8c16' }
+          chartPorps: { itemStyle: { color: '#fa8c16' } }
         }
       });
       setCursor('side');

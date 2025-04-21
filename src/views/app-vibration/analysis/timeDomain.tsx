@@ -4,15 +4,18 @@ import intl from 'react-intl-universal';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { AnalysisCommonProps } from './analysisContent';
-import { MarkList, SingleDoubleToggle, useInitialMarks, useMarkChartProps } from './mark';
+import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
 
 export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
-  const { marks, handleClick } = useMarkChartProps();
+  const { marks, handleClick, handleRefresh } = useMarkChartProps();
 
-  useInitialMarks(x, y);
+  React.useEffect(() => {
+    handleRefresh(x, y);
+  }, [handleRefresh, x, y]);
+
   return (
     <Grid>
       <Col flex='auto'>
@@ -23,10 +26,16 @@ export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) 
           }}
           config={{
             opts: {
-              xAxis: { name: xAxisUnit },
+              xAxis: {
+                name: xAxisUnit,
+                axisLabel: {
+                  formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                  interval: Math.floor(x.length / 20)
+                }
+              },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
-              grid: { top: 60, bottom: 60, right: 30 }
+              grid: { top: 60, bottom: 60, right: 40 }
             }
           }}
           loading={loading}
@@ -36,8 +45,8 @@ export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) 
               setActiveKey('marklist');
             }
           }}
-          series={ChartMark.mergeMarkDatas(
-            [
+          series={ChartMark.mergeMarkDatas({
+            series: [
               {
                 data: { [intl.get(axis.label)]: y },
                 xAxisValues: x,
@@ -45,9 +54,12 @@ export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) 
               }
             ],
             marks
-          )}
+          })}
           style={{ height: 450 }}
-          toolbar={{ visibles: ['save_image'] }}
+          toolbar={{
+            visibles: ['save_image', 'refresh'],
+            onRefresh: () => handleRefresh(x, y)
+          }}
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>

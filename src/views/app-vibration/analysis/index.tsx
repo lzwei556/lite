@@ -53,7 +53,7 @@ function Content({ data, id }: { data: TrendData[]; id: number }) {
               marks: lines.map((line) => ({
                 name: line,
                 data: line,
-                style: { label: { position: 'start', color: '' } }
+                chartPorps: ChartMark.Axis_Mark_Line_Style_Props
               }))
             }}
           >

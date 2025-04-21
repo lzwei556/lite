@@ -38,7 +38,7 @@ export const ThicknessChart = (
         })
       }}
       config={{ opts: { yAxis: { name: property.unit } } }}
-      series={ChartMark.mergeMarkDatas(defaultSeries, visibledMarks)}
+      series={ChartMark.mergeMarkDatas({ series: defaultSeries, marks: visibledMarks })}
       onEvents={{
         brushEnd: (areaCoords: [number, number][]) => {
           const areaValues = areaCoords.map(([start, end]) => {
@@ -56,8 +56,13 @@ export const ThicknessChart = (
                     name: areaCoords[i].join(),
                     data: line,
                     value: rate,
-                    dataProps: {
-                      valueFormatter: (rate) => `${intl.get('FIELD_CORROSION_RATE')} ${rate} mm/a`,
+                    chartPorps: {
+                      label: {
+                        lineHeight: 20,
+                        position: 'middle',
+                        formatterFn: (rate: number) =>
+                          `${intl.get('FIELD_CORROSION_RATE')} ${rate} mm/a`
+                      },
                       lineStyle: { color: '#fa8c16', width: 3, type: 'solid' }
                     },
                     description: `${areaValues[i].map((t) => Dayjs.format(t)).join()}`

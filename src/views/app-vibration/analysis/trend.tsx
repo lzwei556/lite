@@ -44,7 +44,7 @@ export const Trend = ({
     const data = Dayjs.format(timestamp);
     dispatchMarks({
       type: 'append_single',
-      mark: { name: data, data, style: { label: { position: 'start', color: '' } } }
+      mark: { name: data, data, chartPorps: ChartMark.Axis_Mark_Line_Style_Props }
     });
     onClick(timestamp);
     setTimestamp(timestamp);
@@ -82,9 +82,23 @@ export const Trend = ({
       }}
       config={{ opts: { yAxis: { name: property.unit }, grid: { top: 30 } } }}
       onEvents={{ click: (coord: [string, number]) => handleClick(Dayjs.dayjs(coord[0]).unix()) }}
-      series={ChartMark.mergeMarkDatas(getSeries(), visibledMarks)}
+      series={ChartMark.mergeMarkDatas({
+        series: getSeries(),
+        marks: visibledMarks,
+        lineStyle: { symbol: 'none' }
+      })}
       style={{ height: 130 }}
-      toolbar={{ visibles: [], noSplit: true }}
+      toolbar={{
+        visibles: ['save_image', 'refresh'],
+        onRefresh: () => {
+          if (timestamps.length > 0) {
+            const latest = timestamps[timestamps.length - 1];
+            if (latest !== timestamp) {
+              handleClick(latest);
+            }
+          }
+        }
+      }}
       yAxisMeta={{ ...property, unit: property.unit }}
     />
   );

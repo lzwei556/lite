@@ -125,6 +125,10 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
             type: 'category',
             boundaryGap: false,
             axisLine: { onZero: true },
+            axisLabel: {
+              formatter: (value: number) => `${value ? Number(value).toFixed(0) : value}`,
+              interval: Math.floor(x.length / 20)
+            },
             data: x,
             name: 'Hz'
           },
@@ -133,8 +137,13 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
             type: 'category',
             boundaryGap: false,
             axisLine: { onZero: true },
+            axisLabel: {
+              formatter: (value: number) => `${value ? Number(value).toFixed(0) : value}`,
+              interval: Math.floor(x.length / 20)
+            },
             data: x,
-            position: 'top'
+            position: 'top',
+            name: 'Hz'
           }
         ],
         yAxis: [
@@ -144,7 +153,8 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
           {
             gridIndex: 1,
             type: 'value',
-            inverse: true
+            inverse: true,
+            axisLabel: { formatter: (value: number) => `${Number(value).toFixed(2)}` }
           }
         ]
       }}

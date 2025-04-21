@@ -12,7 +12,7 @@ export const SingleDoubleToggle = () => {
   const [type, setType] = React.useState<ToggleMarkType>('Peak');
 
   return (
-    <Tooltip title={intl.get(`analysis.vibration.cursor.${type.toLowerCase()}`)}>
+    <Tooltip title={intl.get(`analysis.vibration.cursor.double`)}>
       <Button
         color='primary'
         onClick={() => {

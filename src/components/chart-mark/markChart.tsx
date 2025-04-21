@@ -31,6 +31,7 @@ type PresetToolbarProps = {
   imageFilename?: string;
   extra?: React.ReactNode;
   noSplit?: boolean;
+  onRefresh?: () => void;
 };
 
 export const MarkChart = (
@@ -70,9 +71,13 @@ export const MarkChart = (
   };
 
   const restoreHandle = () => {
-    reset();
-    dispatchMarks({ type: 'clear' });
-    toolbar?.onRestore?.(ref.current.getInstance());
+    if (toolbar?.onRefresh) {
+      toolbar?.onRefresh();
+    } else {
+      reset();
+      dispatchMarks({ type: 'clear' });
+      toolbar?.onRestore?.(ref.current.getInstance());
+    }
   };
 
   return (

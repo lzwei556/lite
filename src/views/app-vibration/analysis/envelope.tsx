@@ -7,7 +7,7 @@ import { envelope } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
 import CenterSide from './centerSide';
-import { useInitialMarks, useMarkChartProps, MarkList, Toolbar } from './mark';
+import { useMarkChartProps, MarkList, Toolbar } from './mark';
 
 export const Envelope = ({ axis, property, timeDomain, originalDomain }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
@@ -17,9 +17,12 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
   const [activeKey, setActiveKey] = React.useState('overview');
   const { window, setWindow } = useWindow();
   const { filter_type_related, setFilter_type_related } = useFilterTypeRelated();
-  const { marks, handleClick, isTypeSideband } = useMarkChartProps();
+  const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
 
-  useInitialMarks(x, y);
+  React.useEffect(() => {
+    handleRefresh(x, y);
+  }, [handleRefresh, x, y]);
+
   React.useEffect(() => {
     if (originalDomain) {
       const { frequency, fullScale, range, values } = originalDomain;
@@ -50,7 +53,13 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
           }}
           config={{
             opts: {
-              xAxis: { name: 'Hz' },
+              xAxis: {
+                name: 'Hz',
+                axisLabel: {
+                  formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                  interval: Math.floor(x.length / 20)
+                }
+              },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
               grid: { top: 60, bottom: 60, right: 30 }
@@ -63,18 +72,19 @@ export const Envelope = ({ axis, property, timeDomain, originalDomain }: Analysi
               setActiveKey('marklist');
             }
           }}
-          series={ChartMark.mergeMarkDatas(
-            [
+          series={ChartMark.mergeMarkDatas({
+            series: [
               {
                 data: { [intl.get(axis.label)]: y },
                 xAxisValues: x
               }
             ],
             marks
-          )}
+          })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image'],
+            visibles: ['save_image', 'refresh'],
+            onRefresh: () => handleRefresh(x, y),
             extra: [
               <Window onOk={setWindow} key='window' />,
               <FilterTypeRelated

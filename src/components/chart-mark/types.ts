@@ -4,10 +4,9 @@ export type Mark = {
   label?: string | number;
   value?: string | number;
   data: Coord | [Coord, Coord] | string;
-  dataProps?: { valueFormatter?: (value?: string | number) => string; lineStyle?: object };
   description?: string;
   type?: string;
-  style?: { labelFormatter?: string; color?: string; label?: any };
+  chartPorps?: { label?: any; symbol?: string; lineStyle?: any; itemStyle?: any };
 };
 export type PointMark = Omit<Mark, 'data'> & { data: Coord };
 export type LineMark = Omit<Mark, 'data'> & { data: [Coord, Coord] | string };

@@ -38,6 +38,7 @@ export const TimeEnvelope = ({ property, originalDomain }: AnalysisCommonProps) 
       }}
       config={{
         opts: {
+          xAxis: { axisLabel: { interval: Math.floor(x.length / 20) } },
           yAxis: { name: property.unit },
           dataZoom: [{ start: 0, end: 100 }],
           grid: { top: 30, bottom: 60, right: 30 }

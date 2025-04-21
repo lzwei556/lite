@@ -5,7 +5,7 @@ import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { frequency } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
-import { MarkList, SingleDoubleToggle, useInitialMarks, useMarkChartProps } from './mark';
+import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
 
 export const Frequency = ({ axis, property, timeDomain, originalDomain }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
@@ -13,9 +13,11 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
   const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
-  const { marks, handleClick } = useMarkChartProps();
+  const { marks, handleClick, handleRefresh } = useMarkChartProps();
 
-  useInitialMarks(x, y);
+  React.useEffect(() => {
+    handleRefresh(x, y);
+  }, [handleRefresh, x, y]);
 
   React.useEffect(() => {
     if (property.value && originalDomain) {
@@ -46,7 +48,13 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
           }}
           config={{
             opts: {
-              xAxis: { name: 'Hz' },
+              xAxis: {
+                name: 'Hz',
+                axisLabel: {
+                  formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                  interval: Math.floor(x.length / 20)
+                }
+              },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
               grid: { top: 60, bottom: 60, right: 30 }
@@ -59,8 +67,8 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
               setActiveKey('marklist');
             }
           }}
-          series={ChartMark.mergeMarkDatas(
-            [
+          series={ChartMark.mergeMarkDatas({
+            series: [
               {
                 data: { [intl.get(axis.label)]: y ?? [] },
                 xAxisValues: x ?? [],
@@ -68,9 +76,12 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
               }
             ],
             marks
-          )}
+          })}
           style={{ height: 450 }}
-          toolbar={{ visibles: ['save_image'] }}
+          toolbar={{
+            visibles: ['save_image', 'refresh'],
+            onRefresh: () => handleRefresh(x, y)
+          }}
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>

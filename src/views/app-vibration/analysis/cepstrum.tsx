@@ -1,12 +1,13 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
+import { AnalysisSidebarCollapse } from '../../../features';
+import { roundValue } from '../../../utils/format';
 import { ChartMark, Grid } from '../../../components';
 import { cepstrum } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window } from './settings';
-import { MarkList, SingleDoubleToggle, useInitialMarks, useMarkChartProps } from './mark';
-import { AnalysisSidebarCollapse } from '../../../features';
+import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
 
 export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
@@ -14,9 +15,11 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const [activeKey, setActiveKey] = React.useState('marklist');
-  const { marks, handleClick } = useMarkChartProps();
+  const { marks, handleClick, handleRefresh } = useMarkChartProps();
 
-  useInitialMarks(x, y);
+  React.useEffect(() => {
+    handleRefresh(x, y);
+  }, [handleRefresh, x, y]);
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -30,7 +33,7 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
         range,
         window
       })
-        .then(({ x, y }) => setData({ x: x.map((n) => `${n}`), y }))
+        .then(({ x, y }) => setData({ x: x.map((n) => `${roundValue(1000 * n)}`), y }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
@@ -47,10 +50,16 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
           }}
           config={{
             opts: {
-              xAxis: { name: 's' },
+              xAxis: {
+                name: 'ms',
+                axisLabel: {
+                  formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                  interval: Math.floor(x.length / 20)
+                }
+              },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
-              grid: { top: 60, bottom: 60, right: 30 }
+              grid: { top: 60, bottom: 60, right: 40 }
             }
           }}
           loading={loading}
@@ -60,8 +69,8 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
               setActiveKey('marklist');
             }
           }}
-          series={ChartMark.mergeMarkDatas(
-            [
+          series={ChartMark.mergeMarkDatas({
+            series: [
               {
                 data: { [intl.get(axis.label)]: y },
                 xAxisValues: x,
@@ -69,10 +78,11 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
               }
             ],
             marks
-          )}
+          })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image'],
+            visibles: ['save_image', 'refresh'],
+            onRefresh: () => handleRefresh(x, y),
             extra: <Window onOk={setWindow} key='window' />
           }}
           yAxisMeta={{ ...property, unit: property.unit }}

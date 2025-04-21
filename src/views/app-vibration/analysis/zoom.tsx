@@ -6,7 +6,7 @@ import { AnalysisSidebarCollapse } from '../../../features';
 import { zoom } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, useZoomRange, ZoomRange } from './settings';
-import { MarkList, Toolbar, useInitialMarks, useMarkChartProps } from './mark';
+import { MarkList, Toolbar, useMarkChartProps } from './mark';
 import CenterSide from './centerSide';
 
 export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
@@ -16,8 +16,12 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
   const { window, setWindow } = useWindow();
   const { zoomRange, setZoomRange } = useZoomRange();
   const [activeKey, setActiveKey] = React.useState('marklist');
-  const { marks, handleClick, isTypeSideband } = useMarkChartProps();
-  useInitialMarks(x, y);
+  const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
+
+  React.useEffect(() => {
+    handleRefresh(x, y);
+  }, [handleRefresh, x, y]);
+
   React.useEffect(() => {
     if (originalDomain) {
       const { frequency, fullScale, range, values } = originalDomain;
@@ -49,7 +53,13 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
           }}
           config={{
             opts: {
-              xAxis: { name: 'Hz' },
+              xAxis: {
+                name: 'Hz',
+                axisLabel: {
+                  formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                  interval: Math.floor(x.length / 20)
+                }
+              },
               yAxis: { name: property.unit },
               dataZoom: [{ start: 0, end: 100 }],
               grid: { top: 60, bottom: 60, right: 30 }
@@ -62,18 +72,19 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
               setActiveKey('marklist');
             }
           }}
-          series={ChartMark.mergeMarkDatas(
-            [
+          series={ChartMark.mergeMarkDatas({
+            series: [
               {
                 data: { [intl.get(axis.label)]: y },
                 xAxisValues: x
               }
             ],
             marks
-          )}
+          })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image'],
+            visibles: ['save_image', 'refresh'],
+            onRefresh: () => handleRefresh(x, y),
             extra: [
               <Window onOk={setWindow} key='window' />,
               <ZoomRange onOk={setZoomRange} key='zoomRange' />
