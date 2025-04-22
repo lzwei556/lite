@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Tooltip } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { SaveOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { saveAsImage } from '../../utils/image';
 import { ChartHandler } from './chart';
@@ -11,7 +11,7 @@ export const SaveImageIconButton = (props: { chartHandler: ChartHandler; filenam
     <Tooltip title={intl.get('analysis.save.as.image')}>
       <Button
         color='primary'
-        icon={<DownloadOutlined />}
+        icon={<SaveOutlined />}
         onClick={() => {
           const url = chartHandler.getInstance()?.getDataURL({ backgroundColor: '#fff' });
           if (url) {
