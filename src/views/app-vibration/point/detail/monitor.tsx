@@ -65,7 +65,7 @@ export const Monitor = (point: MonitoringPointRow) => {
           </Grid>
         )
       }))}
-      style={{ backgroundColor: '#fff' }}
+      style={{ borderRadius: 0, backgroundColor: '#fff' }}
     />
   );
 };

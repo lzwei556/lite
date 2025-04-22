@@ -70,7 +70,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
           )
         }))}
         size='small'
-        style={{ backgroundColor: '#fff' }}
+        style={{ borderRadius: 0, backgroundColor: '#fff' }}
       />
     );
   } else {
