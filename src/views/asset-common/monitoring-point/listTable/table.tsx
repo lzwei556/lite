@@ -40,22 +40,26 @@ export const MonitoringPointsTable = ({
       {name}
     </SelfLink>
   ) : undefined;
-
-  const columns = getColumns({ language, point: actualPoints[0], ...rest });
+  const [activeKey, setActiveKey] = React.useState(`${actualPoints?.[0]?.type}`);
 
   const tableProps = {
     ...rest,
     cardBordered: true,
-    columns,
     header: { title, enableSettingColumnsCount },
     rowKey: (point: MonitoringPointRow) => point.id
   };
 
   if (actualPoints.length > 0) {
+    const columns = getColumns({
+      language,
+      point: actualPoints.filter((m) => m.type === Number(activeKey))[0],
+      ...rest
+    });
     const types = uniq(actualPoints.map((m) => m.type));
     if (types.length > 1) {
       return (
         <Tabs
+          activeKey={`${activeKey}`}
           items={types.map((t) => ({
             key: `${t}`,
             label: intl.get(
@@ -64,15 +68,20 @@ export const MonitoringPointsTable = ({
               ]
             ),
             children: (
-              <Table {...tableProps} dataSource={actualPoints.filter((m) => m.type === t)} />
+              <Table
+                {...{ ...tableProps, columns }}
+                dataSource={actualPoints.filter((m) => m.type === t)}
+              />
             )
           }))}
+          onChange={setActiveKey}
         />
       );
     } else {
-      return <Table {...tableProps} dataSource={actualPoints} />;
+      return <Table {...{ ...tableProps, columns }} dataSource={actualPoints} />;
     }
   } else {
-    return <Table {...tableProps} />;
+    const columns = getColumns({ language, ...rest });
+    return <Table {...{ ...tableProps, columns }} />;
   }
 };

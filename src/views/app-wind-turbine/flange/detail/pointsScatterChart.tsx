@@ -124,7 +124,7 @@ function buildCirclePointsChartOfFlange(
   if (checkValidAttr(attributes, 'warn', min)) {
     const seriesName = `${intl.get('leveled.alarm', {
       alarmLevel: intl.get(getLabelByValue(AlarmLevel.Major))
-    })} ${attributes?.warn?.value}${unit}`;
+    })}  ${attributes?.warn?.value}${unit}`;
     const color = getColorByValue(AlarmLevel.Major);
     const warn = getSeries(color, attributes?.warn?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color } });
@@ -244,7 +244,11 @@ function generateOuter(measurements: MonitoringPointRow[], isBig: boolean = fals
       },
       tooltip: {
         formatter: `${
-          alertLevel && alertLevel > 0 ? `${Asset.Status.getLabelByValue(alertLevel)}报警<br/>` : ''
+          alertLevel && alertLevel > 0
+            ? `${intl.get('leveled.alarm', {
+                alarmLevel: intl.get(Asset.Status.getLabelByValue(alertLevel))
+              })}<br/>`
+            : ''
         }${generateRowOfTooltip('', name, getValue(value, field?.unit))}`
       },
       itemStyle: {
