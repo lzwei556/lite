@@ -23,7 +23,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   const { monitoringPoint, onSuccess } = props;
   const { hasPermission } = usePermission();
   const vibrationEnabled = useAppVibrationEnabled();
-  const { alertLevel, id, type } = monitoringPoint;
+  const { alertLevel, id, type, attributes } = monitoringPoint;
 
   const items: TabsProps['items'] = [
     {
@@ -63,7 +63,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'analysis',
       label: intl.get('intelligent.analysis'),
-      children: <Analysis id={id} key={id} />
+      children: <Analysis id={id} key={id} attributes={attributes} />
     });
   } else {
     items.push({

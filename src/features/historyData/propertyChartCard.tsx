@@ -39,6 +39,7 @@ const PropertyChartTitle = ({
   let title = `${intl.get(name).d(name)}`;
   let valueEle = null;
   const values = transform(data, property).values;
+  const isSingle = values.length === 1;
 
   if (values.length > 1) {
     title = getDisplayName({ name: title, suffix: unit, lang: language });
@@ -59,14 +60,14 @@ const PropertyChartTitle = ({
         variant='filled'
       />
     );
-  } else if (values.length === 1) {
+  } else if (isSingle) {
     valueEle = getValue(roundValue(values[0].last, precision), unit);
   }
 
   return (
-    <Space align='center' style={{ fontWeight: 400 }} size={16}>
+    <Space align='center' style={{ fontWeight: 400 }} size={isSingle ? 16 : 8}>
       <Typography.Text>
-        <Term name={title} description={intl.get(`${name}_DESC`)} />
+        <Term name={title} description={intl.get(`${name}_DESC`)} size={isSingle ? 8 : 2} />
       </Typography.Text>
       {valueEle}
     </Space>

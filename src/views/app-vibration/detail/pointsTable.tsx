@@ -5,13 +5,14 @@ import usePermission, { Permission } from '../../../permission/permission';
 import { useLocaleContext } from '../../../localeProvider';
 import {
   AssetRow,
+  AXIS_ALIAS,
   getMonitoringPointColumns,
   getOperateColumn,
   MonitoringPointRow,
+  Point,
   Points,
   positionColumn
 } from '../../asset-common';
-import { AXIS_OPTIONS } from '../point/others';
 import { ActionBar } from '../actionBar';
 
 export const PointsTable = (props: {
@@ -32,36 +33,27 @@ export const PointsTable = (props: {
       positionColumn,
       ...[
         {
-          title: intl.get('axis.axial'),
-          key: 'axial',
+          title: intl.get(AXIS_ALIAS.Axial.label),
+          key: AXIS_ALIAS.Axial.key,
           render: (name: string, row: MonitoringPointRow) => {
-            let label: string | undefined;
-            if (row.attributes?.axial !== undefined) {
-              label = AXIS_OPTIONS.find((a) => a.key === row.attributes?.axial)?.label;
-            }
-            return label ? intl.get(label) : '-';
+            let axis = Point.getAxis(row.attributes?.axial);
+            return axis ? intl.get(axis.label) : '-';
           }
         },
         {
-          title: intl.get('axis.vertical'),
-          key: 'radial',
+          title: intl.get(AXIS_ALIAS.Vertical.label),
+          key: AXIS_ALIAS.Vertical.key,
           render: (name: string, row: MonitoringPointRow) => {
-            let label: string | undefined;
-            if (row.attributes?.horizontal !== undefined) {
-              label = AXIS_OPTIONS.find((a) => a.key === row.attributes?.horizontal)?.label;
-            }
-            return label ? intl.get(label) : '-';
+            let axis = Point.getAxis(row.attributes?.vertical);
+            return axis ? intl.get(axis.label) : '-';
           }
         },
         {
-          title: intl.get('axis.horizontal'),
-          key: 'horizontal',
+          title: intl.get(AXIS_ALIAS.Horizontal.label),
+          key: AXIS_ALIAS.Horizontal.key,
           render: (name: string, row: MonitoringPointRow) => {
-            let label: string | undefined;
-            if (row.attributes?.vertical !== undefined) {
-              label = AXIS_OPTIONS.find((a) => a.key === row.attributes?.vertical)?.label;
-            }
-            return label ? intl.get(label) : '-';
+            let axis = Point.getAxis(row.attributes?.horizontal);
+            return axis ? intl.get(axis.label) : '-';
           }
         }
       ]

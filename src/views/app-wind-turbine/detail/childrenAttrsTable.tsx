@@ -130,8 +130,9 @@ export const ChildrenAttrsTable = ({
             type='text'
             size='small'
             title={intl.get('EDIT_SOMETHING', { something: intl.get('ASSET') })}
+            onClick={() => operateCellProps.onUpdate(row)}
           >
-            <EditOutlined onClick={() => operateCellProps.onUpdate(row)} />
+            <EditOutlined />
           </Button>
         </HasPermission>
         <HasPermission value={Permission.AssetDelete}>

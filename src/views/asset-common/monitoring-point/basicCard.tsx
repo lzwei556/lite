@@ -2,10 +2,10 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Card, Descriptions, DescriptionsProps, TitleSection } from '../../../components';
 import { useMonitoringPointParents } from '../../asset-variant';
+import { useParents } from '../../app-wind-turbine/point/common';
 import { Point } from './util';
 import { MonitoringPointRow } from './types';
-import { AXIS_OPTIONS } from '../../app-vibration/point/others';
-import { useParents } from '../../app-wind-turbine/point/common';
+import { AXIS_ALIAS } from './constants';
 
 export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
   const { assetId, attributes, type } = monitoringPoint;
@@ -39,21 +39,24 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
     } = attributes;
     items.push({ label: intl.get('POSITION'), children: index });
     if (axial) {
+      const axis = Point.getAxis(axial);
       items.push({
-        label: intl.get('axis.axial'),
-        children: intl.get(AXIS_OPTIONS.find((ops) => ops.key === axial)?.label!)
+        label: intl.get(AXIS_ALIAS.Axial.label),
+        children: axis ? intl.get(axis.label) : '-'
       });
     }
     if (vertical) {
+      const axis = Point.getAxis(vertical);
       items.push({
-        label: intl.get('axis.vertical'),
-        children: intl.get(AXIS_OPTIONS.find((ops) => ops.key === vertical)?.label!)
+        label: intl.get(AXIS_ALIAS.Vertical.label),
+        children: axis ? intl.get(axis.label) : '-'
       });
     }
     if (horizontal) {
+      const axis = Point.getAxis(horizontal);
       items.push({
-        label: intl.get('axis.horizontal'),
-        children: intl.get(AXIS_OPTIONS.find((ops) => ops.key === horizontal)?.label!)
+        label: intl.get(AXIS_ALIAS.Horizontal.label),
+        children: axis ? intl.get(axis.label) : '-'
       });
     }
     if (initial_thickness_enabled && initial_thickness) {

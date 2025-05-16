@@ -2,7 +2,7 @@ import React from 'react';
 import { Select, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Language, useLocaleContext } from '../../../../localeProvider';
-import { Card, Chart, getOptions } from '../../../../components';
+import { Card, CardProps, Chart, getOptions } from '../../../../components';
 import { roundValue } from '../../../../utils/format';
 import { MonitoringPointTypeValue } from '../../../../config';
 import { HistoryData } from '../../../asset-common';
@@ -19,7 +19,8 @@ export const PointsScatterChart = ({
   style,
   type,
   dynamicData = [],
-  showTitle = true
+  showTitle = true,
+  cardProps
 }: {
   data: {
     name: string;
@@ -31,6 +32,7 @@ export const PointsScatterChart = ({
   type: MonitoringPointTypeValue;
   dynamicData?: Data[];
   showTitle?: boolean;
+  cardProps?: CardProps;
 }) => {
   const { language } = useLocaleContext();
   const transformedData: Data[] = [];
@@ -53,7 +55,10 @@ export const PointsScatterChart = ({
   });
 
   return (
-    <Card title={showTitle ? <Title transformedData={transformedData} type={type} /> : undefined}>
+    <Card
+      {...cardProps}
+      title={showTitle ? <Title transformedData={transformedData} type={type} /> : undefined}
+    >
       <Chart
         options={options ? getOptions(options as any) : undefined}
         style={{ height: 600, ...style }}

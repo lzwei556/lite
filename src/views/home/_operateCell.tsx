@@ -22,8 +22,9 @@ export const OperateCell = ({ asset }: { asset: AssetRow }) => {
           title={intl.get('EDIT_SOMETHING', {
             something: intl.get('ASSET')
           })}
+          onClick={() => setOpen(true)}
         >
-          <EditOutlined onClick={() => setOpen(true)} />
+          <EditOutlined />
         </Button>
       </HasPermission>
       <HasPermission value={Permission.MeasurementDelete}>

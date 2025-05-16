@@ -42,7 +42,9 @@ export function transform(
     property.fields
       ?.filter((f) => (property.onlyShowFirstField ? f.first : true))
       .map((f) => {
-        let seriesName = property.onlyShowFirstField ? intl.get(property.name) : intl.get(f.name);
+        let seriesName = property.onlyShowFirstField
+          ? intl.get(property.name)
+          : intl.get(f.alias ?? f.name);
         if (naming) {
           const { replace, prefix } = naming;
           if (replace) {

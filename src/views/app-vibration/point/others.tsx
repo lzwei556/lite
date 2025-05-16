@@ -2,6 +2,7 @@ import React from 'react';
 import { Col, Form, Input, Select } from 'antd';
 import intl from 'react-intl-universal';
 import { FormInputItem } from '../../../components/formInputItem';
+import { AXIS, AXIS_ALIAS, AXIS_OPTIONS } from '../../asset-common';
 
 type FieldProps = {
   mode: 'create' | 'update';
@@ -62,23 +63,17 @@ function Position(props: FieldProps) {
   );
 }
 
-export const AXIS_OPTIONS = [
-  { label: 'AXIS_X', value: 0, key: 'x' },
-  { label: 'AXIS_Y', value: 1, key: 'y' },
-  { label: 'AXIS_Z', value: 2, key: 'z' }
-];
-
 function Axial(props: FieldProps) {
   const { mode, nameIndex, restFields } = props;
-  const commonNameProp = ['attributes', 'axial'];
+  const commonNameProp = ['attributes', AXIS_ALIAS.Axial.key];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
   const isModeCreate = mode === 'create';
 
   return (
     <Form.Item
       {...restFields}
-      initialValue={'x'}
-      label={intl.get('axis.axial')}
+      initialValue={AXIS.Z.key}
+      label={intl.get(AXIS_ALIAS.Axial.label)}
       name={nameProp}
       style={isModeCreate ? { display: 'inline-block', width: 200, marginRight: 20 } : undefined}
     >
@@ -89,15 +84,15 @@ function Axial(props: FieldProps) {
 
 function Vertical(props: FieldProps) {
   const { mode, nameIndex, restFields } = props;
-  const commonNameProp = ['attributes', 'vertical'];
+  const commonNameProp = ['attributes', AXIS_ALIAS.Vertical.key];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
   const isModeCreate = mode === 'create';
 
   return (
     <Form.Item
       {...restFields}
-      initialValue={'y'}
-      label={intl.get('axis.vertical')}
+      initialValue={AXIS.Y.key}
+      label={intl.get(AXIS_ALIAS.Vertical.label)}
       name={nameProp}
       style={isModeCreate ? { display: 'inline-block', width: 200, marginRight: 20 } : undefined}
     >
@@ -108,15 +103,15 @@ function Vertical(props: FieldProps) {
 
 function Horizontal(props: FieldProps) {
   const { mode, nameIndex, restFields } = props;
-  const commonNameProp = ['attributes', 'horizontal'];
+  const commonNameProp = ['attributes', AXIS_ALIAS.Horizontal.key];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
   const isModeCreate = mode === 'create';
 
   return (
     <Form.Item
       {...restFields}
-      initialValue={'z'}
-      label={intl.get('axis.horizontal')}
+      initialValue={AXIS.X.key}
+      label={intl.get(AXIS_ALIAS.Horizontal.label)}
       name={nameProp}
       style={isModeCreate ? { display: 'inline-block', width: 200, marginRight: 20 } : undefined}
     >

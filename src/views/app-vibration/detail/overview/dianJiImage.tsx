@@ -9,7 +9,13 @@ import { Dayjs } from '../../../../utils';
 import { ImageAnnotation } from '../../../../features';
 import { Card, Descriptions, Grid } from '../../../../components';
 import { SelfLink } from '../../../../components/selfLink';
-import { ASSET_PATHNAME, AssetRow, MonitoringPointRow, Point } from '../../../asset-common';
+import {
+  ASSET_PATHNAME,
+  AssetRow,
+  AXIS_ALIAS,
+  MonitoringPointRow,
+  Point
+} from '../../../asset-common';
 import DianJi from './dianji.png';
 import RawImage from './raw.jpg';
 
@@ -114,16 +120,17 @@ function SettingsButton({
 
 function getPropertyValues(m: MonitoringPointRow, properties: DisplayProperty[]) {
   const items: { label: React.ReactNode; children: string }[] = [];
-  properties.forEach(({ fields = [], first, key, name, precision, unit }) => {
+  properties.forEach(({ fields = [], key, name, precision, unit }) => {
     if (fields.length > 1) {
       items.push(
-        ...fields.map(({ key: subKey }) => {
-          const axisKey = subKey.replace(`${key}_`, '');
-          const axisName = Point.getAxisName(axisKey, m.attributes);
-          const label = axisName ? `${intl.get(name)} ${intl.get(axisName)}` : intl.get(name);
+        ...Object.values(AXIS_ALIAS).map(({ key: aliasKey, label }) => {
+          const attrs = m.attributes;
+          const axisKey = attrs?.[aliasKey];
           return {
-            label: truncate(label, 24),
-            children: `${getValue(roundValue(m?.data?.values[subKey] as number, precision))}${unit}`
+            label: truncate(`${intl.get(name)}${intl.get(label)}`, 24),
+            children: `${getValue(
+              roundValue(m?.data?.values[`${key}_${axisKey}`] as number, precision)
+            )}${unit}`
           };
         })
       );

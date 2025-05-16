@@ -30,8 +30,9 @@ export const Settings = (props: {
             type='text'
             size='small'
             title={intl.get('EDIT_SOMETHING', { something: intl.get('ASSET') })}
+            onClick={() => onUpdate(row)}
           >
-            <EditOutlined onClick={() => onUpdate(row)} />
+            <EditOutlined />
           </Button>
         </HasPermission>
         <HasPermission value={Permission.AssetDelete}>

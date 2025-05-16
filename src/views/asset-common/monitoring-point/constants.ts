@@ -22,3 +22,19 @@ export const MONITORING_POINT_DISPLAY_PROPERTIES = {
 export const MONITORING_POINT = 'MONITORING_POINT';
 export const MONITORING_POINT_LIST = `MONITORING_POINT_LIST`;
 export const INVALID_MONITORING_POINT = `ABNORMAL_MONITORING_POINT`;
+
+export const AXIS = {
+  X: { key: 'x', value: 0, label: 'AXIS_X' },
+  Y: { key: 'y', value: 1, label: 'AXIS_Y' },
+  Z: { key: 'z', value: 2, label: 'AXIS_Z' }
+} as const;
+
+export type AxisKey = typeof AXIS[keyof typeof AXIS]['key'];
+
+export const AXIS_OPTIONS = [AXIS.X, AXIS.Y, AXIS.Z];
+
+export const AXIS_ALIAS = {
+  Axial: { key: 'axial', label: 'axis.axial' },
+  Vertical: { key: 'vertical', label: 'axis.vertical' },
+  Horizontal: { key: 'horizontal', label: 'axis.horizontal' }
+} as const;

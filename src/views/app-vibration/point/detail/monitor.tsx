@@ -12,9 +12,10 @@ import {
   MonitoringPointRow,
   Point
 } from '../../../asset-common';
+import { appendAxisAliasLabelToField } from '../common';
 
 export const Monitor = (point: MonitoringPointRow) => {
-  const { id, type, properties } = point;
+  const { id, type, properties, attributes } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const colProps = generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 });
@@ -50,6 +51,7 @@ export const Monitor = (point: MonitoringPointRow) => {
         children: (
           <Grid>
             {Point.getPropertiesByType(properties, type)
+              .map((p) => appendAxisAliasLabelToField(p, attributes))
               .filter((p) => p.group === g)
               .map((p: DisplayProperty, index: number) => {
                 return (

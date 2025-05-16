@@ -2,6 +2,7 @@ import React from 'react';
 import { TableProps } from 'antd';
 import intl from 'react-intl-universal';
 import { SelfLink } from '../../../../components/selfLink';
+import { MonitoringPointTypeValue } from '../../../../config';
 import { Dayjs } from '../../../../utils';
 import { getDisplayName, getValue, roundValue } from '../../../../utils/format';
 import { Language } from '../../../../localeProvider';
@@ -9,6 +10,7 @@ import { ASSET_PATHNAME } from '../../constants';
 import { AssetStatusTag } from '../../assetStatusTag';
 import { MonitoringPointRow } from '../types';
 import { Point } from '../util';
+import { AXIS_ALIAS } from '../constants';
 import { OperateCell } from './operateCell';
 
 export type Column = Required<TableProps<MonitoringPointRow>>['columns'][0];
@@ -105,19 +107,36 @@ function getPropertyedCols(
     (p) => (needToFilterFirstProperties ? p.first : true)
   );
   return properties.map(({ fields = [], first, key, name, precision, unit }) => {
-    const children = fields.map(({ key: subKey, name }) => {
+    let children = fields.map(({ key: subKey, name }) => {
       const axisKey = subKey.replace(`${key}_`, '');
-      const axisName = Point.getAxisName(axisKey, measurement.attributes);
+      const axis = Point.getAxis(axisKey);
       return {
         key: subKey,
         render: (d: MonitoringPointRow) =>
           getValue(roundValue(d?.data?.values[subKey] as number, precision)),
-        title: axisName ? intl.get(axisName) : intl.get(name),
+        title: axis ? intl.get(axis.label) : intl.get(name),
         width: 90
       };
     });
+    if (
+      measurement.type === MonitoringPointTypeValue.Vibration ||
+      measurement.type === MonitoringPointTypeValue.VibrationRotation
+    ) {
+      children = Object.values(AXIS_ALIAS).map(({ key: aliasKey, label }) => {
+        return {
+          key: aliasKey,
+          render: (d: MonitoringPointRow) => {
+            const attrs = d.attributes;
+            const axisKey = attrs?.[aliasKey];
+            return getValue(roundValue(d?.data?.values[`${key}_${axisKey}`] as number, precision));
+          },
+          title: intl.get(label),
+          width: 90
+        };
+      });
+    }
     const title = getDisplayName({ name: intl.get(name), lang, suffix: unit });
-    return children.length > 1
+    return children.length > 1 && fields.length === children.length
       ? { key, title, children, hidden: !first }
       : {
           key,

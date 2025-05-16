@@ -53,7 +53,8 @@ export const Monitor = (point: MonitoringPointRow) => {
                 radius: attributes?.tower_base_radius
               }
             ]}
-            style={{ height: 300 }}
+            style={{ height: 240 }}
+            cardProps={{ style: { background: '#f0f0f0' } }}
             type={type}
           />
         </Col>
@@ -61,7 +62,11 @@ export const Monitor = (point: MonitoringPointRow) => {
       {Point.getPropertiesByType(properties, type).map((p: DisplayProperty, index: number) => {
         return (
           <Col {...colProps} key={index}>
-            <HistoryDataFea.PropertyChartCard data={historyData} property={p} />
+            <HistoryDataFea.PropertyChartCard
+              data={historyData}
+              property={p}
+              cardprops={{ style: { background: '#f0f0f0' } }}
+            />
           </Col>
         );
       })}

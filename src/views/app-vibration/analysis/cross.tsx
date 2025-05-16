@@ -16,8 +16,9 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
   const { density = [], phase = [], x = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { points, setPoints } = useCrossTarget(id);
-  const selectedPointId = points?.find((p) => p.selected)?.value;
-  const targetAxis = useAxis();
+  const selectedPoint = points?.find((p) => p.selected);
+  const selectedPointId = selectedPoint?.value;
+  const targetAxis = useAxis(selectedPoint?.attributes);
   const targetOriginalDomain = useOriginalDomain(
     points?.[0].value,
     timestamp,

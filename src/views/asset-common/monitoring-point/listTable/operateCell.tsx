@@ -24,8 +24,9 @@ export const OperateCell = ({
           type='text'
           size='small'
           title={intl.get('EDIT_SOMETHING', { something: intl.get(MONITORING_POINT) })}
+          onClick={() => onUpdate(point)}
         >
-          <EditOutlined onClick={() => onUpdate(point)} />
+          <EditOutlined />
         </Button>
       </HasPermission>
       <HasPermission value={Permission.MeasurementDelete}>

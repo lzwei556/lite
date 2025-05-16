@@ -15,7 +15,7 @@ import {
 } from './types';
 
 export function getMeasurements(filters?: Pick<MonitoringPoint, 'asset_id'>) {
-  return request.get<MonitoringPoint[]>(`/monitoringPoints`, { ...filters }).then(GetResponse);
+  return request.get<MonitoringPointRow[]>(`/monitoringPoints`, { ...filters }).then(GetResponse);
 }
 
 export function getMeasurement(id: number) {

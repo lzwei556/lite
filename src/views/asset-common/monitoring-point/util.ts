@@ -1,6 +1,6 @@
 import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../../config';
 import { DisplayProperty } from '../../../constants/properties';
-import { MONITORING_POINT_DISPLAY_PROPERTIES } from './constants';
+import { AXIS, AXIS_ALIAS, MONITORING_POINT_DISPLAY_PROPERTIES } from './constants';
 import { HistoryData, MonitoringPoint, MonitoringPointRow, Property } from './types';
 
 export const Point = {
@@ -101,16 +101,27 @@ export const Point = {
       }
     }
   },
-  getAxisName: (key: string, attrs: MonitoringPointRow['attributes']) => {
+  getAxis: (key?: string) => {
+    if (key === AXIS.X.key) {
+      return AXIS.X;
+    }
+    if (key === AXIS.Y.key) {
+      return AXIS.Y;
+    }
+    if (key === AXIS.Z.key) {
+      return AXIS.Z;
+    }
+  },
+  getAxisAlias: (axisKey: string, attrs?: MonitoringPointRow['attributes']) => {
     if (attrs) {
-      if (attrs.axial === key) {
-        return 'axis.axial';
+      if (axisKey === attrs.axial) {
+        return AXIS_ALIAS.Axial;
       }
-      if (attrs.vertical === key) {
-        return 'axis.vertical';
+      if (axisKey === attrs.vertical) {
+        return AXIS_ALIAS.Vertical;
       }
-      if (attrs.horizontal === key) {
-        return 'axis.horizontal';
+      if (axisKey === attrs.horizontal) {
+        return AXIS_ALIAS.Horizontal;
       }
     }
   }

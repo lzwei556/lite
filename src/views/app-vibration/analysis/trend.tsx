@@ -3,14 +3,16 @@ import { Space } from 'antd';
 import intl from 'react-intl-universal';
 import { LightSelectFilter, SeriesOption, ChartMark } from '../../../components';
 import { Dayjs } from '../../../utils';
-import { ValuesPropertyName } from '../../asset-common';
+import { MonitoringPointRow, ValuesPropertyName } from '../../asset-common';
 import { TrendDataProps, useProperties } from './useTrend';
-import { AXIS_OPTIONS } from './useAxis';
+import { getAxisOptions } from './useAxis';
 
 export const Trend = ({
+  attributes,
   data,
   onClick
 }: {
+  attributes: MonitoringPointRow['attributes'];
   data: TrendDataProps['data'];
   onClick: (t: number) => void;
 }) => {
@@ -20,13 +22,14 @@ export const Trend = ({
   const [timestamp, setTimestamp] = React.useState<number | undefined>(
     data.find((d) => !!d.selected)?.timestamp
   );
+  const axisOptions = getAxisOptions(attributes);
 
   const getSeries = () => {
     const series: SeriesOption[] = [];
     const xAxisValues = timestamps.map((t) => Dayjs.format(t));
     if (data.length > 0) {
       series.push(
-        ...AXIS_OPTIONS.map((o) => ({
+        ...axisOptions.map((o) => ({
           xAxisValues,
           data: {
             [intl.get(o.label)]: data.map(

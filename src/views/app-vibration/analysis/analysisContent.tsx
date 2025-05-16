@@ -19,9 +19,11 @@ import { MarkContext } from './mark';
 import { WaterFall } from './waterFall';
 import { OrbitPlot } from './orbitPlot';
 import { TrendAnalysis } from './trendAnalysis';
+import { MonitoringPointRow } from '../../asset-common';
 
 export type AnalysisCommonProps = {
   id: number;
+  attributes?: MonitoringPointRow['attributes'];
   timestamp: number;
   axis: Axis;
   property: Property;
@@ -45,7 +47,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
   const { property, properties, setProperties } = useProperties(
     activeKey === 'time-envelope' || activeKey === 'envelope' ? 'acceleration' : undefined
   );
-  const { axis, axies, setAxies } = useAxis();
+  const { axis, axies, setAxies } = useAxis(props.attributes);
   const timeDomain = useTimeDomain({ ...props, axis, property });
   const originalDomain = useOriginalDomain(props.id, props.timestamp, axis.value);
 

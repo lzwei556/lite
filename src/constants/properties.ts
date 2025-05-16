@@ -22,7 +22,7 @@ export interface DisplayProperty {
   unit2?: string;
   losingOnMonitoringPoint?: boolean;
   interval?: number;
-  fields?: { name: string; key: string; dataIndex: number; first?: boolean }[];
+  fields?: { name: string; key: string; dataIndex: number; first?: boolean; alias?: string }[];
   defaultFirstFieldKey?: string;
   parentKey?: string;
   group?: DisplayPropertyGroup;

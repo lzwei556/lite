@@ -2,7 +2,9 @@ import React from 'react';
 import { FormInstance } from 'antd';
 import { DeviceType } from '../../../types/device_type';
 import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../../config';
+import { DisplayProperty } from '../../../constants/properties';
 import {
+  AXIS_ALIAS,
   bindDevice,
   MonitoringPoint,
   MonitoringPointBatch,
@@ -99,4 +101,20 @@ export function handleSubmit(
   } catch (error) {
     console.log(error);
   }
+}
+
+export function appendAxisAliasLabelToField(
+  property: DisplayProperty,
+  attrs?: MonitoringPointRow['attributes']
+) {
+  let fields = property.fields ?? [];
+  const isMultiple = fields.length > 1;
+  if (isMultiple) {
+    fields = Object.values(AXIS_ALIAS).map(({ key, label }) => {
+      const axisKey = attrs?.[key];
+      const field = fields.find((field) => axisKey === field.key.replace(`${property.key}_`, ''))!;
+      return { ...field, alias: label };
+    });
+  }
+  return { ...property, fields } as DisplayProperty;
 }

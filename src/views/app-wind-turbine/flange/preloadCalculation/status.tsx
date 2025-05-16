@@ -63,7 +63,6 @@ export const Status: React.FC<AssetRow> = (props) => {
   const renderTimestampsTable = () => {
     return (
       <Table
-        style={{ height: 648 }}
         showHeader={false}
         columns={[
           {
@@ -87,6 +86,7 @@ export const Status: React.FC<AssetRow> = (props) => {
           onMouseEnter: () => (window.document.body.style.cursor = 'pointer')
         })}
         rowKey={(row) => row.timestamp}
+        scroll={{ y: 620 }}
       />
     );
   };

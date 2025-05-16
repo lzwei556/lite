@@ -5,7 +5,8 @@ import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { frequency } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
-import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
+import CenterSide from './centerSide';
+import { MarkList, Toolbar, useMarkChartProps } from './mark';
 
 export const Frequency = ({ axis, property, timeDomain, originalDomain }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
@@ -13,7 +14,7 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
   const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
-  const { marks, handleClick, handleRefresh } = useMarkChartProps();
+  const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
 
   React.useEffect(() => {
     handleRefresh(x, y);
@@ -43,7 +44,7 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
-            extra: <SingleDoubleToggle />,
+            extra: <Toolbar />,
             style: { position: 'relative', border: 'solid 1px #d3d3d3' }
           }}
           config={{
@@ -83,7 +84,9 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
             onRefresh: () => handleRefresh(x, y)
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
-        />
+        >
+          {isTypeSideband && <CenterSide.Switcher />}
+        </ChartMark.Chart>
       </Col>
       <Col flex='300px'>
         <AnalysisSidebarCollapse
