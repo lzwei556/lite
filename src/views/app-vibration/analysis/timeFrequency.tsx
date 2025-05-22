@@ -4,14 +4,14 @@ import intl from 'react-intl-universal';
 import { CardChart, chartColors } from '../../../components';
 import { timeFrequency } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
-import { useWindow, Window, useWindowLength, WindowLength } from './settings';
+import { useWindow, Window, useWindowLength, WindowLengthPopup } from './settings';
 
 export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: number[]; y: number[]; z: number[][] }>();
   const { x = [], y = [], z = [] } = data || {};
   const { window, setWindow } = useWindow();
-  const { window_length, setWindowLength } = useWindowLength();
+  const { window_length, setWindowLength } = useWindowLength(originalDomain?.values?.length);
   const xAxisName = `${intl.get('FIELD_FREQUENCY')}（Hz）`;
   const yAxisName = `${intl.get('TIMESTAMP')}（s）`;
   const zAxisName = intl.get('amplitude');
@@ -41,7 +41,11 @@ export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps)
       cardProps={{
         extra: [
           <Window onOk={setWindow} key='window' />,
-          <WindowLength onOk={setWindowLength} key='window_length' />
+          <WindowLengthPopup
+            maxLen={originalDomain?.values?.length}
+            onOk={setWindowLength}
+            key='window_length'
+          />
         ],
         style: { border: 'solid 1px #d3d3d3' }
       }}

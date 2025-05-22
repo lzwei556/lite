@@ -4,7 +4,17 @@ import { ColumnWidthOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Flex } from '../../../../components';
 
-export const windowLengths = [128, 256, 512, 1024, 2048, 4096, 8192];
+export const WindowLength = {
+  128: { value: 128 },
+  256: { value: 256 },
+  512: { value: 512 },
+  1024: { value: 1024 },
+  2048: { value: 2048 },
+  4096: { value: 4096 },
+  8192: { value: 8192 }
+} as const;
+
+export const windowLengths = Object.values(WindowLength).map((len) => len.value);
 export const windowLength = {
   label: 'chart.window.length',
   name: 'window_length',
@@ -14,12 +24,26 @@ export const windowLength = {
   }))
 };
 
-export function useWindowLength() {
-  const [window_length, setWindowLength] = React.useState<number>(windowLengths[0]);
+export function useWindowLength(maxLen?: number) {
+  const [window_length, setWindowLength] = React.useState<number>(getDefault(maxLen));
   return { window_length, setWindowLength };
 }
 
-export const WindowLength = ({ onOk }: { onOk: (windowLength: number) => void }) => {
+const getDefault = (maxLen?: number) => {
+  let len: number = WindowLength[4096].value;
+  if (maxLen && maxLen < len) {
+    len = Math.max(...windowLengths.filter((len) => len <= maxLen));
+  }
+  return len;
+};
+
+export const WindowLengthPopup = ({
+  maxLen,
+  onOk
+}: {
+  maxLen?: number;
+  onOk: (windowLength: number) => void;
+}) => {
   const [open, setOpen] = React.useState(false);
   const [form] = Form.useForm<{ window_length: number }>();
   const { label, name, options } = windowLength;
@@ -29,7 +53,7 @@ export const WindowLength = ({ onOk }: { onOk: (windowLength: number) => void })
         <Form
           form={form}
           layout='vertical'
-          initialValues={{ window_length: windowLengths[0] }}
+          initialValues={{ window_length: getDefault(maxLen) }}
           style={{ width: 220, padding: 12 }}
         >
           <Form.Item {...{ name, label: intl.get(label) }}>
