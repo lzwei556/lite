@@ -19,11 +19,7 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
   const selectedPoint = points?.find((p) => p.selected);
   const selectedPointId = selectedPoint?.value;
   const targetAxis = useAxis(selectedPoint?.attributes);
-  const targetOriginalDomain = useOriginalDomain(
-    points?.[0].value,
-    timestamp,
-    targetAxis.axis.value
-  );
+  const targetOriginalDomain = useOriginalDomain(selectedPointId, timestamp, targetAxis.axis.value);
 
   React.useEffect(() => {
     if (originalDomain && targetOriginalDomain) {
