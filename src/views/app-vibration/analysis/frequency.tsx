@@ -7,14 +7,27 @@ import { frequency } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import CenterSide from './centerSide';
 import { MarkList, Toolbar, useMarkChartProps } from './mark';
+import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 
-export const Frequency = ({ axis, property, timeDomain, originalDomain }: AnalysisCommonProps) => {
+export const Frequency = ({
+  axis,
+  property,
+  timeDomain,
+  originalDomain,
+  id,
+  timestamp
+}: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
   const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
+  const downlaodRawDataHandler = useDownloadRawDataHandler(
+    id,
+    timestamp,
+    `${property.value}FrequencyDomain`
+  );
 
   React.useEffect(() => {
     handleRefresh(x, y);
@@ -80,7 +93,13 @@ export const Frequency = ({ axis, property, timeDomain, originalDomain }: Analys
           })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image', 'refresh'],
+            visibles: ['download', 'save_image', 'refresh'],
+            download: {
+              onClick() {
+                downlaodRawDataHandler();
+              },
+              tooltip: 'DOWNLOAD_DATA'
+            },
             onRefresh: () => handleRefresh(x, y)
           }}
           yAxisMeta={{ ...property, unit: property.unit }}

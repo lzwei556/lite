@@ -5,12 +5,18 @@ import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { AnalysisCommonProps } from './analysisContent';
 import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
+import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 
-export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) => {
+export const TimeDomain = ({ axis, property, timeDomain, id, timestamp }: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
   const { marks, handleClick, handleRefresh } = useMarkChartProps();
+  const downlaodRawDataHandler = useDownloadRawDataHandler(
+    id,
+    timestamp,
+    `${property.value}TimeDomain`
+  );
 
   React.useEffect(() => {
     handleRefresh(x, y);
@@ -57,7 +63,13 @@ export const TimeDomain = ({ axis, property, timeDomain }: AnalysisCommonProps) 
           })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image', 'refresh'],
+            visibles: ['download', 'save_image', 'refresh'],
+            download: {
+              onClick() {
+                downlaodRawDataHandler();
+              },
+              tooltip: 'DOWNLOAD_DATA'
+            },
             onRefresh: () => handleRefresh(x, y)
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
