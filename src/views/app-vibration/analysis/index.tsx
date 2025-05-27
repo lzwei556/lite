@@ -71,7 +71,7 @@ function Content({
               }))
             }}
           >
-            <Trend attributes={attributes} data={data} onClick={setSelected} />
+            <Trend id={id} attributes={attributes} data={data} onClick={setSelected} />
           </ChartMark.Context>
         </Col>
         {selected && (

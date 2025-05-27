@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, ButtonProps, Tooltip } from 'antd';
-import Icon, { ReloadOutlined } from '@ant-design/icons';
+import Icon, { DownloadOutlined, ReloadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ReactComponent as MouseSVG } from './mouse.svg';
 import { ReactComponent as SelectSVG } from './select.svg';
@@ -34,3 +34,11 @@ export const ReloadIconButton = (props: ButtonProps) => {
 function IconButton(props: ButtonProps) {
   return <Button {...props} color='primary' variant='filled' />;
 }
+
+export const DownloadIconButton = (props: ButtonProps & { tooltip?: string }) => {
+  return (
+    <Tooltip title={intl.get(props.tooltip ?? 'DOWNLOAD')}>
+      <IconButton {...props} icon={<DownloadOutlined />} />
+    </Tooltip>
+  );
+};

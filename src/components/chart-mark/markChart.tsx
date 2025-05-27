@@ -15,13 +15,20 @@ import { SaveImageIconButton } from '../charts/saveImageIconButton';
 import { useContext } from './context';
 import {
   AreaMarkSwitcherIconButton,
+  DownloadIconButton,
   PointMarkSwitcherIconButton,
   ReloadIconButton
 } from './components/icons';
 
-export type Visible = 'enable_point' | 'enable_area' | 'refresh' | 'save_image';
+export type Visible = 'enable_point' | 'enable_area' | 'refresh' | 'save_image' | 'download';
 
-export const Visibles: Visible[] = ['enable_point', 'enable_area', 'refresh', 'save_image'];
+export const Visibles: Visible[] = [
+  'enable_point',
+  'enable_area',
+  'refresh',
+  'save_image',
+  'download'
+];
 
 type PresetToolbarProps = {
   visibles?: Visible[];
@@ -30,8 +37,11 @@ type PresetToolbarProps = {
   onRestore?: (ins: EChartsType | undefined) => void;
   imageFilename?: string;
   extra?: React.ReactNode;
-  noSplit?: boolean;
   onRefresh?: () => void;
+  download?: {
+    onClick: () => void;
+    tooltip: string;
+  };
 };
 
 export const MarkChart = (
@@ -86,13 +96,11 @@ export const MarkChart = (
       extra={
         <Space
           split={
-            !toolbar?.noSplit && (
-              <Divider
-                key='separation'
-                type='vertical'
-                style={{ marginInline: 4, borderColor: '#d3d3d3' }}
-              />
-            )
+            <Divider
+              key='separation'
+              type='vertical'
+              style={{ marginInline: 4, borderColor: '#d3d3d3' }}
+            />
           }
         >
           {toolbar?.extra && <Space>{toolbar?.extra}</Space>}
@@ -103,6 +111,12 @@ export const MarkChart = (
             )}
             {visibles?.includes('enable_area') && (
               <AreaMarkSwitcherIconButton onClick={enableAreaMark} />
+            )}
+            {visibles?.includes('download') && (
+              <DownloadIconButton
+                onClick={toolbar?.download?.onClick}
+                tooltip={toolbar?.download?.tooltip}
+              />
             )}
             {visibles?.includes('refresh') && <ReloadIconButton onClick={restoreHandle} />}
             {visibles?.includes('save_image') && <SaveImageIconButton chartHandler={ref.current} />}

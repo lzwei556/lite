@@ -6,12 +6,15 @@ import { Dayjs } from '../../../utils';
 import { MonitoringPointRow, ValuesPropertyName } from '../../asset-common';
 import { TrendDataProps, useProperties } from './useTrend';
 import { getAxisOptions } from './useAxis';
+import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 
 export const Trend = ({
+  id,
   attributes,
   data,
   onClick
 }: {
+  id: number;
   attributes: MonitoringPointRow['attributes'];
   data: TrendDataProps['data'];
   onClick: (t: number) => void;
@@ -23,6 +26,7 @@ export const Trend = ({
     data.find((d) => !!d.selected)?.timestamp
   );
   const axisOptions = getAxisOptions(attributes);
+  const downlaodRawDataHandler = useDownloadRawDataHandler(id, timestamp, 'originalDomain');
 
   const getSeries = () => {
     const series: SeriesOption[] = [];
@@ -92,7 +96,13 @@ export const Trend = ({
       })}
       style={{ height: 130 }}
       toolbar={{
-        visibles: ['save_image', 'refresh'],
+        visibles: ['download', 'save_image', 'refresh'],
+        download: {
+          tooltip: 'download.vibration.original.data',
+          onClick() {
+            downlaodRawDataHandler();
+          }
+        },
         onRefresh: () => {
           if (timestamps.length > 0) {
             const latest = timestamps[timestamps.length - 1];
