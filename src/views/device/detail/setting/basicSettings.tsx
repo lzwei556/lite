@@ -12,7 +12,10 @@ export const BasicSettings = ({ device, onUpdate }: { device: Device; onUpdate: 
 
   return (
     <Form form={form} labelCol={{ xl: 9, xxl: 8 }} initialValues={getInitial(device)}>
-      <BasicSettingsFormItems device={device} />
+      <BasicSettingsFormItems
+        device={device}
+        onChangeNetwork={(networkId) => form.setFieldValue('network', networkId)}
+      />
       <Form.Item>
         <Flex>
           <Button

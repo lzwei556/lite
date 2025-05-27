@@ -8,7 +8,13 @@ import { Device } from '../../../../types/device';
 import { GetNetworksRequest } from '../../../../apis/network';
 import { ParentsSelect } from '../../parentsSelect';
 
-export const BasicSettingsFormItems = ({ device }: { device: Device }) => {
+export const BasicSettingsFormItems = ({
+  device,
+  onChangeNetwork
+}: {
+  device: Device;
+  onChangeNetwork: (networkId: number) => void;
+}) => {
   const [networkId, setNetworkId] = React.useState<number | undefined>(device.network?.id);
   const renderNetworkFormItem = () => {
     if (DeviceType.isRootDevice(device.typeId)) {
@@ -31,9 +37,13 @@ export const BasicSettingsFormItems = ({ device }: { device: Device }) => {
             dispalyField='macAddress'
             onChange={(value, option: any) => {
               GetNetworksRequest().then((networks) => {
-                setNetworkId(
-                  networks.find((network) => network.gateway.id === option.gatewayId)?.id
-                );
+                const networkId = networks.find(
+                  (network) => network.gateway.id === option.gatewayId
+                )?.id;
+                if (networkId) {
+                  setNetworkId(networkId);
+                  onChangeNetwork(networkId);
+                }
               });
             }}
           />

@@ -31,7 +31,10 @@ export const BasicSettingsModal = (props: ModalFormProps & { device: Device }) =
       title={intl.get('EDIT_SOMETHING', { something: intl.get('DEVICE') })}
     >
       <Form form={form} labelCol={{ xl: 9, xxl: 8 }} initialValues={getInitial(device)}>
-        <BasicSettingsFormItems device={device} />
+        <BasicSettingsFormItems
+          device={device}
+          onChangeNetwork={(networkId) => form.setFieldValue('network', networkId)}
+        />
       </Form>
     </ModalWrapper>
   );
