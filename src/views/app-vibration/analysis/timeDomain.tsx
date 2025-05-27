@@ -7,7 +7,14 @@ import { AnalysisCommonProps } from './analysisContent';
 import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 
-export const TimeDomain = ({ axis, property, timeDomain, id, timestamp }: AnalysisCommonProps) => {
+export const TimeDomain = ({
+  axis,
+  property,
+  timeDomain,
+  id,
+  timestamp,
+  parent
+}: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
@@ -17,6 +24,8 @@ export const TimeDomain = ({ axis, property, timeDomain, id, timestamp }: Analys
     timestamp,
     `${property.value}TimeDomain`
   );
+  //@ts-ignore
+  const rotation_speed = parent.attributes?.rotation_speed;
 
   React.useEffect(() => {
     handleRefresh(x, y);
@@ -91,7 +100,11 @@ export const TimeDomain = ({ axis, property, timeDomain, id, timestamp }: Analys
                         label: intl.get('SETTING_SAMPLING_FREQUNECY'),
                         children: `${frequency}Hz`
                       },
-                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
+                      {
+                        label: intl.get('motor.rotation_speed'),
+                        children: rotation_speed ? `${rotation_speed}RPM` : '-'
+                      }
                     ]}
                   />
                 </Card>

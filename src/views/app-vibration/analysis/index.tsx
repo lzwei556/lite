@@ -2,17 +2,20 @@ import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import { ChartMark, Card, Flex, Grid, useRange, RangeDatePicker } from '../../../components';
 import { Dayjs } from '../../../utils';
-import { MonitoringPointRow, TrendData } from '../../asset-common';
+import { useMonitoringPointParents } from '../../asset-variant';
+import { Asset, MonitoringPointRow, TrendData } from '../../asset-common';
 import { useTrendData } from './useTrend';
 import { AnalysisContent } from './analysisContent';
 import { Trend } from './trend';
 
 export const Index = ({
   id,
-  attributes
+  attributes,
+  assetId
 }: {
   id: number;
   attributes: MonitoringPointRow['attributes'];
+  assetId: number;
 }) => {
   const { numberedRange, setRange } = useRange();
   const { loading, data } = useTrendData(id, numberedRange);
@@ -28,7 +31,13 @@ export const Index = ({
       </Col>
       <Col span={24}>
         <Spin spinning={loading}>
-          <Content data={data} id={id} attributes={attributes} key={JSON.stringify(data)} />
+          <Content
+            assetId={assetId}
+            data={data}
+            id={id}
+            attributes={attributes}
+            key={JSON.stringify(data)}
+          />
         </Spin>
       </Col>
     </Grid>
@@ -38,15 +47,18 @@ export const Index = ({
 function Content({
   data,
   id,
-  attributes
+  attributes,
+  assetId
 }: {
   data: TrendData[];
   id: number;
   attributes: MonitoringPointRow['attributes'];
+  assetId: number;
 }) {
   const [selected, setSelected] = React.useState<number | undefined>(
     data.find((d) => !!d.selected)?.timestamp
   );
+  const parents = useMonitoringPointParents((asset) => Asset.Assert.isVibrationRelated(asset.type));
   const lines: string[] = [];
   if (selected) {
     lines.push(Dayjs.format(selected));
@@ -81,6 +93,7 @@ function Content({
               attributes={attributes}
               timestamp={selected}
               timestamps={data.map(({ timestamp }) => timestamp)}
+              parent={parents.find((asset) => asset.id === assetId)!}
             />
           </Col>
         )}

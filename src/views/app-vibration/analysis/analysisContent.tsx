@@ -2,6 +2,7 @@ import React from 'react';
 import { Space, Tabs } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, LightSelectFilter } from '../../../components';
+import { AssetRow, MonitoringPointRow } from '../../asset-common';
 import { Property, useProperties } from './useTrend';
 import { TimeDomain } from './timeDomain';
 import { useOriginalDomain } from './useOriginalDomain';
@@ -19,7 +20,6 @@ import { MarkContext } from './mark';
 import { WaterFall } from './waterFall';
 import { OrbitPlot } from './orbitPlot';
 import { TrendAnalysis } from './trendAnalysis';
-import { MonitoringPointRow } from '../../asset-common';
 
 export type AnalysisCommonProps = {
   id: number;
@@ -30,6 +30,7 @@ export type AnalysisCommonProps = {
   timeDomain?: { loading: boolean; data?: TimeDomainData };
   originalDomain?: OriginalDomainResponse;
   timestamps: number[];
+  parent: AssetRow;
 };
 
 export type OriginalDomainResponse = {

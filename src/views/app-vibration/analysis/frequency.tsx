@@ -15,7 +15,8 @@ export const Frequency = ({
   timeDomain,
   originalDomain,
   id,
-  timestamp
+  timestamp,
+  parent
 }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
@@ -28,6 +29,8 @@ export const Frequency = ({
     timestamp,
     `${property.value}FrequencyDomain`
   );
+  //@ts-ignore
+  const rotation_speed = parent.attributes?.rotation_speed;
 
   React.useEffect(() => {
     handleRefresh(x, y);
@@ -123,7 +126,11 @@ export const Frequency = ({
                         label: intl.get('SETTING_SAMPLING_FREQUNECY'),
                         children: `${timeDomainFrequency}Hz`
                       },
-                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
+                      {
+                        label: intl.get('motor.rotation_speed'),
+                        children: rotation_speed ? `${rotation_speed}RPM` : '-'
+                      }
                     ]}
                   />
                 </Card>
