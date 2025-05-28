@@ -3,7 +3,7 @@ import { Col, Divider } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
-import { frequency } from '../../asset-common';
+import { frequency, FrequencyAnalysis } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import CenterSide from './centerSide';
 import { MarkList, Toolbar, useMarkChartProps } from './mark';
@@ -20,7 +20,7 @@ export const Frequency = ({
 }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
-  const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
+  const [data, setData] = React.useState<Omit<FrequencyAnalysis, 'x'> & { x: string[] }>();
   const { x = [], y = [] } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
   const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
@@ -33,27 +33,28 @@ export const Frequency = ({
   const rotation_speed = parent.attributes?.rotation_speed;
 
   React.useEffect(() => {
-    handleRefresh(x, y);
-  }, [handleRefresh, x, y]);
-
-  React.useEffect(() => {
     if (property.value && originalDomain) {
       const { frequency: fs, fullScale, range, values } = originalDomain;
       setLoading(true);
-      frequency({
+      const data = {
         property: property.value,
         data: values,
         fs,
         full_scale: fullScale,
         range,
         window: 'hann'
-      })
-        .then(({ x, y }) => setData({ x: x.map((n) => `${n}`), y }))
+      };
+      frequency(rotation_speed ? { ...data, rpm: rotation_speed } : data)
+        .then(({ x, y, ...rest }) => setData({ x: x.map((n) => `${n}`), y, ...rest }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
     }
-  }, [property.value, originalDomain]);
+  }, [property.value, originalDomain, rotation_speed]);
+
+  React.useEffect(() => {
+    handleRefresh(x, y, data);
+  }, [handleRefresh, x, y, data]);
 
   return (
     <Grid>
@@ -103,7 +104,7 @@ export const Frequency = ({
               },
               tooltip: 'DOWNLOAD_DATA'
             },
-            onRefresh: () => handleRefresh(x, y)
+            onRefresh: () => handleRefresh(x, y, data)
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
         >
@@ -134,28 +135,14 @@ export const Frequency = ({
                     ]}
                   />
                 </Card>
-              )
+              ),
+              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             },
             {
               key: 'forecast',
               label: intl.get('data.analysis'),
               children: (
                 <Card styles={{ body: { overflowY: 'auto', maxHeight: 300 } }}>
-                  <Descriptions
-                    items={[
-                      { label: '1x倍频', children: '-' },
-                      { label: '2x倍频', children: '-' },
-                      { label: '3x倍频', children: '-' },
-                      { label: '4x倍频', children: '-' },
-                      { label: '5x倍频', children: '-' },
-                      { label: '6x倍频', children: '-' },
-                      { label: '7x倍频', children: '-' },
-                      { label: '8x倍频', children: '-' },
-                      { label: '9x倍频', children: '-' },
-                      { label: '10x倍频', children: '-' }
-                    ]}
-                  />
-                  <Divider />
                   <Descriptions
                     items={[
                       { label: 'BPFI', children: '-' },

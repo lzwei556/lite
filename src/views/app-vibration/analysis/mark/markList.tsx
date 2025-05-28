@@ -1,7 +1,7 @@
 import React from 'react';
 import { List } from 'antd';
 import { Card, ChartMark } from '../../../../components';
-import { roundValue } from '../../../../utils/format';
+import { getValue, roundValue } from '../../../../utils/format';
 import CenterSide from '../centerSide';
 import { useMarkContext } from './context';
 
@@ -20,7 +20,7 @@ export const MarkList = () => {
       case 'Top10':
         return `Peak${index + 1}`;
       case 'Harmonic':
-        return `${index + 1}Harmon`;
+        return `${index + 1}x`;
     }
   };
 
@@ -42,13 +42,15 @@ export const MarkList = () => {
       <Card styles={{ body: { overflowY: 'auto', maxHeight: 350 } }}>
         <List
           dataSource={marks.concat(getDiff())}
-          renderItem={(mark, i) => (
-            <List.Item>
-              <List.Item.Meta description={getLabel(i)} />
-              <span style={{ width: 90 }}>X: {mark.data[0]}</span>
-              <span style={{ width: 90 }}>Y: {roundValue(mark.data[1] as number)}</span>
-            </List.Item>
-          )}
+          renderItem={(mark, i) => {
+            return (
+              <List.Item>
+                <List.Item.Meta description={getLabel(i)} />
+                <span style={{ width: 90 }}>X: {mark.data[0] ?? '-'}</span>
+                <span style={{ width: 90 }}>Y: {getValue(roundValue(mark.data[1] as number))}</span>
+              </List.Item>
+            );
+          }}
         />
       </Card>
     );

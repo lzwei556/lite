@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChartMark } from '../../../../components';
 import { roundValue } from '../../../../utils/format';
+import { Harmonic } from '../../../asset-common';
 import CenterSide from '../centerSide';
 import Harmon from '../harmonic';
 import { useMarkContext } from './context';
@@ -44,7 +45,7 @@ export const useMarkChartProps = () => {
   );
 
   const handleRefresh = React.useCallback(
-    (x: string[], y: number[]) => {
+    (x: string[], y: number[], harmonic?: Harmonic) => {
       if (markType === 'Peak' || markType === 'Double') {
         dispatchMarks({
           type: 'append_single',
@@ -58,7 +59,7 @@ export const useMarkChartProps = () => {
       } else {
         dispatchMarks({ type: 'clear' });
         if (markType === 'Harmonic') {
-          const indexs = getIndexs();
+          const indexs = harmonic ? getIndexsByHarmonic(harmonic, y) : getIndexs();
           indexs.forEach((index, i) => {
             const xValue = x[index];
             const yValue = y[index];
@@ -100,4 +101,19 @@ export const useMarkChartProps = () => {
     marks: visibledMarks.filter((mark) => mark.type === markType),
     isTypeSideband: markType === 'Sideband'
   };
+};
+
+const getIndexsByHarmonic = (harmonic: Harmonic, y: number[]) => {
+  return [
+    harmonic.harmonic1x,
+    harmonic.harmonic2x,
+    harmonic.harmonic3x,
+    harmonic.harmonic4x,
+    harmonic.harmonic5x,
+    harmonic.harmonic6x,
+    harmonic.harmonic7x,
+    harmonic.harmonic8x,
+    harmonic.harmonic9x,
+    harmonic.harmonic10x
+  ].map((v) => y.indexOf(v));
 };

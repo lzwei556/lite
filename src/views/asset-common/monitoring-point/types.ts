@@ -73,6 +73,7 @@ export type VibrationAnalysisParams = {
   f_l?: number;
   scale?: number;
   window_length?: number;
+  rpm?: number;
 };
 
 export type VibrationAnalysisRequest = {
@@ -97,3 +98,17 @@ export type MonitoringPointInfo = {
 };
 
 export type Metadata = { [key: string]: number };
+
+export type Harmonic = {
+  baseFrequency: number;
+  harmonic1x: number;
+  harmonic2x: number;
+  harmonic3x: number;
+  harmonic4x: number;
+  harmonic5x: number;
+  harmonic6x: number;
+  harmonic7x: number;
+  harmonic8x: number;
+  harmonic9x: number;
+  harmonic10x: number;
+};

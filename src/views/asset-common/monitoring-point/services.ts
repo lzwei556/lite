@@ -8,6 +8,7 @@ import {
 } from '../../../utils/response';
 import {
   DataType,
+  Harmonic,
   HistoryData,
   MonitoringPoint,
   MonitoringPointRow,
@@ -134,28 +135,26 @@ export function getTrend(id: number, from: number, to: number) {
     .then(GetResponse);
 }
 
+type AnalysisDataPart = { rms: number; x: number[]; y: number[] };
+
+export type FrequencyAnalysis = AnalysisDataPart & Harmonic;
+
 export async function frequency(data: VibrationAnalysisRequest) {
-  return request
-    .put<{ rms: number; x: number[]; y: number[] }>('algo/frequencySpectrum', data)
-    .then(HandlePutResponse);
+  return request.put<FrequencyAnalysis>('algo/frequencySpectrum', data).then(HandlePutResponse);
 }
 
 export async function timeEnvelope(data: VibrationAnalysisRequest) {
-  return request
-    .put<{ rms: number; x: number[]; y: number[] }>('algo/timeEnvelope', data)
-    .then(HandlePutResponse);
+  return request.put<AnalysisDataPart>('algo/timeEnvelope', data).then(HandlePutResponse);
 }
 
+export type EnvelopeAnalysis = AnalysisDataPart & Harmonic;
+
 export async function envelope(data: VibrationAnalysisRequest) {
-  return request
-    .put<{ rms: number; x: number[]; y: number[] }>('algo/envelopeSpectrum', data)
-    .then(HandlePutResponse);
+  return request.put<EnvelopeAnalysis>('algo/envelopeSpectrum', data).then(HandlePutResponse);
 }
 
 export async function power(data: VibrationAnalysisRequest) {
-  return request
-    .put<{ rms: number; x: number[]; y: number[] }>('algo/powerSpectrum', data)
-    .then(HandlePutResponse);
+  return request.put<AnalysisDataPart>('algo/powerSpectrum', data).then(HandlePutResponse);
 }
 
 export async function cross(
@@ -167,15 +166,11 @@ export async function cross(
 }
 
 export async function zoom(data: VibrationAnalysisRequest) {
-  return request
-    .put<{ rms: number; x: number[]; y: number[] }>('algo/zoomSpectrum', data)
-    .then(HandlePutResponse);
+  return request.put<AnalysisDataPart>('algo/zoomSpectrum', data).then(HandlePutResponse);
 }
 
 export async function cepstrum(data: VibrationAnalysisRequest) {
-  return request
-    .put<{ rms: number; x: number[]; y: number[] }>('algo/cepstrumSpectrum', data)
-    .then(HandlePutResponse);
+  return request.put<AnalysisDataPart>('algo/cepstrumSpectrum', data).then(HandlePutResponse);
 }
 
 export async function timeFrequency(data: VibrationAnalysisRequest) {

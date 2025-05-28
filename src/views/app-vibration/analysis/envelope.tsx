@@ -3,7 +3,7 @@ import { Col, Divider } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
-import { envelope } from '../../asset-common';
+import { envelope, EnvelopeAnalysis } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
 import CenterSide from './centerSide';
@@ -18,7 +18,7 @@ export const Envelope = ({
 }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
-  const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
+  const [data, setData] = React.useState<Omit<EnvelopeAnalysis, 'x'> & { x: string[] }>();
   const { x = [], y = [] } = data || {};
   const [activeKey, setActiveKey] = React.useState('overview');
   const { window, setWindow } = useWindow();
@@ -28,14 +28,10 @@ export const Envelope = ({
   const rotation_speed = parent.attributes?.rotation_speed;
 
   React.useEffect(() => {
-    handleRefresh(x, y);
-  }, [handleRefresh, x, y]);
-
-  React.useEffect(() => {
     if (originalDomain) {
       const { frequency, fullScale, range, values } = originalDomain;
       setLoading(true);
-      envelope({
+      const data = {
         property: property.value,
         data: values,
         fs: frequency,
@@ -43,13 +39,18 @@ export const Envelope = ({
         range,
         window,
         ...filter_type_related
-      })
-        .then(({ x, y }) => setData({ x: x.map((n) => `${n}`), y }))
+      };
+      envelope(rotation_speed ? { ...data, rpm: rotation_speed } : data)
+        .then(({ x, y, ...rest }) => setData({ x: x.map((n) => `${n}`), y, ...rest }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
     }
-  }, [originalDomain, property.value, window, filter_type_related]);
+  }, [originalDomain, property.value, window, filter_type_related, rotation_speed]);
+
+  React.useEffect(() => {
+    handleRefresh(x, y, data);
+  }, [handleRefresh, x, y, data]);
 
   return (
     <Grid>
@@ -92,7 +93,7 @@ export const Envelope = ({
           style={{ height: 450 }}
           toolbar={{
             visibles: ['save_image', 'refresh'],
-            onRefresh: () => handleRefresh(x, y),
+            onRefresh: () => handleRefresh(x, y, data),
             extra: [
               <Window onOk={setWindow} key='window' />,
               <FilterTypeRelated
@@ -134,28 +135,14 @@ export const Envelope = ({
                     ]}
                   />
                 </Card>
-              )
+              ),
+              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             },
             {
               key: 'forecast',
               label: intl.get('data.analysis'),
               children: (
                 <Card styles={{ body: { overflowY: 'auto', maxHeight: 300 } }}>
-                  <Descriptions
-                    items={[
-                      { label: '1x倍频', children: '-' },
-                      { label: '2x倍频', children: '-' },
-                      { label: '3x倍频', children: '-' },
-                      { label: '4x倍频', children: '-' },
-                      { label: '5x倍频', children: '-' },
-                      { label: '6x倍频', children: '-' },
-                      { label: '7x倍频', children: '-' },
-                      { label: '8x倍频', children: '-' },
-                      { label: '9x倍频', children: '-' },
-                      { label: '10x倍频', children: '-' }
-                    ]}
-                  />
-                  <Divider />
                   <Descriptions
                     items={[
                       { label: 'BPFI', children: '-' },
