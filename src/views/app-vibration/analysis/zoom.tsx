@@ -15,7 +15,6 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { zoomRange, setZoomRange } = useZoomRange();
-  const [activeKey, setActiveKey] = React.useState('marklist');
   const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
 
   React.useEffect(() => {
@@ -69,7 +68,6 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
           onEvents={{
             click: (coord: [string, number], xIndex?: number) => {
               handleClick(coord, x, y, xIndex);
-              setActiveKey('marklist');
             }
           }}
           series={ChartMark.mergeMarkDatas({
@@ -97,7 +95,7 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
       </Col>
       <Col flex='300px'>
         <AnalysisSidebarCollapse
-          activeKey={activeKey}
+          defaultActiveKey={['marklist']}
           items={[
             {
               key: 'marklist',
@@ -106,9 +104,6 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}
-          onChange={(keys) => {
-            setActiveKey(keys[0]);
-          }}
         />
       </Col>
     </Grid>

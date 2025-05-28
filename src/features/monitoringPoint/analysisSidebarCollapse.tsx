@@ -5,7 +5,6 @@ export const AnalysisSidebarCollapse = ({ items, ...rest }: CollapseProps) => {
   return (
     <Collapse
       {...rest}
-      accordion={true}
       bordered={false}
       expandIconPosition='end'
       items={items?.map((item) => ({

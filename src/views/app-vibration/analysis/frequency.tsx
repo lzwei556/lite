@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Divider } from 'antd';
+import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
@@ -22,7 +22,6 @@ export const Frequency = ({
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<Omit<FrequencyAnalysis, 'x'> & { x: string[] }>();
   const { x = [], y = [] } = data || {};
-  const [activeKey, setActiveKey] = React.useState('overview');
   const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
@@ -82,7 +81,6 @@ export const Frequency = ({
           onEvents={{
             click: (coord: [string, number], xIndex?: number) => {
               handleClick(coord, x, y, xIndex);
-              setActiveKey('marklist');
             }
           }}
           series={ChartMark.mergeMarkDatas({
@@ -113,7 +111,7 @@ export const Frequency = ({
       </Col>
       <Col flex='300px'>
         <AnalysisSidebarCollapse
-          activeKey={activeKey}
+          defaultActiveKey={['overview', 'marklist']}
           items={[
             {
               key: 'overview',
@@ -139,33 +137,12 @@ export const Frequency = ({
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             },
             {
-              key: 'forecast',
-              label: intl.get('data.analysis'),
-              children: (
-                <Card styles={{ body: { overflowY: 'auto', maxHeight: 300 } }}>
-                  <Descriptions
-                    items={[
-                      { label: 'BPFI', children: '-' },
-                      { label: 'BPFO', children: '-' },
-                      { label: 'BSF', children: '-' },
-                      { label: 'FTF', children: '-' }
-                    ]}
-                  />
-                  <Divider />
-                  <Descriptions items={[{ label: '边频', children: '-' }]} />
-                </Card>
-              )
-            },
-            {
               key: 'marklist',
               label: intl.get('mark'),
               children: <MarkList />,
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}
-          onChange={(keys) => {
-            setActiveKey(keys[0]);
-          }}
         />
       </Col>
     </Grid>

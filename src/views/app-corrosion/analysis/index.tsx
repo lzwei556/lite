@@ -69,6 +69,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
       )}
       <Col flex='300px'>
         <AnalysisSidebarCollapse
+          accordion={true}
           activeKey={activeKey}
           items={[
             {

@@ -17,7 +17,6 @@ export const TimeDomain = ({
 }: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
-  const [activeKey, setActiveKey] = React.useState('overview');
   const { marks, handleClick, handleRefresh } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
@@ -57,7 +56,6 @@ export const TimeDomain = ({
           onEvents={{
             click: (coord: [string, number], xIndex?: number) => {
               handleClick(coord, x, y, xIndex);
-              setActiveKey('marklist');
             }
           }}
           series={ChartMark.mergeMarkDatas({
@@ -86,7 +84,7 @@ export const TimeDomain = ({
       </Col>
       <Col flex='300px'>
         <AnalysisSidebarCollapse
-          activeKey={activeKey}
+          defaultActiveKey={['overview', 'forecast', 'marklist']}
           items={[
             {
               key: 'overview',
@@ -108,7 +106,8 @@ export const TimeDomain = ({
                     ]}
                   />
                 </Card>
-              )
+              ),
+              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             },
             {
               key: 'forecast',
@@ -134,9 +133,6 @@ export const TimeDomain = ({
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}
-          onChange={(keys) => {
-            setActiveKey(keys[0]);
-          }}
         />
       </Col>
     </Grid>
