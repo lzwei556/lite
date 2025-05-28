@@ -23,7 +23,6 @@ export const TimeDomain = ({
     timestamp,
     `${property.value}TimeDomain`
   );
-  //@ts-ignore
   const rotation_speed = parent.attributes?.rotation_speed;
 
   React.useEffect(() => {

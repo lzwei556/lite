@@ -3,6 +3,21 @@ import { Input, InputNumber, Radio, Select } from 'antd';
 import intl from 'react-intl-universal';
 import { FormInputItem } from '../../../components/formInputItem';
 
+export type MotorAttrs = {
+  motor_type: 'AC' | 'DC';
+  rotation_speed: number;
+  variable_frequency_drive: boolean;
+  nominal_power: number;
+  mounting: 1 | 2;
+  bearing_type: 1 | 2;
+  bearing_model: string;
+  rolling_elements_num: number;
+  rolling_elements_diameter: number;
+  pitch_circle_diameter: number;
+  contact_angle: number;
+  rotation_mode: 'inner' | 'outer';
+};
+
 export const Settings = () => {
   return (
     <fieldset>
@@ -31,7 +46,7 @@ export const Settings = () => {
           message: intl.get('PLEASE_ENTER_NUMERIC')
         }}
         numericChildren={
-          <InputNumber style={{ width: '100%' }} controls={false} addonAfter='RPM' />
+          <InputNumber style={{ width: '100%' }} controls={false} addonAfter='RPM' min={1000} />
         }
       />
       <FormInputItem
@@ -84,6 +99,52 @@ export const Settings = () => {
       <FormInputItem label={intl.get('motor.bearing_model')} name={['attributes', 'bearing_model']}>
         <Input />
       </FormInputItem>
+      <FormInputItem
+        label={intl.get('motor.rolling.elements.num')}
+        name={['attributes', 'rolling_elements_num']}
+        numericRule={{
+          message: intl.get('PLEASE_ENTER_NUMERIC')
+        }}
+        numericChildren={<InputNumber style={{ width: '100%' }} min={1} />}
+      />
+      <FormInputItem
+        label={intl.get('motor.rolling.elements.diameter')}
+        name={['attributes', 'rolling_elements_diameter']}
+        numericRule={{
+          message: intl.get('PLEASE_ENTER_NUMERIC')
+        }}
+        numericChildren={<InputNumber style={{ width: '100%' }} min={1} addonAfter='mm' />}
+      />
+      <FormInputItem
+        label={intl.get('motor.pitch.circle.diameter')}
+        name={['attributes', 'pitch_circle_diameter']}
+        numericRule={{
+          message: intl.get('PLEASE_ENTER_NUMERIC')
+        }}
+        numericChildren={<InputNumber style={{ width: '100%' }} min={1} addonAfter='mm' />}
+      />
+      <FormInputItem
+        label={intl.get('motor.contact.angle')}
+        name={['attributes', 'contact_angle']}
+        numericRule={{
+          message: intl.get('PLEASE_ENTER_NUMERIC')
+        }}
+        numericChildren={<InputNumber style={{ width: '100%' }} min={1} addonAfter='°' />}
+      />
+      <FormInputItem label={intl.get('motor.rotation.mode')} name={['attributes', 'rotation_mode']}>
+        <Select
+          options={[
+            {
+              label: '内',
+              value: 'inner'
+            },
+            {
+              label: '外',
+              value: 'outer'
+            }
+          ]}
+        />
+      </FormInputItem>
     </fieldset>
   );
 };
@@ -96,6 +157,11 @@ export const defaultSettings = {
     nominal_power: 380,
     mounting: 1,
     bearing_type: 1,
-    bearing_model: ''
-  }
+    bearing_model: '',
+    rolling_elements_num: 10,
+    rolling_elements_diameter: 100,
+    pitch_circle_diameter: 100,
+    contact_angle: 2,
+    rotation_mode: 'inner'
+  } as MotorAttrs
 };

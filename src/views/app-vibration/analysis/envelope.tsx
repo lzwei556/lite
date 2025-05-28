@@ -23,7 +23,6 @@ export const Envelope = ({
   const { window, setWindow } = useWindow();
   const { filter_type_related, setFilter_type_related } = useFilterTypeRelated();
   const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
-  //@ts-ignore
   const rotation_speed = parent.attributes?.rotation_speed;
 
   React.useEffect(() => {

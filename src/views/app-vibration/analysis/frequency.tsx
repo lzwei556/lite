@@ -28,7 +28,6 @@ export const Frequency = ({
     timestamp,
     `${property.value}FrequencyDomain`
   );
-  //@ts-ignore
   const rotation_speed = parent.attributes?.rotation_speed;
 
   React.useEffect(() => {

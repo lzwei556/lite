@@ -1,3 +1,4 @@
+import { MotorAttrs } from '../asset-variant';
 import { MonitoringPointRow } from './monitoring-point';
 import { AssetChildrenStatistics } from './utils/statistics';
 
@@ -49,7 +50,7 @@ export type AssetRow = {
     sample_time_offset: number;
     initial_preload: number;
     initial_pressure: number;
-  };
+  } & Partial<MotorAttrs>;
 };
 
 export type AssetCategory = { type: number; label: string };

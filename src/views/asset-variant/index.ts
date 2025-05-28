@@ -1,3 +1,4 @@
+export type { MotorAttrs } from './motor/settings';
 export * from './constants';
 export { Create as CreateAsset } from './create';
 export * from './icon';
