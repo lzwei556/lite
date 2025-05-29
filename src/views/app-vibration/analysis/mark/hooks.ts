@@ -99,7 +99,8 @@ export const useMarkChartProps = () => {
     handleClick,
     handleRefresh,
     marks: visibledMarks.filter((mark) => mark.type === markType),
-    isTypeSideband: markType === 'Sideband'
+    isTypeSideband: markType === 'Sideband',
+    markType
   };
 };
 

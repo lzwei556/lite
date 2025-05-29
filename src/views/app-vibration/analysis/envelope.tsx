@@ -55,7 +55,7 @@ export const Envelope = ({
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
-            extra: <Toolbar />,
+            extra: <Toolbar hiddens={['Faultfrequency']} />,
             style: { position: 'relative', border: 'solid 1px #d3d3d3' }
           }}
           config={{

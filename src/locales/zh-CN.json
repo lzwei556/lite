@@ -1278,6 +1278,11 @@
   "analysis.vibration.cursor.harmonic": "Harmonic Cursor",
   "analysis.vibration.cursor.sideband": "Sideband Cursor",
   "analysis.vibration.cursor.top10": "TOP10",
+  "analysis.vibration.cursor.faultfrequency": "Fault Frequency",
+  "fault.frequency.bpfo": "BPFO",
+  "fault.frequency.bpfi": "BPFI",
+  "fault.frequency.bsf": "BSF",
+  "fault.frequency.ftf": "FTF",
   "asset.parent": "父资产",
   "bindings.device": "关联设备"
 }

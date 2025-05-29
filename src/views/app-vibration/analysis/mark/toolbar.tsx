@@ -9,6 +9,7 @@ import { ReactComponent as MultipleSVG } from './multiple.svg';
 import { ReactComponent as PeakSVG } from './peak.svg';
 import { ReactComponent as SidebandSVG } from './sideband.svg';
 import { ReactComponent as Top10SVG } from './top10.svg';
+import { ReactComponent as FaultFrequencySVG } from './faultFrequency.svg';
 import centerSide from '../centerSide';
 
 const icons: { [Key in MarkType]: React.ComponentType } = {
@@ -17,7 +18,8 @@ const icons: { [Key in MarkType]: React.ComponentType } = {
   Multiple: () => <MultipleSVG />,
   Harmonic: () => <HarmonicSVG />,
   Sideband: () => <SidebandSVG />,
-  Top10: () => <Top10SVG />
+  Top10: () => <Top10SVG />,
+  Faultfrequency: () => <FaultFrequencySVG />
 };
 
 export const Toolbar = ({ hiddens }: { hiddens?: MarkType[] }) => {
@@ -30,9 +32,8 @@ export const Toolbar = ({ hiddens }: { hiddens?: MarkType[] }) => {
         .filter((type) => !hiddens?.includes(type))
         .map((type) => {
           return (
-            <Tooltip title={intl.get(`analysis.vibration.cursor.${type.toLowerCase()}`)}>
+            <Tooltip key={type} title={intl.get(`analysis.vibration.cursor.${type.toLowerCase()}`)}>
               <Button
-                key={type}
                 color='primary'
                 onClick={() => {
                   setMarkType(type);

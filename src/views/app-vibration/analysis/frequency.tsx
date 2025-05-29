@@ -8,6 +8,8 @@ import { AnalysisCommonProps } from './analysisContent';
 import CenterSide from './centerSide';
 import { MarkList, Toolbar, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
+import { useFaultFrequency } from './useFaultFrequency';
+import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
 
 export const Frequency = ({
   axis,
@@ -22,13 +24,15 @@ export const Frequency = ({
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<Omit<FrequencyAnalysis, 'x'> & { x: string[] }>();
   const { x = [], y = [] } = data || {};
-  const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
+  const { marks, handleClick, isTypeSideband, handleRefresh, markType } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
     timestamp,
     `${property.value}FrequencyDomain`
   );
   const rotation_speed = parent.attributes?.rotation_speed;
+  //@ts-ignore
+  const { faultFrequency } = useFaultFrequency(parent.attributes);
 
   React.useEffect(() => {
     if (property.value && originalDomain) {
@@ -137,8 +141,13 @@ export const Frequency = ({
             },
             {
               key: 'marklist',
-              label: intl.get('mark'),
-              children: <MarkList />,
+              label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
+              children:
+                markType === 'Faultfrequency' ? (
+                  <FaultFrequencyMarkList faultFrequency={faultFrequency} />
+                ) : (
+                  <MarkList />
+                ),
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}

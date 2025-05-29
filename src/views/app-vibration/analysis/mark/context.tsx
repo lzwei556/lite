@@ -3,7 +3,15 @@ import { ChartMark } from '../../../../components';
 import CenterSide from '../centerSide';
 import Harmon from '../harmonic';
 
-export const markTypes = ['Peak', 'Double', 'Multiple', 'Harmonic', 'Sideband', 'Top10'] as const;
+export const markTypes = [
+  'Peak',
+  'Double',
+  'Multiple',
+  'Harmonic',
+  'Sideband',
+  'Top10',
+  'Faultfrequency'
+] as const;
 export type MarkType = typeof markTypes[number];
 
 const AnalysisContext = React.createContext<{

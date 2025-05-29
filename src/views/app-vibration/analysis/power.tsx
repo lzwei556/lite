@@ -44,7 +44,7 @@ export const Power = ({ axis, property, originalDomain }: AnalysisCommonProps) =
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
-            extra: <Toolbar hiddens={['Top10']} />,
+            extra: <Toolbar hiddens={['Top10', 'Faultfrequency']} />,
             style: { position: 'relative', border: 'solid 1px #d3d3d3' }
           }}
           config={{
