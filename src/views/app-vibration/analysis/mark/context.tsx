@@ -9,8 +9,8 @@ export const markTypes = [
   'Multiple',
   'Harmonic',
   'Sideband',
-  'Top10',
-  'Faultfrequency'
+  'Faultfrequency',
+  'Top10'
 ] as const;
 export type MarkType = typeof markTypes[number];
 

@@ -111,7 +111,8 @@ export const FilterTypeRelated = ({
           color='primary'
           icon={<FilterOutlined />}
           onClick={() => setOpen(true)}
-          variant='filled'
+          variant='outlined'
+          size='small'
         />
       </Tooltip>
     </Popover>

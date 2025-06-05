@@ -27,7 +27,8 @@ export const SingleDoubleToggle = () => {
             )}
           />
         }
-        variant={type === 'Double' ? 'solid' : 'filled'}
+        variant={type === 'Double' ? 'solid' : 'outlined'}
+        size='small'
       />
     </Tooltip>
   );

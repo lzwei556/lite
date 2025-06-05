@@ -95,6 +95,7 @@ export const MarkChart = (
       {...cardProps}
       extra={
         <Space
+          size={4}
           split={
             <Divider
               key='separation'
@@ -103,22 +104,22 @@ export const MarkChart = (
             />
           }
         >
-          {toolbar?.extra && <Space>{toolbar?.extra}</Space>}
-          {cardProps?.extra && <Space>{cardProps?.extra}</Space>}
-          <Space>
+          {toolbar?.extra && <Space size={4}>{toolbar?.extra}</Space>}
+          {cardProps?.extra && <Space size={4}>{cardProps?.extra}</Space>}
+          <Space size={4}>
             {visibles?.includes('enable_point') && (
               <PointMarkSwitcherIconButton onClick={enablePointMark} />
             )}
             {visibles?.includes('enable_area') && (
               <AreaMarkSwitcherIconButton onClick={enableAreaMark} />
             )}
+            {visibles?.includes('refresh') && <ReloadIconButton onClick={restoreHandle} />}
             {visibles?.includes('download') && (
               <DownloadIconButton
                 onClick={toolbar?.download?.onClick}
                 tooltip={toolbar?.download?.tooltip}
               />
             )}
-            {visibles?.includes('refresh') && <ReloadIconButton onClick={restoreHandle} />}
             {visibles?.includes('save_image') && <SaveImageIconButton chartHandler={ref.current} />}
           </Space>
         </Space>

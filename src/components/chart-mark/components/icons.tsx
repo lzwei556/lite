@@ -32,7 +32,7 @@ export const ReloadIconButton = (props: ButtonProps) => {
 };
 
 function IconButton(props: ButtonProps) {
-  return <Button {...props} color='primary' variant='filled' />;
+  return <Button {...props} color='primary' variant='outlined' size='small' />;
 }
 
 export const DownloadIconButton = (props: ButtonProps & { tooltip?: string }) => {

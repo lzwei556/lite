@@ -100,7 +100,8 @@ export const WindowLengthPopup = ({
           color='primary'
           icon={<ColumnWidthOutlined />}
           onClick={() => setOpen(true)}
-          variant='filled'
+          variant='outlined'
+          size='small'
         />
       </Tooltip>
     </Popover>

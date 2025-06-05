@@ -83,7 +83,8 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
           color='primary'
           icon={<PlusSquareOutlined />}
           onClick={() => setOpen(true)}
-          variant='filled'
+          variant='outlined'
+          size='small'
         />
       </Tooltip>
     </Popover>

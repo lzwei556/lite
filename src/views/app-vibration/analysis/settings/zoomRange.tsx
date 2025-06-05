@@ -73,7 +73,8 @@ export const ZoomRange = ({ onOk }: { onOk: (values: RangeProps) => void }) => {
           color='primary'
           icon={<ZoomInOutlined />}
           onClick={() => setOpen(true)}
-          variant='filled'
+          variant='outlined'
+          size='small'
         />
       </Tooltip>
     </Popover>

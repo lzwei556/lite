@@ -17,9 +17,19 @@ export const CardChart = ({
     <Card
       {...cardRestProps}
       extra={
-        <Space>
+        <Space
+          size={4}
+          split={
+            extra && (
+              <Divider
+                key='separation'
+                type='vertical'
+                style={{ marginInline: 4, borderColor: '#d3d3d3' }}
+              />
+            )
+          }
+        >
           {extra}
-          {extra && <Divider key='separation' type='vertical' style={{ borderColor: '#d3d3d3' }} />}
           <SaveImageIconButton chartHandler={ref.current} filename={filename} />
         </Space>
       }
