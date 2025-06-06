@@ -6,7 +6,13 @@ export type Mark = {
   data: Coord | [Coord, Coord] | string;
   description?: string;
   type?: string;
-  chartPorps?: { label?: any; symbol?: string; lineStyle?: any; itemStyle?: any };
+  chartPorps?: {
+    label?: any;
+    symbol?: string;
+    lineStyle?: any;
+    itemStyle?: any;
+    default?: boolean;
+  };
 };
 export type PointMark = Omit<Mark, 'data'> & { data: Coord };
 export type LineMark = Omit<Mark, 'data'> & { data: [Coord, Coord] | string };

@@ -1,11 +1,13 @@
 import React from 'react';
 import { List } from 'antd';
 import { Card, ChartMark } from '../../../../components';
-import { getValue, roundValue } from '../../../../utils/format';
+import { Language, useLocaleContext } from '../../../../localeProvider';
+import { formatNumericData } from '../../../../utils/format';
 import CenterSide from '../centerSide';
 import { useMarkContext } from './context';
 
 export const MarkList = () => {
+  const { language } = useLocaleContext();
   const { visibledMarks } = ChartMark.useContext();
   const { markType } = useMarkContext();
   const marks = visibledMarks.filter((mark) => mark.type === markType);
@@ -13,12 +15,15 @@ export const MarkList = () => {
   const getLabel = (index: number) => {
     switch (markType) {
       case 'Peak':
-        return 'Start Cursor';
+        return language === 'zh-CN' ? '峰值' : 'Peak';
       case 'Double':
-        return index === 0 ? 'Start Cursor' : index === 1 ? 'End Cursor' : 'Difference';
+        const start = language === 'zh-CN' ? '起始游标' : 'Start Cursor';
+        const end = language === 'zh-CN' ? '终止游标' : 'End Cursor';
+        const diff = language === 'zh-CN' ? '差值' : 'Difference';
+        return index === 0 ? start : index === 1 ? end : diff;
       case 'Multiple':
       case 'Top10':
-        return `Peak${index + 1}`;
+        return `${language === 'zh-CN' ? '峰值' : 'Peak'}${index + 1}`;
       case 'Harmonic':
         return `${index + 1}x`;
     }
@@ -29,8 +34,8 @@ export const MarkList = () => {
       const [start, end] = marks;
       const [startX, startY] = start.data as [string, number];
       const [endX, endY] = end.data as [string, number];
-      const diff = [roundValue(Number(endX) - Number(startX)), endY - startY];
-      return [{ data: diff } as ChartMark.Mark];
+      const diff = [Number(endX) - Number(startX), endY - startY];
+      return [{ data: diff, type: 'diff' } as ChartMark.Mark];
     }
     return [];
   };
@@ -41,13 +46,22 @@ export const MarkList = () => {
     return (
       <Card styles={{ body: { overflowY: 'auto', maxHeight: 350 } }}>
         <List
-          dataSource={marks.concat(getDiff())}
+          dataSource={marks.concat(getDiff()).map(transformMarkData)}
           renderItem={(mark, i) => {
+            const diffSymbol = mark.type === 'diff' ? '△' : '';
+            const [x, y] = mark.data;
+
             return (
               <List.Item>
                 <List.Item.Meta description={getLabel(i)} />
-                <span style={{ width: 90 }}>X: {mark.data[0] ?? '-'}</span>
-                <span style={{ width: 90 }}>Y: {getValue(roundValue(mark.data[1] as number))}</span>
+                <span style={{ width: 90 }}>
+                  X: {diffSymbol}
+                  {dispalyCoordValue(x, language)}
+                </span>
+                <span style={{ width: 90 }}>
+                  Y:{diffSymbol}
+                  {dispalyCoordValue(y, language)}
+                </span>
               </List.Item>
             );
           }}
@@ -56,3 +70,35 @@ export const MarkList = () => {
     );
   }
 };
+
+export function dispalyCoordValue(value: any, language: Language) {
+  if (value === 'out.of.range') {
+    return language === 'zh-CN' ? '超出范围' : 'Out Of Range';
+  }
+  if (value === undefined || value === null) {
+    return '-';
+  } else {
+    return value;
+  }
+}
+
+export function transformMarkData(mark: ChartMark.Mark): ChartMark.Mark {
+  let format = { ...mark };
+  const { data } = format;
+  if (Array.isArray(data) && data.length > 0) {
+    if (Array.isArray(data[0])) {
+      format = {
+        ...mark,
+        data: (data as [[string, number], [string, number]]).map((coord) =>
+          coord.map(formatNumericData)
+        )
+      } as ChartMark.Mark;
+    } else {
+      format = {
+        ...mark,
+        data: (data as [string, number]).map((coord) => formatNumericData(coord))
+      } as ChartMark.Mark;
+    }
+  }
+  return format;
+}

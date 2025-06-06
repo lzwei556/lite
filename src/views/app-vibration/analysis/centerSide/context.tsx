@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocaleContext } from '../../../../localeProvider';
 import { ChartMark } from '../../../../components';
 import { useMarkContext } from '../mark';
 
@@ -10,7 +11,7 @@ const CenterSideContext = React.createContext<{
   cursor: Cursor;
   setCursor: React.Dispatch<React.SetStateAction<Cursor>>;
   cursorOptions: { label: string; value: Cursor }[];
-  handleClick: (coord: [string, number], x: string[], y: number[], xIndex?: number) => void;
+  handleClick: (coord: [string, number], x: number[], y: number[], xIndex?: number) => void;
   num: number;
   setNum: React.Dispatch<React.SetStateAction<number>>;
 }>({
@@ -23,6 +24,7 @@ const CenterSideContext = React.createContext<{
 });
 
 export const Context = ({ children }: { children: React.ReactNode }) => {
+  const { language } = useLocaleContext();
   const { markType } = useMarkContext();
   const [cursor, setCursor] = React.useState<Cursor>('center');
   const [num, setNum] = React.useState(nums[2]);
@@ -33,42 +35,47 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
   });
   const getIndexs = (centerdIndex: number, sideIndex: number) => {
     const isLeft = sideIndex < centerdIndex;
-    const offset = 10;
+    const offset = Math.abs(sideIndex - centerdIndex);
     const halfNum = (num - 1) / 2;
     const lefts: { index: number; label: string }[] = [];
     const rights: { index: number; label: string }[] = [];
+    const left = language === 'zh-CN' ? '左' : 'Left';
+    const right = language === 'zh-CN' ? '右' : 'Right';
     if (isLeft) {
       Array(halfNum)
         .fill(-1)
         .forEach((n, index) => {
-          lefts.push({ index: sideIndex - offset * index, label: `Left${index + 1}` });
+          lefts.push({ index: sideIndex - offset * index, label: `${left}${index + 1}` });
         });
       Array(halfNum)
         .fill(-1)
         .forEach((n, index) => {
-          rights.push({ index: centerdIndex + offset * (index + 1), label: `Right${index + 1}` });
+          rights.push({
+            index: centerdIndex + offset * (index + 1),
+            label: `${right}${index + 1}`
+          });
         });
     } else {
       Array(halfNum)
         .fill(-1)
         .forEach((n, index) => {
-          lefts.push({ index: centerdIndex - offset * (index + 1), label: `Left${index + 1}` });
+          lefts.push({ index: centerdIndex - offset * (index + 1), label: `${left}${index + 1}` });
         });
       Array(halfNum)
         .fill(-1)
         .forEach((n, index) => {
-          rights.push({ index: sideIndex + offset * index, label: `Right${index + 1}` });
+          rights.push({ index: sideIndex + offset * index, label: `${right}${index + 1}` });
         });
     }
     return [...lefts, ...rights];
   };
-  const handleClick = (coord: [string, number], x: string[], y: number[], xIndex?: number) => {
+  const handleClick = (coord: [string, number], x: number[], y: number[], xIndex?: number) => {
     if (cursor === 'center') {
       dispatchMarks({
         type: 'append_multiple',
         mark: {
           name: `${cursor}${coord.join()}`,
-          label: 'Center',
+          label: language === 'zh-CN' ? '中心线' : 'Center',
           data: coord,
           type: markType,
           chartPorps: { itemStyle: { color: '#fa8c16' } }
@@ -81,12 +88,13 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
         //remove existed sides
         sidedMarks.forEach((mark) => dispatchMarks({ type: 'remove', mark }));
       }
-      const centeredIndex = x.indexOf((centeredMark.data as [string, number])[0]);
+      const _x = x.map((n) => `${n}`);
+      const centeredIndex = _x.indexOf((centeredMark.data as [string, number])[0]);
       if (xIndex) {
         const indexs = getIndexs(centeredIndex, xIndex);
         indexs.forEach(({ index, label }, i) => {
-          const xValue = x[index];
-          const yValue = y[index];
+          const xValue = _x[index] ?? 'out.of.range';
+          const yValue = y[index] ?? 'out.of.range';
           dispatchMarks({
             type: 'append_multiple',
             mark: {

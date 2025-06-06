@@ -61,7 +61,7 @@ export const TimeDomain = ({
             series: [
               {
                 data: { [intl.get(axis.label)]: y },
-                xAxisValues: x,
+                xAxisValues: x.map((n) => `${n}`),
                 raw: { animation: false }
               }
             ],

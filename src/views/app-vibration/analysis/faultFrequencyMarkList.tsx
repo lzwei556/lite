@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, List } from 'antd';
 import intl from 'react-intl-universal';
+import { roundValue } from '../../../utils/format';
 import { FaultFrequency } from './useFaultFrequency';
 
 export const FaultFrequencyMarkList = ({ faultFrequency }: { faultFrequency?: FaultFrequency }) => {
@@ -11,7 +12,7 @@ export const FaultFrequencyMarkList = ({ faultFrequency }: { faultFrequency?: Fa
         renderItem={([key, value]) => (
           <List.Item>
             <List.Item.Meta description={intl.get(`fault.frequency.${key}`)} />
-            <span style={{ width: 90 }}>{value}</span>
+            <span style={{ width: 90 }}>{roundValue(value)}</span>
           </List.Item>
         )}
       />

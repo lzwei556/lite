@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
+import { roundValue } from '../../../utils/format';
 import { ChartMark, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { zoom } from '../../asset-common';
@@ -11,7 +12,7 @@ import CenterSide from './centerSide';
 
 export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
-  const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
+  const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { zoomRange, setZoomRange } = useZoomRange();
@@ -35,7 +36,7 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
         ...zoomRange,
         scale: 8 // hard code
       })
-        .then(({ x, y }) => setData({ x: x.map((n) => `${n}`), y }))
+        .then(({ x, y }) => setData({ x: x.map((n) => roundValue(n)), y }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
@@ -74,7 +75,7 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
             series: [
               {
                 data: { [intl.get(axis.label)]: y },
-                xAxisValues: x
+                xAxisValues: x.map((n) => `${n}`)
               }
             ],
             marks

@@ -47,6 +47,9 @@ type PointDataItem = NonNullable<MarkPointOption['data']>[0];
 function buildPointData(mark: PointMark): PointDataItem {
   const { data: coord, name, label: markLabel, value, chartPorps } = mark;
   const { label, itemStyle, symbol } = chartPorps || {};
+  if (chartPorps?.default) {
+    return { name, coord, value: markLabel };
+  }
   const color = '#FF0000';
   const labelProps = {
     show: true,

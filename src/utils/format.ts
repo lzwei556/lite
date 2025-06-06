@@ -58,3 +58,10 @@ export function getDisplayName({
 export function truncate(text: string, max: number) {
   return text.length > max ? text.slice(0, max - 1) + '...' : text;
 }
+
+export function formatNumericData(data: string | number) {
+  if (typeof data === 'number') {
+    return roundValue(data);
+  }
+  return data;
+}

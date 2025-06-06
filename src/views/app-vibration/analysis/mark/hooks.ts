@@ -1,6 +1,6 @@
 import React from 'react';
+import { formatNumericData } from '../../../../utils/format';
 import { ChartMark } from '../../../../components';
-import { roundValue } from '../../../../utils/format';
 import { Harmonic } from '../../../asset-common';
 import CenterSide from '../centerSide';
 import Harmon from '../harmonic';
@@ -10,11 +10,11 @@ export const useMarkChartProps = () => {
   const { visibledMarks, dispatchMarks } = ChartMark.useContext();
   const { markType } = useMarkContext();
   const { handleClick: centerSideHandleClick, setCursor } = CenterSide.useContext();
-  const { handleClick: harmonHandleClick, getIndexs } = Harmon.useContext();
+  const { handleClick: harmonHandleClick } = Harmon.useContext();
 
   const handleClick = React.useCallback(
-    (coord: [string, number], x: string[], y: number[], xIndex?: number) => {
-      const [xValue, yValue] = coord;
+    (coord: [string, number], x: number[], y: number[], xIndex?: number) => {
+      const [xValue, yValue] = coord.map(formatNumericData);
       if (markType === 'Peak' || markType === 'Double') {
         dispatchMarks({
           type: markType === 'Peak' ? 'append_single' : 'append_double',
@@ -22,7 +22,7 @@ export const useMarkChartProps = () => {
             name: coord.join(),
             data: coord,
             type: markType,
-            chartPorps: { label: { formatter: `${xValue} ${roundValue(yValue)}` } }
+            chartPorps: { label: { formatter: `${xValue} ${yValue}` } }
           }
         });
       } else if (markType === 'Multiple') {
@@ -32,7 +32,7 @@ export const useMarkChartProps = () => {
             name: coord.join(),
             data: coord,
             type: markType,
-            value: `${xValue} ${roundValue(yValue)}`
+            value: `${xValue} ${yValue}`
           }
         });
       } else if (markType === 'Sideband') {
@@ -45,54 +45,75 @@ export const useMarkChartProps = () => {
   );
 
   const handleRefresh = React.useCallback(
-    (x: string[], y: number[], harmonic?: Harmonic) => {
+    (
+      x: number[],
+      y: number[],
+      initial?: { harmonic?: Harmonic; faultFrequencies?: { label: string; value: number }[] }
+    ) => {
       if (markType === 'Peak' || markType === 'Double') {
         dispatchMarks({
           type: 'append_single',
           mark: {
-            name: `${[x[0], y[0]].join()}${markType}`,
+            name: `${[`${x[0]}`, y[0]].join()}${markType}`,
             label: markType,
-            data: [x[0], y[0]],
+            data: [`${x[0]}`, y[0]],
             type: markType
           }
         });
       } else {
         dispatchMarks({ type: 'clear' });
         if (markType === 'Harmonic') {
-          const indexs = harmonic ? getIndexsByHarmonic(harmonic, y) : getIndexs();
+          const indexs = getIndexsByHarmonic(initial?.harmonic);
           indexs.forEach((index, i) => {
-            const xValue = x[index];
+            const xValue = `${x[index]}`;
             const yValue = y[index];
             dispatchMarks({
               type: 'append_multiple',
               mark: {
                 name: `${xValue}${yValue}${i}`,
                 data: [xValue, yValue],
-                type: markType
+                type: markType,
+                chartPorps: { label: { formatter: i === 0 ? `${xValue}` : undefined } }
               }
             });
           });
-        } else if (markType === 'Top10') {
-          Array(10)
-            .fill(-1)
-            .forEach((n, index) => {
-              const xValue = x[index];
-              const yValue = y[index];
+        } else if (markType === 'Top10' && y.length >= 10) {
+          const top10 = [...y].sort((a, b) => b - a).slice(0, 10);
+          top10.forEach((n, index) => {
+            const xValue = `${x[y.indexOf(n)]}`;
+            const yValue = n;
+            dispatchMarks({
+              type: 'append_multiple',
+              mark: {
+                name: `${xValue}${yValue}${index}`,
+                data: [xValue, yValue],
+                type: markType,
+                chartPorps: { default: true }
+              }
+            });
+          });
+        } else if (markType === 'Sideband') {
+          setCursor('center');
+        } else if (markType === 'Faultfrequency') {
+          (initial?.faultFrequencies ?? []).forEach(({ label, value }) => {
+            const index = y.indexOf(value);
+            if (index !== -1) {
+              const xValue = `${x[index]}`;
               dispatchMarks({
                 type: 'append_multiple',
                 mark: {
-                  name: `${xValue}${yValue}${index}`,
-                  data: [xValue, yValue],
-                  type: markType
+                  name: `${xValue}${value}`,
+                  data: [xValue, value],
+                  type: markType,
+                  chartPorps: { label: { formatter: label } }
                 }
               });
-            });
-        } else if (markType === 'Sideband') {
-          setCursor('center');
+            }
+          });
         }
       }
     },
-    [markType, dispatchMarks, setCursor, getIndexs]
+    [markType, dispatchMarks, setCursor]
   );
 
   return {
@@ -104,17 +125,18 @@ export const useMarkChartProps = () => {
   };
 };
 
-const getIndexsByHarmonic = (harmonic: Harmonic, y: number[]) => {
+const getIndexsByHarmonic = (harmonic?: Harmonic) => {
+  if (!harmonic) return [];
   return [
-    harmonic.harmonic1x,
-    harmonic.harmonic2x,
-    harmonic.harmonic3x,
-    harmonic.harmonic4x,
-    harmonic.harmonic5x,
-    harmonic.harmonic6x,
-    harmonic.harmonic7x,
-    harmonic.harmonic8x,
-    harmonic.harmonic9x,
-    harmonic.harmonic10x
-  ].map((v) => y.indexOf(v));
+    harmonic.harmonic1XIndex,
+    harmonic.harmonic2XIndex,
+    harmonic.harmonic3XIndex,
+    harmonic.harmonic4XIndex,
+    harmonic.harmonic5XIndex,
+    harmonic.harmonic6XIndex,
+    harmonic.harmonic7XIndex,
+    harmonic.harmonic8XIndex,
+    harmonic.harmonic9XIndex,
+    harmonic.harmonic10XIndex
+  ];
 };

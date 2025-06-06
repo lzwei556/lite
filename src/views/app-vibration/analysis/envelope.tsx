@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
+import { roundValue } from '../../../utils/format';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { envelope, EnvelopeAnalysis } from '../../asset-common';
@@ -18,7 +19,7 @@ export const Envelope = ({
 }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
-  const [data, setData] = React.useState<Omit<EnvelopeAnalysis, 'x'> & { x: string[] }>();
+  const [data, setData] = React.useState<EnvelopeAnalysis>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { filter_type_related, setFilter_type_related } = useFilterTypeRelated();
@@ -39,7 +40,7 @@ export const Envelope = ({
         ...filter_type_related
       };
       envelope(rotation_speed ? { ...data, rpm: rotation_speed } : data)
-        .then(({ x, y, ...rest }) => setData({ x: x.map((n) => `${n}`), y, ...rest }))
+        .then(({ x, y, ...rest }) => setData({ x: x.map((n) => roundValue(n)), y, ...rest }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
@@ -47,7 +48,7 @@ export const Envelope = ({
   }, [originalDomain, property.value, window, filter_type_related, rotation_speed]);
 
   React.useEffect(() => {
-    handleRefresh(x, y, data);
+    handleRefresh(x, y, { harmonic: data });
   }, [handleRefresh, x, y, data]);
 
   return (
@@ -82,7 +83,7 @@ export const Envelope = ({
             series: [
               {
                 data: { [intl.get(axis.label)]: y },
-                xAxisValues: x
+                xAxisValues: x.map((n) => `${n}`)
               }
             ],
             marks
@@ -90,7 +91,7 @@ export const Envelope = ({
           style={{ height: 450 }}
           toolbar={{
             visibles: ['save_image', 'refresh'],
-            onRefresh: () => handleRefresh(x, y, data),
+            onRefresh: () => handleRefresh(x, y, { harmonic: data }),
             extra: [
               <Window onOk={setWindow} key='window' />,
               <FilterTypeRelated

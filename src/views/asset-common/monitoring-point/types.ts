@@ -101,14 +101,14 @@ export type Metadata = { [key: string]: number };
 
 export type Harmonic = {
   baseFrequency: number;
-  harmonic1x: number;
-  harmonic2x: number;
-  harmonic3x: number;
-  harmonic4x: number;
-  harmonic5x: number;
-  harmonic6x: number;
-  harmonic7x: number;
-  harmonic8x: number;
-  harmonic9x: number;
-  harmonic10x: number;
+  harmonic1XIndex: number;
+  harmonic2XIndex: number;
+  harmonic3XIndex: number;
+  harmonic4XIndex: number;
+  harmonic5XIndex: number;
+  harmonic6XIndex: number;
+  harmonic7XIndex: number;
+  harmonic8XIndex: number;
+  harmonic9XIndex: number;
+  harmonic10XIndex: number;
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
+import { roundValue } from '../../../utils/format';
 import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { frequency, FrequencyAnalysis } from '../../asset-common';
@@ -22,7 +23,7 @@ export const Frequency = ({
 }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
-  const [data, setData] = React.useState<Omit<FrequencyAnalysis, 'x'> & { x: string[] }>();
+  const [data, setData] = React.useState<FrequencyAnalysis>();
   const { x = [], y = [] } = data || {};
   const { marks, handleClick, isTypeSideband, handleRefresh, markType } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
@@ -47,7 +48,7 @@ export const Frequency = ({
         window: 'hann'
       };
       frequency(rotation_speed ? { ...data, rpm: rotation_speed } : data)
-        .then(({ x, y, ...rest }) => setData({ x: x.map((n) => `${n}`), y, ...rest }))
+        .then(({ x, y, ...rest }) => setData({ x: x.map((n) => roundValue(n)), y, ...rest }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
@@ -55,8 +56,14 @@ export const Frequency = ({
   }, [property.value, originalDomain, rotation_speed]);
 
   React.useEffect(() => {
-    handleRefresh(x, y, data);
-  }, [handleRefresh, x, y, data]);
+    const faultFrequencies = faultFrequency
+      ? Object.entries(faultFrequency).map(([key, value]) => ({
+          label: intl.get(`fault.frequency.${key}`),
+          value
+        }))
+      : [];
+    handleRefresh(x, y, { harmonic: data, faultFrequencies });
+  }, [handleRefresh, x, y, data, faultFrequency]);
 
   return (
     <Grid>
@@ -90,7 +97,7 @@ export const Frequency = ({
             series: [
               {
                 data: { [intl.get(axis.label)]: y ?? [] },
-                xAxisValues: x ?? [],
+                xAxisValues: x.map((n) => `${n}`),
                 raw: { animation: false }
               }
             ],
@@ -105,7 +112,15 @@ export const Frequency = ({
               },
               tooltip: 'DOWNLOAD_DATA'
             },
-            onRefresh: () => handleRefresh(x, y, data)
+            onRefresh: () => {
+              const faultFrequencies = faultFrequency
+                ? Object.entries(faultFrequency).map(([key, value]) => ({
+                    label: intl.get(`fault.frequency.${key}`),
+                    value
+                  }))
+                : [];
+              handleRefresh(x, y, { harmonic: data, faultFrequencies });
+            }
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
         >

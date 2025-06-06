@@ -1,8 +1,8 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { AnalysisSidebarCollapse } from '../../../features';
 import { roundValue } from '../../../utils/format';
+import { AnalysisSidebarCollapse } from '../../../features';
 import { ChartMark, Grid } from '../../../components';
 import { cepstrum } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
@@ -11,7 +11,7 @@ import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
 
 export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
-  const [data, setData] = React.useState<{ x: string[]; y: number[] }>();
+  const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { marks, handleClick, handleRefresh } = useMarkChartProps();
@@ -32,7 +32,7 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
         range,
         window
       })
-        .then(({ x, y }) => setData({ x: x.map((n) => `${roundValue(1000 * n)}`), y }))
+        .then(({ x, y }) => setData({ x: x.map((n) => roundValue(n * 1000)), y }))
         .finally(() => setLoading(false));
     } else {
       setData(undefined);
@@ -71,7 +71,7 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
             series: [
               {
                 data: { [intl.get(axis.label)]: y },
-                xAxisValues: x,
+                xAxisValues: x.map((n) => `${n}`),
                 raw: { animation: false }
               }
             ],

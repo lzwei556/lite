@@ -4,7 +4,7 @@ import { getDynamicData } from '../../asset-common';
 import { AnalysisCommonProps, OriginalDomainResponse } from './analysisContent';
 
 export type TimeDomainData = {
-  x: string[];
+  x: number[];
   y: number[];
   range: number;
   frequency: number;
@@ -26,7 +26,7 @@ export function useTimeDomain({ id, timestamp, axis, property }: AnalysisCommonP
           const { xAxis, values, range, frequency, number, xAxisUnit } = data.values;
           if (xAxis.length > 0)
             setData({
-              x: xAxis.map((n) => `${roundValue(n)}`),
+              x: xAxis.map((n) => roundValue(n)),
               y: values,
               range,
               frequency,

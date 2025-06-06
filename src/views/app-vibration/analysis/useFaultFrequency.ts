@@ -25,7 +25,17 @@ export const useFaultFrequency = (attrs: MotorAttrs) => {
       }
       setLoading(false);
     };
-    fetchFaultFrequency(attrs);
+    if (
+      attrs &&
+      attrs.rolling_elements_num &&
+      attrs.rolling_elements_diameter &&
+      attrs.pitch_circle_diameter &&
+      attrs.contact_angle &&
+      attrs.rotation_mode &&
+      attrs.rotation_speed
+    ) {
+      fetchFaultFrequency(attrs);
+    }
   }, [attrs]);
 
   return { faultFrequency, loading };
