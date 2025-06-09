@@ -5,6 +5,7 @@ import { Harmonic } from '../../../asset-common';
 import CenterSide from '../centerSide';
 import Harmon from '../harmonic';
 import { useMarkContext } from './context';
+import { getNumsOfCursor } from './configurableNumsOfCursor';
 
 export const useMarkChartProps = () => {
   const { visibledMarks, dispatchMarks } = ChartMark.useContext();
@@ -127,6 +128,7 @@ export const useMarkChartProps = () => {
 
 const getIndexsByHarmonic = (harmonic?: Harmonic) => {
   if (!harmonic) return [];
+  const nums = getNumsOfCursor();
   return [
     harmonic.harmonic1XIndex,
     harmonic.harmonic2XIndex,
@@ -138,5 +140,5 @@ const getIndexsByHarmonic = (harmonic?: Harmonic) => {
     harmonic.harmonic8XIndex,
     harmonic.harmonic9XIndex,
     harmonic.harmonic10XIndex
-  ];
+  ].filter((n, index) => index < nums.harmonic);
 };

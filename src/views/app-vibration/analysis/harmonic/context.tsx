@@ -1,35 +1,26 @@
 import React from 'react';
 import { ChartMark } from '../../../../components';
-import { useMarkContext } from '../mark';
-
-export const nums = Array(50)
-  .fill(-1)
-  .map((n, index) => index + 1);
+import { getNumsOfCursor, useMarkContext } from '../mark';
 
 const HarmonicContext = React.createContext<{
   handleClick: (coord: [string, number], x: number[], y: number[], xIndex?: number) => void;
-  num: number;
-  setNum: React.Dispatch<React.SetStateAction<number>>;
 }>({
-  handleClick: () => {},
-  num: nums[1],
-  setNum: () => {}
+  handleClick: () => {}
 });
 
 export const Context = ({ children }: { children: React.ReactNode }) => {
   const { markType } = useMarkContext();
   const { dispatchMarks } = ChartMark.useContext();
-  const [num, setNum] = React.useState(8);
-  const getIndexs = React.useCallback(
-    (baseFrequencyIndex: number) => {
-      return Array(num)
-        .fill(-1)
-        .map((n, index) => {
-          return baseFrequencyIndex * (index + 1);
-        });
-    },
-    [num]
-  );
+
+  const getIndexs = React.useCallback((baseFrequencyIndex: number) => {
+    const nums = getNumsOfCursor();
+    return Array(nums.harmonic)
+      .fill(-1)
+      .map((n, index) => {
+        return baseFrequencyIndex * (index + 1);
+      });
+  }, []);
+
   const handleClick = (coord: [string, number], x: number[], y: number[], xIndex?: number) => {
     if (xIndex) {
       dispatchMarks({ type: 'clear' });
@@ -50,11 +41,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
       });
     }
   };
-  return (
-    <HarmonicContext.Provider value={{ handleClick, num, setNum }}>
-      {children}
-    </HarmonicContext.Provider>
-  );
+  return <HarmonicContext.Provider value={{ handleClick }}>{children}</HarmonicContext.Provider>;
 };
 
 export const useContext = () => React.useContext(HarmonicContext);

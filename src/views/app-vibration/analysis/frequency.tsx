@@ -7,7 +7,7 @@ import { AnalysisSidebarCollapse } from '../../../features';
 import { frequency, FrequencyAnalysis } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import CenterSide from './centerSide';
-import { MarkList, Toolbar, useMarkChartProps } from './mark';
+import { MarkList, Toolbar, useMarkChartProps, ConfigurableNumsOfCursor } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { useFaultFrequency } from './useFaultFrequency';
 import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
@@ -34,6 +34,7 @@ export const Frequency = ({
   const rotation_speed = parent.attributes?.rotation_speed;
   //@ts-ignore
   const { faultFrequency } = useFaultFrequency(parent.attributes);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (property.value && originalDomain) {
@@ -105,12 +106,18 @@ export const Frequency = ({
           })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['download', 'save_image', 'refresh'],
+            visibles: ['download', 'save_image', 'refresh', 'set'],
             download: {
               onClick() {
                 downlaodRawDataHandler();
               },
               tooltip: 'DOWNLOAD_DATA'
+            },
+            set: {
+              onClick() {
+                setOpen(true);
+              },
+              tooltip: 'nums.of.cursors.settings'
             },
             onRefresh: () => {
               const faultFrequencies = faultFrequency
@@ -125,6 +132,13 @@ export const Frequency = ({
           yAxisMeta={{ ...property, unit: property.unit }}
         >
           {isTypeSideband && <CenterSide.Switcher />}
+          <ConfigurableNumsOfCursor
+            open={open}
+            onSuccess={() => {
+              setOpen(false);
+            }}
+            onCancel={() => setOpen(false)}
+          />
         </ChartMark.Chart>
       </Col>
       <Col flex='300px'>

@@ -1,4 +1,4 @@
-import { Context, nums, useContext } from './context';
+import { Context, useContext } from './context';
 
-const harmon = { Context, useContext, nums };
+const harmon = { Context, useContext };
 export default harmon;

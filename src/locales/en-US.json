@@ -1284,5 +1284,8 @@
   "fault.frequency.bsf": "BSF",
   "fault.frequency.ftf": "FTF",
   "asset.parent": "Parent Asset",
-  "bindings.device": "Associated devices"
+  "bindings.device": "Associated devices",
+  "nums.of.cursors.settings": "Settings",
+  "harmonic.cursor.nums": "The Number of Harmonic",
+  "sideband.cursor.nums": "The Number of Sideband"
 }

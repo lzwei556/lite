@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, ButtonProps, Tooltip } from 'antd';
-import Icon, { DownloadOutlined, ReloadOutlined } from '@ant-design/icons';
+import Icon, { DownloadOutlined, ReloadOutlined, SettingOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ReactComponent as MouseSVG } from './mouse.svg';
 import { ReactComponent as SelectSVG } from './select.svg';
@@ -39,6 +39,14 @@ export const DownloadIconButton = (props: ButtonProps & { tooltip?: string }) =>
   return (
     <Tooltip title={intl.get(props.tooltip ?? 'DOWNLOAD')}>
       <IconButton {...props} icon={<DownloadOutlined />} />
+    </Tooltip>
+  );
+};
+
+export const SettingsIconButton = (props: ButtonProps & { tooltip?: string }) => {
+  return (
+    <Tooltip title={intl.get(props.tooltip ?? 'SETTINGS')}>
+      <IconButton {...props} icon={<SettingOutlined />} />
     </Tooltip>
   );
 };

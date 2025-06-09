@@ -17,17 +17,25 @@ import {
   AreaMarkSwitcherIconButton,
   DownloadIconButton,
   PointMarkSwitcherIconButton,
-  ReloadIconButton
+  ReloadIconButton,
+  SettingsIconButton
 } from './components/icons';
 
-export type Visible = 'enable_point' | 'enable_area' | 'refresh' | 'save_image' | 'download';
+export type Visible =
+  | 'enable_point'
+  | 'enable_area'
+  | 'refresh'
+  | 'save_image'
+  | 'download'
+  | 'set';
 
 export const Visibles: Visible[] = [
   'enable_point',
   'enable_area',
   'refresh',
   'save_image',
-  'download'
+  'download',
+  'set'
 ];
 
 type PresetToolbarProps = {
@@ -39,6 +47,10 @@ type PresetToolbarProps = {
   extra?: React.ReactNode;
   onRefresh?: () => void;
   download?: {
+    onClick: () => void;
+    tooltip: string;
+  };
+  set?: {
     onClick: () => void;
     tooltip: string;
   };
@@ -121,6 +133,9 @@ export const MarkChart = (
               />
             )}
             {visibles?.includes('save_image') && <SaveImageIconButton chartHandler={ref.current} />}
+            {visibles?.includes('set') && (
+              <SettingsIconButton onClick={toolbar?.set?.onClick} tooltip={toolbar?.set?.tooltip} />
+            )}
           </Space>
         </Space>
       }

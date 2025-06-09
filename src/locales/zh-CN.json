@@ -1284,5 +1284,8 @@
   "fault.frequency.bsf": "BSF",
   "fault.frequency.ftf": "FTF",
   "asset.parent": "父资产",
-  "bindings.device": "关联设备"
+  "bindings.device": "关联设备",
+  "nums.of.cursors.settings": "属性设置",
+  "harmonic.cursor.nums": "倍频游标数",
+  "sideband.cursor.nums": "边频游标数"
 }

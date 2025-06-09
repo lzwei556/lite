@@ -1,33 +1,27 @@
 import React from 'react';
 import { useLocaleContext } from '../../../../localeProvider';
 import { ChartMark } from '../../../../components';
-import { useMarkContext } from '../mark';
+import { getNumsOfCursor, useMarkContext } from '../mark';
 
 const cursors = ['center', 'side'] as const;
 type Cursor = typeof cursors[number];
-export const nums = [3, 5, 7, 9];
 
 const CenterSideContext = React.createContext<{
   cursor: Cursor;
   setCursor: React.Dispatch<React.SetStateAction<Cursor>>;
   cursorOptions: { label: string; value: Cursor }[];
   handleClick: (coord: [string, number], x: number[], y: number[], xIndex?: number) => void;
-  num: number;
-  setNum: React.Dispatch<React.SetStateAction<number>>;
 }>({
   cursor: 'center',
   setCursor: () => {},
   cursorOptions: [],
-  handleClick: () => {},
-  num: nums[1],
-  setNum: () => {}
+  handleClick: () => {}
 });
 
 export const Context = ({ children }: { children: React.ReactNode }) => {
   const { language } = useLocaleContext();
   const { markType } = useMarkContext();
   const [cursor, setCursor] = React.useState<Cursor>('center');
-  const [num, setNum] = React.useState(nums[2]);
   const { visibledMarks, dispatchMarks } = ChartMark.useContext();
   const centeredMark = visibledMarks.find((mark) => mark.name.indexOf('center') > -1);
   const cursorOptions = cursors.map((c) => {
@@ -36,7 +30,8 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
   const getIndexs = (centerdIndex: number, sideIndex: number) => {
     const isLeft = sideIndex < centerdIndex;
     const offset = Math.abs(sideIndex - centerdIndex);
-    const halfNum = (num - 1) / 2;
+    const nums = getNumsOfCursor();
+    const halfNum = (nums.sideband - 1) / 2;
     const lefts: { index: number; label: string }[] = [];
     const rights: { index: number; label: string }[] = [];
     const left = language === 'zh-CN' ? '左' : 'Left';
@@ -109,9 +104,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
     }
   };
   return (
-    <CenterSideContext.Provider
-      value={{ cursor, setCursor, cursorOptions, handleClick, num, setNum }}
-    >
+    <CenterSideContext.Provider value={{ cursor, setCursor, cursorOptions, handleClick }}>
       {children}
     </CenterSideContext.Provider>
   );
