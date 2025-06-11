@@ -26,7 +26,7 @@ export const trigger = ({
         name: `${xValue}${yValue}${i}`,
         data: [`${xValue}`, yValue],
         type: markType,
-        chartPorps: { label: { formatter: i === 0 ? xValue : undefined } }
+        chartPorps: { label: { formatter: i === 0 ? `${xValue}` : undefined } }
       }
     });
   });
