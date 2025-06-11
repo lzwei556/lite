@@ -8,7 +8,7 @@ import {
 } from '../../../utils/response';
 import {
   DataType,
-  Harmonic,
+  HarmonicData,
   HistoryData,
   MonitoringPoint,
   MonitoringPointRow,
@@ -137,7 +137,7 @@ export function getTrend(id: number, from: number, to: number) {
 
 type AnalysisDataPart = { rms: number; x: number[]; y: number[] };
 
-export type FrequencyAnalysis = AnalysisDataPart & Harmonic;
+export type FrequencyAnalysis = AnalysisDataPart & HarmonicData;
 
 export async function frequency(data: VibrationAnalysisRequest) {
   return request.put<FrequencyAnalysis>('algo/frequencySpectrum', data).then(HandlePutResponse);
@@ -147,7 +147,7 @@ export async function timeEnvelope(data: VibrationAnalysisRequest) {
   return request.put<AnalysisDataPart>('algo/timeEnvelope', data).then(HandlePutResponse);
 }
 
-export type EnvelopeAnalysis = AnalysisDataPart & Harmonic;
+export type EnvelopeAnalysis = AnalysisDataPart & HarmonicData;
 
 export async function envelope(data: VibrationAnalysisRequest) {
   return request.put<EnvelopeAnalysis>('algo/envelopeSpectrum', data).then(HandlePutResponse);

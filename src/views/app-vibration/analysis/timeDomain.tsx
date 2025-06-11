@@ -17,7 +17,7 @@ export const TimeDomain = ({
 }: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
-  const { marks, handleClick, handleRefresh } = useMarkChartProps();
+  const { marks, handleClick, handleRefresh, markType } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
     timestamp,
@@ -109,25 +109,8 @@ export const TimeDomain = ({
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             },
             {
-              key: 'forecast',
-              label: intl.get('data.analysis'),
-              children: (
-                <Card>
-                  <Descriptions
-                    items={[
-                      { label: '峰值', children: '-' },
-                      { label: '峰峰值', children: '-' },
-                      { label: '有效值', children: '-' },
-                      { label: '歪度', children: '-' },
-                      { label: '峭度', children: '-' }
-                    ]}
-                  />
-                </Card>
-              )
-            },
-            {
               key: 'marklist',
-              label: intl.get('mark'),
+              label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
               children: <MarkList />,
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }

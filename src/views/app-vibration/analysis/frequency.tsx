@@ -6,7 +6,7 @@ import { ChartMark, Card, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../../../features';
 import { frequency, FrequencyAnalysis } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
-import CenterSide from './centerSide';
+import Sideband from './sideband';
 import { MarkList, Toolbar, useMarkChartProps, ConfigurableNumsOfCursor } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { useFaultFrequency } from './useFaultFrequency';
@@ -131,7 +131,7 @@ export const Frequency = ({
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
         >
-          {isTypeSideband && <CenterSide.Switcher />}
+          {isTypeSideband && <Sideband.Switcher />}
           <ConfigurableNumsOfCursor
             open={open}
             onSuccess={() => {

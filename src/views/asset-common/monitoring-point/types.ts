@@ -99,7 +99,7 @@ export type MonitoringPointInfo = {
 
 export type Metadata = { [key: string]: number };
 
-export type Harmonic = {
+export type HarmonicData = {
   baseFrequency: number;
   harmonic1XIndex: number;
   harmonic2XIndex: number;

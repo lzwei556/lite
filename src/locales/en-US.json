@@ -1285,7 +1285,16 @@
   "fault.frequency.ftf": "FTF",
   "asset.parent": "Parent Asset",
   "bindings.device": "Associated devices",
+  "cursor.peak": "Peak",
+  "cursor.double.start": "Start Cursor",
+  "cursor.double.end": "End Cursor",
+  "cursor.double.diff": "Difference",
+  "out.of.range": "Out Of Range",
   "nums.of.cursors.settings": "Settings",
-  "harmonic.cursor.nums": "The Number of Harmonic",
-  "sideband.cursor.nums": "The Number of Sideband"
+  "harmonic.cursor.nums": "Number of Harmonic",
+  "sideband.cursor.nums": "Number of Sideband",
+  "sideband.center": "Center",
+  "sideband.side": "Side",
+  "sideband.left": "Left",
+  "sideband.right": "Right"
 }

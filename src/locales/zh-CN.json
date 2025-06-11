@@ -1285,7 +1285,16 @@
   "fault.frequency.ftf": "FTF",
   "asset.parent": "父资产",
   "bindings.device": "关联设备",
+  "cursor.peak": "峰值",
+  "cursor.double.start": "起始游标",
+  "cursor.double.end": "终止游标",
+  "cursor.double.diff": "差值",
+  "out.of.range": "超出范围",
   "nums.of.cursors.settings": "属性设置",
   "harmonic.cursor.nums": "倍频游标数",
-  "sideband.cursor.nums": "边频游标数"
+  "sideband.cursor.nums": "边频游标数",
+  "sideband.center": "中心线",
+  "sideband.side": "边",
+  "sideband.left": "左",
+  "sideband.right": "右"
 }

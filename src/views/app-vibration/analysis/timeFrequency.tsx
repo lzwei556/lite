@@ -1,5 +1,6 @@
 import React from 'react';
 import 'echarts-gl';
+import { Space } from 'antd';
 import intl from 'react-intl-universal';
 import { CardChart, chartColors } from '../../../components';
 import { timeFrequency } from '../../asset-common';
@@ -39,14 +40,16 @@ export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps)
   return (
     <CardChart
       cardProps={{
-        extra: [
-          <Window onOk={setWindow} key='window' />,
-          <WindowLengthPopup
-            maxLen={originalDomain?.values?.length}
-            onOk={setWindowLength}
-            key='window_length'
-          />
-        ],
+        extra: (
+          <Space size={4}>
+            <Window onOk={setWindow} key='window' />
+            <WindowLengthPopup
+              maxLen={originalDomain?.values?.length}
+              onOk={setWindowLength}
+              key='window_length'
+            />
+          </Space>
+        ),
         style: { border: 'solid 1px #d3d3d3' }
       }}
       loading={loading}

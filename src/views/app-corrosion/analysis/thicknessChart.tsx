@@ -83,6 +83,7 @@ export const ThicknessChart = (
       }}
       style={{ height: 600 }}
       toolbar={{
+        visibles: ['enable_point', 'enable_area', 'refresh', 'save_image'],
         onEnableAreaSelection: (ins) => {
           ChartMark.brushAreas(marks, ins);
         }

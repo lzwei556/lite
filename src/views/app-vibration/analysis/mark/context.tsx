@@ -1,7 +1,6 @@
 import React from 'react';
 import { ChartMark } from '../../../../components';
-import CenterSide from '../centerSide';
-import Harmon from '../harmonic';
+import Sideband from '../sideband';
 
 export const markTypes = [
   'Peak',
@@ -24,9 +23,7 @@ export const MarkContext = ({ children }: { children: React.ReactNode }) => {
   return (
     <ChartMark.Context>
       <AnalysisContext.Provider value={{ markType, setMarkType }}>
-        <CenterSide.Context>
-          <Harmon.Context>{children}</Harmon.Context>
-        </CenterSide.Context>
+        <Sideband.Context>{children}</Sideband.Context>
       </AnalysisContext.Provider>
     </ChartMark.Context>
   );

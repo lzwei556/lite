@@ -1,17 +1,16 @@
 import React from 'react';
 import { formatNumericData } from '../../../../utils/format';
 import { ChartMark } from '../../../../components';
-import { Harmonic } from '../../../asset-common';
-import CenterSide from '../centerSide';
-import Harmon from '../harmonic';
+import { HarmonicData } from '../../../asset-common';
+import Sideband from '../sideband';
 import { useMarkContext } from './context';
-import { getNumsOfCursor } from './configurableNumsOfCursor';
+import * as Harmonic from './harmonic';
 
 export const useMarkChartProps = () => {
   const { visibledMarks, dispatchMarks } = ChartMark.useContext();
   const { markType } = useMarkContext();
-  const { handleClick: centerSideHandleClick, setCursor } = CenterSide.useContext();
-  const { handleClick: harmonHandleClick } = Harmon.useContext();
+  const { centeredIndex, setCenteredIndex, triggerCenter, clearSideMarks, triggerSide, reset } =
+    Sideband.useContext();
 
   const handleClick = React.useCallback(
     (coord: [string, number], x: number[], y: number[], xIndex?: number) => {
@@ -37,19 +36,41 @@ export const useMarkChartProps = () => {
           }
         });
       } else if (markType === 'Sideband') {
-        centerSideHandleClick(coord, x, y, xIndex);
+        if (xIndex) {
+          triggerCenter(coord);
+          if (centeredIndex) {
+            clearSideMarks();
+            triggerSide(Sideband.getIndexs({ centeredIndex, sideIndex: xIndex }), x, y);
+          } else {
+            setCenteredIndex(xIndex);
+          }
+        }
       } else if (markType === 'Harmonic') {
-        harmonHandleClick(coord, x, y, xIndex);
+        Harmonic.trigger({
+          x,
+          y,
+          indexs: Harmonic.getIndexs({ baseFrequencyIndex: xIndex }),
+          dispatchMarks,
+          markType
+        });
       }
     },
-    [markType, dispatchMarks, centerSideHandleClick, harmonHandleClick]
+    [
+      markType,
+      dispatchMarks,
+      centeredIndex,
+      setCenteredIndex,
+      triggerCenter,
+      triggerSide,
+      clearSideMarks
+    ]
   );
 
   const handleRefresh = React.useCallback(
     (
       x: number[],
       y: number[],
-      initial?: { harmonic?: Harmonic; faultFrequencies?: { label: string; value: number }[] }
+      initial?: { harmonic?: HarmonicData; faultFrequencies?: { label: string; value: number }[] }
     ) => {
       if (markType === 'Peak' || markType === 'Double') {
         dispatchMarks({
@@ -61,60 +82,61 @@ export const useMarkChartProps = () => {
             type: markType
           }
         });
-      } else {
+      } else if (markType === 'Multiple') {
         dispatchMarks({ type: 'clear' });
-        if (markType === 'Harmonic') {
-          const indexs = getIndexsByHarmonic(initial?.harmonic);
-          indexs.forEach((index, i) => {
-            const xValue = `${x[index]}`;
-            const yValue = y[index];
-            dispatchMarks({
-              type: 'append_multiple',
-              mark: {
-                name: `${xValue}${yValue}${i}`,
-                data: [xValue, yValue],
-                type: markType,
-                chartPorps: { label: { formatter: i === 0 ? `${xValue}` : undefined } }
-              }
-            });
-          });
-        } else if (markType === 'Top10' && y.length >= 10) {
-          const top10 = [...y].sort((a, b) => b - a).slice(0, 10);
-          top10.forEach((n, index) => {
-            const xValue = `${x[y.indexOf(n)]}`;
-            const yValue = n;
-            dispatchMarks({
-              type: 'append_multiple',
-              mark: {
-                name: `${xValue}${yValue}${index}`,
-                data: [xValue, yValue],
-                type: markType,
-                chartPorps: { default: true }
-              }
-            });
-          });
-        } else if (markType === 'Sideband') {
-          setCursor('center');
-        } else if (markType === 'Faultfrequency') {
-          (initial?.faultFrequencies ?? []).forEach(({ label, value }) => {
-            const index = y.indexOf(value);
-            if (index !== -1) {
-              const xValue = `${x[index]}`;
-              dispatchMarks({
-                type: 'append_multiple',
-                mark: {
-                  name: `${xValue}${value}`,
-                  data: [xValue, value],
-                  type: markType,
-                  chartPorps: { label: { formatter: label } }
-                }
-              });
+      } else if (markType === 'Harmonic') {
+        Harmonic.trigger({
+          x,
+          y,
+          indexs: Harmonic.getIndexs({ harmonic: initial?.harmonic }),
+          dispatchMarks,
+          markType
+        });
+      } else if (markType === 'Top10' && y.length >= 10) {
+        dispatchMarks({ type: 'clear' });
+        const top10 = [...y].sort((a, b) => b - a).slice(0, 10);
+        top10.forEach((n, index) => {
+          const xValue = `${x[y.indexOf(n)]}`;
+          const yValue = n;
+          dispatchMarks({
+            type: 'append_multiple',
+            mark: {
+              name: `${xValue}${yValue}${index}`,
+              data: [xValue, yValue],
+              type: markType,
+              chartPorps: { default: true }
             }
           });
+        });
+      } else if (markType === 'Sideband') {
+        reset();
+        if (initial?.harmonic) {
+          // const centeredIndex = initial.harmonic.harmonic1XIndex;
+          // const xValue = x[centeredIndex];
+          // const yValue = y[centeredIndex];
+          // let sideIndex = centeredIndex;
+          // triggerCenter([`${xValue}`, yValue]);
+          // triggerSide(Sideband.getIndexs({ centeredIndex, sideIndex }), x, y);
         }
+      } else if (markType === 'Faultfrequency') {
+        (initial?.faultFrequencies ?? []).forEach(({ label, value }) => {
+          const index = y.indexOf(value);
+          if (index !== -1) {
+            const xValue = `${x[index]}`;
+            dispatchMarks({
+              type: 'append_multiple',
+              mark: {
+                name: `${xValue}${value}`,
+                data: [xValue, value],
+                type: markType,
+                chartPorps: { label: { formatter: label } }
+              }
+            });
+          }
+        });
       }
     },
-    [markType, dispatchMarks, setCursor]
+    [markType, dispatchMarks, reset]
   );
 
   return {
@@ -124,21 +146,4 @@ export const useMarkChartProps = () => {
     isTypeSideband: markType === 'Sideband',
     markType
   };
-};
-
-const getIndexsByHarmonic = (harmonic?: Harmonic) => {
-  if (!harmonic) return [];
-  const nums = getNumsOfCursor();
-  return [
-    harmonic.harmonic1XIndex,
-    harmonic.harmonic2XIndex,
-    harmonic.harmonic3XIndex,
-    harmonic.harmonic4XIndex,
-    harmonic.harmonic5XIndex,
-    harmonic.harmonic6XIndex,
-    harmonic.harmonic7XIndex,
-    harmonic.harmonic8XIndex,
-    harmonic.harmonic9XIndex,
-    harmonic.harmonic10XIndex
-  ].filter((n, index) => index < nums.harmonic);
 };

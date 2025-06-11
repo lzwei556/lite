@@ -138,15 +138,15 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
             </ChartMark.Context>
           )
         },
-        {
-          key: 'water-fall',
-          label: 'water.fall',
-          children: (
-            <ChartMark.Context>
-              <WaterFall {...{ ...props, axis, property, originalDomain }} />
-            </ChartMark.Context>
-          )
-        },
+        // {
+        //   key: 'water-fall',
+        //   label: 'water.fall',
+        //   children: (
+        //     <ChartMark.Context>
+        //       <WaterFall {...{ ...props, axis, property, originalDomain }} />
+        //     </ChartMark.Context>
+        //   )
+        // },
         {
           key: 'orbit-plot',
           label: 'orbit.plot',

@@ -1,29 +1,26 @@
 import React from 'react';
 import { List } from 'antd';
+import intl from 'react-intl-universal';
 import { Card, ChartMark } from '../../../../components';
-import { Language, useLocaleContext } from '../../../../localeProvider';
 import { formatNumericData } from '../../../../utils/format';
-import CenterSide from '../centerSide';
-import { useMarkContext } from './context';
+import Sideband from '../sideband';
+import { useMarkChartProps } from './hooks';
 
 export const MarkList = () => {
-  const { language } = useLocaleContext();
-  const { visibledMarks } = ChartMark.useContext();
-  const { markType } = useMarkContext();
-  const marks = visibledMarks.filter((mark) => mark.type === markType);
+  const { marks, markType } = useMarkChartProps();
 
   const getLabel = (index: number) => {
     switch (markType) {
       case 'Peak':
-        return language === 'zh-CN' ? '峰值' : 'Peak';
+        return intl.get('cursor.peak');
       case 'Double':
-        const start = language === 'zh-CN' ? '起始游标' : 'Start Cursor';
-        const end = language === 'zh-CN' ? '终止游标' : 'End Cursor';
-        const diff = language === 'zh-CN' ? '差值' : 'Difference';
+        const start = intl.get('cursor.double.start');
+        const end = intl.get('cursor.double.end');
+        const diff = intl.get('cursor.double.diff');
         return index === 0 ? start : index === 1 ? end : diff;
       case 'Multiple':
       case 'Top10':
-        return `${language === 'zh-CN' ? '峰值' : 'Peak'}${index + 1}`;
+        return `${intl.get('cursor.peak')}${index + 1}`;
       case 'Harmonic':
         return `${index + 1}x`;
     }
@@ -41,7 +38,7 @@ export const MarkList = () => {
   };
 
   if (markType === 'Sideband') {
-    return <CenterSide.MarkList />;
+    return <Sideband.MarkList />;
   } else {
     return (
       <Card styles={{ body: { overflowY: 'auto', maxHeight: 350 } }}>
@@ -56,11 +53,11 @@ export const MarkList = () => {
                 <List.Item.Meta description={getLabel(i)} />
                 <span style={{ width: 90 }}>
                   X: {diffSymbol}
-                  {dispalyCoordValue(x, language)}
+                  {dispalyCoordValue(x)}
                 </span>
                 <span style={{ width: 90 }}>
                   Y:{diffSymbol}
-                  {dispalyCoordValue(y, language)}
+                  {dispalyCoordValue(y)}
                 </span>
               </List.Item>
             );
@@ -71,9 +68,9 @@ export const MarkList = () => {
   }
 };
 
-export function dispalyCoordValue(value: any, language: Language) {
+export function dispalyCoordValue(value: any) {
   if (value === 'out.of.range') {
-    return language === 'zh-CN' ? '超出范围' : 'Out Of Range';
+    return intl.get('out.of.range');
   }
   if (value === undefined || value === null) {
     return '-';

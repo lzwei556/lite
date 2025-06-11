@@ -16,6 +16,7 @@ type ContextProps = {
   dispatchMarks: React.Dispatch<Action>;
   visibledMarks: Mark[];
 };
+export type DispathMark = React.Dispatch<Action>;
 
 const MarkContext = React.createContext<ContextProps>({} as ContextProps);
 
