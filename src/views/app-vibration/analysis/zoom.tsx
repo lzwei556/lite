@@ -3,12 +3,10 @@ import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { roundValue } from '../../../utils/format';
 import { ChartMark, Grid } from '../../../components';
-import { AnalysisSidebarCollapse } from '../../../features';
 import { zoom } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, useZoomRange, ZoomRange } from './settings';
-import { MarkList, Toolbar, useMarkChartProps } from './mark';
-import CenterSide from './centerSide';
+import { useMarkChartProps } from './mark';
 
 export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
@@ -16,11 +14,7 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { zoomRange, setZoomRange } = useZoomRange();
-  const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
-
-  React.useEffect(() => {
-    handleRefresh(x, y);
-  }, [handleRefresh, x, y]);
+  const { marks } = useMarkChartProps();
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -45,11 +39,10 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
 
   return (
     <Grid>
-      <Col flex='auto'>
+      <Col span={24}>
         <ChartMark.Chart
           cardProps={{
-            extra: <Toolbar hiddens={['Top10', 'Faultfrequency']} />,
-            style: { position: 'relative', border: 'solid 1px #d3d3d3' }
+            style: { border: 'solid 1px #d3d3d3' }
           }}
           config={{
             opts: {
@@ -66,11 +59,6 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
             }
           }}
           loading={loading}
-          onEvents={{
-            click: (coord: [string, number], xIndex?: number) => {
-              handleClick(coord, x, y, xIndex);
-            }
-          }}
           series={ChartMark.mergeMarkDatas({
             series: [
               {
@@ -82,29 +70,13 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
           })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image', 'refresh'],
-            onRefresh: () => handleRefresh(x, y),
+            visibles: ['save_image'],
             extra: [
               <Window onOk={setWindow} key='window' />,
               <ZoomRange onOk={setZoomRange} key='zoomRange' />
             ]
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
-        >
-          {isTypeSideband && <CenterSide.Switcher />}
-        </ChartMark.Chart>
-      </Col>
-      <Col flex='300px'>
-        <AnalysisSidebarCollapse
-          defaultActiveKey={['marklist']}
-          items={[
-            {
-              key: 'marklist',
-              label: intl.get('mark'),
-              children: <MarkList />,
-              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
-            }
-          ]}
         />
       </Col>
     </Grid>

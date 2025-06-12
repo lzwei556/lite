@@ -2,23 +2,18 @@ import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { roundValue } from '../../../utils/format';
-import { AnalysisSidebarCollapse } from '../../../features';
 import { ChartMark, Grid } from '../../../components';
 import { cepstrum } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window } from './settings';
-import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
+import { useMarkChartProps } from './mark';
 
 export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
-  const { marks, handleClick, handleRefresh } = useMarkChartProps();
-
-  React.useEffect(() => {
-    handleRefresh(x, y);
-  }, [handleRefresh, x, y]);
+  const { marks } = useMarkChartProps();
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -41,10 +36,9 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
 
   return (
     <Grid>
-      <Col flex='auto'>
+      <Col span={24}>
         <ChartMark.Chart
           cardProps={{
-            extra: <SingleDoubleToggle />,
             style: { border: 'solid 1px #d3d3d3' }
           }}
           config={{
@@ -62,11 +56,6 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
             }
           }}
           loading={loading}
-          onEvents={{
-            click: (coord: [string, number], xIndex?: number) => {
-              handleClick(coord, x, y, xIndex);
-            }
-          }}
           series={ChartMark.mergeMarkDatas({
             series: [
               {
@@ -79,24 +68,10 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
           })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image', 'refresh'],
-            onRefresh: () => handleRefresh(x, y),
+            visibles: ['save_image'],
             extra: <Window onOk={setWindow} key='window' />
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
-        />
-      </Col>
-      <Col flex='300px'>
-        <AnalysisSidebarCollapse
-          defaultActiveKey={['marklist']}
-          items={[
-            {
-              key: 'marklist',
-              label: intl.get('mark'),
-              children: <MarkList />,
-              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
-            }
-          ]}
         />
       </Col>
     </Grid>

@@ -7,8 +7,10 @@ import { AnalysisSidebarCollapse } from '../../../features';
 import { envelope, EnvelopeAnalysis } from '../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
-import CenterSide from './centerSide';
-import { useMarkChartProps, MarkList, Toolbar } from './mark';
+import Sideband from './sideband';
+import { useMarkChartProps, MarkList, Toolbar, ConfigurableNumsOfCursor } from './mark';
+import { useFaultFrequency } from './useFaultFrequency';
+import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
 
 export const Envelope = ({
   axis,
@@ -23,8 +25,11 @@ export const Envelope = ({
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { filter_type_related, setFilter_type_related } = useFilterTypeRelated();
-  const { marks, handleClick, isTypeSideband, handleRefresh } = useMarkChartProps();
+  const { marks, handleClick, isTypeSideband, handleRefresh, markType } = useMarkChartProps();
   const rotation_speed = parent.attributes?.rotation_speed;
+  //@ts-ignore
+  const { faultFrequency } = useFaultFrequency(parent.attributes);
+  const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -56,7 +61,7 @@ export const Envelope = ({
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
-            extra: <Toolbar hiddens={['Faultfrequency']} />,
+            extra: <Toolbar />,
             style: { position: 'relative', border: 'solid 1px #d3d3d3' }
           }}
           config={{
@@ -90,8 +95,14 @@ export const Envelope = ({
           })}
           style={{ height: 450 }}
           toolbar={{
-            visibles: ['save_image', 'refresh'],
+            visibles: ['save_image', 'refresh', 'set'],
             onRefresh: () => handleRefresh(x, y, { harmonic: data }),
+            set: {
+              onClick() {
+                setOpen(true);
+              },
+              tooltip: 'nums.of.cursors.settings'
+            },
             extra: [
               <Window onOk={setWindow} key='window' />,
               <FilterTypeRelated
@@ -106,7 +117,14 @@ export const Envelope = ({
           }}
           yAxisMeta={{ ...property, unit: property.unit }}
         >
-          {isTypeSideband && <CenterSide.Switcher />}
+          {isTypeSideband && <Sideband.Switcher />}
+          <ConfigurableNumsOfCursor
+            open={open}
+            onSuccess={() => {
+              setOpen(false);
+            }}
+            onCancel={() => setOpen(false)}
+          />
         </ChartMark.Chart>
       </Col>
       <Col flex='300px'>
@@ -138,8 +156,13 @@ export const Envelope = ({
             },
             {
               key: 'marklist',
-              label: intl.get('mark'),
-              children: <MarkList />,
+              label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
+              children:
+                markType === 'Faultfrequency' ? (
+                  <FaultFrequencyMarkList faultFrequency={faultFrequency} />
+                ) : (
+                  <MarkList />
+                ),
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
           ]}
