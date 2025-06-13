@@ -20,7 +20,9 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
             name,
             parent_id: parentId,
             type,
-            ...getByType(type)?.settings?.default
+            ...(asset.attributes
+              ? { attributes: asset.attributes }
+              : getByType(type)?.settings?.default)
           }}
         >
           <UpdateAssetFormItems asset={asset} types={[motor]} />

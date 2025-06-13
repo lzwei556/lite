@@ -38,7 +38,14 @@ export const UpdateModal = (
       <Form
         form={form}
         labelCol={{ span: 7 }}
-        initialValues={{ name, parent_id: parentId, type, ...getByType(type)?.settings?.default }}
+        initialValues={{
+          name,
+          parent_id: parentId,
+          type,
+          ...(asset.attributes
+            ? { attributes: asset.attributes }
+            : getByType(type)?.settings?.default)
+        }}
       >
         <UpdateFormItems asset={asset} types={types} />
       </Form>
