@@ -31,55 +31,57 @@ export const Canvas = ({
   const placeTextProps = places.map((p, i) => ({ ...placeTexts[i], style: p.style }));
 
   return (
-    <CanvasProvider
-      ends={[...startingPoints].fill(centralPoint)}
-      key={`${centralPoint.x}${centralPoint.y}`}
-    >
-      <div style={{ position: 'relative' }}>
-        {img && rawImg && (
-          <Stage {...size} x={x} y={y} scaleX={scale} scaleY={scale} style={{ cursor }}>
-            <ImageLayer img={img} rawImg={rawImg} />
-            <Marks startingPoints={startingPoints} setCursor={setCursor} />
-          </Stage>
-        )}
-        <Toolbar textSettingBtn={textSettingBtn} />
-        {placeTextProps.map(({ header, body, footer, style }, i) => {
-          return (
-            <Card
-              key={i}
-              style={{
-                ...style,
-                position: 'absolute',
-                border: `solid ${PlaceTextCardStyle.BorderWidth}px #91caff`,
-                width: PlaceTextCardStyle.width,
-                height: PlaceTextCardStyle.height,
-                borderRadius: 4
-              }}
-              styles={{
-                body: {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  paddingBlock: PlaceTextCardStyle.Padding / 2,
-                  paddingInline: PlaceTextCardStyle.Padding,
-                  height: '100%'
-                }
-              }}
-            >
-              <div style={{ borderBottom: 'solid 1px #91caff', textAlign: 'center' }}>
-                <Typography.Text ellipsis={true}>{header}</Typography.Text>
-              </div>
-              <div style={{ flex: 'auto', maxHeight: '100%', overflow: 'auto' }}>{body}</div>
-              <Typography.Text
-                style={{ borderTop: 'solid 1px #91caff', fontSize: 12 }}
-                type='secondary'
+    startingPoints.length > 0 && (
+      <CanvasProvider
+        ends={[...startingPoints].fill(centralPoint)}
+        key={`${centralPoint.x}${centralPoint.y}`}
+      >
+        <div style={{ position: 'relative' }}>
+          {img && rawImg && (
+            <Stage {...size} x={x} y={y} scaleX={scale} scaleY={scale} style={{ cursor }}>
+              <ImageLayer img={img} rawImg={rawImg} />
+              <Marks startingPoints={startingPoints} setCursor={setCursor} />
+            </Stage>
+          )}
+          <Toolbar textSettingBtn={textSettingBtn} />
+          {placeTextProps.map(({ header, body, footer, style }, i) => {
+            return (
+              <Card
+                key={i}
+                style={{
+                  ...style,
+                  position: 'absolute',
+                  border: `solid ${PlaceTextCardStyle.BorderWidth}px #91caff`,
+                  width: PlaceTextCardStyle.width,
+                  height: PlaceTextCardStyle.height,
+                  borderRadius: 4
+                }}
+                styles={{
+                  body: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    paddingBlock: PlaceTextCardStyle.Padding / 2,
+                    paddingInline: PlaceTextCardStyle.Padding,
+                    height: '100%'
+                  }
+                }}
               >
-                {footer}
-              </Typography.Text>
-            </Card>
-          );
-        })}
-      </div>
-    </CanvasProvider>
+                <div style={{ borderBottom: 'solid 1px #91caff', textAlign: 'center' }}>
+                  <Typography.Text ellipsis={true}>{header}</Typography.Text>
+                </div>
+                <div style={{ flex: 'auto', maxHeight: '100%', overflow: 'auto' }}>{body}</div>
+                <Typography.Text
+                  style={{ borderTop: 'solid 1px #91caff', fontSize: 12 }}
+                  type='secondary'
+                >
+                  {footer}
+                </Typography.Text>
+              </Card>
+            );
+          })}
+        </div>
+      </CanvasProvider>
+    )
   );
 };
 
