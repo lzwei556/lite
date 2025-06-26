@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Space as AntSpace, Spin } from 'antd';
-import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
+import { DownloadOutlined } from '@ant-design/icons';
 import { DisplayProperty } from '../../../../constants/properties';
 import { Card } from '../../../../components';
 import { isMobile } from '../../../../utils/deviceDetection';
@@ -22,13 +22,13 @@ export const HistoryChartCard = ({
   loading,
   historyData,
   range,
-  onRemove
+  deleteIconButton
 }: {
   point: MonitoringPointRow;
   loading: boolean;
   historyData?: HistoryData;
   range: Dayjs.RangeValue;
-  onRemove: () => void;
+  deleteIconButton: React.ReactElement;
 }) => {
   const { name, properties, type } = point;
   const displayProperties = Point.getPropertiesByType(properties, type);
@@ -65,12 +65,7 @@ export const HistoryChartCard = ({
               />
             </HasPermission>
             <HasPermission value={Permission.MeasurementDataDelete}>
-              <Button
-                color='danger'
-                icon={<DeleteOutlined />}
-                onClick={onRemove}
-                variant='filled'
-              />
+              {deleteIconButton}
             </HasPermission>
             {open && (
               <DownloadData

@@ -9,8 +9,7 @@ import { useProvisionMode } from '../useProvisionMode';
 import { Network } from '../../../types/network';
 import { useLocaleFormLayout } from '../../../hooks/useLocaleFormLayout';
 import { DeviceType } from '../../../types/device_type';
-import { SelfLink } from '../../../components/selfLink';
-import { Card, Flex, Grid } from '../../../components';
+import { Card, Flex, Grid, Link } from '../../../components';
 import { useContext, VIRTUAL_ROOT_DEVICE } from '../../device';
 import { Preview } from '../topology/preview';
 
@@ -135,7 +134,7 @@ const ImportNetworkPage = () => {
           <Flex justify='space-between' align='center'>
             <Breadcrumb
               items={[
-                { title: <SelfLink to='/devices/0'>{VIRTUAL_ROOT_DEVICE.name}</SelfLink> },
+                { title: <Link to='/devices/0'>{VIRTUAL_ROOT_DEVICE.name}</Link> },
                 { title: intl.get('MENU_IMPORT_NETWORK') }
               ]}
             />
@@ -150,7 +149,7 @@ const ImportNetworkPage = () => {
       </Col>
       <Col span={24}>
         {!success && (
-          <Grid>
+          <Grid wrap={false}>
             <Col flex='auto'>
               {network?.devices.length ? (
                 <Preview

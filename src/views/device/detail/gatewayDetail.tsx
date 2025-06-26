@@ -2,8 +2,7 @@ import React from 'react';
 import { Col, Space as AntSpace, Avatar, Statistic, Empty } from 'antd';
 import { WifiOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card, Descriptions, DescriptionsProps, Flex, Grid } from '../../../components';
-import { SelfLink } from '../../../components/selfLink';
+import { Card, Descriptions, DescriptionsProps, Flex, Grid, Link } from '../../../components';
 import { toMac } from '../../../utils/format';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
@@ -43,9 +42,9 @@ export const GatewayDetail = ({ device, network }: { device: Device; network?: N
       key: 'ip',
       label: intl.get('IP_ADDRESS'),
       children: (
-        <SelfLink to={`http://${information.ip_address}`} target={'_blank'}>
+        <Link to={`http://${information.ip_address}`} target={'_blank'}>
           {information.ip_address}
-        </SelfLink>
+        </Link>
       )
     });
   }

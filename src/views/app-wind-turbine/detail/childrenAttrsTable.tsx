@@ -1,9 +1,7 @@
 import React from 'react';
-import { Button, Col, Popconfirm, Space } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { Grid, Table } from '../../../components';
-import { SelfLink } from '../../../components/selfLink';
+import { DeleteIconButton, EditIconButton, Grid, Link, Table } from '../../../components';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
 import { ASSET_PATHNAME, AssetRow, deleteAsset } from '../../asset-common';
@@ -24,9 +22,9 @@ export const ChildrenAttrsTable = ({
     key: 'name',
     width: 240,
     render: (name: string, row: AssetRow) => (
-      <SelfLink to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`} key={`${row.id}-${row.type}`}>
+      <Link to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`} key={`${row.id}-${row.type}`}>
         {name}
-      </SelfLink>
+      </Link>
     )
   };
   const typeCol = {
@@ -126,33 +124,15 @@ export const ChildrenAttrsTable = ({
     render: (row: AssetRow) => (
       <Space>
         <HasPermission value={Permission.AssetEdit}>
-          <Button
-            type='text'
-            size='small'
-            title={intl.get('EDIT_SOMETHING', { something: intl.get('ASSET') })}
-            onClick={() => operateCellProps.onUpdate(row)}
-          >
-            <EditOutlined />
-          </Button>
+          <EditIconButton onClick={() => operateCellProps.onUpdate(row)} />
         </HasPermission>
         <HasPermission value={Permission.AssetDelete}>
-          <Popconfirm
-            title={intl.get('DELETE_SOMETHING_PROMPT', { something: row.name })}
-            onConfirm={() => {
-              deleteAsset(row.id).then(operateCellProps.onSuccess);
+          <DeleteIconButton
+            confirmProps={{
+              description: intl.get('DELETE_SOMETHING_PROMPT', { something: row.name }),
+              onConfirm: () => deleteAsset(row.id).then(operateCellProps.onSuccess)
             }}
-          >
-            <Button
-              type='text'
-              danger={true}
-              size='small'
-              title={intl.get('DELETE_SOMETHING', {
-                something: intl.get('ASSET')
-              })}
-            >
-              <DeleteOutlined />
-            </Button>
-          </Popconfirm>
+          />
         </HasPermission>
       </Space>
     ),

@@ -3,47 +3,52 @@ import { Typography } from 'antd';
 import { Layer, Stage, Image, Line, Circle } from 'react-konva';
 import useImage from 'use-image';
 import { Card } from '../../components';
+import { AssetRow } from '../../views/asset-common';
 import { Toolbar } from './toolbar';
 import { CanvasProvider, useCanvas } from './context';
 import { getPlaces, PlaceTextCardStyle, PlaceTextProps, Point, scaleStage, Size } from './common';
 
 export const Canvas = ({
+  asset,
   size,
   background,
   placeTexts,
   textSettingBtn,
-  rawImage
+  onSave,
+  toolbarExtras
 }: {
+  asset: AssetRow;
   size: Size;
   background: string;
   placeTexts: PlaceTextProps[];
   textSettingBtn: JSX.Element;
-  rawImage: string;
+  onSave: (snapshot: { canvasSnapshot: Point[] }) => void;
+  toolbarExtras?: React.ReactElement[];
 }) => {
   const [img] = useImage(background);
-  const [rawImg] = useImage(rawImage);
   const [cursor, setCursor] = React.useState('default');
   const stageProps = scaleStage(size, img);
   const { x, y, scale } = stageProps;
   const centralPoint = { x: (size.width / 2 - x) / scale, y: (size.height / 2 - y) / scale };
   const places = getPlaces(stageProps, size, placeTexts);
-  const startingPoints = places.map((p) => ({ x: p.x, y: p.y }));
+  const startingPoints = places.map((p) => ({ id: p.id, x: p.x, y: p.y }));
   const placeTextProps = places.map((p, i) => ({ ...placeTexts[i], style: p.style }));
 
   return (
     startingPoints.length > 0 && (
       <CanvasProvider
-        ends={[...startingPoints].fill(centralPoint)}
+        asset={asset}
+        ends={[...startingPoints].map((point) => ({ ...centralPoint, id: point.id }))}
         key={`${centralPoint.x}${centralPoint.y}`}
       >
         <div style={{ position: 'relative' }}>
-          {img && rawImg && (
+          {img && (
             <Stage {...size} x={x} y={y} scaleX={scale} scaleY={scale} style={{ cursor }}>
-              <ImageLayer img={img} rawImg={rawImg} />
+              <ImageLayer img={img} />
               <Marks startingPoints={startingPoints} setCursor={setCursor} />
             </Stage>
           )}
-          <Toolbar textSettingBtn={textSettingBtn} />
+          <Toolbar textSettingBtn={textSettingBtn} onSave={onSave} extras={toolbarExtras} />
           {placeTextProps.map(({ header, body, footer, style }, i) => {
             return (
               <Card
@@ -71,7 +76,7 @@ export const Canvas = ({
                 </div>
                 <div style={{ flex: 'auto', maxHeight: '100%', overflow: 'auto' }}>{body}</div>
                 <Typography.Text
-                  style={{ borderTop: 'solid 1px #91caff', fontSize: 12 }}
+                  style={{ borderTop: 'solid 1px #91caff', minHeight: '1em', fontSize: 12 }}
                   type='secondary'
                 >
                   {footer}
@@ -85,12 +90,11 @@ export const Canvas = ({
   );
 };
 
-function ImageLayer({ img, rawImg }: { img: HTMLImageElement; rawImg: HTMLImageElement }) {
-  const { editable } = useCanvas();
+function ImageLayer({ img, rawImg }: { img: HTMLImageElement; rawImg?: HTMLImageElement }) {
   return (
     <Layer>
-      {!editable && <Image image={img} width={img.width} height={img.height} />}
-      {editable && <Image image={rawImg} width={rawImg.width} height={rawImg.height} />}
+      <Image image={img} width={img.width} height={img.height} />
+      {rawImg && <Image image={rawImg} width={rawImg.width} height={rawImg.height} />}
     </Layer>
   );
 }
@@ -140,6 +144,7 @@ function ConnectedLine({
   setCursor: React.Dispatch<React.SetStateAction<string>>;
   onDragMove: (point: Point) => void;
 }) {
+  const id = starting.id;
   const { editable } = useCanvas();
   return (
     <>
@@ -156,7 +161,7 @@ function ConnectedLine({
         draggable
         onDragMove={(e) => {
           setCursor('move');
-          onDragMove(e.target.position());
+          onDragMove({ ...e.target.position(), id });
         }}
         onMouseOver={() => setCursor('move')}
         onMouseOut={() => setCursor('default')}

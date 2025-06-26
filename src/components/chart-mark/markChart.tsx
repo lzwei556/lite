@@ -17,7 +17,7 @@ import {
   AreaMarkSwitcherIconButton,
   DownloadIconButton,
   PointMarkSwitcherIconButton,
-  ReloadIconButton,
+  RestoreIconButton,
   SettingsIconButton
 } from './components/icons';
 
@@ -125,7 +125,7 @@ export const MarkChart = (
             {visibles?.includes('enable_area') && (
               <AreaMarkSwitcherIconButton onClick={enableAreaMark} />
             )}
-            {visibles?.includes('refresh') && <ReloadIconButton onClick={restoreHandle} />}
+            {visibles?.includes('refresh') && <RestoreIconButton onClick={restoreHandle} />}
             {visibles?.includes('download') && (
               <DownloadIconButton
                 onClick={toolbar?.download?.onClick}

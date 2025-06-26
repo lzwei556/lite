@@ -1,8 +1,15 @@
 import React from 'react';
-import { Button, Col, Modal, Space as AntSpace } from 'antd';
-import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons';
+import { Button, Col, Space as AntSpace } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card, Flex, Grid, useRange, RangeDatePicker } from '../../../../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  useRange,
+  RangeDatePicker,
+  DeleteIconButton
+} from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
 import { isMobile } from '../../../../utils/deviceDetection';
 import { Dayjs } from '../../../../utils';
@@ -30,6 +37,7 @@ export const History = (point: MonitoringPointRow) => {
     displayProperties ? displayProperties[0] : undefined
   );
   const [open, setVisible] = React.useState(false);
+  const [from, to] = numberedRange;
 
   const fetchData = (id: number, range: [number, number]) => {
     if (range) {
@@ -83,31 +91,19 @@ export const History = (point: MonitoringPointRow) => {
                   />
                 </HasPermission>
                 <HasPermission value={Permission.MeasurementDataDelete}>
-                  <Button
-                    color='danger'
-                    icon={<DeleteOutlined />}
-                    onClick={() => {
-                      if (numberedRange) {
-                        const [from, to] = numberedRange;
-                        Modal.confirm({
-                          title: intl.get('PROMPT'),
-                          content: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
-                            property: point.name,
-                            start: Dayjs.format(from, 'YYYY-MM-DD'),
-                            end: Dayjs.format(to, 'YYYY-MM-DD')
-                          }),
-                          okText: intl.get('OK'),
-                          cancelText: intl.get('CANCEL'),
-                          onOk: (close) => {
-                            clearHistory(id, from, to).then((_) => {
-                              close();
-                              if (numberedRange) fetchData(id, numberedRange);
-                            });
-                          }
-                        });
-                      }
+                  <DeleteIconButton
+                    confirmProps={{
+                      description: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
+                        property: name,
+                        start: Dayjs.format(from, 'YYYY-MM-DD'),
+                        end: Dayjs.format(to, 'YYYY-MM-DD')
+                      }),
+                      onConfirm: () =>
+                        clearHistory(id, from, to).then(() => {
+                          fetchData(id, numberedRange);
+                        })
                     }}
-                    variant='filled'
+                    buttonProps={{ size: 'middle', variant: 'filled' }}
                   />
                 </HasPermission>
               </AntSpace>

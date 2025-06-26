@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, InputNumber, Radio, Select } from 'antd';
+import { Input, InputNumber, Radio, Select, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { FormInputItem } from '../../../components/formInputItem';
 
@@ -21,10 +21,7 @@ export type MotorAttrs = {
 export const Settings = () => {
   return (
     <fieldset>
-      <legend>
-        {intl.get('VIBRATION_MOTOR')}
-        {intl.get('PROPERTY')}
-      </legend>
+      <legend>{intl.get('motor.property')}</legend>
       <FormInputItem label={intl.get('motor.motor_type')} name={['attributes', 'motor_type']}>
         <Select
           options={[
@@ -50,13 +47,17 @@ export const Settings = () => {
         }
       />
       <FormInputItem
-        label={intl.get('motor.variable_frequency_drive')}
+        label={
+          <Typography.Text ellipsis title={intl.get('motor.variable_frequency_drive')}>
+            {intl.get('motor.variable_frequency_drive')}
+          </Typography.Text>
+        }
         name={['attributes', 'variable_frequency_drive']}
       >
         <Radio.Group
           options={[
-            { label: '是', value: true },
-            { label: '否', value: false }
+            { label: intl.get('yes'), value: true },
+            { label: intl.get('no'), value: false }
           ]}
         />
       </FormInputItem>
@@ -72,11 +73,11 @@ export const Settings = () => {
         <Select
           options={[
             {
-              label: '水平',
+              label: intl.get('horizontal'),
               value: 1
             },
             {
-              label: '垂直',
+              label: intl.get('vertical'),
               value: 2
             }
           ]}
@@ -86,11 +87,11 @@ export const Settings = () => {
         <Select
           options={[
             {
-              label: '滚动轴承',
+              label: intl.get('motor.bearing.type.roller'),
               value: 1
             },
             {
-              label: '滑动轴承',
+              label: intl.get('motor.bearing.type.journal'),
               value: 2
             }
           ]}
@@ -135,11 +136,11 @@ export const Settings = () => {
         <Select
           options={[
             {
-              label: '内',
+              label: intl.get('inner'),
               value: 'inner'
             },
             {
-              label: '外',
+              label: intl.get('outer'),
               value: 'outer'
             }
           ]}

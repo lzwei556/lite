@@ -1,8 +1,7 @@
 import React from 'react';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Descriptions, TitleSection } from '../../../components';
-import { SelfLink } from '../../../components/selfLink';
+import { Card, Descriptions, TitleSection, Link } from '../../../components';
 import { SingleDeviceStatus } from '../../device/SingleDeviceStatus';
 import { toMac } from '../../../utils/format';
 import { MonitoringPointRow } from './types';
@@ -21,7 +20,7 @@ export const RelatedDeviceCard = ({ bindingDevices = [] }: MonitoringPointRow) =
                   label: intl.get('NAME'),
                   children: (
                     <Space>
-                      <SelfLink to={`/devices/${device.id}`}>{device.name}</SelfLink>
+                      <Link to={`/devices/${device.id}`}>{device.name}</Link>
                       <SingleDeviceStatus device={device} key={device.id} />
                     </Space>
                   )

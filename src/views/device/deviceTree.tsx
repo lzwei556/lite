@@ -31,7 +31,7 @@ export const DeviceTree = ({
           showIcon={true}
           treeData={treeData}
           titleRender={(node) => {
-            const title = truncate(node.title as string, 14);
+            const title = truncate(node.title as string, 30);
             if (node.id === VIRTUAL_ROOT_DEVICE.id) {
               return title;
             }

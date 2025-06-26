@@ -6,8 +6,7 @@ import { AssetRow } from '../types';
 import { Asset } from '..';
 
 export const StatisticBar = ({ asset }: { asset: AssetRow }) => {
-  const [items, setItems] = React.useState<{ name: string; value: number }[]>([]);
-  React.useEffect(() => {
+  const getItems = () => {
     if (asset) {
       const { statistics } = asset;
       const descendant = Asset.Statistics.resolveDescendant(statistics).map((d) => ({
@@ -19,13 +18,14 @@ export const StatisticBar = ({ asset }: { asset: AssetRow }) => {
         statistics.alarmNum
       ).map((s) => ({ ...s, name: intl.get('leveled.alarm', { alarmLevel: intl.get(s.name) }) }));
       descendant.splice(1, 1, ...status.slice(1).reverse());
-      setItems(descendant);
+      return descendant;
     }
-  }, [asset]);
+    return [];
+  };
 
   return (
     <Row className='overview-statistic'>
-      {items.map(({ name, value }, index) => (
+      {getItems().map(({ name, value }, index) => (
         <Col key={index} {...generateColProps({ md: 12, lg: 12, xl: 4, xxl: 4 })}>
           <Statistic title={name} value={value} />
         </Col>

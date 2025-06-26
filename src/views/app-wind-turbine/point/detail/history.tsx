@@ -1,7 +1,14 @@
 import React from 'react';
-import { Col, Modal } from 'antd';
+import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Flex, Grid, useRange, RangeDatePicker } from '../../../../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  useRange,
+  RangeDatePicker,
+  DeleteIconButton
+} from '../../../../components';
 import { isMobile } from '../../../../utils/deviceDetection';
 import { Dayjs } from '../../../../utils';
 import {
@@ -19,6 +26,7 @@ export const History = (point: MonitoringPointRow) => {
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const { range, numberedRange, setRange } = useRange();
+  const [from, to] = numberedRange;
   const isTowerRelated = Point.Assert.isTowerRelated(type);
 
   const fetchData = (id: number, range: [number, number]) => {
@@ -37,8 +45,8 @@ export const History = (point: MonitoringPointRow) => {
   };
 
   React.useEffect(() => {
-    if (numberedRange) fetchData(id, numberedRange);
-  }, [id, numberedRange]);
+    fetchData(id, [from, to]);
+  }, [id, from, to]);
 
   return (
     <Grid>
@@ -70,27 +78,23 @@ export const History = (point: MonitoringPointRow) => {
           historyData={historyData}
           loading={loading}
           range={range}
-          onRemove={() => {
-            if (numberedRange) {
-              const [from, to] = numberedRange;
-              Modal.confirm({
-                title: intl.get('PROMPT'),
-                content: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
+          deleteIconButton={
+            <DeleteIconButton
+              confirmProps={{
+                description: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
                   property: point.name,
                   start: Dayjs.format(from, 'YYYY-MM-DD'),
                   end: Dayjs.format(to, 'YYYY-MM-DD')
                 }),
-                okText: intl.get('OK'),
-                cancelText: intl.get('CANCEL'),
-                onOk: (close) => {
-                  clearHistory(id, from, to).then((_) => {
-                    close();
+                onConfirm: () => {
+                  clearHistory(id, from, to).then(() => {
                     if (numberedRange) fetchData(id, numberedRange);
                   });
                 }
-              });
-            }
-          }}
+              }}
+              buttonProps={{ size: 'middle', variant: 'filled' }}
+            />
+          }
         />
       </Col>
     </Grid>

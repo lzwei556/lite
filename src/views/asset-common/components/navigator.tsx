@@ -2,12 +2,12 @@ import * as React from 'react';
 import { Breadcrumb, BreadcrumbProps, Dropdown, MenuProps, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { mapTree, tree2List } from '../../../utils/tree';
-import { SelfLink } from '../../../components/selfLink';
 import { truncate } from '../../../utils/format';
 import { AssetTreeNode, combine, pickId } from '../../home/tree';
 import { AssetRow } from '../types';
 import { ASSET_PATHNAME, getVirturalAsset } from '../constants';
 import { useContext } from './context';
+import { Link } from '../../../components';
 
 export type TreeFlatListItem = AssetTreeNode & { path: number[] };
 
@@ -39,7 +39,7 @@ export const AssetNavigator = ({
               title: mix && (
                 <BreadcrumbItemTitle
                   isLast={paths.length - 1 === index}
-                  mix={{ ...mix, name: truncate(mix.name, 14) }}
+                  mix={{ ...mix, name: truncate(mix.name, 30) }}
                   list={list}
                 />
               )
@@ -52,7 +52,7 @@ export const AssetNavigator = ({
   return (
     <Breadcrumb
       items={items.filter((item, index) =>
-        containerDomWidth && containerDomWidth < 1200 ? index === items.length - 1 : true
+        containerDomWidth && containerDomWidth < 1300 ? index === items.length - 1 : true
       )}
     />
   );
@@ -106,5 +106,5 @@ function BreadcrumbItemTitle({
 }
 
 function ItemLink({ id, type, name }: TreeFlatListItem) {
-  return <SelfLink to={`/${ASSET_PATHNAME}/${pickId(id)}-${type}`}>{name}</SelfLink>;
+  return <Link to={`/${ASSET_PATHNAME}/${pickId(id)}-${type}`}>{name}</Link>;
 }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Button, Popconfirm, Space } from 'antd';
-import { DeleteOutlined, EditOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Button, Space } from 'antd';
+import { UserAddOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Table, transformPagedresult } from '../../components';
+import { DeleteIconButton, EditIconButton, Table, transformPagedresult } from '../../components';
 import { GetUserRequest, PagingUsersRequest, RemoveUserRequest } from '../../apis/user';
 import { InitializeUserState, User } from '../../types/user';
 import HasPermission from '../../permission';
@@ -103,23 +103,15 @@ const UserPage = () => {
         return (
           <Space>
             <HasPermission value={Permission.UserEdit}>
-              <Button
-                type='text'
-                size='small'
-                icon={<EditOutlined />}
-                onClick={() => onEdit(record.id)}
-              />
+              <EditIconButton onClick={() => onEdit(record.id)} />
             </HasPermission>
             <HasPermission value={Permission.UserDelete}>
-              <Popconfirm
-                placement='left'
-                title={intl.get('DELETE_USER_PROMPT')}
-                onConfirm={() => onDelete(record.id)}
-                okText={intl.get('DELETE')}
-                cancelText={intl.get('CANCEL')}
-              >
-                <Button type='text' size='small' icon={<DeleteOutlined />} danger />
-              </Popconfirm>
+              <DeleteIconButton
+                confirmProps={{
+                  description: intl.get('DELETE_USER_PROMPT'),
+                  onConfirm: () => onDelete(record.id)
+                }}
+              />
             </HasPermission>
           </Space>
         );

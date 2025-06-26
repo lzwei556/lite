@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Popconfirm, Select, Space } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Form, Input, Select, Space } from 'antd';
 import intl from 'react-intl-universal';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
@@ -9,6 +8,7 @@ import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { FormInputItem } from '../../components/formInputItem';
 import { isAssetAreaParent } from '../asset-variant';
+import { DeleteIconButton, EditIconButton } from '../../components';
 
 export const OperateCell = ({ asset }: { asset: AssetRow }) => {
   const { refresh } = useContext();
@@ -16,35 +16,17 @@ export const OperateCell = ({ asset }: { asset: AssetRow }) => {
   return (
     <Space>
       <HasPermission value={Permission.MeasurementEdit}>
-        <Button
-          type='text'
-          size='small'
-          title={intl.get('EDIT_SOMETHING', {
-            something: intl.get('ASSET')
-          })}
-          onClick={() => setOpen(true)}
-        >
-          <EditOutlined />
-        </Button>
+        <EditIconButton onClick={() => setOpen(true)} />
       </HasPermission>
       <HasPermission value={Permission.MeasurementDelete}>
-        <Popconfirm
-          title={intl.get('DELETE_SOMETHING_PROMPT', { something: asset.name })}
-          onConfirm={() => {
-            deleteAsset(asset.id).then(() => refresh(true));
+        <DeleteIconButton
+          confirmProps={{
+            description: intl.get('DELETE_SOMETHING_PROMPT', { something: asset.name }),
+            onConfirm: () => {
+              deleteAsset(asset.id).then(() => refresh(true));
+            }
           }}
-        >
-          <Button
-            type='text'
-            danger={true}
-            size='small'
-            title={intl.get('DELETE_SOMETHING', {
-              something: intl.get('ASSET')
-            })}
-          >
-            <DeleteOutlined />
-          </Button>
-        </Popconfirm>
+        />
       </HasPermission>
       {open && (
         <UpdateAssetModal

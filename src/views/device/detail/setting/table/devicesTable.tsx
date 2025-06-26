@@ -1,11 +1,16 @@
 import React from 'react';
-import { Button, Dropdown, MenuProps, Popconfirm, Space } from 'antd';
-import { CodeOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Dropdown, MenuProps, Space } from 'antd';
+import { CodeOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Device } from '../../../../../types/device';
-import { SelfLink } from '../../../../../components/selfLink';
 import { toMac } from '../../../../../utils/format';
-import { Table } from '../../../../../components';
+import {
+  DeleteIconButton,
+  EditIconButton,
+  IconButton,
+  Table,
+  Link
+} from '../../../../../components';
 import HasPermission from '../../../../../permission';
 import usePermission, { Permission } from '../../../../../permission/permission';
 import { DeleteDeviceRequest, GetDeviceRequest } from '../../../../../apis/device';
@@ -54,31 +59,25 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
       title: intl.get('STATUS'),
       render: (state: any, device: Device) => {
         return <SingleDeviceStatus device={device} />;
-      },
-      width: 120
+      }
     },
     {
       dataIndex: 'name',
       key: 'name',
       title: intl.get('DEVICE_NAME'),
-      render: (name: string, device: Device) => (
-        <SelfLink to={`/devices/${device.id}`}>{name}</SelfLink>
-      ),
-      width: 240
+      render: (name: string, device: Device) => <Link to={`/devices/${device.id}`}>{name}</Link>
     },
     {
       dataIndex: 'macAddress',
       key: 'mac',
       title: intl.get('MAC_ADDRESS'),
-      render: (mac: string) => toMac(mac.toUpperCase()),
-      width: 120
+      render: (mac: string) => toMac(mac.toUpperCase())
     },
     {
       dataIndex: 'typeId',
       key: 'type',
       title: intl.get('DEVICE_TYPE'),
-      render: (id: number) => intl.get(DeviceType.toString(id)),
-      width: 120
+      render: (id: number) => intl.get(DeviceType.toString(id))
     },
     {
       key: 'action',
@@ -90,14 +89,11 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
               (hasPermission(Permission.DeviceEdit) ||
                 hasPermission(Permission.DeviceSettingsEdit)) && (
                 <Dropdown menu={renderMenus(device)}>
-                  <Button icon={<EditOutlined />} size='small' type='text' />
+                  <EditIconButton />
                 </Dropdown>
               )
             ) : (
-              <Button
-                icon={<EditOutlined />}
-                size='small'
-                type='text'
+              <EditIconButton
                 onClick={() => {
                   setOpen(true);
                   setKey('edit');
@@ -108,22 +104,24 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
             <HasPermission value={Permission.DeviceCommand}>
               <CommandDropdown
                 device={device}
-                target={<Button icon={<CodeOutlined />} size='small' type='text' />}
+                target={
+                  <IconButton title={intl.get('DEVICE_COMMANDS')}>
+                    <Button icon={<CodeOutlined />} size='small' variant='outlined' />
+                  </IconButton>
+                }
               />
             </HasPermission>
             <HasPermission value={Permission.DeviceDelete}>
-              <Popconfirm
-                placement='left'
-                title={intl.get('DELETE_DEVICE_PROMPT')}
-                onConfirm={() => DeleteDeviceRequest(device.id).then(() => refresh())}
-              >
-                <Button danger={true} icon={<DeleteOutlined />} size='small' type='text' />
-              </Popconfirm>
+              <DeleteIconButton
+                confirmProps={{
+                  description: intl.get('DELETE_DEVICE_PROMPT'),
+                  onConfirm: () => DeleteDeviceRequest(device.id).then(() => refresh())
+                }}
+              />
             </HasPermission>
           </Space>
         );
-      },
-      width: 150
+      }
     }
   ];
 

@@ -23,9 +23,9 @@ export const AreaMarkSwitcherIconButton = (props: ButtonProps) => {
   );
 };
 
-export const ReloadIconButton = (props: ButtonProps) => {
+export const RestoreIconButton = (props: ButtonProps) => {
   return (
-    <Tooltip title={intl.get('analysis.refresh')}>
+    <Tooltip title={intl.get('analysis.restore')}>
       <IconButton {...props} icon={<ReloadOutlined />} />
     </Tooltip>
   );

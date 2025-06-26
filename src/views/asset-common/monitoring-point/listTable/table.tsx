@@ -2,9 +2,8 @@ import React from 'react';
 import { Tabs } from 'antd';
 import intl from 'react-intl-universal';
 import { uniq } from 'lodash';
-import { Table } from '../../../../components';
+import { Table, Link } from '../../../../components';
 import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../../../config';
-import { SelfLink } from '../../../../components/selfLink';
 import { ASSET_PATHNAME, AssetRow, MonitoringPointRow, Points } from '../..';
 import { getColumns, OperateCellProps } from './columns';
 import { useLocaleContext } from '../../../../localeProvider';
@@ -27,7 +26,7 @@ export const MonitoringPointsTable = ({
   const actualPoints = Points.filter(monitoringPoints);
   const { language } = useLocaleContext();
   const title = showTitle ? (
-    <SelfLink
+    <Link
       to={`/${ASSET_PATHNAME}/${id}-${asset.type}`}
       state={[`${id}-${asset.type}`]}
       style={{ display: 'inline-block', fontSize: 16 }}
@@ -38,7 +37,7 @@ export const MonitoringPointsTable = ({
       }}
     >
       {name}
-    </SelfLink>
+    </Link>
   ) : undefined;
   const [activeKey, setActiveKey] = React.useState(`${actualPoints?.[0]?.type}`);
 
@@ -71,6 +70,7 @@ export const MonitoringPointsTable = ({
               <Table
                 {...{ ...tableProps, columns }}
                 dataSource={actualPoints.filter((m) => m.type === t)}
+                tableLayout='fixed'
               />
             )
           }))}
@@ -78,7 +78,9 @@ export const MonitoringPointsTable = ({
         />
       );
     } else {
-      return <Table {...{ ...tableProps, columns }} dataSource={actualPoints} />;
+      return (
+        <Table {...{ ...tableProps, columns }} dataSource={actualPoints} tableLayout='fixed' />
+      );
     }
   } else {
     const columns = getColumns({ language, ...rest });

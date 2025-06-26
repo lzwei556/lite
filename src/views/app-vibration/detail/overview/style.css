@@ -1,0 +1,11 @@
+.asset-image-annotation-list {
+  top: 4px;
+}
+.asset-image-annotation-list .asset-image-annotation-list-item {
+  padding: 1px 2px;
+  cursor: pointer;
+}
+.asset-image-annotation-list .asset-image-annotation-list-item:hover,
+.asset-image-annotation-list .asset-image-annotation-list-item.selected {
+  background-color: rgba(145, 202, 255, 0.45);
+}

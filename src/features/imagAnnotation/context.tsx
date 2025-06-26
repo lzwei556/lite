@@ -1,4 +1,5 @@
 import React from 'react';
+import { AssetRow } from '../../views/asset-common';
 import { Point } from './common';
 
 const CanvasContext = React.createContext<{
@@ -14,14 +15,15 @@ const CanvasContext = React.createContext<{
 });
 
 export const CanvasProvider = ({
+  asset,
   ends: endsFromProps,
   children
 }: {
+  asset: AssetRow;
   ends: Point[];
   children: React.ReactNode;
 }) => {
-  const ls = localStorage.getItem('canvas-snapshot');
-  const endsFromLocal: Point[] = ls ? JSON.parse(ls) : [];
+  const endsFromLocal: Point[] = asset.attributes?.canvasSnapshot ?? [];
   const [ends, setEnds] = React.useState(
     endsFromProps.length === endsFromLocal.length ? endsFromLocal : endsFromProps
   );

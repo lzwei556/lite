@@ -1,40 +1,35 @@
 import React from 'react';
-import { Button, Checkbox, Col, Popover } from 'antd';
+import { Button, Checkbox, Col, List, Popover, Tooltip, Typography } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { getValue, roundValue, truncate } from '../../../../utils/format';
 import { DisplayProperty } from '../../../../constants/properties';
 import { Dayjs } from '../../../../utils';
 import { ImageAnnotation } from '../../../../features';
-import { Card, Descriptions, Grid } from '../../../../components';
-import { SelfLink } from '../../../../components/selfLink';
-import {
-  ASSET_PATHNAME,
-  AssetRow,
-  AXIS_ALIAS,
-  MonitoringPointRow,
-  Point
-} from '../../../asset-common';
+import { Card, Flex, Grid, Link } from '../../../../components';
+import { ASSET_PATHNAME, AssetRow, updateAsset } from '../../../asset-common';
 import DianJi from './dianji.png';
-import RawImage from './raw.jpg';
+import './style.css';
+import { getPropertyValues, MonitoringPointPropertyItem } from '.';
 
-export const DianJiImage = ({ asset }: { asset: AssetRow }) => {
+export const DianJiImage = ({
+  asset,
+  properties,
+  onSelectMonitoringPointProperty,
+  viewIcon
+}: {
+  asset: AssetRow;
+  properties: DisplayProperty[];
+  onSelectMonitoringPointProperty?: (item: MonitoringPointPropertyItem) => void;
+  viewIcon: React.ReactElement;
+}) => {
   const ref = React.useRef(null);
   const size = useSize(ref);
-  const getProperties = () => {
-    let properties: DisplayProperty[] = [];
-    if (asset.monitoringPoints && asset.monitoringPoints.length > 0) {
-      const first = asset.monitoringPoints[0];
-      properties = Point.getPropertiesByType(first.properties, first.type);
-    }
-    return properties;
-  };
 
-  const properties = getProperties();
   const [visibledKeys, setVisibledKeys] = React.useState<string[]>(
     properties.filter((p) => !!p.first).map((p) => p.key)
   );
+  const [selected, setSelected] = React.useState<MonitoringPointPropertyItem | undefined>();
 
   return (
     <Card
@@ -49,23 +44,47 @@ export const DianJiImage = ({ asset }: { asset: AssetRow }) => {
     >
       {size && (
         <ImageAnnotation
+          asset={asset}
           size={size}
           background={DianJi}
-          rawImage={RawImage}
           placeTexts={(asset.monitoringPoints ?? []).map((m) => ({
-            header: <SelfLink to={`/${ASSET_PATHNAME}/${m.id}-${m.type}`}>{m.name}</SelfLink>,
+            id: m.id,
+            header: <Link to={`/${ASSET_PATHNAME}/${m.id}-${m.type}`}>{m.name}</Link>,
             body: (
-              <Descriptions
-                labelStyle={{ fontSize: 12 }}
-                contentStyle={{ fontSize: 12 }}
-                items={getPropertyValues(
+              <List
+                className='asset-image-annotation-list'
+                dataSource={getPropertyValues(
                   m,
                   properties.filter((p) => visibledKeys.includes(p.key))
-                ).map((item) => ({
-                  ...item,
-                  style: { paddingBottom: 2 }
-                }))}
-                column={1}
+                )}
+                rowKey={(item) => `${item.key}_${item.axisKey}`}
+                renderItem={(item) => {
+                  const { axisKey, key, label, children } = item;
+                  const isSelected =
+                    selected?.id === m.id && selected?.key === key && selected?.axisKey === axisKey;
+                  return (
+                    <List.Item
+                      className={`asset-image-annotation-list-item ${isSelected ? 'selected' : ''}`}
+                      onClick={() => {
+                        const mix = {
+                          ...m,
+                          ...item,
+                          property: properties.find((p) => p.key === key)!
+                        };
+                        setSelected(mix);
+                        onSelectMonitoringPointProperty?.(mix);
+                      }}
+                      style={{ border: 0 }}
+                    >
+                      <Flex align='center' justify='space-between' style={{ width: '100%' }}>
+                        <Typography.Text type='secondary' style={{ fontSize: 12 }}>
+                          {label}
+                        </Typography.Text>
+                        <span style={{ fontSize: 12 }}>{children}</span>
+                      </Flex>
+                    </List.Item>
+                  );
+                }}
                 size='small'
               />
             ),
@@ -78,6 +97,17 @@ export const DianJiImage = ({ asset }: { asset: AssetRow }) => {
               setVisibledKeys={setVisibledKeys}
             />
           }
+          onSave={(snapshot) => {
+            updateAsset(asset.id, {
+              id: asset.id,
+              name: asset.name,
+              parent_id: asset.parentId,
+              type: asset.type,
+              //@ts-ignore
+              attributes: { ...asset.attributes, ...snapshot }
+            });
+          }}
+          toolbarExtras={[viewIcon]}
         />
       )}
     </Card>
@@ -95,10 +125,9 @@ function SettingsButton({
 }) {
   return (
     <Popover
-      arrow={false}
       content={
-        <Checkbox.Group value={visibledKeys} onChange={setVisibledKeys}>
-          <Grid gutter={[0, 0]}>
+        <Checkbox.Group value={visibledKeys} onChange={setVisibledKeys} style={{ width: '100%' }}>
+          <Grid gutter={[0, 0]} style={{ width: 500 }}>
             {properties.map((p) => (
               <Col span={24} key={p.key}>
                 <Checkbox value={p.key} disabled={!!p.first}>
@@ -109,37 +138,13 @@ function SettingsButton({
           </Grid>
         </Checkbox.Group>
       }
-      overlayStyle={{ maxWidth: 300, maxHeight: 600, overflow: 'auto' }}
+      overlayStyle={{ maxWidth: 300 }}
       placement='leftBottom'
       trigger='click'
     >
-      <Button icon={<SettingOutlined />} />
+      <Tooltip title={intl.get('SETTINGS')}>
+        <Button icon={<SettingOutlined />} />
+      </Tooltip>
     </Popover>
   );
-}
-
-function getPropertyValues(m: MonitoringPointRow, properties: DisplayProperty[]) {
-  const items: { label: React.ReactNode; children: string }[] = [];
-  properties.forEach(({ fields = [], key, name, precision, unit }) => {
-    if (fields.length > 1) {
-      items.push(
-        ...Object.values(AXIS_ALIAS).map(({ key: aliasKey, label }) => {
-          const attrs = m.attributes;
-          const axisKey = attrs?.[aliasKey];
-          return {
-            label: truncate(`${intl.get(name)}${intl.get(label)}`, 24),
-            children: `${getValue(
-              roundValue(m?.data?.values[`${key}_${axisKey}`] as number, precision)
-            )}${unit}`
-          };
-        })
-      );
-    } else {
-      items.push({
-        label: truncate(intl.get(name), 24),
-        children: `${getValue(roundValue(m?.data?.values[key] as number, precision))}${unit}`
-      });
-    }
-  });
-  return items;
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Card, Descriptions } from '../../../components';
-import { SelfLink } from '../../../components/selfLink';
+import { Card, Descriptions, Link } from '../../../components';
 import { ASSET_PATHNAME, AssetRow, Asset, Points } from '../../asset-common';
 import * as Flange from '../flange';
 import * as Tower from '../tower';
@@ -52,7 +51,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
             )}
           </>
         }
-        title={<SelfLink to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</SelfLink>}
+        title={<Link to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</Link>}
       />
     </Card>
   );

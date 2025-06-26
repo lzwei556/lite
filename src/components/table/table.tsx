@@ -39,6 +39,7 @@ export function Table<T>({
   noScroll,
   scroll,
   size = 'small',
+  tableLayout = 'auto',
   ...rest
 }: Props<T>) {
   const [visibledColumnKeys, setVisibledColumnKeys] = React.useState<string[]>(
@@ -89,7 +90,7 @@ export function Table<T>({
         }
         scroll={scrollProps}
         size={size}
-        tableLayout='fixed'
+        tableLayout={tableLayout}
       />
     </Card>
   );

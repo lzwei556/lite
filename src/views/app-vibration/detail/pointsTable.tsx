@@ -35,7 +35,7 @@ export const PointsTable = (props: {
         {
           title: intl.get(AXIS_ALIAS.Axial.label),
           key: AXIS_ALIAS.Axial.key,
-          render: (name: string, row: MonitoringPointRow) => {
+          render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.axial);
             return axis ? intl.get(axis.label) : '-';
           }
@@ -43,7 +43,7 @@ export const PointsTable = (props: {
         {
           title: intl.get(AXIS_ALIAS.Vertical.label),
           key: AXIS_ALIAS.Vertical.key,
-          render: (name: string, row: MonitoringPointRow) => {
+          render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.vertical);
             return axis ? intl.get(axis.label) : '-';
           }
@@ -51,7 +51,7 @@ export const PointsTable = (props: {
         {
           title: intl.get(AXIS_ALIAS.Horizontal.label),
           key: AXIS_ALIAS.Horizontal.key,
-          render: (name: string, row: MonitoringPointRow) => {
+          render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.horizontal);
             return axis ? intl.get(axis.label) : '-';
           }
@@ -67,7 +67,7 @@ export const PointsTable = (props: {
   return (
     <Table
       rowKey={(record) => record.id}
-      columns={columns}
+      columns={columns.map((c) => ({ ...c, width: 'auto' }))}
       cardProps={{ styles: { body: { padding: 0 } } }}
       dataSource={Points.sort(actualPoints)}
       header={{ toolbar: [<ActionBar {...props} />] }}

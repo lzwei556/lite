@@ -37,17 +37,17 @@ export function importAssets(id: number, data: any) {
   return request.post<any>(`my/projects/${id}/import`, data);
 }
 
+export type ProjectStatistics = {
+  deviceOfflineNum: number;
+  deviceNum: number;
+  monitoringPointAlarmNum: [number, number, number];
+  monitoringPointNum: number;
+  rootAssetAlarmNum: [number, number, number];
+  rootAssetNum: number;
+};
+
 export function getProjectStatistics() {
-  return request
-    .get<{
-      deviceOfflineNum: number;
-      deviceNum: number;
-      monitoringPointAlarmNum: [number, number, number];
-      monitoringPointNum: number;
-      rootAssetAlarmNum: [number, number, number];
-      rootAssetNum: number;
-    }>(`/statistics/all`)
-    .then(GetResponse);
+  return request.get<ProjectStatistics>(`/statistics/all`).then(GetResponse);
 }
 
 export function downloadHistory(

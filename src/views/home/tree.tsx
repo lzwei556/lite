@@ -51,7 +51,7 @@ export const AssetTree: React.FC<{
           titleRender={(props: any) => {
             const { name } = props;
             return (
-              <Typography.Text ellipsis={true} style={{ maxWidth: 140 }}>
+              <Typography.Text ellipsis={true} style={{ maxWidth: 220 }}>
                 {name}
               </Typography.Text>
             );

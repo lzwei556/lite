@@ -17,8 +17,7 @@ export const SingleDeviceDetail: React.FC<{ device: Device }> = ({ device }) => 
       value: (
         <Typography.Text
           copyable={{
-            text: device.macAddress,
-            tooltips: [intl.get('COPY'), intl.get('COPY_SUCCEEDED')]
+            text: device.macAddress
           }}
         >
           {toMac(device.macAddress.toUpperCase())}

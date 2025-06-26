@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, Empty, Space, Spin, TableProps, Tag } from 'antd';
 import intl from 'react-intl-universal';
-import { SelfLink } from '../../../components/selfLink';
 import { isMobile } from '../../../utils/deviceDetection';
 import { getValue } from '../../../utils/format';
 import { AlarmRule } from '../../alarm/alarm-group/types';
@@ -12,7 +11,7 @@ import {
   unbindMeasurementsToAlarmRule
 } from '../../alarm/alarm-group/services';
 import { MonitoringPointRow, Point } from '../../asset-common';
-import { Table } from '../../../components';
+import { Link, Table } from '../../../components';
 import { AlarmLevelTag } from '../../alarm';
 
 export const AlarmRuleSetting = (point: MonitoringPointRow) => {
@@ -172,7 +171,7 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
         image={Empty.PRESENTED_IMAGE_SIMPLE}
         description={
           <p>
-            <SelfLink to='/alarmRules'>{intl.get('CREATE_ONE')}</SelfLink>
+            <Link to='/alarmRules'>{intl.get('CREATE_ONE')}</Link>
           </p>
         }
       />

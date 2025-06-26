@@ -18,9 +18,9 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
     ...getBarPieOption(),
     title: {
       text: `${statistics.monitoringPointNum}`,
-      subtext: '监测点总数',
+      subtext: intl.get('total'),
       left: 'center',
-      top: 105,
+      top: 95,
       textStyle: {
         fontSize: 30
       }
@@ -48,9 +48,9 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
         },
         body: { height: '100%' }
       }}
-      title='监测点统计'
+      title={intl.get('monitoring.points.statistics')}
     >
-      <Chart options={options} />
+      <Chart options={options} style={{ height: 265 }} />
     </Card>
   );
 };

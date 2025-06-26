@@ -7,7 +7,15 @@ import { Card, Chart, getBarPieOption, getOptions } from '../../components';
 import { AlarmLevel, getColorByValue, getLabelByValue } from '../alarm';
 
 type Statistics = { timestamp: number; info: number; warn: number; critical: number };
-export const AlarmTrend = ({ title, id }: { id?: number; title: string }) => {
+export const AlarmTrend = ({
+  title,
+  id,
+  chartStyle
+}: {
+  id?: number;
+  title: string;
+  chartStyle?: React.CSSProperties;
+}) => {
   const [loading, setLoading] = React.useState(true);
   const [countAlarm, setCountAlarm] = React.useState<Statistics[]>([]);
 
@@ -93,7 +101,7 @@ export const AlarmTrend = ({ title, id }: { id?: number; title: string }) => {
       }}
       title={title}
     >
-      <Chart options={options} />
+      <Chart options={options} style={chartStyle} />
     </Card>
   );
 };

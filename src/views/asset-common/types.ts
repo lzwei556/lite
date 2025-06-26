@@ -50,6 +50,7 @@ export type AssetRow = {
     sample_time_offset: number;
     initial_preload: number;
     initial_pressure: number;
+    canvasSnapshot?: { id: number; x: number; y: number }[];
   } & Partial<MotorAttrs>;
 };
 

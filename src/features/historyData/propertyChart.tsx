@@ -10,11 +10,12 @@ export const PropertyChart = (
   props: {
     data?: HistoryData;
     property: DisplayProperty;
+    axisKey?: string;
     config?: { opts?: ChartProps['options']; switchs?: { noDataZoom?: boolean; noArea?: boolean } };
   } & Omit<ChartProps, 'options'>
 ) => {
-  const { data, property, config, ...rest } = props;
-  const transformed = transform(data, property);
+  const { data, property, config, axisKey, ...rest } = props;
+  const transformed = transform(data, property, undefined, axisKey);
   const options = getOptions(
     useLinedSeriesOptions(
       transformed?.series,
@@ -34,13 +35,20 @@ export const PropertyChart = (
 export function transform(
   origin: HistoryData | undefined | null,
   property: DisplayProperty,
-  naming?: { replace?: string; prefix?: string }
+  naming?: { replace?: string; prefix?: string },
+  axisKey?: string
 ) {
   if (!origin || origin.length === 0) return { series: [], values: [] };
   const xAxisValues = origin.map(({ timestamp }) => Dayjs.format(timestamp));
   const series =
     property.fields
-      ?.filter((f) => (property.onlyShowFirstField ? f.first : true))
+      ?.filter((f) =>
+        property.onlyShowFirstField
+          ? f.first
+          : axisKey
+          ? f.key === `${property.key}_${axisKey}`
+          : true
+      )
       .map((f) => {
         let seriesName = property.onlyShowFirstField
           ? intl.get(property.name)

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Button, Input, Popconfirm, Space, Tag, Typography } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Input, Space, Tag, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { PageResult } from '../../../types/page';
 import { Dayjs } from '../../../utils';
@@ -9,7 +8,8 @@ import {
   useRange,
   LightSelectFilter,
   Table,
-  transformPagedresult
+  transformPagedresult,
+  DeleteIconButton
 } from '../../../components';
 import { PagingAlarmRecordRequest, RemoveAlarmRecordRequest } from '../../../apis/alarm';
 import HasPermission from '../../../permission';
@@ -100,7 +100,6 @@ export const FilterableAlarmRecordTable: React.FC<{
       title: intl.get('ALARM_NAME'),
       dataIndex: 'alarmRuleGroupName',
       key: 'alarmRuleGroupName',
-      width: 200,
       render: (name: string, record: any) => {
         return record.alarmRuleGroupId === 0 ? '已删除' : name;
       }
@@ -110,7 +109,6 @@ export const FilterableAlarmRecordTable: React.FC<{
       dataIndex: 'level',
       key: 'level',
       filters: alarmLevelOptions.map((o) => ({ ...o, text: intl.get(o.label) })),
-      width: 120,
       render: (level: number) => <AlarmLevelTag level={level} />
     },
     {
@@ -134,14 +132,12 @@ export const FilterableAlarmRecordTable: React.FC<{
       title: intl.get('ALARM_TIMESTAMP'),
       dataIndex: 'createdAt',
       key: 'createdAt',
-      width: 160,
       render: (createdAt: number) => Dayjs.format(createdAt)
     },
     {
       title: intl.get('ALARM_DURATION'),
       dataIndex: 'duration',
       key: 'duration',
-      width: 120,
       render: (_: any, record: any) => {
         switch (record.status) {
           case 1:
@@ -160,7 +156,6 @@ export const FilterableAlarmRecordTable: React.FC<{
       dataIndex: 'status',
       key: 'status',
       filters: statusOptions,
-      width: 120,
       render: (status: Status) => {
         const text = statusOptions.find((option) => option.value === status)?.text;
         return <Tag color={status === Status.AutoProcessd ? 'success' : undefined}>{text}</Tag>;
@@ -169,20 +164,16 @@ export const FilterableAlarmRecordTable: React.FC<{
     {
       title: intl.get('OPERATION'),
       key: 'action',
-      width: 80,
       render: (_: any, record: any) => {
         return (
           <Space>
             <HasPermission value={Permission.AlarmRecordDelete}>
-              <Popconfirm
-                placement='left'
-                title={intl.get('DELETE_ALARM_RECORD_PROMPT')}
-                onConfirm={() => onDelete(record.id)}
-                okText={intl.get('DELETE')}
-                cancelText={intl.get('CANCEL')}
-              >
-                <Button type='text' size='small' icon={<DeleteOutlined />} danger />
-              </Popconfirm>
+              <DeleteIconButton
+                confirmProps={{
+                  description: intl.get('DELETE_ALARM_RECORD_PROMPT'),
+                  onConfirm: () => onDelete(record.id)
+                }}
+              />
             </HasPermission>
           </Space>
         );

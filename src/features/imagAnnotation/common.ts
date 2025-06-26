@@ -1,9 +1,14 @@
 import { Space } from '../../common';
 
 export type Size = { width: number; height: number };
-export type Point = { x: number; y: number };
+export type Point = { id: number; x: number; y: number };
 type StageProps = { x: number; y: number; scale: number };
-export type PlaceTextProps = { header: React.ReactNode; body: JSX.Element; footer?: string };
+export type PlaceTextProps = {
+  id: number;
+  header: React.ReactNode;
+  body: JSX.Element;
+  footer?: string;
+};
 
 export const MARGIN = Space;
 export const PlaceTextCardStyle = {
@@ -44,9 +49,9 @@ export function getPlaces(stage: StageProps, size: Size, placeTexts: PlaceTextPr
     style: { top: MARGIN, left: MARGIN }
   };
   const rightTop = {
-    x: (size.width - popoverXLen - x) / scale,
+    x: (size.width - popoverXLen - x - MARGIN * 3) / scale,
     y: (popoverYLen - y) / scale,
-    style: { top: MARGIN, right: MARGIN }
+    style: { top: MARGIN, right: MARGIN * 4 }
   };
   const leftBottom = {
     x: (popoverXLen - x) / scale,
@@ -54,9 +59,11 @@ export function getPlaces(stage: StageProps, size: Size, placeTexts: PlaceTextPr
     style: { bottom: MARGIN, left: MARGIN }
   };
   const rightBottom = {
-    x: (size.width - popoverXLen - x) / scale,
+    x: (size.width - popoverXLen - x - MARGIN * 3) / scale,
     y: (size.height - popoverYLen - y) / scale,
-    style: { bottom: MARGIN, right: MARGIN }
+    style: { bottom: MARGIN, right: MARGIN * 4 }
   };
-  return [leftTop, rightTop, leftBottom, rightBottom].filter((p, i) => i < placeTexts.length);
+  return [leftTop, rightTop, leftBottom, rightBottom]
+    .map((point, i) => ({ ...point, id: placeTexts[i].id }))
+    .filter((p, i) => i < placeTexts.length);
 }

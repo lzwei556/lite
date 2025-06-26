@@ -5,8 +5,7 @@ import intl from 'react-intl-universal';
 import { useContext, VIRTUAL_ROOT_DEVICE } from '.';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
-import { SelfLink } from '../../components/selfLink';
-import { Card, Flex, Grid } from '../../components';
+import { Card, Flex, Grid, Link } from '../../components';
 import { DeviceNS, getValueOfFirstClassProperty } from './util';
 import { generateColProps } from '../../utils/grid';
 import { Dayjs } from '../../utils';
@@ -32,7 +31,7 @@ export const Virtual = () => {
 
             return (
               <Col key={id} {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })}>
-                <SelfLink to={`/devices/${id}`}>
+                <Link to={`/devices/${id}`}>
                   <Card size='small' hoverable={true}>
                     <Flex justify='space-between'>
                       {name}
@@ -55,7 +54,7 @@ export const Virtual = () => {
                       }
                     />
                   </Card>
-                </SelfLink>
+                </Link>
               </Col>
             );
           })}
@@ -69,12 +68,12 @@ export const Virtual = () => {
       extra={
         <Space>
           <HasPermission value={Permission.NetworkAdd}>
-            <SelfLink to='/devices/import'>
+            <Link to='/devices/import'>
               <Button type='primary'>
                 {intl.get('MENU_IMPORT_NETWORK')}
                 <ImportOutlined />
               </Button>
-            </SelfLink>
+            </Link>
           </HasPermission>
           <Button type='primary' onClick={() => setOpen(true)}>
             {intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })}

@@ -1,8 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal, Popconfirm, Space, Typography } from 'antd';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Modal, Space, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card, Table, transformPagedresult } from '../../components';
+import {
+  Card,
+  Link,
+  DeleteIconButton,
+  EditIconButton,
+  Table,
+  transformPagedresult
+} from '../../components';
 import { PageResult } from '../../types/page';
 import {
   DeleteProjectRequest,
@@ -27,6 +34,7 @@ const ProjectPage = () => {
   const [store, setStore, gotoPage] = useStore('projectList');
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const projectTypeOptions = useProjectTypeOptions();
+  const [token, setToken] = useState<string>();
 
   const fetchProjects = (store: Store['firmwareList']) => {
     const {
@@ -69,21 +77,6 @@ const ProjectPage = () => {
     });
   };
 
-  const onViewAccessToken = (token: string) => {
-    Modal.info({
-      title: intl.get('ACCESS_CREDENTIALS'),
-      content: (
-        <Card size={'small'} style={{ backgroundColor: 'rgb(37, 43, 58)' }}>
-          <Typography.Text style={{ color: '#fff' }} copyable={{ text: token }}>
-            {token}
-          </Typography.Text>
-        </Card>
-      ),
-      icon: null,
-      okText: intl.get('OK')
-    });
-  };
-
   const columns = [
     {
       title: intl.get('PROJECT_NAME'),
@@ -94,29 +87,18 @@ const ProjectPage = () => {
       title: intl.get('ACCESS_CREDENTIALS'),
       dataIndex: 'token',
       key: 'token',
-
       render: (token: string, record: Project) => {
         if (token) {
           return (
-            <Button
-              type={'link'}
-              onClick={() => {
-                onViewAccessToken(token);
-              }}
-            >
+            <Link onClick={() => setToken(token)} variant='button'>
               {intl.get('CLICK_TO_VIEW')}
-            </Button>
+            </Link>
           );
         }
         return (
-          <Button
-            type={'link'}
-            onClick={() => {
-              onGenAccessToken(record.id);
-            }}
-          >
+          <Link onClick={() => onGenAccessToken(record.id)} variant='button'>
             {intl.get('CLICK_TO_GENERATE_ACCESS_CREDENTIAL')}
-          </Button>
+          </Link>
         );
       }
     },
@@ -141,24 +123,20 @@ const ProjectPage = () => {
         return (
           <Space>
             {hasPermissions(Permission.ProjectAllocUser, Permission.ProjectAllocUserGet) && (
-              <Button type={'link'} size={'small'} onClick={() => onAllocUser(record)}>
+              <Link onClick={() => onAllocUser(record)} variant='button'>
                 {intl.get('ASSIGN_USERS')}
-              </Button>
+              </Link>
             )}
             <HasPermission value={Permission.ProjectEdit}>
-              <Button type={'text'} size={'small'} onClick={() => onEdit(record)}>
-                <EditOutlined />
-              </Button>
+              <EditIconButton onClick={() => onEdit(record)} />
             </HasPermission>
             <HasPermission value={Permission.ProjectDelete}>
-              <Popconfirm
-                title={intl.get('DELETE_PROJECT_PROMPT')}
-                onConfirm={() => onDelete(record.id)}
-              >
-                <Button type={'text'} size={'small'} danger>
-                  <DeleteOutlined />
-                </Button>
-              </Popconfirm>
+              <DeleteIconButton
+                confirmProps={{
+                  description: intl.get('DELETE_PROJECT_PROMPT'),
+                  onConfirm: () => onDelete(record.id)
+                }}
+              />
             </HasPermission>
           </Space>
         );
@@ -223,6 +201,16 @@ const ProjectPage = () => {
           }}
         />
       )}
+      <Modal
+        open={!!token}
+        title={intl.get('ACCESS_CREDENTIALS')}
+        onCancel={() => setToken(undefined)}
+        footer={null}
+      >
+        <Card size={'small'}>
+          <Typography.Text copyable={{ text: token }}>{token}</Typography.Text>
+        </Card>
+      </Modal>
     </>
   );
 };

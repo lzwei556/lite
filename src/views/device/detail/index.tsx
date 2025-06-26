@@ -1,11 +1,11 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSize } from 'ahooks';
-import { Button, Popconfirm, Space as AntSpace, Spin, Tooltip, Empty } from 'antd';
-import { DeleteOutlined, DownloadOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Space as AntSpace, Spin, Empty } from 'antd';
+import { DownloadOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import { TabsProps } from 'antd/lib';
 import intl from 'react-intl-universal';
-import { Card, Tabs } from '../../../components';
+import { Card, DeleteIconButton, IconButton, Tabs } from '../../../components';
 import { DeleteNetworkRequest, ExportNetworkRequest } from '../../../apis/network';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
@@ -119,7 +119,7 @@ const DeviceDetailPage = () => {
                 {DeviceType.isGateway(device.typeId) && network && (
                   <>
                     <HasPermission value={Permission.NetworkExport}>
-                      <Tooltip title={intl.get('EXPORT_NETWORK')}>
+                      <IconButton title={intl.get('EXPORT_NETWORK')}>
                         <Button
                           type='primary'
                           onClick={() => {
@@ -134,28 +134,32 @@ const DeviceDetailPage = () => {
                           }}
                           icon={<ExportOutlined />}
                         />
-                      </Tooltip>
+                      </IconButton>
                     </HasPermission>
                     <HasPermission value={Permission.NetworkDelete}>
-                      <Tooltip
-                        title={intl.get('DELETE_SOMETHING_PROMPT', {
-                          something: intl.get('DEVICE')
-                        })}
-                      >
-                        <Popconfirm
-                          title={intl.get('DELETE_SOMETHING_PROMPT', { something: network.name })}
-                          onConfirm={() => {
+                      <DeleteIconButton
+                        confirmProps={{
+                          description: intl.get('DELETE_SOMETHING_PROMPT', {
+                            something: network.gateway.name
+                          }),
+                          onConfirm: () => {
                             DeleteNetworkRequest(network.id).then(() => {
                               refresh();
                               navigate(`/devices/0`);
                             });
-                          }}
-                        >
-                          <Button type='primary' onClick={() => {}} icon={<DeleteOutlined />} />
-                        </Popconfirm>
-                      </Tooltip>
+                          },
+                          placement: 'top'
+                        }}
+                        buttonProps={{
+                          variant: 'solid',
+                          color: 'primary',
+                          size: 'middle',
+                          type: 'primary'
+                        }}
+                        tooltipProps={{ placement: 'top' }}
+                      />
                     </HasPermission>
-                    <Tooltip
+                    <IconButton
                       title={intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })}
                     >
                       <Button
@@ -163,7 +167,7 @@ const DeviceDetailPage = () => {
                         onClick={() => setOpen2(true)}
                         icon={<PlusOutlined />}
                       />
-                    </Tooltip>
+                    </IconButton>
                     {open2 && (
                       <AddModal
                         open={open2}
@@ -175,41 +179,45 @@ const DeviceDetailPage = () => {
                 )}
                 {DeviceType.isRootDevice(device.typeId) && !DeviceType.isGateway(device.typeId) && (
                   <HasPermission value={Permission.DeviceDelete}>
-                    <Tooltip
-                      title={intl.get('DELETE_SOMETHING_PROMPT', {
-                        something: intl.get('DEVICE')
-                      })}
-                    >
-                      <Popconfirm
-                        title={intl.get('DELETE_SOMETHING_PROMPT', { something: device.name })}
-                        onConfirm={() => {
+                    <DeleteIconButton
+                      confirmProps={{
+                        description: intl.get('DELETE_SOMETHING_PROMPT', {
+                          something: device.name
+                        }),
+                        onConfirm: () => {
                           DeleteDeviceRequest(device.id).then(() => {
                             refresh();
                             navigate(`/devices/0`);
                             setDevice(undefined);
                           });
-                        }}
-                      >
-                        <Button type='primary' onClick={() => {}} icon={<DeleteOutlined />} />
-                      </Popconfirm>
-                    </Tooltip>
+                        },
+                        placement: 'top'
+                      }}
+                      buttonProps={{
+                        variant: 'solid',
+                        color: 'primary',
+                        size: 'middle',
+                        type: 'primary'
+                      }}
+                      tooltipProps={{ placement: 'top' }}
+                    />
                   </HasPermission>
                 )}
                 {DeviceType.isSensor(device.typeId) && (
                   <HasPermission value={Permission.DeviceData}>
-                    <Tooltip title={intl.get('DOWNLOAD_DATA')}>
+                    <IconButton title={intl.get('DOWNLOAD_DATA')}>
                       <Button
                         type='primary'
                         onClick={() => setOpen(true)}
                         icon={<DownloadOutlined />}
                       />
-                      <DownloadModal
-                        open={open}
-                        onCancel={() => setOpen(false)}
-                        device={device}
-                        onSuccess={() => setOpen(false)}
-                      />
-                    </Tooltip>
+                    </IconButton>
+                    <DownloadModal
+                      open={open}
+                      onCancel={() => setOpen(false)}
+                      device={device}
+                      onSuccess={() => setOpen(false)}
+                    />
                   </HasPermission>
                 )}
                 <HasPermission value={Permission.DeviceCommand}>

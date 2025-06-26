@@ -1,6 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
-import { Button, Col, Modal, Space as AntSpace, Empty } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Col, Space as AntSpace, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { Device } from '../../../../types/device';
 import { Dayjs } from '../../../../utils';
@@ -21,7 +20,8 @@ import {
   LightSelectFilter,
   LineChart,
   useRange,
-  RangeDatePicker
+  RangeDatePicker,
+  DeleteIconButton
 } from '../../../../components';
 import { HistoryDataFea } from '../../../../features';
 import { HistoryData } from '../../../asset-common';
@@ -54,6 +54,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
     properties.length > 0 ? properties[0] : undefined
   );
   const { numberedRange, setRange } = useRange();
+  const [from, to] = numberedRange;
   const [dataSource, setDataSource] = useState<HistoryData>();
   const channels = DeviceType.getChannels(device.typeId);
   const [channel, setChannel] = useState('1');
@@ -66,14 +67,11 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
   >([]);
 
   const fetchDeviceData = useCallback(() => {
-    if (numberedRange) {
-      const [from, to] = numberedRange;
-      FindDeviceDataRequest(device.id, from, to, channels.length > 0 ? { channel } : {}).then(
-        setDataSource
-      );
-      GetDeviceRuntimeRequest(device.id, from, to).then(setRuntimes);
-    }
-  }, [device.id, numberedRange, channel, channels.length]);
+    FindDeviceDataRequest(device.id, from, to, channels.length > 0 ? { channel } : {}).then(
+      setDataSource
+    );
+    GetDeviceRuntimeRequest(device.id, from, to).then(setRuntimes);
+  }, [device.id, from, to, channel, channels.length]);
 
   useEffect(() => {
     fetchDeviceData();
@@ -116,29 +114,6 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
   };
 
-  const onRemoveDeviceData = () => {
-    if (device) {
-      if (numberedRange) {
-        const [from, to] = numberedRange;
-        Modal.confirm({
-          title: intl.get('PROMPT'),
-          content: intl.get('DELETE_DEVICE_DATA_PROMPT', {
-            device: device.name,
-            start: Dayjs.format(from, 'YYYY-MM-DD'),
-            end: Dayjs.format(to, 'YYYY-MM-DD')
-          }),
-          okText: intl.get('OK'),
-          cancelText: intl.get('CANCEL'),
-          onOk: (close) => {
-            RemoveDeviceDataRequest(device.id, from, to).then((_) => close());
-            RemoveDeviceRuntimeRequest(device.id, from, to);
-            fetchDeviceData();
-          }
-        });
-      }
-    }
-  };
-
   return (
     <Grid>
       <Col span={24}>
@@ -178,11 +153,20 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
                     />
                   )}
                   <HasPermission value={Permission.DeviceDataDelete}>
-                    <Button
-                      color='danger'
-                      icon={<DeleteOutlined />}
-                      onClick={onRemoveDeviceData}
-                      variant='filled'
+                    <DeleteIconButton
+                      confirmProps={{
+                        description: intl.get('DELETE_DEVICE_DATA_PROMPT', {
+                          device: device.name,
+                          start: Dayjs.format(from, 'YYYY-MM-DD'),
+                          end: Dayjs.format(to, 'YYYY-MM-DD')
+                        }),
+                        onConfirm: () => {
+                          RemoveDeviceDataRequest(device.id, from, to);
+                          RemoveDeviceRuntimeRequest(device.id, from, to);
+                          fetchDeviceData();
+                        }
+                      }}
+                      buttonProps={{ size: 'middle', variant: 'filled' }}
                     />
                   </HasPermission>
                 </>

@@ -9,7 +9,7 @@ import { persistor, store } from '../../store';
 import { Dayjs } from '../../utils';
 import ProjectSelect from '../../components/select/projectSelect';
 import { GetMyProjectRequest } from '../../apis/project';
-import { Language, useLocaleContext } from '../../localeProvider';
+import { LangSwitcher } from '../../localeProvider/switcher';
 import { NavMenu } from './NavMenu';
 import './layout.css';
 import { Brand } from './brand';
@@ -18,7 +18,6 @@ const { Text } = Typography;
 
 const HeaderLayout = (props: any) => {
   const navigate = useNavigate();
-  const { setLocale, language } = useLocaleContext();
   const { menus } = props;
   const [currentUser] = useState<any>(store.getState().auth.data.user);
   const [now, setNow] = useState<string>(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
@@ -53,13 +52,7 @@ const HeaderLayout = (props: any) => {
   return (
     <Header className='ts-header'>
       <div className='pc'>
-        <Brand
-          height={36}
-          brandNameStyle={{
-            fontSize: 18,
-            letterSpacing: 2
-          }}
-        />
+        <Brand height={36} brandNameStyle={{ fontSize: 18 }} />
         {menus && <NavMenu menus={menus} />}
         <Space>
           <Text style={{ color: 'white', fontFamily: 'monospace' }} strong>
@@ -83,43 +76,12 @@ const HeaderLayout = (props: any) => {
               <DownOutlined />
             </Button>
           </Dropdown>
-          <Dropdown
-            menu={{
-              items: [
-                { key: 'zh-CN', label: '中文' },
-                { key: 'en-US', label: 'EN' }
-              ],
-              onClick: ({ key }) => {
-                if (key !== language) {
-                  setLocale((prev) => ({
-                    ...prev,
-                    language: key as Language
-                  }));
-                }
-              }
-            }}
-          >
-            <Button
-              icon={<DownOutlined />}
-              iconPosition='end'
-              type={'text'}
-              style={{ color: '#fff', width: 60, paddingRight: 0 }}
-            >
-              {language === 'en-US' ? 'EN' : '中文'}
-            </Button>
-          </Dropdown>
+          <LangSwitcher style={{ color: '#fff', width: 60, paddingRight: 0 }} />
         </Space>
       </div>
       <div className='mobile'>
         <MenuOutlined onClick={() => setVisible(true)} />
-        <Brand
-          className='logo'
-          height={36}
-          brandNameStyle={{
-            fontSize: 18,
-            letterSpacing: 2
-          }}
-        />
+        <Brand className='logo' height={36} brandNameStyle={{ fontSize: 18 }} />
         <Dropdown
           menu={{ items: [{ key: 'logout', label: intl.get('LOGOUT'), onClick: onLogout }] }}
         >

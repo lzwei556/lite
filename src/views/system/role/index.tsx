@@ -1,9 +1,8 @@
-import { Button, Space } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import intl from 'react-intl-universal';
 import { GetRoleRequest, PagingRolesRequest } from '../../../apis/role';
 import { Role } from '../../../types/role';
-import { Table, transformPagedresult } from '../../../components';
+import { Link, Table, transformPagedresult } from '../../../components';
 import usePermission, { Permission } from '../../../permission/permission';
 import { PageResult } from '../../../types/page';
 import AddRoleModal from './modal/add';
@@ -45,37 +44,24 @@ const RolePage = () => {
       title: intl.get('ROLE_NAME'),
       dataIndex: 'name',
       key: 'name',
-      render: (text: string, record: any) => {
-        return intl.get(record.name);
-      }
+      render: (name: string) => intl.get(name)
     },
     {
       title: intl.get('ROLE_DESCRIPTION'),
       dataIndex: 'description',
       key: 'description',
-      render: (text: string, record: any) => {
-        return intl.get(record.description);
-      }
+      render: (description: string) => intl.get(description)
     },
     {
       title: intl.get('OPERATION'),
       key: 'action',
-      width: '25%',
-      render: (text: string, record: any) => {
+      render: (_: string, record: any) => {
         return (
-          <Space>
-            {hasPermission(Permission.RoleAllocMenus) && (
-              <Button
-                type={'link'}
-                size={'small'}
-                onClick={() => {
-                  onAllocMenus(record.id);
-                }}
-              >
-                {intl.get('ASSIGN_MENU')}
-              </Button>
-            )}
-          </Space>
+          hasPermission(Permission.RoleAllocMenus) && (
+            <Link onClick={() => onAllocMenus(record.id)} variant='button'>
+              {intl.get('ASSIGN_MENU')}
+            </Link>
+          )
         );
       }
     }

@@ -4,7 +4,7 @@ import { Menu, MenuProps } from 'antd';
 import intl from 'react-intl-universal';
 import { Menu as MenuItem } from '../../types/menu';
 import { mapTree } from '../../utils/tree';
-import { SelfLink } from '../../components/selfLink';
+import { Link } from '../../components';
 import { ASSET_PATHNAME } from '../asset-common';
 
 export const NavMenu: React.FC<{
@@ -19,9 +19,9 @@ export const NavMenu: React.FC<{
       state = { from: { path: m.path, label: intl.get(m.title) } };
     }
     const label = m.path ? (
-      <SelfLink to={`${m.name}`} state={state}>
+      <Link to={`${m.name}`} state={state}>
         {intl.get(m.title)}
-      </SelfLink>
+      </Link>
     ) : (
       intl.get(m.title)
     );

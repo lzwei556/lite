@@ -3,11 +3,11 @@ import { Button, message } from 'antd';
 import { DownloadOutlined, ExportOutlined } from '@ant-design/icons';
 import { cloneDeep } from 'lodash';
 import intl from 'react-intl-universal';
-import { Card, Table } from '../../components';
+import { Card, Table, Link } from '../../components';
 import { FileInput } from '../../components/fileInput';
 import { getProject } from '../../utils/session';
 import { App, useAppType } from '../../config';
-import { AssetRow, importAssets, useContext } from '../asset-common';
+import { ASSET_PATHNAME, AssetRow, importAssets, useContext } from '../asset-common';
 import * as Area from '../asset-area';
 import * as Wind from '../app-wind-turbine';
 import { BatchDownlaodHistoryDataModal } from './batchDownlaodHistoryDataModal';
@@ -55,7 +55,24 @@ export const Settings = () => {
         bordered={true}
         cardProps={{ styles: { body: { padding: 0 } } }}
         columns={[
-          { dataIndex: 'name', key: 'name', title: intl.get('NAME') },
+          {
+            dataIndex: 'name',
+            key: 'name',
+            title: intl.get('NAME'),
+            render: (_, row: AssetRow) => (
+              <Link
+                to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
+                style={{ display: 'inline-block', fontSize: 16 }}
+                onClick={(e) => {
+                  if (e.ctrlKey) {
+                    e.preventDefault();
+                  }
+                }}
+              >
+                {row.name}
+              </Link>
+            )
+          },
           {
             key: 'action',
             title: intl.get('OPERATION'),

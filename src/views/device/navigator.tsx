@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Breadcrumb, BreadcrumbProps, Dropdown, MenuProps, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { tree2List } from '../../utils/tree';
-import { SelfLink } from '../../components/selfLink';
 import { truncate } from '../../utils/format';
+import { Link } from '../../components';
 import { DeviceTreeNode, useDeviceTreeData } from './deviceTree';
 
 export type TreeFlatListItem = DeviceTreeNode & { path: number[] };
@@ -28,7 +28,7 @@ export const DeviceNavigator = ({
             title: mix && (
               <BreadcrumbItemTitle
                 isLast={paths.length - 1 === index}
-                mix={{ ...mix, name: truncate(mix.name, 14) }}
+                mix={{ ...mix, name: truncate(mix.name, 30) }}
                 list={list}
               />
             )
@@ -40,7 +40,7 @@ export const DeviceNavigator = ({
   return (
     <Breadcrumb
       items={items.filter((item, index) =>
-        containerDomWidth && containerDomWidth < 1200 ? index === items.length - 1 : true
+        containerDomWidth && containerDomWidth < 1300 ? index === items.length - 1 : true
       )}
     />
   );
@@ -94,5 +94,5 @@ function BreadcrumbItemTitle({
 }
 
 function ItemLink({ id, name }: TreeFlatListItem) {
-  return <SelfLink to={`/devices/${id}`}>{name}</SelfLink>;
+  return <Link to={`/devices/${id}`}>{name}</Link>;
 }

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Pagination, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Descriptions } from '../../../components';
+import { Card, Descriptions, Link } from '../../../components';
 import { getValue, roundValue, truncate } from '../../../utils/format';
 import { ASSET_PATHNAME, AssetRow, Point } from '../../asset-common';
 import { Icon } from '../../home/icon';
-import { SelfLink } from '../../../components/selfLink';
 
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, monitoringPoints = [], name, type } = asset;
@@ -20,7 +19,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
       value = data.values[key] as number;
     }
     return {
-      name: <span title={name}>{truncate(name, 12)}</span>,
+      name: <span title={name}>{truncate(name, 20)}</span>,
       value: property && (
         <Space>
           <Typography.Text type='secondary'>{intl.get(property.name)}</Typography.Text>
@@ -57,7 +56,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
             <></>
           )
         }
-        title={<SelfLink to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</SelfLink>}
+        title={<Link to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</Link>}
       />
     </Card>
   );

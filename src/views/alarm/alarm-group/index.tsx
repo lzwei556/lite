@@ -1,12 +1,6 @@
 import * as React from 'react';
-import { Button, Empty, message, Popconfirm, Space, TableProps } from 'antd';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ExportOutlined,
-  MoreOutlined,
-  PlusOutlined
-} from '@ant-design/icons';
+import { Button, Empty, message, Space, TableProps } from 'antd';
+import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
@@ -18,7 +12,7 @@ import { isMobile } from '../../../utils/deviceDetection';
 import { getValue } from '../../../utils/format';
 import { App, useAppType } from '../../../config';
 import { MONITORING_POINT } from '../../asset-common';
-import { Table } from '../../../components';
+import { DeleteIconButton, EditIconButton, Table } from '../../../components';
 import { FileInput } from '../../../components/fileInput';
 import { CreateModal } from './createModal';
 import { UpdateModal } from './updateModal';
@@ -49,7 +43,6 @@ export default function AlarmRuleList() {
       title: intl.get('NAME'),
       dataIndex: 'name',
       key: 'name',
-      width: 400,
       render: (name: string) => intl.get(name).d(name)
     },
     {
@@ -60,7 +53,6 @@ export default function AlarmRuleList() {
         text: intl.get(label),
         value: id
       })),
-      width: 200,
       render: (typeId: number) => {
         const label = App.getMonitoringPointTypes(appType).find((m) => m.id === typeId)?.label;
         return label ? intl.get(label) : '-';
@@ -74,48 +66,37 @@ export default function AlarmRuleList() {
           <Space>
             {row.editable && (
               <>
-                <Button
-                  type='text'
-                  size='small'
-                  title={intl.get('EDIT')}
+                <EditIconButton
                   onClick={() => {
                     setOpen(true);
                     setType('update');
                     setSelectedRow(row);
                   }}
-                >
-                  <EditOutlined />
-                </Button>
+                />
                 <HasPermission value={Permission.AlarmRuleDelete}>
-                  <Popconfirm
-                    title={intl.get('DELETE_RULE_PROMPT')}
-                    onConfirm={() => {
-                      deleteAlarmRule(row.id).then(() => {
-                        fetchAlarmRules(levels, monitoringPointType);
-                      });
+                  <DeleteIconButton
+                    confirmProps={{
+                      description: intl.get('DELETE_RULE_PROMPT'),
+                      onConfirm: () => {
+                        deleteAlarmRule(row.id).then(() => {
+                          fetchAlarmRules(levels, monitoringPointType);
+                        });
+                      }
                     }}
-                  >
-                    <Button type='text' danger={true} size='small' title={intl.get('DELETE')}>
-                      <DeleteOutlined />
-                    </Button>
-                  </Popconfirm>
+                  />
                 </HasPermission>
               </>
             )}
             <HasPermission value={Permission.AlarmRuleGroupBind}>
               <Button
-                type='text'
+                icon={<MoreOutlined />}
                 size='small'
-                title={intl.get('EDIT_SOMETHING', { something: intl.get(MONITORING_POINT) })}
-              >
-                <MoreOutlined
-                  onClick={() => {
-                    setType('bind');
-                    setSelectedRow(row);
-                    setOpen(true);
-                  }}
-                />
-              </Button>
+                onClick={() => {
+                  setType('bind');
+                  setSelectedRow(row);
+                  setOpen(true);
+                }}
+              />
             </HasPermission>
           </Space>
         );
@@ -131,7 +112,6 @@ export default function AlarmRuleList() {
           title: intl.get('NAME'),
           dataIndex: 'name',
           key: 'name',
-          width: 400,
           render: (name: string) => intl.get(name).d(name)
         },
         {
@@ -140,8 +120,7 @@ export default function AlarmRuleList() {
           key: 'metric',
           render: (metric: any) => {
             return translateMetricName(metric.name);
-          },
-          width: 120
+          }
         },
         {
           title: intl.get('ALARM_CONDITION'),
@@ -149,14 +128,12 @@ export default function AlarmRuleList() {
           key: 'condition',
           render: (_: any, record: any) => {
             return `${record.operation} ${record.threshold} ${record.metric.unit}`;
-          },
-          width: 150
+          }
         },
         {
           title: intl.get('ALARM_LEVEL'),
           dataIndex: 'level',
           key: 'level',
-          width: 100,
           render: (level: number) => <AlarmLevelTag level={level} />
         }
       ],

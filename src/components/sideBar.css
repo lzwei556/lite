@@ -34,7 +34,7 @@
 }
 .sidebar-container .sidebar-inner .sidebar-head,
 .sidebar-container .sidebar-inner .sidebar-body {
-  padding: var(--space);
+  padding: var(--space) 4px var(--space) 0;
 }
 .sidebar-container .sidebar-inner .sidebar-body {
   flex: 1;

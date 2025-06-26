@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dropdown, MenuProps, message, Tooltip } from 'antd';
+import { Button, Dropdown, MenuProps, message } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { DeviceCommand } from '../../types/device_command';
@@ -15,6 +15,7 @@ import { isMobile } from '../../utils/deviceDetection';
 import { NetworkProvisionRequest, NetworkSyncRequest } from '../../apis/network';
 import { Network } from '../../types/network';
 import { useAppType } from '../../config';
+import { IconButton } from '../../components';
 
 export const CommandDropdown = ({
   device,
@@ -161,9 +162,9 @@ export const CommandDropdown = ({
         trigger={isMobile ? ['click'] : ['hover']}
       >
         {target ?? (
-          <Tooltip title={intl.get('DEVICE_COMMANDS')}>
+          <IconButton title={intl.get('DEVICE_COMMANDS')}>
             <Button type={'primary'} icon={<MoreOutlined />} />
-          </Tooltip>
+          </IconButton>
         )}
       </Dropdown>
       {upgradeVisible && (

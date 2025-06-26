@@ -1,10 +1,17 @@
 import * as React from 'react';
-import { Button, Col, Empty, Modal, Space } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { Col, Empty, Space } from 'antd';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../utils';
 import { GetDeviceRuntimeRequest, RemoveDeviceRuntimeRequest } from '../../apis/device';
-import { Card, Flex, Grid, LineChart, useRange, RangeDatePicker } from '../../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  LineChart,
+  useRange,
+  RangeDatePicker,
+  DeleteIconButton
+} from '../../components';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
 import { Device } from '../../types/device';
@@ -18,32 +25,12 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
     }[]
   >([]);
   const { numberedRange, setRange } = useRange();
+  const [from, to] = numberedRange;
   const { id, name } = device;
 
   React.useEffect(() => {
-    const [from, to] = numberedRange;
     GetDeviceRuntimeRequest(id, from, to).then(setRuntimes);
-  }, [id, numberedRange]);
-
-  const onRemoveDeviceData = () => {
-    if (numberedRange) {
-      const [from, to] = numberedRange;
-      Modal.confirm({
-        title: intl.get('PROMPT'),
-        content: intl.get('DELETE_DEVICE_DATA_PROMPT', {
-          device: name,
-          start: Dayjs.format(from, 'YYYY-MM-DD'),
-          end: Dayjs.format(to, 'YYYY-MM-DD')
-        }),
-        okText: intl.get('OK'),
-        cancelText: intl.get('CANCEL'),
-        onOk: (close) => {
-          RemoveDeviceRuntimeRequest(id, from, to, true).then(close);
-          GetDeviceRuntimeRequest(id, from, to).then(setRuntimes);
-        }
-      });
-    }
-  };
+  }, [id, from, to]);
 
   const renderChart = () => {
     if (runtimes.length === 0) {
@@ -59,11 +46,19 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
       <Card
         extra={
           <HasPermission value={Permission.DeviceDataDelete}>
-            <Button
-              color='danger'
-              icon={<DeleteOutlined />}
-              onClick={onRemoveDeviceData}
-              variant='filled'
+            <DeleteIconButton
+              confirmProps={{
+                description: intl.get('DELETE_DEVICE_DATA_PROMPT', {
+                  device: name,
+                  start: Dayjs.format(from, 'YYYY-MM-DD'),
+                  end: Dayjs.format(to, 'YYYY-MM-DD')
+                }),
+                onConfirm: () => {
+                  RemoveDeviceRuntimeRequest(id, from, to, true);
+                  GetDeviceRuntimeRequest(id, from, to).then(setRuntimes);
+                }
+              }}
+              buttonProps={{ size: 'middle', variant: 'filled' }}
             />
           </HasPermission>
         }

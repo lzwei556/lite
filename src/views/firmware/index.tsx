@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, message, Popconfirm, Space, Upload } from 'antd';
-import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
+import { Button, message, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import {
   PagingFirmwaresRequest,
@@ -13,7 +13,7 @@ import { Permission } from '../../permission/permission';
 import { PageResult } from '../../types/page';
 import { Firmware } from '../../types/firmware';
 import { Store, useStore } from '../../hooks/store';
-import { Table, transformPagedresult } from '../../components';
+import { DeleteIconButton, Table, transformPagedresult } from '../../components';
 
 const FirmwarePage = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -94,19 +94,14 @@ const FirmwarePage = () => {
     {
       title: intl.get('OPERATION'),
       key: 'action',
-      render: (text: any, record: any) => {
+      render: (_: string, record: any) => {
         return (
-          <Space>
-            <Popconfirm
-              placement='left'
-              title={intl.get('DELETE_FIRMWARE_CONFIRM_WITH_NAME', { name: record.name })}
-              onConfirm={() => onDelete(record.id)}
-              okText={intl.get('DELETE')}
-              cancelText={intl.get('CANCEL')}
-            >
-              <Button type='text' size='small' icon={<DeleteOutlined />} danger />
-            </Popconfirm>
-          </Space>
+          <DeleteIconButton
+            confirmProps={{
+              description: intl.get('DELETE_FIRMWARE_CONFIRM_WITH_NAME', { name: record.name }),
+              onConfirm: () => onDelete(record.id)
+            }}
+          />
         );
       }
     }

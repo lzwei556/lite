@@ -1,9 +1,9 @@
 import React from 'react';
 import { TableProps } from 'antd';
 import intl from 'react-intl-universal';
-import { SelfLink } from '../../../../components/selfLink';
 import { MonitoringPointTypeValue } from '../../../../config';
 import { Dayjs } from '../../../../utils';
+import { Link } from '../../../../components';
 import { getDisplayName, getValue, roundValue } from '../../../../utils/format';
 import { Language } from '../../../../localeProvider';
 import { ASSET_PATHNAME } from '../../constants';
@@ -21,9 +21,9 @@ const name = {
   key: 'name',
   width: 240,
   render: (name: string, row: MonitoringPointRow) => (
-    <SelfLink to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`} key={`${row.id}-${row.type}`}>
+    <Link to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`} key={`${row.id}-${row.type}`}>
       {name}
-    </SelfLink>
+    </Link>
   )
 };
 
@@ -43,9 +43,9 @@ const sensor = {
   render: (name: string, row: MonitoringPointRow) =>
     row.bindingDevices && row.bindingDevices.length > 0
       ? row.bindingDevices.map(({ id, name }) => (
-          <SelfLink to={`/devices/${id}`} key={id}>
+          <Link to={`/devices/${id}`} key={id}>
             {name}
-          </SelfLink>
+          </Link>
         ))
       : ''
 };
@@ -61,8 +61,7 @@ const time = {
 export const positionColumn = {
   title: () => intl.get('POSITION'),
   key: 'position',
-  render: (name: string, row: MonitoringPointRow) => row.attributes?.index ?? '-',
-  width: 120
+  render: (name: string, row: MonitoringPointRow) => row.attributes?.index ?? '-'
 };
 export type OperateCellProps = {
   onDeleteSuccess: () => void;
@@ -73,28 +72,24 @@ export const getOperateColumn = ({ onDeleteSuccess, onUpdate }: OperateCellProps
   key: 'action',
   render: (_: string, point: MonitoringPointRow) => (
     <OperateCell {...{ onDeleteSuccess, onUpdate, point }} />
-  ),
-  width: 150
+  )
 });
 export const installAngle = {
   title: () => intl.get('TOWER_INSTALL_ANGLE'),
   key: 'install.angle',
-  render: (name: string, row: MonitoringPointRow) => row.attributes?.tower_install_angle ?? '-',
-  width: 120
+  render: (_: string, row: MonitoringPointRow) => row.attributes?.tower_install_angle ?? '-'
 };
 
 export const installHeight = {
   title: () => intl.get('TOWER_INSTALL_HEIGHT'),
   key: 'install.height',
-  render: (name: string, row: MonitoringPointRow) => row.attributes?.tower_install_height ?? '-',
-  width: 120
+  render: (_: string, row: MonitoringPointRow) => row.attributes?.tower_install_height ?? '-'
 };
 
 export const installRadius = {
   title: () => intl.get('TOWER_BASE_RADIUS'),
   key: 'install.radius',
-  render: (name: string, row: MonitoringPointRow) => row.attributes?.tower_base_radius ?? '-',
-  width: 120
+  render: (_: string, row: MonitoringPointRow) => row.attributes?.tower_base_radius ?? '-'
 };
 
 function getPropertyedCols(

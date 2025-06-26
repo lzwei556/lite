@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { HashRouter, RouteObject, useRoutes } from 'react-router-dom';
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import {
   Device,
   DeviceDetail,
@@ -14,12 +14,9 @@ import {
   Unauthorized,
   User,
   ImportNetwork,
-  AlarmRecord,
-  ReportList,
-  Report
+  AlarmRecord
 } from '../views';
 import { PrimaryLayout } from '../views/layout/primaryLayout';
-import { isLogin } from '../utils/session';
 import { ConfigProvider, Spin } from 'antd';
 import { useLocaleContext } from '../localeProvider';
 import intl from 'react-intl-universal';
@@ -31,6 +28,7 @@ import { Dayjs } from '../utils';
 import 'dayjs/locale/zh-cn';
 import { App, useAppType } from '../config';
 import { ASSET_PATHNAME } from '../views/asset-common';
+import { isLogin } from '../utils/session';
 
 const AlarmRuleGroups = lazy(() => import('../views/alarm/alarm-group/index'));
 
@@ -39,60 +37,7 @@ const Asset = lazy(() => import('../views/home/main'));
 
 const AppRouter = () => {
   const config = useAppType();
-  const [initDone, setInitDone] = React.useState(false);
-  const routes: RouteObject[] = [
-    { path: '/403', element: <Unauthorized /> },
-    { path: '*', element: <NotFound /> },
-    { path: '/500', element: <ServerError /> },
-    {
-      path: '/',
-      element: <PrimaryLayout />,
-      children: [
-        { index: true, element: <Assets /> },
-        {
-          path: ASSET_PATHNAME,
-          element: <Assets />,
-          children: [
-            {
-              path: ':id',
-              element: <Asset />
-            }
-          ]
-        },
-        {
-          path: 'devices',
-          element: <Device />,
-          children: [
-            {
-              path: 'import',
-              element: <ImportNetwork />
-            },
-            {
-              path: ':id',
-              element: <DeviceDetail />
-            }
-          ]
-        },
-        { path: 'firmwares', element: <Firmware /> },
-        { path: 'alerts', element: <AlarmRecord /> },
-        { path: 'alarmRules', element: <AlarmRuleGroups /> },
-        { path: 'projects', element: <Project /> },
-        { path: 'users', element: <User /> },
-        { path: 'me', element: <Me /> },
-        { path: 'roles', element: <Role /> },
-        { path: 'systeminfo', element: <System /> },
-        { path: 'reports', element: <ReportList /> },
-        { path: 'reports/:id', element: <Report /> }
-      ]
-    }
-  ];
-  if (!isLogin()) {
-    routes.push({
-      path: '/login',
-      element: <Login />
-    });
-  }
-  const Routes = () => useRoutes(routes);
+  const [renderingKey, setRenderingKey] = React.useState(0);
   const { language } = useLocaleContext();
 
   React.useEffect(() => {
@@ -103,36 +48,62 @@ const AppRouter = () => {
       },
       currentLocale: language
     });
-    setInitDone(true);
+    setRenderingKey((prev) => prev + 1);
     if (language === 'zh-CN') {
       Dayjs.dayjs.locale('zh-cn');
     } else {
       Dayjs.dayjs.locale('en');
     }
-    document.title = intl.get(App.getSiteName(config));
-  }, [language, config]);
+  }, [language]);
+
+  React.useEffect(() => {
+    if (renderingKey) {
+      document.title = intl.get(App.getSiteName(config));
+    }
+  }, [language, renderingKey, config]);
 
   return (
-    <>
-      {initDone && (
-        <ConfigProvider
-          locale={language === 'zh-CN' ? zhCN : enUS}
-          theme={{ components: { Menu: { itemHoverColor: '#1677ff' } } }}
-        >
-          <HashRouter>
-            <Suspense
-              fallback={
-                <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                  <Spin />
-                </div>
-              }
-            >
-              <Routes />
-            </Suspense>
-          </HashRouter>
-        </ConfigProvider>
-      )}
-    </>
+    renderingKey && (
+      <ConfigProvider
+        locale={language === 'zh-CN' ? zhCN : enUS}
+        theme={{ components: { Menu: { itemHoverColor: '#1677ff' }, Tree: { indentSize: 8 } } }}
+      >
+        <HashRouter>
+          <Suspense
+            fallback={
+              <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                <Spin />
+              </div>
+            }
+          >
+            <Routes>
+              <Route path='/' element={<PrimaryLayout />}>
+                <Route index element={<Assets />} />
+                <Route path={ASSET_PATHNAME} element={<Assets />}>
+                  <Route path=':id' element={<Asset />} />
+                </Route>
+                <Route path='devices' element={<Device />}>
+                  <Route path='import' element={<ImportNetwork />} />
+                  <Route path=':id' element={<DeviceDetail />} />
+                </Route>
+                <Route path='alarmRules' element={<AlarmRuleGroups />} />
+                <Route path='alerts' element={<AlarmRecord />} />
+                <Route path='projects' element={<Project />} />
+                <Route path='users' element={<User />} />
+                <Route path='roles' element={<Role />} />
+                <Route path='firmwares' element={<Firmware />} />
+                <Route path='systeminfo' element={<System />} />
+                <Route path='me' element={<Me />} />
+              </Route>
+              <Route path='/login' element={isLogin() ? <Navigate to='/' /> : <Login />} />
+              <Route path='/403' element={<Unauthorized />} />
+              <Route path='/500' element={<ServerError />} />
+              <Route path='*' element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </HashRouter>
+      </ConfigProvider>
+    )
   );
 };
 

@@ -1,14 +1,13 @@
 import React from 'react';
-import { Button, Col, Empty, Popconfirm, Space, TableProps } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Col, Empty, Space, TableProps } from 'antd';
 import intl from 'react-intl-universal';
-import { Flex, Grid, Table } from '../../../components';
-import { Asset, AssetRow, deleteAsset } from '../../asset-common';
+import { uniq } from 'lodash';
+import { DeleteIconButton, EditIconButton, Flex, Grid, Link, Table } from '../../../components';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
-import { ActionBar } from '../actionBar';
-import { uniq } from 'lodash';
+import { Asset, ASSET_PATHNAME, AssetRow, deleteAsset } from '../../asset-common';
 import { getByType } from '../../asset-variant';
+import { ActionBar } from '../actionBar';
 
 type Column = NonNullable<TableProps<AssetRow>['columns']>[0];
 
@@ -19,40 +18,40 @@ export const Settings = (props: {
 }) => {
   const { asset, onSuccess, onUpdate } = props;
   const { children } = asset;
-  const columns: Column[] = [{ title: intl.get('NAME'), dataIndex: 'name' }];
+  const columns: Column[] = [
+    {
+      title: intl.get('NAME'),
+      dataIndex: 'name',
+      render: (_, row: AssetRow) => (
+        <Link
+          to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
+          style={{ display: 'inline-block', fontSize: 16 }}
+          onClick={(e) => {
+            if (e.ctrlKey) {
+              e.preventDefault();
+            }
+          }}
+        >
+          {row.name}
+        </Link>
+      )
+    }
+  ];
   const operationColumn: Column = {
     title: intl.get('OPERATION'),
     key: 'action',
     render: (row: AssetRow) => (
       <Space>
         <HasPermission value={Permission.AssetEdit}>
-          <Button
-            type='text'
-            size='small'
-            title={intl.get('EDIT_SOMETHING', { something: intl.get('ASSET') })}
-            onClick={() => onUpdate(row)}
-          >
-            <EditOutlined />
-          </Button>
+          <EditIconButton onClick={() => onUpdate(row)} />
         </HasPermission>
         <HasPermission value={Permission.AssetDelete}>
-          <Popconfirm
-            title={intl.get('DELETE_SOMETHING_PROMPT', { something: row.name })}
-            onConfirm={() => {
-              deleteAsset(row.id).then(onSuccess);
+          <DeleteIconButton
+            confirmProps={{
+              description: intl.get('DELETE_SOMETHING_PROMPT', { something: row.name }),
+              onConfirm: () => deleteAsset(row.id).then(onSuccess)
             }}
-          >
-            <Button
-              type='text'
-              danger={true}
-              size='small'
-              title={intl.get('DELETE_SOMETHING', {
-                something: intl.get('ASSET')
-              })}
-            >
-              <DeleteOutlined />
-            </Button>
-          </Popconfirm>
+          />
         </HasPermission>
       </Space>
     )
@@ -83,7 +82,7 @@ export const Settings = (props: {
         cols.push({
           key: 'variable_frequency_drive',
           render: ({ attributes }: any) =>
-            !!attributes?.variable_frequency_drive === true ? '是' : '否',
+            !!attributes?.variable_frequency_drive === true ? intl.get('yes') : intl.get('no'),
           title: intl.get('motor.variable_frequency_drive')
         });
         cols.push({
@@ -93,13 +92,16 @@ export const Settings = (props: {
         });
         cols.push({
           key: 'mounting',
-          render: ({ attributes }: any) => (attributes?.mounting === 1 ? '水平' : '垂直'),
+          render: ({ attributes }: any) =>
+            attributes?.mounting === 1 ? intl.get('horizontal') : intl.get('vertical'),
           title: intl.get('motor.mounting')
         });
         cols.push({
           key: 'bearing_type',
           render: ({ attributes }: any) =>
-            attributes?.bearing_type === 1 ? '滚动轴承' : '滑动轴承',
+            attributes?.bearing_type === 1
+              ? intl.get('motor.bearing.type.roller')
+              : intl.get('motor.bearing.type.journal'),
           title: intl.get('motor.bearing_type')
         });
         cols.push({
