@@ -31,17 +31,16 @@ const EditUserModal = (props: EditUserProps) => {
 
   const onSave = () => {
     setIsLoading(true);
-    form
-      .validateFields()
-      .then((values) => {
-        UpdateUserRequest(user.id, values).then((_) => {
+    form.validateFields().then((values) => {
+      UpdateUserRequest(user.id, values)
+        .then((_) => {
           setIsLoading(false);
           onSuccess();
+        })
+        .catch((e) => {
+          setIsLoading(false);
         });
-      })
-      .catch((e) => {
-        setIsLoading(false);
-      });
+    });
   };
 
   return (
@@ -66,10 +65,20 @@ const EditUserModal = (props: EditUserProps) => {
             <RoleSelect placeholder={intl.get('PLEASE_SELECT_USER_ROLE')} />
           </Form.Item>
         )}
-        <Form.Item name={'phone'} label={intl.get('CELLPHONE')} initialValue={user.phone}>
+        <Form.Item
+          name={'phone'}
+          label={intl.get('CELLPHONE')}
+          initialValue={user.phone}
+          rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
+        >
           <Input placeholder={intl.get('CELLPHONE')} />
         </Form.Item>
-        <Form.Item name={'email'} label={intl.get('EMAIL')} initialValue={user.email}>
+        <Form.Item
+          name={'email'}
+          label={intl.get('EMAIL')}
+          initialValue={user.email}
+          rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
+        >
           <Input placeholder={intl.get('EMAIL')} />
         </Form.Item>
       </Form>

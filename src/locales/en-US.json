@@ -1305,5 +1305,7 @@
   "motor.bearing.type.roller": "Roller Bearing",
   "motor.property": "Motor Properties",
   "monitoring.points.statistics": "Monitoring Points Statistics",
-  "total": "Total"
+  "total": "Total",
+  "phone.is.invalid": "Phone is invalid",
+  "email.is.invalid": "Email is invalid"
 }

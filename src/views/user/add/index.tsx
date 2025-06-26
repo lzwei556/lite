@@ -73,13 +73,14 @@ const AddUserModal = (props: AddUserProps) => {
         >
           <Input placeholder={intl.get('USERNAME')} />
         </FormInputItem>
-        <Form.Item
+        <FormInputItem
           name='password'
           label={intl.get('PASSWORD')}
-          rules={[{ required: true, message: intl.get('PLEASE_ENTER_PASSWORD') }]}
+          requiredMessage={intl.get('PLEASE_ENTER_PASSWORD')}
+          lengthLimit={{ min: 6, max: 16, label: intl.get('PASSWORD').toLowerCase() }}
         >
           <Input.Password placeholder={intl.get('PASSWORD')} />
-        </Form.Item>
+        </FormInputItem>
         <Form.Item
           name='confirmPwd'
           label={
@@ -108,10 +109,20 @@ const AddUserModal = (props: AddUserProps) => {
         >
           <RoleSelect placeholder={intl.get('PLEASE_SELECT_USER_ROLE')} />
         </Form.Item>
-        <Form.Item name='phone' label={intl.get('CELLPHONE')} initialValue={''}>
+        <Form.Item
+          name='phone'
+          label={intl.get('CELLPHONE')}
+          initialValue={''}
+          rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
+        >
           <Input placeholder={intl.get('CELLPHONE')} />
         </Form.Item>
-        <Form.Item name='email' label={intl.get('EMAIL')} initialValue={''}>
+        <Form.Item
+          name='email'
+          label={intl.get('EMAIL')}
+          initialValue={''}
+          rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
+        >
           <Input placeholder={intl.get('EMAIL')} />
         </Form.Item>
         <Form.Item name={'projects'} label={intl.get('BIND_PROJECT')} initialValue={[]}>

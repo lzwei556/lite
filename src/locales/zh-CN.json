@@ -1305,5 +1305,7 @@
   "motor.bearing.type.roller": "滚动轴承",
   "motor.property": "电机属性",
   "monitoring.points.statistics": "监测点统计",
-  "total": "监测点总数"
+  "total": "监测点总数",
+  "phone.is.invalid": "手机号格式不正确",
+  "email.is.invalid": "邮箱格式不正确"
 }
