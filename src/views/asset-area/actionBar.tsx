@@ -47,7 +47,7 @@ export const ActionBar = ({
       return (
         <>
           <Button
-            key={type}
+            key={1}
             onClick={() => {
               setOpen(true);
               setType(1);
