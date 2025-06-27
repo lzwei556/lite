@@ -25,10 +25,11 @@ export const AddModal = (props: ModalFormProps) => {
   const [success, setSuccess] = React.useState<boolean>(false);
   const [form] = Form.useForm();
   const { refresh } = useContext();
+  const isBLEGateway = (type: number) => DeviceType.isBLEGateway(type);
 
   const fetchDeviceDefaultSettings = (type: any) => {
     setDeviceType(type);
-    if (type === DeviceType.Gateway) {
+    if (isBLEGateway(type)) {
       form.setFieldsValue({
         mode: NetworkProvisioningMode.Mode2,
         wsn: DEFAULT_WSN_SETTING
@@ -46,7 +47,7 @@ export const AddModal = (props: ModalFormProps) => {
   const onSave = () => {
     form.validateFields().then((values) => {
       if (values) {
-        if (values.type === DeviceType.Gateway) {
+        if (DeviceType.isGateway(values.type)) {
           CreateNetworkRequest({
             ...values,
             gateway: {
@@ -193,7 +194,7 @@ export const AddModal = (props: ModalFormProps) => {
               {deviceType && deviceSettings && (
                 <DeviceSettingsFormItems deviceType={deviceType} settings={deviceSettings} />
               )}
-              {deviceType && deviceType === DeviceType.Gateway && (
+              {deviceType && isBLEGateway(deviceType) && (
                 <fieldset>
                   <legend>{intl.get('wireless.network.settings')}</legend>
                   <WsnFormItem />

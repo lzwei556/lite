@@ -28,8 +28,10 @@ const SettingPage: React.FC<SettingPageProps> = ({ device, onUpdate, network }) 
       { label: intl.get('BASIC_INFORMATION'), value: 'basic' },
       { label: intl.get('DEVICE_SETTINGS'), value: 'device' }
     );
-    if (typeId === DeviceType.Gateway && network) {
+    if (DeviceType.isBLEGateway(typeId)) {
       options.push({ label: intl.get('wireless.network.settings'), value: 'wsn' });
+    }
+    if (DeviceType.isGateway(typeId) && network) {
       options.push({ label: intl.get('MENU_DEVICE_LSIT'), value: 'list' });
     }
   }

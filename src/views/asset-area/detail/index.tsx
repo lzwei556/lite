@@ -20,7 +20,9 @@ export const Index = (props: {
     return (asset.children?.length ?? 0) > 0 ? (
       content
     ) : (
-      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      <Card>
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      </Card>
     );
   };
 

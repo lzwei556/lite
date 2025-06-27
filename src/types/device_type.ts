@@ -2,7 +2,11 @@ import { PROPERTY_CATEGORIES } from '../constants/properties';
 
 export enum DeviceType {
   Gateway = 0x1,
+  Gateway4G = 0x2,
+  GatewayWIFI = 0x3,
   GatewayLora = 0x5,
+  GatewayDual4G = 0x6,
+  Gateway5G = 0x7,
   Router = 0x101,
   SA = 0x20001,
   SA_S = 0x20101,
@@ -42,8 +46,16 @@ export namespace DeviceType {
     switch (type) {
       case DeviceType.Gateway:
         return 'DEVICE_TYPE_GATEWAY';
+      case DeviceType.Gateway4G:
+        return 'DEVICE_TYPE_GATEWAY_4G';
+      case DeviceType.GatewayWIFI:
+        return 'DEVICE_TYPE_GATEWAY_WIFI';
       case DeviceType.GatewayLora:
         return 'DEVICE_TYPE_GATEWAY_LORA';
+      case DeviceType.GatewayDual4G:
+        return 'DEVICE_TYPE_GATEWAY_DUAL_4G';
+      case DeviceType.Gateway5G:
+        return 'DEVICE_TYPE_GATEWAY_5G';
       case DeviceType.Router:
         return 'DEVICE_TYPE_RELAY';
       case DeviceType.SA:
@@ -113,8 +125,24 @@ export namespace DeviceType {
     }
   }
 
+  const BLE_gateways = [
+    DeviceType.Gateway,
+    DeviceType.Gateway4G,
+    DeviceType.GatewayWIFI,
+    DeviceType.GatewayDual4G,
+    DeviceType.Gateway5G
+  ];
+
   export function getGateways() {
-    return [DeviceType.Gateway, DeviceType.GatewayLora];
+    return [...BLE_gateways, DeviceType.GatewayLora];
+  }
+
+  export function isGateway(type: number) {
+    return getGateways().includes(type);
+  }
+
+  export function isBLEGateway(type: number) {
+    return BLE_gateways.includes(type);
   }
 
   export function getRouters() {
@@ -207,10 +235,6 @@ export namespace DeviceType {
     return isGateway(type) || isMultiChannel(type) || isCat1(type);
   }
 
-  export function isGateway(type: number) {
-    return type === DeviceType.Gateway || type === DeviceType.GatewayLora;
-  }
-
   export function isSensor(type: number) {
     return sensors().includes(type);
   }
@@ -250,10 +274,6 @@ export namespace DeviceType {
       (type === DeviceType.SAS || isSASMultiChannel(type) || isMultiChannel(type)) &&
       !isVibration(type)
     );
-  }
-
-  export function getNonSensorDeviceTypes() {
-    return [DeviceType.Gateway, DeviceType.GatewayLora, DeviceType.Router];
   }
 
   export function isVibration(type: DeviceType | undefined) {

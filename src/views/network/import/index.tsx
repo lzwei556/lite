@@ -33,7 +33,8 @@ const ImportNetworkPage = () => {
     return source.hasOwnProperty('deviceList') && source.hasOwnProperty('wsn');
   };
   const formLayout = useLocaleFormLayout(18, 'vertical');
-  const isGatewayBle = network?.devices?.[0]?.type === DeviceType.Gateway;
+  const isGatewayBLE =
+    network?.devices?.[0]?.type && DeviceType.isBLEGateway(network?.devices?.[0]?.type);
 
   const onBeforeUpload = (file: any) => {
     const reader = new FileReader();
@@ -169,7 +170,7 @@ const ImportNetworkPage = () => {
                 </Card>
               )}
             </Col>
-            {isGatewayBle && (
+            {isGatewayBLE && (
               <Col flex='300px'>
                 <Card type='inner' size={'small'} title={intl.get('EDIT')}>
                   <Form form={form} {...formLayout} labelWrap={true}>
