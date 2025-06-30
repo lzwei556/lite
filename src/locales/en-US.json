@@ -1311,5 +1311,7 @@
   "monitoring.points.statistics": "Monitoring Points Statistics",
   "total": "Total",
   "phone.is.invalid": "Phone is invalid",
-  "email.is.invalid": "Email is invalid"
+  "email.is.invalid": "Email is invalid",
+  "replace.image": "Replace",
+  "only.jpeg.or.png": "You can only upload JPG/PNG file"
 }

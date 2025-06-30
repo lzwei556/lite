@@ -19,6 +19,12 @@ export function updateAsset(id: AssetModel['id'], asset: AssetModel) {
   return request.put(`/assets/${id}`, asset).then(PutResponse);
 }
 
+export function uploadAssetImage(id: AssetModel['id'], data: any) {
+  return request.axios.post(`/assets/${id}/image`, data, {
+    headers: { 'Content-type': 'image/png' }
+  });
+}
+
 export function deleteAsset(id: AssetModel['id']) {
   return request.delete(`/assets/${id}`).then(DeleteResponse);
 }

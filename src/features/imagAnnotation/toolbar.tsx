@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Space, Tooltip } from 'antd';
-import { CloseCircleOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons';
+import { Button, message, Space, Tooltip, Upload } from 'antd';
+import { CloseCircleOutlined, EditOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { MARGIN, Point } from './common';
 import { useCanvas } from './context';
@@ -8,14 +8,23 @@ import { useCanvas } from './context';
 export function Toolbar({
   textSettingBtn,
   onSave,
-  extras
+  extras,
+  beforeUpload,
+  onCancel,
+  onUpload,
+  uploadedImageStr
 }: {
   textSettingBtn: JSX.Element;
   onSave: (snapshot: { canvasSnapshot: Point[] }) => void;
   extras?: React.ReactElement[];
+  beforeUpload?: (image: string) => void;
+  onCancel?: () => void;
+  onUpload?: (image: string) => void;
+  uploadedImageStr?: string;
 }) {
   const { ends, setEnds, editable, setEditable } = useCanvas();
   const [prevEnds, setPrevEnds] = React.useState<Point[]>([]);
+
   return (
     <Space
       direction='vertical'
@@ -38,6 +47,27 @@ export function Toolbar({
       )}
       {editable && (
         <>
+          <Tooltip title={intl.get('replace.image')}>
+            <Upload
+              beforeUpload={(file) => {
+                const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+                if (!isJpgOrPng) {
+                  message.error(intl.get('only.jpeg.or.png'));
+                } else {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = () => {
+                    const result = reader.result as string;
+                    beforeUpload?.(result);
+                  };
+                }
+                return false;
+              }}
+              showUploadList={false}
+            >
+              <Button icon={<PlusOutlined />} />
+            </Upload>
+          </Tooltip>
           <Tooltip title={intl.get('SAVE')}>
             <Button
               icon={<SaveOutlined />}
@@ -45,6 +75,9 @@ export function Toolbar({
                 setEditable(false);
                 setPrevEnds([]);
                 onSave({ canvasSnapshot: ends });
+                if (uploadedImageStr) {
+                  onUpload?.(uploadedImageStr);
+                }
               }}
             />
           </Tooltip>
@@ -56,6 +89,7 @@ export function Toolbar({
                   setEnds(prevEnds);
                 }
                 setEditable(false);
+                onCancel?.();
               }}
             />
           </Tooltip>

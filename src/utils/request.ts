@@ -124,6 +124,7 @@ function filterNull(params: any) {
 
 // eslint-disable-next-line
 export default {
+  axios,
   download: <T>(url: string, params: any = null) => {
     return download<T>('GET', url, params);
   },

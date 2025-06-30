@@ -5,9 +5,10 @@ import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
 import { DisplayProperty } from '../../../../constants/properties';
 import { Dayjs } from '../../../../utils';
+import { base64toBlob } from '../../../../utils/image';
 import { ImageAnnotation } from '../../../../features';
 import { Card, Flex, Grid, Link } from '../../../../components';
-import { ASSET_PATHNAME, AssetRow, updateAsset } from '../../../asset-common';
+import { ASSET_PATHNAME, AssetRow, updateAsset, uploadAssetImage } from '../../../asset-common';
 import DianJi from './dianji.png';
 import './style.css';
 import { getPropertyValues, MonitoringPointPropertyItem } from '.';
@@ -46,7 +47,7 @@ export const DianJiImage = ({
         <ImageAnnotation
           asset={asset}
           size={size}
-          background={DianJi}
+          background={asset.image ? `/images/${asset.image}` : DianJi}
           placeTexts={(asset.monitoringPoints ?? []).map((m) => ({
             id: m.id,
             header: <Link to={`/${ASSET_PATHNAME}/${m.id}-${m.type}`}>{m.name}</Link>,
@@ -105,6 +106,11 @@ export const DianJiImage = ({
               type: asset.type,
               //@ts-ignore
               attributes: { ...asset.attributes, ...snapshot }
+            });
+          }}
+          onUpload={(image) => {
+            base64toBlob(image).then((blob) => {
+              uploadAssetImage(asset.id, blob);
             });
           }}
           toolbarExtras={[viewIcon]}

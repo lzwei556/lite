@@ -17,17 +17,19 @@ const CanvasContext = React.createContext<{
 export const CanvasProvider = ({
   asset,
   ends: endsFromProps,
-  children
+  children,
+  editable: editableFromProps
 }: {
   asset: AssetRow;
   ends: Point[];
   children: React.ReactNode;
+  editable?: boolean;
 }) => {
   const endsFromLocal: Point[] = asset.attributes?.canvasSnapshot ?? [];
   const [ends, setEnds] = React.useState(
     endsFromProps.length === endsFromLocal.length ? endsFromLocal : endsFromProps
   );
-  const [editable, setEditable] = React.useState(false);
+  const [editable, setEditable] = React.useState(editableFromProps ?? false);
   return (
     <CanvasContext.Provider value={{ ends, setEnds, editable, setEditable }}>
       {children}

@@ -35,6 +35,7 @@ export type AssetRow = {
   label: React.ReactNode;
   value: string | number;
   statistics: AssetChildrenStatistics;
+  image?: string;
   alertLevel: number;
   attributes?: {
     index: number;

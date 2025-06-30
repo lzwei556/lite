@@ -15,7 +15,8 @@ export const Canvas = ({
   placeTexts,
   textSettingBtn,
   onSave,
-  toolbarExtras
+  toolbarExtras,
+  onUpload
 }: {
   asset: AssetRow;
   size: Size;
@@ -24,8 +25,10 @@ export const Canvas = ({
   textSettingBtn: JSX.Element;
   onSave: (snapshot: { canvasSnapshot: Point[] }) => void;
   toolbarExtras?: React.ReactElement[];
+  onUpload?: (image: string) => void;
 }) => {
-  const [img] = useImage(background);
+  const [uploadingImg, setUploadingImg] = React.useState<string | undefined>();
+  const [img] = useImage(uploadingImg ?? background);
   const [cursor, setCursor] = React.useState('default');
   const stageProps = scaleStage(size, img);
   const { x, y, scale } = stageProps;
@@ -39,6 +42,7 @@ export const Canvas = ({
       <CanvasProvider
         asset={asset}
         ends={[...startingPoints].map((point) => ({ ...centralPoint, id: point.id }))}
+        editable={!!uploadingImg}
         key={`${centralPoint.x}${centralPoint.y}`}
       >
         <div style={{ position: 'relative' }}>
@@ -48,7 +52,17 @@ export const Canvas = ({
               <Marks startingPoints={startingPoints} setCursor={setCursor} />
             </Stage>
           )}
-          <Toolbar textSettingBtn={textSettingBtn} onSave={onSave} extras={toolbarExtras} />
+          <Toolbar
+            textSettingBtn={textSettingBtn}
+            onSave={onSave}
+            extras={toolbarExtras}
+            beforeUpload={setUploadingImg}
+            onCancel={() => {
+              setUploadingImg(undefined);
+            }}
+            onUpload={onUpload}
+            uploadedImageStr={uploadingImg}
+          />
           {placeTextProps.map(({ header, body, footer, style }, i) => {
             return (
               <Card
