@@ -12,8 +12,7 @@ import { isMobile } from '../../../utils/deviceDetection';
 import { getValue } from '../../../utils/format';
 import { App, useAppType } from '../../../config';
 import { MONITORING_POINT } from '../../asset-common';
-import { DeleteIconButton, EditIconButton, Table } from '../../../components';
-import { FileInput } from '../../../components/fileInput';
+import { DeleteIconButton, EditIconButton, Table, JsonImporter } from '../../../components';
 import { CreateModal } from './createModal';
 import { UpdateModal } from './updateModal';
 import { AlarmLevelLightSelectFilter } from '../alarmLevelLightSelectFilter';
@@ -222,7 +221,7 @@ export default function AlarmRuleList() {
                 )}
               </HasPermission>
               <HasPermission value={Permission.AlarmRuleGroupImport}>
-                <FileInput
+                <JsonImporter
                   onUpload={(data) => {
                     return importAlarmRules(data).then((res) => {
                       if (res.data.code === 200) {

@@ -10,6 +10,7 @@ export * from './table/editIconButton';
 export * from './table/iconButton';
 export * from './table/table';
 export * from './tabs/tabs';
+export * from './jsonImporter';
 export * from './link';
 export * from './rangeDatePicker';
 export * from './term';

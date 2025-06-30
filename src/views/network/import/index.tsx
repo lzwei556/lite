@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Breadcrumb, Button, Col, Form, message, Result, Upload } from 'antd';
-import { ImportOutlined, InboxOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Col, Form, message, Result } from 'antd';
+import { ImportOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ImportNetworkRequest } from '../../../apis/network';
 import WsnFormItem from '../../../components/formItems/wsnFormItem';
@@ -9,11 +9,9 @@ import { useProvisionMode } from '../useProvisionMode';
 import { Network } from '../../../types/network';
 import { useLocaleFormLayout } from '../../../hooks/useLocaleFormLayout';
 import { DeviceType } from '../../../types/device_type';
-import { Card, Flex, Grid, Link } from '../../../components';
+import { Card, Flex, Grid, JsonImporter, Link } from '../../../components';
 import { useContext, VIRTUAL_ROOT_DEVICE } from '../../device';
 import { Preview } from '../topology/preview';
-
-const { Dragger } = Upload;
 
 export interface NetworkRequestForm {
   mode: number;
@@ -35,22 +33,6 @@ const ImportNetworkPage = () => {
   const formLayout = useLocaleFormLayout(18, 'vertical');
   const isGatewayBLE =
     network?.devices?.[0]?.type && DeviceType.isBLEGateway(network?.devices?.[0]?.type);
-
-  const onBeforeUpload = (file: any) => {
-    const reader = new FileReader();
-    reader.readAsText(file);
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        const json = JSON.parse(reader.result);
-        if (checkJSONFormat(json)) {
-          setNetwork({ wsn: json.wsn, devices: json.deviceList });
-        } else {
-          message.error(intl.get('INVALID_FILE_FORMAT')).then();
-        }
-      }
-    };
-    return false;
-  };
 
   const onSave = () => {
     if (network === undefined) {
@@ -160,13 +142,16 @@ const ImportNetworkPage = () => {
                 />
               ) : (
                 <Card>
-                  <Dragger accept={'.json'} beforeUpload={onBeforeUpload} showUploadList={false}>
-                    <p className='ant-upload-drag-icon'>
-                      <InboxOutlined />
-                    </p>
-                    <p className='ant-upload-text'>{intl.get('UPLOAD_NETWORK_PROMPT')}</p>
-                    <p className='ant-upload-hint'>{intl.get('UPLOAD_NETWORK_HINT')}</p>
-                  </Dragger>
+                  <JsonImporter
+                    onUpload={(json: { wsn: any; deviceList: any }) => {
+                      return new Promise(() => {
+                        if (checkJSONFormat(json)) {
+                          setNetwork({ wsn: json.wsn, devices: json.deviceList });
+                        }
+                      });
+                    }}
+                    dragger={true}
+                  />
                 </Card>
               )}
             </Col>

@@ -1313,5 +1313,6 @@
   "phone.is.invalid": "手机号格式不正确",
   "email.is.invalid": "邮箱格式不正确",
   "replace.image": "替换图片",
-  "only.jpeg.or.png": "仅支持JPG/PNG文件"
+  "only.jpeg.or.png": "仅支持JPG/PNG文件",
+  "only.json.file": "仅支持JSON文件"
 }

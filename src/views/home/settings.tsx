@@ -3,8 +3,7 @@ import { Button, message } from 'antd';
 import { DownloadOutlined, ExportOutlined } from '@ant-design/icons';
 import { cloneDeep } from 'lodash';
 import intl from 'react-intl-universal';
-import { Card, Table, Link } from '../../components';
-import { FileInput } from '../../components/fileInput';
+import { Card, Table, JsonImporter, Link } from '../../components';
 import { getProject } from '../../utils/session';
 import { App, useAppType } from '../../config';
 import { ASSET_PATHNAME, AssetRow, importAssets, useContext } from '../asset-common';
@@ -108,8 +107,8 @@ export const Settings = () => {
               {intl.get('EXPORT_SETTINGS')}
               <ExportOutlined />
             </Button>,
-            <FileInput
-              onUpload={(data: any) => {
+            <JsonImporter
+              onUpload={(data) => {
                 return importAssets(getProject().id, data).then((res) => {
                   if (res.data.code === 200) {
                     message.success(intl.get('IMPORTED_SUCCESSFUL'));
@@ -122,7 +121,7 @@ export const Settings = () => {
             />
           ]
         }}
-        rowKey={(row) => row.name}
+        rowKey={(row) => row.id}
       />
       {open && type === 'download' && <BatchDownlaodHistoryDataModal {...commonProps} />}
       {open && type === 'export' && <SelectAssets {...commonProps} onSuccess={refresh} />}
