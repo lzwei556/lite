@@ -14,6 +14,7 @@ import {
   positionColumn
 } from '../../asset-common';
 import { ActionBar } from '../actionBar';
+import { getDefaultSelectedPoint, useAssetContext } from './context';
 
 export const PointsTable = (props: {
   asset: AssetRow;
@@ -27,6 +28,7 @@ export const PointsTable = (props: {
   const { hasPermission } = usePermission();
   const actualPoints = Points.filter(monitoringPoints);
   const columns = basicColumns;
+  const { selectedPoint, setSelectedPoint } = useAssetContext();
 
   columns.push(
     ...[
@@ -61,7 +63,22 @@ export const PointsTable = (props: {
   );
 
   if (hasPermission(Permission.MeasurementAdd)) {
-    columns.push(getOperateColumn({ onDeleteSuccess: onSuccess, onUpdate }));
+    columns.push(
+      getOperateColumn({
+        onDeleteSuccess: (id: number) => {
+          onSuccess();
+          if (selectedPoint?.id === id) {
+            const restPoints = (asset.monitoringPoints ?? []).filter((m) => m.id !== id);
+            setSelectedPoint(
+              restPoints.length > 0
+                ? getDefaultSelectedPoint({ ...asset, monitoringPoints: restPoints })
+                : undefined
+            );
+          }
+        },
+        onUpdate
+      })
+    );
   }
 
   return (

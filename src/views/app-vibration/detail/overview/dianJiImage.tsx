@@ -9,9 +9,9 @@ import { base64toBlob } from '../../../../utils/image';
 import { ImageAnnotation } from '../../../../features';
 import { Card, Flex, Grid, Link } from '../../../../components';
 import { ASSET_PATHNAME, AssetRow, updateAsset, uploadAssetImage } from '../../../asset-common';
+import { getPropertyValues, MonitoringPointPropertyItem } from '../context';
 import DianJi from './dianji.png';
 import './style.css';
-import { getPropertyValues, MonitoringPointPropertyItem } from '.';
 
 export const DianJiImage = ({
   asset,

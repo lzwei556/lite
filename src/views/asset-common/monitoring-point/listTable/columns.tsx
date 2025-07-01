@@ -64,7 +64,7 @@ export const positionColumn = {
   render: (name: string, row: MonitoringPointRow) => row.attributes?.index ?? '-'
 };
 export type OperateCellProps = {
-  onDeleteSuccess: () => void;
+  onDeleteSuccess: (id: number) => void;
   onUpdate: (point: MonitoringPointRow) => void;
 };
 export const getOperateColumn = ({ onDeleteSuccess, onUpdate }: OperateCellProps) => ({

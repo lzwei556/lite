@@ -40,6 +40,7 @@ export function scaleStage(size: Size, img?: HTMLImageElement) {
 }
 
 export function getPlaces(stage: StageProps, size: Size, placeTexts: PlaceTextProps[]) {
+  if (placeTexts.length === 0) return [];
   const { x, y, scale } = stage;
   const popoverXLen = PlaceTextCardStyle.width / 2 + MARGIN;
   const popoverYLen = PlaceTextCardStyle.height + MARGIN;
@@ -64,6 +65,6 @@ export function getPlaces(stage: StageProps, size: Size, placeTexts: PlaceTextPr
     style: { bottom: MARGIN, right: MARGIN * 4 }
   };
   return [leftTop, rightTop, leftBottom, rightBottom]
-    .map((point, i) => ({ ...point, id: placeTexts[i].id }))
-    .filter((p, i) => i < placeTexts.length);
+    .filter((p, i) => i < placeTexts.length)
+    .map((point, i) => ({ ...point, id: placeTexts[i].id }));
 }

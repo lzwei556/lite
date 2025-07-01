@@ -13,7 +13,7 @@ export const OperateCell = ({
   onUpdate
 }: {
   point: MonitoringPointRow;
-  onDeleteSuccess: () => void;
+  onDeleteSuccess: (id: number) => void;
   onUpdate: (point: MonitoringPointRow) => void;
 }) => {
   return (
@@ -25,7 +25,7 @@ export const OperateCell = ({
         <DeleteIconButton
           confirmProps={{
             description: intl.get('DELETE_SOMETHING_PROMPT', { something: point.name }),
-            onConfirm: () => deleteMeasurement(point.id).then(onDeleteSuccess)
+            onConfirm: () => deleteMeasurement(point.id).then(() => onDeleteSuccess(point.id))
           }}
         />
       </HasPermission>
