@@ -1120,6 +1120,7 @@
   "SETTING_VELOCITY_CALCULATION_IS_ENABLED_DESC": "启用后传感器上报速度有效值",
   "AXIS": "坐标轴",
   "DEVICE_TYPE_SVT210K": "无线振动温度传感器 (2K/1K)",
+  "DEVICE_TYPE_SVT210A": "无线振动温度传感器 (10K)",
   "DEVICE_TYPE_SVT510L": "无线振动温度传感器 (6K/5K LoRa)",
   "GROUP_SIZE_2": "每组设备数（波形）",
   "INTERVAL_CNT": "次要通讯周期间隔倍数",

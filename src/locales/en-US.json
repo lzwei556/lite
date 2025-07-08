@@ -1120,6 +1120,7 @@
   "SETTING_VELOCITY_CALCULATION_IS_ENABLED_DESC": "When enabled,report velocity RMS",
   "AXIS": "Axis",
   "DEVICE_TYPE_SVT210K": "Wireless Vibration Temperature Sensor (2K/1K)",
+  "DEVICE_TYPE_SVT210A": "Wireless Vibration Temperature Sensor (10K)",
   "DEVICE_TYPE_SVT510L": "Wireless Vibration Temperature Sensor (6K/5K LoRa)",
   "GROUP_SIZE_2": "Group Size (Waveform)",
   "INTERVAL_CNT": "Interval Count",

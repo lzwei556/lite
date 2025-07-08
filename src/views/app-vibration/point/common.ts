@@ -34,7 +34,8 @@ export const relatedDeviceTypes = new Map([
       DeviceType.SVT520C,
       DeviceType.SVT210510P,
       DeviceType.SVT510C,
-      DeviceType.SVT210K
+      DeviceType.SVT210K,
+      DeviceType.SVT210A
     ]
   ],
   [MonitoringPointTypeValue.VibrationRotationSingleAxis, [DeviceType.SVT220S1]],
