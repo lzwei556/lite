@@ -121,18 +121,13 @@ function useAcquisitionModeRelatedFields(settings?: DeviceSetting[]) {
 }
 
 function useSampleRelatedFields(type: DeviceType, settings?: DeviceSetting[]) {
-  const acc3_is_auto = settings?.find((s) => s.key === 'acc3_is_auto');
-  const acc3_range = acc3_is_auto?.children?.find((s) => s.key === 'acc3_range');
+  const acc3_range = settings?.find((s) => s.key === 'acc3_range');
   const acc3_odr = settings?.find((s) => s.key === 'acc3_odr');
   const acc3_samples = settings?.find((s) => s.key === 'acc3_samples');
   const acc1_odr = settings?.find((s) => s.key === 'acc1_odr');
   const acc1_samples = settings?.find((s) => s.key === 'acc1_samples');
-  const [isAuto, setIsAuto] = React.useState<boolean>(acc3_is_auto ? acc3_is_auto.value : false);
   const fields: DeviceSetting[] = [];
-  if (acc3_is_auto) {
-    fields.push({ ...acc3_is_auto, onChange: setIsAuto });
-  }
-  if (!isAuto && acc3_range) {
+  if (acc3_range) {
     fields.push(acc3_range);
   }
   if (acc3_odr) {
