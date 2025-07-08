@@ -19,8 +19,8 @@ import { useAssetContext } from '../context';
 import { MonitoringPointsStatistics } from './monitoringPointsStatistics';
 import { DianJiImage } from './dianJiImage';
 
-export const Index = (props: { asset: AssetRow }) => {
-  const { asset } = props;
+export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
+  const { asset, onSuccess } = props;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const [open, setOpen] = React.useState(false);
@@ -55,7 +55,7 @@ export const Index = (props: { asset: AssetRow }) => {
             <Col flex='auto' style={{ minWidth: 560 }}>
               <DianJiImage
                 asset={asset}
-                key={`${asset.id}_${asset.monitoringPoints?.length}`}
+                key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
                 properties={properties}
                 onSelectMonitoringPointProperty={(item) => {
                   if (item) {
@@ -86,6 +86,7 @@ export const Index = (props: { asset: AssetRow }) => {
                     </ModalWrapper>
                   </React.Fragment>
                 }
+                onSuccess={onSuccess}
               />
             </Col>
             <Col flex='350px'>

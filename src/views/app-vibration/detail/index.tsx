@@ -31,7 +31,7 @@ export const Index = (props: {
           {
             key: 'overview',
             label: intl.get('OVERVIEW'),
-            children: <Overview asset={asset} key={asset.id} />
+            children: <Overview asset={asset} key={asset.id} onSuccess={onSuccess} />
           },
           {
             key: 'monitoringPointList',

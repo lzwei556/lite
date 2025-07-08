@@ -17,12 +17,14 @@ export const DianJiImage = ({
   asset,
   properties,
   onSelectMonitoringPointProperty,
-  viewIcon
+  viewIcon,
+  onSuccess
 }: {
   asset: AssetRow;
   properties: DisplayProperty[];
   onSelectMonitoringPointProperty?: (item: MonitoringPointPropertyItem) => void;
   viewIcon: React.ReactElement;
+  onSuccess: () => void;
 }) => {
   const ref = React.useRef(null);
   const size = useSize(ref);
@@ -106,7 +108,7 @@ export const DianJiImage = ({
               type: asset.type,
               //@ts-ignore
               attributes: { ...asset.attributes, ...snapshot }
-            });
+            }).then(onSuccess);
           }}
           onUpload={(image) => {
             base64toBlob(image).then((blob) => {
