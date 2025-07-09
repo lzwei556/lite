@@ -1,6 +1,6 @@
 import * as echarts from 'echarts/core';
 import _ from 'lodash';
-import { roundValue } from '../../utils/format';
+import { getValue, roundValue } from '../../utils/format';
 import { useYAxisOptions } from './useYAxisOptions';
 import type { LineSeriesOption } from 'echarts/charts';
 import type { ECOptions, ECSerionOptions } from './chart';
@@ -43,7 +43,7 @@ export function useLinedSeriesOptions(
       trigger: 'axis',
       valueFormatter: (value) => {
         const suffix = yAxisMeta?.unit;
-        const roundedValue = roundValue(value as number, yAxisMeta?.precision);
+        const roundedValue = getValue(roundValue(value as number, yAxisMeta?.precision));
         return suffix ? `${roundedValue} ${suffix}` : `${roundedValue}`;
       }
     },
