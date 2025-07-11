@@ -1256,7 +1256,7 @@
   "monitoring.point.type.base.inclination": "塔基沉降监测点",
   "monitoring.point.type.pressure": "压力监测点",
   "monitoring.point.type.temperature": "温度监测点",
-  "save.and.apply.settings.to.the.devices.of.the.same.type": "批量配置",
+  "apply.settings.to.the.same.types": "批量配置",
   "project.type": "项目类型",
   "TREND_CHART": "趋势图",
   "close": "关闭",

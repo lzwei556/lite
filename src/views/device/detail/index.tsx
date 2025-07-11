@@ -21,10 +21,10 @@ import { DeviceNavigator } from '../navigator';
 import DeviceEvent from './event';
 import HistoryDataPage from './data';
 import DownloadModal from './downloadModal';
-import SettingPage from './setting';
 import { GatewayDetail } from './gatewayDetail';
 import { SensorDetail } from './sensorDetail';
 import { DeleteDeviceRequest } from '../../../apis/device';
+import { Index } from '../edit';
 
 const DeviceDetailPage = () => {
   const navigate = useNavigate();
@@ -89,9 +89,7 @@ const DeviceDetailPage = () => {
         key: 'settings',
         label: intl.get('SETTINGS'),
         children: device && (
-          <Card>
-            <SettingPage device={device} onUpdate={() => refresh(device.id)} network={network} />
-          </Card>
+          <Index device={device} onUpdate={() => refresh(device.id)} network={network} />
         )
       });
     }
