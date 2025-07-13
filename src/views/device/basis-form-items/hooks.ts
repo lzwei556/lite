@@ -2,7 +2,7 @@ import React from 'react';
 import { FormInstance, SelectProps } from 'antd';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
-import { NetworkProvisioningMode } from '../../../types/network';
+import { ProvisioningMode } from '../../../features/wsn';
 import { DEFAULT_WSN_SETTING } from '../../../types/wsn_setting';
 import { App, useAppType } from '../../../config';
 import { GetDefaultDeviceSettingsRequest, GetDeviceSettingRequest } from '../../../apis/device';
@@ -50,7 +50,7 @@ const useDeviceTypeSelectProps = ({ form, device }: { form?: FormInstance; devic
         setDeviceType(deviceType);
         setSettingsInitialValues(settings, form);
         form?.setFieldsValue?.({
-          mode: NetworkProvisioningMode.Mode2,
+          mode: ProvisioningMode.TimeDivision,
           wsn: DEFAULT_WSN_SETTING,
           protocol: 3
         });

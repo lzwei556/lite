@@ -6,21 +6,11 @@ import intl from 'react-intl-universal';
 import { ImportNetworkRequest } from '../../../apis/network';
 import { DeviceType } from '../../../types/device_type';
 import { Card, Flex, Grid, JsonImporter, Link } from '../../../components';
+import * as WSN from '../../../features/wsn';
 import { useContext, VIRTUAL_ROOT_DEVICE } from '../../device';
 import { Preview } from '../topology/preview';
-import { WsnFormItems } from '../../device/settings-common';
 import { generateColProps } from '../../../utils/grid';
 import { DEFAULT_WSN_SETTING } from '../../../types/wsn_setting';
-
-type WSN = {
-  provisioning_mode: number;
-  communication_period: number;
-  communication_period_2: number;
-  communication_offset: number;
-  group_size: number;
-  group_size_2: number;
-  interval_cnt: number;
-};
 
 export type ImportedJSONDevice = {
   id: number;
@@ -33,7 +23,7 @@ export type ImportedJSONDevice = {
 };
 
 type ValidJson = {
-  wsn: WSN;
+  wsn: WSN.WSN;
   deviceList: ImportedJSONDevice[];
 };
 
@@ -127,7 +117,7 @@ const ImportNetworkPage = () => {
                       return new Promise(() => {
                         if (checkJSONFormat(json)) {
                           setNetwork({ wsn: json.wsn, deviceList: json.deviceList });
-                          form.setFieldsValue(tranformNetworkDTO2Entity(json.wsn));
+                          form.setFieldsValue(WSN.tranformWSN2WSNUpdate(json.wsn));
                         }
                       });
                     }}
@@ -140,7 +130,7 @@ const ImportNetworkPage = () => {
               <Col flex='300px'>
                 <Card size='small' title={intl.get('EDIT')}>
                   <Form form={form} layout='vertical'>
-                    <WsnFormItems
+                    <WSN.FormItems
                       formItemColProps={generateColProps({})}
                       mode={wsn.provisioning_mode}
                     />
@@ -179,18 +169,3 @@ const ImportNetworkPage = () => {
 };
 
 export default ImportNetworkPage;
-
-const tranformNetworkDTO2Entity = (wsn: WSN) => {
-  return {
-    mode: wsn.provisioning_mode,
-    wsn: {
-      communication_period: wsn.communication_period ?? DEFAULT_WSN_SETTING.communication_period,
-      communication_period_2:
-        wsn.communication_period_2 ?? DEFAULT_WSN_SETTING.communication_period_2,
-      communication_offset: wsn.communication_offset ?? DEFAULT_WSN_SETTING.communication_offset,
-      group_size: wsn.group_size ?? DEFAULT_WSN_SETTING.group_size,
-      group_size_2: wsn.group_size_2 ?? DEFAULT_WSN_SETTING.group_size,
-      interval_cnt: wsn.interval_cnt ?? DEFAULT_WSN_SETTING.interval_cnt
-    }
-  };
-};

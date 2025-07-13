@@ -3,13 +3,9 @@ import { Button, Form, Result } from 'antd';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { Card } from '../../../components';
 import { ModalFormProps } from '../../../types/common';
+import * as WSN from '../../../features/wsn';
 import * as Basis from '../basis-form-items';
-import {
-  isBLEGateway,
-  SettingsFormItems,
-  useGroupCardProps,
-  WsnFormItems
-} from '../settings-common';
+import { isBLEGateway, SettingsFormItems, useGroupCardProps } from '../settings-common';
 import { AddFormProps, useCreate, useAddFormProps, useModalProps } from './hooks';
 
 export const AddModal = (props: ModalFormProps) => {
@@ -56,7 +52,7 @@ const AddForm = (props: AddFormProps) => {
           {<SettingsFormItems {...commonProps} deviceType={deviceType} />}
           {isBLEGateway(deviceType) && (
             <Card {...wsnCardProps}>
-              <WsnFormItems formItemColProps={formItemColProps} />
+              <WSN.FormItems formItemColProps={formItemColProps} />
             </Card>
           )}
         </>

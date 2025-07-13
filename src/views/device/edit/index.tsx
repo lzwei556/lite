@@ -7,13 +7,9 @@ import { DeviceType } from '../../../types/device_type';
 import { Card } from '../../../components';
 import { createReactIntlTextNode } from '../../../utils';
 import { generateColProps } from '../../../utils/grid';
+import * as WSN from '../../../features/wsn';
 import * as Basis from '../basis-form-items';
-import {
-  isBLEGateway,
-  tranformDeviceDTO2Entity,
-  useGroupCardProps,
-  WsnFormItems
-} from '../settings-common';
+import { isBLEGateway, tranformDeviceDTO2Entity, useGroupCardProps } from '../settings-common';
 import { DevicesTable } from './devicesTable';
 import { SettingsSectionForm } from './sectionForm';
 import { SaveIconButton } from './saveIconButton';
@@ -94,7 +90,7 @@ const WSNEditForm = ({ network }: { network: Network }) => {
           extra: <SaveIconButton {...groupCardPropsExtra.saveButton} />
         }}
       >
-        <WsnFormItems formItemColProps={formItemColProps} mode={network.mode} />
+        <WSN.FormItems formItemColProps={formItemColProps} mode={network.mode} />
       </Card>
     </Form>
   );

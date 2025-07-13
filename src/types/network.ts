@@ -1,6 +1,5 @@
 import { Device } from './device';
 import { Asset } from './asset';
-import intl from 'react-intl-universal';
 
 export type Network = {
   id: number;
@@ -17,17 +16,3 @@ export type Network = {
   groupSize2: number;
   intervalCnt: number;
 };
-
-export enum NetworkProvisioningMode {
-  Mode1 = 1,
-  Mode2,
-  Mode3,
-  Mode4,
-  Mode5
-}
-
-export namespace NetworkProvisioningMode {
-  export function toString(mode: NetworkProvisioningMode) {
-    return intl.get(`WSN_MODE_OPTION_${mode}`);
-  }
-}
