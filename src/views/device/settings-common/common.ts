@@ -2,8 +2,8 @@ import { ColProps } from 'antd';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
 import { CardProps } from '../../../components';
-import * as SVT from './use-groupd-settins-svt';
-import * as NonSVT from './use-groupd-settins';
+import * as SVT from './use-groupd-settings-svt';
+import * as NonSVT from './use-groupd-settings';
 
 export type DeviceSetting = {
   name: string;
