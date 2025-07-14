@@ -52,7 +52,10 @@ const AddForm = (props: AddFormProps) => {
           {<SettingsFormItems {...commonProps} deviceType={deviceType} />}
           {isBLEGateway(deviceType) && (
             <Card {...wsnCardProps}>
-              <WSN.FormItems formItemColProps={formItemColProps} />
+              <WSN.FormItems
+                formItemColProps={formItemColProps}
+                setFieldsValue={formProps.form?.setFieldsValue}
+              />
             </Card>
           )}
         </>

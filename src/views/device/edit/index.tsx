@@ -8,6 +8,7 @@ import { Card } from '../../../components';
 import { createReactIntlTextNode } from '../../../utils';
 import { generateColProps } from '../../../utils/grid';
 import * as WSN from '../../../features/wsn';
+import * as NetworkNS from '../../../features/network';
 import * as Basis from '../basis-form-items';
 import { isBLEGateway, tranformDeviceDTO2Entity, useGroupCardProps } from '../settings-common';
 import { DevicesTable } from './devicesTable';
@@ -90,7 +91,14 @@ const WSNEditForm = ({ network }: { network: Network }) => {
           extra: <SaveIconButton {...groupCardPropsExtra.saveButton} />
         }}
       >
-        <WSN.FormItems formItemColProps={formItemColProps} mode={network.mode} />
+        <WSN.FormItems
+          formItemColProps={formItemColProps}
+          initial={{
+            ...NetworkNS.tranformNetwork2WSNUpdate(network).wsn,
+            provisioning_mode: network.mode
+          }}
+          setFieldsValue={formProps.form?.setFieldsValue}
+        />
       </Card>
     </Form>
   );
@@ -102,7 +110,7 @@ const useWSNFormEditProps = (network: Network, updateProps: UpdateProps): FormEd
     formProps: {
       form,
       layout: 'vertical',
-      initialValues: tranformNetworkDTO2Entity(network)
+      initialValues: NetworkNS.tranformNetwork2WSNUpdate(network)
     },
     groupCardProps: useGroupCardProps({
       title: createReactIntlTextNode('wireless.network.settings')
@@ -114,19 +122,5 @@ const useWSNFormEditProps = (network: Network, updateProps: UpdateProps): FormEd
       }
     },
     formItemColProps: generateColProps({ xl: 12, xxl: 8 })
-  };
-};
-
-const tranformNetworkDTO2Entity = (network: Network) => {
-  return {
-    mode: network.mode,
-    wsn: {
-      communication_period: network.communicationPeriod,
-      communication_period_2: network.communicationPeriod2,
-      communication_offset: network.communicationOffset,
-      group_size: network.groupSize,
-      group_size_2: network.groupSize2,
-      interval_cnt: network.intervalCnt
-    }
   };
 };

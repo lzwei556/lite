@@ -132,7 +132,8 @@ const ImportNetworkPage = () => {
                   <Form form={form} layout='vertical'>
                     <WSN.FormItems
                       formItemColProps={generateColProps({})}
-                      mode={wsn.provisioning_mode}
+                      initial={wsn}
+                      setFieldsValue={form.setFieldsValue}
                     />
                   </Form>
                 </Card>

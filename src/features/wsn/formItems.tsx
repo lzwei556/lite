@@ -4,6 +4,7 @@ import intl from 'react-intl-universal';
 import { Grid, Term } from '../../components';
 import {
   CommunicationPeriodOptions,
+  getInitialSettings,
   MajorCommunicationPeriodOptions,
   ProvisioningMode,
   SecondaryCommunicationPeriodOptions,
@@ -13,23 +14,28 @@ import {
   useGroupSize2,
   useIntervalCnt,
   useProvisioningMode,
-  useProvisioningModeField
+  useProvisioningModeField,
+  WSN
 } from './hooks';
 
 type Props = {
   formItemColProps: ColProps;
-  onChange: (mode: ProvisioningMode) => void;
+  initial?: WSN;
+  setFieldsValue?: (values: any) => void;
 };
 
-export const FormItems = ({
-  formItemColProps,
-  mode: modeFromProps
-}: Omit<Props, 'onChange'> & { mode?: ProvisioningMode }) => {
-  const { mode, setMode } = useProvisioningMode(modeFromProps);
+export const FormItems = ({ formItemColProps, initial, setFieldsValue }: Props) => {
+  const { mode, setMode } = useProvisioningMode(initial?.provisioning_mode);
+  const onChangeProps = (mode: ProvisioningMode) => {
+    setMode(mode);
+    setFieldsValue?.({ wsn: getInitialSettings(mode, initial) });
+  };
   if (mode === ProvisioningMode.Group) {
-    return <GroupModeFormItems onChange={setMode} formItemColProps={formItemColProps} />;
+    return <GroupModeFormItems onChange={onChangeProps} formItemColProps={formItemColProps} />;
   } else if (mode === ProvisioningMode.TimeDivision) {
-    return <TimeDivisionModeFormItems onChange={setMode} formItemColProps={formItemColProps} />;
+    return (
+      <TimeDivisionModeFormItems onChange={onChangeProps} formItemColProps={formItemColProps} />
+    );
   } else {
     return (
       <Grid>
@@ -47,7 +53,9 @@ export const FormItems = ({
   }
 };
 
-const GroupModeFormItems = (props: Props) => {
+type OnChange = { onChange: (mode: ProvisioningMode) => void };
+
+const GroupModeFormItems = (props: Pick<Props, 'formItemColProps'> & OnChange) => {
   const { formItemColProps, onChange } = props;
   return (
     <Grid>
@@ -67,7 +75,7 @@ const GroupModeFormItems = (props: Props) => {
   );
 };
 
-const TimeDivisionModeFormItems = (props: Props) => {
+const TimeDivisionModeFormItems = (props: Pick<Props, 'formItemColProps'> & OnChange) => {
   const { formItemColProps, onChange } = props;
   return (
     <Grid>
@@ -93,7 +101,7 @@ const TimeDivisionModeFormItems = (props: Props) => {
   );
 };
 
-const ProvisioningModeFromItem = ({ onChange }: { onChange: (mode: ProvisioningMode) => void }) => {
+const ProvisioningModeFromItem = ({ onChange }: OnChange) => {
   const { label, formItemProps, controlProps } = useProvisioningModeField(onChange);
   return (
     <Form.Item label={<Term {...label} />} {...formItemProps}>

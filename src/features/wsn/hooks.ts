@@ -1,9 +1,9 @@
 import React from 'react';
-import { createReactIntlTextNode, pickOptionsFromNumericEnum } from '../../utils';
 import { FormItemProps } from 'antd';
+import intl from 'react-intl-universal';
+import { createReactIntlTextNode, pickOptionsFromNumericEnum } from '../../utils';
 import { millisecond } from '../../constants';
 import { Rules } from '../../constants/validator';
-import intl from 'react-intl-universal';
 
 export type WSN = {
   provisioning_mode: number;
@@ -147,6 +147,28 @@ export enum ProvisioningMode {
   UnManagedBroadcast
 }
 
+export const getInitialSettings = (mode: ProvisioningMode, initial?: WSN) => {
+  if (initial) {
+    const { communication_period, ...rest } = initial;
+    const isPeriodValid = ValidPeriod(communication_period, mode);
+    return {
+      ...rest,
+      communication_period: isPeriodValid
+        ? communication_period
+        : DEFAULT_WSN_SETTING.communication_period
+    };
+  }
+  return DEFAULT_WSN_SETTING;
+};
+
+const ValidPeriod = (period: number, mode: ProvisioningMode) => {
+  if (mode === ProvisioningMode.TimeDivision) {
+    return MajorCommunicationPeriodOptions.some((opts) => opts.value === period);
+  } else {
+    return CommunicationPeriodOptions.some((opts) => opts.value === period);
+  }
+};
+
 export const useProvisioningMode = (modeFromProps?: ProvisioningMode) => {
   const [mode, setMode] = React.useState(modeFromProps ?? ProvisioningMode.TimeDivision);
   return { mode, setMode };
@@ -217,7 +239,7 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
         ({ getFieldValue }: any) => ({
           validator(_, value: number) {
             const wsn = getFieldValue('wsn');
-            if (!value || Number(wsn.communication_period) / 1000 >= value) {
+            if (!value || Number(wsn.communication_period) >= value) {
               return Promise.resolve();
             }
             return Promise.reject(createReactIntlTextNode('COMMUNICATION_OFFSET_PROMPT'));
@@ -273,7 +295,14 @@ export const useGroupSize = () => {
     label,
     formItemProps: {
       name: ['wsn', 'group_size'],
-      rules: [Rules.required]
+      rules: [
+        {
+          required: true,
+          message: createReactIntlTextNode('PLEASE_ENTER_SOMETHING', {
+            something: label.name
+          })
+        }
+      ]
     } as FormItemProps,
     contorlProps: {
       options: [1, 2, 4, 8].map((value) => ({ label: `${value}`, value }))
@@ -294,7 +323,14 @@ export const useGroupSize2 = () => {
     label,
     formItemProps: {
       name: ['wsn', 'group_size_2'],
-      rules: [Rules.required]
+      rules: [
+        {
+          required: true,
+          message: createReactIntlTextNode('PLEASE_ENTER_SOMETHING', {
+            something: label.name
+          })
+        }
+      ]
     } as FormItemProps,
     contorlProps: { controls: false, style: { width: '100%' } }
   };
