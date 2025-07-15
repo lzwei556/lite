@@ -104,7 +104,7 @@ export const useCreate = (form: FormInstance, onSuccess: () => void): CreateProp
         children: intl.get('CONTINUE_TO_CREATE_DEVICE'),
         type: 'primary',
         onClick: () => {
-          form.resetFields();
+          form.resetFields(['name', 'mac_address']);
           setSuccess(false);
         }
       },
