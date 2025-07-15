@@ -5,7 +5,6 @@ import { Device } from '../../../types/device';
 import { Network } from '../../../types/network';
 import { DeviceType } from '../../../types/device_type';
 import { Card } from '../../../components';
-import { createReactIntlTextNode } from '../../../utils';
 import { generateColProps } from '../../../utils/grid';
 import * as WSN from '../../../features/wsn';
 import * as NetworkNS from '../../../features/network';
@@ -66,7 +65,7 @@ const useBasisFormEditProps = (device: Device, updateProps: UpdateProps): FormEd
       layout: 'vertical',
       initialValues: tranformDeviceDTO2Entity(device)
     },
-    groupCardProps: useGroupCardProps({ title: createReactIntlTextNode('BASIC_INFORMATION') }),
+    groupCardProps: useGroupCardProps({ title: intl.get('BASIC_INFORMATION') }),
     groupCardPropsExtra: {
       saveButton: {
         onClick: () => form.validateFields().then(updateProps.handleSubmit),
@@ -113,7 +112,7 @@ const useWSNFormEditProps = (network: Network, updateProps: UpdateProps): FormEd
       initialValues: NetworkNS.tranformNetwork2WSNUpdate(network)
     },
     groupCardProps: useGroupCardProps({
-      title: createReactIntlTextNode('wireless.network.settings')
+      title: intl.get('wireless.network.settings')
     }),
     groupCardPropsExtra: {
       saveButton: {

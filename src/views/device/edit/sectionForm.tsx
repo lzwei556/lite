@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form, Space, Tooltip } from 'antd';
 import { SelectOutlined } from '@ant-design/icons';
+import intl from 'react-intl-universal';
 import { Card, CardProps } from '../../../components';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
-import { createReactIntlTextNode } from '../../../utils';
 import { generateColProps } from '../../../utils/grid';
 import { Trigger } from '../settings-apply-same-types/trigger';
 import {
@@ -77,7 +77,7 @@ const useSettingsFormProps = (
   const singleGroupCardProps = useGroupCardProps({});
   const multipleGroupCardProps = useGroupCardProps({
     styles: { body: { paddingBlock: 0 } },
-    title: createReactIntlTextNode('DEVICE_SETTINGS')
+    title: intl.get('DEVICE_SETTINGS')
   });
   return {
     formProps: { form, layout: 'vertical', variant: onlySingleGroup ? undefined : 'filled' },
@@ -88,7 +88,7 @@ const useSettingsFormProps = (
         loading: updateProps.loading
       },
       selectButton: {
-        children: createReactIntlTextNode('apply.settings.to.the.same.types')
+        children: intl.get('apply.settings.to.the.same.types')
       }
     },
     innerGroupCardProps: {

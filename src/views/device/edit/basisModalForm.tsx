@@ -5,7 +5,6 @@ import { ModalFormProps } from '../../../types/common';
 import { Device } from '../../../types/device';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { generateColProps } from '../../../utils/grid';
-import { createReactIntlTextNode } from '../../../utils';
 import { tranformDeviceDTO2Entity } from '../settings-common';
 import * as Basis from '../basis-form-items';
 import { useUpdate } from './hooks';
@@ -42,8 +41,8 @@ const useModalProps = (
     ...rest,
     afterClose: () => form.resetFields(),
     okButtonProps: { loading },
-    okText: createReactIntlTextNode('SAVE'),
+    okText: intl.get('SAVE'),
     onOk: () => form.validateFields().then(handleSubmit),
-    title: createReactIntlTextNode('EDIT_SOMETHING', { something: intl.get('DEVICE') })
+    title: intl.get('EDIT_SOMETHING', { something: intl.get('DEVICE') })
   };
 };

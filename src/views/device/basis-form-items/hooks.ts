@@ -1,4 +1,5 @@
 import React from 'react';
+import intl from 'react-intl-universal';
 import { FormInstance, SelectProps } from 'antd';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
@@ -64,24 +65,24 @@ const useGroupedDeviceTypeOptions = () => {
   const deviceTypes: SelectProps['options'] = [];
   if (appType !== 'corrosionWirelessHART') {
     deviceTypes.push({
-      label: 'GATEWAY',
+      label: intl.get('GATEWAY'),
       options: DeviceType.getGateways().map((t) => ({
-        label: DeviceType.toString(t),
+        label: intl.get(DeviceType.toString(t)),
         value: t
       }))
     });
     deviceTypes.push({
-      label: 'RELAY',
+      label: intl.get('RELAY'),
       options: DeviceType.getRouters().map((t) => ({
-        label: DeviceType.toString(t),
+        label: intl.get(DeviceType.toString(t)),
         value: t
       }))
     });
   }
   deviceTypes.push({
-    label: 'SENSOR',
+    label: intl.get('SENSOR'),
     options: App.getDeviceTypes(appType).map((t) => ({
-      label: DeviceType.toString(t),
+      label: intl.get(DeviceType.toString(t)),
       value: t
     }))
   });

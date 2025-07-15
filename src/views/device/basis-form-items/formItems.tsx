@@ -50,17 +50,7 @@ export const FormItems = ({ formItemColProps }: Omit<FormItemsProps, 'settings'>
           name={'type'}
           rules={[{ required: true, message: intl.get('PLEASE_SELECT_DEVICE_TYPE') }]}
         >
-          <Select
-            {...{
-              ...deviceTypeSelectProps,
-              options: deviceTypeSelectProps.options?.map((opts) => ({
-                ...opts,
-                label: intl.get(opts.label as string),
-                options: opts.options.map((opts: any) => ({ ...opts, label: intl.get(opts.label) }))
-              }))
-            }}
-            placeholder={intl.get('PLEASE_SELECT_DEVICE_TYPE')}
-          />
+          <Select {...deviceTypeSelectProps} placeholder={intl.get('PLEASE_SELECT_DEVICE_TYPE')} />
         </Form.Item>
       </Col>
       {deviceType && (

@@ -8,11 +8,11 @@ import {
   ModalProps,
   ResultProps
 } from 'antd';
+import intl from 'react-intl-universal';
 import { CardProps } from '../../../components';
 import { ModalFormProps } from '../../../types/common';
 import { DeviceType } from '../../../types/device_type';
 import { generateColProps } from '../../../utils/grid';
-import { createReactIntlTextNode } from '../../../utils';
 import { CreateNetworkRequest } from '../../../apis/network';
 import { AddDeviceRequest } from '../../../apis/device';
 import { transformSettings, useGroupCardProps } from '../settings-common';
@@ -29,9 +29,9 @@ export const useAddFormProps = (): AddFormProps => {
   const [form] = Form.useForm();
   return {
     formProps: { form, layout: 'vertical' },
-    basisCardProps: useGroupCardProps({ title: createReactIntlTextNode('BASIC_INFORMATION') }),
+    basisCardProps: useGroupCardProps({ title: intl.get('BASIC_INFORMATION') }),
     wsnCardProps: useGroupCardProps({
-      title: createReactIntlTextNode('wireless.network.settings')
+      title: intl.get('wireless.network.settings')
     }),
     formItemColProps: generateColProps({ xl: 12, xxl: 12 })
   };
@@ -46,9 +46,9 @@ export const useModalProps = (
     ...rest,
     afterClose: () => form.resetFields(),
     footer: success ? null : undefined,
-    okText: createReactIntlTextNode('CREATE'),
+    okText: intl.get('CREATE'),
     onOk: () => form.validateFields().then(handleSubmit),
-    title: createReactIntlTextNode('CREATE_DEVICE'),
+    title: intl.get('CREATE_DEVICE'),
     width: 640
   };
 };
@@ -97,18 +97,18 @@ export const useCreate = (form: FormInstance, onSuccess: () => void): CreateProp
     successProps: {
       result: {
         status: 'success',
-        subTitle: createReactIntlTextNode('DEVICE_CREATED_NEXT_PROMPT'),
-        title: createReactIntlTextNode('CREATED_SUCCESSFUL')
+        subTitle: intl.get('DEVICE_CREATED_NEXT_PROMPT'),
+        title: intl.get('CREATED_SUCCESSFUL')
       },
       continueButtonProps: {
-        children: createReactIntlTextNode('CONTINUE_TO_CREATE_DEVICE'),
+        children: intl.get('CONTINUE_TO_CREATE_DEVICE'),
         type: 'primary',
         onClick: () => {
           form.resetFields();
           setSuccess(false);
         }
       },
-      closeButtonProps: { children: createReactIntlTextNode('close'), onClick: onSuccess }
+      closeButtonProps: { children: intl.get('close'), onClick: onSuccess }
     },
     handleSubmit
   };

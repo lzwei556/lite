@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormItemProps } from 'antd';
 import intl from 'react-intl-universal';
-import { createReactIntlTextNode, pickOptionsFromNumericEnum } from '../../utils';
+import { pickOptionsFromNumericEnum } from '../../utils';
 import { millisecond } from '../../constants';
 import { Rules } from '../../constants/validator';
 
@@ -175,16 +175,8 @@ export const useProvisioningMode = (modeFromProps?: ProvisioningMode) => {
 };
 
 export const useProvisioningModeField = (onChange: (mode: ProvisioningMode) => void) => {
-  const label = {
-    get name() {
-      return intl.get('provisioning.mode');
-    },
-    get description() {
-      return intl.get('provisioning.mode.desc');
-    }
-  };
   return {
-    label,
+    label: { name: intl.get('provisioning.mode'), description: intl.get('provisioning.mode.desc') },
     formItemProps: { name: 'mode', rules: [Rules.required] } as FormItemProps,
     controlProps: {
       onChange,
@@ -206,19 +198,15 @@ export const useCommunicationPeriod = (
       rules: [Rules.required]
     } as FormItemProps,
     contorlProps: {
-      options: options?.map((opts) => ({ ...opts, label: createReactIntlTextNode(opts.label) }))
+      options: options?.map((opts) => ({ ...opts, label: intl.get(opts.label) }))
     }
   };
 };
 
 export const useCommunicationOffset = (communicationPeriodName: string[]) => {
   const label = {
-    get name() {
-      return intl.get('communication.offset');
-    },
-    get description() {
-      return intl.get('communication.offset.desc');
-    }
+    name: intl.get('communication.offset'),
+    description: intl.get('communication.offset.desc')
   };
   return {
     label,
@@ -227,14 +215,14 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
       rules: [
         {
           required: true,
-          message: createReactIntlTextNode('PLEASE_ENTER_SOMETHING', {
+          message: intl.get('PLEASE_ENTER_SOMETHING', {
             something: label.name
           })
         },
         {
           type: 'integer',
           min: 0,
-          message: createReactIntlTextNode('UNSIGNED_INTEGER_ENTER_PROMPT')
+          message: intl.get('UNSIGNED_INTEGER_ENTER_PROMPT')
         },
         ({ getFieldValue }: any) => ({
           validator(_, value: number) {
@@ -242,7 +230,7 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
             if (!value || Number(wsn.communication_period) >= value) {
               return Promise.resolve();
             }
-            return Promise.reject(createReactIntlTextNode('COMMUNICATION_OFFSET_PROMPT'));
+            return Promise.reject(intl.get('COMMUNICATION_OFFSET_PROMPT'));
           }
         })
       ],
@@ -250,7 +238,7 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
     } as FormItemProps,
     contorlProps: {
       controls: false,
-      addonAfter: createReactIntlTextNode('UNIT_MILLISECOND'),
+      addonAfter: intl.get('UNIT_MILLISECOND'),
       style: { width: '100%' }
     }
   };
@@ -258,12 +246,8 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
 
 export const useIntervalCnt = () => {
   const label = {
-    get name() {
-      return intl.get('interval.cnt');
-    },
-    get description() {
-      return intl.get('interval.cnt.desc');
-    }
+    name: intl.get('interval.cnt'),
+    description: intl.get('interval.cnt.desc')
   };
   return {
     label,
@@ -272,7 +256,7 @@ export const useIntervalCnt = () => {
       rules: [
         {
           required: true,
-          message: createReactIntlTextNode('PLEASE_ENTER_SOMETHING', {
+          message: intl.get('PLEASE_ENTER_SOMETHING', {
             something: label.name
           })
         }
@@ -284,12 +268,8 @@ export const useIntervalCnt = () => {
 
 export const useGroupSize = () => {
   const label = {
-    get name() {
-      return intl.get('group.size');
-    },
-    get description() {
-      return intl.get('group.size.desc');
-    }
+    name: intl.get('group.size'),
+    description: intl.get('group.size.desc')
   };
   return {
     label,
@@ -298,7 +278,7 @@ export const useGroupSize = () => {
       rules: [
         {
           required: true,
-          message: createReactIntlTextNode('PLEASE_ENTER_SOMETHING', {
+          message: intl.get('PLEASE_ENTER_SOMETHING', {
             something: label.name
           })
         }
@@ -312,12 +292,8 @@ export const useGroupSize = () => {
 
 export const useGroupSize2 = () => {
   const label = {
-    get name() {
-      return intl.get('group.size2');
-    },
-    get description() {
-      return intl.get('group.size2.desc');
-    }
+    name: intl.get('group.size2'),
+    description: intl.get('group.size2.desc')
   };
   return {
     label,
@@ -326,7 +302,7 @@ export const useGroupSize2 = () => {
       rules: [
         {
           required: true,
-          message: createReactIntlTextNode('PLEASE_ENTER_SOMETHING', {
+          message: intl.get('PLEASE_ENTER_SOMETHING', {
             something: label.name
           })
         }
