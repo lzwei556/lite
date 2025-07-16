@@ -48,7 +48,10 @@ export const RangeDatePicker = ({
       }}
       onChange={(date) => {
         if (date) {
-          handleChange(date as Dayjs.RangeValue);
+          const [start, end] = date;
+          if (start && end) {
+            handleChange([start.startOf('day'), end.endOf('day')]);
+          }
         }
       }}
       disabledDate={(current) => current && current > Dayjs.dayjs().endOf('day')}
