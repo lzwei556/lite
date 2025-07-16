@@ -35,7 +35,7 @@ export const Point = {
       return (
         type === MonitoringPointTypeValue.Corrosion ||
         type === MonitoringPointTypeValue.HighTemperatureCorrosion ||
-        type === MonitoringPointTypeValue.LowTemperatureCorrosion
+        type === MonitoringPointTypeValue.UltraHighTemperatureCorrosion
       );
     }
   },

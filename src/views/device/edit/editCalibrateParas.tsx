@@ -28,13 +28,7 @@ const EditCalibrateParas = ({
   typeParaMapping.set(DeviceType.SAS120Q, 'preload');
   typeParaMapping.set(DeviceType.DS4, 'preload');
   typeParaMapping.set(DeviceType.DS8, 'preload');
-  typeParaMapping.set(DeviceType.DC110, 'thickness');
-  typeParaMapping.set(DeviceType.DC110C, 'thickness');
-  typeParaMapping.set(DeviceType.DC210, 'thickness');
-  typeParaMapping.set(DeviceType.DC210C, 'thickness');
-  typeParaMapping.set(DeviceType.DC110H, 'thickness');
-  typeParaMapping.set(DeviceType.DC110HC, 'thickness');
-  typeParaMapping.set(DeviceType.DC110L, 'thickness');
+  DeviceType.getDCSensors().forEach((dcType) => typeParaMapping.set(dcType, 'thickness'));
   typeParaMapping.set(DeviceType.PressureGuoDa, 'pressure');
   typeParaMapping.set(DeviceType.PressureWoErKe, 'pressure');
   typeParaMapping.set(DeviceType.SPT510, 'pressure');

@@ -152,6 +152,22 @@ export namespace DeviceType {
     return [DeviceType.Router];
   }
 
+  export function getNormalDCSensors() {
+    return [DeviceType.DC110, DeviceType.DC110C, DeviceType.DC110L];
+  }
+
+  export function getHighDCSensors() {
+    return [DeviceType.DC110H, DeviceType.DC110HC];
+  }
+
+  export function getUltraHighDCSensors() {
+    return [DeviceType.DC210, DeviceType.DC210C];
+  }
+
+  export function getDCSensors() {
+    return getNormalDCSensors().concat(getHighDCSensors()).concat(getUltraHighDCSensors());
+  }
+
   export function sensors() {
     return [
       DeviceType.SA,
@@ -161,13 +177,7 @@ export namespace DeviceType {
       DeviceType.DS8,
       DeviceType.SAS120D,
       DeviceType.SAS120Q,
-      DeviceType.DC110,
-      DeviceType.DC110C,
-      DeviceType.DC210,
-      DeviceType.DC210C,
-      DeviceType.DC110H,
-      DeviceType.DC110HC,
-      DeviceType.DC110L,
+      ...getDCSensors(),
       DeviceType.SVT220520P,
       DeviceType.SVT520C,
       DeviceType.SVT210510P,
@@ -259,13 +269,7 @@ export namespace DeviceType {
       type === DeviceType.SAS ||
       DeviceType.isSASMultiChannel(type) ||
       DeviceType.isMultiChannel(type) ||
-      type === DeviceType.DC110 ||
-      type === DeviceType.DC110C ||
-      type === DeviceType.DC210 ||
-      type === DeviceType.DC210C ||
-      type === DeviceType.DC110H ||
-      type === DeviceType.DC110HC ||
-      type === DeviceType.DC110L ||
+      getDCSensors().includes(type) ||
       type === DeviceType.PressureGuoDa ||
       type === DeviceType.PressureWoErKe ||
       type === DeviceType.SPT510 ||
@@ -327,11 +331,11 @@ export const SENSOR_DISPLAY_PROPERTIES = {
   [DeviceType.DS8]: PROPERTY_CATEGORIES.DS,
   [DeviceType.DC110]: PROPERTY_CATEGORIES.DC_NORMAL,
   [DeviceType.DC110C]: PROPERTY_CATEGORIES.DC_NORMAL,
-  [DeviceType.DC210]: PROPERTY_CATEGORIES.DC_HIGH,
-  [DeviceType.DC210C]: PROPERTY_CATEGORIES.DC_HIGH,
+  [DeviceType.DC110L]: PROPERTY_CATEGORIES.DC_NORMAL,
   [DeviceType.DC110H]: PROPERTY_CATEGORIES.DC_HIGH,
   [DeviceType.DC110HC]: PROPERTY_CATEGORIES.DC_HIGH,
-  [DeviceType.DC110L]: PROPERTY_CATEGORIES.DC_NORMAL,
+  [DeviceType.DC210]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
+  [DeviceType.DC210C]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
   [DeviceType.SVT220520P]: PROPERTY_CATEGORIES.SVT220520P,
   [DeviceType.SVT520C]: PROPERTY_CATEGORIES.SVT220520P,
   [DeviceType.SVT210510P]: PROPERTY_CATEGORIES.SVT210510P,

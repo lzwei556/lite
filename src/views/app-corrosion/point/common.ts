@@ -19,21 +19,15 @@ export const monitoringPointTypes = [
     label: MonitoringPointTypeText.HighTemperatureCorrosion
   },
   {
-    id: MonitoringPointTypeValue.LowTemperatureCorrosion,
-    label: MonitoringPointTypeText.LowTemperatureCorrosion
+    id: MonitoringPointTypeValue.UltraHighTemperatureCorrosion,
+    label: MonitoringPointTypeText.UltraHighTemperatureCorrosion
   }
 ];
 
 export const relatedDeviceTypes = new Map([
-  [MonitoringPointTypeValue.Corrosion, [DeviceType.DC110, DeviceType.DC110C, DeviceType.DC110L]],
-  [
-    MonitoringPointTypeValue.HighTemperatureCorrosion,
-    [DeviceType.DC210, DeviceType.DC210C, DeviceType.DC110H, DeviceType.DC110HC]
-  ],
-  [
-    MonitoringPointTypeValue.LowTemperatureCorrosion,
-    [DeviceType.DC210, DeviceType.DC210C, DeviceType.DC110H, DeviceType.DC110HC]
-  ]
+  [MonitoringPointTypeValue.Corrosion, DeviceType.getDCSensors()],
+  [MonitoringPointTypeValue.HighTemperatureCorrosion, DeviceType.getHighDCSensors()],
+  [MonitoringPointTypeValue.UltraHighTemperatureCorrosion, DeviceType.getUltraHighDCSensors()]
 ]);
 
 export function useSelectPoints(form: FormInstance<MonitoringPointBatch>) {

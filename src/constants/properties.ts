@@ -36,6 +36,7 @@ export type DisplayPropertyCategories = {
     | 'DS'
     | 'DC_NORMAL'
     | 'DC_HIGH'
+    | 'DC_Ultra_HIGH'
     | 'SVT220520P'
     | 'SVT210510P'
     | 'SVT210K'
@@ -445,6 +446,20 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
     SIGNAL_QUALITY
   ],
   DC_HIGH: [
+    THICKNESS,
+    {
+      ...DC_TEMPERATURE,
+      name: 'FIELD_ENVIRONMENT_TEMPERATURE',
+      defaultFirstFieldKey: 'temperature',
+      onlyShowFirstField: true
+    },
+    TOF,
+    CORROSION_RATE,
+    CORROSION_LOSS,
+    SIGNAL_STRENGTH,
+    SIGNAL_QUALITY
+  ],
+  DC_Ultra_HIGH: [
     THICKNESS,
     DC_TEMPERATURE,
     TOF,

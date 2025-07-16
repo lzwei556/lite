@@ -15,8 +15,8 @@ export const MONITORING_POINTS = [
     label: MonitoringPointTypeText.HighTemperatureCorrosion
   },
   {
-    id: MonitoringPointTypeValue.LowTemperatureCorrosion,
-    label: MonitoringPointTypeText.LowTemperatureCorrosion
+    id: MonitoringPointTypeValue.UltraHighTemperatureCorrosion,
+    label: MonitoringPointTypeText.UltraHighTemperatureCorrosion
   },
   { id: MonitoringPointTypeValue.BoltPreload, label: MonitoringPointTypeText.BoltPreload },
   {

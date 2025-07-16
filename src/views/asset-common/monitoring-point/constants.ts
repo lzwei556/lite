@@ -4,8 +4,8 @@ import { PROPERTY_CATEGORIES } from '../../../constants/properties';
 export const MONITORING_POINT_DISPLAY_PROPERTIES = {
   [MonitoringPointTypeValue.BoltLoosening]: PROPERTY_CATEGORIES.SA,
   [MonitoringPointTypeValue.Corrosion]: PROPERTY_CATEGORIES.DC_NORMAL,
-  [MonitoringPointTypeValue.HighTemperatureCorrosion]: PROPERTY_CATEGORIES.DC_NORMAL,
-  [MonitoringPointTypeValue.LowTemperatureCorrosion]: PROPERTY_CATEGORIES.DC_NORMAL,
+  [MonitoringPointTypeValue.HighTemperatureCorrosion]: PROPERTY_CATEGORIES.DC_HIGH,
+  [MonitoringPointTypeValue.UltraHighTemperatureCorrosion]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
   [MonitoringPointTypeValue.BoltPreload]: PROPERTY_CATEGORIES.SAS,
   [MonitoringPointTypeValue.AnchorPreload]: PROPERTY_CATEGORIES.SAS,
   [MonitoringPointTypeValue.FlangeBoltPreload]: PROPERTY_CATEGORIES.SAS,

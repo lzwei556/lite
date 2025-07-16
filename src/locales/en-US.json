@@ -1243,7 +1243,7 @@
   "monitoring.point.type.bolt.loosening": "Bolt Loosening",
   "monitoring.point.type.corrosion": "Corrosion",
   "monitoring.point.type.high.temperature.corrosion": "High Temperature Corrosion",
-  "monitoring.point.type.low.temperature.corrosion": "Low Temperature Corrosion",
+  "monitoring.point.type.ultra.high.temperature.corrosion": "Ultra High Temperature Corrosion",
   "monitoring.point.type.bolt.preload": "Bolt Preload",
   "monitoring.point.type.anchor.preload": "Anchor Preload",
   "monitoring.point.type.flange.bolt.preload": "Flange Bolt Preload",
