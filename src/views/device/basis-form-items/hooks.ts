@@ -1,61 +1,62 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { FormInstance, SelectProps } from 'antd';
+import { SelectProps } from 'antd';
+import { useFormItemBindingsProps } from '../../../hooks';
+import { Normalizes } from '../../../constants/validator';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
-import { ProvisioningMode } from '../../../features/wsn';
-import { DEFAULT_WSN_SETTING } from '../../../types/wsn_setting';
+import * as WSN from '../../../features/wsn';
 import { App, useAppType } from '../../../config';
-import { GetDefaultDeviceSettingsRequest, GetDeviceSettingRequest } from '../../../apis/device';
 import { GetNetworksRequest } from '../../../apis/network';
-import { DeviceSetting } from '../settings-common';
+import * as Basis from '../basis-form-items';
+import { FormCommonProps, FormItemsProps } from '../settings-common';
 
-export function useContextProps(props: { device?: Device; form?: FormInstance }) {
-  const {
-    deviceType,
-    settings,
-    selectProps: deviceTypeSelectProps
-  } = useDeviceTypeSelectProps(props);
-  const { networkId, selectProps: parentSelectProps } = useParentSelectProps(props);
+export type CommonProps = Pick<FormCommonProps, 'form'>;
+
+export const useProps = (form: CommonProps['form']) => {
+  const deviceName = useFormItemBindingsProps({
+    label: 'DEVICE_NAME',
+    name: 'name',
+    rules: [{ required: true }, { min: 4, max: 20 }]
+  });
+  const mac = useFormItemBindingsProps({
+    label: 'MAC_ADDRESS',
+    name: 'mac_address',
+    normalize: Normalizes.macAddress,
+    rules: [
+      { required: true },
+      {
+        pattern: /^([0-9a-fA-F]{2})(([0-9a-fA-F]{2}){5})$/,
+        message: intl.get('MAC_ADDRESS_IS_INVALID')
+      }
+    ]
+  });
+  const deviceType = useFormItemBindingsProps({
+    label: 'DEVICE_TYPE',
+    name: 'type',
+    rules: [{ required: true }]
+  });
+
   return {
-    deviceType,
-    settings,
-    deviceTypeSelectProps,
-    networkId,
-    parentSelectProps
+    deviceName,
+    mac,
+    deviceTypeProps: { ...deviceType, selectProps: useDeviceTypeSelectProps(form) }
   };
-}
+};
 
-const useDeviceTypeSelectProps = ({ form, device }: { form?: FormInstance; device?: Device }) => {
-  const [deviceType, setDeviceType] = React.useState<DeviceType | undefined>(device?.typeId);
-  const [settings, setSettings] = React.useState<DeviceSetting[]>([]);
-
-  React.useEffect(() => {
-    if (deviceType) {
-      if (device?.id) {
-        GetDeviceSettingRequest(device.id).then(setSettings);
-      } else {
-        GetDefaultDeviceSettingsRequest(deviceType).then(setSettings);
-      }
-    }
-    return () => setSettings([]);
-  }, [deviceType, device?.id]);
-
+const useDeviceTypeSelectProps = (form: CommonProps['form']) => {
+  const { setDeviceType, settings, device } = Basis.useContext();
   return {
-    deviceType,
-    settings,
-    selectProps: {
-      disabled: !!device,
-      options: useGroupedDeviceTypeOptions(),
-      onChange: (deviceType: number) => {
-        setDeviceType(deviceType);
-        setSettingsInitialValues(settings, form);
-        form?.setFieldsValue?.({
-          mode: ProvisioningMode.TimeDivision,
-          wsn: DEFAULT_WSN_SETTING,
-          protocol: 3
-        });
-      }
+    disabled: !!device,
+    options: useGroupedDeviceTypeOptions(),
+    onChange: (deviceType: number) => {
+      setDeviceType(deviceType);
+      setSettingsInitialValues(settings, form);
+      form?.setFieldsValue?.({
+        mode: WSN.ProvisioningMode.TimeDivision,
+        wsn: WSN.getInitialSettings(),
+        protocol: 3
+      });
     }
   };
 };
@@ -89,7 +90,10 @@ const useGroupedDeviceTypeOptions = () => {
   return deviceTypes;
 };
 
-const setSettingsInitialValues = (settings: DeviceSetting[], form?: FormInstance) => {
+const setSettingsInitialValues = (
+  settings: FormItemsProps['settings'],
+  form: CommonProps['form']
+) => {
   if (settings && settings.length > 0) {
     settings.forEach((s) => {
       form?.setFieldValue?.([s.category, s.key], s.key === 'sensor_flags' ? [s.value] : s.value);
@@ -97,22 +101,45 @@ const setSettingsInitialValues = (settings: DeviceSetting[], form?: FormInstance
   }
 };
 
-const useParentSelectProps = ({ form, device }: { form?: FormInstance; device?: Device }) => {
+export const useProtocolProps = () => {
+  return {
+    ...useFormItemBindingsProps({
+      label: 'wan.interface.protocol',
+      name: 'protocol'
+    }),
+    selectProps: {
+      options: [
+        { label: intl.get('wan.interface.protocol.protobuf'), value: 2 },
+        { label: intl.get('wan.interface.protocol.tlv'), value: 3 }
+      ]
+    }
+  };
+};
+
+export const useParentProps = (form: CommonProps['form']) => {
+  const parent = useFormItemBindingsProps({ label: 'PARENT', name: 'parent' });
   const [networkId, setNetworkId] = React.useState<number | undefined>();
   return {
     networkId,
-    selectProps: {
-      device,
-      dispalyField: device ? 'macAddress' : ('id' as keyof Pick<Device, 'id' | 'macAddress'>),
-      onChange: (_: string, option: any) => {
-        GetNetworksRequest().then((networks) => {
-          const network = networks.find((network) => network.gateway.id === option.gatewayId);
-          if (network) {
-            setNetworkId(network.id);
-            form?.setFieldValue('network', network.id);
-          }
-        });
-      }
+    parent,
+    selectProps: useParentSelectProps(form, setNetworkId),
+    network: useFormItemBindingsProps({ name: 'network', hidden: true })
+  };
+};
+
+const useParentSelectProps = (form: CommonProps['form'], setNetworkId?: (id: number) => void) => {
+  const { device } = Basis.useContext();
+  return {
+    device,
+    dispalyField: device ? 'macAddress' : ('id' as keyof Pick<Device, 'id' | 'macAddress'>),
+    onChange: (_: string, option: any) => {
+      GetNetworksRequest().then((networks) => {
+        const network = networks.find((network) => network.gateway.id === option.gatewayId);
+        if (network) {
+          setNetworkId?.(network.id);
+          form?.setFieldValue('network', network.id);
+        }
+      });
     }
   };
 };

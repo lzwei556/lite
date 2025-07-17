@@ -5,12 +5,11 @@ import { ImportOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ImportNetworkRequest } from '../../../apis/network';
 import { DeviceType } from '../../../types/device_type';
+import { generateColProps } from '../../../utils/grid';
 import { Card, Flex, Grid, JsonImporter, Link } from '../../../components';
 import * as WSN from '../../../features/wsn';
 import { useContext, VIRTUAL_ROOT_DEVICE } from '../../device';
 import { Preview } from '../topology/preview';
-import { generateColProps } from '../../../utils/grid';
-import { DEFAULT_WSN_SETTING } from '../../../types/wsn_setting';
 
 export type ImportedJSONDevice = {
   id: number;
@@ -28,7 +27,10 @@ type ValidJson = {
 };
 
 const ImportNetworkPage = () => {
-  const initialNetwork = { deviceList: [], wsn: { provisioning_mode: 2, ...DEFAULT_WSN_SETTING } };
+  const initialNetwork = {
+    deviceList: [],
+    wsn: { provisioning_mode: WSN.ProvisioningMode.TimeDivision, ...WSN.getInitialSettings() }
+  };
   const [network, setNetwork] = useState<ValidJson>(initialNetwork);
   const { deviceList, wsn } = network;
   const [success, setSuccess] = useState(false);

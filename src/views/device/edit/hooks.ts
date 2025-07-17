@@ -1,21 +1,10 @@
 import React from 'react';
-import { ButtonProps, ColProps, FormProps } from 'antd';
-import { CardProps } from '../../../components';
 import { UpdateDeviceRequest, UpdateDeviceSettingRequest } from '../../../apis/device';
 import { UpdateNetworkRequest } from '../../../apis/network';
 import { Network } from '../../../types/network';
 import { transformSettings } from '../settings-common';
 
-export type UpdateProps = { loading: boolean; handleSubmit: (values: any) => void };
-export type FormEditProps = {
-  formProps: FormProps;
-  groupCardProps: CardProps;
-  groupCardPropsExtra: { saveButton: ButtonProps; selectButton?: ButtonProps };
-  innerGroupCardProps?: CardProps;
-  formItemColProps: ColProps;
-};
-
-export const useUpdate = (id: number, onUpdate?: () => void): UpdateProps => {
+export const useUpdate = (id: number, onUpdate?: () => void) => {
   const [loading, setLoading] = React.useState(false);
 
   const handleSubmit = (values: any) => {

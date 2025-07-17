@@ -1,125 +1,100 @@
 import React from 'react';
 import { Form } from 'antd';
 import intl from 'react-intl-universal';
-import { Device } from '../../../types/device';
-import { Network } from '../../../types/network';
 import { DeviceType } from '../../../types/device_type';
 import { Card } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import * as WSN from '../../../features/wsn';
 import * as NetworkNS from '../../../features/network';
+import { useFormBindingsProps } from '../../../hooks';
 import * as Basis from '../basis-form-items';
-import { isBLEGateway, tranformDeviceDTO2Entity, useGroupCardProps } from '../settings-common';
+import {
+  FormCommonProps,
+  isBLEGateway,
+  tranformDeviceDTO2Entity,
+  useGroupCardProps
+} from '../settings-common';
 import { DevicesTable } from './devicesTable';
 import { SettingsSectionForm } from './sectionForm';
-import { SaveIconButton } from './saveIconButton';
-import { FormEditProps, UpdateProps, useUpdate, useUpdateNetwork } from './hooks';
+import { Toolbar } from './toolbar';
+import { useUpdate, useUpdateNetwork } from './hooks';
 
-export const Index = ({
-  device,
-  network,
-  onUpdate
-}: {
-  device: Device;
-  onUpdate: () => void;
-  network?: Network;
-}) => {
-  const [form] = Form.useForm();
+type Props = FormCommonProps & { onUpdate: () => void };
+
+export const Index = ({ network, ...rest }: Props) => {
+  const { device } = rest;
   return (
-    <Basis.ContextProvier device={device} form={form}>
-      <BasisEditForm device={device} onUpdate={onUpdate} />
+    <Basis.ContextProvier device={device}>
+      <BasisEditForm {...rest} />
       <SettingsSectionForm device={device} />
       {isBLEGateway(device.typeId) && network && <WSNEditForm network={network} />}
       {DeviceType.isGateway(device.typeId) && (
         <Card size='small' title={intl.get('MENU_DEVICE_LSIT')}>
-          <DevicesTable device={device} onUpdate={onUpdate} />
+          <DevicesTable {...rest} />
         </Card>
       )}
     </Basis.ContextProvier>
   );
 };
 
-const BasisEditForm = ({ device, onUpdate }: { device: Device; onUpdate?: () => void }) => {
-  const updateProps = useUpdate(device.id, onUpdate);
-  const { formProps, groupCardProps, groupCardPropsExtra, formItemColProps } =
-    useBasisFormEditProps(device, updateProps);
+const BasisEditForm = (props: Props) => {
+  const { formProps, groupCardProps, formItemsProps } = useBasisFormEditProps(props);
   return (
     <Form {...formProps}>
-      <Card
-        {...{
-          ...groupCardProps,
-          extra: <SaveIconButton {...groupCardPropsExtra.saveButton} />
-        }}
-      >
-        <Basis.FormItems formItemColProps={formItemColProps} />
+      <Card {...groupCardProps}>
+        <Basis.FormItems {...formItemsProps} />
       </Card>
     </Form>
   );
 };
 
-const useBasisFormEditProps = (device: Device, updateProps: UpdateProps): FormEditProps => {
-  const [form] = Form.useForm();
+const useBasisFormEditProps = ({ device, onUpdate }: Props) => {
+  const formProps = useFormBindingsProps({
+    layout: 'vertical',
+    initialValues: tranformDeviceDTO2Entity(device)
+  });
+  const { form } = formProps;
   return {
-    formProps: {
-      form,
-      layout: 'vertical',
-      initialValues: tranformDeviceDTO2Entity(device)
-    },
-    groupCardProps: useGroupCardProps({ title: intl.get('BASIC_INFORMATION') }),
-    groupCardPropsExtra: {
-      saveButton: {
-        onClick: () => form.validateFields().then(updateProps.handleSubmit),
-        loading: updateProps.loading
-      }
-    },
-    formItemColProps: generateColProps({ xl: 12, xxl: 8 })
+    formProps,
+    groupCardProps: useGroupCardProps({
+      extra: <Toolbar {...{ device, form, ...useUpdate(device.id, onUpdate) }} />,
+      title: intl.get('BASIC_INFORMATION')
+    }),
+    formItemsProps: { form, formItemColProps: generateColProps({ xl: 12, xxl: 8 }) }
   };
 };
 
-const WSNEditForm = ({ network }: { network: Network }) => {
-  const updateProps = useUpdateNetwork(network);
-  const { formProps, groupCardProps, groupCardPropsExtra, formItemColProps } = useWSNFormEditProps(
-    network,
-    updateProps
-  );
+const WSNEditForm = ({ network }: Pick<Props, 'network'>) => {
+  const { formProps, groupCardProps, formItemsProps } = useWSNFormEditProps(network!);
   return (
     <Form {...formProps}>
-      <Card
-        {...{
-          ...groupCardProps,
-          extra: <SaveIconButton {...groupCardPropsExtra.saveButton} />
-        }}
-      >
-        <WSN.FormItems
-          formItemColProps={formItemColProps}
-          initial={{
-            ...NetworkNS.tranformNetwork2WSNUpdate(network).wsn,
-            provisioning_mode: network.mode
-          }}
-          setFieldsValue={formProps.form?.setFieldsValue}
-        />
+      <Card {...groupCardProps}>
+        <WSN.FormItems {...formItemsProps} />
       </Card>
     </Form>
   );
 };
 
-const useWSNFormEditProps = (network: Network, updateProps: UpdateProps): FormEditProps => {
-  const [form] = Form.useForm();
+const useWSNFormEditProps = (network: NonNullable<Props['network']>) => {
+  const formProps = useFormBindingsProps({
+    layout: 'vertical',
+    initialValues: NetworkNS.tranformNetwork2WSNUpdate(network)
+  });
+  const { form } = formProps;
   return {
-    formProps: {
-      form,
-      layout: 'vertical',
-      initialValues: NetworkNS.tranformNetwork2WSNUpdate(network)
-    },
+    formProps,
     groupCardProps: useGroupCardProps({
+      extra: <Toolbar {...{ form, ...useUpdateNetwork(network) }} />,
       title: intl.get('wireless.network.settings')
     }),
-    groupCardPropsExtra: {
-      saveButton: {
-        onClick: () => form.validateFields().then(updateProps.handleSubmit),
-        loading: updateProps.loading
-      }
-    },
-    formItemColProps: generateColProps({ xl: 12, xxl: 8 })
+    formItemsProps: {
+      form,
+      formItemColProps: generateColProps({ xl: 12, xxl: 8 }),
+      initial: {
+        ...NetworkNS.tranformNetwork2WSNUpdate(network).wsn,
+        provisioning_mode: network.mode
+      },
+      setFieldsValue: form.setFieldsValue
+    }
   };
 };

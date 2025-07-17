@@ -1,48 +1,57 @@
 import React from 'react';
-import { Form, FormInstance, FormProps, ModalProps } from 'antd';
+import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
-import { Device } from '../../../types/device';
 import { ModalWrapper } from '../../../components/modalWrapper';
+import { useFormBindingsProps, useModalBindingsProps } from '../../../hooks';
 import { generateColProps } from '../../../utils/grid';
-import { tranformDeviceDTO2Entity } from '../settings-common';
+import {
+  FormCommonProps,
+  FormSubmitButtonProps,
+  tranformDeviceDTO2Entity
+} from '../settings-common';
 import * as Basis from '../basis-form-items';
 import { useUpdate } from './hooks';
 
-export const BasisModalForm = (props: ModalFormProps & { device: Device }) => {
-  const { device, onSuccess } = props;
-  const formProps = useFormProps(device);
-  const updateProps = useUpdate(device.id, onSuccess);
-  const modalProps = useModalProps({ ...props, ...updateProps, form: formProps.form! });
+type Props = ModalFormProps & Pick<FormCommonProps, 'device'>;
+
+export const BasisModalForm = (props: Props) => {
+  const { modalProps, formProps, basisFormItemsProps } = useProps(props);
 
   return (
-    <ModalWrapper {...modalProps}>
-      <Basis.ContextProvier form={formProps.form} device={device}>
+    <Basis.ContextProvier device={props.device}>
+      <ModalWrapper {...modalProps}>
         <Form {...formProps}>
-          <Basis.FormItems formItemColProps={generateColProps({})} />
+          <Basis.FormItems {...basisFormItemsProps} />
         </Form>
-      </Basis.ContextProvier>
-    </ModalWrapper>
+      </ModalWrapper>
+    </Basis.ContextProvier>
   );
 };
 
-const useFormProps = (device: Device) => {
-  const [form] = Form.useForm();
-  return { form, layout: 'vertical', initialValues: tranformDeviceDTO2Entity(device) } as FormProps;
+const useProps = (props: Props) => {
+  const { device, onSuccess } = props;
+  const formProps = useFormBindingsProps({
+    layout: 'vertical',
+    initialValues: tranformDeviceDTO2Entity(device)
+  });
+  const { form } = formProps;
+  const modalProps = useModalProps({ ...props, ...useUpdate(device.id, onSuccess), form });
+  return {
+    formProps,
+    modalProps,
+    basisFormItemsProps: { form, formItemColProps: generateColProps({}) }
+  };
 };
 
-const useModalProps = (
-  props: ModalFormProps & { form: FormInstance } & { handleSubmit: (values: any) => void } & {
-    loading: boolean;
-  }
-): ModalProps => {
+const useModalProps = (props: ModalFormProps & FormSubmitButtonProps) => {
   const { form, loading, handleSubmit, ...rest } = props;
-  return {
+  return useModalBindingsProps({
     ...rest,
-    afterClose: () => form.resetFields(),
+    afterClose: () => form?.resetFields(),
     okButtonProps: { loading },
     okText: intl.get('SAVE'),
-    onOk: () => form.validateFields().then(handleSubmit),
+    onOk: () => form?.validateFields().then(handleSubmit),
     title: intl.get('EDIT_SOMETHING', { something: intl.get('DEVICE') })
-  };
+  });
 };

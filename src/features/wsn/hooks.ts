@@ -147,8 +147,8 @@ export enum ProvisioningMode {
   UnManagedBroadcast
 }
 
-export const getInitialSettings = (mode: ProvisioningMode, initial?: WSN) => {
-  if (initial) {
+export const getInitialSettings = (mode?: ProvisioningMode, initial?: WSN) => {
+  if (initial && mode) {
     const { communication_period, ...rest } = initial;
     const isPeriodValid = ValidPeriod(communication_period, mode);
     return {

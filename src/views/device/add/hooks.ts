@@ -1,55 +1,27 @@
 import React from 'react';
-import {
-  ButtonProps,
-  ColProps,
-  Form,
-  FormInstance,
-  FormProps,
-  ModalProps,
-  ResultProps
-} from 'antd';
+import { ButtonProps, ResultProps } from 'antd';
 import intl from 'react-intl-universal';
-import { CardProps } from '../../../components';
+import { useFormBindingsProps, useModalBindingsProps } from '../../../hooks';
 import { ModalFormProps } from '../../../types/common';
 import { DeviceType } from '../../../types/device_type';
 import { generateColProps } from '../../../utils/grid';
 import { CreateNetworkRequest } from '../../../apis/network';
 import { AddDeviceRequest } from '../../../apis/device';
-import { transformSettings, useGroupCardProps } from '../settings-common';
+import { FormCommonProps, transformSettings, useGroupCardProps } from '../settings-common';
+import * as Basis from '../basis-form-items';
 import { useContext } from '..';
 
-export type AddFormProps = {
-  formProps: FormProps;
-  basisCardProps: CardProps;
-  wsnCardProps: CardProps;
-  formItemColProps: ColProps;
-};
-
-export const useAddFormProps = (): AddFormProps => {
-  const [form] = Form.useForm();
+export const useProps = (props: ModalFormProps) => {
+  const formProps = useFormBindingsProps({ layout: 'vertical' });
+  const { form } = formProps;
+  const { success, ...createProps } = useCreate(form, props.onSuccess);
+  const modalProps = useModalProps({ ...props, form, success, ...createProps });
   return {
-    formProps: { form, layout: 'vertical' },
-    basisCardProps: useGroupCardProps({ title: intl.get('BASIC_INFORMATION') }),
-    wsnCardProps: useGroupCardProps({
-      title: intl.get('wireless.network.settings')
-    }),
-    formItemColProps: generateColProps({ xl: 12, xxl: 12 })
-  };
-};
-
-export const useModalProps = (
-  props: ModalFormProps & { form: FormInstance } & Pick<CreateProps, 'success' | 'handleSubmit'>
-): ModalProps => {
-  const { form, success, handleSubmit, ...rest } = props;
-
-  return {
-    ...rest,
-    afterClose: () => form.resetFields(),
-    footer: success ? null : undefined,
-    okText: intl.get('CREATE'),
-    onOk: () => form.validateFields().then(handleSubmit),
-    title: intl.get('CREATE_DEVICE'),
-    width: 640
+    formProps,
+    modalProps,
+    success,
+    ...createProps.successProps,
+    ...useFormSectionProps(form)
   };
 };
 
@@ -64,7 +36,7 @@ type CreateProps = {
   handleSubmit: (values: any) => void;
 };
 
-export const useCreate = (form: FormInstance, onSuccess: () => void): CreateProps => {
+const useCreate = (form: FormCommonProps['form'], onSuccess: () => void): CreateProps => {
   const [success, setSuccess] = React.useState(false);
   const { refresh } = useContext();
 
@@ -104,12 +76,48 @@ export const useCreate = (form: FormInstance, onSuccess: () => void): CreateProp
         children: intl.get('CONTINUE_TO_CREATE_DEVICE'),
         type: 'primary',
         onClick: () => {
-          form.resetFields(['name', 'mac_address']);
+          form?.resetFields(['name', 'mac_address']);
           setSuccess(false);
         }
       },
       closeButtonProps: { children: intl.get('close'), onClick: onSuccess }
     },
     handleSubmit
+  };
+};
+
+const useModalProps = (
+  props: ModalFormProps &
+    Pick<FormCommonProps, 'form'> &
+    Pick<CreateProps, 'success' | 'handleSubmit'>
+) => {
+  const { form, success, handleSubmit, ...rest } = props;
+  return useModalBindingsProps({
+    ...rest,
+    afterClose: () => form?.resetFields(),
+    footer: success ? null : undefined,
+    okText: intl.get('CREATE'),
+    onOk: () => form?.validateFields().then(handleSubmit),
+    title: intl.get('CREATE_DEVICE'),
+    width: 640
+  });
+};
+
+const useFormSectionProps = (form: FormCommonProps['form']) => {
+  const { deviceType, settings } = Basis.useContext();
+  const formItemColProps = generateColProps({ xl: 12, xxl: 12 });
+  return {
+    deviceType,
+    basis: {
+      cardProps: useGroupCardProps({ title: intl.get('BASIC_INFORMATION') }),
+      formItemsProps: { form, formItemColProps }
+    },
+    settings: { deviceType, settings, formItemColProps, groupCardProps: useGroupCardProps({}) },
+    wsn: {
+      cardProps: useGroupCardProps({
+        title: intl.get('wireless.network.settings')
+      }),
+      formItemsProps: { formItemColProps, setFieldsValue: form?.setFieldsValue }
+    }
   };
 };

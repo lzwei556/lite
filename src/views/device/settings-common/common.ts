@@ -1,6 +1,7 @@
-import { ColProps } from 'antd';
+import { ColProps, FormInstance } from 'antd';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
+import { Network } from '../../../features/network';
 import { CardProps } from '../../../components';
 import * as SVT from './use-groupd-settings-svt';
 import * as NonSVT from './use-groupd-settings';
@@ -22,10 +23,22 @@ export type DeviceSetting = {
   onChange?: (paras: any) => void;
 };
 
+export type FormCommonProps = {
+  device: Device;
+  form?: FormInstance;
+  network?: Network;
+};
+
 export type FormItemsProps = {
+  deviceType?: DeviceType;
   settings: DeviceSetting[];
   formItemColProps?: ColProps;
   groupCardProps?: CardProps;
+};
+
+export type FormSubmitButtonProps = Pick<FormCommonProps, 'form'> & {
+  handleSubmit: (values: any) => void;
+  loading: boolean;
 };
 
 export function transformSettings(setting: any) {

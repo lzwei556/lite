@@ -1320,5 +1320,6 @@
   "email.is.invalid": "Email is invalid",
   "replace.image": "Replace",
   "only.jpeg.or.png": "You can only upload JPG/PNG file",
-  "only.json.file": "You can only upload json file"
+  "only.json.file": "You can only upload json file",
+  "string.length.range.pattern": "The length of {something} must be between {min} and {max} characters"
 }

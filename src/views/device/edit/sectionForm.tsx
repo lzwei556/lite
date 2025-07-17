@@ -1,100 +1,96 @@
 import React from 'react';
-import { Form, Space, Tooltip } from 'antd';
-import { SelectOutlined } from '@ant-design/icons';
+import { Form } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, CardProps } from '../../../components';
-import { Device } from '../../../types/device';
-import { DeviceType } from '../../../types/device_type';
+import { Card } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
-import { Trigger } from '../settings-apply-same-types/trigger';
+import { useFormBindingsProps } from '../../../hooks';
 import {
+  FormCommonProps,
   FormItemsProps,
+  FormSubmitButtonProps,
   SettingsFormItems,
   useGroupCardProps,
   useGroupedSettings
 } from '../settings-common';
 import * as Basis from '../basis-form-items';
-import { FormEditProps, UpdateProps, useUpdateSettings } from './hooks';
-import { SaveIconButton } from './saveIconButton';
+import { useUpdateSettings } from './hooks';
+import { Toolbar } from './toolbar';
 
-export const SettingsSectionForm = ({ device }: { device: Device }) => {
-  const { settings } = Basis.useContext();
-  const onlySingleGroup = useGroupedSettings(settings).length <= 1;
-  const updateProps = useUpdateSettings(device.id);
-  const { formProps, groupCardPropsExtra, innerGroupCardProps, ...rest } = useSettingsFormProps(
-    onlySingleGroup,
-    updateProps
-  );
-  const commonProps = {
-    ...rest,
-    settings,
-    deviceType: device.typeId,
-    groupCardProps: {
-      ...rest.groupCardProps,
-      extra: (
-        <Space>
-          <SaveIconButton {...groupCardPropsExtra.saveButton} />
-          <Tooltip title={groupCardPropsExtra.selectButton?.children}>
-            <Trigger device={device} form={formProps.form!} icon={<SelectOutlined />} />
-          </Tooltip>
-        </Space>
-      )
-    }
-  };
+type Props = FormCommonProps & Pick<FormItemsProps, 'settings'> & FormSubmitButtonProps;
+
+export const SettingsSectionForm = ({ device }: Pick<Props, 'device'>) => {
+  const { formProps, onlySingleGroup, ...rest } = useProps(device);
 
   return (
     <Form {...formProps}>
-      {onlySingleGroup ? (
-        <SingleGroupSection {...commonProps} />
-      ) : (
-        <MultipleGroupsSection {...{ ...commonProps, innerGroupCardProps }} />
-      )}
+      {onlySingleGroup ? <SingleGroupSection {...rest} /> : <MultipleGroupsSection {...rest} />}
     </Form>
   );
 };
 
-const SingleGroupSection = (props: FormItemsProps & { deviceType: DeviceType }) => {
-  return <SettingsFormItems {...props} />;
+const useProps = (device: Props['device']) => {
+  const { settings } = Basis.useContext();
+  const onlySingleGroup = useGroupedSettings(settings, device.typeId).length <= 1;
+  const updateProps = useUpdateSettings(device.id);
+  const formProps = useFormBindingsProps({
+    layout: 'vertical',
+    variant: onlySingleGroup ? undefined : 'filled'
+  });
+  return {
+    formProps,
+    onlySingleGroup,
+    device,
+    form: formProps.form,
+    settings,
+    ...updateProps
+  };
 };
 
-const MultipleGroupsSection = (
-  props: FormItemsProps & { deviceType: DeviceType } & { innerGroupCardProps?: CardProps }
-) => {
-  const { groupCardProps, innerGroupCardProps, ...rest } = props;
+const SingleGroupSection = (props: Props) => {
+  return <SettingsFormItems {...useSingleGroupSectionProps(props)} />;
+};
 
+const MultipleGroupsSection = (props: Props) => {
+  const { groupCardProps, settingsFormItemsProps } = useMultipleGroupSectionProps(props);
   return (
     <Card {...groupCardProps}>
-      <SettingsFormItems {...{ ...rest, groupCardProps: innerGroupCardProps }} />
+      <SettingsFormItems {...settingsFormItemsProps} />
     </Card>
   );
 };
 
-const useSettingsFormProps = (
-  onlySingleGroup: boolean,
-  updateProps: UpdateProps
-): FormEditProps => {
-  const [form] = Form.useForm();
-  const singleGroupCardProps = useGroupCardProps({});
-  const multipleGroupCardProps = useGroupCardProps({
-    styles: { body: { paddingBlock: 0 } },
-    title: intl.get('DEVICE_SETTINGS')
-  });
+const useSingleGroupSectionProps = (props: Props) => {
   return {
-    formProps: { form, layout: 'vertical', variant: onlySingleGroup ? undefined : 'filled' },
-    groupCardProps: onlySingleGroup ? singleGroupCardProps : multipleGroupCardProps,
-    groupCardPropsExtra: {
-      saveButton: {
-        onClick: () => form.validateFields().then(updateProps.handleSubmit),
-        loading: updateProps.loading
-      },
-      selectButton: {
-        children: intl.get('apply.settings.to.the.same.types')
-      }
+    ...useSettingFormItemsCommonProps(props),
+    groupCardProps: {
+      ...useGroupCardProps({}),
+      extra: <Toolbar {...props} />
+    }
+  };
+};
+
+const useSettingFormItemsCommonProps = (props: Props) => {
+  return {
+    deviceType: props.device.typeId,
+    formItemColProps: generateColProps({ xl: 12, xxl: 8 }),
+    settings: props.settings
+  };
+};
+
+const useMultipleGroupSectionProps = (props: Props) => {
+  return {
+    groupCardProps: {
+      ...useGroupCardProps({
+        styles: { body: { paddingBlock: 0 } },
+        title: intl.get('DEVICE_SETTINGS')
+      }),
+      extra: <Toolbar {...props} />
     },
-    innerGroupCardProps: {
-      extra: undefined,
-      style: { ...singleGroupCardProps.style, backgroundColor: 'var(--body-bg-color)' }
-    },
-    formItemColProps: generateColProps({ xl: 12, xxl: 8 })
+    settingsFormItemsProps: {
+      ...useSettingFormItemsCommonProps(props),
+      groupCardProps: useGroupCardProps({
+        style: { marginBlock: 16, backgroundColor: 'var(--body-bg-color)' }
+      })
+    }
   };
 };

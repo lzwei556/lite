@@ -1,33 +1,47 @@
 import React from 'react';
-import { SelectProps, FormInstance } from 'antd';
-import { DeviceType } from '../../../types/device_type';
-import { Device } from '../../../types/device';
-import { DeviceSetting } from '../settings-common';
-import { useContextProps } from './hooks';
+import { GetDefaultDeviceSettingsRequest, GetDeviceSettingRequest } from '../../../apis/device';
+import { FormItemsProps, FormCommonProps } from '../settings-common';
 
-const Context = React.createContext<{
-  deviceType: DeviceType | undefined;
-  settings: DeviceSetting[];
-  deviceTypeSelectProps: SelectProps;
-  networkId: number | undefined;
-  parentSelectProps: SelectProps;
-}>({
+type Props = Partial<Pick<FormCommonProps, 'device'>> &
+  Pick<FormItemsProps, 'deviceType' | 'settings'> & {
+    setDeviceType: React.Dispatch<React.SetStateAction<FormItemsProps['deviceType']>>;
+  };
+
+const Context = React.createContext<Props>({
   deviceType: undefined,
+  setDeviceType: () => {},
   settings: [],
-  deviceTypeSelectProps: {},
-  networkId: undefined,
-  parentSelectProps: {}
+  device: undefined
 });
 
 export const ContextProvier = ({
   children,
-  ...rest
+  device
 }: {
   children: React.ReactNode;
-  device?: Device;
-  form?: FormInstance;
+  device?: Props['device'];
 }) => {
-  return <Context.Provider value={useContextProps(rest)}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={{ ...useDeviceTypeSettings(device), device }}>
+      {children}
+    </Context.Provider>
+  );
+};
+
+const useDeviceTypeSettings = (device: Props['device']) => {
+  const [deviceType, setDeviceType] = React.useState<Props['deviceType']>(device?.typeId);
+  const [settings, setSettings] = React.useState<Props['settings']>([]);
+  React.useEffect(() => {
+    if (deviceType) {
+      if (device?.id) {
+        GetDeviceSettingRequest(device.id).then(setSettings);
+      } else {
+        GetDefaultDeviceSettingsRequest(deviceType).then(setSettings);
+      }
+    }
+    return () => setSettings([]);
+  }, [deviceType, device?.id]);
+  return { deviceType, setDeviceType, settings };
 };
 
 export const useContext = () => React.useContext(Context);

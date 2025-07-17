@@ -1,61 +1,37 @@
 import React from 'react';
-import { Col, Form, Input, Select } from 'antd';
-import intl from 'react-intl-universal';
-import { Grid } from '../../../components';
-import { FormInputItem } from '../../../components/formInputItem';
-import { Normalizes } from '../../../constants/validator';
+import { Col } from 'antd';
+import { Grid, SelectFormItem, TextFormItem } from '../../../components';
 import { DeviceType } from '../../../types/device_type';
 import { FormItemsProps } from '../settings-common';
 import { ParentsSelect } from './parentsSelect';
 import { useContext } from './context';
+import { useProps, useProtocolProps, useParentProps, CommonProps } from './hooks';
 
-export const FormItems = ({ formItemColProps }: Omit<FormItemsProps, 'settings'>) => {
-  const { deviceType, deviceTypeSelectProps } = useContext();
+export const FormItems = ({
+  form,
+  formItemColProps
+}: CommonProps & Pick<FormItemsProps, 'formItemColProps'>) => {
+  const { deviceType } = useContext();
+  const { deviceName, mac, deviceTypeProps } = useProps(form);
 
   return (
     <Grid>
       <Col {...formItemColProps}>
-        <FormInputItem
-          label={intl.get('DEVICE_NAME')}
-          name='name'
-          requiredMessage={intl.get('PLEASE_ENTER_DEVICE_NAME')}
-          lengthLimit={{ min: 4, max: 20, label: intl.get('DEVICE_NAME') }}
-        >
-          <Input placeholder={intl.get('PLEASE_ENTER_DEVICE_NAME')} />
-        </FormInputItem>
+        <TextFormItem {...deviceName} />
       </Col>
       <Col {...formItemColProps}>
-        <Form.Item
-          label={intl.get('MAC_ADDRESS')}
-          normalize={Normalizes.macAddress}
-          required
-          name='mac_address'
-          rules={[
-            {
-              required: true,
-              message: intl.get('PLEASE_ENTER_MAC_ADDRESS')
-            },
-            {
-              pattern: /^([0-9a-fA-F]{2})(([0-9a-fA-F]{2}){5})$/,
-              message: intl.get('MAC_ADDRESS_IS_INVALID')
-            }
-          ]}
-        >
-          <Input placeholder={intl.get('PLEASE_ENTER_MAC_ADDRESS')} />
-        </Form.Item>
+        <TextFormItem {...mac} />
       </Col>
       <Col {...formItemColProps}>
-        <Form.Item
-          label={intl.get('DEVICE_TYPE')}
-          name={'type'}
-          rules={[{ required: true, message: intl.get('PLEASE_SELECT_DEVICE_TYPE') }]}
-        >
-          <Select {...deviceTypeSelectProps} placeholder={intl.get('PLEASE_SELECT_DEVICE_TYPE')} />
-        </Form.Item>
+        <SelectFormItem {...deviceTypeProps} />
       </Col>
       {deviceType && (
         <Col {...formItemColProps}>
-          {DeviceType.isRootDevice(deviceType) ? <ProtocolFormItem /> : <ParentFormItemsSection />}
+          {DeviceType.isRootDevice(deviceType) ? (
+            <ProtocolFormItem />
+          ) : (
+            <ParentFormItemsSection form={form} />
+          )}
         </Col>
       )}
     </Grid>
@@ -63,35 +39,17 @@ export const FormItems = ({ formItemColProps }: Omit<FormItemsProps, 'settings'>
 };
 
 const ProtocolFormItem = () => {
-  return (
-    <Form.Item label={intl.get('wan.interface.protocol')} name='protocol'>
-      <Select
-        defaultValue={3}
-        options={[
-          { label: intl.get('wan.interface.protocol.protobuf'), value: 2 },
-          { label: intl.get('wan.interface.protocol.tlv'), value: 3 }
-        ]}
-      />
-    </Form.Item>
-  );
+  return <SelectFormItem {...useProtocolProps()} />;
 };
 
-const ParentFormItemsSection = () => {
-  const { networkId, parentSelectProps } = useContext();
+const ParentFormItemsSection = ({ form }: CommonProps) => {
+  const { networkId, parent, selectProps, network } = useParentProps(form);
   return (
     <>
-      <Form.Item
-        label={intl.get('PARENT')}
-        name={'parent'}
-        rules={[{ required: true, message: intl.get('PLEASE_SELECT_PARENT') }]}
-      >
-        <ParentsSelect {...parentSelectProps} />
-      </Form.Item>
-      {networkId && (
-        <Form.Item name={'network'} hidden={true}>
-          <Input />
-        </Form.Item>
-      )}
+      <SelectFormItem {...parent}>
+        <ParentsSelect {...selectProps} />
+      </SelectFormItem>
+      {networkId && <TextFormItem {...network} />}
     </>
   );
 };
