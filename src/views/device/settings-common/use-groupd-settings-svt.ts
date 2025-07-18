@@ -1,18 +1,8 @@
 import React from 'react';
-import { Form, Input, InputNumber, Radio, Select } from 'antd';
-import intl from 'react-intl-universal';
-import { DeviceSetting, DeviceSettingValueType } from '../../types/device_setting';
-import { DeviceType } from '../../types/device_type';
-import { SETTING_GROUPS } from '../../constants/settingGroup';
-import { Term } from '../../components/term';
+import { DeviceType } from '../../../types/device_type';
+import { DeviceSetting, GROUPS } from './common';
 
-export const SVTSettings = ({
-  settings,
-  type
-}: {
-  settings?: DeviceSetting[];
-  type: DeviceType;
-}) => {
+export const useGroupedSettings = (settings: DeviceSetting[], deviceType?: DeviceType) => {
   const mounting_type = settings?.find((s) => s.key === 'mounting_type');
   const disp_mode = settings?.find((s) => s.key === 'disp_mode');
   const base_frequency = settings?.find((s) => s.key === 'base_frequency');
@@ -23,28 +13,28 @@ export const SVTSettings = ({
   const { mode, action, fields } = useAcquisitionModeRelatedFields(settings);
   const settingsFields: DeviceSetting[] = [...fields];
   if (mounting_type) {
-    settingsFields.push({ ...mounting_type, group: SETTING_GROUPS.basic });
+    settingsFields.push({ ...mounting_type, group: GROUPS.basic });
   }
   if (disp_mode) {
-    settingsFields.push({ ...disp_mode, group: SETTING_GROUPS.basic });
+    settingsFields.push({ ...disp_mode, group: GROUPS.basic });
   }
   if (base_frequency) {
-    settingsFields.push({ ...base_frequency, group: SETTING_GROUPS.basic });
+    settingsFields.push({ ...base_frequency, group: GROUPS.basic });
   }
   if (communication_period) {
-    settingsFields.push({ ...communication_period, group: SETTING_GROUPS.basic });
+    settingsFields.push({ ...communication_period, group: GROUPS.basic });
   }
   if (communication_offset) {
-    settingsFields.push({ ...communication_offset, group: SETTING_GROUPS.basic });
+    settingsFields.push({ ...communication_offset, group: GROUPS.basic });
   }
   const commonSampleRelatedFields: DeviceSetting[] = [];
   if (sample_period) {
-    commonSampleRelatedFields.push({ ...sample_period, group: SETTING_GROUPS.dat });
+    commonSampleRelatedFields.push({ ...sample_period, group: GROUPS.dat });
   }
   if (sample_offset) {
-    commonSampleRelatedFields.push({ ...sample_offset, group: SETTING_GROUPS.dat });
+    commonSampleRelatedFields.push({ ...sample_offset, group: GROUPS.dat });
   }
-  const sampleRelatedFields = useSampleRelatedFields(type, settings);
+  const sampleRelatedFields = useSampleRelatedFields(deviceType, settings);
   const waveRelatedFields = useWaveRealtedFields(mode, action, settings);
   if (mode === 0 || action === 1) {
     settingsFields.push(...commonSampleRelatedFields, ...sampleRelatedFields, ...waveRelatedFields);
@@ -53,29 +43,15 @@ export const SVTSettings = ({
   } else if (action === 4) {
     settingsFields.push(...waveRelatedFields);
   }
+  if (!settings || settings.length === 0) return [];
 
-  if (!settings || settings.length === 0) return null;
-
-  return (
-    <>
-      {Array.from(new Set(settingsFields.map((s) => s?.group)))
-        .sort((g1, g2) => {
-          return (
-            Object.values(SETTING_GROUPS).indexOf(g1!) - Object.values(SETTING_GROUPS).indexOf(g2!)
-          );
-        })
-        .map((g) => (
-          <fieldset key={g}>
-            <legend>{intl.get(g!)}</legend>
-            {settingsFields
-              .filter((s) => s?.group === g)
-              .map((s: any, i: number) => (
-                <InternalFormItem key={i} setting={s} onChange={s?.onChange} />
-              ))}
-          </fieldset>
-        ))}
-    </>
-  );
+  return Array.from(new Set(settingsFields.map((s) => s?.group!)))
+    .sort((g1, g2) => {
+      return Object.values(GROUPS).indexOf(g1!) - Object.values(GROUPS).indexOf(g2!);
+    })
+    .map((group) => {
+      return { group, settings: settingsFields.filter((s) => s?.group === group) };
+    });
 };
 
 function useAcquisitionModeRelatedFields(settings?: DeviceSetting[]) {
@@ -116,11 +92,11 @@ function useAcquisitionModeRelatedFields(settings?: DeviceSetting[]) {
   return {
     mode,
     action,
-    fields: fields.map((f) => ({ ...f, group: SETTING_GROUPS.dat }))
+    fields: fields.map((f) => ({ ...f, group: GROUPS.dat }))
   };
 }
 
-function useSampleRelatedFields(type: DeviceType, settings?: DeviceSetting[]) {
+function useSampleRelatedFields(type?: DeviceType, settings?: DeviceSetting[]) {
   const acc3_range = settings?.find((s) => s.key === 'acc3_range');
   const acc3_odr = settings?.find((s) => s.key === 'acc3_odr');
   const acc3_samples = settings?.find((s) => s.key === 'acc3_samples');
@@ -145,7 +121,7 @@ function useSampleRelatedFields(type: DeviceType, settings?: DeviceSetting[]) {
     }
   }
   if (!settings || settings.length === 0) return [];
-  return fields.map((f) => ({ ...f, group: SETTING_GROUPS.dap } as DeviceSetting));
+  return fields.map((f) => ({ ...f, group: GROUPS.dap } as DeviceSetting));
 }
 
 function useWaveRealtedFields(mode: number, triggerAction: number, settings?: DeviceSetting[]) {
@@ -155,7 +131,7 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
   let enabledField: DeviceSetting | undefined;
   const waveFields: DeviceSetting[] = [];
   if (is_enabled_2 && is_enabled_2.children && is_enabled_2.children.length > 0) {
-    enabledField = { ...is_enabled_2, onChange: setEnabled, group: SETTING_GROUPS.dat };
+    enabledField = { ...is_enabled_2, onChange: setEnabled, group: GROUPS.dat };
     const sample_period_2 = is_enabled_2.children.find((s) => s.key === 'sample_period_2');
     const sample_offset_2 = is_enabled_2.children.find((s) => s.key === 'sample_offset_2');
     const acc3_range_2 = is_enabled_2.children.find((s) => s.key === 'acc3_range_2');
@@ -165,28 +141,28 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
     const acc1_samples_2 = is_enabled_2.children.find((s) => s.key === 'acc1_samples_2');
     const data_axis = is_enabled_2.children.find((s) => s.key === 'data_axis');
     if (sample_period_2) {
-      waveFields.push({ ...sample_period_2, group: SETTING_GROUPS.dat });
+      waveFields.push({ ...sample_period_2, group: GROUPS.dat });
     }
     if (sample_offset_2) {
-      waveFields.push({ ...sample_offset_2, group: SETTING_GROUPS.dat });
+      waveFields.push({ ...sample_offset_2, group: GROUPS.dat });
     }
     if (acc3_range_2) {
-      waveFields.push({ ...acc3_range_2, group: SETTING_GROUPS.dap });
+      waveFields.push({ ...acc3_range_2, group: GROUPS.dap });
     }
     if (acc3_odr_2) {
-      waveFields.push({ ...acc3_odr_2, group: SETTING_GROUPS.dap });
+      waveFields.push({ ...acc3_odr_2, group: GROUPS.dap });
     }
     if (acc3_samples_2) {
-      waveFields.push({ ...acc3_samples_2, group: SETTING_GROUPS.dap });
+      waveFields.push({ ...acc3_samples_2, group: GROUPS.dap });
     }
     if (acc1_odr_2) {
-      waveFields.push({ ...acc1_odr_2, group: SETTING_GROUPS.dap });
+      waveFields.push({ ...acc1_odr_2, group: GROUPS.dap });
     }
     if (acc1_samples_2) {
-      waveFields.push({ ...acc1_samples_2, group: SETTING_GROUPS.dap });
+      waveFields.push({ ...acc1_samples_2, group: GROUPS.dap });
     }
     if (data_axis) {
-      waveFields.push({ ...data_axis, group: SETTING_GROUPS.dap });
+      waveFields.push({ ...data_axis, group: GROUPS.dap });
     }
   }
   if (!settings || settings.length === 0) return [];
@@ -198,54 +174,3 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
     return [];
   }
 }
-
-const InternalFormItem = ({
-  onChange,
-  setting
-}: {
-  onChange?: (value: any) => void;
-  setting?: DeviceSetting;
-}) => {
-  if (!setting) {
-    return null;
-  }
-  let control;
-  const unit = setting.unit ? intl.get(setting.unit).d(setting.unit) : '';
-  if (setting.type === DeviceSettingValueType.bool) {
-    control = (
-      <Radio.Group buttonStyle={'solid'} onChange={(e) => onChange?.(e.target.value)}>
-        <Radio.Button key={'true'} value={true}>
-          {intl.get('ENABLED')}
-        </Radio.Button>
-        <Radio.Button key={'false'} value={false}>
-          {intl.get('DISABLED')}
-        </Radio.Button>
-      </Radio.Group>
-    );
-  } else if (setting.options) {
-    control = (
-      <Select onChange={onChange}>
-        {Object.keys(setting.options).map((key) => {
-          return (
-            <Select.Option key={key} value={Number(key)}>
-              {intl.get(setting.options[key]).d(setting.options[key])}
-            </Select.Option>
-          );
-        })}
-      </Select>
-    );
-  } else if (setting.type === DeviceSettingValueType.string) {
-    control = <Input suffix={unit} />;
-  } else {
-    control = <InputNumber controls={false} style={{ width: '100%' }} addonAfter={unit} />;
-  }
-  return (
-    <Form.Item
-      name={[setting.category, setting.key]}
-      label={<Term name={intl.get(setting.name)} description={intl.get(`${setting.name}_DESC`)} />}
-      initialValue={setting.value}
-    >
-      {control}
-    </Form.Item>
-  );
-};

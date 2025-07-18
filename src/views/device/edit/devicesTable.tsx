@@ -2,26 +2,20 @@ import React from 'react';
 import { Button, Dropdown, MenuProps, Space } from 'antd';
 import { CodeOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Device } from '../../../../../types/device';
-import { toMac } from '../../../../../utils/format';
-import {
-  DeleteIconButton,
-  EditIconButton,
-  IconButton,
-  Table,
-  Link
-} from '../../../../../components';
-import HasPermission from '../../../../../permission';
-import usePermission, { Permission } from '../../../../../permission/permission';
-import { DeleteDeviceRequest, GetDeviceRequest } from '../../../../../apis/device';
-import { DeviceType } from '../../../../../types/device_type';
-import { tree2List } from '../../../../../utils/tree';
-import { CommandDropdown } from '../../../commandDropdown';
-import { useDeviceOnlineLiving, useDeviceTreeData } from '../../../deviceTree';
-import { SingleDeviceStatus } from '../../../SingleDeviceStatus';
-import { useContext } from '../../..';
-import { BasicSettingsModal } from './basicSettingsModal';
-import { DeviceSettingsModal } from './deviceSettingsModal';
+import { Device } from '../../../types/device';
+import { toMac } from '../../../utils/format';
+import { DeleteIconButton, EditIconButton, IconButton, Table, Link } from '../../../components';
+import HasPermission from '../../../permission';
+import usePermission, { Permission } from '../../../permission/permission';
+import { DeleteDeviceRequest, GetDeviceRequest } from '../../../apis/device';
+import { DeviceType } from '../../../types/device_type';
+import { tree2List } from '../../../utils/tree';
+import { CommandDropdown } from '../commandDropdown';
+import { useDeviceOnlineLiving, useDeviceTreeData } from '../deviceTree';
+import { SingleDeviceStatus } from '../SingleDeviceStatus';
+import { useContext } from '..';
+import { BasisModalForm } from './basisModalForm';
+import { SettingsModalForm } from './settingsModalForm';
 
 export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: () => void }) => {
   const { hasPermission } = usePermission();
@@ -57,7 +51,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
     {
       key: 'state',
       title: intl.get('STATUS'),
-      render: (state: any, device: Device) => {
+      render: (_: string, device: Device) => {
         return <SingleDeviceStatus device={device} />;
       }
     },
@@ -139,7 +133,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
         rowKey={(row) => row.id}
       />
       {open && key === 'edit' && updatedDevice && (
-        <BasicSettingsModal
+        <BasisModalForm
           device={updatedDevice}
           open={open}
           onCancel={reset}
@@ -150,15 +144,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
         />
       )}
       {open && key === 'editSettings' && updatedDevice && (
-        <DeviceSettingsModal
-          device={updatedDevice}
-          open={open}
-          onCancel={reset}
-          onSuccess={() => {
-            reset();
-            onUpdate();
-          }}
-        />
+        <SettingsModalForm device={updatedDevice} open={open} onCancel={reset} onSuccess={reset} />
       )}
     </>
   );

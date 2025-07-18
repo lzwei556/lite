@@ -23,7 +23,7 @@ export function PostResponse<T>(response: AxiosResponse<ResponseResult<T>>) {
       resolve(response.data.data);
     } else {
       message.error(
-        `${intl.get('FAILED_TO_CREATE')}${intl.get(response.data.msg).d(response.data.msg)}`
+        `${intl.get('FAILED_TO_CREATE')} ${intl.get(response.data.msg).d(response.data.msg)}`
       );
       reject(response.data.msg);
     }

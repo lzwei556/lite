@@ -1,57 +1,65 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Breadcrumb, Button, Col, Form, message, Result } from 'antd';
 import { ImportOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ImportNetworkRequest } from '../../../apis/network';
-import WsnFormItem from '../../../components/formItems/wsnFormItem';
-import { useProvisionMode } from '../useProvisionMode';
-import { Network } from '../../../types/network';
-import { useLocaleFormLayout } from '../../../hooks/useLocaleFormLayout';
 import { DeviceType } from '../../../types/device_type';
+import { generateColProps } from '../../../utils/grid';
 import { Card, Flex, Grid, JsonImporter, Link } from '../../../components';
+import * as WSN from '../../../features/wsn';
 import { useContext, VIRTUAL_ROOT_DEVICE } from '../../device';
 import { Preview } from '../topology/preview';
 
-export interface NetworkRequestForm {
-  mode: number;
-  wsn: any;
-  devices: any;
-}
+export type ImportedJSONDevice = {
+  id: number;
+  name: string;
+  address: string;
+  parentAddress: string;
+  type: number;
+  settings: any;
+  protocol: number;
+};
+
+type ValidJson = {
+  wsn: WSN.WSN;
+  deviceList: ImportedJSONDevice[];
+};
 
 const ImportNetworkPage = () => {
-  const [network, setNetwork] = useState<any>();
-  const [success, setSuccess] = useState<boolean>(false);
+  const initialNetwork = {
+    deviceList: [],
+    wsn: { provisioning_mode: WSN.ProvisioningMode.TimeDivision, ...WSN.getInitialSettings() }
+  };
+  const [network, setNetwork] = useState<ValidJson>(initialNetwork);
+  const { deviceList, wsn } = network;
+  const [success, setSuccess] = useState(false);
   const [form] = Form.useForm();
-  const [networkSettings, setNetworkSettings] = useState<any>();
-  const [provisionMode, setProvisionMode, settings] = useProvisionMode(networkSettings);
   const navigate = useNavigate();
   const devicesContext = useContext();
   const checkJSONFormat = (source: any) => {
     return source.hasOwnProperty('deviceList') && source.hasOwnProperty('wsn');
   };
-  const formLayout = useLocaleFormLayout(18, 'vertical');
-  const isGatewayBLE =
-    network?.devices?.[0]?.type && DeviceType.isBLEGateway(network?.devices?.[0]?.type);
+  const isGatewayBLE = deviceList.length > 0 && DeviceType.isBLEGateway(deviceList[0].type);
 
   const onSave = () => {
-    if (network === undefined) {
+    if (deviceList.length === 0) {
       message.error(intl.get('PLEASE_UPLOAD_FILE'));
       return;
     }
-    const nodes = network.devices;
-    if (nodes && nodes.length && provisionMode) {
+    if (deviceList) {
       form.validateFields().then((values) => {
-        const req: NetworkRequestForm = {
-          mode: provisionMode,
+        const req = {
+          mode: values.mode,
           wsn: values.wsn ?? network.wsn,
-          devices: nodes.map((n: any) => {
+          devices: deviceList.map((d) => {
             return {
-              name: n.name,
-              mac_address: n.address,
-              parent_address: n.parentAddress,
-              type_id: n.type,
-              settings: n.settings
+              name: d.name,
+              mac_address: d.address,
+              parent_address: d.parentAddress,
+              type_id: d.type,
+              settings: d.settings,
+              protocol: d.protocol
             };
           })
         };
@@ -65,49 +73,9 @@ const ImportNetworkPage = () => {
     }
   };
 
-  useEffect(() => {
-    setNetworkSettings(
-      network?.wsn
-        ? ({
-            mode: network.wsn.provisioning_mode,
-            communicationPeriod: network.wsn.communication_period,
-            communicationPeriod2: network.wsn.communication_period_2,
-            communicationOffset: network.wsn.communication_offset,
-            groupSize: network.wsn.group_size
-          } as Network)
-        : undefined
-    );
-  }, [network]);
-
-  useEffect(() => {
-    if (network !== undefined) {
-      form.setFieldsValue({
-        name: network.name
-      });
-      setProvisionMode(network.wsn.provisioning_mode === 0 ? 1 : network.wsn.provisioning_mode);
-    }
-  }, [network, form, setProvisionMode]);
-
-  useEffect(() => {
-    if (settings) {
-      form.setFieldsValue(settings);
-    }
-  }, [form, settings]);
-
-  const renderAction = () => {
-    if (network) {
-      return (
-        <a
-          onClick={() => {
-            setNetwork(undefined);
-            form.resetFields();
-          }}
-        >
-          {intl.get('RESET')}
-        </a>
-      );
-    }
-    return <div />;
+  const reset = () => {
+    setNetwork(initialNetwork);
+    form.resetFields();
   };
 
   return (
@@ -134,19 +102,24 @@ const ImportNetworkPage = () => {
         {!success && (
           <Grid wrap={false}>
             <Col flex='auto'>
-              {network?.devices.length ? (
+              {deviceList.length > 0 ? (
                 <Preview
-                  devices={network.devices}
-                  extra={renderAction()}
+                  devices={deviceList as any}
+                  extra={
+                    <Button type='link' onClick={reset}>
+                      {intl.get('RESET')}
+                    </Button>
+                  }
                   title={intl.get('PREVIEW')}
                 />
               ) : (
                 <Card>
                   <JsonImporter
-                    onUpload={(json: { wsn: any; deviceList: any }) => {
+                    onUpload={(json: any) => {
                       return new Promise(() => {
                         if (checkJSONFormat(json)) {
-                          setNetwork({ wsn: json.wsn, devices: json.deviceList });
+                          setNetwork({ wsn: json.wsn, deviceList: json.deviceList });
+                          form.setFieldsValue(WSN.tranformWSN2WSNUpdate(json.wsn));
                         }
                       });
                     }}
@@ -157,11 +130,13 @@ const ImportNetworkPage = () => {
             </Col>
             {isGatewayBLE && (
               <Col flex='300px'>
-                <Card type='inner' size={'small'} title={intl.get('EDIT')}>
-                  <Form form={form} {...formLayout} labelWrap={true}>
-                    {network && provisionMode && (
-                      <WsnFormItem mode={provisionMode} onModeChange={setProvisionMode} />
-                    )}
+                <Card size='small' title={intl.get('EDIT')}>
+                  <Form form={form} layout='vertical'>
+                    <WSN.FormItems
+                      formItemColProps={generateColProps({})}
+                      initial={wsn}
+                      setFieldsValue={form.setFieldsValue}
+                    />
                   </Form>
                 </Card>
               </Col>
@@ -169,26 +144,27 @@ const ImportNetworkPage = () => {
           </Grid>
         )}
         {success && (
-          <Result
-            status='success'
-            title={intl.get('NETWORK_IMPORTED_SUCCESSFUL')}
-            subTitle={intl.get('NETWORK_IMPORTED_NEXT_PROMPT')}
-            extra={[
-              <Button type='primary' key='devices' onClick={() => navigate('/devices/0')}>
-                {intl.get('RETURN')}
-              </Button>,
-              <Button
-                key='add'
-                onClick={() => {
-                  form.resetFields();
-                  setNetwork({ devices: [], wsn: {} });
-                  setSuccess(false);
-                }}
-              >
-                {intl.get('CONTINUE_TO_IMPORT_NETWORK')}
-              </Button>
-            ]}
-          />
+          <Card>
+            <Result
+              status='success'
+              title={intl.get('NETWORK_IMPORTED_SUCCESSFUL')}
+              subTitle={intl.get('NETWORK_IMPORTED_NEXT_PROMPT')}
+              extra={[
+                <Button type='primary' key='devices' onClick={() => navigate('/devices/0')}>
+                  {intl.get('RETURN')}
+                </Button>,
+                <Button
+                  key='add'
+                  onClick={() => {
+                    reset();
+                    setSuccess(false);
+                  }}
+                >
+                  {intl.get('CONTINUE_TO_IMPORT_NETWORK')}
+                </Button>
+              ]}
+            />
+          </Card>
         )}
       </Col>
     </Grid>

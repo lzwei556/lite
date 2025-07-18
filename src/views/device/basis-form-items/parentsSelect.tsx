@@ -1,13 +1,13 @@
 import React from 'react';
 import { Select, SelectProps, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { toMac } from '../../utils/format';
-import { DeviceType } from '../../types/device_type';
-import { useAppType } from '../../config';
-import { Device } from '../../types/device';
-import { foreachTree } from '../../utils/tree';
-import { DeviceTreeNode } from './deviceTree';
-import { useContext } from '.';
+import { toMac } from '../../../utils/format';
+import { DeviceType } from '../../../types/device_type';
+import { useAppType } from '../../../config';
+import { Device } from '../../../types/device';
+import { foreachTree } from '../../../utils/tree';
+import { DeviceTreeNode } from '../deviceTree';
+import { useContext } from '..';
 
 type Parent = Device & { gatewayId: number };
 
