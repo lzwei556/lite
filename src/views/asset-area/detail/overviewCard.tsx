@@ -56,7 +56,11 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
             <></>
           )
         }
-        title={<Link to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</Link>}
+        title={
+          <Link to={`/${ASSET_PATHNAME}/${id}-${type}`} title={name}>
+            {name}
+          </Link>
+        }
       />
     </Card>
   );

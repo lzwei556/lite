@@ -32,12 +32,13 @@ export const UpdateModal = (
               console.log(error);
             }
           });
-        }
+        },
+        width: 600
       }}
     >
       <Form
         form={form}
-        labelCol={{ span: 7 }}
+        layout='vertical'
         initialValues={{
           name,
           parent_id: parentId,

@@ -182,6 +182,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
             onChange={(value) =>
               setAxies((prev) => prev.map((a) => ({ ...a, selected: a.value === value })))
             }
+            popupMatchSelectWidth={false}
             value={axis.value}
           />
         </Space>

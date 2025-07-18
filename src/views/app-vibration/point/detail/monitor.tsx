@@ -18,7 +18,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties, attributes } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
-  const colProps = generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 });
+  const colProps = generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
 
   React.useEffect(() => {
     const [from, to] = Dayjs.toRange(commonRange.PastWeek);

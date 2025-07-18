@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select } from 'antd';
+import { Col, Form, Input, Select } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { FormInputItem } from '../../components/formInputItem';
@@ -8,6 +8,8 @@ import { addAsset, AssetCategory, AssetModel } from '../asset-common';
 import { SettingFormItems } from './settingFormItems';
 import { getByType, useParents } from './utils';
 import { TypeFormItem } from './typeFormItem';
+import { Card, Grid } from '../../components';
+import { generateColProps } from '../../utils/grid';
 
 export const Create = (props: ModalFormProps & { parentId?: number; types: AssetCategory[] }) => {
   const { onSuccess, parentId, types } = props;
@@ -25,24 +27,26 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
       );
     } else if (parents.length >= 0) {
       return (
-        <Form.Item
-          label={label}
-          name='parent_id'
-          rules={[
-            {
-              required: true,
-              message: intl.get('PLEASE_SELECT_SOMETHING', { something: label })
-            }
-          ]}
-        >
-          <Select placeholder={intl.get('PLEASE_SELECT_SOMETHING', { something: label })}>
-            {parents.map(({ id, name }) => (
-              <Select.Option key={id} value={id}>
-                {name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+          <Form.Item
+            label={label}
+            name='parent_id'
+            rules={[
+              {
+                required: true,
+                message: intl.get('PLEASE_SELECT_SOMETHING', { something: label })
+              }
+            ]}
+          >
+            <Select placeholder={intl.get('PLEASE_SELECT_SOMETHING', { something: label })}>
+              {parents.map(({ id, name }) => (
+                <Select.Option key={id} value={id}>
+                  {name}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
       );
     }
   };
@@ -64,29 +68,35 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
               console.log(error);
             }
           });
-        }
+        },
+        width: 600
       }}
     >
-      <Form form={form} labelCol={{ span: 7 }}>
-        <fieldset>
-          <legend>{intl.get('BASIC_INFORMATION')}</legend>
-          <FormInputItem
-            label={intl.get('NAME')}
-            name='name'
-            requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-            lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-          >
-            <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-          </FormInputItem>
-          {renderParent()}
-          <TypeFormItem
-            onChange={(type) => {
-              setType(type);
-              form.setFieldsValue(getByType(type)?.settings?.default as any);
-            }}
-            types={types}
-          />
-        </fieldset>
+      <Form form={form} layout='vertical'>
+        <Card size='small' style={{ marginBlock: 16 }} title={intl.get('BASIC_INFORMATION')}>
+          <Grid>
+            <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+              <FormInputItem
+                label={intl.get('NAME')}
+                name='name'
+                requiredMessage={intl.get('PLEASE_ENTER_NAME')}
+                lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
+              >
+                <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
+              </FormInputItem>
+            </Col>
+            {renderParent()}
+            <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+              <TypeFormItem
+                onChange={(type) => {
+                  setType(type);
+                  form.setFieldsValue(getByType(type)?.settings?.default as any);
+                }}
+                types={types}
+              />
+            </Col>
+          </Grid>
+        </Card>
         {type && <SettingFormItems key={type} type={type} />}
       </Form>
     </ModalWrapper>

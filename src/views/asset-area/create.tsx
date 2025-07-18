@@ -6,6 +6,7 @@ import { ModalWrapper } from '../../components/modalWrapper';
 import { ModalFormProps } from '../../types/common';
 import { addAsset, AssetModel, useContext } from '../asset-common';
 import { area, isAssetAreaParent } from '../asset-variant';
+import { transform2Phrase } from '../../utils';
 
 export const Create = (props: ModalFormProps & { parentId?: number }) => {
   const { onSuccess, parentId, ...rest } = props;
@@ -63,7 +64,7 @@ export const Create = (props: ModalFormProps & { parentId?: number }) => {
           requiredMessage={intl.get('PLEASE_ENTER_NAME')}
           lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
         >
-          <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
+          <Input placeholder={transform2Phrase(intl.get('PLEASE_ENTER_NAME'))} />
         </FormInputItem>
         {renderParent()}
       </Form>

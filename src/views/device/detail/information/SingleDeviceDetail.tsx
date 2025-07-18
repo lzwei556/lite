@@ -57,6 +57,7 @@ export const SingleDeviceDetail: React.FC<{ device: Device }> = ({ device }) => 
             lang: language,
             suffix: 'dBm'
           })}
+          nameStyle={{ color: 'rgba(0,0,0,.6)' }}
           description={
             DeviceType.isGateway(device.typeId)
               ? intl.get('MOBILE_SIGNAL_STRENGTH_DESC')

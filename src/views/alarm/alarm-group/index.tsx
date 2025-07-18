@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Empty, message, Space, TableProps } from 'antd';
+import { Button, message, Space, TableProps } from 'antd';
 import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import HasPermission from '../../../permission';
@@ -144,41 +144,22 @@ export default function AlarmRuleList() {
     };
   };
 
-  const [result, setResult] = React.useState<TableProps<any>>({
-    rowKey: 'id',
-    columns,
-    expandable: {
-      expandedRowRender: (record: AlarmRule) => (
-        <Table {...getRules(record.rules)} noScroll={true} />
-      )
-    },
-    onChange: (paged, filters: any) => {
-      setMontoringPointType(filters?.type ?? []);
-    },
-    size: 'small',
-    pagination: false,
-    loading: true,
-    locale: {
-      emptyText: (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={intl.get('NO_DATA_PROMPT')} />
-      )
-    },
-    scroll: isMobile ? { x: 600 } : undefined
-  });
+  const [loading, setLoading] = React.useState(false);
+  const [alarmRules, setAlarmRules] = React.useState<AlarmRule[]>([]);
 
   const fetchAlarmRules = (levels: number[], monitoringPointType: number[]) => {
-    setResult((prev) => ({ ...prev, loading: true }));
-    getAlarmRules().then((data) => {
-      setResult((prev) => ({
-        ...prev,
-        loading: false,
-        dataSource: data
-          .filter(({ rules }) => rules.some((r) => levels.includes(r.level)))
-          .filter(({ type }) =>
-            monitoringPointType.length > 0 ? monitoringPointType.includes(type) : true
-          )
-      }));
-    });
+    setLoading(true);
+    getAlarmRules()
+      .then((data) =>
+        setAlarmRules(
+          data
+            .filter(({ rules }) => rules.some((r) => levels.includes(r.level)))
+            .filter(({ type }) =>
+              monitoringPointType.length > 0 ? monitoringPointType.includes(type) : true
+            )
+        )
+      )
+      .finally(() => setLoading(false));
   };
 
   React.useEffect(() => {
@@ -188,7 +169,23 @@ export default function AlarmRuleList() {
   return (
     <>
       <Table
-        {...result}
+        {...{
+          rowKey: 'id',
+          columns,
+          expandable: {
+            expandedRowRender: (record: AlarmRule) => (
+              <Table {...getRules(record.rules)} noScroll={true} />
+            )
+          },
+          onChange: (paged, filters: any) => {
+            setMontoringPointType(filters?.type ?? []);
+          },
+          size: 'small',
+          pagination: false,
+          loading,
+          dataSource: alarmRules,
+          scroll: isMobile ? { x: 600 } : undefined
+        }}
         header={{
           title: intl.get('ALARM_RULES'),
           toolbar: [
@@ -207,7 +204,7 @@ export default function AlarmRuleList() {
                 </Button>
               </HasPermission>
               <HasPermission value={Permission.AlarmRuleGroupExport}>
-                {result.dataSource && result.dataSource.length > 0 && (
+                {alarmRules.length > 0 && (
                   <Button
                     type='primary'
                     onClick={() => {
@@ -246,11 +243,7 @@ export default function AlarmRuleList() {
                 />
               )}
               {open && type === 'export' && (
-                <SelectRules
-                  {...modalProps}
-                  rules={result.dataSource as AlarmRule[]}
-                  onSuccess={() => setOpen(false)}
-                />
+                <SelectRules {...modalProps} rules={alarmRules} onSuccess={() => setOpen(false)} />
               )}
               {open && type === 'update' && selectedRow && (
                 <UpdateModal

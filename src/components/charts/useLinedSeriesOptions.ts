@@ -45,7 +45,8 @@ export function useLinedSeriesOptions(
         const suffix = yAxisMeta?.unit;
         const roundedValue = getValue(roundValue(value as number, yAxisMeta?.precision));
         return suffix ? `${roundedValue} ${suffix}` : `${roundedValue}`;
-      }
+      },
+      confine: true
     },
     xAxis: {
       type: 'category',

@@ -65,3 +65,12 @@ export function formatNumericData(data: string | number) {
   }
   return data;
 }
+
+export const transform2Phrase = (sentence: string) => {
+  return isSentence(sentence) ? sentence.slice(0, sentence.length - 1) : sentence;
+};
+
+const isSentence = (str: string) => {
+  const pos = str.indexOf('.');
+  return pos > -1 && str.length > 1 && str.length === pos + 1;
+};
