@@ -7,12 +7,16 @@ import { DeviceType } from '../../../types/device_type';
 import { generateColProps } from '../../../utils/grid';
 import { CreateNetworkRequest } from '../../../apis/network';
 import { AddDeviceRequest } from '../../../apis/device';
+import { transform, transform2UpdateDTO } from '../../../features/wsn';
 import { FormCommonProps, transformSettings, useGroupCardProps } from '../settings-common';
 import * as Basis from '../basis-form-items';
 import { useContext } from '..';
 
 export const useProps = (props: ModalFormProps) => {
-  const formProps = useFormBindingsProps({ layout: 'vertical' });
+  const formProps = useFormBindingsProps({
+    layout: 'vertical',
+    initialValues: { ...transform(), protocol: Basis.WanProtocol.Tlv }
+  });
   const { form } = formProps;
   const { success, ...createProps } = useCreate(form, props.onSuccess);
   const modalProps = useModalProps({ ...props, form, success, ...createProps });
@@ -43,14 +47,16 @@ const useCreate = (form: FormCommonProps['form'], onSuccess: () => void): Create
   const handleSubmit = (values: any) => {
     if (values) {
       if (DeviceType.isGateway(values.type)) {
-        CreateNetworkRequest({
-          ...values,
-          gateway: {
-            mac_address: values.mac_address,
-            type: values.type,
-            protocol: values.protocol
-          }
-        }).then((_) => {
+        CreateNetworkRequest(
+          transform2UpdateDTO({
+            ...values,
+            gateway: {
+              mac_address: values.mac_address,
+              type: values.type,
+              protocol: values.protocol
+            }
+          })
+        ).then((_) => {
           setSuccess(true);
           refresh();
         });
@@ -117,7 +123,7 @@ const useFormSectionProps = (form: FormCommonProps['form']) => {
       cardProps: useGroupCardProps({
         title: intl.get('wireless.network.settings')
       }),
-      formItemsProps: { formItemColProps, setFieldsValue: form?.setFieldsValue }
+      formItemsProps: { formItemColProps, form }
     }
   };
 };

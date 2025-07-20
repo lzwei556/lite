@@ -22,17 +22,15 @@ export type ImportedJSONDevice = {
 };
 
 type ValidJson = {
-  wsn: WSN.WSN;
+  wsn?: WSN.WSNDTO['exported'];
   deviceList: ImportedJSONDevice[];
 };
 
 const ImportNetworkPage = () => {
-  const initialNetwork = {
-    deviceList: [],
-    wsn: { provisioning_mode: WSN.ProvisioningMode.TimeDivision, ...WSN.getInitialSettings() }
-  };
+  const initialNetwork = { deviceList: [] };
   const [network, setNetwork] = useState<ValidJson>(initialNetwork);
   const { deviceList, wsn } = network;
+  const initialValues = WSN.transform(wsn);
   const [success, setSuccess] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -50,8 +48,7 @@ const ImportNetworkPage = () => {
     if (deviceList) {
       form.validateFields().then((values) => {
         const req = {
-          mode: values.mode,
-          wsn: values.wsn ?? network.wsn,
+          ...WSN.transform2UpdateDTO(values),
           devices: deviceList.map((d) => {
             return {
               name: d.name,
@@ -119,7 +116,6 @@ const ImportNetworkPage = () => {
                       return new Promise(() => {
                         if (checkJSONFormat(json)) {
                           setNetwork({ wsn: json.wsn, deviceList: json.deviceList });
-                          form.setFieldsValue(WSN.tranformWSN2WSNUpdate(json.wsn));
                         }
                       });
                     }}
@@ -131,11 +127,11 @@ const ImportNetworkPage = () => {
             {isGatewayBLE && (
               <Col flex='300px'>
                 <Card size='small' title={intl.get('EDIT')}>
-                  <Form form={form} layout='vertical'>
+                  <Form form={form} layout='vertical' initialValues={initialValues}>
                     <WSN.FormItems
                       formItemColProps={generateColProps({})}
-                      initial={wsn}
-                      setFieldsValue={form.setFieldsValue}
+                      form={form}
+                      initial={initialValues}
                     />
                   </Form>
                 </Card>

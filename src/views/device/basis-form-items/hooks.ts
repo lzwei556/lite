@@ -5,8 +5,8 @@ import { useFormItemBindingsProps } from '../../../hooks';
 import { Normalizes } from '../../../constants/validator';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
-import * as WSN from '../../../features/wsn';
 import { App, useAppType } from '../../../config';
+import { pickOptionsFromNumericEnum } from '../../../utils';
 import { GetNetworksRequest } from '../../../apis/network';
 import * as Basis from '../basis-form-items';
 import { FormCommonProps, FormItemsProps } from '../settings-common';
@@ -52,11 +52,6 @@ const useDeviceTypeSelectProps = (form: CommonProps['form']) => {
     onChange: (deviceType: number) => {
       setDeviceType(deviceType);
       setSettingsInitialValues(settings, form);
-      form?.setFieldsValue?.({
-        mode: WSN.ProvisioningMode.TimeDivision,
-        wsn: WSN.getInitialSettings(),
-        protocol: 3
-      });
     }
   };
 };
@@ -101,6 +96,11 @@ const setSettingsInitialValues = (
   }
 };
 
+export enum WanProtocol {
+  Protobuf = 2,
+  Tlv = 3
+}
+
 export const useProtocolProps = () => {
   return {
     ...useFormItemBindingsProps({
@@ -108,10 +108,10 @@ export const useProtocolProps = () => {
       name: 'protocol'
     }),
     selectProps: {
-      options: [
-        { label: intl.get('wan.interface.protocol.protobuf'), value: 2 },
-        { label: intl.get('wan.interface.protocol.tlv'), value: 3 }
-      ]
+      options: pickOptionsFromNumericEnum(WanProtocol, 'wan.interface.protocol').map((opts) => ({
+        ...opts,
+        label: intl.get(opts.label)
+      }))
     }
   };
 };

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Col, ColProps, Form, InputNumber, Select } from 'antd';
+import { Col, ColProps, FormInstance, InputNumber, Select } from 'antd';
 import intl from 'react-intl-universal';
-import { Grid, Term } from '../../components';
+import { Grid, SelectFormItem, Term, TextFormItem } from '../../components';
+import { Field } from '../../types';
 import {
-  CommunicationPeriodOptions,
-  getInitialSettings,
-  MajorCommunicationPeriodOptions,
+  getCommunicationPeriodOptions,
   ProvisioningMode,
+  resetInvalidCommunicationPeriod,
   SecondaryCommunicationPeriodOptions,
   useCommunicationOffset,
   useCommunicationPeriod,
@@ -21,14 +21,17 @@ import {
 type Props = {
   formItemColProps: ColProps;
   initial?: WSN;
-  setFieldsValue?: (values: any) => void;
+  form?: FormInstance;
 };
 
-export const FormItems = ({ formItemColProps, initial, setFieldsValue }: Props) => {
-  const { mode, setMode } = useProvisioningMode(initial?.provisioning_mode);
+export const FormItems = ({ formItemColProps, initial, form }: Props) => {
+  const { mode, setMode } = useProvisioningMode(initial?.provisioningMode);
   const onChangeProps = (mode: ProvisioningMode) => {
     setMode(mode);
-    setFieldsValue?.({ wsn: getInitialSettings(mode, initial) });
+    form?.setFieldValue(
+      'communicationPeriod',
+      resetInvalidCommunicationPeriod(initial?.communicationPeriod, mode)
+    );
   };
   if (mode === ProvisioningMode.Group) {
     return <GroupModeFormItems onChange={onChangeProps} formItemColProps={formItemColProps} />;
@@ -40,7 +43,7 @@ export const FormItems = ({ formItemColProps, initial, setFieldsValue }: Props) 
     return (
       <Grid>
         <Col {...formItemColProps}>
-          <ProvisioningModeFromItem onChange={setMode} />
+          <ProvisioningModeFromItem onChange={onChangeProps} />
         </Col>
         <Col {...formItemColProps}>
           <CommunicationPeriod />
@@ -102,96 +105,94 @@ const TimeDivisionModeFormItems = (props: Pick<Props, 'formItemColProps'> & OnCh
 };
 
 const ProvisioningModeFromItem = ({ onChange }: OnChange) => {
-  const { label, formItemProps, controlProps } = useProvisioningModeField(onChange);
+  const { termProps, formItemProps, controlProps } = useProvisioningModeField(onChange);
   return (
-    <Form.Item label={<Term {...label} />} {...formItemProps}>
+    <TextFormItem label={<Term {...termProps} />} {...formItemProps}>
       <Select {...controlProps} />
-    </Form.Item>
+    </TextFormItem>
   );
 };
 
 const GeneralCommunicationPeriod = ({
   label,
   name,
+  description,
   options
-}: {
-  label: { name: string; description: string };
-  name: string;
+}: Field<WSN> & {
   options: { label: string; value: number }[];
 }) => {
-  const { formItemProps, contorlProps } = useCommunicationPeriod(name, options);
+  const formItemProps = useCommunicationPeriod(name, options);
   return (
-    <Form.Item
-      label={<Term {...{ name: intl.get(label.name), description: intl.get(label.description) }} />}
-      {...formItemProps}
-    >
-      <Select {...contorlProps} />
-    </Form.Item>
+    <SelectFormItem
+      {...{
+        label: <Term {...{ name: intl.get(label), description: intl.get(description) }} />,
+        ...formItemProps
+      }}
+    />
   );
 };
 
 const MajorCommunicationPeriod = () => (
   <GeneralCommunicationPeriod
-    label={{ name: 'major.communication.period', description: 'major.communication.period.desc' }}
-    name='communication_period'
-    options={MajorCommunicationPeriodOptions}
+    {...{
+      name: 'communicationPeriod',
+      label: 'major.communication.period',
+      description: 'major.communication.period.desc',
+      options: getCommunicationPeriodOptions(ProvisioningMode.TimeDivision)
+    }}
   />
 );
 
 const SecondaryCommunicationPeriod = () => (
   <GeneralCommunicationPeriod
-    label={{
-      name: 'secondary.communication.period',
-      description: 'secondary.communication.period.desc'
+    {...{
+      name: 'communicationPeriod2',
+      label: 'communication.period.2',
+      description: 'communication.period.2.desc',
+      options: SecondaryCommunicationPeriodOptions
     }}
-    name='communication_period_2'
-    options={SecondaryCommunicationPeriodOptions}
   />
 );
 
 const CommunicationPeriod = () => (
   <GeneralCommunicationPeriod
-    label={{ name: 'communication.period', description: 'communication.period.desc' }}
-    name='communication_period'
-    options={CommunicationPeriodOptions}
+    {...{
+      name: 'communicationPeriod',
+      label: 'communication.period',
+      description: 'communication.period.desc',
+      options: getCommunicationPeriodOptions()
+    }}
   />
 );
 
 const CommunicationOffset = () => {
-  const {
-    formItemProps: { name }
-  } = useCommunicationPeriod('communication_period');
-  const { label, formItemProps, contorlProps } = useCommunicationOffset(name);
+  const { termProps, formItemProps, contorlProps } = useCommunicationOffset('communicationPeriod');
   return (
-    <Form.Item label={<Term {...label} />} {...formItemProps}>
+    <TextFormItem {...formItemProps} label={<Term {...termProps} />}>
       <InputNumber {...contorlProps} />
-    </Form.Item>
+    </TextFormItem>
   );
 };
 
 const IntervalCnt = () => {
-  const { label, formItemProps, contorlProps } = useIntervalCnt();
+  const { termProps, formItemProps, contorlProps } = useIntervalCnt();
   return (
-    <Form.Item label={<Term {...label} />} {...formItemProps}>
+    <TextFormItem label={<Term {...termProps} />} {...formItemProps}>
       <InputNumber {...contorlProps} />
-    </Form.Item>
+    </TextFormItem>
   );
 };
 
 const GroupSize = () => {
-  const { label, formItemProps, contorlProps } = useGroupSize();
-  return (
-    <Form.Item label={<Term {...label} />} {...formItemProps}>
-      <Select {...contorlProps} />
-    </Form.Item>
-  );
+  const { termProps, ...rest } = useGroupSize();
+  return <SelectFormItem {...{ ...rest, label: <Term {...termProps} /> }} />;
 };
 
 const GroupSize2 = () => {
-  const { label, formItemProps, contorlProps } = useGroupSize2();
+  const { termProps, formItemProps, contorlProps } = useGroupSize2();
   return (
-    <Form.Item label={<Term {...label} />} {...formItemProps}>
+    <TextFormItem label={<Term {...termProps} />} {...formItemProps}>
       <InputNumber {...contorlProps} />
-    </Form.Item>
+    </TextFormItem>
   );
 };

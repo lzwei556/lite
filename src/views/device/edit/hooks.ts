@@ -2,6 +2,7 @@ import React from 'react';
 import { UpdateDeviceRequest, UpdateDeviceSettingRequest } from '../../../apis/device';
 import { UpdateNetworkRequest } from '../../../apis/network';
 import { Network } from '../../../types/network';
+import { transform2UpdateDTO } from '../../../features/wsn';
 import { transformSettings } from '../settings-common';
 
 export const useUpdate = (id: number, onUpdate?: () => void) => {
@@ -47,9 +48,10 @@ export const useUpdateNetwork = (network?: Network) => {
   const handleSubmit = (values: any) => {
     if (network && values) {
       setLoading(true);
-      UpdateNetworkRequest(network.id, { ...values, name: network.name }).finally(() =>
-        setLoading(false)
-      );
+      UpdateNetworkRequest(network.id, {
+        ...transform2UpdateDTO(values),
+        name: network.name
+      }).finally(() => setLoading(false));
     }
   };
 

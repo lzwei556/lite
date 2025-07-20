@@ -1,78 +1,54 @@
 import React from 'react';
-import { FormItemProps } from 'antd';
 import intl from 'react-intl-universal';
+import { objectToCamel, objectToSnake, ObjectToSnake } from 'ts-case-convert';
 import { pickOptionsFromNumericEnum } from '../../utils';
 import { millisecond } from '../../constants';
-import { Rules } from '../../constants/validator';
+import { Field } from '../../types';
+import { useFormItemBindingsProps } from '../../hooks';
+
+export enum ProvisioningMode {
+  Group = 1,
+  TimeDivision,
+  Continuous,
+  ManagedBroadcast,
+  UnManagedBroadcast
+}
 
 export type WSN = {
-  provisioning_mode: number;
-  communication_period: number;
-  communication_period_2: number;
-  communication_offset: number;
-  group_size: number;
-  group_size_2: number;
-  interval_cnt: number;
+  provisioningMode: ProvisioningMode;
+  majorCommunicationPeriod?: number;
+  communicationPeriod: number;
+  communicationPeriod2: number;
+  communicationOffset: number;
+  groupSize: number;
+  groupSize2: number;
+  intervalCnt: number;
 };
 
-export type WSNUpdate = { mode: ProvisioningMode; wsn: Omit<WSN, 'provisioning_mode'> };
-
-const DEFAULT_WSN_SETTING = {
-  communication_period: 20 * 60 * 1000,
-  communication_period_2: 0,
-  communication_offset: 10000,
-  group_size: 4,
-  group_size_2: 1,
-  interval_cnt: 1
+export type WSNDTO = {
+  exported: Exported;
+  update: Update;
+  network: Network;
 };
 
-export const tranformWSN2WSNUpdate = (wsn: WSN): WSNUpdate => {
-  return {
-    mode: wsn.provisioning_mode,
-    wsn: {
-      communication_period: wsn.communication_period ?? DEFAULT_WSN_SETTING.communication_period,
-      communication_period_2:
-        wsn.communication_period_2 ?? DEFAULT_WSN_SETTING.communication_period_2,
-      communication_offset: wsn.communication_offset ?? DEFAULT_WSN_SETTING.communication_offset,
-      group_size: wsn.group_size ?? DEFAULT_WSN_SETTING.group_size,
-      group_size_2: wsn.group_size_2 ?? DEFAULT_WSN_SETTING.group_size,
-      interval_cnt: wsn.interval_cnt ?? DEFAULT_WSN_SETTING.interval_cnt
-    }
-  };
+type Exported = ObjectToSnake<WSN>;
+type Update = {
+  mode: ProvisioningMode;
+  wsn: Omit<Exported, 'provisioning_mode'>;
+};
+type Network = { mode: ProvisioningMode } & Omit<WSN, 'provisioningMode'>;
+
+const WSN_DEFAULT_SETTINGS: WSN = {
+  provisioningMode: ProvisioningMode.TimeDivision,
+  communicationPeriod: 20 * 60 * 1000,
+  communicationPeriod2: 0,
+  communicationOffset: 10000,
+  groupSize: 4,
+  groupSize2: 1,
+  intervalCnt: 1
 };
 
-export const MajorCommunicationPeriodOptions = [
-  {
-    value: 5 * 60 * millisecond,
-    label: 'OPTION_5_MINUTES'
-  },
-  {
-    value: 10 * 60 * millisecond,
-    label: 'OPTION_10_MINUTES'
-  },
-  {
-    value: 20 * 60 * millisecond,
-    label: 'OPTION_20_MINUTES'
-  },
-  {
-    value: 30 * 60 * millisecond,
-    label: 'OPTION_30_MINUTES'
-  },
-  {
-    value: 60 * 60 * millisecond,
-    label: 'OPTION_1_HOUR'
-  },
-  {
-    value: 2 * 60 * 60 * millisecond,
-    label: 'OPTION_2_HOURS'
-  }
-];
-
-export const CommunicationPeriodOptions = [
-  {
-    value: 4 * 60 * millisecond,
-    label: 'OPTION_4_MINUTES'
-  },
+const rest = [
   {
     value: 10 * 60 * millisecond,
     label: 'OPTION_10_MINUTES'
@@ -95,32 +71,43 @@ export const CommunicationPeriodOptions = [
     label: 'OPTION_2_HOURS'
   }
 ];
+
+export const getCommunicationPeriodOptions = (mode?: ProvisioningMode) => {
+  return mode === ProvisioningMode.TimeDivision
+    ? [
+        {
+          value: 5 * 60 * millisecond,
+          label: 'OPTION_5_MINUTES'
+        },
+        ...rest
+      ]
+    : [
+        {
+          value: 4 * 60 * millisecond,
+          label: 'OPTION_4_MINUTES'
+        },
+        ...rest
+      ];
+};
+
+export const resetInvalidCommunicationPeriod = (
+  communicationPeriod?: number,
+  mode?: ProvisioningMode
+) => {
+  const isValid =
+    communicationPeriod &&
+    getCommunicationPeriodOptions(mode)
+      .map(({ value }) => value)
+      .includes(communicationPeriod);
+  return isValid ? communicationPeriod : WSN_DEFAULT_SETTINGS.communicationPeriod;
+};
 
 export const SecondaryCommunicationPeriodOptions = [
   {
     value: 0,
     label: 'NONE'
   },
-  {
-    value: 10 * 60 * millisecond,
-    label: 'OPTION_10_MINUTES'
-  },
-  {
-    value: 20 * 60 * millisecond,
-    label: 'OPTION_20_MINUTES'
-  },
-  {
-    value: 30 * 60 * millisecond,
-    label: 'OPTION_30_MINUTES'
-  },
-  {
-    value: 60 * 60 * millisecond,
-    label: 'OPTION_1_HOUR'
-  },
-  {
-    value: 2 * 60 * 60 * millisecond,
-    label: 'OPTION_2_HOURS'
-  },
+  ...rest,
   {
     value: 4 * 60 * 60 * millisecond,
     label: 'OPTION_4_HOURS'
@@ -139,51 +126,92 @@ export const SecondaryCommunicationPeriodOptions = [
   }
 ];
 
-export enum ProvisioningMode {
-  Group = 1,
-  TimeDivision,
-  Continuous,
-  ManagedBroadcast,
-  UnManagedBroadcast
-}
-
-export const getInitialSettings = (mode?: ProvisioningMode, initial?: WSN) => {
-  if (initial && mode) {
-    const { communication_period, ...rest } = initial;
-    const isPeriodValid = ValidPeriod(communication_period, mode);
-    return {
-      ...rest,
-      communication_period: isPeriodValid
-        ? communication_period
-        : DEFAULT_WSN_SETTING.communication_period
-    };
+export const transform = (initial?: WSNDTO['exported'] | WSNDTO['network']): WSN => {
+  let wsn = WSN_DEFAULT_SETTINGS;
+  if (initial) {
+    if ('mode' in initial) {
+      wsn = { ...initial, provisioningMode: initial.mode };
+    } else {
+      wsn = objectToCamel(initial);
+    }
   }
-  return DEFAULT_WSN_SETTING;
+  return fillEmptyToDefault(wsn);
 };
 
-const ValidPeriod = (period: number, mode: ProvisioningMode) => {
-  if (mode === ProvisioningMode.TimeDivision) {
-    return MajorCommunicationPeriodOptions.some((opts) => opts.value === period);
-  } else {
-    return CommunicationPeriodOptions.some((opts) => opts.value === period);
-  }
+export const transform2UpdateDTO = <T extends WSN>(wsn: T): WSNDTO['update'] => {
+  const {
+    provisioningMode,
+    communicationPeriod,
+    communicationPeriod2,
+    communicationOffset,
+    intervalCnt,
+    groupSize,
+    groupSize2,
+    ...rest
+  } = fillEmptyToDefault(wsn);
+  return {
+    ...rest,
+    mode: provisioningMode,
+    wsn: objectToSnake({
+      communicationPeriod,
+      communicationPeriod2,
+      communicationOffset,
+      intervalCnt,
+      groupSize,
+      groupSize2
+    })
+  };
 };
 
-export const useProvisioningMode = (modeFromProps?: ProvisioningMode) => {
-  const [mode, setMode] = React.useState(modeFromProps ?? ProvisioningMode.TimeDivision);
+const fillEmptyToDefault = <T extends WSN>(wsn: T): WSN => {
+  const {
+    provisioningMode = WSN_DEFAULT_SETTINGS.provisioningMode,
+    communicationPeriod = WSN_DEFAULT_SETTINGS.communicationPeriod,
+    communicationPeriod2 = WSN_DEFAULT_SETTINGS.communicationPeriod2,
+    communicationOffset = WSN_DEFAULT_SETTINGS.communicationOffset,
+    intervalCnt = WSN_DEFAULT_SETTINGS.intervalCnt,
+    groupSize = WSN_DEFAULT_SETTINGS.groupSize,
+    groupSize2 = WSN_DEFAULT_SETTINGS.groupSize2,
+    ...rest
+  } = wsn;
+  return {
+    ...rest,
+    provisioningMode,
+    communicationPeriod,
+    communicationPeriod2,
+    communicationOffset,
+    intervalCnt,
+    groupSize,
+    groupSize2
+  };
+};
+
+export const useProvisioningMode = (initial?: ProvisioningMode) => {
+  const [mode, setMode] = React.useState(initial ?? WSN_DEFAULT_SETTINGS.provisioningMode);
   return { mode, setMode };
+};
+
+const ProvisioningModeField: Field<WSN> = {
+  name: 'provisioningMode',
+  label: 'provisioning.mode',
+  description: 'provisioning.mode.desc'
 };
 
 export const useProvisioningModeField = (onChange: (mode: ProvisioningMode) => void) => {
   return {
-    label: { name: intl.get('provisioning.mode'), description: intl.get('provisioning.mode.desc') },
-    formItemProps: { name: 'mode', rules: [Rules.required] } as FormItemProps,
+    termProps: {
+      name: intl.get(ProvisioningModeField.label),
+      description: intl.get(ProvisioningModeField.description!)
+    },
+    formItemProps: useFormItemBindingsProps({ name: ProvisioningModeField.name }),
     controlProps: {
       onChange,
-      options: pickOptionsFromNumericEnum(ProvisioningMode, 'provisioning.mode').map((opts) => ({
-        ...opts,
-        label: intl.get(opts.label)
-      }))
+      options: pickOptionsFromNumericEnum(ProvisioningMode, ProvisioningModeField.label).map(
+        (opts) => ({
+          ...opts,
+          label: intl.get(opts.label)
+        })
+      )
     }
   };
 };
@@ -193,32 +221,29 @@ export const useCommunicationPeriod = (
   options?: { label: string; value: number }[]
 ) => {
   return {
-    formItemProps: {
-      name: ['wsn', name],
-      rules: [Rules.required]
-    } as FormItemProps,
-    contorlProps: {
+    ...useFormItemBindingsProps({ name }),
+    selectProps: {
       options: options?.map((opts) => ({ ...opts, label: intl.get(opts.label) }))
     }
   };
 };
 
-export const useCommunicationOffset = (communicationPeriodName: string[]) => {
-  const label = {
-    name: intl.get('communication.offset'),
-    description: intl.get('communication.offset.desc')
-  };
+const CommunicationOffsetField: Field<WSN> = {
+  name: 'communicationOffset',
+  label: 'communication.offset',
+  description: 'communication.offset.desc'
+};
+
+export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name']) => {
   return {
-    label,
-    formItemProps: {
-      name: ['wsn', 'communication_offset'],
+    termProps: {
+      name: intl.get(CommunicationOffsetField.label),
+      description: intl.get(CommunicationOffsetField.description!)
+    },
+    formItemProps: useFormItemBindingsProps({
+      label: CommunicationOffsetField.label,
+      name: CommunicationOffsetField.name,
       rules: [
-        {
-          required: true,
-          message: intl.get('PLEASE_ENTER_SOMETHING', {
-            something: label.name
-          })
-        },
         {
           type: 'integer',
           min: 0,
@@ -226,8 +251,8 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
         },
         ({ getFieldValue }: any) => ({
           validator(_, value: number) {
-            const wsn = getFieldValue('wsn');
-            if (!value || Number(wsn.communication_period) >= value) {
+            const period = getFieldValue(communicationPeriodName);
+            if (!value || Number(period) >= value) {
               return Promise.resolve();
             }
             return Promise.reject(intl.get('COMMUNICATION_OFFSET_PROMPT'));
@@ -235,7 +260,7 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
         })
       ],
       dependencies: [communicationPeriodName]
-    } as FormItemProps,
+    }),
     contorlProps: {
       controls: false,
       addonAfter: intl.get('UNIT_MILLISECOND'),
@@ -244,70 +269,49 @@ export const useCommunicationOffset = (communicationPeriodName: string[]) => {
   };
 };
 
+const IntervalCnt: Field<WSN> = {
+  name: 'intervalCnt',
+  label: 'interval.cnt',
+  description: 'interval.cnt.desc'
+};
+
 export const useIntervalCnt = () => {
-  const label = {
-    name: intl.get('interval.cnt'),
-    description: intl.get('interval.cnt.desc')
-  };
   return {
-    label,
-    formItemProps: {
-      name: ['wsn', 'interval_cnt'],
-      rules: [
-        {
-          required: true,
-          message: intl.get('PLEASE_ENTER_SOMETHING', {
-            something: label.name
-          })
-        }
-      ]
-    } as FormItemProps,
+    termProps: {
+      name: intl.get(IntervalCnt.label),
+      description: intl.get(IntervalCnt.description!)
+    },
+    formItemProps: useFormItemBindingsProps({ name: IntervalCnt.name }),
     contorlProps: { controls: false, style: { width: '100%' } }
   };
 };
 
+const GroupSize: Field<WSN> = {
+  name: 'groupSize',
+  label: 'group.size',
+  description: 'group.size.desc'
+};
+
 export const useGroupSize = () => {
-  const label = {
-    name: intl.get('group.size'),
-    description: intl.get('group.size.desc')
-  };
   return {
-    label,
-    formItemProps: {
-      name: ['wsn', 'group_size'],
-      rules: [
-        {
-          required: true,
-          message: intl.get('PLEASE_ENTER_SOMETHING', {
-            something: label.name
-          })
-        }
-      ]
-    } as FormItemProps,
-    contorlProps: {
+    termProps: { name: intl.get(GroupSize.label), description: intl.get(GroupSize.description) },
+    ...useFormItemBindingsProps({ name: GroupSize.name }),
+    selectProps: {
       options: [1, 2, 4, 8].map((value) => ({ label: `${value}`, value }))
     }
   };
 };
 
+const GroupSize2: Field<WSN> = {
+  name: 'groupSize2',
+  label: 'group.size.2',
+  description: 'group.size.2.desc'
+};
+
 export const useGroupSize2 = () => {
-  const label = {
-    name: intl.get('group.size2'),
-    description: intl.get('group.size2.desc')
-  };
   return {
-    label,
-    formItemProps: {
-      name: ['wsn', 'group_size_2'],
-      rules: [
-        {
-          required: true,
-          message: intl.get('PLEASE_ENTER_SOMETHING', {
-            something: label.name
-          })
-        }
-      ]
-    } as FormItemProps,
+    termProps: { name: intl.get(GroupSize2.label), description: intl.get(GroupSize2.description) },
+    formItemProps: useFormItemBindingsProps({ name: GroupSize2.name }),
     contorlProps: { controls: false, style: { width: '100%' } }
   };
 };

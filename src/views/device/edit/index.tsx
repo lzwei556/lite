@@ -5,7 +5,6 @@ import { DeviceType } from '../../../types/device_type';
 import { Card } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import * as WSN from '../../../features/wsn';
-import * as NetworkNS from '../../../features/network';
 import { useFormBindingsProps } from '../../../hooks';
 import * as Basis from '../basis-form-items';
 import {
@@ -76,9 +75,10 @@ const WSNEditForm = ({ network }: Pick<Props, 'network'>) => {
 };
 
 const useWSNFormEditProps = (network: NonNullable<Props['network']>) => {
+  const initialValues = WSN.transform(network);
   const formProps = useFormBindingsProps({
     layout: 'vertical',
-    initialValues: NetworkNS.tranformNetwork2WSNUpdate(network)
+    initialValues
   });
   const { form } = formProps;
   return {
@@ -90,11 +90,7 @@ const useWSNFormEditProps = (network: NonNullable<Props['network']>) => {
     formItemsProps: {
       form,
       formItemColProps: generateColProps({ xl: 12, xxl: 8 }),
-      initial: {
-        ...NetworkNS.tranformNetwork2WSNUpdate(network).wsn,
-        provisioning_mode: network.mode
-      },
-      setFieldsValue: form.setFieldsValue
+      initial: initialValues
     }
   };
 };
