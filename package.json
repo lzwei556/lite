@@ -84,6 +84,7 @@
     "prettier": "^2.7.1",
     "react-scripts": "4.0.3",
     "source-map-explorer": "^2.5.3",
+    "ts-case-convert": "^2.1.0",
     "typescript": "^5.8.2"
   },
   "lint-staged": {
