@@ -56,7 +56,7 @@ const useBasisFormEditProps = ({ device, onUpdate }: Props) => {
   return {
     formProps,
     groupCardProps: useGroupCardProps({
-      extra: <Toolbar {...{ device, form, ...useUpdate(device.id, onUpdate) }} />,
+      extra: <Toolbar {...{ form, ...useUpdate(device.id, onUpdate) }} />,
       title: intl.get('BASIC_INFORMATION')
     }),
     formItemsProps: { form, formItemColProps: generateColProps({ xl: 12, xxl: 8 }) }

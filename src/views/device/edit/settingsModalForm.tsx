@@ -41,10 +41,10 @@ const ModalForm = (props: Props) => {
 
 const useProps = (props: Props) => {
   const { settings } = Basis.useContext();
-
+  const formProps = useFormBindingsProps({ layout: 'vertical' });
   return {
-    modalProps: useModalProps(props, <Footer {...props} />),
-    formProps: useFormBindingsProps({ layout: 'vertical' }),
+    modalProps: useModalProps(props, <Footer {...{ ...props, form: formProps.form }} />),
+    formProps,
     settingsFormItemsProps: {
       deviceType: props.device.typeId,
       formItemColProps: verticalFewSettings(settings, generateColProps({ xl: 12, xxl: 12 })),

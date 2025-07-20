@@ -9,12 +9,12 @@ import { UpdateDeviceSettingRequest } from '../../../apis/device';
 import { useContext } from '..';
 import { DeviceType } from '../../../types/device_type';
 
-type Props = Omit<ButtonProps, 'form'> & Pick<FormCommonProps, 'device'>;
+type Props = Omit<ButtonProps, 'form'> & FormCommonProps;
 
 export const CanCopySettings = (props: Props) => {
-  const { device, ...rest } = props;
+  const { device, form, ...rest } = props;
   const { can, formProps, handleClick, modalProps, checkGroupProps, checkAllProps, devices } =
-    useProps(device);
+    useProps(form, device);
   return (
     can && (
       <>
@@ -46,11 +46,14 @@ export const CanCopySettings = (props: Props) => {
   );
 };
 
-const useProps = (device: Props['device']) => {
+const useProps = (settingsForm: FormCommonProps['form'], device: Props['device']) => {
   const [form] = Form.useForm();
-  const { handleClick, ...rest } = useTrigger(form);
+  const { handleClick, ...rest } = useTrigger(settingsForm);
   const devices = useDevicesWithSameTypes(device);
-  const { indeterminate, ...checkGroupProps } = useGroupProps(devices.map(({ id }) => id));
+  const { indeterminate, ...checkGroupProps } = useGroupProps(
+    form,
+    devices.map(({ id }) => id)
+  );
   return {
     can:
       devices.length > 0 &&
@@ -152,8 +155,7 @@ type TriggerProps = {
   setSubmitedValues: React.Dispatch<any>;
 };
 
-const useGroupProps = (deviceIds: number[]) => {
-  const [form] = Form.useForm();
+const useGroupProps = (form: FormCommonProps['form'], deviceIds: number[]) => {
   const [prevIds, setPrevIds] = React.useState<number[]>([]);
   const indeterminate =
     prevIds.filter((id) => id !== 0).length > 0 &&
@@ -173,7 +175,7 @@ const useGroupProps = (deviceIds: number[]) => {
         ids = e;
       }
     }
-    form.setFieldsValue({ ids });
+    form?.setFieldsValue({ ids });
     setPrevIds(ids);
   };
   return { onChange, style: { width: '100%' }, indeterminate };

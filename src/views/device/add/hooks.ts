@@ -83,6 +83,7 @@ const useCreate = (form: FormCommonProps['form'], onSuccess: () => void): Create
         type: 'primary',
         onClick: () => {
           form?.resetFields(['name', 'mac_address']);
+          form?.setFieldsValue(transform());
           setSuccess(false);
         }
       },

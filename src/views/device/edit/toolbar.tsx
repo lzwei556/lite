@@ -16,7 +16,10 @@ export const Toolbar = (props: Props) => {
       <SaveIconButton {...saveButtonProps} />
       {props.device && (
         <Tooltip title={selectButtonChildren}>
-          <CanCopySettings {...{ ...props, device: props.device }} icon={<SelectOutlined />} />
+          <CanCopySettings
+            {...{ device: props.device, form: props.form }}
+            icon={<SelectOutlined />}
+          />
         </Tooltip>
       )}
     </Space>
