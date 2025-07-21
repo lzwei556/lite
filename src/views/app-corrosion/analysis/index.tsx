@@ -62,7 +62,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
           <ThicknessChart
             {...props}
             history={history}
-            property={property}
+            property={{ ...property, interval: 0.01 }}
             onDispatchMark={() => setActiveKey('marklist')}
           />
         </Col>
