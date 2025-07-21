@@ -69,7 +69,8 @@ const TOF: DisplayProperty = {
   key: 'tof',
   name: 'FIELD_TOF',
   precision: 0,
-  unit: 'ns'
+  unit: 'ns',
+  interval: 600
 };
 const SIGNAL_STRENGTH: DisplayProperty = {
   key: 'signal_strength',
@@ -356,7 +357,7 @@ const SAS: DisplayProperty[] = [
     unit: 'mm'
   },
   { ...TEMPERATURE, key: 'bolt_temperature', name: 'FIELD_BOLT_TEMPERATURE' },
-  { ...TOF, interval: 600 },
+  TOF,
   {
     key: 'defect_location',
     name: 'FIELD_DEFECT_LOCATION',
