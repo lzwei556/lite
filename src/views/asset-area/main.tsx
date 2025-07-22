@@ -1,15 +1,12 @@
 import React from 'react';
 import { Spin } from 'antd';
 import { Asset, AssetRow, ContextProps } from '../asset-common';
-import { UpdateAssetModal } from '../asset-variant';
 import * as Detail from './detail';
 import { UpdateModal } from './updateModal';
-import { useAssetCategories } from './utils';
 
 export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
   const [open, setOpen] = React.useState(false);
   const [asset, setAsset] = React.useState<AssetRow | undefined>();
-  const assetCategories = useAssetCategories();
 
   const reset = () => {
     setOpen(false);
@@ -50,9 +47,6 @@ export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
       {ele}
       {asset && Asset.Assert.isArea(asset.type) && (
         <UpdateModal {...updateModalProps} asset={asset} />
-      )}
-      {asset && !Asset.Assert.isArea(asset.type) && (
-        <UpdateAssetModal {...updateModalProps} asset={asset} types={assetCategories} />
       )}
     </Spin>
   );
