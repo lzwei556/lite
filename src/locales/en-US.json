@@ -82,8 +82,8 @@
   "CONTINUE_TO_CREATE_DEVICE": "Continue to create device.",
   "CONTINUE_TO_IMPORT_NETWORK": "Continue to import network.",
   "CORROSION_MONITORING_SYSTEM": "Corrosion Monitoring System",
-  "CORROSION_RATE_LONG_TERM": "Corrosion rate long term",
-  "CORROSION_RATE_SHORT_TERM": " Corrosion rate short term",
+  "CORROSION_RATE_LONG_TERM": "Corrosion Rate Long-term",
+  "CORROSION_RATE_SHORT_TERM": " Corrosion Rate Short-term",
   "CPU_CORE": "Core",
   "CPU_RUNNING_STATUS": "CPU Running Status",
   "CRC": "CRC",
@@ -1321,5 +1321,6 @@
   "replace.image": "Upload Image",
   "only.jpeg.or.png": "You can only upload JPG/PNG file",
   "only.json.file": "You can only upload json file",
-  "string.length.range.pattern": "The length of {something} must be between {min} and {max} characters"
+  "string.length.range.pattern": "The length of {something} must be between {min} and {max} characters",
+  "no.corrosion": "No Corrosion"
 }

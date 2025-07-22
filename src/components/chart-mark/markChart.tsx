@@ -62,7 +62,7 @@ export const MarkChart = (
   }
 ) => {
   const ref = useChartContext();
-  const { setCursor, dispatchMarks } = useContext();
+  const { cursor, setCursor, dispatchMarks } = useContext();
   const { cardProps, series, yAxisMeta, config, onEvents, toolbar, ...rest } = props;
   const visibles = toolbar?.visibles ?? Visibles;
   const options = getOptions(
@@ -120,10 +120,16 @@ export const MarkChart = (
           {cardProps?.extra && <Space size={4}>{cardProps?.extra}</Space>}
           <Space size={4}>
             {visibles?.includes('enable_point') && (
-              <PointMarkSwitcherIconButton onClick={enablePointMark} />
+              <PointMarkSwitcherIconButton
+                onClick={enablePointMark}
+                variant={cursor === 'point' ? 'solid' : 'outlined'}
+              />
             )}
             {visibles?.includes('enable_area') && (
-              <AreaMarkSwitcherIconButton onClick={enableAreaMark} />
+              <AreaMarkSwitcherIconButton
+                onClick={enableAreaMark}
+                variant={cursor === 'line' ? 'solid' : 'outlined'}
+              />
             )}
             {visibles?.includes('refresh') && <RestoreIconButton onClick={restoreHandle} />}
             {visibles?.includes('download') && (

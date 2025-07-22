@@ -1321,5 +1321,6 @@
   "replace.image": "上传图片",
   "only.jpeg.or.png": "仅支持JPG/PNG文件",
   "only.json.file": "仅支持JSON文件",
-  "string.length.range.pattern": "{something}长度必须在{min}到{max}个字符之间"
+  "string.length.range.pattern": "{something}长度必须在{min}到{max}个字符之间",
+  "no.corrosion": "无腐蚀"
 }

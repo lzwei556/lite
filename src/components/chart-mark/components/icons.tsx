@@ -31,8 +31,13 @@ export const RestoreIconButton = (props: ButtonProps) => {
   );
 };
 
-function IconButton(props: ButtonProps) {
-  return <Button {...props} color='primary' variant='outlined' size='small' />;
+function IconButton({
+  color = 'primary',
+  variant = 'outlined',
+  size = 'small',
+  ...rest
+}: ButtonProps) {
+  return <Button {...rest} color={color} variant={variant} size={size} />;
 }
 
 export const DownloadIconButton = (props: ButtonProps & { tooltip?: string }) => {

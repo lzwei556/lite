@@ -1,5 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
+import { useLocaleContext } from '../../../localeProvider';
 import { Dayjs } from '../../../utils';
 import { DisplayProperty } from '../../../constants/properties';
 import { roundValue } from '../../../utils/format';
@@ -15,7 +16,8 @@ export const ThicknessChart = (
     onDispatchMark?: () => void;
   }
 ) => {
-  const { marks, visibledMarks, dispatchMarks } = ChartMark.useContext();
+  const { language } = useLocaleContext();
+  const { cursor, marks, visibledMarks, dispatchMarks } = ChartMark.useContext();
   const { history, property, id, attributes, onDispatchMark } = props;
   const { series: initialSeries, min, max } = HistoryDataFea.transform(history, property);
   const defaultSeries = initialSeries.map((s) => ({
@@ -25,7 +27,10 @@ export const ThicknessChart = (
   function getMarkLine() {
     const data = getDefaultLines(attributes)?.map((line) => ({
       ...line,
-      label: { distance: [-60, 60], formatter: `${intl.get(line.name!)} {c}` }
+      label: {
+        distance: language === 'en-US' ? -110 : -60,
+        formatter: `${intl.get(line.name!)} {c}`
+      }
     }));
     return { symbol: 'none', data };
   }
@@ -55,17 +60,23 @@ export const ThicknessChart = (
                   mark: {
                     name: areaCoords[i].join(),
                     data: line,
-                    value: rate,
+                    value: rate === 0 ? `${rate}` : rate,
                     chartPorps: {
                       label: {
-                        lineHeight: 20,
+                        lineHeight: 10,
                         position: 'middle',
-                        formatterFn: (rate: number) =>
-                          `${intl.get('FIELD_CORROSION_RATE')} ${rate} mm/a`
+                        formatterFn: (rate: number | string) => {
+                          if (!rate || rate === '0') {
+                            return `${intl.get('no.corrosion')}`;
+                          } else {
+                            return `${intl.get('FIELD_CORROSION_RATE')} ${rate} mm/a`;
+                          }
+                        }
                       },
                       lineStyle: { color: '#fa8c16', width: 3, type: 'solid' }
                     },
-                    description: `${areaValues[i].map((t) => Dayjs.format(t)).join()}`
+                    description: `${areaValues[i].map((t) => Dayjs.format(t)).join()}`,
+                    type: cursor
                   }
                 });
                 onDispatchMark?.();
@@ -76,7 +87,13 @@ export const ThicknessChart = (
         click: ([x, y]: [x: string, y: number]) => {
           dispatchMarks({
             type: 'append_multiple',
-            mark: { name: `${x}${y}`, data: [x, y], value: roundValue(y), description: x }
+            mark: {
+              name: `${x}${y}`,
+              data: [x, y],
+              value: roundValue(y),
+              description: x,
+              type: cursor
+            }
           });
           onDispatchMark?.();
         }

@@ -17,6 +17,7 @@ import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
 import { AnalysisSidebarCollapse } from '../../../features';
+import { MarkList } from './markList';
 
 export const Analysis = (props: MonitoringPointRow) => {
   const { numberedRange, setRange } = useRange();
@@ -87,7 +88,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
             {
               key: 'marklist',
               label: intl.get('mark'),
-              children: <ChartMark.List />,
+              children: <MarkList property={property} />,
               style: { border: 0 },
               styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
             }
