@@ -77,7 +77,6 @@ export const Index = (props: {
           key={asset.id}
           asset={asset}
           enableSettingColumnsCount={Points.filter(monitoringPoints).length > 0}
-          showTitle={false}
         />
       )
     },

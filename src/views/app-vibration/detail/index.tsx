@@ -1,11 +1,10 @@
 import React from 'react';
-import { Radio } from 'antd';
+import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Tabs } from '../../../components';
+import { Grid, Tabs } from '../../../components';
 import {
   AssetNavigator,
   AssetRow,
-  MONITORING_POINT,
   MonitoringPointRow,
   MonitoringPointsTable,
   TabBarExtraLeftContent
@@ -22,7 +21,6 @@ export const Index = (props: {
 }) => {
   const { asset, onSuccess } = props;
   const { id, alertLevel } = asset;
-  const [type, setType] = React.useState('basic');
 
   return (
     <AssetProvider asset={asset}>
@@ -42,20 +40,14 @@ export const Index = (props: {
             key: 'settings',
             label: intl.get('SETTINGS'),
             children: (
-              <Card>
-                <Radio.Group
-                  options={[
-                    { label: intl.get('BASIC_INFORMATION'), value: 'basic' },
-                    { label: intl.get(MONITORING_POINT), value: 'monitoringPoints' }
-                  ]}
-                  onChange={(e) => setType(e.target.value)}
-                  value={type}
-                  optionType='button'
-                  buttonStyle='solid'
-                />
-                {type === 'basic' && <Update asset={asset} onSuccess={onSuccess} key={asset.id} />}
-                {type === 'monitoringPoints' && <PointsTable {...props} />}
-              </Card>
+              <Grid>
+                <Col span={24}>
+                  <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
+                </Col>
+                <Col span={24}>
+                  <PointsTable {...props} />
+                </Col>
+              </Grid>
             )
           }
         ]}
