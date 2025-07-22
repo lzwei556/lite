@@ -10,6 +10,10 @@ body {
 tbody.ant-table-tbody > tr.ant-table-row:hover > td {
   background-color: #eee;
 }
+.ant-table-wrapper .ant-table-thead > tr > th {
+  overflow-wrap: normal;
+  white-space: nowrap;
+}
 .ant-form fieldset {
   margin-bottom: var(--space);
   padding: 20px;

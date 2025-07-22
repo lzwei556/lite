@@ -44,6 +44,7 @@ export const MonitoringPointsTable = ({
   const tableProps = {
     ...rest,
     cardBordered: true,
+    bordered: true,
     header: { title, enableSettingColumnsCount },
     rowKey: (point: MonitoringPointRow) => point.id
   };
@@ -70,7 +71,6 @@ export const MonitoringPointsTable = ({
               <Table
                 {...{ ...tableProps, columns }}
                 dataSource={actualPoints.filter((m) => m.type === t)}
-                tableLayout='fixed'
               />
             )
           }))}
@@ -78,9 +78,7 @@ export const MonitoringPointsTable = ({
         />
       );
     } else {
-      return (
-        <Table {...{ ...tableProps, columns }} dataSource={actualPoints} tableLayout='fixed' />
-      );
+      return <Table {...{ ...tableProps, columns }} dataSource={actualPoints} />;
     }
   } else {
     const columns = getColumns({ language, ...rest });

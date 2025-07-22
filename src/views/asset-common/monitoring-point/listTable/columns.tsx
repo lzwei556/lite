@@ -19,9 +19,12 @@ const name = {
   title: () => intl.get('NAME'),
   dataIndex: 'name',
   key: 'name',
-  width: 240,
   render: (name: string, row: MonitoringPointRow) => (
-    <Link to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`} key={`${row.id}-${row.type}`}>
+    <Link
+      style={{ display: 'inline-block', minWidth: 120 }}
+      to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
+      key={`${row.id}-${row.type}`}
+    >
       {name}
     </Link>
   )
@@ -31,7 +34,6 @@ const status = {
   title: () => intl.get('STATUS'),
   dataIndex: 'alertLevel',
   key: 'alertLevel',
-  width: 120,
   render: (level: number) => <AssetStatusTag status={level} />
 };
 
@@ -39,11 +41,10 @@ const sensor = {
   title: () => intl.get('SENSOR'),
   dataIndex: 'devices',
   key: 'devices',
-  width: 120,
-  render: (name: string, row: MonitoringPointRow) =>
+  render: (_: string, row: MonitoringPointRow) =>
     row.bindingDevices && row.bindingDevices.length > 0
       ? row.bindingDevices.map(({ id, name }) => (
-          <Link to={`/devices/${id}`} key={id}>
+          <Link style={{ display: 'inline-block', minWidth: 120 }} to={`/devices/${id}`} key={id}>
             {name}
           </Link>
         ))
@@ -52,16 +53,21 @@ const sensor = {
 const time = {
   title: () => intl.get('SAMPLING_TIME'),
   key: 'timestamp',
-  render: (time: string, row: MonitoringPointRow) => {
-    return row.data && row.data.timestamp ? Dayjs.format(row.data.timestamp) : '-';
-  },
-  width: 120
+  render: (_: string, row: MonitoringPointRow) => {
+    return row.data && row.data.timestamp ? (
+      <span style={{ display: 'inline-block', width: 150 }}>
+        {Dayjs.format(row.data.timestamp)}
+      </span>
+    ) : (
+      '-'
+    );
+  }
 };
 
 export const positionColumn = {
   title: () => intl.get('POSITION'),
   key: 'position',
-  render: (name: string, row: MonitoringPointRow) => row.attributes?.index ?? '-'
+  render: (_: string, row: MonitoringPointRow) => row.attributes?.index ?? '-'
 };
 export type OperateCellProps = {
   onDeleteSuccess: (id: number) => void;
@@ -109,8 +115,7 @@ function getPropertyedCols(
         key: subKey,
         render: (d: MonitoringPointRow) =>
           getValue(roundValue(d?.data?.values[subKey] as number, precision)),
-        title: axis ? intl.get(axis.label) : intl.get(name),
-        width: 90
+        title: axis ? intl.get(axis.label) : intl.get(name)
       };
     });
     if (
@@ -125,8 +130,7 @@ function getPropertyedCols(
             const axisKey = attrs?.[aliasKey];
             return getValue(roundValue(d?.data?.values[`${key}_${axisKey}`] as number, precision));
           },
-          title: intl.get(label),
-          width: 90
+          title: intl.get(label)
         };
       });
     }
@@ -138,7 +142,6 @@ function getPropertyedCols(
           render: (d: MonitoringPointRow) =>
             getValue(roundValue(d?.data?.values[key] as number, precision)),
           title,
-          width: 120,
           hidden: !first
         };
   });
