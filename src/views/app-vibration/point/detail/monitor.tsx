@@ -59,7 +59,10 @@ export const Monitor = (point: MonitoringPointRow) => {
                     <HistoryDataFea.PropertyChartCard
                       data={historyData}
                       property={p}
-                      cardprops={{ style: { background: '#f0f0f0' } }}
+                      cardProps={{
+                        style: { background: '#f0f0f0' },
+                        styles: { header: { fontWeight: 400 } }
+                      }}
                     />
                   </Col>
                 );

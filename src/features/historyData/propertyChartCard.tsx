@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Space } from 'antd';
+import { Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, CardProps, Term } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
@@ -11,10 +11,10 @@ import { PropertyChart, transform } from './propertyChart';
 export const PropertyChartCard = (props: {
   data?: HistoryData;
   property: DisplayProperty;
-  cardprops?: CardProps;
+  cardProps?: CardProps;
 }) => {
   return (
-    <Card {...props.cardprops} title={<PropertyChartTitle {...props} />}>
+    <Card {...props.cardProps} title={<PropertyChartTitle {...props} />}>
       <PropertyChart
         {...props}
         config={{
@@ -36,40 +36,43 @@ const PropertyChartTitle = ({
 }) => {
   const { language } = useLocaleContext();
   const { name, unit, precision } = property;
-  let title = intl.get(name).d(name);
-  let valueEle = null;
   const values = transform(data, property).values;
-  const isSingle = values.length === 1;
 
-  if (values.length > 1) {
-    title = getDisplayName({ name: title, suffix: unit, lang: language });
-    const defaultValue = `${values[0].name} ${values[0].last}`;
-    valueEle = (
-      <Select
-        key={defaultValue}
-        defaultValue={defaultValue}
-        options={values.map((v) => ({
-          label: (
-            <Space>
-              {v.name}
-              {getValue(roundValue(v.last, precision))}
-            </Space>
-          ),
-          value: `${v.name} ${v.last}`
-        }))}
-        size='small'
-        style={{ minWidth: 130 }}
-        variant='filled'
-      />
+  if (values.length <= 2) {
+    return values.map(({ name, last }) => {
+      let title = intl.get(name).d(name);
+      return (
+        <Space style={{ display: 'flex' }}>
+          <Term
+            name={title}
+            nameProps={{ style: { color: 'rgba(0,0,0,.45)' } }}
+            description={intl.get(`${name}_DESC`)}
+          />
+          {getValue(roundValue(last, precision), unit)}
+        </Space>
+      );
+    });
+  } else {
+    return (
+      <>
+        <Space style={{ display: 'flex' }}>
+          <Term
+            name={getDisplayName({ name: intl.get(name).d(name), suffix: unit, lang: language })}
+            nameProps={{ style: { color: 'rgba(0,0,0,.45)' } }}
+            description={intl.get(`${name}_DESC`)}
+          />
+        </Space>
+        <Space size={5} style={{ display: 'flex', fontSize: 13 }}>
+          {values.map(({ name, last }) => (
+            <>
+              <Typography.Text style={{ fontSize: 13 }} type='secondary'>
+                {intl.get(name).d(name)}
+              </Typography.Text>
+              {getValue(roundValue(last, precision))}
+            </>
+          ))}
+        </Space>
+      </>
     );
-  } else if (isSingle) {
-    valueEle = getValue(roundValue(values[0].last, precision), unit);
   }
-
-  return (
-    <Space align='center' style={{ fontWeight: 400 }} size={isSingle ? 16 : 8} wrap={true}>
-      <Term name={title} description={intl.get(`${name}_DESC`)} size={isSingle ? 8 : 2} />
-      {valueEle}
-    </Space>
-  );
 };

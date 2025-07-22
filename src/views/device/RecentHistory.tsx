@@ -57,11 +57,14 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                 .filter((p) => p.group === g)
                 .map((p: DisplayProperty, index: number) => {
                   return (
-                    <Col {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })} key={index}>
+                    <Col {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })} key={index}>
                       <HistoryDataFea.PropertyChartCard
                         data={historyData}
                         property={p}
-                        cardprops={{ style: { background: '#f0f0f0' } }}
+                        cardProps={{
+                          style: { background: '#f0f0f0' },
+                          styles: { header: { fontWeight: 400 } }
+                        }}
                       />
                     </Col>
                   );
@@ -79,8 +82,12 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
         {getDisplayProperties(device.properties, device.typeId).map(
           (p: DisplayProperty, index: number) => {
             return (
-              <Col {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })} key={index}>
-                <HistoryDataFea.PropertyChartCard data={historyData} property={p} />
+              <Col {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })} key={index}>
+                <HistoryDataFea.PropertyChartCard
+                  data={historyData}
+                  property={p}
+                  cardProps={{ styles: { header: { fontWeight: 400 } } }}
+                />
               </Col>
             );
           }

@@ -16,7 +16,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
-  const colProps = generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 });
+  const colProps = generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
 
   React.useEffect(() => {
     const [from, to] = Dayjs.toRange(commonRange.PastWeek);
@@ -46,7 +46,10 @@ export const Monitor = (point: MonitoringPointRow) => {
             <HistoryDataFea.PropertyChartCard
               data={historyData}
               property={p}
-              cardprops={{ style: { background: '#f0f0f0' } }}
+              cardProps={{
+                style: { background: '#f0f0f0' },
+                styles: { header: { fontWeight: 400 } }
+              }}
             />
           </Col>
         );
