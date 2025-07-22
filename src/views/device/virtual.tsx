@@ -19,7 +19,11 @@ export const Virtual = () => {
 
   const renderBody = () => {
     if (devices.length === 0) {
-      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+      return (
+        <Card>
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </Card>
+      );
     } else {
       return (
         <Grid>
