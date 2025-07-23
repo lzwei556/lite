@@ -1,23 +1,27 @@
 import React from 'react';
-import { Form, Input, Select } from 'antd';
+import { Col, ColProps, Form, Input, Select } from 'antd';
 import intl from 'react-intl-universal';
+import { Grid } from '../../../components';
 import { FormInputItem } from '../../../components/formInputItem';
 import DeviceSelect from '../../../components/select/deviceSelect';
 import { Asset, MONITORING_POINT, MonitoringPointRow, Point } from '../../asset-common';
 import { useMonitoringPointParents } from '../../asset-variant';
 import { relatedDeviceTypes } from './common';
-import { Others } from './others';
 
-export const UpdateFormItems = (monitoringPoint: MonitoringPointRow) => {
+export const BasisFormItems = ({
+  formItemColProps,
+  monitoringPoint
+}: {
+  formItemColProps: ColProps;
+  monitoringPoint: MonitoringPointRow;
+}) => {
   const { type } = monitoringPoint;
   const parents = useMonitoringPointParents((asset) => Asset.Assert.isVibrationRelated(asset.type));
   const types = [{ id: type, label: Point.getTypeLabel(type) as string }];
   const deviceTypes = relatedDeviceTypes.get(type);
-
   return (
-    <>
-      <fieldset>
-        <legend>{intl.get('BASIC_INFORMATION')}</legend>
+    <Grid>
+      <Col {...formItemColProps}>
         <FormInputItem
           label={intl.get('NAME')}
           name='name'
@@ -26,6 +30,8 @@ export const UpdateFormItems = (monitoringPoint: MonitoringPointRow) => {
         >
           <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
         </FormInputItem>
+      </Col>
+      <Col {...formItemColProps}>
         <Form.Item
           label={intl.get('TYPE')}
           name='type'
@@ -51,6 +57,8 @@ export const UpdateFormItems = (monitoringPoint: MonitoringPointRow) => {
             ))}
           </Select>
         </Form.Item>
+      </Col>
+      <Col {...formItemColProps}>
         <Form.Item
           label={intl.get('SENSOR')}
           name='device_id'
@@ -67,6 +75,8 @@ export const UpdateFormItems = (monitoringPoint: MonitoringPointRow) => {
             }}
           />
         </Form.Item>
+      </Col>
+      <Col {...formItemColProps}>
         <Form.Item
           label={intl.get('ASSET')}
           name='asset_id'
@@ -87,11 +97,7 @@ export const UpdateFormItems = (monitoringPoint: MonitoringPointRow) => {
             ))}
           </Select>
         </Form.Item>
-      </fieldset>
-      <fieldset>
-        <legend>{intl.get('monitoring.point.attr')}</legend>
-        <Others mode='update' />
-      </fieldset>
-    </>
+      </Col>
+    </Grid>
   );
 };

@@ -6,6 +6,7 @@ import { Grid } from '../../../components';
 import { Device } from '../../../types/device';
 import { FormInputItem } from '../../../components/formInputItem';
 import { isMobile } from '../../../utils/deviceDetection';
+import { generateColProps } from '../../../utils/grid';
 import { GetDevicesRequest } from '../../../apis/device';
 import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
 import { relatedDeviceTypes } from './common';
@@ -62,7 +63,7 @@ export const PointItemList = ({
                 }}
               />
               <Grid>
-                <Col span={12}>
+                <Col {...generateColProps({ xl: 12, xxl: 12 })}>
                   <FormInputItem
                     {...restFields}
                     label={intl.get('NAME')}
@@ -74,7 +75,11 @@ export const PointItemList = ({
                     <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
                   </FormInputItem>
                 </Col>
-                <Others mode='create' nameIndex={name} restFields={restFields} />
+                <Others
+                  formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
+                  nameIndex={name}
+                  restFields={restFields}
+                />
               </Grid>
             </div>
           ))}

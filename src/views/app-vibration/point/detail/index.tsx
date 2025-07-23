@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, TabsProps } from 'antd';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { Card, Grid, Tabs, TitleSection } from '../../../../components';
+import { Grid, Tabs, TitleSection } from '../../../../components';
 import { FilterableAlarmRecordTable } from '../../../alarm';
 import usePermission, { Permission } from '../../../../permission/permission';
 import { useAppVibrationEnabled } from '../../../../config';
@@ -88,11 +88,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'settings',
       label: intl.get('SETTINGS'),
-      children: (
-        <Card>
-          <Settings point={monitoringPoint} onUpdateSuccess={onSuccess} />
-        </Card>
-      )
+      children: <Settings monitoringPoint={monitoringPoint} onSuccess={onSuccess} />
     });
   }
 

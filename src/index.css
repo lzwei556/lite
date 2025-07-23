@@ -14,15 +14,6 @@ tbody.ant-table-tbody > tr.ant-table-row:hover > td {
   overflow-wrap: normal;
   white-space: nowrap;
 }
-.ant-form fieldset {
-  margin-bottom: var(--space);
-  padding: 20px;
-  border: solid 1px #d9d9d9;
-}
-.ant-form fieldset legend {
-  width: initial;
-  border: initial;
-}
 .overview-statistic .ant-statistic {
   max-width: 15em;
   text-align: center;
