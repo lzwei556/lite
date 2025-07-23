@@ -146,9 +146,7 @@ export const BindMonitoringPoints: React.FC<
   const renderModalContent = () => {
     if (loading) return <Spin />;
     if (assets.length === 0 || !selectedAsset)
-      return (
-        <Empty description={intl.get('NO_DATA_PROMPT')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
-      );
+      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     return (
       <>
         <Form.Item>

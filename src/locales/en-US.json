@@ -629,7 +629,6 @@
   "NO_ALARM_RECORDS_PROMPT": "No alarm record exists",
   "NO_ASSET_PROMPT": "There is no available {assetTypeLabel}.",
   "NO_DATA": "No Data",
-  "NO_DATA_PROMPT": "No Data",
   "NO_DEVICES_PROMPT": "No Devices",
   "NO_DYANAMIC_DATA_PROMPT": "No Dyanmic Data",
   "NO_FIRMWARES_PROMPT": "No Firmwares",

@@ -47,7 +47,7 @@ export const Status: React.FC<AssetRow> = (props) => {
     if (timestamps.length === 0) {
       return (
         <Card>
-          <Empty description={intl.get('NO_DATA_PROMPT')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </Card>
       );
     } else {

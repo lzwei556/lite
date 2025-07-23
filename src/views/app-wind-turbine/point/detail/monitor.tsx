@@ -1,6 +1,5 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
-import intl from 'react-intl-universal';
 import { generateColProps } from '../../../../utils/grid';
 import { Card, Grid, commonRange } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
@@ -36,7 +35,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   if (!historyData || historyData.length === 0)
     return (
       <Card>
-        <Empty description={intl.get('NO_DATA_PROMPT')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       </Card>
     );
 
