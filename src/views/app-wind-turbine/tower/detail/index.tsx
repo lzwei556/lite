@@ -80,7 +80,6 @@ export const Index = (props: {
               {type === 'basic' && <Update asset={asset} onSuccess={onSuccess} key={asset.id} />}
               {type === 'monitoringPoints' && (
                 <Table
-                  cardProps={{ styles: { body: { padding: 0 } } }}
                   columns={[
                     ...getMonitoringPointColumns({
                       language

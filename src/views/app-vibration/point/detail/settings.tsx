@@ -52,9 +52,7 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
         </Card>
       </Col>
       <Col span={24}>
-        <Card size='small' title={intl.get('ALARM_RULES')}>
-          <AlarmRuleSetting {...monitoringPoint} />
-        </Card>
+        <AlarmRuleSetting {...monitoringPoint} />
       </Col>
     </Grid>
   );

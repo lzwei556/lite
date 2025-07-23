@@ -112,13 +112,12 @@ export const Settings = (props: {
       }
       cols.push(operationColumn);
       const typeLabel = getByType(t)?.label;
-      const cardProps = { styles: { body: { padding: 0 } } };
+
       return (
         <Col span={24} key={t}>
           {types.length === 1 ? (
             <Table
               bordered
-              cardProps={cardProps}
               columns={cols}
               dataSource={children
                 .filter((a) => a.type === t)
@@ -132,7 +131,6 @@ export const Settings = (props: {
           ) : (
             <Table
               bordered
-              cardProps={cardProps}
               columns={cols}
               dataSource={children
                 .filter((a) => a.type === t)

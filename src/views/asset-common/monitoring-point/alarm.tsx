@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Empty, Space, Spin, TableProps, Tag } from 'antd';
+import { Button, Space, Spin, TableProps, Tag } from 'antd';
 import intl from 'react-intl-universal';
 import { isMobile } from '../../../utils/deviceDetection';
 import { getValue } from '../../../utils/format';
@@ -11,7 +11,7 @@ import {
   unbindMeasurementsToAlarmRule
 } from '../../alarm/alarm-group/services';
 import { MonitoringPointRow, Point } from '../../asset-common';
-import { Link, Table } from '../../../components';
+import { Table } from '../../../components';
 import { AlarmLevelTag } from '../../alarm';
 
 export const AlarmRuleSetting = (point: MonitoringPointRow) => {
@@ -165,22 +165,10 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
     }
   }, [point.id, allRules]);
 
-  if (!loading && allRules && allRules.length === 0) {
-    return (
-      <Empty
-        image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description={
-          <p>
-            <Link to='/alarmRules'>{intl.get('CREATE_ONE')}</Link>
-          </p>
-        }
-      />
-    );
-  }
   return (
     <Table
       rowKey='id'
-      cardProps={{ styles: { body: { padding: 0 } } }}
+      cardProps={{ size: 'small', title: intl.get('ALARM_RULES') }}
       columns={columns}
       dataSource={allRules}
       expandable={{

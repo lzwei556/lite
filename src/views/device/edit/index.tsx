@@ -27,11 +27,7 @@ export const Index = ({ network, ...rest }: Props) => {
       <BasisEditForm {...rest} />
       <SettingsSectionForm device={device} />
       {isBLEGateway(device.typeId) && network && <WSNEditForm network={network} />}
-      {DeviceType.isGateway(device.typeId) && (
-        <Card size='small' title={intl.get('MENU_DEVICE_LSIT')}>
-          <DevicesTable {...rest} />
-        </Card>
-      )}
+      {DeviceType.isGateway(device.typeId) && <DevicesTable {...rest} />}
     </Basis.ContextProvier>
   );
 };

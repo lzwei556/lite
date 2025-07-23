@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Card, Table } from '../../../components';
+import { Table } from '../../../components';
 import usePermission, { Permission } from '../../../permission/permission';
 import { useLocaleContext } from '../../../localeProvider';
 import {
@@ -83,14 +83,17 @@ export const PointsTable = (props: {
   }
 
   return (
-    <Card extra={<ActionBar {...props} />} size='small' title={intl.get(MONITORING_POINT)}>
-      <Table
-        rowKey={(record) => record.id}
-        columns={columns.map((c) => ({ ...c, width: 'auto' }))}
-        cardProps={{ styles: { body: { padding: 0 } } }}
-        dataSource={Points.sort(actualPoints)}
-        pagination={false}
-      />
-    </Card>
+    <Table
+      rowKey={(record) => record.id}
+      columns={columns.map((c) => ({ ...c, width: 'auto' }))}
+      cardProps={{
+        extra: <ActionBar {...props} />,
+        size: 'small',
+        styles: { body: { padding: 0 } },
+        title: intl.get(MONITORING_POINT)
+      }}
+      dataSource={Points.sort(actualPoints)}
+      pagination={false}
+    />
   );
 };

@@ -144,7 +144,6 @@ export const ChildrenAttrsTable = ({
       {Array.from(new Set(assets.map((a) => a.type))).map((type) => (
         <Col span={24} key={type}>
           <Table
-            cardProps={{ styles: { body: { padding: 0 } } }}
             columns={
               type === tower.type
                 ? [nameCol, indexCol, operationColumn]

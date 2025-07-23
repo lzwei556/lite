@@ -17,7 +17,6 @@ export type MonitoringPointsTableProps = {
 
 export const MonitoringPointsTable = ({
   asset,
-
   enableSettingColumnsCount,
   ...rest
 }: MonitoringPointsTableProps) => {

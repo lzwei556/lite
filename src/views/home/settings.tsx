@@ -3,7 +3,7 @@ import { Button, message } from 'antd';
 import { DownloadOutlined, ExportOutlined } from '@ant-design/icons';
 import { cloneDeep } from 'lodash';
 import intl from 'react-intl-universal';
-import { Card, Table, JsonImporter, Link } from '../../components';
+import { Table, JsonImporter, Link } from '../../components';
 import { getProject } from '../../utils/session';
 import { App, useAppType } from '../../config';
 import { ASSET_PATHNAME, AssetRow, importAssets, useContext } from '../asset-common';
@@ -49,10 +49,9 @@ export const Settings = () => {
   const dataSource = cloneDeep(assets);
 
   return (
-    <Card>
+    <>
       <Table
         bordered={true}
-        cardProps={{ styles: { body: { padding: 0 } } }}
         columns={[
           {
             dataIndex: 'name',
@@ -125,6 +124,6 @@ export const Settings = () => {
       />
       {open && type === 'download' && <BatchDownlaodHistoryDataModal {...commonProps} />}
       {open && type === 'export' && <SelectAssets {...commonProps} onSuccess={refresh} />}
-    </Card>
+    </>
   );
 };
