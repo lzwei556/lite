@@ -82,7 +82,7 @@ const useCreate = (form: FormCommonProps['form'], onSuccess: () => void): Create
         children: intl.get('CONTINUE_TO_CREATE_DEVICE'),
         type: 'primary',
         onClick: () => {
-          form?.resetFields(['name', 'mac_address']);
+          form?.resetFields(['name', 'mac_address', 'parent']);
           form?.setFieldsValue(transform());
           setSuccess(false);
         }

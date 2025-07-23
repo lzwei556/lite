@@ -117,7 +117,11 @@ export const useProtocolProps = () => {
 };
 
 export const useParentProps = (form: CommonProps['form']) => {
-  const parent = useFormItemBindingsProps({ label: 'PARENT', name: 'parent' });
+  const parent = useFormItemBindingsProps({
+    label: 'PARENT',
+    name: 'parent',
+    rules: [{ required: true }]
+  });
   const [networkId, setNetworkId] = React.useState<number | undefined>();
   return {
     networkId,
