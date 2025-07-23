@@ -249,6 +249,10 @@ export namespace DeviceType {
     return isGateway(type) || isMultiChannel(type) || isCat1(type);
   }
 
+  export function isRootSensor(type: number) {
+    return isMultiChannel(type) || isCat1(type);
+  }
+
   export function isSensor(type: number) {
     return sensors().includes(type);
   }

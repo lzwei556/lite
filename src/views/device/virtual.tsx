@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Button, Col, Empty, Space, Statistic } from 'antd';
+import { Badge, Button, Col, Empty, Space, Statistic, Typography } from 'antd';
 import { ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { useContext, VIRTUAL_ROOT_DEVICE } from '.';
@@ -46,7 +46,7 @@ export const Virtual = () => {
                         size='small'
                       />
                     </Flex>
-                    <div style={{ padding: 20, textAlign: 'center' }}>
+                    <div style={{ paddingBlock: 20, textAlign: 'center' }}>
                       <DataBar device={d} devices={devices} />
                     </div>
                     <Card.Meta
@@ -102,13 +102,20 @@ export const Virtual = () => {
 };
 
 function DataBar({ device, devices }: { device: Device; devices: Device[] }) {
-  if (DeviceType.isMultiChannel(device.typeId)) {
+  const renderTitle = (name: string) => {
+    return (
+      <Typography.Text style={{ whiteSpace: 'nowrap' }} ellipsis={true} title={name}>
+        {name}
+      </Typography.Text>
+    );
+  };
+  if (DeviceType.isRootSensor(device.typeId)) {
     const datas = getValueOfFirstClassProperty(device);
     return (
       <Grid>
         {datas.map(({ name, value2, unit }) => (
           <Col span={8} key={name}>
-            <Statistic value={value2} title={intl.get(name)} suffix={unit} />
+            <Statistic value={value2} title={renderTitle(intl.get(name))} suffix={unit} />
           </Col>
         ))}
       </Grid>
@@ -118,10 +125,10 @@ function DataBar({ device, devices }: { device: Device; devices: Device[] }) {
     return (
       <Grid justify='center'>
         <Col span={8}>
-          <Statistic value={count.online} title={intl.get('ONLINE')} />
+          <Statistic value={count.online} title={renderTitle(intl.get('ONLINE'))} />
         </Col>
         <Col span={8}>
-          <Statistic value={count.offline} title={intl.get('OFFLINE')} />
+          <Statistic value={count.offline} title={renderTitle(intl.get('OFFLINE'))} />
         </Col>
       </Grid>
     );
