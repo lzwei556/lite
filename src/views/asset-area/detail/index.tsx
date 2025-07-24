@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Empty, Radio } from 'antd';
+import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../utils/grid';
 import { Card, Grid, Tabs } from '../../../components';
@@ -14,8 +14,6 @@ export const Index = (props: {
   onUpdateAsset: (asset: AssetRow) => void;
 }) => {
   const { asset, onSuccess, onUpdateAsset } = props;
-  const [type, setType] = React.useState('basic');
-
   const renderAssetList = (content: React.ReactNode) => {
     return (asset.children?.length ?? 0) > 0 ? (
       content
@@ -57,27 +55,19 @@ export const Index = (props: {
           label: intl.get('SETTINGS'),
           key: 'settings',
           children: (
-            <Card>
-              <Radio.Group
-                options={[
-                  { label: intl.get('BASIC_INFORMATION'), value: 'basic' },
-                  { label: intl.get('ASSET'), value: 'asset' }
-                ]}
-                onChange={(e) => setType(e.target.value)}
-                value={type}
-                optionType='button'
-                buttonStyle='solid'
-              />
-              {type === 'basic' && <Update asset={asset} onSuccess={onSuccess} key={asset.id} />}
-              {type === 'asset' && (
+            <Grid>
+              <Col span={24}>
+                <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
+              </Col>
+              <Col span={24}>
                 <Settings
                   asset={asset}
                   onSuccess={onSuccess}
                   key={asset.id}
                   onUpdate={onUpdateAsset}
                 />
-              )}
-            </Card>
+              </Col>
+            </Grid>
           )
         }
       ]}

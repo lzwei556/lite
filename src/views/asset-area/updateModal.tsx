@@ -31,7 +31,7 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
     >
       <Form
         form={form}
-        labelCol={{ span: 6 }}
+        layout='vertical'
         initialValues={{
           name: asset.name,
           parent_id: asset.parentId > 0 ? asset.parentId : undefined

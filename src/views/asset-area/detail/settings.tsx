@@ -2,7 +2,15 @@ import React from 'react';
 import { Col, Empty, Space, TableProps } from 'antd';
 import intl from 'react-intl-universal';
 import { uniq } from 'lodash';
-import { DeleteIconButton, EditIconButton, Flex, Grid, Link, Table } from '../../../components';
+import {
+  Card,
+  DeleteIconButton,
+  EditIconButton,
+  Flex,
+  Grid,
+  Link,
+  Table
+} from '../../../components';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
 import { Asset, ASSET_PATHNAME, AssetRow, deleteAsset } from '../../asset-common';
@@ -18,25 +26,23 @@ export const Settings = (props: {
 }) => {
   const { asset, onSuccess, onUpdate } = props;
   const { children } = asset;
-  const columns: Column[] = [
-    {
-      title: intl.get('NAME'),
-      dataIndex: 'name',
-      render: (_, row: AssetRow) => (
-        <Link
-          to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
-          style={{ display: 'inline-block', fontSize: 16 }}
-          onClick={(e) => {
-            if (e.ctrlKey) {
-              e.preventDefault();
-            }
-          }}
-        >
-          {row.name}
-        </Link>
-      )
-    }
-  ];
+  const nameColun: Column = {
+    title: intl.get('NAME'),
+    dataIndex: 'name',
+    render: (_, row: AssetRow) => (
+      <Link
+        to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
+        style={{ display: 'inline-block', fontSize: 16 }}
+        onClick={(e) => {
+          if (e.ctrlKey) {
+            e.preventDefault();
+          }
+        }}
+      >
+        {row.name}
+      </Link>
+    )
+  };
   const operationColumn: Column = {
     title: intl.get('OPERATION'),
     key: 'action',
@@ -57,17 +63,35 @@ export const Settings = (props: {
     )
   };
 
-  const renderChildren = (children?: AssetRow[]) => {
+  const renderAssets = (children?: AssetRow[]) => {
     if (!children || children.length === 0) {
       return (
-        <Col span={24}>
+        <Card title={intl.get('ASSET')}>
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </Col>
+        </Card>
       );
+    } else if (children.every((asset) => Asset.Assert.isArea(asset.type))) {
+      return (
+        <Table
+          cardProps={{
+            size: 'small',
+            title: intl.get('ASSET')
+          }}
+          columns={[nameColun, operationColumn]}
+          dataSource={children.map(({ children, ...rest }) => rest)}
+          pagination={false}
+          rowKey={(row) => row.id}
+        />
+      );
+    } else {
+      return renderSpecificAssetChildren(children);
     }
+  };
+
+  const renderSpecificAssetChildren = (children: AssetRow[]) => {
     const types = uniq(children.map((a) => a.type));
-    return types.map((t) => {
-      const cols = [...columns];
+    return types.map((t, i) => {
+      const cols = [nameColun];
       if (Asset.Assert.isVibrationRelated(t)) {
         cols.push({
           key: 'motor_type',
@@ -114,36 +138,17 @@ export const Settings = (props: {
       const typeLabel = getByType(t)?.label;
 
       return (
-        <Col span={24} key={t}>
-          {types.length === 1 ? (
-            <Table
-              bordered
-              columns={cols}
-              dataSource={children
-                .filter((a) => a.type === t)
-                .map((c) => {
-                  delete c.children;
-                  return c;
-                })}
-              pagination={false}
-              rowKey={(row) => row.id}
-            />
-          ) : (
-            <Table
-              bordered
-              columns={cols}
-              dataSource={children
-                .filter((a) => a.type === t)
-                .map((c) => {
-                  delete c.children;
-                  return c;
-                })}
-              header={{ title: typeLabel ? intl.get(typeLabel) : t }}
-              pagination={false}
-              rowKey={(row) => row.id}
-            />
-          )}
-        </Col>
+        <Table
+          cardProps={{
+            size: 'small',
+            style: { marginTop: i !== 0 ? 16 : undefined },
+            title: typeLabel ? intl.get(typeLabel) : intl.get('ASSET')
+          }}
+          columns={cols}
+          dataSource={children.filter((a) => a.type === t)}
+          pagination={false}
+          rowKey={(row) => row.id}
+        />
       );
     });
   };
@@ -155,7 +160,7 @@ export const Settings = (props: {
           <ActionBar {...props} />
         </Flex>
       </Col>
-      {renderChildren(children)}
+      <Col span={24}>{renderAssets(children)}</Col>
     </Grid>
   );
 };
