@@ -96,11 +96,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'settings',
       label: intl.get('SETTINGS'),
-      children: (
-        <Card>
-          <Settings point={monitoringPoint} onUpdateSuccess={onSuccess} />
-        </Card>
-      )
+      children: <Settings point={monitoringPoint} onSuccess={onSuccess} />
     });
   }
 

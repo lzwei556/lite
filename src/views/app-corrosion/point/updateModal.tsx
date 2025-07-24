@@ -2,11 +2,13 @@ import React from 'react';
 import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
-import { useLocaleFormLayout } from '../../../hooks/useLocaleFormLayout';
 import { ModalWrapper } from '../../../components/modalWrapper';
+import { Card, Grid } from '../../../components';
+import { generateColProps } from '../../../utils/grid';
 import { MONITORING_POINT, MonitoringPoint, MonitoringPointRow, Point } from '../../asset-common';
-import { UpdateFormItems } from './_updateFormItems';
+import { BasisFormItems } from './basisFormItems';
 import { handleSubmit, parseAttrs } from './common';
+import { Others } from './others';
 
 export const UpdateModal = (props: ModalFormProps & { monitoringPoint: MonitoringPointRow }) => {
   const { monitoringPoint, onSuccess, ...rest } = props;
@@ -28,10 +30,20 @@ export const UpdateModal = (props: ModalFormProps & { monitoringPoint: Monitorin
     >
       <Form
         form={form}
-        {...useLocaleFormLayout()}
+        layout='vertical'
         initialValues={{ ...Point.convert(monitoringPoint, parseAttrs) }}
       >
-        <UpdateFormItems {...monitoringPoint} />
+        <Card size='small' style={{ marginBlock: 16 }} title={intl.get('BASIC_INFORMATION')}>
+          <BasisFormItems monitoringPoint={monitoringPoint} />
+        </Card>
+        <Card size='small' style={{ marginBlock: 16 }} title={intl.get('monitoring.point.attr')}>
+          <Grid>
+            <Others
+              monitoringPoint={monitoringPoint}
+              formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
+            />
+          </Grid>
+        </Card>
       </Form>
     </ModalWrapper>
   );
