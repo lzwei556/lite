@@ -58,17 +58,7 @@ export const Settings = () => {
             key: 'name',
             title: intl.get('NAME'),
             render: (_, row: AssetRow) => (
-              <Link
-                to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
-                style={{ display: 'inline-block', fontSize: 16 }}
-                onClick={(e) => {
-                  if (e.ctrlKey) {
-                    e.preventDefault();
-                  }
-                }}
-              >
-                {row.name}
-              </Link>
+              <Link to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}>{row.name}</Link>
             )
           },
           {
