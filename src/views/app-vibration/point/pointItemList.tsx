@@ -70,7 +70,6 @@ export const PointItemList = ({
                     name={[name, 'name']}
                     requiredMessage={intl.get('PLEASE_ENTER_NAME')}
                     lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-                    style={{ display: 'inline-block', width: 200, marginRight: 20 }}
                   >
                     <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
                   </FormInputItem>
