@@ -63,7 +63,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                         property={p}
                         cardProps={{
                           style: { background: '#f0f0f0' },
-                          styles: { header: { fontWeight: 400 } }
+                          styles: { header: { fontWeight: 400, borderColor: 'rgb(0,0,0,.05)' } }
                         }}
                       />
                     </Col>
@@ -86,7 +86,10 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                 <HistoryDataFea.PropertyChartCard
                   data={historyData}
                   property={p}
-                  cardProps={{ styles: { header: { fontWeight: 400 } } }}
+                  cardProps={{
+                    style: { background: '#f0f0f0' },
+                    styles: { header: { fontWeight: 400, borderColor: 'rgb(0,0,0,.05)' } }
+                  }}
                 />
               </Col>
             );

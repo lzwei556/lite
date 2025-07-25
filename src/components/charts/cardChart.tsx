@@ -1,6 +1,6 @@
 import React from 'react';
 import { Divider, Space } from 'antd';
-import { Card, CardProps } from '../card';
+import { Card, CardProps } from '../card/card';
 import { Chart, ChartHandler, ChartProps } from './chart';
 import { getOptions } from './utils';
 import { SaveImageIconButton } from './saveImageIconButton';

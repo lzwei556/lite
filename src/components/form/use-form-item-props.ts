@@ -10,6 +10,12 @@ export const useFormItemIntlProps = (props: FormItemProps): FormItemProps => {
     : props;
 };
 
+export const useSelectControlPlaceHolder = (label: React.ReactNode) => {
+  return isLabelString(label)
+    ? intl.get('PLEASE_SELECT_SOMETHING', { something: intl.get(label).toLowerCase() })
+    : undefined;
+};
+
 export const useTextControlPlaceHolder = (label: React.ReactNode) => {
   return isLabelString(label)
     ? intl.get('PLEASE_ENTER_SOMETHING', { something: intl.get(label).toLowerCase() })

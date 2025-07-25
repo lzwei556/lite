@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, TabsProps } from 'antd';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { Card, Grid, Tabs, TitleSection } from '../../../../components';
+import { Grid, MetaCard, Tabs } from '../../../../components';
 import { FilterableAlarmRecordTable } from '../../../alarm';
 import usePermission, { Permission } from '../../../../permission/permission';
 import {
@@ -32,13 +32,9 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
         <div style={{ marginTop: 16 }}>
           <Grid wrap={false}>
             <Col flex='auto'>
-              <TitleSection
+              <MetaCard
                 title={intl.get('real.time.data')}
-                body={
-                  <Card>
-                    <Monitor {...monitoringPoint} key={id} />
-                  </Card>
-                }
+                description={<Monitor {...monitoringPoint} key={id} />}
               />
             </Col>
             <Col flex='300px'>

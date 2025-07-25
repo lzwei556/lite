@@ -9,7 +9,7 @@ import {
   LineChartProps,
   useLinedSeriesOptions
 } from '../charts';
-import { Card, CardProps } from '../card';
+import { Card, CardProps } from '../card/card';
 import { useChartContext } from '../charts';
 import { SaveImageIconButton } from '../charts/saveImageIconButton';
 import { useContext } from './context';

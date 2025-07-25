@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Card, Descriptions, DescriptionsProps, TitleSection } from '../../../components';
+import { Descriptions, DescriptionsProps, MetaCard } from '../../../components';
 import { useMonitoringPointParents } from '../../asset-variant';
 import { useParents } from '../../app-wind-turbine/point/common';
 import { Point } from './util';
@@ -102,14 +102,5 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
       });
     }
   }
-  return (
-    <TitleSection
-      title={intl.get('ASSET')}
-      body={
-        <Card>
-          <Descriptions items={items} />
-        </Card>
-      }
-    />
-  );
+  return <MetaCard description={<Descriptions items={items} />} title={intl.get('ASSET')} />;
 };

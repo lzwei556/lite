@@ -1,61 +1,15 @@
 import React from 'react';
-import { Col, Space as AntSpace, Avatar, Statistic, Empty } from 'antd';
-import { WifiOutlined } from '@ant-design/icons';
+import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Descriptions, DescriptionsProps, Flex, Grid, Link } from '../../../components';
-import { toMac } from '../../../utils/format';
-import { DeviceType } from '../../../types/device_type';
+import { Card, Descriptions, Grid, MetaCard } from '../../../components';
 import { Device } from '../../../types/device';
 import { Network } from '../../../types/network';
-import { Dayjs } from '../../../utils';
 import { Topology } from '../../network';
+import { useBasisFields } from './sensorDetail';
+import { DeviceStatus } from '../device-status';
 
 export const GatewayDetail = ({ device, network }: { device: Device; network?: Network }) => {
-  const { macAddress, information, state } = device;
-  const items: DescriptionsProps['items'] = [
-    {
-      key: 'mac',
-      label: intl.get('MAC_ADDRESS'),
-      children: toMac(macAddress.toUpperCase())
-    },
-    {
-      key: 'type',
-      label: intl.get('DEVICE_TYPE'),
-      children: intl.get(DeviceType.toString(device.typeId))
-    },
-    {
-      key: 'version',
-      label: intl.get('FIRMWARE_VERSION'),
-      children:
-        information.firmware_version && information.product_id
-          ? `${information.firmware_version}(${information.product_id})`
-          : '-'
-    },
-    {
-      key: 'time',
-      label: intl.get('LAST_CONNECTION_TIME'),
-      children: state.connectedAt ? Dayjs.format(state.connectedAt) : '-'
-    }
-  ];
-  if (information.ip_address) {
-    items.push({
-      key: 'ip',
-      label: intl.get('IP_ADDRESS'),
-      children: (
-        <Link to={`http://${information.ip_address}`} target={'_blank'}>
-          {information.ip_address}
-        </Link>
-      )
-    });
-  }
-  items.push({
-    key: 'signal',
-    label: intl.get('MOBILE_SIGNAL_STRENGTH'),
-    children: state.signalLevel ? `${state.signalLevel} dBm` : '-'
-  });
-  if (information.iccid_4g) {
-    items.push({ key: 'nuber', label: intl.get('4G_CARD_NO'), children: information.iccid_4g });
-  }
+  const basisFields = useBasisFields(device);
 
   if (!network) {
     return (
@@ -72,27 +26,12 @@ export const GatewayDetail = ({ device, network }: { device: Device; network?: N
       </Col>
       <Col flex='300px'>
         <Grid>
+          <DeviceStatus device={device} />
           <Col span={24}>
-            <Card title={intl.get('DEVICE_STATUS')}>
-              <Flex align='center' justify='flex-start'>
-                <AntSpace size={16}>
-                  <Avatar
-                    icon={<WifiOutlined />}
-                    size={60}
-                    style={{ color: '#333', backgroundColor: '#fff' }}
-                  />
-                  <Statistic
-                    title={intl.get('MOBILE_SIGNAL_STRENGTH')}
-                    value={state.signalLevel ?? '-'}
-                  />
-                </AntSpace>
-              </Flex>
-            </Card>
-          </Col>
-          <Col span={24}>
-            <Card title={intl.get('BASIC_INFORMATION')}>
-              <Descriptions column={1} items={items} />
-            </Card>
+            <MetaCard
+              description={<Descriptions column={1} items={basisFields} />}
+              title={intl.get('BASIC_INFORMATION')}
+            />
           </Col>
         </Grid>
       </Col>

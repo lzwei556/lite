@@ -41,7 +41,7 @@ export const Index = (props: {
                 {renderAssetList(
                   <Grid>
                     {asset.children?.map((a) => (
-                      <Col key={a.id} {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })}>
+                      <Col key={a.id} {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })}>
                         <OverviewCard asset={a} />
                       </Col>
                     ))}

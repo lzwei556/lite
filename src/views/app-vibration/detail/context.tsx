@@ -78,8 +78,9 @@ export function getPropertyValues(m: MonitoringPointRow, properties: DisplayProp
             label: truncate(title, 24),
             title,
             children: `${getValue(
-              roundValue(m?.data?.values[`${key}_${axisKey}`] as number, precision)
-            )}${unit}`,
+              roundValue(m?.data?.values[`${key}_${axisKey}`] as number, precision),
+              unit
+            )}`,
             axisKey,
             key
           };

@@ -20,7 +20,7 @@ import { AnalysisSidebarCollapse } from '../../../features';
 import { MarkList } from './markList';
 
 export const Analysis = (props: MonitoringPointRow) => {
-  const { numberedRange, setRange } = useRange();
+  const { numberedRange, setRange } = useRange(commonRange.PastYear);
 
   return (
     <ChartMark.Context>

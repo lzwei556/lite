@@ -123,6 +123,7 @@ function TimestampsTable<T>(
   return (
     <>
       <Table
+        cardProps={{ style: { height: '100%' } }}
         header={{
           toolbar: [
             <Button onClick={() => setBatchDownloadModalVisible(true)}>
@@ -130,7 +131,7 @@ function TimestampsTable<T>(
             </Button>
           ]
         }}
-        scroll={{ y: 600 }}
+        scroll={{ y: 700 }}
         showHeader={false}
         columns={[
           {

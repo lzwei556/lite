@@ -2,7 +2,14 @@ import React from 'react';
 import { Select, SelectProps, Typography } from 'antd';
 
 export const LightSelectFilter = (props: SelectProps) => {
-  const { allowClear = true, onChange, prefix, variant = 'outlined', ...rest } = props;
+  const {
+    allowClear = true,
+    onChange,
+    popupMatchSelectWidth = false,
+    prefix,
+    variant = 'outlined',
+    ...rest
+  } = props;
   const [val, setVal] = React.useState<string | string[] | number | number[]>(props.defaultValue);
 
   const getSelected = () => {
@@ -28,6 +35,7 @@ export const LightSelectFilter = (props: SelectProps) => {
         setVal(value);
         onChange?.(value, options);
       }}
+      popupMatchSelectWidth={popupMatchSelectWidth}
       prefix={<Typography.Text type='secondary'>{prefix}</Typography.Text>}
       variant={variant}
     />

@@ -16,7 +16,7 @@ const metaData = [
   { label: 'FIELD_THICKNESS', value: 'thickness', unit: 'mm', precision: 3 },
   { label: 'FIELD_TEMPERATURE', value: 'temp', unit: '℃', precision: 1 },
   { label: 'FIELD_TOF', value: 'tof', unit: 'ns', precision: 0 },
-  { label: 'FIELD_ENVIRONMENT_TEMPERATURE', value: 'envTemp', unit: '℃', precision: 1 },
+  { label: 'rod.top.temperature', value: 'envTemp', unit: '℃', precision: 1 },
   { label: 'FIELD_SIGNAL_STRENGTH', value: 'sigStrength', unit: '', precision: 1 }
 ];
 

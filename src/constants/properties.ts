@@ -448,12 +448,7 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
   ],
   DC_HIGH: [
     THICKNESS,
-    {
-      ...DC_TEMPERATURE,
-      name: 'FIELD_ENVIRONMENT_TEMPERATURE',
-      defaultFirstFieldKey: 'temperature',
-      onlyShowFirstField: true
-    },
+    { ...DC_TEMPERATURE, defaultFirstFieldKey: 'temperature', onlyShowFirstField: true },
     TOF,
     CORROSION_RATE,
     CORROSION_LOSS,
@@ -462,7 +457,23 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
   ],
   DC_Ultra_HIGH: [
     THICKNESS,
-    DC_TEMPERATURE,
+    {
+      ...DC_TEMPERATURE,
+      fields: [
+        {
+          name: 'FIELD_TEMPERATURE',
+          key: 'temperature',
+          dataIndex: 1,
+          alias: 'contact.temperature'
+        },
+        {
+          name: 'FIELD_ENVIRONMENT_TEMPERATURE',
+          key: 'env_temperature',
+          dataIndex: 3,
+          alias: 'rod.top.temperature'
+        }
+      ]
+    },
     TOF,
     CORROSION_RATE,
     CORROSION_LOSS,

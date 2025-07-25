@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card as AntCard, CardProps as AntCardProps } from 'antd';
-import { Space } from '../common';
+import { Space } from '../../common';
 
 export type CardProps = AntCardProps;
 
@@ -25,7 +25,8 @@ const CardComponent = React.forwardRef(function CardComponent(
           fontWeight: 500,
           ...styles?.header
         },
-        body: { padding: Space, ...styles?.body }
+        body: { padding: Space, ...styles?.body },
+        actions: styles?.actions
       }}
     />
   );

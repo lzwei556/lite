@@ -34,7 +34,7 @@ export const Virtual = () => {
             const channel = d.data?.values?.channel;
 
             return (
-              <Col key={id} {...generateColProps({ md: 12, lg: 12, xl: 8, xxl: 6 })}>
+              <Col key={id} {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })}>
                 <Link to={`/devices/${id}`}>
                   <Card size='small' hoverable={true}>
                     <Flex justify='space-between'>

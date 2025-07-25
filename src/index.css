@@ -33,3 +33,6 @@ tbody.ant-table-tbody > tr.ant-table-row:hover > td {
 .corrosion-analysis-forecast .ant-descriptions .ant-descriptions-view {
   border-radius: 0;
 }
+.ant-card.meta-card .ant-card-meta-title {
+  font-weight: 400;
+}

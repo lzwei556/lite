@@ -26,7 +26,7 @@ const ProjectSelect: FC<ProjectSelectProps> = (props) => {
   return (
     <Select
       {...props}
-      popupMatchSelectWidth={160}
+      popupMatchSelectWidth={false}
       defaultValue={projectId}
       className='project-select'
     >

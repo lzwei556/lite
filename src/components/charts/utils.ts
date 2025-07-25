@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { LegendComponentOption } from 'echarts/types/dist/shared';
+import { Language } from '../../localeProvider';
 import type { ECOptions } from './chart';
 
 export const chartColors = [
@@ -54,3 +56,37 @@ export function getBarPieOption() {
     }
   };
 }
+
+export const getVerticalLegends = (
+  data: { name: string; value: number; itemStyle: { color: string } }[],
+  language: Language
+) => {
+  return data.length === 2
+    ? {
+        formatter: (itemName: string) => {
+          const series = data.find(({ name }) => itemName === name);
+          return series ? `${itemName} ${series.value}` : itemName;
+        }
+      }
+    : data.map(({ name, value }, i) => {
+        const even = i % 2 === 0;
+        const top2 = i < 2;
+        let opts: LegendComponentOption = {
+          ...getBarPieOption().legend,
+          data: [name],
+          orient: 'vertical',
+          bottom: even ? 20 : 'bottom',
+          formatter: `{name|{name}} ${value}`,
+          textStyle: {
+            color: 'rgba(0,0,0,0.45)',
+            rich: { name: { width: language === 'en-US' ? 45 : 25 } }
+          }
+        };
+        if (top2) {
+          opts = { ...opts, left: '16%' };
+        } else {
+          opts = { ...opts, right: '16%' };
+        }
+        return opts;
+      });
+};

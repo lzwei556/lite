@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { LegendComponentOption } from 'echarts/types/dist/shared';
 import { Language } from '../../localeProvider';
-import { getBarPieOption, getOptions } from '../../components';
+import { getBarPieOption, getOptions, getVerticalLegends } from '../../components';
 import { getProjectStatistics, ProjectStatistics } from '../asset-common';
 
 export function useProjectStatistics() {
@@ -23,35 +22,7 @@ export const generatePieOptions = (
       left: 'center',
       top: 120
     },
-    legend:
-      data.length === 2
-        ? {
-            formatter: (itemName) => {
-              const series = data.find(({ name }) => itemName === name);
-              return series ? `${itemName} ${series.value}` : itemName;
-            }
-          }
-        : data.map(({ name, value }, i) => {
-            const even = i % 2 === 0;
-            const top2 = i < 2;
-            let opts: LegendComponentOption = {
-              ...getBarPieOption().legend,
-              data: [name],
-              orient: 'vertical',
-              bottom: even ? 20 : 'bottom',
-              formatter: `{name|{name}} ${value}`,
-              textStyle: {
-                color: 'rgba(0,0,0,0.45)',
-                rich: { name: { width: language === 'en-US' ? 45 : 25 } }
-              }
-            };
-            if (top2) {
-              opts = { ...opts, left: '16%' };
-            } else {
-              opts = { ...opts, right: '16%' };
-            }
-            return opts;
-          }),
+    legend: getVerticalLegends(data, language),
     series: [
       {
         type: 'pie',

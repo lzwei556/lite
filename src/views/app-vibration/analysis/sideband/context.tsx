@@ -1,5 +1,4 @@
 import React from 'react';
-import intl from 'react-intl-universal';
 import { ChartMark } from '../../../../components';
 import { getNumsOfCursor, useMarkContext } from '../mark';
 
@@ -38,7 +37,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
           type: 'append_multiple',
           mark: {
             name: `${cursor}${coord.join()}`,
-            label: intl.get('sideband.center'),
+            label: 'sideband.center',
             data: coord,
             type: markType,
             chartPorps: { itemStyle: { color: '#fa8c16' } }
@@ -116,32 +115,32 @@ export const getIndexs = ({
   const halfNum = (nums.sideband - 1) / 2;
   const lefts: { index: number; label: string }[] = [];
   const rights: { index: number; label: string }[] = [];
-  const left = intl.get('sideband.left');
-  const right = intl.get('sideband.right');
+  const left = 'sideband.left';
+  const right = 'sideband.right';
   if (isLeft) {
     Array(halfNum)
       .fill(-1)
       .forEach((n, index) => {
-        lefts.push({ index: sideIndex - offset * index, label: `${left}${index + 1}` });
+        lefts.push({ index: sideIndex - offset * index, label: `${left}.${index + 1}` });
       });
     Array(halfNum)
       .fill(-1)
       .forEach((n, index) => {
         rights.push({
           index: centeredIndex + offset * (index + 1),
-          label: `${right}${index + 1}`
+          label: `${right}.${index + 1}`
         });
       });
   } else {
     Array(halfNum)
       .fill(-1)
       .forEach((n, index) => {
-        lefts.push({ index: centeredIndex - offset * (index + 1), label: `${left}${index + 1}` });
+        lefts.push({ index: centeredIndex - offset * (index + 1), label: `${left}.${index + 1}` });
       });
     Array(halfNum)
       .fill(-1)
       .forEach((n, index) => {
-        rights.push({ index: sideIndex + offset * index, label: `${right}${index + 1}` });
+        rights.push({ index: sideIndex + offset * index, label: `${right}.${index + 1}` });
       });
   }
   return [...lefts, ...rights];

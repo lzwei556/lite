@@ -42,7 +42,7 @@ const PropertyChartTitle = ({
     return values.map(({ name, last }) => {
       let title = intl.get(name).d(name);
       return (
-        <Space style={{ display: 'flex' }}>
+        <Space style={{ display: 'flex', lineHeight: 1.35 }}>
           <Term
             name={title}
             nameProps={{ style: { color: 'rgba(0,0,0,.45)' } }}

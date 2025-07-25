@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import { generateColProps } from '../../../../utils/grid';
-import { Card, Grid, commonRange } from '../../../../components';
+import { Grid, commonRange } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
 import { HistoryDataFea } from '../../../../features';
 import {
@@ -33,11 +33,7 @@ export const Monitor = (point: MonitoringPointRow) => {
 
   if (loading) return <Spin />;
   if (!historyData || historyData.length === 0)
-    return (
-      <Card>
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-      </Card>
-    );
+    return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
 
   return (
     <Grid>
@@ -55,7 +51,7 @@ export const Monitor = (point: MonitoringPointRow) => {
             style={{ height: 240 }}
             cardProps={{
               style: { background: '#f0f0f0' },
-              styles: { header: { fontWeight: 400 } }
+              styles: { header: { fontWeight: 400, borderColor: 'rgb(0,0,0,.05)' } }
             }}
             type={type}
           />
@@ -69,7 +65,7 @@ export const Monitor = (point: MonitoringPointRow) => {
               property={p}
               cardProps={{
                 style: { background: '#f0f0f0' },
-                styles: { header: { fontWeight: 400 } }
+                styles: { header: { fontWeight: 400, borderColor: 'rgb(0,0,0,.05)' } }
               }}
             />
           </Col>

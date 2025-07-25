@@ -1,13 +1,20 @@
 import React from 'react';
 import { Form, FormItemProps, Select, SelectProps } from 'antd';
-import { useFormItemIntlProps, useTextControlPlaceHolder } from './use-form-item-props';
+import { useFormItemIntlProps, useSelectControlPlaceHolder } from './use-form-item-props';
 
 export const SelectFormItem = (props: FormItemProps & { selectProps?: SelectProps }) => {
   const { children, selectProps, ...rest } = props;
-  const placeholder = useTextControlPlaceHolder(props.label);
+  const ph = useSelectControlPlaceHolder(props.label);
+  const { placeholder = ph, popupMatchSelectWidth = false, ...selectRestProps } = selectProps || {};
   return (
     <Form.Item {...useFormItemIntlProps(rest)}>
-      {children ?? <Select placeholder={placeholder} {...selectProps} />}
+      {children ?? (
+        <Select
+          placeholder={placeholder}
+          popupMatchSelectWidth={popupMatchSelectWidth}
+          {...selectRestProps}
+        />
+      )}
     </Form.Item>
   );
 };

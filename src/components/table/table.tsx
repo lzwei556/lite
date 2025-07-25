@@ -15,7 +15,7 @@ import { SettingOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Grid } from '../grid';
 import { Flex } from '../flex';
-import { Card, CardProps } from '../card';
+import { Card, CardProps } from '../card/card';
 import { Space } from '../../common';
 import { PageResult } from '../../types/page';
 

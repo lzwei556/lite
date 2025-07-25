@@ -1,9 +1,17 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Card, Chart, getBarPieOption, getOptions } from '../../../../components';
+import {
+  Card,
+  Chart,
+  getBarPieOption,
+  getOptions,
+  getVerticalLegends
+} from '../../../../components';
+import { useLocaleContext } from '../../../../localeProvider';
 import { Asset, AssetRow } from '../../../asset-common';
 
 export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
+  const { language } = useLocaleContext();
   const { asset } = props;
   const { statistics } = asset;
   const statisticsData = Asset.Statistics.resolveStatus(
@@ -25,6 +33,7 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
         fontSize: 30
       }
     },
+    legend: getVerticalLegends(statisticsData, language),
     series: [
       {
         type: 'pie',
