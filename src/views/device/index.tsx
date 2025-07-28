@@ -1,33 +1,24 @@
 import React from 'react';
-import { Outlet, useLocation, useParams } from 'react-router-dom';
-import './deviceList.css';
+import { Outlet, useParams } from 'react-router-dom';
 import { Device } from '../../types/device';
 import { GetNetworkRequest } from '../../apis/network';
 import { PageWithSideBar } from '../../components/pageWithSideBar';
-import { DeviceTree } from './deviceTree';
-import { getProject } from '../../utils/session';
 import { GetDeviceRequest, GetDevicesRequest } from '../../apis/device';
 import { DeviceType } from '../../types/device_type';
 import { Network } from '../../types/network';
-import { Virtual } from './virtual';
-
-export const VIRTUAL_ROOT_DEVICE = {
-  macAddress: '000000000000',
-  id: 0,
-  name: getProject().name
-};
+import './deviceList.css';
+import { DeviceTree } from './deviceTree';
+import { VIRTUAL_ROOT_DEVICE } from './virtual';
 
 const virtualPathId = `${VIRTUAL_ROOT_DEVICE.id}`;
 
 const DevicePage = () => {
-  const { pathname } = useLocation();
-  const isRouteImport = pathname === '/devices/import';
   const { id: pathId = virtualPathId } = useParams();
 
   return (
     <ContextProvider>
       <PageWithSideBar
-        content={pathId === virtualPathId && !isRouteImport ? <Virtual /> : <Outlet key={pathId} />}
+        content={<Outlet />}
         sideBar={{
           body: (height, onClick) => (
             <DeviceTree height={height} onClick={onClick} selectedKeys={[pathId]} />

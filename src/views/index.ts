@@ -1,7 +1,11 @@
 import { lazy } from 'react';
 
 export const Login = lazy(() => import('./login'));
+export const Assets = lazy(() => import('../views/home'));
+export const VirtualAssetDetail = lazy(() => import('../views/home/virtualAssetDetail'));
+export const Asset = lazy(() => import('../views/home/main'));
 export const Device = lazy(() => import('./device'));
+export const DeviceVirtual = lazy(() => import('./device/virtual'));
 export const DeviceDetail = lazy(() => import('./device/detail'));
 export const ImportNetwork = lazy(() => import('./network/import'));
 export const AlarmRecord = lazy(() => import('./alarm/record'));

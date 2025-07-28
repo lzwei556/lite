@@ -2,24 +2,15 @@ import React from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { PageWithSideBar } from '../../components/pageWithSideBar';
 import { AssetTree, ContextProvider, getVirturalAsset } from '../asset-common';
-import { VirtualAssetDetail } from './virtualAssetDetail';
 
-export default function Index() {
+export default function Index({ children }: { children?: React.ReactNode }) {
   const { homePathId } = getVirturalAsset();
   const { id: pathId = homePathId } = useParams();
-
-  const renderContent = () => {
-    if (pathId === homePathId) {
-      return <VirtualAssetDetail />;
-    } else {
-      return <Outlet />;
-    }
-  };
 
   return (
     <ContextProvider>
       <PageWithSideBar
-        content={renderContent()}
+        content={children ?? <Outlet />}
         sideBar={{
           body: (height, onClick) => (
             <AssetTree height={height} onClick={onClick} selectedKeys={[pathId]} />

@@ -8,7 +8,8 @@ import { DeviceType } from '../../../types/device_type';
 import { generateColProps } from '../../../utils/grid';
 import { Card, Flex, Grid, JsonImporter, Link } from '../../../components';
 import * as WSN from '../../../features/wsn';
-import { useContext, VIRTUAL_ROOT_DEVICE } from '../../device';
+import { useContext } from '../../device';
+import { VIRTUAL_ROOT_DEVICE } from '../../device/virtual';
 import { Preview } from '../topology/preview';
 
 export type ImportedJSONDevice = {
@@ -82,7 +83,7 @@ const ImportNetworkPage = () => {
           <Flex justify='space-between' align='center'>
             <Breadcrumb
               items={[
-                { title: <Link to='/devices/0'>{VIRTUAL_ROOT_DEVICE.name}</Link> },
+                { title: <Link to='/devices'>{VIRTUAL_ROOT_DEVICE.name}</Link> },
                 { title: intl.get('MENU_IMPORT_NETWORK') }
               ]}
             />

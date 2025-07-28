@@ -2,18 +2,25 @@ import React from 'react';
 import { Badge, Button, Col, Empty, Space, Statistic, Typography } from 'antd';
 import { ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { useContext, VIRTUAL_ROOT_DEVICE } from '.';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
 import { Card, Flex, Grid, Link } from '../../components';
-import { DeviceNS, getValueOfFirstClassProperty } from './util';
 import { generateColProps } from '../../utils/grid';
 import { Dayjs } from '../../utils';
-import { AddModal } from './add/modal';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
+import { getProject } from '../../utils/session';
+import { AddModal } from './add/modal';
+import { DeviceNS, getValueOfFirstClassProperty } from './util';
+import { useContext } from '.';
 
-export const Virtual = () => {
+export const VIRTUAL_ROOT_DEVICE = {
+  macAddress: '000000000000',
+  id: 0,
+  name: getProject().name
+};
+
+export default function Virtual() {
   const { devices } = useContext();
   const [open, setOpen] = React.useState(false);
 
@@ -99,7 +106,7 @@ export const Virtual = () => {
       {renderBody()}
     </Card>
   );
-};
+}
 
 function DataBar({ device, devices }: { device: Device; devices: Device[] }) {
   const renderTitle = (name: string) => {

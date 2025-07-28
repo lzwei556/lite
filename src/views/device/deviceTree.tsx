@@ -3,10 +3,11 @@ import { Badge, Spin, Tree } from 'antd';
 import { BasicDataNode } from 'antd/es/tree';
 import { useNavigate } from 'react-router-dom';
 import { Device } from '../../types/device';
-import { useContext, VIRTUAL_ROOT_DEVICE } from '.';
-import { DeviceNS } from './util';
 import useSocket, { SocketTopic } from '../../socket';
 import { toMac, truncate } from '../../utils/format';
+import { DeviceNS } from './util';
+import { VIRTUAL_ROOT_DEVICE } from './virtual';
+import { useContext } from '.';
 
 export const DeviceTree = ({
   height,
@@ -39,7 +40,7 @@ export const DeviceTree = ({
           }}
           height={height}
           onClick={onClick}
-          onSelect={(keys, e: any) => {
+          onSelect={(_, e: any) => {
             const id = `${e.node.key}`;
             navigate(`/devices/${id}`);
           }}

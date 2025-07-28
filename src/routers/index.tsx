@@ -1,6 +1,9 @@
 import React, { lazy, Suspense } from 'react';
 import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import {
+  Assets,
+  VirtualAssetDetail,
+  Asset,
   Device,
   DeviceDetail,
   Firmware,
@@ -14,7 +17,8 @@ import {
   Unauthorized,
   User,
   ImportNetwork,
-  AlarmRecord
+  AlarmRecord,
+  DeviceVirtual
 } from '../views';
 import { PrimaryLayout } from '../views/layout/primaryLayout';
 import { ConfigProvider, Spin } from 'antd';
@@ -31,9 +35,6 @@ import { ASSET_PATHNAME } from '../views/asset-common';
 import { isLogin } from '../utils/session';
 
 const AlarmRuleGroups = lazy(() => import('../views/alarm/alarm-group/index'));
-
-const Assets = lazy(() => import('../views/home'));
-const Asset = lazy(() => import('../views/home/main'));
 
 const AppRouter = () => {
   const config = useAppType();
@@ -78,13 +79,24 @@ const AppRouter = () => {
           >
             <Routes>
               <Route path='/' element={<PrimaryLayout />}>
-                <Route index element={<Assets />} />
+                <Route
+                  index
+                  element={
+                    <Assets>
+                      <VirtualAssetDetail />
+                    </Assets>
+                  }
+                />
                 <Route path={ASSET_PATHNAME} element={<Assets />}>
+                  <Route index element={<VirtualAssetDetail />} />
                   <Route path=':id' element={<Asset />} />
+                  <Route path='0-0' element={<VirtualAssetDetail />} />
                 </Route>
                 <Route path='devices' element={<Device />}>
+                  <Route index element={<DeviceVirtual />} />
                   <Route path='import' element={<ImportNetwork />} />
                   <Route path=':id' element={<DeviceDetail />} />
+                  <Route path='0' element={<DeviceVirtual />} />
                 </Route>
                 <Route path='alarmRules' element={<AlarmRuleGroups />} />
                 <Route path='alerts' element={<AlarmRecord />} />

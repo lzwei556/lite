@@ -3,6 +3,8 @@ import intl from 'react-intl-universal';
 import { Card, Descriptions, Tabs, Link } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { App, useAppType } from '../../config';
+import { ColorHealth, ColorOffline } from '../../constants/color';
+import { useLocaleContext } from '../../localeProvider';
 import {
   Asset,
   ASSET_PATHNAME,
@@ -18,10 +20,8 @@ import { AlarmTrend } from './alarmTrend';
 import { Icon } from './icon';
 import { generatePieOptions, useProjectStatistics } from './useProjectStatistics';
 import { Settings } from './settings';
-import { ColorHealth, ColorOffline } from '../../constants/color';
-import { useLocaleContext } from '../../localeProvider';
 
-export const VirtualAssetDetail = () => {
+export default function VirtualAssetDetail() {
   const { assets } = useContext();
   const appType = useAppType();
   const projectStatistics = useProjectStatistics();
@@ -146,4 +146,4 @@ export const VirtualAssetDetail = () => {
       tabsRighted={true}
     />
   );
-};
+}
