@@ -11,6 +11,7 @@ import * as WSN from '../../../features/wsn';
 import { useContext } from '../../device';
 import { VIRTUAL_ROOT_DEVICE } from '../../device/virtual';
 import { Preview } from '../topology/preview';
+import { WanProtocol } from '../../device/basis-form-items';
 
 export type ImportedJSONDevice = {
   id: number;
@@ -57,7 +58,7 @@ const ImportNetworkPage = () => {
               parent_address: d.parentAddress,
               type_id: d.type,
               settings: d.settings,
-              protocol: d.protocol
+              protocol: d.protocol ?? WanProtocol.Tlv
             };
           })
         };
