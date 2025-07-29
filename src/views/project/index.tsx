@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 import { Button, Modal, Space, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
@@ -22,39 +22,42 @@ import usePermission, { Permission } from '../../permission/permission';
 import { Store, useStore } from '../../hooks/store';
 import { store as reduxStore } from '../../store';
 import { useProjectTypeOptions } from '../../project';
-import EditProjectModal from './editProjectModal';
-import AllocUserDrawer from './allocUserDrawer';
+import { EditProjectModal } from './editProjectModal';
+import { AllocUserDrawer } from './allocUserDrawer';
+
+type ModalType = 'update' | 'assign' | undefined;
 
 const ProjectPage = () => {
-  const [open, setVisible] = useState(false);
-  const [allocVisible, setAllocVisible] = useState(false);
-  const [dataSource, setDataSource] = useState<PageResult<any>>();
-  const [project, setProject] = useState<Project>();
+  const [open, setOpen] = React.useState(false);
+  const [modalType, setModalType] = React.useState<ModalType>();
+  const [dataSource, setDataSource] = React.useState<PageResult<any>>();
+  const [project, setProject] = React.useState<Project>();
   const { hasPermissions } = usePermission();
   const [store, setStore, gotoPage] = useStore('projectList');
-  const [refreshKey, setRefreshKey] = useState<number>(0);
   const projectTypeOptions = useProjectTypeOptions();
-  const [token, setToken] = useState<string>();
+  const [token, setToken] = React.useState<string>();
 
-  const fetchProjects = (store: Store['firmwareList']) => {
+  const fetchProjects = (store: Store['projectList']) => {
     const {
       pagedOptions: { index, size }
     } = store;
     PagingProjectsRequest(index, size).then(setDataSource);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     fetchProjects(store);
-  }, [store, refreshKey]);
+  }, [store]);
 
-  const onAllocUser = (record: Project) => {
-    setAllocVisible(true);
-    setProject(record);
+  const trigger = (modalType?: ModalType, project?: Project) => {
+    setOpen(true);
+    setModalType(modalType);
+    setProject(project);
   };
 
-  const onEdit = (record: Project) => {
-    setProject(record);
-    setVisible(true);
+  const reset = () => {
+    setOpen(false);
+    setModalType(undefined);
+    setProject(undefined);
   };
 
   const onDelete = (id: number) => {
@@ -73,7 +76,7 @@ const ProjectPage = () => {
 
   const onGenAccessToken = (id: number) => {
     GenProjectAccessTokenRequest(id).then((_) => {
-      setRefreshKey(refreshKey + 1);
+      fetchProjects(store);
     });
   };
 
@@ -119,16 +122,16 @@ const ProjectPage = () => {
     {
       title: intl.get('OPERATION'),
       key: 'action',
-      render: (_: any, record: any) => {
+      render: (_: string, record: Project) => {
         return (
           <Space>
             {hasPermissions(Permission.ProjectAllocUser, Permission.ProjectAllocUserGet) && (
-              <Link onClick={() => onAllocUser(record)} variant='button'>
+              <Link onClick={() => trigger('assign', record)} variant='button'>
                 {intl.get('ASSIGN_USERS')}
               </Link>
             )}
             <HasPermission value={Permission.ProjectEdit}>
-              <EditIconButton onClick={() => onEdit(record)} />
+              <EditIconButton onClick={() => trigger('update', record)} />
             </HasPermission>
             <HasPermission value={Permission.ProjectDelete}>
               <DeleteIconButton
@@ -155,7 +158,7 @@ const ProjectPage = () => {
           title: intl.get('MENU_PROJECT_MANAGEMENT'),
           toolbar: [
             <HasPermission value={Permission.ProjectAdd}>
-              <Button type={'primary'} onClick={() => setVisible(true)}>
+              <Button type={'primary'} onClick={() => trigger()}>
                 {intl.get('CREATE_PROJECT')}
                 <PlusOutlined />
               </Button>
@@ -169,36 +172,23 @@ const ProjectPage = () => {
         }}
         rowKey={(row) => row.id}
       />
-      {open && (
+      {project && modalType === 'assign' ? (
+        <AllocUserDrawer project={project} open={open} onSuccess={reset} onClose={reset} />
+      ) : (
         <EditProjectModal
+          key={project?.id}
           open={open}
           project={project}
           onSuccess={() => {
-            setVisible(false);
-            setProject(undefined);
-            if (dataSource) {
+            reset();
+            if (dataSource && !project) {
               const { size, page, total } = dataSource;
               gotoPage({ size, total, index: page }, 'next');
+            } else {
+              fetchProjects(store);
             }
           }}
-          onCancel={() => {
-            setVisible(false);
-            setProject(undefined);
-          }}
-        />
-      )}
-      {allocVisible && project && (
-        <AllocUserDrawer
-          project={project}
-          open={allocVisible}
-          onSuccess={() => {
-            setAllocVisible(false);
-            setProject(undefined);
-          }}
-          onClose={() => {
-            setAllocVisible(false);
-            setProject(undefined);
-          }}
+          onCancel={reset}
         />
       )}
       <Modal

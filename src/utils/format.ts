@@ -74,3 +74,7 @@ const isSentence = (str: string) => {
   const pos = str.indexOf('.');
   return pos > -1 && str.length > 1 && str.length === pos + 1;
 };
+
+export const transformSnake2Dot = (term: string) => {
+  return term.replaceAll('_', '.');
+};

@@ -1,13 +1,11 @@
 import React from 'react';
-import { Form, FormItemProps, Input } from 'antd';
-import { useFormItemIntlProps, useTextControlPlaceHolder } from './use-form-item-props';
+import { Form, FormItemProps, Input, InputProps } from 'antd';
+import { useFormItemIntlProps } from './use-form-item-props';
 
-export const TextFormItem = (props: FormItemProps) => {
-  const { children, ...rest } = props;
-  const placeholder = useTextControlPlaceHolder(props.label);
+export const TextFormItem = (props: FormItemProps & { inputProps?: InputProps }) => {
+  const { children, inputProps, ...rest } = props;
+
   return (
-    <Form.Item {...useFormItemIntlProps(rest)}>
-      {children ?? <Input placeholder={placeholder} />}
-    </Form.Item>
+    <Form.Item {...useFormItemIntlProps(rest)}>{children ?? <Input {...inputProps} />}</Form.Item>
   );
 };

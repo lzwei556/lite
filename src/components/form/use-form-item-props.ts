@@ -10,18 +10,6 @@ export const useFormItemIntlProps = (props: FormItemProps): FormItemProps => {
     : props;
 };
 
-export const useSelectControlPlaceHolder = (label: React.ReactNode) => {
-  return isLabelString(label)
-    ? intl.get('PLEASE_SELECT_SOMETHING', { something: intl.get(label).toLowerCase() })
-    : undefined;
-};
-
-export const useTextControlPlaceHolder = (label: React.ReactNode) => {
-  return isLabelString(label)
-    ? intl.get('PLEASE_ENTER_SOMETHING', { something: intl.get(label).toLowerCase() })
-    : undefined;
-};
-
 const isLabelString = (label: React.ReactNode) => {
   return typeof label === 'string';
 };
@@ -41,14 +29,20 @@ const padMessage = (rule: RuleObject, label: string) => {
     return rule;
   }
   if (rule.required) {
-    message = intl.get('PLEASE_ENTER_SOMETHING', { something: intl.get(label) });
-  }
-  if (rule.min && rule.max && rule.type === 'string') {
-    message = intl.get('string.length.range.pattern', {
-      something: intl.get(label),
-      min: rule.min,
-      max: rule.max
-    });
+    message = getRequiredMessage(label);
   }
   return { ...rule, message };
+};
+
+const getRequiredMessage = (label: string) => {
+  return intl.get('PLEASE_ENTER_SOMETHING', {
+    something: smoothCapitalization(intl.get(label))
+  });
+};
+
+const smoothCapitalization = (text: string) => {
+  return text
+    .split(' ')
+    .map((word) => (/\b[A-Z]+\b/g.test(word) ? word : word.toLowerCase()))
+    .join(' ');
 };

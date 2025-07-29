@@ -1,93 +1,58 @@
-import { Form, Input, Select, Typography } from 'antd';
-import { AddUserRequest } from '../../../apis/user';
-import { useEffect, useState } from 'react';
-import RoleSelect from '../../../components/roleSelect';
-import { GetProjectsRequest } from '../../../apis/project';
+import { Form, Input } from 'antd';
+import { useState } from 'react';
 import intl from 'react-intl-universal';
-import { FormInputItem } from '../../../components/formInputItem';
-import { useLocaleFormLayout } from '../../../hooks/useLocaleFormLayout';
+import { GetProjectsRequest } from '../../../apis/project';
+import { AddUserRequest } from '../../../apis/user';
+import { Project } from '../../../types/project';
 import { ModalWrapper } from '../../../components/modalWrapper';
+import { SelectFormItem, TextFormItem } from '../../../components';
+import { ModalFormProps } from '../../../types/common';
+import { useRoleSelectProps } from '../use-roles';
 
-export interface AddUserProps {
-  open: boolean;
-  onCancel?: () => void;
-  onSuccess: () => void;
-}
-
-const { Option } = Select;
-
-const AddUserModal = (props: AddUserProps) => {
-  const { open, onCancel, onSuccess } = props;
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [projects, setProjects] = useState<any>();
+export const AddUserModal = (props: ModalFormProps) => {
+  const { onSuccess, ...rest } = props;
+  const [isLoading, setIsLoading] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    if (open) {
-      form.resetFields();
-    }
-  }, [open, form]);
-
   const onAdd = () => {
-    setIsLoading(true);
-    form
-      .validateFields()
-      .then((values) => {
-        AddUserRequest(values)
-          .then((_) => {
-            setIsLoading(false);
-            onSuccess();
-          })
-          .catch((e) => {
-            setIsLoading(false);
-          });
-      })
-      .catch((e) => {
-        setIsLoading(false);
-      });
-  };
-
-  const onSelectProjects = (open: any) => {
-    if (open) {
-      GetProjectsRequest().then(setProjects);
-    }
+    form.validateFields().then((values) => {
+      setIsLoading(true);
+      AddUserRequest(values)
+        .then((_) => {
+          onSuccess();
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    });
   };
 
   return (
     <ModalWrapper
+      {...rest}
       afterClose={() => form.resetFields()}
-      width={420}
       title={intl.get('CREATE_USER')}
-      open={open}
-      onCancel={onCancel}
       onOk={onAdd}
       okText={intl.get('CREATE')}
       confirmLoading={isLoading}
     >
-      <Form form={form} {...useLocaleFormLayout()}>
-        <FormInputItem
+      <Form form={form} layout='vertical'>
+        <TextFormItem
+          label='USERNAME'
           name='username'
-          label={intl.get('USERNAME')}
-          requiredMessage={intl.get('PLEASE_ENTER_USERNAME')}
-          lengthLimit={{ min: 4, max: 16, label: intl.get('USERNAME').toLowerCase() }}
-        >
-          <Input placeholder={intl.get('USERNAME')} />
-        </FormInputItem>
-        <FormInputItem
+          rules={[{ required: true }, { min: 4, max: 16 }]}
+        />
+        <TextFormItem
+          label='PASSWORD'
           name='password'
-          label={intl.get('PASSWORD')}
-          requiredMessage={intl.get('PLEASE_ENTER_PASSWORD')}
-          lengthLimit={{ min: 6, max: 16, label: intl.get('PASSWORD').toLowerCase() }}
+          rules={[{ required: true }, { min: 6, max: 16 }]}
         >
-          <Input.Password placeholder={intl.get('PASSWORD')} />
-        </FormInputItem>
-        <Form.Item
+          <Input.Password />
+        </TextFormItem>
+        <TextFormItem
+          label='CONFIRM_PASSWORD'
           name='confirmPwd'
-          label={
-            <Typography.Text ellipsis={true} title={intl.get('CONFIRM_PASSWORD')}>
-              {intl.get('CONFIRM_PASSWORD')}
-            </Typography.Text>
-          }
           rules={[
             { required: true, message: intl.get('PLEASE_CONFIRM_PASSWORD') },
             ({ getFieldValue }) => ({
@@ -100,47 +65,41 @@ const AddUserModal = (props: AddUserProps) => {
             })
           ]}
         >
-          <Input.Password placeholder={intl.get('CONFIRM_PASSWORD')} />
-        </Form.Item>
-        <Form.Item
-          name={'role'}
-          label={intl.get('USER_ROLE')}
-          rules={[{ required: true, message: intl.get('PLEASE_SELECT_USER_ROLE') }]}
-        >
-          <RoleSelect placeholder={intl.get('PLEASE_SELECT_USER_ROLE')} />
-        </Form.Item>
-        <Form.Item
+          <Input.Password />
+        </TextFormItem>
+        <SelectFormItem
+          label='USER_ROLE'
+          name='role'
+          rules={[{ required: true }]}
+          selectProps={useRoleSelectProps()}
+        />
+        <TextFormItem
+          label='CELLPHONE'
           name='phone'
-          label={intl.get('CELLPHONE')}
           initialValue={''}
           rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
-        >
-          <Input placeholder={intl.get('CELLPHONE')} />
-        </Form.Item>
-        <Form.Item
+        />
+        <TextFormItem
+          label='EMAIL'
           name='email'
-          label={intl.get('EMAIL')}
           initialValue={''}
           rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
-        >
-          <Input placeholder={intl.get('EMAIL')} />
-        </Form.Item>
-        <Form.Item name={'projects'} label={intl.get('BIND_PROJECT')} initialValue={[]}>
-          <Select
-            mode='multiple'
-            placeholder={intl.get('PLEASE_SELECT_PROJECT_BOUND')}
-            onDropdownVisibleChange={onSelectProjects}
-          >
-            {projects?.map((project: any) => (
-              <Option key={project.id} value={project.id}>
-                {project.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        />
+        <SelectFormItem
+          label='BIND_PROJECT'
+          name='projects'
+          initialValue={[]}
+          selectProps={{
+            mode: 'multiple',
+            onDropdownVisibleChange: (open) => {
+              if (open) {
+                GetProjectsRequest().then(setProjects);
+              }
+            },
+            options: projects.map((p) => ({ label: p.name, value: p.id }))
+          }}
+        />
       </Form>
     </ModalWrapper>
   );
 };
-
-export default AddUserModal;

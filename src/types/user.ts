@@ -6,12 +6,3 @@ export type User = {
   password: string;
   role: number;
 };
-
-export const InitializeUserState: User = {
-  id: 0,
-  username: '',
-  email: '',
-  phone: '',
-  password: '',
-  role: 0
-};

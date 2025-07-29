@@ -12,6 +12,7 @@ import { isLogin } from '../../utils/session';
 import { useLocaleContext } from '../../localeProvider';
 import { Brand } from '../layout/brand';
 import './login.css';
+import { TextFormItem } from '../../components';
 
 const LoginPage: FC = () => {
   const { language } = useLocaleContext();
@@ -38,6 +39,7 @@ const LoginPage: FC = () => {
       redirect('/');
     }
   }, []);
+  const username = intl.get('USERNAME');
 
   return (
     <div id='login-page'>
@@ -64,23 +66,29 @@ const LoginPage: FC = () => {
       </div>
       <div className={'ts-login-form'}>
         <Form onFinish={login}>
-          <Form.Item
+          <TextFormItem
             name='username'
-            rules={[{ required: true, message: intl.get('PLEASE_ENTER_USERNAME') }]}
-          >
-            <Input prefix={<UserOutlined />} placeholder={intl.get('USERNAME')} />
-          </Form.Item>
-          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: intl.get('PLEASE_ENTER_SOMETHING', {
+                  something: username.toLowerCase()
+                })
+              }
+            ]}
+            inputProps={{ placeholder: username, prefix: <UserOutlined /> }}
+          />
+          <TextFormItem
             name='password'
             rules={[{ required: true, message: intl.get('PLEASE_ENTER_PASSWORD') }]}
           >
-            <Input prefix={<KeyOutlined />} placeholder={intl.get('PASSWORD')} type='password' />
-          </Form.Item>
-          <Form.Item>
+            <Input.Password prefix={<KeyOutlined />} placeholder={intl.get('PASSWORD')} />
+          </TextFormItem>
+          <TextFormItem>
             <Button type='primary' htmlType='submit' loading={isLoading}>
               {intl.get('LOGIN')}
             </Button>
-          </Form.Item>
+          </TextFormItem>
         </Form>
       </div>
       <div style={{ position: 'fixed', bottom: 20 }}>

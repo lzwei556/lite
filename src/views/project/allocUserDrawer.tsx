@@ -1,5 +1,5 @@
-import { FC, useCallback, useEffect, useState } from 'react';
-import { Button, Col, Drawer, DrawerProps, Space, Tree } from 'antd';
+import React from 'react';
+import { Button, Col, Drawer, DrawerProps, Tree } from 'antd';
 import Search from 'antd/es/input/Search';
 import intl from 'react-intl-universal';
 import { Project } from '../../types/project';
@@ -7,89 +7,71 @@ import { AllocUsersRequest, GetAllocUsersRequest } from '../../apis/project';
 import { AllocUser } from '../../types/alloc_user';
 import { Grid } from '../../components';
 
-export interface AllocUserDrawerProps extends DrawerProps {
-  project: Project;
-  onSuccess: () => void;
-}
+type Item = AllocUser & { checked: boolean };
 
-const AllocUserDrawer: FC<AllocUserDrawerProps> = (props) => {
-  const { project, open, onSuccess } = props;
-  const [ds, setDs] = useState<AllocUser[]>([]);
-  const [treeData, setTreeData] = useState<any>();
-  const [checkedKeys, setCheckedKeys] = useState<any[]>([]);
+export const AllocUserDrawer = ({
+  project,
+  onSuccess,
+  ...rest
+}: DrawerProps & { onSuccess: () => void; project: Project }) => {
+  const [users, setUsers] = React.useState<Item[]>([]);
+  const [username, setUsername] = React.useState<string>();
+  const filteredUsers = users.filter((item) =>
+    username ? item.user.username.indexOf(username) > -1 : true
+  );
+  const treeData = convertTreeData(filteredUsers);
+  const checkedKeys = convertCheckedKeys(filteredUsers);
 
-  const fetchUsers = useCallback(() => {
-    GetAllocUsersRequest(project.id).then((ds: AllocUser[]) => {
-      setDs(ds);
-      if (ds) {
-        setTreeData(convertTreeData(ds));
-        setCheckedKeys(convertCheckedKeys(ds));
-      }
-    });
+  React.useEffect(() => {
+    GetAllocUsersRequest(project.id).then((users) =>
+      setUsers(users.map((user) => ({ ...user, checked: user.isAllocated })))
+    );
   }, [project.id]);
 
-  useEffect(() => {
-    if (open) {
-      fetchUsers();
-    }
-  }, [open, fetchUsers]);
-
-  const onSave = () => {
-    AllocUsersRequest(project.id, { user_ids: checkedKeys }).then((_) => onSuccess());
-  };
-
-  const renderExtra = () => {
-    return (
-      <Space>
-        <Button type={'primary'} onClick={onSave}>
-          {intl.get('SAVE')}
-        </Button>
-      </Space>
-    );
-  };
-
-  const convertTreeData = (dataSource: AllocUser[]) => {
+  function convertTreeData(users: AllocUser[]) {
     return [
       {
         title: intl.get('USER_LIST'),
         key: 'users',
         checkable: false,
-        children: dataSource.map((item) => {
+        children: users.map(({ user }) => {
           return {
-            title: item.user.username,
-            key: item.user.id
+            title: user.username,
+            key: user.id
           };
         })
       }
     ];
-  };
+  }
 
-  const convertCheckedKeys = (dataSource: AllocUser[]) => {
-    return dataSource.filter((item) => item.isAllocated).map((item) => item.user.id);
-  };
+  function convertCheckedKeys(users: Item[]) {
+    return users.filter((item) => item.checked).map((item) => item.user.id);
+  }
 
-  const onCheck = (value: any) => {
-    setCheckedKeys(value);
-  };
-
-  const onChange = (value: any) => {
-    setTreeData(convertTreeData(ds?.filter((item) => item.user.username.indexOf(value) !== -1)));
-    setCheckedKeys(
-      convertCheckedKeys(ds?.filter((item) => item.user.username.indexOf(value) !== -1))
-    );
+  const onSave = () => {
+    AllocUsersRequest(project.id, { user_ids: checkedKeys }).then((_) => onSuccess());
   };
 
   return (
-    <Drawer {...props} title={project.name} placement={'right'} extra={renderExtra()}>
+    <Drawer
+      {...rest}
+      title={project.name}
+      placement={'right'}
+      extra={
+        <Button type={'primary'} onClick={onSave}>
+          {intl.get('SAVE')}
+        </Button>
+      }
+    >
       <Grid>
         <Col span={24}>
           <Search
             placeholder={intl.get('PLEASE_ENTER_USERNAME_TO_SEARCH')}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </Col>
-        <Col span={24}>
-          {treeData && (
+        {filteredUsers.length > 0 && (
+          <Col span={24}>
             <Tree
               defaultExpandAll={true}
               treeData={treeData}
@@ -97,13 +79,15 @@ const AllocUserDrawer: FC<AllocUserDrawerProps> = (props) => {
               selectable={false}
               checkable={true}
               checkedKeys={checkedKeys}
-              onCheck={onCheck}
+              onCheck={(checked: any) =>
+                setUsers((prev) =>
+                  prev.map((item) => ({ ...item, checked: checked.includes(item.user.id) }))
+                )
+              }
             />
-          )}
-        </Col>
+          </Col>
+        )}
       </Grid>
     </Drawer>
   );
 };
-
-export default AllocUserDrawer;
