@@ -1,15 +1,14 @@
 import React from 'react';
-import { Col, Form, Input, Select } from 'antd';
+import { Col, Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../components/modalWrapper';
-import { FormInputItem } from '../../components/formInputItem';
 import { ModalFormProps } from '../../types/common';
+import { Card, Grid, SelectFormItem, TextFormItem } from '../../components';
+import { generateColProps } from '../../utils/grid';
 import { addAsset, AssetCategory, AssetModel } from '../asset-common';
 import { SettingFormItems } from './settingFormItems';
 import { getByType, useParents } from './utils';
 import { TypeFormItem } from './typeFormItem';
-import { Card, Grid } from '../../components';
-import { generateColProps } from '../../utils/grid';
 
 export const Create = (props: ModalFormProps & { parentId?: number; types: AssetCategory[] }) => {
   const { onSuccess, parentId, types } = props;
@@ -20,32 +19,16 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
 
   const renderParent = () => {
     if (parentId) {
-      return (
-        <Form.Item name='parent_id' hidden={true} initialValue={parentId}>
-          <Input />
-        </Form.Item>
-      );
+      return <TextFormItem name='parent_id' hidden initialValue={parentId} />;
     } else if (parents.length >= 0) {
       return (
         <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-          <Form.Item
+          <SelectFormItem
             label={label}
             name='parent_id'
-            rules={[
-              {
-                required: true,
-                message: intl.get('PLEASE_SELECT_SOMETHING', { something: label })
-              }
-            ]}
-          >
-            <Select placeholder={intl.get('PLEASE_SELECT_SOMETHING', { something: label })}>
-              {parents.map(({ id, name }) => (
-                <Select.Option key={id} value={id}>
-                  {name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+            rules={[{ required: true }]}
+            selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
+          />
         </Col>
       );
     }
@@ -76,14 +59,11 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
         <Card size='small' style={{ marginBlock: 16 }} title={intl.get('BASIC_INFORMATION')}>
           <Grid>
             <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-              <FormInputItem
-                label={intl.get('NAME')}
+              <TextFormItem
+                label='NAME'
                 name='name'
-                requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-                lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-              >
-                <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-              </FormInputItem>
+                rules={[{ required: true }, { min: 4, max: 50 }]}
+              />
             </Col>
             {renderParent()}
             <Col {...generateColProps({ xl: 12, xxl: 12 })}>

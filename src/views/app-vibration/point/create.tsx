@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Input, Select } from 'antd';
+import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
+import { SelectFormItem, TextFormItem } from '../../../components';
 import {
   addMonitoringPoints,
   Asset,
@@ -85,64 +86,34 @@ const isVaidParent = (asset?: AssetRow) => {
 
 function ParentSelection({ asset }: { asset?: AssetRow }) {
   const parents = useMonitoringPointParents(isVaidParent, asset);
-  const label = intl.get('ASSET');
 
   if (isVaidParent(asset)) {
-    return (
-      <Form.Item name='asset_id' hidden={true} initialValue={asset?.id}>
-        <Input />
-      </Form.Item>
-    );
+    return <TextFormItem name='asset_id' hidden={true} initialValue={asset?.id} />;
   } else {
     return (
-      <Form.Item
-        label={label}
+      <SelectFormItem
+        label='ASSET'
         name='asset_id'
-        rules={[
-          {
-            required: true,
-            message: intl.get('PLEASE_SELECT_SOMETHING', { something: label })
-          }
-        ]}
-      >
-        <Select placeholder={intl.get('PLEASE_SELECT_SOMETHING', { something: label })}>
-          {parents.map(({ id, name }) => (
-            <Select.Option key={id} value={id}>
-              {name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
+        rules={[{ required: true }]}
+        selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
+      />
     );
   }
 }
 
 function TypeSelection({ onChange }: { onChange: (id: number) => void }) {
   return (
-    <Form.Item
-      label={intl.get('TYPE')}
+    <SelectFormItem
+      label='TYPE'
       name='type'
-      rules={[
-        {
-          required: true,
-          message: intl.get('PLEASE_SELECT_SOMETHING', {
-            something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-          })
-        }
-      ]}
-    >
-      <Select
-        placeholder={intl.get('PLEASE_SELECT_SOMETHING', {
-          something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-        })}
-        onChange={onChange}
-      >
-        {monitoringPointTypes.map(({ id, label }) => (
-          <Select.Option key={id} value={id}>
-            {intl.get(label)}
-          </Select.Option>
-        ))}
-      </Select>
-    </Form.Item>
+      rules={[{ required: true }]}
+      selectProps={{
+        onChange,
+        options: monitoringPointTypes.map(({ id, label }) => ({
+          label: intl.get(label),
+          value: id
+        }))
+      }}
+    />
   );
 }

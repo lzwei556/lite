@@ -3,12 +3,11 @@ import { Col, Form, FormListFieldData, Input, Select } from 'antd';
 import intl from 'react-intl-universal';
 import { getPropertiesByMeasurementType, updateAlarmRule } from './services';
 import { AlarmRule } from './types';
-import { FormInputItem } from '../../../components/formInputItem';
 import { DisplayProperty } from '../../../constants/properties';
 import { MONITORING_POINT, Point } from '../../asset-common';
 import { App, useAppType } from '../../../config';
 import { cloneDeep } from 'lodash';
-import { Grid, Table } from '../../../components';
+import { Grid, Table, TextFormItem } from '../../../components';
 import { NameFormItem } from './nameFormItem';
 import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
@@ -63,14 +62,11 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
       >
         <Grid gutter={[0, 0]} justify='space-between'>
           <Col {...generateColProps({ xl: 11, xxl: 11 })}>
-            <FormInputItem
+            <TextFormItem
+              label='NAME'
               name='name'
-              label={intl.get('NAME')}
-              requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-              lengthLimit={{ min: 4, max: 16, label: intl.get('NAME').toLowerCase() }}
-            >
-              <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-            </FormInputItem>
+              rules={[{ required: true }, { min: 4, max: 16 }]}
+            />
           </Col>
           <Col {...generateColProps({ xl: 11, xxl: 11 })}>
             <Form.Item

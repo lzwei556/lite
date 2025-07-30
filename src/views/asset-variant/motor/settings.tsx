@@ -1,8 +1,7 @@
 import React from 'react';
-import { Col, ColProps, Input, InputNumber, Radio, Select, Typography } from 'antd';
+import { Col, ColProps, Radio } from 'antd';
 import intl from 'react-intl-universal';
-import { FormInputItem } from '../../../components/formInputItem';
-import { Card, Grid } from '../../../components';
+import { Card, Grid, NumberFormItem, SelectFormItem, TextFormItem } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 
 export type MotorAttrs = {
@@ -29,9 +28,11 @@ export const Settings = ({
     <Card size='small' title={intl.get('motor.property')}>
       <Grid>
         <Col {...formItemColProps}>
-          <FormInputItem label={intl.get('motor.motor_type')} name={['attributes', 'motor_type']}>
-            <Select
-              options={[
+          <SelectFormItem
+            label='motor.motor_type'
+            name={['attributes', 'motor_type']}
+            selectProps={{
+              options: [
                 {
                   label: 'AC',
                   value: 'AC'
@@ -40,29 +41,20 @@ export const Settings = ({
                   label: 'DC',
                   value: 'DC'
                 }
-              ]}
-            />
-          </FormInputItem>
-        </Col>
-        <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.rotation_speed')}
-            name={['attributes', 'rotation_speed']}
-            numericRule={{
-              message: intl.get('PLEASE_ENTER_NUMERIC')
+              ]
             }}
-            numericChildren={
-              <InputNumber style={{ width: '100%' }} controls={false} addonAfter='RPM' min={1000} />
-            }
           />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={
-              <Typography.Text ellipsis title={intl.get('motor.variable_frequency_drive')}>
-                {intl.get('motor.variable_frequency_drive')}
-              </Typography.Text>
-            }
+          <NumberFormItem
+            label='motor.rotation_speed'
+            name={['attributes', 'rotation_speed']}
+            inputNumberProps={{ addonAfter: 'RMP', min: 1000 }}
+          />
+        </Col>
+        <Col {...formItemColProps}>
+          <TextFormItem
+            label='motor.variable_frequency_drive'
             name={['attributes', 'variable_frequency_drive']}
           >
             <Radio.Group
@@ -71,24 +63,21 @@ export const Settings = ({
                 { label: intl.get('no'), value: false }
               ]}
             />
-          </FormInputItem>
+          </TextFormItem>
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.nominal_power')}
+          <NumberFormItem
+            label='motor.nominal_power'
             name={['attributes', 'nominal_power']}
-            numericRule={{
-              message: intl.get('PLEASE_ENTER_NUMERIC')
-            }}
-            numericChildren={
-              <InputNumber style={{ width: '100%' }} controls={false} addonAfter='kW' />
-            }
+            inputNumberProps={{ addonAfter: 'kW' }}
           />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem label={intl.get('motor.mounting')} name={['attributes', 'mounting']}>
-            <Select
-              options={[
+          <SelectFormItem
+            label='motor.mounting'
+            name={['attributes', 'mounting']}
+            selectProps={{
+              options: [
                 {
                   label: intl.get('horizontal'),
                   value: 1
@@ -97,17 +86,16 @@ export const Settings = ({
                   label: intl.get('vertical'),
                   value: 2
                 }
-              ]}
-            />
-          </FormInputItem>
+              ]
+            }}
+          />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.bearing_type')}
+          <SelectFormItem
+            label='motor.bearing_type'
             name={['attributes', 'bearing_type']}
-          >
-            <Select
-              options={[
+            selectProps={{
+              options: [
                 {
                   label: intl.get('motor.bearing.type.roller'),
                   value: 1
@@ -116,65 +104,47 @@ export const Settings = ({
                   label: intl.get('motor.bearing.type.journal'),
                   value: 2
                 }
-              ]}
-            />
-          </FormInputItem>
+              ]
+            }}
+          />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.bearing_model')}
-            name={['attributes', 'bearing_model']}
-          >
-            <Input />
-          </FormInputItem>
+          <TextFormItem label='motor.bearing_model' name={['attributes', 'bearing_model']} />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.rolling.elements.num')}
+          <NumberFormItem
+            label='motor.rolling.elements.num'
             name={['attributes', 'rolling_elements_num']}
-            numericRule={{
-              message: intl.get('PLEASE_ENTER_NUMERIC')
-            }}
-            numericChildren={<InputNumber style={{ width: '100%' }} min={1} />}
+            inputNumberProps={{ min: 1 }}
           />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.rolling.elements.diameter')}
+          <NumberFormItem
+            label='motor.rolling.elements.diameter'
             name={['attributes', 'rolling_elements_diameter']}
-            numericRule={{
-              message: intl.get('PLEASE_ENTER_NUMERIC')
-            }}
-            numericChildren={<InputNumber style={{ width: '100%' }} min={1} addonAfter='mm' />}
+            inputNumberProps={{ addonAfter: 'mm', min: 1 }}
           />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.pitch.circle.diameter')}
+          <NumberFormItem
+            label='motor.pitch.circle.diameter'
             name={['attributes', 'pitch_circle_diameter']}
-            numericRule={{
-              message: intl.get('PLEASE_ENTER_NUMERIC')
-            }}
-            numericChildren={<InputNumber style={{ width: '100%' }} min={1} addonAfter='mm' />}
+            inputNumberProps={{ addonAfter: 'mm', min: 1 }}
           />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.contact.angle')}
+          <NumberFormItem
+            label='motor.contact.angle'
             name={['attributes', 'contact_angle']}
-            numericRule={{
-              message: intl.get('PLEASE_ENTER_NUMERIC')
-            }}
-            numericChildren={<InputNumber style={{ width: '100%' }} min={1} addonAfter='°' />}
+            inputNumberProps={{ addonAfter: '°', min: 1 }}
           />
         </Col>
         <Col {...formItemColProps}>
-          <FormInputItem
-            label={intl.get('motor.rotation.mode')}
+          <SelectFormItem
+            label='motor.rotation.mode'
             name={['attributes', 'rotation_mode']}
-          >
-            <Select
-              options={[
+            selectProps={{
+              options: [
                 {
                   label: intl.get('inner'),
                   value: 'inner'
@@ -183,9 +153,9 @@ export const Settings = ({
                   label: intl.get('outer'),
                   value: 'outer'
                 }
-              ]}
-            />
-          </FormInputItem>
+              ]
+            }}
+          />
         </Col>
       </Grid>
     </Card>

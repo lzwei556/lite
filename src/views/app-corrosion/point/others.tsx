@@ -1,7 +1,7 @@
 import React from 'react';
-import { Col, ColProps, InputNumber } from 'antd';
+import { Col, ColProps } from 'antd';
 import intl from 'react-intl-universal';
-import { FormInputItem } from '../../../components/formInputItem';
+import { NumberFormItem } from '../../../components';
 import { MonitoringPointRow } from '../../asset-common';
 import { AttributeFormItem } from './attributeFormItem';
 
@@ -46,26 +46,11 @@ function ShortTerm(props: Omit<FieldProps, 'formItemColProps'>) {
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
-    <FormInputItem
+    <NumberFormItem
       {...restFields}
-      initialValue={30}
-      label={intl.get('CORROSION_RATE_SHORT_TERM')}
+      label='CORROSION_RATE_SHORT_TERM'
       name={nameProp}
-      numericChildren={
-        <InputNumber
-          addonAfter={intl.get('UNIT_DAY')}
-          controls={false}
-          placeholder={intl.get('PLEASE_ENTER_SOMETHING', {
-            something: intl.get('CORROSION_RATE_SHORT_TERM')
-          })}
-          style={{ width: '100%' }}
-        />
-      }
-      numericRule={{
-        isInteger: true,
-        min: 1,
-        message: intl.get('UNSIGNED_INTEGER_ENTER_PROMPT')
-      }}
+      inputNumberProps={{ addonAfter: intl.get('UNIT_DAY') }}
     />
   );
 }
@@ -76,26 +61,11 @@ function LongTerm(props: Omit<FieldProps, 'formItemColProps'>) {
   const nameProp = nameIndex !== undefined ? [`${nameIndex}`, ...commonNameProp] : commonNameProp;
 
   return (
-    <FormInputItem
+    <NumberFormItem
       {...restFields}
-      initialValue={365}
-      label={intl.get('CORROSION_RATE_LONG_TERM')}
+      label='CORROSION_RATE_LONG_TERM'
       name={nameProp}
-      numericChildren={
-        <InputNumber
-          addonAfter={intl.get('UNIT_DAY')}
-          controls={false}
-          placeholder={intl.get('PLEASE_ENTER_SOMETHING', {
-            something: intl.get('CORROSION_RATE_LONG_TERM')
-          })}
-          style={{ width: '100%' }}
-        />
-      }
-      numericRule={{
-        isInteger: true,
-        min: 1,
-        message: intl.get('UNSIGNED_INTEGER_ENTER_PROMPT')
-      }}
+      inputNumberProps={{ addonAfter: intl.get('UNIT_DAY') }}
     />
   );
 }

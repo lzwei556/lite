@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Col, ColProps, Form, Input, Popover } from 'antd';
+import { Button, Col, ColProps, Form, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Device } from '../../../types/device';
-import { FormInputItem } from '../../../components/formInputItem';
-import { Grid } from '../../../components';
+import { Grid, NumberFormItem, TextFormItem } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import { isMobile } from '../../../utils/deviceDetection';
 import { GetDevicesRequest } from '../../../apis/device';
@@ -50,6 +49,7 @@ export const PointItemList = ({
         <>
           {fields.map(({ key, name, ...restFields }, index) => (
             <div
+              key={index}
               style={{
                 position: 'relative',
                 border: 'dashed 1px #d9d9d9',
@@ -66,32 +66,19 @@ export const PointItemList = ({
               />
               <Grid>
                 <Col {...formItemColProps}>
-                  <FormInputItem
+                  <TextFormItem
                     {...restFields}
-                    label={intl.get('NAME')}
+                    label='NAME'
                     name={[name, 'name']}
-                    requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-                    lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-                  >
-                    <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-                  </FormInputItem>
+                    rules={[{ required: true }, { min: 4, max: 50 }]}
+                  />
                 </Col>
                 <Col {...formItemColProps}>
-                  <FormInputItem
-                    label={intl.get('POSITION')}
+                  <NumberFormItem
                     {...restFields}
+                    label='POSITION'
                     name={[name, 'attributes', 'index']}
-                    requiredMessage={intl.get('PLEASE_ENTER_SOMETHING', {
-                      something: intl.get('POSITION')
-                    })}
-                    numericRule={{
-                      isInteger: true,
-                      min: 1,
-                      message: intl.get('UNSIGNED_INTEGER_ENTER_PROMPT')
-                    }}
-                    placeholder={intl.get('PLEASE_ENTER_SOMETHING', {
-                      something: intl.get('POSITION')
-                    })}
+                    rules={[{ required: true }]}
                   />
                 </Col>
                 <Others
@@ -111,7 +98,15 @@ export const PointItemList = ({
                     devices={devices}
                     onSelect={(selecteds) => {
                       setVisible(false);
-                      onSelect(selecteds);
+                      onSelect(
+                        selecteds.map((m) => ({
+                          ...m,
+                          attributes: {
+                            corrosion_rate_short_term: 30,
+                            corrosion_rate_long_term: 365
+                          }
+                        }))
+                      );
                     }}
                     initialSelected={initialSelected}
                   />

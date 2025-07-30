@@ -1,14 +1,13 @@
 import React from 'react';
-import { Form, Input, Select, Space } from 'antd';
+import { Form, Space } from 'antd';
 import intl from 'react-intl-universal';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
 import { AssetModel, AssetRow, deleteAsset, updateAsset, useContext } from '../asset-common';
 import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
-import { FormInputItem } from '../../components/formInputItem';
+import { DeleteIconButton, EditIconButton, SelectFormItem, TextFormItem } from '../../components';
 import { isAssetAreaParent } from '../asset-variant';
-import { DeleteIconButton, EditIconButton } from '../../components';
 
 export const OperateCell = ({ asset }: { asset: AssetRow }) => {
   const { refresh } = useContext();
@@ -74,26 +73,13 @@ function UpdateAssetModal({ asset, onSuccess, ...rest }: ModalFormProps & { asse
           parent_id: asset.parentId > 0 ? asset.parentId : undefined
         }}
       >
-        <FormInputItem
-          label={intl.get('NAME')}
-          name='name'
-          requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-          lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-        >
-          <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-        </FormInputItem>
+        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
         {asset.parentId > 0 && (
-          <Form.Item label={intl.get('ASSET')} name='parent_id'>
-            <Select
-              placeholder={intl.get('PLEASE_SELECT_SOMETHING', { something: intl.get('ASSET') })}
-            >
-              {parents.map(({ id, name }) => (
-                <Select.Option key={id} value={id}>
-                  {name}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+          <SelectFormItem
+            label='ASSET'
+            name='parent_id'
+            selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
+          />
         )}
       </Form>
     </ModalWrapper>

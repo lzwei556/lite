@@ -63,7 +63,7 @@ export const PointsTable = (props: {
   columns.push(longTermCol);
 
   if (hasPermission(Permission.MeasurementAdd)) {
-    columns.push(getOperateColumn({ onDeleteSuccess: onSuccess, onUpdate }));
+    columns.push(getOperateColumn({ onDeleteSuccess: () => onSuccess(), onUpdate }));
   }
 
   return (

@@ -1,8 +1,6 @@
 import React from 'react';
-import { Col, ColProps, Form, Input, Select } from 'antd';
-import intl from 'react-intl-universal';
-import { Grid } from '../../components';
-import { FormInputItem } from '../../components/formInputItem';
+import { Col, ColProps } from 'antd';
+import { Grid, SelectFormItem, TextFormItem } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { AssetCategory } from '../asset-common';
 import { TypeFormItem } from './typeFormItem';
@@ -15,40 +13,20 @@ export const BasisFormItems = ({
   types: AssetCategory[];
   formItemColProps?: ColProps;
 }) => {
-  const label = intl.get('ASSET');
   const parents = useParents();
 
   return (
     <Grid>
       <Col {...formItemColProps}>
-        <FormInputItem
-          label={intl.get('NAME')}
-          name='name'
-          requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-          lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-        >
-          <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-        </FormInputItem>
+        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
       </Col>
       <Col {...formItemColProps}>
-        <Form.Item
-          label={label}
+        <SelectFormItem
+          label='ASSET'
           name='parent_id'
-          rules={[
-            {
-              required: true,
-              message: intl.get('PLEASE_SELECT_SOMETHING', { something: label })
-            }
-          ]}
-        >
-          <Select placeholder={intl.get('PLEASE_SELECT_SOMETHING', { something: label })}>
-            {parents.map(({ id, name }) => (
-              <Select.Option key={id} value={id}>
-                {name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+          rules={[{ required: true }]}
+          selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
+        />
       </Col>
       <Col {...formItemColProps}>
         <TypeFormItem disabled={true} types={types} />

@@ -1,53 +1,35 @@
 import React from 'react';
-import { Form, InputNumber, Select } from 'antd';
-import intl from 'react-intl-universal';
-import { FormInputItem, FormInputItemProps } from '../../../components/formInputItem';
+import { NumberFormItem, SelectFormItem } from '../../../components';
 
 export const ConditionFormItem = ({
   nameIndex,
-  unitText,
-  ...rest
-}: FormInputItemProps & {
+  unitText
+}: {
   nameIndex: number;
   unitText?: string;
 }) => {
   return (
-    <FormInputItem
-      {...rest}
-      label={intl.get('CONDITION')}
+    <NumberFormItem
+      label='CONDITION'
       name={[nameIndex, 'threshold']}
       noStyle
-      numericRule={{
-        isInteger: false
+      inputNumberProps={{
+        addonBefore: (
+          <SelectFormItem
+            name={[nameIndex, 'operation']}
+            noStyle
+            selectProps={{
+              options: [
+                { label: '>', value: '>' },
+                { label: '>=', value: '>=' },
+                { label: '<', value: '<' },
+                { label: '<=', value: '<=' }
+              ]
+            }}
+          />
+        ),
+        addonAfter: unitText
       }}
-      numericChildren={
-        <InputNumber
-          addonBefore={
-            <Form.Item {...rest} name={[nameIndex, 'operation']} noStyle initialValue={'>='}>
-              <Select style={{ width: 65 }}>
-                <Select.Option key={'>'} value={'>'}>
-                  &gt;
-                </Select.Option>
-                <Select.Option key={'>='} value={'>='}>
-                  &gt;=
-                </Select.Option>
-                <Select.Option key={'<'} value={'<'}>
-                  &lt;
-                </Select.Option>
-                <Select.Option key={'<='} value={'<='}>
-                  &lt;=
-                </Select.Option>
-              </Select>
-            </Form.Item>
-          }
-          controls={false}
-          addonAfter={unitText}
-          placeholder={intl.get('PLEASE_ENTER_SOMETHING', {
-            something: intl.get('CONDITION')
-          })}
-        />
-      }
-      requiredMessage={' '}
     />
   );
 };

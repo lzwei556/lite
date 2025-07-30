@@ -1,8 +1,8 @@
 import React from 'react';
-import { Col, ColProps, Form, Input, Select } from 'antd';
+import { Col, ColProps } from 'antd';
 import intl from 'react-intl-universal';
-import { FormInputItem } from '../../../components/formInputItem';
-import { AXIS, AXIS_ALIAS, AXIS_OPTIONS } from '../../asset-common';
+import { SelectFormItem, TextFormItem } from '../../../components';
+import { AXIS_ALIAS, AXIS_OPTIONS } from '../../asset-common';
 
 type FieldProps = {
   formItemColProps: ColProps;
@@ -37,14 +37,7 @@ function Position(props: Omit<FieldProps, 'formItemColProps'>) {
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
-    <FormInputItem
-      {...restFields}
-      label={intl.get('POSITION')}
-      name={nameProp}
-      requiredMessage={intl.get('PLEASE_ENTER_POSITION')}
-    >
-      <Input />
-    </FormInputItem>
+    <TextFormItem {...restFields} label='POSITION' name={nameProp} rules={[{ required: true }]} />
   );
 }
 
@@ -54,14 +47,14 @@ function Axial(props: Omit<FieldProps, 'formItemColProps'>) {
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
-    <Form.Item
+    <SelectFormItem
       {...restFields}
-      initialValue={AXIS.Z.key}
-      label={intl.get(AXIS_ALIAS.Axial.label)}
+      label={AXIS_ALIAS.Axial.label}
       name={nameProp}
-    >
-      <Select options={AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))} />
-    </Form.Item>
+      selectProps={{
+        options: AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))
+      }}
+    />
   );
 }
 
@@ -71,14 +64,14 @@ function Vertical(props: Omit<FieldProps, 'formItemColProps'>) {
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
-    <Form.Item
+    <SelectFormItem
       {...restFields}
-      initialValue={AXIS.Y.key}
-      label={intl.get(AXIS_ALIAS.Vertical.label)}
+      label={AXIS_ALIAS.Vertical.label}
       name={nameProp}
-    >
-      <Select options={AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))} />
-    </Form.Item>
+      selectProps={{
+        options: AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))
+      }}
+    />
   );
 }
 
@@ -88,13 +81,13 @@ function Horizontal(props: Omit<FieldProps, 'formItemColProps'>) {
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
-    <Form.Item
+    <SelectFormItem
       {...restFields}
-      initialValue={AXIS.X.key}
-      label={intl.get(AXIS_ALIAS.Horizontal.label)}
+      label={AXIS_ALIAS.Horizontal.label}
       name={nameProp}
-    >
-      <Select options={AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))} />
-    </Form.Item>
+      selectProps={{
+        options: AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))
+      }}
+    />
   );
 }

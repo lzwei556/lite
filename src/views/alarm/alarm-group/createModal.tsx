@@ -5,12 +5,11 @@ import intl from 'react-intl-universal';
 import { getPropertiesByMeasurementType } from './services';
 import { AlarmRule } from './types';
 import { addAlarmRule } from './services';
-import { FormInputItem } from '../../../components/formInputItem';
 import { DisplayProperty } from '../../../constants/properties';
 import { MONITORING_POINT, Point } from '../../asset-common';
 import { App, useAppType } from '../../../config';
 import { cloneDeep } from 'lodash';
-import { Grid, Table } from '../../../components';
+import { Grid, Table, TextFormItem } from '../../../components';
 import { NameFormItem } from './nameFormItem';
 import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
@@ -55,14 +54,11 @@ export function CreateModal(props: ModalFormProps) {
       <Form form={form} layout='vertical'>
         <Grid gutter={[0, 0]} justify='space-between'>
           <Col {...generateColProps({ xl: 11, xxl: 11 })}>
-            <FormInputItem
+            <TextFormItem
+              label='NAME'
               name='name'
-              label={intl.get('NAME')}
-              requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-              lengthLimit={{ min: 4, max: 16, label: intl.get('NAME').toLowerCase() }}
-            >
-              <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-            </FormInputItem>
+              rules={[{ required: true }, { min: 4, max: 16 }]}
+            />
           </Col>
           <Col {...generateColProps({ xl: 11, xxl: 11 })}>
             <Form.Item
@@ -123,7 +119,7 @@ export function CreateModal(props: ModalFormProps) {
             </Form.Item>
           </Col>
         </Grid>
-        <Form.List name='rules' initialValue={[0]}>
+        <Form.List name='rules' initialValue={[{ duration: 1, operation: '>=' }]}>
           {(fields, { add, remove }, { errors }) => {
             return (
               <>
@@ -133,15 +129,13 @@ export function CreateModal(props: ModalFormProps) {
                       key: 'name',
                       title: intl.get('NAME'),
                       width: 120,
-                      render: (text: any, row: FormListFieldData) => (
-                        <NameFormItem nameIndex={row.name} />
-                      )
+                      render: (_, row: FormListFieldData) => <NameFormItem nameIndex={row.name} />
                     },
                     {
                       key: 'property',
                       title: intl.get('INDEX'),
                       width: 150,
-                      render: (text: any, row: FormListFieldData) => (
+                      render: (_, row: FormListFieldData) => (
                         <IndexFormItem
                           disabled={false}
                           nameIndex={row.name}
@@ -170,7 +164,7 @@ export function CreateModal(props: ModalFormProps) {
                       key: 'duration',
                       title: intl.get('DURATION'),
                       width: 60,
-                      render: (text: any, row: FormListFieldData) => (
+                      render: (_, row: FormListFieldData) => (
                         <DurationFormItem nameIndex={row.name} />
                       )
                     },
@@ -178,7 +172,7 @@ export function CreateModal(props: ModalFormProps) {
                       key: 'condition',
                       title: intl.get('CONDITION'),
                       width: 180,
-                      render: (text: any, row: FormListFieldData) => {
+                      render: (_, row: FormListFieldData) => {
                         let unitText = '';
                         if (metric.length > 0 && metric[row.name] && metric[row.name].unit) {
                           const unit = metric[row.name].unit as string;
@@ -191,7 +185,7 @@ export function CreateModal(props: ModalFormProps) {
                       key: 'severity',
                       title: intl.get('SEVERITY'),
                       width: 80,
-                      render: (text: any, row: FormListFieldData) => (
+                      render: (_, row: FormListFieldData) => (
                         <SeverityFormItem nameIndex={row.name} />
                       )
                     },
@@ -199,7 +193,7 @@ export function CreateModal(props: ModalFormProps) {
                       key: 'operation',
                       title: intl.get('REMOVE'),
                       width: 60,
-                      render: (text: any, row: FormListFieldData) => {
+                      render: (_, row: FormListFieldData) => {
                         return (
                           <Button
                             disabled={row.name === 0}

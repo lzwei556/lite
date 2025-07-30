@@ -1,28 +1,13 @@
 import React from 'react';
-import intl from 'react-intl-universal';
-import { FormInputItem, FormInputItemProps } from '../../../components/formInputItem';
+import { NumberFormItem } from '../../../components';
 
-export const DurationFormItem = ({
-  nameIndex,
-  ...rest
-}: FormInputItemProps & {
-  nameIndex: number;
-  numericChildren?: JSX.Element;
-}) => {
+export const DurationFormItem = ({ nameIndex }: { nameIndex: number }) => {
   return (
-    <FormInputItem
-      {...rest}
-      initialValue={1}
+    <NumberFormItem
       name={[nameIndex, 'duration']}
       noStyle
-      numericRule={{
-        isInteger: true,
-        min: 1,
-        message: intl.get('UNSIGNED_INTEGER_ENTER_PROMPT')
-      }}
-      requiredMessage={intl.get('PLEASE_ENTER_SOMETHING', {
-        something: intl.get('DURATION')
-      })}
+      rules={[{ required: true }]}
+      inputNumberProps={{ min: 1 }}
     />
   );
 };

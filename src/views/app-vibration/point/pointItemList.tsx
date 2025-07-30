@@ -1,14 +1,13 @@
 import React from 'react';
-import { Button, Col, Form, Input, Popover } from 'antd';
+import { Button, Col, Form, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Grid } from '../../../components';
+import { Grid, TextFormItem } from '../../../components';
 import { Device } from '../../../types/device';
-import { FormInputItem } from '../../../components/formInputItem';
 import { isMobile } from '../../../utils/deviceDetection';
 import { generateColProps } from '../../../utils/grid';
 import { GetDevicesRequest } from '../../../apis/device';
-import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
+import { AXIS, AXIS_ALIAS, DeviceSelection, MonitoringPointInfo } from '../../asset-common';
 import { relatedDeviceTypes } from './common';
 import { Others } from './others';
 
@@ -48,6 +47,7 @@ export const PointItemList = ({
         <>
           {fields.map(({ key, name, ...restFields }, index) => (
             <div
+              key={index}
               style={{
                 position: 'relative',
                 border: 'dashed 1px #d9d9d9',
@@ -64,15 +64,12 @@ export const PointItemList = ({
               />
               <Grid>
                 <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-                  <FormInputItem
+                  <TextFormItem
                     {...restFields}
-                    label={intl.get('NAME')}
+                    label='NAME'
                     name={[name, 'name']}
-                    requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-                    lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-                  >
-                    <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-                  </FormInputItem>
+                    rules={[{ required: true }, { min: 4, max: 50 }]}
+                  />
                 </Col>
                 <Others
                   formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
@@ -91,7 +88,16 @@ export const PointItemList = ({
                     devices={devices}
                     onSelect={(selecteds) => {
                       setVisible(false);
-                      onSelect(selecteds);
+                      onSelect(
+                        selecteds.map((m) => ({
+                          ...m,
+                          attributes: {
+                            [AXIS_ALIAS.Axial.key]: AXIS.Z.key,
+                            [AXIS_ALIAS.Horizontal.key]: AXIS.X.key,
+                            [AXIS_ALIAS.Vertical.key]: AXIS.Y.key
+                          }
+                        }))
+                      );
                     }}
                     initialSelected={initialSelected}
                   />
