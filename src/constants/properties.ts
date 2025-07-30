@@ -494,26 +494,29 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
     RPM
   ],
   ST: [TEMPERATURE],
-  SPT: [{ key: 'pressure', name: 'FIELD_PRESSURE2', precision: 1, unit: 'MPa' }, TEMPERATURE],
+  SPT: [
+    { key: 'pressure', name: 'FIELD_PRESSURE2', precision: 1, unit: 'MPa', first: true },
+    TEMPERATURE
+  ],
   SQ: [
     { ...INCLINATION, first: true },
     { ...PITCH, first: true },
     { ...ROLL, first: true },
     WAGGLE,
-    TEMPERATURE
+    { ...TEMPERATURE, first: false }
   ],
   TopInclination: [
     TopInclination_DISPLACEMENT_COMBINED,
     TopInclination_INCLINATION_COMBINED,
     DIRECTION,
     WAGGLE,
-    TEMPERATURE
+    { ...TEMPERATURE, first: false }
   ],
   BaseInclination: [
     BaseInclination_DISPLACEMENT_COMBINED,
     BaseInclination_INCLINATION_COMBINED,
     DIRECTION,
     WAGGLE,
-    TEMPERATURE
+    { ...TEMPERATURE, first: false }
   ]
 } as const;
