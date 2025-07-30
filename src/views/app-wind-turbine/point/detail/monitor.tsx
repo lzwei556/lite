@@ -57,7 +57,7 @@ export const Monitor = (point: MonitoringPointRow) => {
           />
         </Col>
       )}
-      {Point.getPropertiesByType(properties, type).map((p: DisplayProperty, index: number) => {
+      {Point.getPropertiesByType(type, properties).map((p: DisplayProperty, index: number) => {
         return (
           <Col {...colProps} key={index}>
             <HistoryDataFea.PropertyChartCard

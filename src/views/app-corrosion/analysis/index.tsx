@@ -52,7 +52,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
       </Card>
     );
   }
-  const _properties = Point.getPropertiesByType(properties, type);
+  const _properties = Point.getPropertiesByType(type, properties);
   if (_properties.length === 0) return null;
   const property = _properties[0];
 

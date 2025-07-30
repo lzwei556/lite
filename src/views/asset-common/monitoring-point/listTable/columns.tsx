@@ -104,7 +104,7 @@ function getPropertyedCols(
   needToFilterFirstProperties = false
 ): Column[] {
   if (!measurement) return [];
-  const properties = Point.getPropertiesByType(measurement.properties, measurement.type).filter(
+  const properties = Point.getPropertiesByType(measurement.type, measurement.properties).filter(
     (p) => (needToFilterFirstProperties ? p.first : true)
   );
   return properties.map(({ fields = [], first, key, name, precision, unit }) => {

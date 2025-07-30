@@ -32,7 +32,7 @@ export const History = (point: MonitoringPointRow) => {
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const { range, numberedRange, setRange } = useRange();
-  const displayProperties = Point.getPropertiesByType(properties, type).map((p) =>
+  const displayProperties = Point.getPropertiesByType(type, properties).map((p) =>
     appendAxisAliasLabelToField(p, attributes)
   );
   const [property, setProperty] = React.useState<DisplayProperty | undefined>(

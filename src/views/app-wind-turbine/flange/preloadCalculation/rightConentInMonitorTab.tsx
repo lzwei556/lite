@@ -13,7 +13,7 @@ export const RightConentInMonitorTab = ({ asset }: { asset: AssetRow }) => {
     .filter((point) => !!point.data);
   let properties: DisplayProperty[] = [];
   if (actuals.length > 0) {
-    properties = Point.getPropertiesByType(actuals[0].properties, actuals[0].type);
+    properties = Point.getPropertiesByType(actuals[0].type, actuals[0].properties);
   }
   const property = properties.length > 0 ? properties[0] : undefined;
   let bolts: number[] = [];

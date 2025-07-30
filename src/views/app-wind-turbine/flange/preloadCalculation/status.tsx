@@ -105,8 +105,8 @@ export const Status: React.FC<AssetRow> = (props) => {
         properties={
           props.monitoringPoints && props.monitoringPoints.length > 0
             ? Point.getPropertiesByType(
-                props.monitoringPoints[0].properties,
-                props.monitoringPoints[0].type
+                props.monitoringPoints[0].type,
+                props.monitoringPoints[0].properties
               )
             : []
         }

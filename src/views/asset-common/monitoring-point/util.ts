@@ -58,7 +58,10 @@ export const Point = {
       channel: firstDevice?.channel === 0 ? 1 : firstDevice?.channel
     };
   },
-  getPropertiesByType: (properties: Property[], monitoringPointType: MonitoringPointTypeValue) => {
+  getPropertiesByType: (
+    monitoringPointType: MonitoringPointTypeValue,
+    properties: Property[] = []
+  ) => {
     const dispalyPropertiesSettings =
       MONITORING_POINT_DISPLAY_PROPERTIES[
         monitoringPointType as keyof typeof MONITORING_POINT_DISPLAY_PROPERTIES

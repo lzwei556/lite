@@ -97,7 +97,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     )?.id;
                     if (measurementType) {
                       setProperties(
-                        removeDulpicateProperties(Point.getPropertiesByType(res, measurementType))
+                        removeDulpicateProperties(Point.getPropertiesByType(measurementType, res))
                       );
                     }
                   });

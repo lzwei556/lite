@@ -89,7 +89,7 @@ export function CreateModal(props: ModalFormProps) {
                     if (measurementType) {
                       setProperties(
                         removeDulpicateProperties(
-                          Point.getPropertiesByType(res, measurementType).map(
+                          Point.getPropertiesByType(measurementType, res).map(
                             NormalizeAttitudeIndexProperty
                           )
                         )

@@ -88,7 +88,7 @@ function buildCirclePointsChartOfFlange(
   series.push(actuals.series);
 
   const legends = [];
-  const unit = Point.getPropertiesByType(measurements[0].properties, measurements[0].type).filter(
+  const unit = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
     (p) => p.first
   )?.[0]?.unit;
   if (
@@ -227,7 +227,7 @@ function generateOuter(measurements: MonitoringPointRow[], isBig: boolean = fals
     splitLine: { show: false }
   };
   const seriesData = measurements.map(({ name, attributes, data, alertLevel }, index) => {
-    let field = Point.getPropertiesByType(measurements[0].properties, measurements[0].type).filter(
+    let field = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
       (p) => p.first
     )?.[0];
     let value = NaN;
@@ -277,7 +277,7 @@ function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = fa
     radius = { radius: isBig ? '85%' : '80%' };
   }
   const seriesData: any = [];
-  let field = Point.getPropertiesByType(measurements[0].properties, measurements[0].type).filter(
+  let field = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
     (p) => p.first
   )?.[0];
   let max = 0;

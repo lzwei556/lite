@@ -47,7 +47,7 @@ const getProperties = (asset: AssetRow) => {
   let properties: DisplayProperty[] = [];
   if (asset.monitoringPoints && asset.monitoringPoints.length > 0) {
     const first = asset.monitoringPoints[0];
-    properties = Point.getPropertiesByType(first.properties, first.type);
+    properties = Point.getPropertiesByType(first.type, first.properties);
   }
   return properties;
 };

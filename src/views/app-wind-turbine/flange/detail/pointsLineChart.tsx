@@ -31,7 +31,7 @@ export const PointsLineChart = ({
   const getProperties = () => {
     const points = Points.filter(flange.monitoringPoints);
     const firstPoint = points[0];
-    return Point.getPropertiesByType(firstPoint.properties, firstPoint.type);
+    return Point.getPropertiesByType(firstPoint.type, firstPoint.properties);
   };
   const properties = getProperties();
   const [property, setProperty] = React.useState<DisplayProperty | undefined>(properties?.[0]);

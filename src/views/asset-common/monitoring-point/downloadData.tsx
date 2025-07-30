@@ -22,7 +22,7 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
   const [form] = Form.useForm();
   const { language } = useLocaleContext();
 
-  const properties = Point.getPropertiesByType(measurement.properties, measurement.type);
+  const properties = Point.getPropertiesByType(measurement.type, measurement.properties);
   const onDownload = () => {
     form.validateFields().then((values) => {
       if (numberedRange) {

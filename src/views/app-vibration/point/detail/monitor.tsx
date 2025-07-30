@@ -45,7 +45,7 @@ export const Monitor = (point: MonitoringPointRow) => {
         label: intl.get(g),
         children: (
           <Grid>
-            {Point.getPropertiesByType(properties, type)
+            {Point.getPropertiesByType(type, properties)
               .map((p) => appendAxisAliasLabelToField(p, attributes))
               .filter((p) => p.group === g)
               .map((p: DisplayProperty, index: number) => {

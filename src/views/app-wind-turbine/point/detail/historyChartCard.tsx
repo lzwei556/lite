@@ -31,7 +31,7 @@ export const HistoryChartCard = ({
   deleteIconButton: React.ReactElement;
 }) => {
   const { name, properties, type } = point;
-  const displayProperties = Point.getPropertiesByType(properties, type);
+  const displayProperties = Point.getPropertiesByType(type, properties);
   const [property, setProperty] = React.useState<DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined
   );

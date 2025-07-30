@@ -9,14 +9,17 @@ import { Icon } from '../../home/icon';
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, monitoringPoints = [], name, type } = asset;
   const items = monitoringPoints.map(({ id, name, data, properties, type }) => {
-    const property = Point.getPropertiesByType(properties, type).filter((p) => p.first)?.[0];
-    const key =
-      property.fields && property.fields.length > 1
-        ? property.fields[property.fields.length - 1].key
-        : property.key;
+    const property = Point.getPropertiesByType(type, properties).filter((p) => p.first)?.[0];
     let value = NaN;
-    if (data && data.values && data.values[key] !== undefined) {
-      value = data.values[key] as number;
+    if (property) {
+      const key =
+        property.fields && property.fields.length > 1
+          ? property.fields[property.fields.length - 1].key
+          : property.key;
+
+      if (data && data.values && data.values[key] !== undefined) {
+        value = data.values[key] as number;
+      }
     }
     return { id, name, type, value, property };
   });
@@ -69,9 +72,9 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
                 </Typography.Paragraph>
                 <Space direction='vertical' size={0}>
                   <Typography.Text style={{ whiteSpace: 'nowrap' }} type='secondary'>
-                    {intl.get(property.name)}
+                    {property ? intl.get(property.name) : '-'}
                   </Typography.Text>
-                  {getValue(roundValue(value, property.precision), property.unit)}
+                  {getValue(roundValue(value, property?.precision), property?.unit)}
                 </Space>
               </Flex>
             </Card>
