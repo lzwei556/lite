@@ -53,7 +53,7 @@ const DeviceDetailPage = () => {
       tabs.push({
         key: 'historyData',
         label: intl.get('HISTORY_DATA'),
-        children: device && <HistoryDataPage device={device} />
+        children: device && <HistoryDataPage device={device} key={device.id} />
       });
     } else if (
       DeviceType.isGateway(deviceTypeId) &&
@@ -62,14 +62,14 @@ const DeviceDetailPage = () => {
       tabs.push({
         key: 'status',
         label: intl.get('STATUS_HISTORY'),
-        children: device && <RuntimeChart device={device} />
+        children: device && <RuntimeChart device={device} key={device.id} />
       });
     }
     if (hasPermission(Permission.DeviceEventList)) {
       tabs.push({
         key: 'events',
         label: intl.get('EVENTS'),
-        children: device && <QueryEventTable device={device} />
+        children: device && <QueryEventTable device={device} key={device.id} />
       });
     }
     if (hasPermissions(Permission.DeviceSettingsGet, Permission.DeviceSettingsEdit)) {
@@ -77,7 +77,12 @@ const DeviceDetailPage = () => {
         key: 'settings',
         label: intl.get('SETTINGS'),
         children: device && (
-          <Index device={device} onUpdate={() => refresh(device.id)} network={network} />
+          <Index
+            device={device}
+            onUpdate={() => refresh(device.id)}
+            network={network}
+            key={device.id}
+          />
         )
       });
     }
