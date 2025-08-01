@@ -1,12 +1,11 @@
 import React from 'react';
-import { Form, Input } from 'antd';
+import { Form } from 'antd';
 import intl from 'react-intl-universal';
-import { FormInputItem } from '../../components/formInputItem';
+import { TextFormItem } from '../../components';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ModalFormProps } from '../../types/common';
 import { addAsset, AssetModel } from '../asset-common';
 import { wind } from './constants';
-import { transform2Phrase } from '../../utils';
 
 export const Create = (props: ModalFormProps) => {
   const { onSuccess, ...rest } = props;
@@ -34,14 +33,7 @@ export const Create = (props: ModalFormProps) => {
       }}
     >
       <Form form={form} labelCol={{ span: 6 }}>
-        <FormInputItem
-          label={intl.get('NAME')}
-          name='name'
-          requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-          lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-        >
-          <Input placeholder={transform2Phrase(intl.get('PLEASE_ENTER_NAME'))} />
-        </FormInputItem>
+        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
       </Form>
     </ModalWrapper>
   );

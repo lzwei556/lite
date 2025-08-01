@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, Col, Form, Input, Popover, Row } from 'antd';
+import { Button, Col, Form, Popover, Row } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Device } from '../../../types/device';
+import { NumberFormItem, TextFormItem } from '../../../components';
 import { GetDevicesRequest } from '../../../apis/device';
-import { FormInputItem } from '../../../components/formInputItem';
 import { isMobile } from '../../../utils/deviceDetection';
 import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
 import * as Tower from './tower';
@@ -62,44 +62,28 @@ export const PointItemList = ({
               />
               <Row>
                 <Col span={12}>
-                  <FormInputItem
+                  <TextFormItem
                     {...restFields}
-                    label={intl.get('NAME')}
+                    label='NAME'
                     name={[name, 'name']}
-                    requiredMessage={intl.get('PLEASE_ENTER_NAME')}
-                    lengthLimit={{ min: 4, max: 50, label: intl.get('NAME').toLowerCase() }}
-                    style={{ display: 'inline-block', width: 200, marginRight: 20 }}
-                  >
-                    <Input placeholder={intl.get('PLEASE_ENTER_NAME')} />
-                  </FormInputItem>
-                  <Form.Item name={[name, 'channel']} hidden={true}>
-                    <Input />
-                  </Form.Item>
+                    rules={[{ required: true }, { min: 4, max: 50 }]}
+                  />
+                  <TextFormItem name={[name, 'channel']} hidden={true} />
                 </Col>
                 <Col span={12}>
-                  <FormInputItem
-                    label={intl.get('POSITION')}
+                  <NumberFormItem
                     {...restFields}
+                    label='POSITION'
                     name={[name, 'attributes', 'index']}
-                    requiredMessage={intl.get('PLEASE_ENTER_SOMETHING', {
-                      something: intl.get('POSITION')
-                    })}
-                    style={{ display: 'inline-block', width: 200 }}
-                    numericRule={{
-                      isInteger: true,
-                      min: 1,
-                      message: intl.get('UNSIGNED_INTEGER_ENTER_PROMPT')
-                    }}
-                    placeholder={intl.get('PLEASE_ENTER_SOMETHING', {
-                      something: intl.get('POSITION')
-                    })}
+                    rules={[{ required: true }]}
+                    inputNumberProps={{ min: 1 }}
                   />
                 </Col>
               </Row>
               <Tower.Index mode='create' name={name} restFields={restFields} type={type} />
             </div>
           ))}
-          <Form.Item>
+          <TextFormItem>
             <Popover
               title={intl.get('SELECT_SENSOR')}
               content={
@@ -123,7 +107,7 @@ export const PointItemList = ({
               <Button disabled={devices.length === 0}>{intl.get('SELECT_SENSOR')}</Button>
               <Form.ErrorList errors={errors} />
             </Popover>
-          </Form.Item>
+          </TextFormItem>
         </>
       )}
     </Form.List>

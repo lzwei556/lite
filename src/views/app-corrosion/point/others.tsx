@@ -1,35 +1,39 @@
 import React from 'react';
 import { Col, ColProps } from 'antd';
 import intl from 'react-intl-universal';
-import { NumberFormItem } from '../../../components';
+import { NumberFormItem, NumberFormItemWithSwitcher } from '../../../components';
 import { MonitoringPointRow } from '../../asset-common';
-import { AttributeFormItem } from './attributeFormItem';
 
 type FieldProps = {
-  formItemColProps: ColProps;
   monitoringPoint?: MonitoringPointRow;
+  formItemColProps: ColProps;
   nameIndex?: number;
-  restFields?: {
-    fieldKey?: number | undefined;
-  };
+  fieldKey?: number | undefined;
 };
 
-export const Others = ({ formItemColProps, monitoringPoint, ...props }: FieldProps) => {
-  const initialThickness = (
-    <AttributeFormItem label={intl.get('INITIAL_THICKNESS')} name='initial_thickness' {...props} />
-  );
-  const criticalThickness = (
-    <AttributeFormItem
-      label={intl.get('CRITICAL_THICKNESS')}
-      name='critical_thickness'
-      {...props}
-    />
-  );
-
+export const Others = ({ monitoringPoint, formItemColProps, ...props }: FieldProps) => {
+  const { nameIndex } = props;
+  const nameProp = nameIndex !== undefined ? [`${nameIndex}`, 'attributes'] : ['attributes'];
   return (
     <>
-      <Col {...formItemColProps}>{initialThickness}</Col>
-      <Col {...formItemColProps}>{criticalThickness}</Col>
+      <Col {...formItemColProps}>
+        <NumberFormItemWithSwitcher
+          label={'INITIAL_THICKNESS'}
+          name={[...nameProp, 'initial_thickness']}
+          enabled={monitoringPoint?.attributes?.initial_thickness_enabled}
+          enabledFormItemProps={props}
+          numberFormItemProps={props}
+        />
+      </Col>
+      <Col {...formItemColProps}>
+        <NumberFormItemWithSwitcher
+          label={'CRITICAL_THICKNESS'}
+          name={[...nameProp, 'critical_thickness']}
+          enabled={monitoringPoint?.attributes?.critical_thickness_enabled}
+          enabledFormItemProps={props}
+          numberFormItemProps={props}
+        />
+      </Col>
       <Col {...formItemColProps}>
         <ShortTerm {...props} />
       </Col>
@@ -41,13 +45,13 @@ export const Others = ({ formItemColProps, monitoringPoint, ...props }: FieldPro
 };
 
 function ShortTerm(props: Omit<FieldProps, 'formItemColProps'>) {
-  const { nameIndex, restFields } = props;
+  const { nameIndex, ...rest } = props;
   const commonNameProp = ['attributes', 'corrosion_rate_short_term'];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
-      {...restFields}
+      {...rest}
       label='CORROSION_RATE_SHORT_TERM'
       name={nameProp}
       inputNumberProps={{ addonAfter: intl.get('UNIT_DAY') }}
@@ -56,13 +60,13 @@ function ShortTerm(props: Omit<FieldProps, 'formItemColProps'>) {
 }
 
 function LongTerm(props: Omit<FieldProps, 'formItemColProps'>) {
-  const { nameIndex, restFields } = props;
+  const { nameIndex, ...rest } = props;
   const commonNameProp = ['attributes', 'corrosion_rate_long_term'];
   const nameProp = nameIndex !== undefined ? [`${nameIndex}`, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
-      {...restFields}
+      {...rest}
       label='CORROSION_RATE_LONG_TERM'
       name={nameProp}
       inputNumberProps={{ addonAfter: intl.get('UNIT_DAY') }}

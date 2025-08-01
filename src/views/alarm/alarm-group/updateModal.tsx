@@ -1,21 +1,21 @@
 import * as React from 'react';
-import { Col, Form, FormListFieldData, Input, Select } from 'antd';
+import { Col, Form, FormListFieldData } from 'antd';
 import intl from 'react-intl-universal';
-import { getPropertiesByMeasurementType, updateAlarmRule } from './services';
-import { AlarmRule } from './types';
-import { DisplayProperty } from '../../../constants/properties';
-import { MONITORING_POINT, Point } from '../../asset-common';
-import { App, useAppType } from '../../../config';
 import { cloneDeep } from 'lodash';
-import { Grid, Table, TextFormItem } from '../../../components';
+import { getPropertiesByMeasurementType, updateAlarmRule } from './services';
+import { DisplayProperty } from '../../../constants/properties';
+import { App, useAppType } from '../../../config';
+import { generateColProps } from '../../../utils/grid';
+import { ModalWrapper } from '../../../components/modalWrapper';
+import { ModalFormProps } from '../../../types/common';
+import { Grid, SelectFormItem, Table, TextFormItem } from '../../../components';
+import { Point } from '../../asset-common';
+import { AlarmRule } from './types';
 import { NameFormItem } from './nameFormItem';
 import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
 import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
-import { generateColProps } from '../../../utils/grid';
-import { ModalWrapper } from '../../../components/modalWrapper';
-import { ModalFormProps } from '../../../types/common';
 import { translateMetricName } from '.';
 
 export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
@@ -32,18 +32,16 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
       okText={intl.get('SAVE')}
       onOk={() => {
         form.validateFields().then((values: AlarmRule) => {
-          form.validateFields().then((values: AlarmRule) => {
-            const final = {
-              ...values,
-              category: 2,
-              rules: values.rules.map((_rule) => ({
-                ..._rule,
-                threshold: Number(_rule.threshold),
-                description: _rule.description || ''
-              }))
-            };
-            updateAlarmRule(alarm.id, final).then(props.onSuccess);
-          });
+          const final = {
+            ...values,
+            category: 2,
+            rules: values.rules.map((_rule) => ({
+              ..._rule,
+              threshold: Number(_rule.threshold),
+              description: _rule.description || ''
+            }))
+          };
+          updateAlarmRule(alarm.id, final).then(props.onSuccess);
         });
       }}
       title={intl.get('EDIT_ALARM_RULE')}
@@ -54,39 +52,28 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
         layout='vertical'
         initialValues={{
           ...alarm,
-          rules: alarm.rules.map((r, i) => ({
+          rules: alarm.rules.map((r) => ({
             ...r,
             index: translateMetricName(r.metric.name)
           }))
         }}
       >
         <Grid gutter={[0, 0]} justify='space-between'>
-          <Col {...generateColProps({ xl: 11, xxl: 11 })}>
+          <Col {...generateColProps({ xl: 12, xxl: 12 })}>
             <TextFormItem
               label='NAME'
               name='name'
               rules={[{ required: true }, { min: 4, max: 16 }]}
             />
           </Col>
-          <Col {...generateColProps({ xl: 11, xxl: 11 })}>
-            <Form.Item
-              label={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
+          <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+            <SelectFormItem
+              label='monitoring.point.type'
               name='type'
-              rules={[
-                {
-                  required: true,
-                  message: intl.get('PLEASE_SELECT_SOMETHING', {
-                    something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-                  })
-                }
-              ]}
-            >
-              <Select
-                disabled={true}
-                placeholder={intl.get('PLEASE_SELECT_SOMETHING', {
-                  something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-                })}
-                onChange={(e) => {
+              rules={[{ required: true }]}
+              selectProps={{
+                disabled: true,
+                onChange: (e) => {
                   getPropertiesByMeasurementType(e).then((res) => {
                     const measurementType = App.getMonitoringPointTypes(appType).find(
                       ({ id }) => e === id
@@ -106,26 +93,22 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       })
                     });
                   }
-                }}
-              >
-                {App.getMonitoringPointTypes(appType).map(({ label, id }) => (
-                  <Select.Option key={id} value={id}>
-                    {intl.get(label)}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
+                },
+                options: App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
+                  label: intl.get(label),
+                  value: id
+                }))
+              }}
+            />
           </Col>
         </Grid>
         <Grid>
           <Col {...generateColProps({})}>
-            <Form.Item label={intl.get('DESCRIPTION')} name='description' initialValue=''>
-              <Input placeholder={intl.get('PLEASE_ENTER_DESCRIPTION')} />
-            </Form.Item>
+            <TextFormItem label='DESCRIPTION' name='description' initialValue='' />
           </Col>
         </Grid>
         <Form.List name='rules'>
-          {(fields, { add, remove }, { errors }) => {
+          {(fields, _, { errors }) => {
             return (
               <>
                 <Table
@@ -134,7 +117,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       key: 'name',
                       title: intl.get('NAME'),
                       width: 120,
-                      render: (text: any, row: FormListFieldData) => (
+                      render: (_, row: FormListFieldData) => (
                         <NameFormItem disabled={true} nameIndex={row.name} />
                       )
                     },
@@ -142,7 +125,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       key: 'property',
                       title: intl.get('INDEX'),
                       width: 150,
-                      render: (text: any, row: FormListFieldData) => (
+                      render: (_, row: FormListFieldData) => (
                         <IndexFormItem
                           disabled={true}
                           nameIndex={row.name}
@@ -171,7 +154,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       key: 'duration',
                       title: intl.get('DURATION'),
                       width: 60,
-                      render: (text: any, row: FormListFieldData) => (
+                      render: (_, row: FormListFieldData) => (
                         <DurationFormItem nameIndex={row.name} />
                       )
                     },
@@ -179,7 +162,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       key: 'condition',
                       title: intl.get('CONDITION'),
                       width: 180,
-                      render: (text: any, row: FormListFieldData) => {
+                      render: (_, row: FormListFieldData) => {
                         let unitText = '';
                         if (metric.length > 0 && metric[row.name] && metric[row.name].unit) {
                           const unit = metric[row.name].unit as string;
@@ -192,7 +175,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       key: 'severity',
                       title: intl.get('SEVERITY'),
                       width: 80,
-                      render: (text: any, row: FormListFieldData) => (
+                      render: (_, row: FormListFieldData) => (
                         <SeverityFormItem nameIndex={row.name} />
                       )
                     }

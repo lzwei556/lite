@@ -14,7 +14,7 @@ import {
   Point,
   Points
 } from '../../../asset-common';
-import { AlarmLevel, getColorByValue, getLabelByValue } from '../../../alarm';
+import { AlarmLevel, getColorByValue } from '../../../alarm';
 
 export const PointsScatterChart = ({
   asset,
@@ -112,9 +112,9 @@ function buildCirclePointsChartOfFlange(
   }
 
   if (checkValidAttr(attributes, 'info', min)) {
-    const seriesName = `${intl.get('leveled.alarm', {
-      alarmLevel: intl.get(getLabelByValue(AlarmLevel.Minor))
-    })} ${attributes?.info?.value}${unit}`;
+    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Minor}`)} ${
+      attributes?.info?.value
+    }${unit}`;
     const color = getColorByValue(AlarmLevel.Minor);
     const info = getSeries(color, attributes?.info?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color } });
@@ -122,9 +122,9 @@ function buildCirclePointsChartOfFlange(
   }
 
   if (checkValidAttr(attributes, 'warn', min)) {
-    const seriesName = `${intl.get('leveled.alarm', {
-      alarmLevel: intl.get(getLabelByValue(AlarmLevel.Major))
-    })}  ${attributes?.warn?.value}${unit}`;
+    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Major}`)}  ${
+      attributes?.warn?.value
+    }${unit}`;
     const color = getColorByValue(AlarmLevel.Major);
     const warn = getSeries(color, attributes?.warn?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color } });
@@ -132,9 +132,9 @@ function buildCirclePointsChartOfFlange(
   }
 
   if (checkValidAttr(attributes, 'danger', min)) {
-    const seriesName = `${intl.get('leveled.alarm', {
-      alarmLevel: intl.get(getLabelByValue(AlarmLevel.Critical))
-    })} ${attributes?.danger?.value}${unit}`;
+    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Critical}`)} ${
+      attributes?.danger?.value
+    }${unit}`;
     const color = getColorByValue(AlarmLevel.Critical);
     const danger = getSeries(color, attributes?.danger?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color } });
@@ -244,11 +244,7 @@ function generateOuter(measurements: MonitoringPointRow[], isBig: boolean = fals
       },
       tooltip: {
         formatter: `${
-          alertLevel && alertLevel > 0
-            ? `${intl.get('leveled.alarm', {
-                alarmLevel: intl.get(Asset.Status.getLabelByValue(alertLevel))
-              })}<br/>`
-            : ''
+          alertLevel && alertLevel > 0 ? `${intl.get(`leveled.alarm.${alertLevel}`)}<br/>` : ''
         }${generateRowOfTooltip('', name, getValue(value, field?.unit))}`
       },
       itemStyle: {

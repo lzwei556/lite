@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Form, ModalProps, Select } from 'antd';
+import { Form, ModalProps } from 'antd';
 import intl from 'react-intl-universal';
-import { RangeDatePicker, useRange } from '../../../components';
+import { RangeDatePicker, SelectFormItem, TextFormItem, useRange } from '../../../components';
 import { Dayjs } from '../../../utils';
 import { getFilename } from '../../../utils/format';
 import { useLocaleContext } from '../../../localeProvider';
@@ -18,7 +18,7 @@ export interface DownloadModalProps extends ModalProps {
 
 export const DownloadData: React.FC<DownloadModalProps> = (props) => {
   const { measurement, onSuccess, assetId } = props;
-  const { range, numberedRange, setRange } = useRange(props.range);
+  const { numberedRange, setRange } = useRange(props.range);
   const [form] = Form.useForm();
   const { language } = useLocaleContext();
 
@@ -57,25 +57,19 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
       onOk={onDownload}
     >
       <Form form={form} labelCol={{ span: 8 }}>
-        <Form.Item
-          label={intl.get('PROPERTY')}
-          name={'properties'}
-          rules={[{ required: true, message: intl.get('PLEASE_SELECT_PROPERTY') }]}
-        >
-          <Select
-            options={properties.map((p) => ({
-              ...p,
-              value: p.key,
-              label: intl.get(p.name).d(p.name)
-            }))}
-            placeholder={intl.get('PLEASE_SELECT_PROPERTY')}
-            mode={'multiple'}
-            maxTagCount={2}
-          />
-        </Form.Item>
-        <Form.Item label={intl.get('DATE_RANGE')} required>
-          <RangeDatePicker onChange={setRange} value={range} />
-        </Form.Item>
+        <SelectFormItem
+          label='PROPERTY'
+          name='properties'
+          rules={[{ required: true }]}
+          selectProps={{
+            mode: 'multiple',
+            maxTagCount: 2,
+            options: properties.map(({ key, name }) => ({ label: intl.get(name), value: key }))
+          }}
+        />
+        <TextFormItem label='DATE_RANGE'>
+          <RangeDatePicker onChange={setRange} />
+        </TextFormItem>
       </Form>
     </ModalWrapper>
   );

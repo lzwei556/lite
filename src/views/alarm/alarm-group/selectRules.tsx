@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Checkbox, Form, ModalProps, Row, Col, Button } from 'antd';
+import { Checkbox, Form, ModalProps, Col, Button } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { getFilename } from '../../../utils/format';
 import { exportAlarmRules } from './services';
 import { AlarmRule } from './types';
+import { Card, Grid, TextFormItem } from '../../../components';
 
 export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void } & ModalProps> = (
   props
@@ -61,19 +62,21 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
         </Button>
       ]}
     >
-      <Form form={form}>
-        <Form.Item name='asset_ids' noStyle>
-          <Checkbox.Group style={{ width: '100%' }} onChange={(values) => setSelected(values)}>
-            <Row style={{ width: '100%' }}>
-              {props.rules.map(({ id, name }) => (
-                <Col span={8} key={id}>
-                  <Checkbox value={id}>{intl.get(name).d(name)}</Checkbox>
-                </Col>
-              ))}
-            </Row>
-          </Checkbox.Group>
-        </Form.Item>
-      </Form>
+      <Card>
+        <Form form={form}>
+          <TextFormItem name='asset_ids' noStyle>
+            <Checkbox.Group onChange={(values) => setSelected(values)}>
+              <Grid>
+                {props.rules.map(({ id, name }) => (
+                  <Col span={12} key={id}>
+                    <Checkbox value={id}>{intl.get(name).d(name)}</Checkbox>
+                  </Col>
+                ))}
+              </Grid>
+            </Checkbox.Group>
+          </TextFormItem>
+        </Form>
+      </Card>
     </ModalWrapper>
   );
 };

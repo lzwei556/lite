@@ -1,9 +1,9 @@
-import { Button, Form, InputNumber, Select } from 'antd';
+import { Button, Form } from 'antd';
+import intl from 'react-intl-universal';
 import { DeviceType } from '../../../types/device_type';
 import { Property } from '../../../types/property';
-import intl from 'react-intl-universal';
-import { FormInputItem } from '../../../components/formInputItem';
 import { ModalWrapper } from '../../../components/modalWrapper';
+import { NumberFormItem, SelectFormItem } from '../../../components';
 import { SVT } from '../calibration/svt';
 
 type Paras = { param: number; channel?: number; sub_command?: number };
@@ -90,39 +90,20 @@ const EditCalibrateParas = ({
           />
         ) : (
           <>
-            <FormInputItem
-              label={`${intl.get(property.name).d(property.name)}`}
+            <NumberFormItem
+              label={property.name}
               name='param'
-              requiredMessage={intl.get('PLEASE_ENTER_SOMETHING', {
-                something: intl.get(property.name).d(property.name)
-              })}
-              numericRule={{ isInteger: false }}
-              numericChildren={
-                <InputNumber
-                  controls={false}
-                  style={{ width: '100%' }}
-                  placeholder={intl.get('PLEASE_ENTER_SOMETHING', {
-                    something: intl.get(property.name).d(property.name)
-                  })}
-                  addonAfter={property.unit}
-                />
-              }
+              rules={[{ required: true }]}
+              inputNumberProps={{ addonAfter: property.unit }}
             />
             {channels.length > 0 && (
-              <Form.Item
-                label={intl.get('CHANNEL')}
+              <SelectFormItem
+                label='CHANNEL'
                 name='channel'
-                rules={[{ required: true, message: intl.get('PLEASE_SELECT_CHANNEL') }]}
+                rules={[{ required: true }]}
                 initialValue={1}
-              >
-                <Select>
-                  {channels.map(({ label, value }) => (
-                    <Select.Option key={value} value={value}>
-                      {label}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
+                selectProps={{ options: channels }}
+              />
             )}
           </>
         )}

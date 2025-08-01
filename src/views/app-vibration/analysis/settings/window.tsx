@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form, Popover, Select, Space, Tooltip } from 'antd';
+import { Button, Form, Popover, Space, Tooltip } from 'antd';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex } from '../../../../components';
+import { Flex, SelectFormItem, TextFormItem } from '../../../../components';
 
 const WindowSettings = {
   label: 'chart.window',
@@ -39,15 +39,17 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
           initialValues={{ window: options[0].value }}
           style={{ width: 220, padding: 12 }}
         >
-          <Form.Item {...{ name, label: intl.get(label) }}>
-            <Select
-              options={options.map((len) => ({
+          <SelectFormItem
+            label={label}
+            name={name}
+            selectProps={{
+              options: options.map((len) => ({
                 ...len,
                 label: intl.get(len.label)
-              }))}
-            />
-          </Form.Item>
-          <Form.Item noStyle>
+              }))
+            }}
+          />
+          <TextFormItem noStyle>
             <Flex>
               <Space>
                 <Button
@@ -70,7 +72,7 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
                 </Button>
               </Space>
             </Flex>
-          </Form.Item>
+          </TextFormItem>
         </Form>
       }
       open={open}

@@ -23,7 +23,8 @@ export function resolveStatus(monitoringPointNum: number, alarmNum?: [number, nu
   return [normal, info, warn, danger].map((n, i) => ({
     name: getLabelByValue(i),
     value: n,
-    color: getColorByValue(i)
+    color: getColorByValue(i),
+    level: i
   }));
 }
 

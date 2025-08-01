@@ -2,7 +2,9 @@ import React from 'react';
 import { FormItemProps, InputNumber, InputNumberProps } from 'antd';
 import { TextFormItem } from './textFormItem';
 
-export const NumberFormItem = (props: FormItemProps & { inputNumberProps?: InputNumberProps }) => {
+export type NumberFromItemProps = FormItemProps & { inputNumberProps?: InputNumberProps };
+
+export const NumberFormItem = (props: NumberFromItemProps) => {
   const { inputNumberProps, rules: rulesFromProps, ...rest } = props;
   let rules = rulesFromProps ?? [];
   if (!rules.some((rule) => typeof rule !== 'function' && rule.type && rule.type === 'number')) {

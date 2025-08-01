@@ -4,7 +4,7 @@ import { FormCommonProps, transformSettings } from '../settings-common';
 import { useModalBindingsProps } from '../../../hooks';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
-import { Grid } from '../../../components';
+import { Grid, TextFormItem } from '../../../components';
 import { UpdateDeviceSettingRequest } from '../../../apis/device';
 import { useContext } from '..';
 import { DeviceType } from '../../../types/device_type';
@@ -21,7 +21,7 @@ export const CanCopySettings = (props: Props) => {
         <Button {...rest} onClick={handleClick} />
         <ModalWrapper {...modalProps}>
           <Form {...formProps}>
-            <Form.Item name='ids'>
+            <TextFormItem name='ids'>
               <Checkbox.Group {...checkGroupProps}>
                 <Grid>
                   <Col span={24}>
@@ -38,7 +38,7 @@ export const CanCopySettings = (props: Props) => {
                   </Col>
                 </Grid>
               </Checkbox.Group>
-            </Form.Item>
+            </TextFormItem>
           </Form>
         </ModalWrapper>
       </>

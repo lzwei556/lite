@@ -1,16 +1,15 @@
 import React from 'react';
-import { Cascader, CascaderProps, Form } from 'antd';
+import { Cascader, CascaderProps } from 'antd';
 import intl from 'react-intl-universal';
 import { DisplayProperty } from '../../../constants/properties';
-import { FormInputItemProps } from '../../../components/formInputItem';
+import { TextFormItem } from '../../../components';
 
 export const IndexFormItem = ({
   disabled,
   nameIndex,
   onChange,
-  properties,
-  ...rest
-}: FormInputItemProps & {
+  properties
+}: {
   disabled: boolean;
   onChange: (metric: { key: string; name: string; unit: string }) => void;
   nameIndex: number;
@@ -32,8 +31,7 @@ export const IndexFormItem = ({
   };
 
   return (
-    <Form.Item
-      {...rest}
+    <TextFormItem
       name={[nameIndex, 'index']}
       noStyle
       rules={[
@@ -55,10 +53,9 @@ export const IndexFormItem = ({
             label: intl.get(field.name)
           }))
         }))}
-        placeholder={intl.get('PLEASE_SELECT_INDEX_NAME')}
         fieldNames={{ value: 'key', children: 'fields' }}
         style={{ width: 160 }}
       />
-    </Form.Item>
+    </TextFormItem>
   );
 };

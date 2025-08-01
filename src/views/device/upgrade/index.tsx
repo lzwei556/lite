@@ -1,4 +1,4 @@
-import { Divider, Form, message, Select } from 'antd';
+import { Divider, Form, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { Firmware } from '../../../types/firmware';
 import { Device } from '../../../types/device';
@@ -8,7 +8,7 @@ import { DeviceUpgradeRequest } from '../../../apis/device';
 import { DeviceCommand } from '../../../types/device_command';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
-import { Card, Descriptions } from '../../../components';
+import { Card, Descriptions, SelectFormItem } from '../../../components';
 
 export interface UpgradeModalProps {
   open: boolean;
@@ -16,8 +16,6 @@ export interface UpgradeModalProps {
   onCancel?: () => void;
   onSuccess: () => void;
 }
-
-const { Option } = Select;
 
 const UpgradeModal: FC<UpgradeModalProps> = ({ open, device, onCancel, onSuccess }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -89,20 +87,16 @@ const UpgradeModal: FC<UpgradeModalProps> = ({ open, device, onCancel, onSuccess
       confirmLoading={isLoading}
     >
       <Form form={form} layout='vertical'>
-        <Form.Item label={intl.get('SELECT_FIRMWARE_VERSION')} name={'firmware'}>
-          <Select
-            placeholder={intl.get('PLEASE_SELECT_FIRMWARE_VERSION')}
-            onChange={(value) => {
+        <SelectFormItem
+          label='SELECT_FIRMWARE_VERSION'
+          name='firmware'
+          selectProps={{
+            onChange: (value) => {
               setFirmware(firmwares.find((item) => item.id === value));
-            }}
-          >
-            {firmwares.map((firmware) => (
-              <Option key={firmware.id} value={firmware.id}>
-                {firmware.version}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+            },
+            options: firmwares.map(({ id, version }) => ({ label: version, value: id }))
+          }}
+        />
       </Form>
       {renderFirmware()}
     </ModalWrapper>

@@ -2,8 +2,8 @@ import { Form, Input } from 'antd';
 import { FC, useState } from 'react';
 import { UpdateMyPass } from '../../../apis/profile';
 import intl from 'react-intl-universal';
-import { useLocaleFormLayout } from '../../../hooks/useLocaleFormLayout';
 import { ModalWrapper } from '../../../components/modalWrapper';
+import { TextFormItem } from '../../../components';
 
 export interface EditPassProps {
   open: boolean;
@@ -16,48 +16,39 @@ const EditPassModal: FC<EditPassProps> = ({ open, onSuccess, onCancel }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onSave = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        setIsLoading(true);
-        UpdateMyPass({ old: values.pwd, new: values.confirmPwd }).then((_) => {
+    form.validateFields().then((values) => {
+      setIsLoading(true);
+      UpdateMyPass({ old: values.pwd, new: values.confirmPwd })
+        .then((_) => {
           setIsLoading(false);
           onSuccess();
-        });
-      })
-      .catch((e) => {
-        setIsLoading(false);
-      })
-      .finally(() => setIsLoading(false));
+        })
+        .finally(() => setIsLoading(false));
+    });
   };
 
   return (
     <ModalWrapper
       afterClose={() => form.resetFields()}
-      width={420}
       open={open}
       title={intl.get('MODIFY_PASSWORD')}
       onOk={onSave}
       onCancel={onCancel}
       confirmLoading={isLoading}
     >
-      <Form form={form} {...useLocaleFormLayout()}>
-        <Form.Item
-          label={intl.get('OLD_PASSWORD')}
-          name='pwd'
-          rules={[{ required: true, message: intl.get('PLEASE_ENTER_OLD_PASSWORD') }]}
-        >
-          <Input type={'password'} placeholder={intl.get('PLEASE_ENTER_OLD_PASSWORD')} />
-        </Form.Item>
-        <Form.Item
-          label={intl.get('NEW_PASSWORD')}
+      <Form form={form} layout='vertical'>
+        <TextFormItem label='OLD_PASSWORD' name='pwd' rules={[{ required: true }]}>
+          <Input.Password />
+        </TextFormItem>
+        <TextFormItem
+          label='NEW_PASSWORD'
           name='newPwd'
-          rules={[{ required: true, message: intl.get('PLEASE_ENTER_NEW_PASSWORD') }]}
+          rules={[{ required: true }, { min: 6, max: 16 }]}
         >
-          <Input type={'password'} placeholder={intl.get('PLEASE_ENTER_NEW_PASSWORD')} />
-        </Form.Item>
-        <Form.Item
-          label={intl.get('CONFIRM_PASSWORD')}
+          <Input.Password />
+        </TextFormItem>
+        <TextFormItem
+          label='CONFIRM_PASSWORD'
           name='confirmPwd'
           rules={[
             { required: true, message: intl.get('PLEASE_CONFIRM_PASSWORD') },
@@ -71,8 +62,8 @@ const EditPassModal: FC<EditPassProps> = ({ open, onSuccess, onCancel }) => {
             })
           ]}
         >
-          <Input type={'password'} placeholder={intl.get('PLEASE_CONFIRM_PASSWORD')} />
-        </Form.Item>
+          <Input.Password />
+        </TextFormItem>
       </Form>
     </ModalWrapper>
   );

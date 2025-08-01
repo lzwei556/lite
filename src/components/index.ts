@@ -1,6 +1,7 @@
 export * as ChartMark from './chart-mark';
 export * from './charts';
 export * from './form/numberFormItem';
+export * from './form/numberFormItemWithSwitcher';
 export * from './form/selecFormItem';
 export * from './form/textFormItem';
 export * from './descriptions';

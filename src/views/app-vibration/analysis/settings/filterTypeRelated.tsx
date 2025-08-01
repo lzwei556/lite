@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form, InputNumber, Popover, Select, Space, Tooltip } from 'antd';
+import { Button, Form, Popover, Space, Tooltip } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex } from '../../../../components';
+import { Flex, NumberFormItem, SelectFormItem, TextFormItem } from '../../../../components';
 import {
   CutoffRange,
   FilterTypeRelatedFields,
@@ -45,37 +45,32 @@ export const FilterTypeRelated = ({
             if (item.hasOwnProperty('range')) {
               const [first, last] = (item as RangeItem).range;
               return (
-                <Form.Item key={i} label={item.label ? intl.get(item.label) : item.label}>
+                <TextFormItem key={i} label={item.label}>
                   <Space>
-                    <Form.Item {...first} noStyle>
-                      <InputNumber />
-                    </Form.Item>
+                    <NumberFormItem {...first} noStyle />
                     -
-                    <Form.Item {...last} noStyle>
-                      <InputNumber />
-                    </Form.Item>
+                    <NumberFormItem {...last} noStyle />
                   </Space>
-                </Form.Item>
+                </TextFormItem>
               );
             } else {
               const { label, options, ...rest } = item as Item;
-              return (
-                <Form.Item {...{ ...rest, label: label ? intl.get(label) : label }} key={i}>
-                  {options ? (
-                    <Select
-                      {...{
-                        ...item,
-                        options: options.map((o) => ({ ...o, label: intl.get(o.label) }))
-                      }}
-                    />
-                  ) : (
-                    <InputNumber style={{ width: '100%' }} />
-                  )}
-                </Form.Item>
+              return options ? (
+                <SelectFormItem
+                  {...rest}
+                  key={i}
+                  label={label}
+                  selectProps={{
+                    ...item,
+                    options: options.map((o) => ({ ...o, label: intl.get(o.label) }))
+                  }}
+                />
+              ) : (
+                <NumberFormItem {...rest} label={label} key={i} />
               );
             }
           })}
-          <Form.Item noStyle>
+          <TextFormItem noStyle>
             <Flex>
               <Space>
                 <Button
@@ -98,7 +93,7 @@ export const FilterTypeRelated = ({
                 </Button>
               </Space>
             </Flex>
-          </Form.Item>
+          </TextFormItem>
         </Form>
       }
       open={open}

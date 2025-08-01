@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Checkbox, Form, ModalProps, Row, Col, Button } from 'antd';
-
+import { Checkbox, Form, ModalProps, Col, Button } from 'antd';
 import intl from 'react-intl-universal';
 import { AssetRow, exportAssets } from '../asset-common';
 import { getProject } from '../../utils/session';
 import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
+import { Card, Grid, TextFormItem } from '../../components';
 
 export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void } & ModalProps> = (
   props
@@ -62,19 +62,21 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
         </Button>
       ]}
     >
-      <Form form={form}>
-        <Form.Item name='asset_ids' noStyle>
-          <Checkbox.Group style={{ width: '100%' }} onChange={(values) => setSelected(values)}>
-            <Row style={{ width: '100%' }}>
-              {props.assets.map(({ id, name }) => (
-                <Col span={8} key={id}>
-                  <Checkbox value={id}>{name}</Checkbox>
-                </Col>
-              ))}
-            </Row>
-          </Checkbox.Group>
-        </Form.Item>
-      </Form>
+      <Card>
+        <Form form={form}>
+          <TextFormItem name='asset_ids' noStyle>
+            <Checkbox.Group onChange={(values) => setSelected(values)}>
+              <Grid>
+                {props.assets.map(({ id, name }) => (
+                  <Col span={12} key={id}>
+                    <Checkbox value={id}>{name}</Checkbox>
+                  </Col>
+                ))}
+              </Grid>
+            </Checkbox.Group>
+          </TextFormItem>
+        </Form>
+      </Card>
     </ModalWrapper>
   );
 };

@@ -1,29 +1,32 @@
 import * as React from 'react';
-import { Button, Col, Form, FormListFieldData, Input, Select } from 'antd';
+import { Button, Col, Form, FormListFieldData } from 'antd';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
+import { cloneDeep } from 'lodash';
+import { DisplayProperty } from '../../../constants/properties';
+import { Grid, SelectFormItem, Table, TextFormItem } from '../../../components';
+import { generateColProps } from '../../../utils/grid';
+import { ModalWrapper } from '../../../components/modalWrapper';
+import { ModalFormProps } from '../../../types/common';
+import { App, useAppType } from '../../../config';
+import { Point } from '../../asset-common';
+import { AlarmLevel } from '../alarmLevel';
 import { getPropertiesByMeasurementType } from './services';
 import { AlarmRule } from './types';
 import { addAlarmRule } from './services';
-import { DisplayProperty } from '../../../constants/properties';
-import { MONITORING_POINT, Point } from '../../asset-common';
-import { App, useAppType } from '../../../config';
-import { cloneDeep } from 'lodash';
-import { Grid, Table, TextFormItem } from '../../../components';
 import { NameFormItem } from './nameFormItem';
 import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
 import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
-import { generateColProps } from '../../../utils/grid';
-import { ModalWrapper } from '../../../components/modalWrapper';
-import { ModalFormProps } from '../../../types/common';
 
 export function CreateModal(props: ModalFormProps) {
   const appType = useAppType();
   const [form] = Form.useForm();
   const [properties, setProperties] = React.useState<DisplayProperty[]>([]);
   const [metric, setMetric] = React.useState<{ key: string; name: string; unit?: string }[]>([]);
+
+  const defaultValues = { duration: 1, operation: '>=', level: AlarmLevel.Critical };
 
   return (
     <ModalWrapper
@@ -52,32 +55,21 @@ export function CreateModal(props: ModalFormProps) {
       width={860}
     >
       <Form form={form} layout='vertical'>
-        <Grid gutter={[0, 0]} justify='space-between'>
-          <Col {...generateColProps({ xl: 11, xxl: 11 })}>
+        <Grid justify='space-between'>
+          <Col {...generateColProps({ xl: 12, xxl: 12 })}>
             <TextFormItem
               label='NAME'
               name='name'
               rules={[{ required: true }, { min: 4, max: 16 }]}
             />
           </Col>
-          <Col {...generateColProps({ xl: 11, xxl: 11 })}>
-            <Form.Item
-              label={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
+          <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+            <SelectFormItem
+              label='monitoring.point.type'
               name='type'
-              rules={[
-                {
-                  required: true,
-                  message: intl.get('PLEASE_SELECT_SOMETHING', {
-                    something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-                  })
-                }
-              ]}
-            >
-              <Select
-                placeholder={intl.get('PLEASE_SELECT_SOMETHING', {
-                  something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-                })}
-                onChange={(e) => {
+              rules={[{ required: true }]}
+              selectProps={{
+                onChange: (e) => {
                   getPropertiesByMeasurementType(e).then((res) => {
                     const measurementType = App.getMonitoringPointTypes(appType).find(
                       ({ id }) => e === id
@@ -101,25 +93,21 @@ export function CreateModal(props: ModalFormProps) {
                       })
                     });
                   }
-                }}
-              >
-                {App.getMonitoringPointTypes(appType).map(({ label, id }) => (
-                  <Select.Option key={id} value={id}>
-                    {intl.get(label)}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
+                },
+                options: App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
+                  label: intl.get(label),
+                  value: id
+                }))
+              }}
+            />
           </Col>
         </Grid>
         <Grid>
           <Col {...generateColProps({})}>
-            <Form.Item label={intl.get('DESCRIPTION')} name='description' initialValue=''>
-              <Input placeholder={intl.get('PLEASE_ENTER_DESCRIPTION')} />
-            </Form.Item>
+            <TextFormItem label='DESCRIPTION' name='description' initialValue='' />
           </Col>
         </Grid>
-        <Form.List name='rules' initialValue={[{ duration: 1, operation: '>=' }]}>
+        <Form.List name='rules' initialValue={[defaultValues]}>
           {(fields, { add, remove }, { errors }) => {
             return (
               <>
@@ -208,7 +196,11 @@ export function CreateModal(props: ModalFormProps) {
                   ]}
                   dataSource={fields}
                   footer={() => (
-                    <Button icon={<PlusCircleOutlined />} size='small' onClick={() => add()} />
+                    <Button
+                      icon={<PlusCircleOutlined />}
+                      size='small'
+                      onClick={() => add(defaultValues)}
+                    />
                   )}
                   header={{ title: intl.get('sub.rules') }}
                   noScroll={true}

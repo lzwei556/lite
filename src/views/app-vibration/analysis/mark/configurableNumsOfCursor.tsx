@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, Select } from 'antd';
+import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../../components/modalWrapper';
 import { ModalFormProps } from '../../../../types/common';
+import { SelectFormItem } from '../../../../components';
 
 enum HarmonicCursor {
   One = 1,
@@ -50,12 +51,16 @@ export const ConfigurableNumsOfCursor = (props: ModalFormProps) => {
         form={form}
         initialValues={nums ?? { harmonic: HarmonicCursor.Five, sideband: SidebandCursor.Five }}
       >
-        <Form.Item label={intl.get('harmonic.cursor.nums')} name='harmonic'>
-          <Select options={HARMONIC_CURSOR_NUMS.map((n) => ({ label: `${n}`, value: n }))} />
-        </Form.Item>
-        <Form.Item label={intl.get('sideband.cursor.nums')} name='sideband'>
-          <Select options={SIDEBAND_CURSOR_NUMS.map((n) => ({ label: `${n}`, value: n }))} />
-        </Form.Item>
+        <SelectFormItem
+          label='harmonic.cursor.nums'
+          name='harmonic'
+          selectProps={{ options: HARMONIC_CURSOR_NUMS.map((n) => ({ label: `${n}`, value: n })) }}
+        />
+        <SelectFormItem
+          label='sideband.cursor.nums'
+          name='sideband'
+          selectProps={{ options: SIDEBAND_CURSOR_NUMS.map((n) => ({ label: `${n}`, value: n })) }}
+        />
       </Form>
     </ModalWrapper>
   );

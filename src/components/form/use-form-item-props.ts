@@ -34,7 +34,7 @@ const padMessage = (rule: RuleObject, label: string) => {
   return { ...rule, message };
 };
 
-const getRequiredMessage = (label: string) => {
+export const getRequiredMessage = (label: string) => {
   return intl.get('PLEASE_ENTER_SOMETHING', {
     something: smoothCapitalization(intl.get(label))
   });

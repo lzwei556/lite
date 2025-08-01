@@ -1,10 +1,9 @@
-import useSocket, { SocketTopic } from '../../socket';
-import { notification, Space } from 'antd';
 import { useEffect, useState } from 'react';
-import { getProject } from '../../utils/session';
+import { notification, Space } from 'antd';
 import intl from 'react-intl-universal';
+import { getProject } from '../../utils/session';
+import useSocket, { SocketTopic } from '../../socket';
 import { translateMetricName } from '../../views/alarm/alarm-group';
-import { getLabelByValue } from '../../views/alarm';
 
 const AlertMessageNotification = () => {
   const { PubSub } = useSocket();
@@ -30,9 +29,7 @@ const AlertMessageNotification = () => {
 
   useEffect(() => {
     const renderNotification = (record: any) => {
-      const message = intl.get('leveled.alarm', {
-        alarmLevel: intl.get(getLabelByValue(record.level))
-      });
+      const message = intl.get(`leveled.alarm.${record.level}`);
       switch (record.level) {
         case 1:
           api.info({

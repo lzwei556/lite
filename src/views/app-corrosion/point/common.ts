@@ -67,7 +67,7 @@ export function handleSubmit(
   onSuccess: () => void
 ) {
   try {
-    const { id, bindingDevices, attributes } = monitoringPoint;
+    const { id, bindingDevices } = monitoringPoint;
     const processId = 11;
     if (bindingDevices && bindingDevices.length > 0) {
       if (bindingDevices[0].id !== values.device_id) {
@@ -83,7 +83,7 @@ export function handleSubmit(
     }
     updateMeasurement(id, {
       ...values,
-      attributes: resolveAttrs(values.attributes, attributes)
+      attributes: resolveAttrs(values.attributes)
     }).then(() => {
       onSuccess();
     });
@@ -93,7 +93,7 @@ export function handleSubmit(
 }
 
 // convert 'initial_thickness: { enabled: true; value: 5 }' to 'initial_thickness_enabled: true' and 'initial_thickness: 5'
-export const resolveAttrs = (attributes: any, oldAttrs?: any) => {
+export const resolveAttrs = (attributes: any) => {
   if (attributes) {
     const { critical_thickness, initial_thickness, ...rest } = attributes;
     let attr = { ...rest };
@@ -104,8 +104,6 @@ export const resolveAttrs = (attributes: any, oldAttrs?: any) => {
       };
       if (critical_thickness.value) {
         attr = { ...attr, critical_thickness: critical_thickness.value };
-      } else if (oldAttrs && oldAttrs.critical_thickness) {
-        attr = { ...attr, critical_thickness: oldAttrs.critical_thickness };
       }
     }
     if (initial_thickness) {
@@ -115,8 +113,6 @@ export const resolveAttrs = (attributes: any, oldAttrs?: any) => {
       };
       if (initial_thickness.value) {
         attr = { ...attr, initial_thickness: initial_thickness.value };
-      } else if (oldAttrs && oldAttrs.initial_thickness) {
-        attr = { ...attr, initial_thickness: oldAttrs.initial_thickness };
       }
     }
     return attr;
@@ -134,25 +130,17 @@ export const parseAttrs = (attributes: MonitoringPointRow['attributes']) => {
       initial_thickness_enabled,
       ...rest
     } = attributes;
-    attr = { ...rest };
-    if (critical_thickness) {
-      attr = {
-        ...attr,
-        critical_thickness: {
-          enabled: critical_thickness_enabled,
-          value: critical_thickness
-        }
-      };
-    }
-    if (initial_thickness) {
-      attr = {
-        ...attr,
-        initial_thickness: {
-          enabled: initial_thickness_enabled,
-          value: initial_thickness
-        }
-      };
-    }
+    attr = {
+      ...rest,
+      critical_thickness: {
+        enabled: critical_thickness_enabled,
+        value: critical_thickness
+      },
+      initial_thickness: {
+        enabled: initial_thickness_enabled,
+        value: initial_thickness
+      }
+    };
   }
 
   return attr ?? attributes;

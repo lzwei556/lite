@@ -81,15 +81,11 @@ export const PointItemList = ({
                     rules={[{ required: true }]}
                   />
                 </Col>
-                <Others
-                  nameIndex={name}
-                  restFields={restFields}
-                  formItemColProps={formItemColProps}
-                />
+                <Others {...restFields} nameIndex={name} formItemColProps={formItemColProps} />
               </Grid>
             </div>
           ))}
-          <Form.Item>
+          <TextFormItem>
             <Popover
               title={intl.get('SELECT_SENSOR')}
               content={
@@ -103,7 +99,9 @@ export const PointItemList = ({
                           ...m,
                           attributes: {
                             corrosion_rate_short_term: 30,
-                            corrosion_rate_long_term: 365
+                            corrosion_rate_long_term: 365,
+                            initial_thickness: { enabled: false },
+                            critical_thickness: { enabled: false }
                           }
                         }))
                       );
@@ -121,7 +119,7 @@ export const PointItemList = ({
               <Button disabled={devices.length === 0}>{intl.get('SELECT_SENSOR')}</Button>
               <Form.ErrorList errors={errors} />
             </Popover>
-          </Form.Item>
+          </TextFormItem>
         </>
       )}
     </Form.List>

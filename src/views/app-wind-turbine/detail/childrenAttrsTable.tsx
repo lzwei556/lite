@@ -7,7 +7,7 @@ import { Permission } from '../../../permission/permission';
 import { ASSET_PATHNAME, AssetRow, deleteAsset } from '../../asset-common';
 import { categories } from '../flange';
 import { tower } from '../constants';
-import { AlarmLevel, getLabelByValue } from '../../alarm';
+import { AlarmLevel } from '../../alarm';
 
 export const ChildrenAttrsTable = ({
   assets,
@@ -70,10 +70,7 @@ export const ChildrenAttrsTable = ({
     width: 120
   };
   const infoCol = {
-    title: () =>
-      intl.get('leveled.alarm', {
-        alarmLevel: intl.get(getLabelByValue(AlarmLevel.Minor))
-      }),
+    title: () => intl.get(`leveled.alarm.${AlarmLevel.Minor}`),
     dataIndex: ['attributes', 'info'],
     key: 'info',
     render: (info: { enabled: boolean; value: string }) => {
@@ -86,10 +83,7 @@ export const ChildrenAttrsTable = ({
     width: 120
   };
   const warnCol = {
-    title: () =>
-      intl.get('leveled.alarm', {
-        alarmLevel: intl.get(getLabelByValue(AlarmLevel.Major))
-      }),
+    title: () => intl.get(`leveled.alarm.${AlarmLevel.Major}`),
     dataIndex: ['attributes', 'warn'],
     key: 'warn',
     render: (warn: { enabled: boolean; value: string }) => {
@@ -102,10 +96,7 @@ export const ChildrenAttrsTable = ({
     width: 120
   };
   const dangerCol = {
-    title: () =>
-      intl.get('leveled.alarm', {
-        alarmLevel: intl.get(getLabelByValue(AlarmLevel.Critical))
-      }),
+    title: () => intl.get(`leveled.alarm.${AlarmLevel.Critical}`),
     dataIndex: ['attributes', 'danger'],
     key: 'danger',
     render: (danger: { enabled: boolean; value: string }) => {

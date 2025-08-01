@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form, Popover, Select, Space, Tooltip } from 'antd';
+import { Button, Form, Popover, Space, Tooltip } from 'antd';
 import { ColumnWidthOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex } from '../../../../components';
+import { Flex, SelectFormItem, TextFormItem } from '../../../../components';
 
 export const WindowLength = {
   128: { value: 128 },
@@ -56,15 +56,17 @@ export const WindowLengthPopup = ({
           initialValues={{ window_length: getDefault(maxLen) }}
           style={{ width: 220, padding: 12 }}
         >
-          <Form.Item {...{ name, label: intl.get(label) }}>
-            <Select
-              options={options.map((len) => ({
+          <SelectFormItem
+            label={label}
+            name={name}
+            selectProps={{
+              options: options.map((len) => ({
                 ...len,
                 label: intl.get(len.label)
-              }))}
-            />
-          </Form.Item>
-          <Form.Item noStyle>
+              }))
+            }}
+          />
+          <TextFormItem noStyle>
             <Flex>
               <Space>
                 <Button
@@ -87,7 +89,7 @@ export const WindowLengthPopup = ({
                 </Button>
               </Space>
             </Flex>
-          </Form.Item>
+          </TextFormItem>
         </Form>
       }
       open={open}

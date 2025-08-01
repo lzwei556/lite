@@ -79,7 +79,7 @@ export const PointItemList = ({
               </Grid>
             </div>
           ))}
-          <Form.Item>
+          <TextFormItem>
             <Popover
               title={intl.get('SELECT_SENSOR')}
               content={
@@ -112,7 +112,7 @@ export const PointItemList = ({
               <Button disabled={devices.length === 0}>{intl.get('SELECT_SENSOR')}</Button>
               <Form.ErrorList errors={errors} />
             </Popover>
-          </Form.Item>
+          </TextFormItem>
         </>
       )}
     </Form.List>

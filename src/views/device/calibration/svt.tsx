@@ -1,9 +1,8 @@
 import React from 'react';
-import { Form, Input, InputNumber, Select } from 'antd';
 import intl from 'react-intl-universal';
 import { Property } from '../../../types/property';
-import { FormInputItem } from '../../../components/formInputItem';
 import { DeviceType } from '../../../types/device_type';
+import { NumberFormItem, SelectFormItem, TextFormItem } from '../../../components';
 
 export const SVT = ({
   typeId,
@@ -27,55 +26,35 @@ export const SVT = ({
 
   return (
     <>
-      <Form.Item label={intl.get('calibrate.type')}>
-        <Select
-          options={properties.map((p) => ({ label: intl.get(p.name), value: p.key }))}
-          onChange={(value: string) => {
+      <SelectFormItem
+        label='calibrate.type'
+        selectProps={{
+          defaultValue: property.key,
+          options: properties.map((p) => ({ label: intl.get(p.name), value: p.key })),
+          onChange: (value: string) => {
             setProperty(properties.find((p) => p.key === value)!);
             onChange(axisValues[value][0]);
-          }}
-          defaultValue={property.key}
-        />
-      </Form.Item>
-      <FormInputItem
-        label={`${intl.get(property.name).d(property.name)}`}
+          }
+        }}
+      />
+      <NumberFormItem
+        label={property.name}
         name='param'
-        requiredMessage={intl.get('PLEASE_ENTER_SOMETHING', {
-          something: intl.get(property.name).d(property.name)
-        })}
-        numericRule={{ isInteger: false }}
-        numericChildren={
-          <InputNumber
-            controls={false}
-            style={{ width: '100%' }}
-            placeholder={intl.get('PLEASE_ENTER_SOMETHING', {
-              something: intl.get(property.name).d(property.name)
-            })}
-            addonAfter={property.unit}
-          />
-        }
+        rules={[{ required: true }]}
+        inputNumberProps={{ addonAfter: property.unit }}
       />
       {!isSVT220S1 && (
-        <Form.Item
-          label={intl.get('AXIS')}
+        <SelectFormItem
+          label='AXIS'
           name='sub_command'
-          rules={[{ required: true, message: intl.get('PLEASE_SELECT_CHANNEL') }]}
+          rules={[{ required: true }]}
           initialValue={axisValues[property.key][0]}
-        >
-          <Select>
-            {axis.map(({ label, value }) => (
-              <Select.Option key={value} value={value}>
-                {intl.get(label)}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+          selectProps={{
+            options: axis.map(({ label, value }) => ({ label: intl.get(label), value }))
+          }}
+        />
       )}
-      {isSVT220S1 && (
-        <Form.Item name={'sub_command'} hidden={true} initialValue={3}>
-          <Input />
-        </Form.Item>
-      )}
+      {isSVT220S1 && <TextFormItem name={'sub_command'} hidden={true} initialValue={3} />}
     </>
   );
 };

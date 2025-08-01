@@ -1,17 +1,15 @@
 import React from 'react';
-import { Form, ModalProps, Select } from 'antd';
+import { Form, ModalProps } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
 import { Device } from '../../../types/device';
-import { useRange, RangeDatePicker } from '../../../components';
+import { useRange, RangeDatePicker, SelectFormItem, TextFormItem } from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { getDisplayProperties } from '../util';
 import { DeviceType } from '../../../types/device_type';
 import { DisplayProperty } from '../../../constants/properties';
 import { DownloadDeviceDataRequest } from '../../../apis/device';
-
-const { Option } = Select;
 
 export interface DownloadModalProps extends ModalProps {
   device: Device;
@@ -66,33 +64,27 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
       onOk={onDownload}
     >
       <Form form={form} labelCol={{ span: 8 }}>
-        <Form.Item label={intl.get('PROPERTY')} name={'properties'} required>
-          <Select
-            placeholder={intl.get('PLEASE_SELECT_DEVICE_PROPERTY')}
-            mode={'multiple'}
-            maxTagCount={2}
-          >
-            {properties.map((item) => (
-              <Option key={item.key} value={item.key}>
-                {intl.get(item.name)}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <SelectFormItem
+          label='PROPERTY'
+          name='properties'
+          rules={[{ required: true }]}
+          selectProps={{
+            mode: 'multiple',
+            maxTagCount: 2,
+            options: properties.map(({ key, name }) => ({ label: intl.get(name), value: key }))
+          }}
+        />
         {channels.length > 0 && (
-          <Form.Item label={intl.get('CURRENT_CHANNEL')} name='channel'>
-            <Select defaultValue={1}>
-              {channels.map(({ label, value }) => (
-                <Select.Option value={value} key={value}>
-                  {label}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+          <SelectFormItem
+            label='CURRENT_CHANNEL'
+            name='channel'
+            initialValue={1}
+            selectProps={{ options: channels }}
+          />
         )}
-        <Form.Item label={intl.get('DATE_RANGE')} required>
+        <TextFormItem label='DATE_RANGE'>
           <RangeDatePicker onChange={setRange} />
-        </Form.Item>
+        </TextFormItem>
       </Form>
     </ModalWrapper>
   );

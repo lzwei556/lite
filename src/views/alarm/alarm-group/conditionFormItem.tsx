@@ -13,6 +13,7 @@ export const ConditionFormItem = ({
       label='CONDITION'
       name={[nameIndex, 'threshold']}
       noStyle
+      rules={[{ required: true }]}
       inputNumberProps={{
         addonBefore: (
           <SelectFormItem

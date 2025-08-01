@@ -16,7 +16,7 @@ export const StatisticBar = ({ asset }: { asset: AssetRow }) => {
       const status = Asset.Statistics.resolveStatus(
         statistics.monitoringPointNum,
         statistics.alarmNum
-      ).map((s) => ({ ...s, name: intl.get('leveled.alarm', { alarmLevel: intl.get(s.name) }) }));
+      ).map((s) => ({ ...s, name: intl.get(`leveled.alarm.${s.level}`) }));
       descendant.splice(1, 1, ...status.slice(1).reverse());
       return descendant;
     }

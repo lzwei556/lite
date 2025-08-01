@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form, InputNumber, Popover, Space, Tooltip } from 'antd';
+import { Button, Form, Popover, Space, Tooltip } from 'antd';
 import { ZoomInOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex } from '../../../../components';
+import { Flex, NumberFormItem, TextFormItem } from '../../../../components';
 
 type RangeProps = { f_h: number; f_l: number };
 
@@ -26,18 +26,14 @@ export const ZoomRange = ({ onOk }: { onOk: (values: RangeProps) => void }) => {
           initialValues={{ f_h: 2000, f_l: 1000 }}
           style={{ width: 220, padding: 12 }}
         >
-          <Form.Item label={intl.get(label)}>
+          <TextFormItem label={label}>
             <Space>
-              <Form.Item {...range[0]} noStyle>
-                <InputNumber />
-              </Form.Item>
+              <NumberFormItem {...range[0]} noStyle />
               -
-              <Form.Item {...range[1]} noStyle>
-                <InputNumber />
-              </Form.Item>
+              <NumberFormItem {...range[1]} noStyle />
             </Space>
-          </Form.Item>
-          <Form.Item noStyle>
+          </TextFormItem>
+          <TextFormItem noStyle>
             <Flex>
               <Space>
                 <Button
@@ -60,7 +56,7 @@ export const ZoomRange = ({ onOk }: { onOk: (values: RangeProps) => void }) => {
                 </Button>
               </Space>
             </Flex>
-          </Form.Item>
+          </TextFormItem>
         </Form>
       }
       open={open}

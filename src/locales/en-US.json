@@ -1264,7 +1264,9 @@
   "corrosion.analysis.forecast.diff": "Diff",
   "corrosion.analysis.begin": "Begin",
   "corrosion.analysis.end": "End",
-  "leveled.alarm": "{alarmLevel} Alarm",
+  "leveled.alarm.1": "Minor Alarm",
+  "leveled.alarm.2": "Major Alarm",
+  "leveled.alarm.3": "Critical Alarm",
   "calibrate.type": "Calibrate Type",
   "mark": "Mark",
   "data.analysis": "Data Analysis",
@@ -1329,5 +1331,6 @@
   "contact.temperature": "Contact Temperature",
   "contact.temperature.desc": "Measurement of contact temperature",
   "rod.top.temperature": "Rod Top Temperature",
-  "rod.top.temperature.desc": "Rod Top Temperature"
+  "rod.top.temperature.desc": "Rod Top Temperature",
+  "monitoring.point.type": "Monitoring Point Type"
 }

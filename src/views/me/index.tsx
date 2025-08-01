@@ -1,152 +1,106 @@
-import { useEffect, useState } from 'react';
-import { Button, Col, Form, Input, message, Space } from 'antd';
+import React from 'react';
+import { Button, ButtonProps, Col, Form, FormProps, message, Space } from 'antd';
+import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { GetMyProfile, UpdateMyProfile } from '../../apis/profile';
 import { User } from '../../types/user';
-import { Card, Grid } from '../../components';
+import { Card, Flex, Grid, TextFormItem } from '../../components';
 import EditPassModal from './edit/editPassModal';
 
 const MePage = () => {
-  const [isPhoneEdit, setIsPhoneEdit] = useState<boolean>(false);
-  const [isEmailEdit, setIsEmailEdit] = useState<boolean>(false);
-  const [isPassEdit, setIsPassEdit] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
-  const [form] = Form.useForm();
-
-  useEffect(() => {
+  const [isPassEdit, setIsPassEdit] = React.useState(false);
+  const [user, setUser] = React.useState<User>();
+  const [phoneForm] = Form.useForm();
+  const [emailForm] = Form.useForm();
+  React.useEffect(() => {
     GetMyProfile().then(setUser);
   }, []);
 
-  const renderPhone = () => {
-    const render = () => {
-      if (isPhoneEdit) {
-        return <Input />;
-      } else {
-        return (
-          <span style={{ lineHeight: '32px' }}>
-            {user && user.phone.length ? user.phone : intl.get('NOT_BOUND_PROMPT')}
-          </span>
-        );
-      }
-    };
-
+  const renderItem = (label: string, content: React.ReactNode) => {
     return (
-      <Form.Item
-        label={intl.get('CELLPHONE')}
-        name='phone'
-        initialValue={user?.phone}
-        style={{ marginBottom: 16 }}
-      >
-        <Space>
-          <Space.Compact>
-            {render()}
-            {isPhoneEdit ? (
-              <Button onClick={onSavePhone} type='link'>
-                {intl.get('SAVE')}
-              </Button>
-            ) : (
-              <Button onClick={() => setIsPhoneEdit(true)} type='link'>
-                {intl.get('MODIFY')}
-              </Button>
-            )}
-          </Space.Compact>
-        </Space>
-      </Form.Item>
+      <Flex justify='flex-start' style={{ marginBlock: 8, height: 32, lineHeight: '32px' }}>
+        <span style={{ minWidth: 160 }}>{label}</span>
+        <Flex flex={1} justify='flex-start' align='center'>
+          {content}
+        </Flex>
+      </Flex>
     );
-  };
-
-  const onSavePhone = () => {
-    form.validateFields(['phone']).then((values) => {
-      UpdateMyProfile({ phone: values.phone }).then((res) => {
-        if (res.code === 200) {
-          message.success(intl.get('SAVED_SUCCESSFUL')).then();
-          setUser(res.data);
-        } else {
-          message.error(intl.get('FAILED_TO_SAVE')).then();
-        }
-        setIsPhoneEdit(false);
-      });
-    });
-  };
-
-  const renderEmail = () => {
-    const render = () => {
-      if (isEmailEdit) {
-        return <Input />;
-      } else {
-        return (
-          <span style={{ lineHeight: '32px' }}>
-            {user && user.email.length ? user.email : intl.get('NOT_BOUND_PROMPT')}
-          </span>
-        );
-      }
-    };
-
-    return (
-      <Form.Item
-        label={intl.get('EMAIL')}
-        name='email'
-        initialValue={user?.email}
-        rules={[{ type: 'email' }]}
-        style={{ marginBottom: 16 }}
-      >
-        <Space>
-          <Space.Compact>
-            {render()}
-            {isEmailEdit ? (
-              <Button onClick={onSaveEmail} type='link'>
-                {intl.get('SAVE')}
-              </Button>
-            ) : (
-              <Button onClick={() => setIsEmailEdit(true)} type='link'>
-                {intl.get('MODIFY')}
-              </Button>
-            )}
-          </Space.Compact>
-        </Space>
-      </Form.Item>
-    );
-  };
-
-  const onSaveEmail = () => {
-    form.validateFields(['email']).then((values) => {
-      UpdateMyProfile({ email: values.email }).then((res) => {
-        if (res.code === 200) {
-          message.success(intl.get('SAVED_SUCCESSFUL')).then();
-          setUser(res.data);
-        } else {
-          message.error(intl.get('FAILED_TO_SAVE')).then();
-        }
-        setIsEmailEdit(false);
-      });
-    });
   };
 
   return (
     <Grid>
       <Col span={24}>
         <Card title={intl.get('BASIC_INFORMATION')} bordered={false}>
-          <Form form={form} labelAlign='left' labelCol={{ span: 2 }} wrapperCol={{ span: 8 }}>
-            <Form.Item label={intl.get('ACCOUNT_NAME')} style={{ marginBottom: 16 }}>
-              {user?.username}
-            </Form.Item>
-            {renderPhone()}
-            {renderEmail()}
-          </Form>
+          {renderItem(intl.get('ACCOUNT_NAME'), user?.username)}
+          {renderItem(
+            intl.get('CELLPHONE'),
+            user && (
+              <ProfileItemForm
+                formProps={{ form: phoneForm, initialValues: { phone: user.phone } }}
+                input={
+                  <TextFormItem
+                    name='phone'
+                    noStyle
+                    rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
+                  />
+                }
+                value={user.phone}
+                onSubmit={(values) =>
+                  UpdateMyProfile(values).then((res) => {
+                    if (res.code === 200) {
+                      message.success(intl.get('SAVED_SUCCESSFUL')).then();
+                      setUser(res.data);
+                    } else {
+                      message.error(intl.get('FAILED_TO_SAVE'));
+                    }
+                  })
+                }
+              />
+            )
+          )}
+          {renderItem(
+            intl.get('EMAIL'),
+            user && (
+              <ProfileItemForm
+                formProps={{ form: emailForm, initialValues: { email: user.email } }}
+                input={
+                  <TextFormItem
+                    name='email'
+                    noStyle
+                    rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
+                  />
+                }
+                value={user.email}
+                onSubmit={(values) =>
+                  UpdateMyProfile(values).then((res) => {
+                    if (res.code === 200) {
+                      message.success(intl.get('SAVED_SUCCESSFUL'));
+                      setUser(res.data);
+                    } else {
+                      message.error(intl.get('FAILED_TO_SAVE'));
+                    }
+                  })
+                }
+              />
+            )
+          )}
         </Card>
       </Col>
       <Col span={24}>
         <Card title={intl.get('ACCOUNT_SECURITY')} bordered={false}>
-          <Form.Item label={intl.get('PASSWORD')} labelAlign='left' labelCol={{ span: 2 }}>
+          {renderItem(
+            intl.get('PASSWORD'),
             <Space>
-              <Space.Compact>
-                <span style={{ lineHeight: '32px' }}>****************</span>
-                <Button onClick={() => setIsPassEdit(true)} type='link'>
-                  {intl.get('MODIFY')}
-                </Button>
-              </Space.Compact>
+              ****************
+              <Button
+                onClick={() => setIsPassEdit(true)}
+                icon={<EditOutlined />}
+                color='primary'
+                size='small'
+                variant='text'
+              />
             </Space>
-          </Form.Item>
+          )}
         </Card>
       </Col>
       <EditPassModal
@@ -159,6 +113,59 @@ const MePage = () => {
         }}
       />
     </Grid>
+  );
+};
+
+const EditIconButton = (props: ButtonProps) => (
+  <Button {...props} icon={<EditOutlined />} color='primary' size='small' variant='text' />
+);
+
+const SaveIconButton = (props: ButtonProps) => (
+  <Button {...props} icon={<CheckOutlined />} color='primary' size='small' variant='text' />
+);
+
+const CancelIconButton = (props: ButtonProps) => (
+  <Button {...props} icon={<CloseOutlined />} color='danger' size='small' variant='text' />
+);
+
+const ProfileItemForm = ({
+  formProps,
+  input,
+  value,
+  onSubmit
+}: {
+  formProps: FormProps;
+  input: React.ReactNode;
+  value?: string;
+  onSubmit: (values: any) => Promise<void>;
+}) => {
+  const [editable, setEditable] = React.useState(false);
+
+  return (
+    <Form {...formProps}>
+      <Space>
+        {editable ? (
+          <>
+            {input}
+            <div>
+              <SaveIconButton
+                onClick={() =>
+                  formProps?.form
+                    ?.validateFields()
+                    .then((values) => onSubmit(values).then(() => setEditable(false)))
+                }
+              />
+              <CancelIconButton onClick={() => setEditable(false)} />
+            </div>
+          </>
+        ) : (
+          <>
+            {value && value.length > 0 ? value : intl.get('NOT_BOUND_PROMPT')}
+            <EditIconButton onClick={() => setEditable(true)} />
+          </>
+        )}
+      </Space>
+    </Form>
   );
 };
 

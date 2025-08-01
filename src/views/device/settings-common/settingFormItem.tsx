@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Checkbox, Col, ColProps, Form, FormRule, Input, InputNumber, Radio, Select } from 'antd';
+import { Checkbox, Col, ColProps, FormRule, Input, InputNumber, Radio, Select } from 'antd';
 import intl from 'react-intl-universal';
-import { Term } from '../../../components';
+import { Term, TextFormItem } from '../../../components';
 import { DeviceSetting } from './common';
 
 enum DeviceSettingValueType {
@@ -78,7 +78,7 @@ export const SettingFormItem = ({
     if (setting.type === DeviceSettingValueType.string) {
       return <Input suffix={unit} />;
     } else {
-      return <InputNumber controls={false} style={{ width: '100%' }} addonAfter={unit} />;
+      return <InputNumber style={{ width: '100%' }} addonAfter={unit} />;
     }
   };
 
@@ -154,7 +154,7 @@ export const SettingFormItem = ({
   return (
     <>
       <Col {...formItemColProps}>
-        <Form.Item
+        <TextFormItem
           label={
             <Term name={intl.get(setting.name)} description={intl.get(`${setting.name}_DESC`)} />
           }
@@ -164,7 +164,7 @@ export const SettingFormItem = ({
           messageVariables={{ label: intl.get(setting.name).toLowerCase() }}
         >
           {renderComponents()}
-        </Form.Item>
+        </TextFormItem>
       </Col>
       {!ignoreChildren && renderChildren()}
     </>

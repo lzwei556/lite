@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Select } from 'antd';
+import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
@@ -17,6 +17,7 @@ import {
   useSelectPoints
 } from './common';
 import { PointItemList } from './pointItemList';
+import { SelectFormItem, TextFormItem } from '../../../components';
 
 export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
   const { asset, onSuccess } = props;
@@ -114,67 +115,37 @@ function ParentSelection({
   onChange: (asset?: AssetRow) => void;
 }) {
   const parents = useParents(asset);
-  const label = intl.get('ASSET');
 
   if (isParentValid(asset)) {
-    return (
-      <Form.Item name='asset_id' hidden={true} initialValue={asset?.id}>
-        <Input />
-      </Form.Item>
-    );
+    return <TextFormItem name='asset_id' hidden={true} initialValue={asset?.id} />;
   } else {
     return (
-      <Form.Item
-        label={label}
+      <SelectFormItem
+        label='ASSET'
         name='asset_id'
-        rules={[
-          {
-            required: true,
-            message: intl.get('PLEASE_SELECT_SOMETHING', { something: label })
-          }
-        ]}
-      >
-        <Select
-          placeholder={intl.get('PLEASE_SELECT_SOMETHING', { something: label })}
-          onChange={(id: number) => onChange(parents.find((a) => a.id === id))}
-        >
-          {parents.map(({ id, name }) => (
-            <Select.Option key={id} value={id}>
-              {name}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
+        rules={[{ required: true }]}
+        selectProps={{
+          onChange: (id: number) => onChange(parents.find((a) => a.id === id)),
+          options: parents.map(({ id, name }) => ({ label: name, value: id }))
+        }}
+      />
     );
   }
 }
 
 function TypeSelection({ parent, onChange }: { parent: AssetRow; onChange: (id: number) => void }) {
   return (
-    <Form.Item
-      label={intl.get('TYPE')}
+    <SelectFormItem
+      label='TYPE'
       name='type'
-      rules={[
-        {
-          required: true,
-          message: intl.get('PLEASE_SELECT_SOMETHING', {
-            something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-          })
-        }
-      ]}
-    >
-      <Select
-        placeholder={intl.get('PLEASE_SELECT_SOMETHING', {
-          something: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })
-        })}
-        onChange={onChange}
-      >
-        {getMonitoringPointTypes(parent).map(({ id, label }) => (
-          <Select.Option key={id} value={id}>
-            {intl.get(label)}
-          </Select.Option>
-        ))}
-      </Select>
-    </Form.Item>
+      rules={[{ required: true }]}
+      selectProps={{
+        onChange,
+        options: getMonitoringPointTypes(parent).map(({ id, label }) => ({
+          label: intl.get(label),
+          value: id
+        }))
+      }}
+    />
   );
 }
