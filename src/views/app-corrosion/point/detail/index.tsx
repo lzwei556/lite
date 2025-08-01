@@ -92,7 +92,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'settings',
       label: intl.get('SETTINGS'),
-      children: <Settings point={monitoringPoint} onSuccess={onSuccess} />
+      children: <Settings point={monitoringPoint} onSuccess={onSuccess} key={id} />
     });
   }
 
