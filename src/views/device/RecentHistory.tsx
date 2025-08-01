@@ -18,12 +18,10 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   const [channel, setChannel] = React.useState('1');
 
   React.useEffect(() => {
-    FindDeviceDataRequest(
-      device.id,
-      Dayjs.dayjs().startOf('day').subtract(13, 'd').utc().unix(),
-      Dayjs.dayjs().endOf('day').utc().unix(),
-      channels.length > 0 ? { channel } : {}
-    ).then(setHistoryData);
+    const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastHalfMonth);
+    FindDeviceDataRequest(device.id, from, to, channels.length > 0 ? { channel } : {}).then(
+      setHistoryData
+    );
   }, [device.id, channel, channels.length]);
 
   const channelsSelect = channels.length > 0 && (

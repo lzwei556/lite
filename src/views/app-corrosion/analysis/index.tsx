@@ -1,26 +1,19 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
-import {
-  Card,
-  ChartMark,
-  commonRange,
-  Flex,
-  Grid,
-  RangeDatePicker,
-  useRange
-} from '../../../components';
+import { Card, ChartMark, Flex, Grid, RangeDatePicker, useRange } from '../../../components';
+import { AnalysisSidebarCollapse } from '../../../features';
 import { Space } from '../../../common';
+import { Dayjs } from '../../../utils';
 import { MonitoringPointRow, Point } from '../../asset-common';
 import { Forecast } from './forecast';
 import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
-import { AnalysisSidebarCollapse } from '../../../features';
 import { MarkList } from './markList';
 
 export const Analysis = (props: MonitoringPointRow) => {
-  const { numberedRange, setRange } = useRange(commonRange.PastYear);
+  const { numberedRange, setRange } = useRange(Dayjs.CommonRange.PastYear);
 
   return (
     <ChartMark.Context>
@@ -28,7 +21,7 @@ export const Analysis = (props: MonitoringPointRow) => {
         <Col span={24}>
           <Card>
             <Flex>
-              <RangeDatePicker onChange={setRange} defaultValue={commonRange.PastYear} />
+              <RangeDatePicker onChange={setRange} defaultValue={Dayjs.CommonRange.PastYear} />
             </Flex>
           </Card>
         </Col>

@@ -1,9 +1,11 @@
 import React from 'react';
 import { AssetRow, getDataOfMonitoringPoint, HistoryData, Points } from '../../asset-common';
 import { Dayjs } from '../../../utils';
-import { commonRange } from '../../../components';
 
-export function useHistoryDatas(asset?: AssetRow, range = Dayjs.toRange(commonRange.PastWeek)) {
+export function useHistoryDatas(
+  asset?: AssetRow,
+  range = Dayjs.toRange(Dayjs.CommonRange.PastWeek)
+) {
   const [from, to] = range;
   const [historyDatas, setHistoryDatas] = React.useState<
     { name: string; data: HistoryData; height?: number; radius?: number }[] | undefined

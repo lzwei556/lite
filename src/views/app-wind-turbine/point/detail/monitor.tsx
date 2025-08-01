@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import { generateColProps } from '../../../../utils/grid';
-import { Grid, commonRange } from '../../../../components';
+import { Grid } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
 import { HistoryDataFea } from '../../../../features';
 import {
@@ -20,7 +20,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const colProps = generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
 
   React.useEffect(() => {
-    const [from, to] = Dayjs.toRange(commonRange.PastWeek);
+    const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastWeek);
     getDataOfMonitoringPoint(id, from, to).then((data) => {
       setLoading(false);
       if (data.length > 0) {

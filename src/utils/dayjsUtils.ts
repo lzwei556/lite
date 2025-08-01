@@ -17,17 +17,34 @@ export { dayjs };
 export type Dayjs = dayjs.Dayjs;
 
 export function format(timestamp: number, format = 'YYYY-MM-DD HH:mm:ss') {
-  return dayjs.unix(timestamp).local().format(format);
+  return toDate(timestamp).format(format);
+}
+
+export function toRangeValue(range: Range) {
+  return range.map(toDate) as RangeValue;
+}
+
+export function toRange(range: RangeValue) {
+  return range.map(toTimestamp) as Range;
+}
+
+export function toDate(timestamp: number) {
+  return dayjs.unix(timestamp).local();
 }
 
 export function toTimestamp(date: Dayjs) {
   return date.utc().unix();
 }
 
-export function toDayjs(timestamp: number) {
-  return dayjs.unix(timestamp).utc();
+export function getRange(value: number, unit: dayjs.ManipulateType): RangeValue {
+  return [dayjs().startOf('day').subtract(value, unit), dayjs().endOf('day')];
 }
 
-export function toRange(range: RangeValue) {
-  return range.map((r) => toTimestamp(r)) as Range;
-}
+export const CommonRange = {
+  PastWeek: getRange(6, 'days'),
+  PastHalfMonth: getRange(13, 'days'),
+  PastMonth: getRange(1, 'months'),
+  PastThreeMonths: getRange(3, 'months'),
+  PastHalfYear: getRange(6, 'months'),
+  PastYear: getRange(1, 'years')
+};

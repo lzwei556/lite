@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Col, Tooltip } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card, commonRange, Grid } from '../../../../components';
+import { Card, Grid } from '../../../../components';
 import { ModalWrapper } from '../../../../components/modalWrapper';
 import { Dayjs } from '../../../../utils';
 import { HistoryDataFea } from '../../../../features';
@@ -43,7 +43,7 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
 
   React.useEffect(() => {
     if (firstPoint?.id && !historyData) {
-      fetchData(firstPoint.id, Dayjs.toRange(commonRange.PastWeek));
+      fetchData(firstPoint.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
     }
   }, [firstPoint?.id, historyData]);
 
@@ -61,7 +61,7 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
                   if (item) {
                     setSelectedPoint(item);
                     if (!selectedPoint || selectedPoint.id !== item.id) {
-                      fetchData(item.id, Dayjs.toRange(commonRange.PastWeek));
+                      fetchData(item.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
                     }
                   }
                 }}

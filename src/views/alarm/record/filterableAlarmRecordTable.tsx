@@ -142,12 +142,9 @@ export const FilterableAlarmRecordTable: React.FC<{
         switch (record.status) {
           case 1:
           case 2:
-            return Dayjs.dayjs
-              .unix(record.createdAt)
-              .local()
-              .from(Dayjs.dayjs.unix(record.updatedAt).local(), true);
+            return Dayjs.toDate(record.createdAt).from(Dayjs.toDate(record.updatedAt), true);
           default:
-            return Dayjs.dayjs.unix(record.createdAt).local().fromNow(true);
+            return Dayjs.toDate(record.createdAt).fromNow(true);
         }
       }
     },

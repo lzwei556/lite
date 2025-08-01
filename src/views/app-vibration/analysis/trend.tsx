@@ -88,7 +88,9 @@ export const Trend = ({
         )
       }}
       config={{ opts: { yAxis: { name: property.unit }, grid: { top: 30 } } }}
-      onEvents={{ click: (coord: [string, number]) => handleClick(Dayjs.dayjs(coord[0]).unix()) }}
+      onEvents={{
+        click: (coord: [string, number]) => handleClick(Dayjs.toTimestamp(Dayjs.dayjs(coord[0])))
+      }}
       series={ChartMark.mergeMarkDatas({
         series: getSeries(),
         marks: visibledMarks,

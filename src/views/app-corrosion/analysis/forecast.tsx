@@ -49,6 +49,8 @@ export const Forecast = ({
       );
     }
   };
+  const [start, end] = Dayjs.toRangeValue(range);
+  const initialRangeValue = Dayjs.toRangeValue(initialRange);
 
   return (
     <Card className='corrosion-analysis-forecast' styles={{ body: { padding: 0 } }}>
@@ -62,9 +64,9 @@ export const Forecast = ({
             children: (
               <DatePicker
                 allowClear={false}
-                defaultValue={Dayjs.dayjs(range[0] * 1000)}
-                minDate={Dayjs.dayjs(initialRange[0] * 1000)}
-                maxDate={Dayjs.dayjs(initialRange[1] * 1000).endOf('day')}
+                defaultValue={start}
+                minDate={initialRangeValue[0]}
+                maxDate={initialRangeValue[1]}
                 onChange={(date) => setRange((prev) => [date.utc().unix(), prev[1]])}
                 variant='borderless'
               />
@@ -74,7 +76,7 @@ export const Forecast = ({
             label: intl.get('corrosion.analysis.end'),
             children: (
               <span style={{ paddingLeft: 11, lineHeight: '30px' }}>
-                {Dayjs.dayjs(range[1] * 1000).format('YYYY-MM-DD')}
+                {end.format('YYYY-MM-DD')}
               </span>
             )
           }
