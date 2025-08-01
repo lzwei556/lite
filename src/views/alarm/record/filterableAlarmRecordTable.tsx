@@ -197,16 +197,18 @@ export const FilterableAlarmRecordTable: React.FC<{
               onBlur={(e) => setAlarmName(e.target.value)}
               prefix={<Typography.Text type='secondary'>{intl.get('ALARM_NAME')}</Typography.Text>}
             />
-            <LightSelectFilter
-              maxTagCount={2}
-              mode='multiple'
-              onChange={setMontoringPointType}
-              options={App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
-                label: intl.get(label),
-                value: id
-              }))}
-              prefix={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
-            />
+            {!sourceId && (
+              <LightSelectFilter
+                maxTagCount={2}
+                mode='multiple'
+                onChange={setMontoringPointType}
+                options={App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
+                  label: intl.get(label),
+                  value: id
+                }))}
+                prefix={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
+              />
+            )}
             <RangeDatePicker onChange={setRange} />
           </>
         ]
