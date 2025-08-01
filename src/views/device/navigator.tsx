@@ -58,9 +58,9 @@ function BreadcrumbItemTitle({
   const { id, name, parent } = mix;
   const downIcon = <DownOutlined style={{ fontSize: '10px', cursor: 'pointer' }} />;
   const siblings = list.filter((item) => item.id !== id && item.parent === parent);
-  const items: MenuProps['items'] = siblings.map((mix: any) => ({
-    key: mix.id,
-    label: <ItemLink {...mix} />
+  const items: MenuProps['items'] = siblings.map(({ id, name }) => ({
+    key: id,
+    label: <ItemLink {...{ id, name }} />
   }));
   if (isLast) {
     if (siblings.length > 0) {
@@ -82,7 +82,7 @@ function BreadcrumbItemTitle({
   } else {
     return (
       <Space>
-        <ItemLink {...mix} />
+        <ItemLink {...{ id, name }} />
         {siblings.length > 0 && id !== 0 && (
           <Dropdown menu={{ items }} trigger={['click']} placement='bottomRight'>
             {downIcon}
@@ -93,6 +93,6 @@ function BreadcrumbItemTitle({
   }
 }
 
-function ItemLink({ id, name }: TreeFlatListItem) {
+function ItemLink({ id, name }: Pick<TreeFlatListItem, 'id' | 'name'>) {
   return <Link to={`/devices/${id}`}>{name}</Link>;
 }

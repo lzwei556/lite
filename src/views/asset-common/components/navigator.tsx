@@ -67,12 +67,12 @@ function BreadcrumbItemTitle({
   mix: TreeFlatListItem;
   list: TreeFlatListItem[];
 }) {
-  const { id, name, parentId } = mix;
+  const { id, name, parentId, type } = mix;
   const downIcon = <DownOutlined style={{ fontSize: '10px', cursor: 'pointer' }} />;
   const siblings = list.filter((item) => item.id !== id && item.parentId === parentId);
-  const items: MenuProps['items'] = siblings.map((mix: any) => ({
-    key: mix.id,
-    label: <ItemLink {...mix} />
+  const items: MenuProps['items'] = siblings.map(({ id, name, type }) => ({
+    key: id,
+    label: <ItemLink {...{ id, name, type }} />
   }));
   if (isLast) {
     if (siblings.length > 0) {
@@ -94,7 +94,7 @@ function BreadcrumbItemTitle({
   } else {
     return (
       <Space>
-        <ItemLink {...mix} />
+        <ItemLink {...{ id, name, type }} />
         {siblings.length > 0 && id !== 0 && (
           <Dropdown menu={{ items }} trigger={['click']} placement='bottomRight'>
             {downIcon}
@@ -105,6 +105,6 @@ function BreadcrumbItemTitle({
   }
 }
 
-function ItemLink({ id, type, name }: TreeFlatListItem) {
+function ItemLink({ id, type, name }: Pick<TreeFlatListItem, 'id' | 'name' | 'type'>) {
   return <Link to={`/${ASSET_PATHNAME}/${pickId(id)}-${type}`}>{name}</Link>;
 }

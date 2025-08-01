@@ -42,7 +42,7 @@ const PropertyChartTitle = ({
     return values.map(({ name, last }) => {
       let title = intl.get(name).d(name);
       return (
-        <Space style={{ display: 'flex', lineHeight: 1.35 }}>
+        <Space key={name} style={{ display: 'flex', lineHeight: 1.35 }}>
           <Term
             name={title}
             nameProps={{ style: { color: 'rgba(0,0,0,.45)' } }}
@@ -64,12 +64,12 @@ const PropertyChartTitle = ({
         </Space>
         <Space size={5} style={{ display: 'flex', fontSize: 13 }}>
           {values.map(({ name, last }) => (
-            <>
+            <React.Fragment key={name}>
               <Typography.Text style={{ fontSize: 13 }} type='secondary'>
                 {intl.get(name).d(name)}
               </Typography.Text>
               {getValue(roundValue(last, precision))}
-            </>
+            </React.Fragment>
           ))}
         </Space>
       </>
