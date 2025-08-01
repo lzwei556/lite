@@ -1,35 +1,31 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Col, Space as AntSpace, Empty } from 'antd';
 import intl from 'react-intl-universal';
-import { Device } from '../../../../types/device';
-import { Dayjs } from '../../../../utils';
+import { Device } from '../../../types/device';
+import { Dayjs } from '../../../utils';
 import {
   FindDeviceDataRequest,
   GetDeviceRuntimeRequest,
   RemoveDeviceDataRequest,
   RemoveDeviceRuntimeRequest
-} from '../../../../apis/device';
-import HasPermission from '../../../../permission';
-import { Permission } from '../../../../permission/permission';
-import { DeviceType } from '../../../../types/device_type';
-import { DisplayProperty } from '../../../../constants/properties';
+} from '../../../apis/device';
+import HasPermission from '../../../permission';
+import { Permission } from '../../../permission/permission';
+import { DeviceType } from '../../../types/device_type';
+import { DisplayProperty } from '../../../constants/properties';
 import {
   Card,
   Flex,
   Grid,
   LightSelectFilter,
   LineChart,
-  useRange,
   RangeDatePicker,
   DeleteIconButton
-} from '../../../../components';
-import { HistoryDataFea } from '../../../../features';
-import { HistoryData } from '../../../asset-common';
-import { getDisplayProperties } from '../../util';
-
-export interface DeviceDataProps {
-  device: Device;
-}
+} from '../../../components';
+import { HistoryDataFea } from '../../../features';
+import { HistoryData } from '../../asset-common';
+import { getDisplayProperties } from '../util';
+import { useContext } from '..';
 
 const batteryVoltage: DisplayProperty = {
   key: 'batteryVoltage',
@@ -44,7 +40,7 @@ const signalStrength: DisplayProperty = {
   unit: 'dBm'
 };
 
-const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
+export const HistoryDataPage = ({ device }: { device: Device }) => {
   const properties = getDisplayProperties(device.properties, device.typeId);
   if (!DeviceType.isWiredDevice(device.typeId)) {
     properties.push(batteryVoltage);
@@ -53,7 +49,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
   const [property, setProperty] = useState<DisplayProperty | undefined>(
     properties.length > 0 ? properties[0] : undefined
   );
-  const { numberedRange, setRange } = useRange();
+  const { range, numberedRange, onChange } = useContext();
   const [from, to] = numberedRange;
   const [dataSource, setDataSource] = useState<HistoryData>();
   const channels = DeviceType.getChannels(device.typeId);
@@ -119,7 +115,7 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
       <Col span={24}>
         <Card>
           <Flex>
-            <RangeDatePicker onChange={setRange} />
+            <RangeDatePicker onChange={onChange} value={range} />
           </Flex>
         </Card>
       </Col>
@@ -181,5 +177,3 @@ const HistoryDataPage: FC<DeviceDataProps> = ({ device }) => {
     </Grid>
   );
 };
-
-export default HistoryDataPage;

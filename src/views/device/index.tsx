@@ -6,9 +6,11 @@ import { PageWithSideBar } from '../../components/pageWithSideBar';
 import { GetDeviceRequest, GetDevicesRequest } from '../../apis/device';
 import { DeviceType } from '../../types/device_type';
 import { Network } from '../../types/network';
+import { Dayjs } from '../../utils';
 import './deviceList.css';
 import { DeviceTree } from './deviceTree';
 import { VIRTUAL_ROOT_DEVICE } from './virtual';
+import { SelectedDeviceRangeProps, useSelectedDeviceRange } from './use-selected-device';
 
 const virtualPathId = `${VIRTUAL_ROOT_DEVICE.id}`;
 
@@ -40,7 +42,7 @@ type ContextProps = {
   device: Device | undefined;
   setDevice: React.Dispatch<React.SetStateAction<Device | undefined>>;
   network: Network | undefined;
-};
+} & SelectedDeviceRangeProps;
 
 const Context = React.createContext<ContextProps>({
   devices: [],
@@ -50,7 +52,10 @@ const Context = React.createContext<ContextProps>({
   refresh: () => {},
   device: undefined,
   setDevice: () => {},
-  network: undefined
+  network: undefined,
+  range: Dayjs.CommonRange.PastWeek,
+  numberedRange: Dayjs.toRange(Dayjs.CommonRange.PastWeek),
+  onChange: () => {}
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -61,6 +66,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = React.useState(false);
   const [device, setDevice] = React.useState<Device | undefined>();
   const [network, setNetwork] = React.useState<Network | undefined>();
+  const { store, setStore, selectedDeviceRange } = useSelectedDeviceRange(device);
 
   const fetchDevices = () => {
     setDeviceLoading(true);
@@ -73,12 +79,24 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     fetchDevices();
   }, []);
 
-  const fetchDevice = React.useCallback((id: number) => {
-    setLoading(true);
-    GetDeviceRequest(Number(id))
-      .then(setDevice)
-      .finally(() => setLoading(false));
-  }, []);
+  const fetchDevice = React.useCallback(
+    (id: number) => {
+      setLoading(true);
+      GetDeviceRequest(Number(id))
+        .then((device) => {
+          setDevice(device);
+          if (device.macAddress !== store.mac) {
+            setStore((prev) => ({
+              ...prev,
+              mac: device.macAddress,
+              range: Dayjs.toRange(Dayjs.CommonRange.PastWeek)
+            }));
+          }
+        })
+        .finally(() => setLoading(false));
+    },
+    [store, setStore]
+  );
 
   React.useEffect(() => {
     if (device) {
@@ -111,7 +129,17 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <Context.Provider
-      value={{ devices, setDevices, devicesLoading, device, setDevice, loading, refresh, network }}
+      value={{
+        devices,
+        setDevices,
+        devicesLoading,
+        device,
+        setDevice,
+        loading,
+        refresh,
+        network,
+        ...selectedDeviceRange
+      }}
     >
       {children}
     </Context.Provider>

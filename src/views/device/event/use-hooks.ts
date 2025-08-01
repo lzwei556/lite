@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { transformPagedresult, useRange } from '../../../components';
+import { transformPagedresult } from '../../../components';
 import { PageResult } from '../../../types/page';
 import usePermission, { Permission } from '../../../permission/permission';
 import { store } from '../../../store';
@@ -8,9 +8,10 @@ import { BatchDeleteDeviceEventsRequest, PagingDeviceEventsRequest } from '../..
 import { Device } from '../../../types/device';
 import { Dayjs } from '../../../utils';
 import { useButtonBindingsProps } from '../../../hooks';
+import { useContext } from '..';
 
 export const useEvents = (device: Device) => {
-  const { numberedRange, setRange } = useRange();
+  const { range, numberedRange, onChange } = useContext();
   const [dataSource, setDataSource] = React.useState<PageResult<any>>();
 
   const fetchDeviceEvents = React.useCallback(
@@ -27,7 +28,7 @@ export const useEvents = (device: Device) => {
     fetchDeviceEvents(1, 10);
   }, [fetchDeviceEvents]);
 
-  return { fetchDeviceEvents, dataSource, setRange };
+  return { fetchDeviceEvents, dataSource, range, onChange };
 };
 
 export const useEventTableProps = ({

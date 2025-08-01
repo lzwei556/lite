@@ -7,7 +7,7 @@ import { Permission } from '../../../permission/permission';
 import { useEvents, useEventTableProps } from './use-hooks';
 
 export const QueryEventTable = ({ device }: { device: Device }) => {
-  const { fetchDeviceEvents, setRange, dataSource } = useEvents(device);
+  const { fetchDeviceEvents, range, onChange, dataSource } = useEvents(device);
   const { tablePorps, header } = useEventTableProps({
     device,
     dataSource,
@@ -18,7 +18,7 @@ export const QueryEventTable = ({ device }: { device: Device }) => {
       <Col span={24}>
         <Card>
           <Flex>
-            <RangeDatePicker onChange={setRange} />
+            <RangeDatePicker onChange={onChange} value={range} />
           </Flex>
         </Card>
       </Col>

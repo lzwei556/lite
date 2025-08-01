@@ -21,7 +21,7 @@ import { BasisModalForm } from '../edit/basisModalForm';
 
 export const RouterDetail = ({ device, onSuccess }: { device: Device; onSuccess: () => void }) => {
   const basisFields = useBasisFields(device);
-  const { fetchDeviceEvents, setRange, dataSource } = useEvents(device);
+  const { fetchDeviceEvents, range, onChange, dataSource } = useEvents(device);
   const { tablePorps, header } = useEventTableProps({
     device,
     dataSource,
@@ -81,7 +81,7 @@ export const RouterDetail = ({ device, onSuccess }: { device: Device; onSuccess:
             title={
               <Flex justify='space-between'>
                 {intl.get('EVENTS')}
-                <RangeDatePicker onChange={setRange} />
+                <RangeDatePicker onChange={onChange} value={range} />
               </Flex>
             }
           />

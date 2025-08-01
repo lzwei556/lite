@@ -3,13 +3,14 @@ import { Form, ModalProps } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
 import { Device } from '../../../types/device';
-import { useRange, RangeDatePicker, SelectFormItem, TextFormItem } from '../../../components';
+import { RangeDatePicker, SelectFormItem, TextFormItem } from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { getDisplayProperties } from '../util';
 import { DeviceType } from '../../../types/device_type';
 import { DisplayProperty } from '../../../constants/properties';
 import { DownloadDeviceDataRequest } from '../../../apis/device';
+import { useContext } from '..';
 
 export interface DownloadModalProps extends ModalProps {
   device: Device;
@@ -23,7 +24,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
   const { device, onSuccess, ...rest } = props;
   const properties = getDisplayProperties(device.properties, device.typeId);
   const channels = DeviceType.getChannels(device.typeId);
-  const { numberedRange, setRange } = useRange();
+  const { range, numberedRange, onChange } = useContext();
   const [form] = Form.useForm();
   const { language } = useLocaleContext();
 
@@ -83,7 +84,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
           />
         )}
         <TextFormItem label='DATE_RANGE'>
-          <RangeDatePicker onChange={setRange} />
+          <RangeDatePicker onChange={onChange} value={range} />
         </TextFormItem>
       </Form>
     </ModalWrapper>

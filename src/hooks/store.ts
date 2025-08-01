@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { PagedOption } from '../types/props';
 import { Filters } from '../views/device/util';
+import { Dayjs } from '../utils';
 
 export type Store = {
   deviceList: {
@@ -27,6 +28,12 @@ export type Store = {
   projectList: { pagedOptions: PagedOption; lastUpdate: number };
   accountList: { pagedOptions: PagedOption; lastUpdate: number };
   reportList: { pagedOptions: PagedOption; lastUpdate: number };
+  selectedDevice: {
+    pagedOptions: PagedOption;
+    lastUpdate: number;
+    mac: string;
+    range: Dayjs.Range;
+  };
 };
 
 export function useStore<ReturnType extends keyof Store>(
@@ -57,7 +64,8 @@ export function useStore<ReturnType extends keyof Store>(
     },
     projectList: { ...defaultOptions },
     accountList: { ...defaultOptions },
-    reportList: { ...defaultOptions }
+    reportList: { ...defaultOptions },
+    selectedDevice: { ...defaultOptions }
   });
 
   const local = localStorage.getItem('store') || initial;

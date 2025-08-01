@@ -10,11 +10,11 @@ import { Network } from '../../../types/network';
 import userPermission, { Permission } from '../../../permission/permission';
 import { useContext } from '..';
 import { RuntimeChart } from '../RuntimeChart';
-import HistoryDataPage from './data';
-import { GatewayDetail } from './gatewayDetail';
-import { SensorDetail } from './sensorDetail';
 import { QueryEventTable } from '../event';
 import { Index } from '../edit';
+import { HistoryDataPage } from './historyData';
+import { GatewayDetail } from './gatewayDetail';
+import { SensorDetail } from './sensorDetail';
 import { RouterDetail } from './router-detail';
 import { HeadLeft, HeadRight } from './head';
 
