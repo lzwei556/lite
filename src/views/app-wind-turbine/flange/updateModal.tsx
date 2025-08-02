@@ -5,6 +5,7 @@ import { ModalFormProps } from '../../../types/common';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { Asset, AssetModel, AssetRow, updateAsset } from '../../asset-common';
 import { UpdateFormItems } from './_updateFormItems';
+import { mergeAttrsAboutFlangePreload } from './common';
 
 export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
   const { asset, onSuccess, ...rest } = props;
@@ -21,11 +22,8 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
             const _values = {
               ...values,
               attributes: {
-                ...values.attributes,
-                monitoring_points_num: Number(values.attributes?.monitoring_points_num),
-                sub_type: Number(values.attributes?.sub_type),
-                initial_preload: Number(values.attributes?.initial_preload),
-                initial_pressure: Number(values.attributes?.initial_pressure)
+                ...mergeAttrsAboutFlangePreload(values.attributes, asset.attributes),
+                sub_type: Number(values.attributes?.sub_type)
               }
             };
             updateAsset(asset.id, _values as any).then(onSuccess);
@@ -36,7 +34,7 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
       }}
       title={intl.get('EDIT_SOMETHING', { something: intl.get('FLANGE') })}
     >
-      <Form form={form} labelCol={{ span: 7 }} initialValues={{ ...Asset.convert(asset) }}>
+      <Form form={form} layout='vertical' initialValues={{ ...Asset.convert(asset) }}>
         <UpdateFormItems asset={asset} />
       </Form>
     </ModalWrapper>

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Col, Empty, Radio } from 'antd';
+import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Flex, Grid, Tabs } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import { AssetNavigator, AssetRow, StatisticBar, TabBarExtraLeftContent } from '../../asset-common';
+import { ActionBar } from '../components/actionBar';
 import { Update } from './update';
 import { OverviewCard } from './overviewCard';
-import { ActionBar } from '../components/actionBar';
 import { ChildrenAttrsTable } from './childrenAttrsTable';
 
 export const Index = (props: {
@@ -16,12 +16,11 @@ export const Index = (props: {
 }) => {
   const { asset, onUpdateAsset, onSuccess } = props;
   const { id, alertLevel } = asset;
-  const [type, setType] = React.useState('basic');
   const renderAssetList = (content: React.ReactNode) => {
     return (asset.children?.length ?? 0) > 0 ? (
-      content
+      <Grid>{content}</Grid>
     ) : (
-      <Card>
+      <Card title={intl.get('ASSET')}>
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       </Card>
     );
@@ -33,24 +32,28 @@ export const Index = (props: {
         {
           label: intl.get('ASSET'),
           key: 'asset',
-          children: renderAssetList(
+          children: (
             <Grid>
               <Col span={24}>
                 <Card>
                   <StatisticBar asset={asset} />
                 </Card>
               </Col>
-              {asset.children
-                ?.sort((prev, next) => {
-                  const { index: prevIndex } = prev.attributes || { index: 88 };
-                  const { index: nextIndex } = next.attributes || { index: 88 };
-                  return prevIndex - nextIndex;
-                })
-                ?.map((a) => (
-                  <Col key={a.id} {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })}>
-                    <OverviewCard asset={a} />
-                  </Col>
-                ))}
+              <Col span={24}>
+                {renderAssetList(
+                  asset.children
+                    ?.sort((prev, next) => {
+                      const { index: prevIndex } = prev.attributes || { index: 88 };
+                      const { index: nextIndex } = next.attributes || { index: 88 };
+                      return prevIndex - nextIndex;
+                    })
+                    ?.map((a) => (
+                      <Col key={a.id} {...generateColProps({ xl: 12, xxl: 8 })}>
+                        <OverviewCard asset={a} />
+                      </Col>
+                    ))
+                )}
+              </Col>
             </Grid>
           )
         },
@@ -58,36 +61,24 @@ export const Index = (props: {
           label: intl.get('SETTINGS'),
           key: 'settings',
           children: (
-            <Card>
-              <Radio.Group
-                options={[
-                  { label: intl.get('BASIC_INFORMATION'), value: 'basic' },
-                  { label: intl.get('ASSET'), value: 'asset' }
-                ]}
-                onChange={(e) => setType(e.target.value)}
-                value={type}
-                optionType='button'
-                buttonStyle='solid'
-              />
-              {type === 'basic' && <Update asset={asset} onSuccess={onSuccess} key={asset.id} />}
-              {type === 'asset' && (
-                <Grid>
-                  <Col span={24}>
-                    <Flex>
-                      <ActionBar {...props} />
-                    </Flex>
-                  </Col>
-                  <Col span={24}>
-                    {renderAssetList(
-                      <ChildrenAttrsTable
-                        assets={asset.children ?? []}
-                        operateCellProps={{ onSuccess, onUpdate: onUpdateAsset }}
-                      />
-                    )}
-                  </Col>
-                </Grid>
-              )}
-            </Card>
+            <Grid>
+              <Col span={24}>
+                <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
+              </Col>
+              <Col span={24}>
+                <Flex>
+                  <ActionBar {...props} />
+                </Flex>
+              </Col>
+              <Col span={24}>
+                {renderAssetList(
+                  <ChildrenAttrsTable
+                    assets={asset.children ?? []}
+                    operateCellProps={{ onSuccess, onUpdate: onUpdateAsset }}
+                  />
+                )}
+              </Col>
+            </Grid>
           )
         }
       ]}

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Form } from 'antd';
+import { Col, Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
 import { ModalWrapper } from '../../../components/modalWrapper';
-import { SelectFormItem, TextFormItem } from '../../../components';
+import { generateColProps } from '../../../utils/grid';
+import { Grid, SelectFormItem, TextFormItem } from '../../../components';
 import { addAsset, AssetModel, useContext } from '../../asset-common';
 import { useParentTypes } from '../utils';
 import { wind, tower } from '../constants';
@@ -15,6 +16,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
   const { type } = tower;
   const { assets } = useContext();
   const parentTypes = useParentTypes(type);
+  const formItemColProps = generateColProps({});
   const winds = windId
     ? []
     : assets.filter((a) => parentTypes.map(({ type }) => type).includes(a.type));
@@ -24,12 +26,14 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
       return <TextFormItem name='parent_id' hidden={true} initialValue={windId} />;
     } else if (winds.length >= 0) {
       return (
-        <SelectFormItem
-          label={label}
-          name='parent_id'
-          rules={[{ required: true }]}
-          selectProps={{ options: winds.map(({ id, name }) => ({ label: name, value: id })) }}
-        />
+        <Col {...formItemColProps}>
+          <SelectFormItem
+            label={label}
+            name='parent_id'
+            rules={[{ required: true }]}
+            selectProps={{ options: winds.map(({ id, name }) => ({ label: name, value: id })) }}
+          />
+        </Col>
       );
     }
   };
@@ -52,16 +56,25 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
         }
       }}
     >
-      <Form form={form} labelCol={{ span: 7 }}>
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
-        <TextFormItem name='type' hidden={true} initialValue={type} />
+      <Form form={form} layout='vertical' initialValues={{ type, attributes: { index: 1 } }}>
+        <Grid>
+          <Col {...formItemColProps}>
+            <TextFormItem
+              label='NAME'
+              name='name'
+              rules={[{ required: true }, { min: 4, max: 50 }]}
+            />
+          </Col>
+        </Grid>
+        <TextFormItem name='type' hidden={true} />
         {renderParent()}
-        <SelectFormItem
-          label='INDEX_NUMBER'
-          name={['attributes', 'index']}
-          initialValue={1}
-          selectProps={{ options: [1, 2, 3, 4, 5].map((value) => ({ label: value, value })) }}
-        />
+        <Col {...formItemColProps}>
+          <SelectFormItem
+            label='INDEX_NUMBER'
+            name={['attributes', 'index']}
+            selectProps={{ options: [1, 2, 3, 4, 5].map((value) => ({ label: value, value })) }}
+          />
+        </Col>
       </Form>
     </ModalWrapper>
   );

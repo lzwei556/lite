@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, TabsProps } from 'antd';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { Card, Grid, MetaCard, Tabs } from '../../../../components';
+import { Grid, MetaCard, Tabs } from '../../../../components';
 import { FilterableAlarmRecordTable } from '../../../alarm';
 import usePermission, { Permission } from '../../../../permission/permission';
 import { MonitoringPointTypeValue } from '../../../../config';
@@ -130,11 +130,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'settings',
       label: intl.get('SETTINGS'),
-      children: (
-        <Card>
-          <Settings point={monitoringPoint} onUpdateSuccess={onSuccess} />
-        </Card>
-      )
+      children: <Settings point={monitoringPoint} onSuccess={onSuccess} key={id} />
     });
   }
 

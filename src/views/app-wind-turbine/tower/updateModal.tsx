@@ -26,7 +26,7 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
       }}
       title={intl.get('EDIT_SOMETHING', { something: intl.get('TOWER') })}
     >
-      <Form form={form} labelCol={{ span: 7 }} initialValues={{ ...Asset.convert(asset) }}>
+      <Form form={form} layout='vertical' initialValues={{ ...Asset.convert(asset) }}>
         <UpdateFormItems />
       </Form>
     </ModalWrapper>

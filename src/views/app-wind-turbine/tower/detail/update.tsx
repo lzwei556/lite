@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Col, Form } from 'antd';
+import { Button, Form } from 'antd';
+import { SaveOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../../utils/grid';
 import { ModalFormProps } from '../../../../types/common';
-import { Flex, Grid } from '../../../../components';
+import { Card } from '../../../../components';
 import { Asset, AssetModel, AssetRow, updateAsset } from '../../../asset-common';
 import { UpdateFormItems } from '../_updateFormItems';
 
@@ -12,28 +13,30 @@ export const Update = (props: ModalFormProps & { asset: AssetRow }) => {
   const [form] = Form.useForm<AssetModel>();
 
   return (
-    <Grid style={{ marginTop: 16 }}>
-      <Col {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })}>
-        <Form form={form} labelCol={{ span: 6 }} initialValues={{ ...Asset.convert(asset) }}>
-          <UpdateFormItems />
-          <Flex style={{ marginTop: 12 }}>
-            <Button
-              type='primary'
-              onClick={() => {
-                form.validateFields().then((values) => {
-                  try {
-                    updateAsset(asset.id, values).then(onSuccess);
-                  } catch (error) {
-                    console.log(error);
-                  }
-                });
-              }}
-            >
-              {intl.get('SAVE')}
-            </Button>
-          </Flex>
-        </Form>
-      </Col>
-    </Grid>
+    <Card
+      extra={
+        <Button
+          icon={<SaveOutlined />}
+          color='primary'
+          variant='outlined'
+          onClick={() => {
+            form.validateFields().then((values) => {
+              try {
+                updateAsset(asset.id, values).then(onSuccess);
+              } catch (error) {
+                console.log(error);
+              }
+            });
+          }}
+          size='small'
+        />
+      }
+      size='small'
+      title={intl.get('BASIC_INFORMATION')}
+    >
+      <Form form={form} layout='vertical' initialValues={{ ...Asset.convert(asset) }}>
+        <UpdateFormItems formItemColProps={generateColProps({ lg: 12, xl: 8, xxl: 8 })} />
+      </Form>
+    </Card>
   );
 };

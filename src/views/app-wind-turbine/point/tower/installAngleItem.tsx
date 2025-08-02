@@ -2,20 +2,18 @@ import React from 'react';
 import { NumberFormItem } from '../../../../components';
 
 export const InstallAngletItem = ({
-  name,
-  restFields
+  nameIndex,
+  ...rest
 }: {
-  name?: number;
-  restFields?: {
-    fieldKey?: number | undefined;
-  };
+  nameIndex?: number;
+  fieldKey?: number | undefined;
 }) => {
   const commonNameProp = ['attributes', 'tower_install_angle'];
-  const nameProp = name !== undefined ? [name, ...commonNameProp] : commonNameProp;
+  const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
-      {...restFields}
+      {...rest}
       label='TOWER_INSTALL_ANGLE'
       name={nameProp}
       inputNumberProps={{ addonAfter: '°', min: -180, max: 180 }}

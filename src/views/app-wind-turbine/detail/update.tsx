@@ -1,42 +1,49 @@
 import React from 'react';
 import { Button, Col, Form } from 'antd';
+import { SaveOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex, Grid, TextFormItem } from '../../../components';
-import { generateColProps } from '../../../utils/grid';
+import { Card, Grid, TextFormItem } from '../../../components';
 import { AssetRow, updateAsset, AssetModel } from '../../asset-common';
+import { generateColProps } from '../../../utils/grid';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const [form] = Form.useForm<AssetModel>();
 
   return (
-    <Grid style={{ marginTop: 16 }}>
-      <Col {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })}>
-        <Form form={form} labelCol={{ span: 6 }} initialValues={{ name: asset.name }}>
-          <TextFormItem
-            label='NAME'
-            name='name'
-            rules={[{ required: true }, { min: 4, max: 50 }]}
-          />
-          <Flex style={{ marginTop: 12 }}>
-            <Button
-              type='primary'
-              onClick={() => {
-                form.validateFields().then((values) => {
-                  try {
-                    updateAsset(asset.id, { ...values, type: asset.type }).then(() => {
-                      onSuccess();
-                    });
-                  } catch (error) {
-                    console.log(error);
-                  }
+    <Card
+      extra={
+        <Button
+          icon={<SaveOutlined />}
+          color='primary'
+          variant='outlined'
+          onClick={() => {
+            form.validateFields().then((values) => {
+              try {
+                updateAsset(asset.id, { ...values, type: asset.type }).then(() => {
+                  onSuccess();
                 });
-              }}
-            >
-              {intl.get('SAVE')}
-            </Button>
-          </Flex>
-        </Form>
-      </Col>
-    </Grid>
+              } catch (error) {
+                console.log(error);
+              }
+            });
+          }}
+          size='small'
+        />
+      }
+      size='small'
+      title={intl.get('BASIC_INFORMATION')}
+    >
+      <Form form={form} layout='vertical' initialValues={{ name: asset.name }}>
+        <Grid>
+          <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+            <TextFormItem
+              label='NAME'
+              name='name'
+              rules={[{ required: true }, { min: 4, max: 50 }]}
+            />
+          </Col>
+        </Grid>
+      </Form>
+    </Card>
   );
 };

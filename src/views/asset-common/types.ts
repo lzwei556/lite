@@ -10,11 +10,11 @@ export type AssetModel = {
   attributes?: {
     index: number;
     type: number;
-    normal?: { enabled: boolean; value: number | string };
-    initial?: { enabled: boolean; value: number | string };
-    info?: { enabled: boolean; value: number | string };
-    warn?: { enabled: boolean; value: number | string };
-    danger?: { enabled: boolean; value: number | string };
+    normal?: { enabled: boolean; value: number | undefined };
+    initial?: { enabled: boolean; value: number | undefined };
+    info?: { enabled: boolean; value: number | undefined };
+    warn?: { enabled: boolean; value: number | undefined };
+    danger?: { enabled: boolean; value: number | undefined };
     sub_type: number;
     monitoring_points_num: number;
     sample_period: number;
@@ -40,11 +40,11 @@ export type AssetRow = {
   attributes?: {
     index: number;
     type: number;
-    normal?: { enabled: boolean; value: number | string };
-    initial?: { enabled: boolean; value: number | string };
-    info?: { enabled: boolean; value: number | string };
-    warn?: { enabled: boolean; value: number | string };
-    danger?: { enabled: boolean; value: number | string };
+    normal?: { enabled: boolean; value: number | undefined };
+    initial?: { enabled: boolean; value: number | undefined };
+    info?: { enabled: boolean; value: number | undefined };
+    warn?: { enabled: boolean; value: number | undefined };
+    danger?: { enabled: boolean; value: number | undefined };
     sub_type: number;
     monitoring_points_num: number;
     sample_period: number;

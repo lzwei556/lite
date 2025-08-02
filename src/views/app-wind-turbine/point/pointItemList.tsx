@@ -1,12 +1,13 @@
 import React from 'react';
-import { Button, Col, Form, Popover, Row } from 'antd';
+import { Button, Col, ColProps, Form, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Device } from '../../../types/device';
-import { NumberFormItem, TextFormItem } from '../../../components';
+import { generateColProps } from '../../../utils/grid';
+import { Grid, NumberFormItem, TextFormItem } from '../../../components';
 import { GetDevicesRequest } from '../../../apis/device';
 import { isMobile } from '../../../utils/deviceDetection';
-import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
+import { DeviceSelection, MonitoringPointInfo, Point } from '../../asset-common';
 import * as Tower from './tower';
 import { getRelatedDeviceTypes } from './common';
 
@@ -14,15 +15,18 @@ export const PointItemList = ({
   onSelect,
   onRemove,
   initialSelected,
-  type
+  type,
+  formItemColProps = generateColProps({ xl: 12, xxl: 12 })
 }: {
   onSelect: (points: MonitoringPointInfo[]) => void;
   onRemove: (index: number) => void;
   initialSelected: MonitoringPointInfo[];
   type: number;
+  formItemColProps?: ColProps;
 }) => {
   const [devices, setDevices] = React.useState<Device[]>([]);
   const [open, setVisible] = React.useState(false);
+  const isTowerRelated = Point.Assert.isTowerRelated(type);
 
   React.useEffect(() => {
     const deviceTypes = getRelatedDeviceTypes(type);
@@ -60,8 +64,8 @@ export const PointItemList = ({
                   onRemove(index);
                 }}
               />
-              <Row>
-                <Col span={12}>
+              <Grid>
+                <Col {...formItemColProps}>
                   <TextFormItem
                     {...restFields}
                     label='NAME'
@@ -70,7 +74,7 @@ export const PointItemList = ({
                   />
                   <TextFormItem name={[name, 'channel']} hidden={true} />
                 </Col>
-                <Col span={12}>
+                <Col {...formItemColProps}>
                   <NumberFormItem
                     {...restFields}
                     label='POSITION'
@@ -79,8 +83,15 @@ export const PointItemList = ({
                     inputNumberProps={{ min: 1 }}
                   />
                 </Col>
-              </Row>
-              <Tower.Index mode='create' name={name} restFields={restFields} type={type} />
+                {isTowerRelated && (
+                  <Tower.Index
+                    {...restFields}
+                    formItemColProps={formItemColProps}
+                    nameIndex={name}
+                    type={type}
+                  />
+                )}
+              </Grid>
             </div>
           ))}
           <TextFormItem>

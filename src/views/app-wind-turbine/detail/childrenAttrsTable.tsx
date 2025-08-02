@@ -1,13 +1,13 @@
 import React from 'react';
 import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { DeleteIconButton, EditIconButton, Grid, Link, Table } from '../../../components';
+import { DeleteIconButton, EditIconButton, Link, Table } from '../../../components';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
 import { ASSET_PATHNAME, AssetRow, deleteAsset } from '../../asset-common';
-import { categories } from '../flange';
-import { tower } from '../constants';
 import { AlarmLevel } from '../../alarm';
+import { categories } from '../flange';
+import { flange, tower } from '../constants';
 
 export const ChildrenAttrsTable = ({
   assets,
@@ -20,7 +20,6 @@ export const ChildrenAttrsTable = ({
     title: () => intl.get('NAME'),
     dataIndex: 'name',
     key: 'name',
-    width: 240,
     render: (name: string, row: AssetRow) => (
       <Link to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`} key={`${row.id}-${row.type}`}>
         {name}
@@ -34,14 +33,12 @@ export const ChildrenAttrsTable = ({
     render: (type: number) => {
       const label = categories.find((c) => c.value === type)?.label;
       return label ? intl.get(label) : '';
-    },
-    width: 120
+    }
   };
   const indexCol = {
     title: () => intl.get('INDEX_NUMBER'),
     dataIndex: ['attributes', 'index'],
-    key: 'index',
-    width: 120
+    key: 'index'
   };
   const normalCol = {
     title: () => intl.get('RATING'),
@@ -53,8 +50,7 @@ export const ChildrenAttrsTable = ({
       } else {
         return intl.get('DISABLED');
       }
-    },
-    width: 120
+    }
   };
   const initialCol = {
     title: () => intl.get('INITIAL_VALUE'),
@@ -66,8 +62,7 @@ export const ChildrenAttrsTable = ({
       } else {
         return intl.get('DISABLED');
       }
-    },
-    width: 120
+    }
   };
   const infoCol = {
     title: () => intl.get(`leveled.alarm.${AlarmLevel.Minor}`),
@@ -79,8 +74,7 @@ export const ChildrenAttrsTable = ({
       } else {
         return intl.get('DISABLED');
       }
-    },
-    width: 120
+    }
   };
   const warnCol = {
     title: () => intl.get(`leveled.alarm.${AlarmLevel.Major}`),
@@ -92,8 +86,7 @@ export const ChildrenAttrsTable = ({
       } else {
         return intl.get('DISABLED');
       }
-    },
-    width: 120
+    }
   };
   const dangerCol = {
     title: () => intl.get(`leveled.alarm.${AlarmLevel.Critical}`),
@@ -105,8 +98,7 @@ export const ChildrenAttrsTable = ({
       } else {
         return intl.get('DISABLED');
       }
-    },
-    width: 120
+    }
   };
 
   const operationColumn = {
@@ -126,35 +118,34 @@ export const ChildrenAttrsTable = ({
           />
         </HasPermission>
       </Space>
-    ),
-    width: 150
+    )
   };
 
-  return (
-    <Grid>
-      {Array.from(new Set(assets.map((a) => a.type))).map((type) => (
-        <Col span={24} key={type}>
-          <Table
-            columns={
-              type === tower.type
-                ? [nameCol, indexCol, operationColumn]
-                : [
-                    nameCol,
-                    typeCol,
-                    indexCol,
-                    normalCol,
-                    initialCol,
-                    infoCol,
-                    warnCol,
-                    dangerCol,
-                    operationColumn
-                  ]
-            }
-            dataSource={assets.filter((a) => a.type === type)}
-            rowKey={(row) => row.id}
-          />
-        </Col>
-      ))}
-    </Grid>
-  );
+  return Array.from(new Set(assets.map((a) => a.type))).map((type) => (
+    <Col span={24} key={type}>
+      <Table
+        cardProps={{
+          size: 'small',
+          title: intl.get(type === flange.type ? flange.label : tower.label)
+        }}
+        columns={
+          type === tower.type
+            ? [nameCol, indexCol, operationColumn]
+            : [
+                nameCol,
+                typeCol,
+                indexCol,
+                normalCol,
+                initialCol,
+                infoCol,
+                warnCol,
+                dangerCol,
+                operationColumn
+              ]
+        }
+        dataSource={assets.filter((a) => a.type === type)}
+        rowKey={(row) => row.id}
+      />
+    </Col>
+  ));
 };

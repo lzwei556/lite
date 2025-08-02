@@ -31,7 +31,7 @@ export const UpdateModal = (props: ModalFormProps & { monitoringPoint: Monitorin
         {...useLocaleFormLayout()}
         initialValues={{ ...Point.convert(monitoringPoint) }}
       >
-        <UpdateFormItems {...monitoringPoint} />
+        <UpdateFormItems monitoringPoint={monitoringPoint} />
       </Form>
     </ModalWrapper>
   );

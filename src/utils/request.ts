@@ -108,17 +108,19 @@ function typeOf(t: any) {
 }
 
 function filterNull(params: any) {
-  Object.keys(params).forEach((key) => {
-    if (params[key] === null) {
-      delete params[key];
-    } else if (typeOf(params[key]) === 'string') {
-      params[key] = params[key].trim();
-    } else if (typeOf(params[key] === 'object')) {
-      params[key] = filterNull(params[key]);
-    } else if (typeOf(params[key] === 'array')) {
-      params[key] = filterNull(params[key]);
-    }
-  });
+  if (params) {
+    Object.keys(params).forEach((key) => {
+      if (params[key] === null) {
+        delete params[key];
+      } else if (typeOf(params[key]) === 'string') {
+        params[key] = params[key].trim();
+      } else if (typeOf(params[key] === 'object')) {
+        params[key] = filterNull(params[key]);
+      } else if (typeOf(params[key] === 'array')) {
+        params[key] = filterNull(params[key]);
+      }
+    });
+  }
   return params;
 }
 

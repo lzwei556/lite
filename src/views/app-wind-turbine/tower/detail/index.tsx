@@ -1,8 +1,8 @@
 import React from 'react';
-import { Radio } from 'antd';
+import { Col } from 'antd';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { Card, Table, Tabs } from '../../../../components';
+import { Grid, Table, Tabs } from '../../../../components';
 import { useLocaleContext } from '../../../../localeProvider';
 import {
   AssetRow,
@@ -34,7 +34,6 @@ export const Index = (props: {
   const { language } = useLocaleContext();
   const { asset, onSuccess } = props;
   const { id, alertLevel, monitoringPoints } = asset;
-  const [type, setType] = React.useState('basic');
   const historyDatas = useHistoryDatas(asset);
   const ref = React.useRef<HTMLDivElement>(null);
   const size = useSize(ref);
@@ -66,20 +65,17 @@ export const Index = (props: {
           label: intl.get('SETTINGS'),
           key: 'settings',
           children: (
-            <Card>
-              <Radio.Group
-                options={[
-                  { label: intl.get('BASIC_INFORMATION'), value: 'basic' },
-                  { label: intl.get(MONITORING_POINT), value: 'monitoringPoints' }
-                ]}
-                onChange={(e) => setType(e.target.value)}
-                value={type}
-                optionType='button'
-                buttonStyle='solid'
-              />
-              {type === 'basic' && <Update asset={asset} onSuccess={onSuccess} key={asset.id} />}
-              {type === 'monitoringPoints' && (
+            <Grid>
+              <Col span={24}>
+                <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
+              </Col>
+              <Col span={24}>
                 <Table
+                  cardProps={{
+                    extra: <ActionBar {...props} />,
+                    size: 'small',
+                    title: intl.get(MONITORING_POINT)
+                  }}
                   columns={[
                     ...getMonitoringPointColumns({
                       language
@@ -94,11 +90,10 @@ export const Index = (props: {
                     })
                   ]}
                   dataSource={Points.filter(monitoringPoints)}
-                  header={{ toolbar: [<ActionBar {...props} />] }}
                   rowKey={(row) => row.id}
                 />
-              )}
-            </Card>
+              </Col>
+            </Grid>
           )
         }
       ]}
