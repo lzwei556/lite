@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { Dayjs } from '../../utils';
 import { GetAlertStatisticsRequest } from '../../apis/statistic';
 import { Card, Chart, getBarPieOption, getOptions } from '../../components';
-import { AlarmLevel, getColorByValue, getLabelByValue } from '../alarm';
+import { AlarmLevel, getColorByValue, getLabelByValue } from '../../features/alarm';
 
 type Statistics = { timestamp: number; info: number; warn: number; critical: number };
 export const AlarmTrend = ({

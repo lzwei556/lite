@@ -8,7 +8,7 @@ import {
   MonitoringPointRow,
   unbindDevice,
   updateMeasurement
-} from '../../views/asset-common';
+} from '../../asset-common';
 import { DeviceType } from '../../types/device_type';
 import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
 

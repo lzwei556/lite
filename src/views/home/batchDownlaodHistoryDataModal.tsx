@@ -7,7 +7,7 @@ import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { useLocaleContext } from '../../localeProvider';
 import { mapTree, tree2List } from '../../utils/tree';
-import { AssetRow, downloadHistory, MONITORING_POINT_DISPLAY_PROPERTIES } from '../asset-common';
+import { AssetRow, downloadHistory, MONITORING_POINT_DISPLAY_PROPERTIES } from '../../asset-common';
 import { combine } from './tree';
 import { MonitoringPointTypeValue } from '../../config';
 import { DisplayProperty, displayPropertyGroup } from '../../constants/properties';

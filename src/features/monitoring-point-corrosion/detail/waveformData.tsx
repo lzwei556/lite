@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
-import { Metadata, PropertyLightSelectFilter } from '../../../views/asset-common';
+import { Metadata, PropertyLightSelectFilter } from '../../../asset-common';
 import { getValue, roundValue } from '../../../utils/format';
 import { Card, Descriptions, Grid, LineChart } from '../../../components';
 

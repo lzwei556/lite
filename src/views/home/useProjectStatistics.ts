@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Language } from '../../localeProvider';
 import { getBarPieOption, getOptions, getVerticalLegends } from '../../components';
-import { getProjectStatistics, ProjectStatistics } from '../asset-common';
+import { getProjectStatistics, ProjectStatistics } from '../../asset-common';
 
 export function useProjectStatistics() {
   const [projectStatistics, setProjectStatistics] = React.useState<ProjectStatistics | undefined>();

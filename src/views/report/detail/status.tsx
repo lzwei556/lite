@@ -2,7 +2,7 @@ import React from 'react';
 import { ALARM_LEVELS, Report } from './report';
 import { Card, Chart } from '../../../components';
 import { ColorHealth, ColorOffline } from '../../../constants/color';
-import { AlarmLevel, getColorByValue } from '../../alarm';
+import { AlarmLevel, getColorByValue } from '../../../features/alarm';
 
 export const Status = ({ report }: { report: Report }) => {
   const renderStatus = (title: string, states: string[], data: number[], color: string[]) => {

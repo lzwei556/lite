@@ -5,7 +5,7 @@ import { Card, ChartMark, Flex, Grid, RangeDatePicker, useRange } from '../../..
 import { AnalysisSidebarCollapse } from '../..';
 import { Space } from '../../../common';
 import { Dayjs } from '../../../utils';
-import { MonitoringPointRow, Point } from '../../../views/asset-common';
+import { MonitoringPointRow, Point } from '../../../asset-common';
 import { Forecast } from './forecast';
 import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';

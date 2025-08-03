@@ -1,5 +1,5 @@
 import React from 'react';
-import { MonitoringPointRow, Point } from './asset-common';
+import { MonitoringPointRow, Point } from '../asset-common';
 import * as Corrosion from '../features/monitoring-point-corrosion';
 
 export const MonitoringPoint = (props: {

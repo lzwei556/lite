@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PagedOption } from '../types/props';
-import { Filters } from '../views/device/util';
+import { Filters } from '../features/device/util';
 import { Dayjs } from '../utils';
 
 export type Store = {

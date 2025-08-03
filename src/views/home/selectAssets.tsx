@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Checkbox, Form, ModalProps, Col, Button } from 'antd';
 import intl from 'react-intl-universal';
-import { AssetRow, exportAssets } from '../asset-common';
+import { AssetRow, exportAssets } from '../../asset-common';
 import { getProject } from '../../utils/session';
 import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';

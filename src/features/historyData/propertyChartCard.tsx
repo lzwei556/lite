@@ -5,7 +5,7 @@ import { Card, CardProps, Term } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
 import { DisplayProperty } from '../../constants/properties';
 import { getDisplayName, getValue, roundValue } from '../../utils/format';
-import { HistoryData } from '../../views/asset-common';
+import { HistoryData } from '../../asset-common';
 import { PropertyChart, transform } from './propertyChart';
 
 export const PropertyChartCard = (props: {

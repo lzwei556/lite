@@ -10,8 +10,8 @@ import {
   AssetRow,
   MONITORING_POINT,
   MonitoringPointBatch
-} from '../../views/asset-common';
-import { useMonitoringPointParents } from '../../views/asset-variant';
+} from '../../asset-common';
+import { useMonitoringPointParents } from '../../asset-variant';
 import { monitoringPointTypes, resolveAttrs, useSelectPoints } from './common';
 import { PointItemList } from './pointItemList';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { DisplayProperty } from '../../constants/properties';
 import { LineChart, LineChartProps, SeriesOption } from '../../components';
 import { Dayjs } from '../../utils';
-import { hasData, HistoryData } from '../../views/asset-common';
+import { hasData, HistoryData } from '../../asset-common';
 import { transform } from './propertyChart';
 
 export const PropertyChartList = (

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Asset, AssetRow, MonitoringPointRow, Point, useContext } from '../asset-common';
-import * as Area from '../asset-area';
-import * as Vibration from '../app-vibration';
-import * as Corrosion from '../app-corrosion';
-import * as Wind from '../app-wind-turbine';
+import { Asset, AssetRow, MonitoringPointRow, Point, useContext } from '../../asset-common';
+import * as Area from '../../features/asset-area';
+import * as Vibration from '../../features/asset-vibration';
+import * as Corrosion from '../../features/asset-corrosion';
+import * as Wind from '../../features/asset-wind-turbine';
 import { MonitoringPoint } from '../monitoring-point';
 
 export default function Main() {

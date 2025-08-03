@@ -7,7 +7,7 @@ import {
   HistoryData,
   MonitoringPointRow,
   ThicknessAnalysis
-} from '../../../views/asset-common';
+} from '../../../asset-common';
 
 export type Range = [number, number];
 type Line = [start: [string, number], end: [string, number]];

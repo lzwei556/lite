@@ -31,10 +31,10 @@ import enUS from 'antd/es/locale/en_US';
 import { Dayjs } from '../utils';
 import 'dayjs/locale/zh-cn';
 import { App, useAppType } from '../config';
-import { ASSET_PATHNAME } from '../views/asset-common';
+import { ASSET_PATHNAME } from '../asset-common';
 import { isLogin } from '../utils/session';
 
-const AlarmRuleGroups = lazy(() => import('../views/alarm/alarm-group/index'));
+const AlarmRuleGroups = lazy(() => import('../features/alarm/alarm-group/index'));
 
 const AppRouter = () => {
   const config = useAppType();

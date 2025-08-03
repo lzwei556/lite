@@ -1,5 +1,5 @@
 import React from 'react';
-import { AssetRow } from '../../views/asset-common';
+import { AssetRow } from '../../asset-common';
 import { Point } from './common';
 
 const CanvasContext = React.createContext<{

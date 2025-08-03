@@ -3,7 +3,7 @@ import { Typography } from 'antd';
 import { Layer, Stage, Image, Line, Circle } from 'react-konva';
 import useImage from 'use-image';
 import { Card } from '../../components';
-import { AssetRow } from '../../views/asset-common';
+import { AssetRow } from '../../asset-common';
 import { Toolbar } from './toolbar';
 import { CanvasProvider, useCanvas } from './context';
 import { getPlaces, PlaceTextCardStyle, PlaceTextProps, Point, scaleStage, Size } from './common';

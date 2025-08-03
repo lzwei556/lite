@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { HistoryData } from '../../views/asset-common';
+import { HistoryData } from '../../asset-common';
 import { DisplayProperty } from '../../constants/properties';
 import { Dayjs } from '../../utils';
 import { roundValue } from '../../utils/format';

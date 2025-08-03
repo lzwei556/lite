@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, ColProps } from 'antd';
 import intl from 'react-intl-universal';
 import { NumberFormItem, NumberFormItemWithSwitcher } from '../../components';
-import { MonitoringPointRow } from '../../views/asset-common';
+import { MonitoringPointRow } from '../../asset-common';
 
 type FieldProps = {
   monitoringPoint?: MonitoringPointRow;

@@ -3,7 +3,7 @@ import { Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card } from '../../../components';
 import { getValue, roundValue } from '../../../utils/format';
-import { HistoryData, MonitoringPointRow } from '../../../views/asset-common';
+import { HistoryData, MonitoringPointRow } from '../../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
 
 export const Overview = (props: {

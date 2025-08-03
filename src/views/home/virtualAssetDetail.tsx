@@ -13,9 +13,9 @@ import {
   OverviewPage,
   ProjectStatistics,
   useContext
-} from '../asset-common';
-import { wind } from '../app-wind-turbine/constants';
-import { area } from '../asset-variant';
+} from '../../asset-common';
+import { wind } from '../../features/asset-wind-turbine/constants';
+import { area } from '../../asset-variant';
 import { AlarmTrend } from './alarmTrend';
 import { Icon } from './icon';
 import { generatePieOptions, useProjectStatistics } from './useProjectStatistics';

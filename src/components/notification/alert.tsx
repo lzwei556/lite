@@ -3,7 +3,7 @@ import { notification, Space } from 'antd';
 import intl from 'react-intl-universal';
 import { getProject } from '../../utils/session';
 import useSocket, { SocketTopic } from '../../socket';
-import { translateMetricName } from '../../views/alarm/alarm-group';
+import { translateMetricName } from '../../features/alarm/alarm-group';
 
 const AlertMessageNotification = () => {
   const { PubSub } = useSocket();

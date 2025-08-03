@@ -1,10 +1,10 @@
 import React from 'react';
 import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
-import { Asset, AssetRow, MonitoringPointRow } from '../asset-common';
-import * as Area from '../asset-area';
-import * as Variant from '../asset-variant';
-import * as Wind from '../app-wind-turbine';
-import * as MonitoringPoint from '../asset-common/monitoring-point';
+import { Asset, AssetRow, MonitoringPointRow } from '../../asset-common';
+import * as Area from '../../features/asset-area';
+import * as Variant from '../../asset-variant';
+import * as Wind from '../../features/asset-wind-turbine';
+import * as MonitoringPoint from '../../monitoring-point';
 
 export const Icon = (
   props: Partial<CustomIconComponentProps> & {

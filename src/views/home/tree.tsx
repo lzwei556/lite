@@ -9,7 +9,7 @@ import {
   MonitoringPointRow,
   Points,
   useContext
-} from '../asset-common';
+} from '../../asset-common';
 import { Icon } from './icon';
 
 export const AssetTree: React.FC<{

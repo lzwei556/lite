@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Menu as MenuItem } from '../../types/menu';
 import { mapTree } from '../../utils/tree';
 import { Link } from '../../components';
-import { ASSET_PATHNAME } from '../asset-common';
+import { ASSET_PATHNAME } from '../../asset-common';
 
 export const NavMenu: React.FC<{
   menus: MenuItem[];

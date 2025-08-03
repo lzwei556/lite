@@ -18,7 +18,7 @@ import {
   MonitoringPointRow,
   Point,
   PropertyLightSelectFilter
-} from '../../../views/asset-common';
+} from '../../../asset-common';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type } = point;

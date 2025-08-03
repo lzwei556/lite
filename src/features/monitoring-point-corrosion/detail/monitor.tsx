@@ -10,7 +10,7 @@ import {
   HistoryData,
   MonitoringPointRow,
   Point
-} from '../../../views/asset-common';
+} from '../../../asset-common';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;

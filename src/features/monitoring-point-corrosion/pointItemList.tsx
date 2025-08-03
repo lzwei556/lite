@@ -7,7 +7,7 @@ import { Grid, NumberFormItem, TextFormItem } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { isMobile } from '../../utils/deviceDetection';
 import { GetDevicesRequest } from '../../apis/device';
-import { DeviceSelection, MonitoringPointInfo } from '../../views/asset-common';
+import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
 import { relatedDeviceTypes } from './common';
 import { Others } from './others';
 

@@ -3,11 +3,11 @@ import { Form, Space } from 'antd';
 import intl from 'react-intl-universal';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
-import { AssetModel, AssetRow, deleteAsset, updateAsset, useContext } from '../asset-common';
+import { AssetModel, AssetRow, deleteAsset, updateAsset, useContext } from '../../asset-common';
 import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { DeleteIconButton, EditIconButton, SelectFormItem, TextFormItem } from '../../components';
-import { isAssetAreaParent } from '../asset-variant';
+import { isAssetAreaParent } from '../../asset-variant';
 
 export const OperateCell = ({ asset }: { asset: AssetRow }) => {
   const { refresh } = useContext();

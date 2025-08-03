@@ -4,8 +4,8 @@ import intl from 'react-intl-universal';
 import DeviceSelect from '../../components/select/deviceSelect';
 import { Grid, NumberFormItem, SelectFormItem, TextFormItem } from '../../components';
 import { generateColProps } from '../../utils/grid';
-import { Asset, MonitoringPointRow, Point } from '../../views/asset-common';
-import { useMonitoringPointParents } from '../../views/asset-variant';
+import { Asset, MonitoringPointRow, Point } from '../../asset-common';
+import { useMonitoringPointParents } from '../../asset-variant';
 import { relatedDeviceTypes } from './common';
 
 export const BasisFormItems = ({
