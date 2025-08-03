@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { Card } from '../../../components';
 import { Dayjs } from '../../../utils';
 import { getValue, roundValue } from '../../../utils/format';
-import { MonitoringPointRow } from '../../asset-common';
+import { MonitoringPointRow } from '../../../views/asset-common';
 import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
 
 export const Forecast = ({

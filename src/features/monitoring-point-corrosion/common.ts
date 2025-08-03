@@ -8,9 +8,9 @@ import {
   MonitoringPointRow,
   unbindDevice,
   updateMeasurement
-} from '../../asset-common';
-import { DeviceType } from '../../../types/device_type';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../../config';
+} from '../../views/asset-common';
+import { DeviceType } from '../../types/device_type';
+import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
 
 export const monitoringPointTypes = [
   { id: MonitoringPointTypeValue.Corrosion, label: MonitoringPointTypeText.Corrosion },

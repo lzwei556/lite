@@ -2,20 +2,13 @@ import React from 'react';
 import { Button, Col, Space as AntSpace } from 'antd';
 import { DownloadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import {
-  Card,
-  Flex,
-  Grid,
-  useRange,
-  RangeDatePicker,
-  DeleteIconButton
-} from '../../../../components';
-import { DisplayProperty } from '../../../../constants/properties';
-import { isMobile } from '../../../../utils/deviceDetection';
-import { Dayjs } from '../../../../utils';
-import HasPermission from '../../../../permission';
-import { Permission } from '../../../../permission/permission';
-import { HistoryDataFea } from '../../../../features';
+import { Card, Flex, Grid, useRange, RangeDatePicker, DeleteIconButton } from '../../../components';
+import { DisplayProperty } from '../../../constants/properties';
+import { isMobile } from '../../../utils/deviceDetection';
+import { Dayjs } from '../../../utils';
+import HasPermission from '../../../permission';
+import { Permission } from '../../../permission/permission';
+import { HistoryDataFea } from '../..';
 import {
   clearHistory,
   DownloadData,
@@ -25,7 +18,7 @@ import {
   MonitoringPointRow,
   Point,
   PropertyLightSelectFilter
-} from '../../../asset-common';
+} from '../../../views/asset-common';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type } = point;

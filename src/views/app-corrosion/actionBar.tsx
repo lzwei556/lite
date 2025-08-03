@@ -4,7 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { AssetRow, MONITORING_POINT } from '../asset-common';
 import { ModalFormProps } from '../../types/common';
-import { Create } from './point';
+import { Create } from '../../features/monitoring-point-corrosion';
 
 export const ActionBar = ({ asset, onSuccess }: { asset?: AssetRow; onSuccess: () => void }) => {
   const [open, setOpen] = React.useState(false);

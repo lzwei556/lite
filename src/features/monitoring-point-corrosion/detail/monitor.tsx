@@ -1,16 +1,16 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
-import { Grid } from '../../../../components';
-import { DisplayProperty } from '../../../../constants/properties';
-import { generateColProps } from '../../../../utils/grid';
-import { Dayjs } from '../../../../utils';
-import { HistoryDataFea } from '../../../../features';
+import { Grid } from '../../../components';
+import { DisplayProperty } from '../../../constants/properties';
+import { generateColProps } from '../../../utils/grid';
+import { Dayjs } from '../../../utils';
+import { HistoryDataFea } from '../..';
 import {
   getDataOfMonitoringPoint,
   HistoryData,
   MonitoringPointRow,
   Point
-} from '../../../asset-common';
+} from '../../../views/asset-common';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;

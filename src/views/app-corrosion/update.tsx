@@ -2,10 +2,10 @@ import React from 'react';
 import { Button, Form } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card } from '../../../components';
-import { generateColProps } from '../../../utils/grid';
-import { AssetModel, AssetRow, updateAsset } from '../../asset-common';
-import { BasisFormItems, pipe, SettingFormItems, tank } from '../../asset-variant';
+import { Card } from '../../components';
+import { generateColProps } from '../../utils/grid';
+import { AssetModel, AssetRow, updateAsset } from '../asset-common';
+import { BasisFormItems, pipe, SettingFormItems, tank } from '../asset-variant';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const { name, parentId, type } = asset;

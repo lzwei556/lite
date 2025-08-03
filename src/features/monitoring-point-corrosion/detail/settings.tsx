@@ -7,9 +7,9 @@ import {
   MonitoringPoint,
   MonitoringPointRow,
   Point
-} from '../../../asset-common';
-import { Card, Grid } from '../../../../components';
-import { generateColProps } from '../../../../utils/grid';
+} from '../../../views/asset-common';
+import { Card, Grid } from '../../../components';
+import { generateColProps } from '../../../utils/grid';
 import { handleSubmit, parseAttrs } from '../common';
 import { BasisFormItems } from '../basisFormItems';
 import { Others } from '../others';

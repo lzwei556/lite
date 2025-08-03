@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, Col, ColProps, Form, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Device } from '../../../types/device';
-import { Grid, NumberFormItem, TextFormItem } from '../../../components';
-import { generateColProps } from '../../../utils/grid';
-import { isMobile } from '../../../utils/deviceDetection';
-import { GetDevicesRequest } from '../../../apis/device';
-import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
+import { Device } from '../../types/device';
+import { Grid, NumberFormItem, TextFormItem } from '../../components';
+import { generateColProps } from '../../utils/grid';
+import { isMobile } from '../../utils/deviceDetection';
+import { GetDevicesRequest } from '../../apis/device';
+import { DeviceSelection, MonitoringPointInfo } from '../../views/asset-common';
 import { relatedDeviceTypes } from './common';
 import { Others } from './others';
 

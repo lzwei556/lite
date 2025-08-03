@@ -1,11 +1,16 @@
 import React from 'react';
 import { Form } from 'antd';
 import intl from 'react-intl-universal';
-import { ModalFormProps } from '../../../types/common';
-import { ModalWrapper } from '../../../components/modalWrapper';
-import { Card, Grid } from '../../../components';
-import { generateColProps } from '../../../utils/grid';
-import { MONITORING_POINT, MonitoringPoint, MonitoringPointRow, Point } from '../../asset-common';
+import { ModalFormProps } from '../../types/common';
+import { ModalWrapper } from '../../components/modalWrapper';
+import { Card, Grid } from '../../components';
+import { generateColProps } from '../../utils/grid';
+import {
+  MONITORING_POINT,
+  MonitoringPoint,
+  MonitoringPointRow,
+  Point
+} from '../../views/asset-common';
 import { BasisFormItems } from './basisFormItems';
 import { handleSubmit, parseAttrs } from './common';
 import { Others } from './others';

@@ -2,9 +2,9 @@ import React from 'react';
 import { Col, TabsProps } from 'antd';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { Grid, MetaCard, Tabs } from '../../../../components';
-import { FilterableAlarmRecordTable } from '../../../alarm';
-import usePermission, { Permission } from '../../../../permission/permission';
+import { Grid, MetaCard, Tabs } from '../../../components';
+import { FilterableAlarmRecordTable } from '../../../views/alarm';
+import usePermission, { Permission } from '../../../permission/permission';
 import {
   AssetNavigator,
   BasicCard,
@@ -12,8 +12,8 @@ import {
   MonitoringPointRow,
   RelatedDeviceCard,
   TabBarExtraLeftContent
-} from '../../../asset-common';
-import { Analysis } from '../../analysis';
+} from '../../../views/asset-common';
+import { Analysis } from '../analysis';
 import { Monitor } from './monitor';
 import { History } from './history';
 import { Settings } from './settings';

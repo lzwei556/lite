@@ -1,17 +1,17 @@
 import React from 'react';
 import { Form } from 'antd';
 import intl from 'react-intl-universal';
-import { ModalFormProps } from '../../../types/common';
-import { ModalWrapper } from '../../../components/modalWrapper';
-import { SelectFormItem, TextFormItem } from '../../../components';
+import { ModalFormProps } from '../../types/common';
+import { ModalWrapper } from '../../components/modalWrapper';
+import { SelectFormItem, TextFormItem } from '../../components';
 import {
   addMonitoringPoints,
   Asset,
   AssetRow,
   MONITORING_POINT,
   MonitoringPointBatch
-} from '../../asset-common';
-import { useMonitoringPointParents } from '../../asset-variant';
+} from '../../views/asset-common';
+import { useMonitoringPointParents } from '../../views/asset-variant';
 import { monitoringPointTypes, resolveAttrs, useSelectPoints } from './common';
 import { PointItemList } from './pointItemList';
 

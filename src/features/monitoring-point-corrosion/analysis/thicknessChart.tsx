@@ -5,8 +5,8 @@ import { Dayjs } from '../../../utils';
 import { DisplayProperty } from '../../../constants/properties';
 import { roundValue } from '../../../utils/format';
 import { ChartMark } from '../../../components';
-import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../asset-common';
-import { HistoryDataFea } from '../../../features';
+import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../../views/asset-common';
+import { HistoryDataFea } from '../..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
 
 export const ThicknessChart = (

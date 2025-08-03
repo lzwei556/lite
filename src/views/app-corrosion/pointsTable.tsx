@@ -1,8 +1,8 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Table } from '../../../components';
-import usePermission, { Permission } from '../../../permission/permission';
-import { useLocaleContext } from '../../../localeProvider';
+import { Table } from '../../components';
+import usePermission, { Permission } from '../../permission/permission';
+import { useLocaleContext } from '../../localeProvider';
 import {
   AssetRow,
   getMonitoringPointColumns,
@@ -11,8 +11,8 @@ import {
   MonitoringPointRow,
   Points,
   positionColumn
-} from '../../asset-common';
-import { ActionBar } from '../actionBar';
+} from '../asset-common';
+import { ActionBar } from './actionBar';
 
 export const PointsTable = (props: {
   asset: AssetRow;
