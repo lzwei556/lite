@@ -18,7 +18,8 @@ export const Icon = (
       return <Area.Icon asset={node as AssetRow} {...rest} {...sizeProps} />;
     } else if (
       Asset.Assert.isCorrosionRelated(node.type) ||
-      Asset.Assert.isVibrationRelated(node.type)
+      Asset.Assert.isVibrationRelated(node.type) ||
+      Asset.Assert.isDeviceRelated(node.type)
     ) {
       return <Variant.Icon asset={node as AssetRow} {...rest} {...sizeProps} />;
     } else if (Asset.Assert.isWindRelated(node.type)) {

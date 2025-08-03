@@ -1332,5 +1332,6 @@
   "contact.temperature.desc": "触点温度",
   "rod.top.temperature": "杆顶温度",
   "rod.top.temperature.desc": "杆顶温度",
-  "monitoring.point.type": "监测点类型"
+  "monitoring.point.type": "监测点类型",
+  "asset.device": "设备"
 }

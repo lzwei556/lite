@@ -1,5 +1,5 @@
 import { useAppType } from '../../config';
-import { motor, pipe, tank } from '../asset-variant';
+import { device, motor, pipe, tank } from '../asset-variant';
 
 export function useAssetCategories() {
   const appType = useAppType();
@@ -10,6 +10,6 @@ export function useAssetCategories() {
     case 'vibration':
       return [motor];
     default:
-      return [pipe, tank, motor];
+      return [device, pipe, tank, motor];
   }
 }

@@ -1332,5 +1332,6 @@
   "contact.temperature.desc": "Measurement of contact temperature",
   "rod.top.temperature": "Rod Top Temperature",
   "rod.top.temperature.desc": "Rod Top Temperature",
-  "monitoring.point.type": "Monitoring Point Type"
+  "monitoring.point.type": "Monitoring Point Type",
+  "asset.device": "Device"
 }

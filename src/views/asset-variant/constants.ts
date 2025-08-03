@@ -17,3 +17,7 @@ export const tank: AssetCategory = {
   label: 'TANK',
   type: 222
 };
+export const device: AssetCategory = {
+  label: 'asset.device',
+  type: 100
+};

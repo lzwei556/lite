@@ -1,6 +1,6 @@
 import { AssetModel, AssetRow } from './types';
 import { isWindRelated } from '../app-wind-turbine';
-import { isArea, isCorrosionRelated, isVibrationRelated } from '../asset-variant';
+import { isArea, isCorrosionRelated, isDeviceRelated, isVibrationRelated } from '../asset-variant';
 import { isMonitoringPoint } from './monitoring-point';
 import { getColorByValue, getLabelByValue } from './assetStatus';
 import { resolveDescendant, resolveStatus } from './utils/statistics';
@@ -18,7 +18,8 @@ export const Asset = {
     isWindRelated,
     isMonitoringPoint,
     isVibrationRelated,
-    isCorrosionRelated
+    isCorrosionRelated,
+    isDeviceRelated
   },
   convert: (values?: AssetRow): AssetModel | null => {
     if (!values) return null;

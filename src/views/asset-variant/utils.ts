@@ -1,6 +1,6 @@
 import { mapTree } from '../../utils/tree';
 import { AssetRow, useContext } from '../asset-common';
-import { area, motor, pipe, tank } from './constants';
+import { area, device, motor, pipe, tank } from './constants';
 import { defaultSettings as MotorDefaultSettings } from './motor/settings';
 
 export function isArea(type: number) {
@@ -72,6 +72,10 @@ export function isCorrosionRelated(type: number) {
   return type === pipe.type || type === tank.type;
 }
 
+export function isDeviceRelated(type: number) {
+  return type === device.type;
+}
+
 type TypeMeta = { label: string; settings?: { default: object } } | undefined;
 
 export function getByType(type: number): TypeMeta {
@@ -83,6 +87,8 @@ export function getByType(type: number): TypeMeta {
       return { label: pipe.label };
     case tank.type:
       return { label: tank.label };
+    case device.type:
+      return { label: device.label };
     default:
       break;
   }
