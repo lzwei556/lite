@@ -16,6 +16,7 @@ import { NetworkProvisionRequest, NetworkSyncRequest } from '../../apis/network'
 import { Network } from '../../types/network';
 import { useAppType } from '../../config';
 import { IconButton } from '../../components';
+import { Compensation } from './edit/compensation';
 
 export const CommandDropdown = ({
   device,
@@ -36,6 +37,7 @@ export const CommandDropdown = ({
   const [openCalibrate, setVisibleCalibrate] = useState(false);
   const { hasPermissions } = userPermission();
   const chanels = DeviceType.getChannels(typeId);
+  const [compensationOpen, setCompensationOpen] = useState(false);
 
   useEffect(() => {
     PubSub.subscribe(SocketTopic.upgradeStatus, (msg: string, status: any) => {
@@ -86,21 +88,24 @@ export const CommandDropdown = ({
         case DeviceCommand.CancelUpgrade:
           DeviceUpgradeRequest(id, { type: DeviceCommand.CancelUpgrade }).then((res) => {
             if (res.code === 200) {
-              message.success(intl.get('CANCEL_UPGRADING_SUCCESSFUL')).then();
+              message.success(intl.get('CANCEL_UPGRADING_SUCCESSFUL'));
             } else {
-              message.error(`${intl.get('FAILED_TO_CANCEL_UPGRADING')},${res.msg}`).then();
+              message.error(`${intl.get('FAILED_TO_CANCEL_UPGRADING')},${res.msg}`);
             }
           });
           break;
         case DeviceCommand.Calibrate:
           setVisibleCalibrate(true);
           break;
+        case DeviceCommand.Compensation:
+          setCompensationOpen(true);
+          break;
         default:
           SendDeviceCommandRequest(id, commandKey, channel ? { channel } : {}).then((res) => {
             if (res.code === 200) {
-              message.success(intl.get('SENT_SUCCESSFUL')).then();
+              message.success(intl.get('SENT_SUCCESSFUL'));
             } else {
-              message.error(intl.get('FAILED_TO_SEND')).then();
+              message.error(intl.get('FAILED_TO_SEND'));
             }
           });
           break;
@@ -140,6 +145,9 @@ export const CommandDropdown = ({
     items.push({ key: DeviceCommand.Reset, label: intl.get('RESTORE_FACTORY_SETTINGS') });
     if (DeviceType.canSupportingCalibrate(typeId)) {
       items.push({ key: DeviceCommand.Calibrate, label: intl.get('CALIBRATE') });
+    }
+    if (DeviceType.canSupportingCompensation(typeId)) {
+      items.push({ key: DeviceCommand.Compensation, label: intl.get('compensation') });
     }
   }
   if (hasPermissions(Permission.DeviceUpgrade, Permission.DeviceFirmwares)) {
@@ -194,6 +202,22 @@ export const CommandDropdown = ({
                 message.error(intl.get(res.msg).d(res.msg)).then();
               }
             });
+          }}
+        />
+      )}
+      {compensationOpen && (
+        <Compensation
+          open={compensationOpen}
+          onCancel={() => setCompensationOpen(false)}
+          onSuccess={(paras) => {
+            SendDeviceCommandRequest(id, DeviceCommand.Compensation, paras).then((res) => {
+              if (res.code === 200) {
+                message.success(intl.get('COMMAND_SENT_SUCCESSFUL'));
+              } else {
+                message.error(intl.get(res.msg).d(res.msg));
+              }
+            });
+            setCompensationOpen(false);
           }}
         />
       )}

@@ -1333,5 +1333,10 @@
   "rod.top.temperature": "杆顶温度",
   "rod.top.temperature.desc": "杆顶温度",
   "monitoring.point.type": "监测点类型",
-  "asset.device": "设备"
+  "asset.device": "设备",
+  "compensation": "温度补偿",
+  "compensation.duration": "持续时间",
+  "compensation.start": "开始",
+  "compensation.stop": "结束",
+  "hours": "小时"
 }

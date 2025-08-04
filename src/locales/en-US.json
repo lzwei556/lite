@@ -1333,5 +1333,10 @@
   "rod.top.temperature": "Rod Top Temperature",
   "rod.top.temperature.desc": "Rod Top Temperature",
   "monitoring.point.type": "Monitoring Point Type",
-  "asset.device": "Device"
+  "asset.device": "Device",
+  "compensation": "Compensation",
+  "compensation.duration": "Duration",
+  "compensation.start": "Start",
+  "compensation.stop": "Stop",
+  "hours": "Hours"
 }

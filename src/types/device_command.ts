@@ -6,5 +6,6 @@ export enum DeviceCommand {
   Reboot,
   Provision,
   Calibrate,
-  AcquireSensorData
+  AcquireSensorData,
+  Compensation
 }

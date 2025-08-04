@@ -281,6 +281,10 @@ export namespace DeviceType {
     );
   }
 
+  export function canSupportingCompensation(type: number) {
+    return getDCSensors().includes(type) || type === DeviceType.SAS;
+  }
+
   export function hasGroupedSettings(type: number) {
     return (
       (type === DeviceType.SAS || isSASMultiChannel(type) || isMultiChannel(type)) &&
