@@ -49,6 +49,7 @@ export const ConfigurableNumsOfCursor = (props: ModalFormProps) => {
     >
       <Form
         form={form}
+        layout='vertical'
         initialValues={nums ?? { harmonic: HarmonicCursor.Five, sideband: SidebandCursor.Five }}
       >
         <SelectFormItem

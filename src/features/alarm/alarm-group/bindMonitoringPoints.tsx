@@ -8,7 +8,7 @@ import { wind } from '../../asset-wind-turbine/constants';
 import { bindMeasurementsToAlarmRule2 } from './services';
 import { AlarmRule } from './types';
 import { MonitoringPointTypeValue } from '../../../config';
-import { TextFormItem } from '../../../components';
+import { Grid, TextFormItem } from '../../../components';
 
 type MixinAssetRow = AssetRow & {
   pointIds: number[];
@@ -116,7 +116,7 @@ export const BindMonitoringPoints: React.FC<
                 monitoringPoints.map(({ id, name, type }) => {
                   if (type === props.selectedRow.type) {
                     return (
-                      <Col key={id} span={8}>
+                      <Col key={id} span={12}>
                         <Checkbox value={id}>{name}</Checkbox>
                       </Col>
                     );
@@ -195,9 +195,9 @@ export const BindMonitoringPoints: React.FC<
                   );
                 }}
               >
-                <Row key={id} gutter={[0, 16]} style={{ marginBottom: 16, width: '100%' }}>
+                <Grid key={id} gutter={[0, 16]} style={{ marginBottom: 16, width: '100%' }}>
                   {children?.map((asset) => renderAsset(asset))}
-                </Row>
+                </Grid>
               </Checkbox.Group>
             </TextFormItem>
           </div>

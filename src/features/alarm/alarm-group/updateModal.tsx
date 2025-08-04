@@ -112,6 +112,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
             return (
               <>
                 <Table
+                  cardProps={{ style: { marginBottom: 16 } }}
                   columns={[
                     {
                       key: 'name',

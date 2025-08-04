@@ -56,7 +56,7 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
       }}
     >
       <Form form={form} layout='vertical'>
-        <Card size='small' style={{ marginBlock: 16 }} title={intl.get('BASIC_INFORMATION')}>
+        <Card size='small' style={{ marginBottom: 16 }} title={intl.get('BASIC_INFORMATION')}>
           <Grid>
             <Col {...generateColProps({ xl: 12, xxl: 12 })}>
               <TextFormItem

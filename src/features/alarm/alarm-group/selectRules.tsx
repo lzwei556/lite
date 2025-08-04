@@ -62,7 +62,7 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
         </Button>
       ]}
     >
-      <Card>
+      <Card style={{ marginBottom: 16 }}>
         <Form form={form}>
           <TextFormItem name='asset_ids' noStyle>
             <Checkbox.Group onChange={(values) => setSelected(values)}>

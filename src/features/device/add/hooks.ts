@@ -116,7 +116,10 @@ const useFormSectionProps = (form: FormCommonProps['form']) => {
   return {
     deviceType,
     basis: {
-      cardProps: useGroupCardProps({ title: intl.get('BASIC_INFORMATION') }),
+      cardProps: useGroupCardProps({
+        style: { marginBottom: 16 },
+        title: intl.get('BASIC_INFORMATION')
+      }),
       formItemsProps: { form, formItemColProps }
     },
     settings: { deviceType, settings, formItemColProps, groupCardProps: useGroupCardProps({}) },

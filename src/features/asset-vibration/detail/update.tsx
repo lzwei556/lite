@@ -52,6 +52,7 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
           <SettingFormItems
             key={type}
             type={type}
+            cardProps={{ type: 'inner' }}
             formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
           />
         )}

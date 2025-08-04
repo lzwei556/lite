@@ -59,12 +59,12 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
     <ModalWrapper
       {...rest}
       afterClose={() => form.resetFields()}
-      width={430}
+      width={400}
       title={intl.get('DWONLOAD_DATA')}
       okText={intl.get('DOWNLOAD')}
       onOk={onDownload}
     >
-      <Form form={form} labelCol={{ span: 8 }}>
+      <Form form={form} layout='vertical'>
         <SelectFormItem
           label='PROPERTY'
           name='properties'
@@ -84,7 +84,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
           />
         )}
         <TextFormItem label='DATE_RANGE'>
-          <RangeDatePicker onChange={onChange} value={range} />
+          <RangeDatePicker onChange={onChange} value={range} style={{ width: '100%' }} />
         </TextFormItem>
       </Form>
     </ModalWrapper>

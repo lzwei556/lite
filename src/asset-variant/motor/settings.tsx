@@ -1,7 +1,14 @@
 import React from 'react';
 import { Col, ColProps, Radio } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Grid, NumberFormItem, SelectFormItem, TextFormItem } from '../../components';
+import {
+  Card,
+  CardProps,
+  Grid,
+  NumberFormItem,
+  SelectFormItem,
+  TextFormItem
+} from '../../components';
 import { generateColProps } from '../../utils/grid';
 
 export type MotorAttrs = {
@@ -20,12 +27,14 @@ export type MotorAttrs = {
 };
 
 export const Settings = ({
+  cardProps,
   formItemColProps = generateColProps({ xl: 12, xxl: 12 })
 }: {
+  cardProps?: CardProps;
   formItemColProps?: ColProps;
 }) => {
   return (
-    <Card size='small' title={intl.get('motor.property')}>
+    <Card {...cardProps} size='small' title={intl.get('motor.property')}>
       <Grid>
         <Col {...formItemColProps}>
           <SelectFormItem

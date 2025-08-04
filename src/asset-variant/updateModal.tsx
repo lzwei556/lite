@@ -9,6 +9,7 @@ import { getByType } from './utils';
 import { BasisFormItems } from './basisFormItems';
 import { SettingFormItems } from './settingFormItems';
 import { useAssetCategories } from '../features/asset-area';
+import { Card } from '../components';
 
 export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
   const { asset, onSuccess, ...rest } = props;
@@ -49,10 +50,12 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
             : getByType(type)?.settings?.default)
         }}
       >
-        <BasisFormItems
-          types={useAssetCategories()}
-          formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
-        />
+        <Card size='small' style={{ marginBottom: 16 }} title={intl.get('BASIC_INFORMATION')}>
+          <BasisFormItems
+            types={useAssetCategories()}
+            formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
+          />
+        </Card>
         {type && (
           <SettingFormItems
             key={type}

@@ -51,12 +51,12 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
     <ModalWrapper
       {...props}
       afterClose={() => form.resetFields()}
-      width={430}
+      width={400}
       title={intl.get('DWONLOAD_DATA')}
       okText={intl.get('DOWNLOAD')}
       onOk={onDownload}
     >
-      <Form form={form} labelCol={{ span: 8 }}>
+      <Form form={form} layout='vertical'>
         <SelectFormItem
           label='PROPERTY'
           name='properties'
@@ -68,7 +68,7 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
           }}
         />
         <TextFormItem label='DATE_RANGE'>
-          <RangeDatePicker onChange={setRange} />
+          <RangeDatePicker onChange={setRange} style={{ width: '100%' }} />
         </TextFormItem>
       </Form>
     </ModalWrapper>

@@ -81,7 +81,7 @@ const EditCalibrateParas = ({
         </Button>
       ]}
     >
-      <Form form={form} labelCol={{ span: 8 }}>
+      <Form form={form} layout='vertical'>
         {isSVT ? (
           <SVT
             typeId={typeId}

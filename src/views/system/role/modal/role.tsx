@@ -12,7 +12,7 @@ const RoleModal: FC<RoleModalProps> = (props) => {
 
   return (
     <ModalWrapper {...props}>
-      <Form form={form} labelCol={{ span: 6 }}>
+      <Form form={form} layout='vertical'>
         <TextFormItem
           label='ROLE_NAME'
           name='name'

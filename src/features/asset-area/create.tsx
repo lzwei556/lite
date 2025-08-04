@@ -48,7 +48,7 @@ export const Create = (props: ModalFormProps & { parentId?: number }) => {
         }
       }}
     >
-      <Form form={form} labelCol={{ span: 6 }}>
+      <Form form={form} layout='vertical'>
         <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
         {renderParent()}
       </Form>

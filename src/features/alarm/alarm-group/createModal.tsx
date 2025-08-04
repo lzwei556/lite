@@ -112,6 +112,7 @@ export function CreateModal(props: ModalFormProps) {
             return (
               <>
                 <Table
+                  cardProps={{ style: { marginBottom: 16 } }}
                   columns={[
                     {
                       key: 'name',

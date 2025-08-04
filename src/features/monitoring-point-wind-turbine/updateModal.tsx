@@ -3,7 +3,6 @@ import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
-import { useLocaleFormLayout } from '../../hooks/useLocaleFormLayout';
 import { MONITORING_POINT, MonitoringPoint, MonitoringPointRow, Point } from '../../asset-common';
 import { UpdateFormItems } from './_updateFormItems';
 import { handleSubmit } from './common';
@@ -26,11 +25,7 @@ export const UpdateModal = (props: ModalFormProps & { monitoringPoint: Monitorin
         }
       }}
     >
-      <Form
-        form={form}
-        {...useLocaleFormLayout()}
-        initialValues={{ ...Point.convert(monitoringPoint) }}
-      >
+      <Form form={form} layout='vertical' initialValues={{ ...Point.convert(monitoringPoint) }}>
         <UpdateFormItems monitoringPoint={monitoringPoint} />
       </Form>
     </ModalWrapper>
