@@ -3,7 +3,6 @@ import intl from 'react-intl-universal';
 import { HistoryData } from '../../asset-common';
 import { DisplayProperty } from '../../constants/properties';
 import { Dayjs } from '../../utils';
-import { roundValue } from '../../utils/format';
 import { Chart, useLinedSeriesOptions, ChartProps, getOptions } from '../../components';
 
 export const PropertyChart = (
@@ -71,13 +70,8 @@ export function transform(
         };
       }) ?? [];
   const values = series.map((s) => {
-    const value = Object.values(s)[0];
-    return {
-      name: Object.keys(s)[0],
-      last: value[value.length - 1],
-      min: roundValue(Math.min(...value), property.precision),
-      max: roundValue(Math.max(...value), property.precision)
-    };
+    const [name, data] = Object.entries(s)[0];
+    return { name, last: data[data.length - 1], min: Math.min(...data), max: Math.max(...data) };
   });
   return {
     series: series.map((s) => {
