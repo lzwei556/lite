@@ -16,7 +16,6 @@ export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
-  const colProps = generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
 
   React.useEffect(() => {
     const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastWeek);
@@ -34,11 +33,24 @@ export const Monitor = (point: MonitoringPointRow) => {
   if (!historyData || historyData.length === 0)
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
 
+  const getCols = (propertyNums: number) => {
+    if (propertyNums < 3) {
+      return generateColProps({
+        md: 24 / propertyNums,
+        lg: 24 / propertyNums,
+        xl: 24 / propertyNums,
+        xxl: 24 / propertyNums
+      });
+    } else {
+      return generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
+    }
+  };
+
   return (
     <Grid>
       {Point.getPropertiesByType(type, properties).map((p: DisplayProperty, index: number) => {
         return (
-          <Col {...colProps} key={index}>
+          <Col {...getCols(properties.length)} key={index}>
             <HistoryDataFea.PropertyChartCard
               data={historyData}
               property={p}

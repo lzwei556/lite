@@ -34,6 +34,19 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
     />
   );
 
+  const getCols = (propertyNums: number) => {
+    if (propertyNums < 3) {
+      return generateColProps({
+        md: 24 / propertyNums,
+        lg: 24 / propertyNums,
+        xl: 24 / propertyNums,
+        xxl: 24 / propertyNums
+      });
+    } else {
+      return generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
+    }
+  };
+
   if (!historyData || historyData.length === 0) {
     return (
       <Card extra={channelsSelect}>
@@ -80,7 +93,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
         {getDisplayProperties(device.properties, device.typeId).map(
           (p: DisplayProperty, index: number) => {
             return (
-              <Col {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })} key={index}>
+              <Col {...getCols(device.properties.length)} key={index}>
                 <HistoryDataFea.PropertyChartCard
                   data={historyData}
                   property={p}

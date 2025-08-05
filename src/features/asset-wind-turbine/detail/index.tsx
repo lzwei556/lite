@@ -25,7 +25,7 @@ export const Index = (props: {
     return (asset.children?.length ?? 0) > 0 ? (
       <Grid>{content}</Grid>
     ) : (
-      <Card title={intl.get('ASSET')}>
+      <Card title={intl.get('assets')}>
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       </Card>
     );
@@ -35,7 +35,7 @@ export const Index = (props: {
     <Tabs
       items={[
         {
-          label: intl.get('ASSET'),
+          label: intl.get('assets'),
           key: 'asset',
           children: (
             <Grid>

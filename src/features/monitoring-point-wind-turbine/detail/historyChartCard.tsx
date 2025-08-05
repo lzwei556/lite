@@ -82,7 +82,7 @@ export const HistoryChartCard = ({
       title={name}
     >
       <HistoryDataFea.PropertyChart
-        config={{ opts: { yAxis: { name: property?.unit } } }}
+        config={{ opts: { dataZoom: [{ start: 0, end: 100 }], yAxis: { name: property?.unit } } }}
         data={historyData}
         property={property!}
         style={{ height: 600 }}

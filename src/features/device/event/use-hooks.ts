@@ -85,7 +85,11 @@ const useColumns = () => {
       dataIndex: 'name',
       key: 'name',
       render: (_: string, record: Device) => {
-        return intl.get(record.name);
+        return React.createElement(
+          'span',
+          { style: { display: 'inline-block', minWidth: 160 } },
+          intl.get(record.name)
+        );
       }
     },
     {

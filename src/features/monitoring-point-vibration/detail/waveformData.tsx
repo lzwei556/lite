@@ -2,8 +2,7 @@ import React from 'react';
 import { Checkbox, Select, Space } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, LineChart } from '../../../components';
-import { AXIS_THREE } from '../../device/detail/dynamicData/constants';
-import { DynamicData, PropertyLightSelectFilter } from '../../../asset-common';
+import { AXIS_OPTIONS, DynamicData, PropertyLightSelectFilter } from '../../../asset-common';
 
 type Field = { label: string; value: string; unit: string; precision: number };
 
@@ -62,11 +61,6 @@ type Data = {
   yAxisUnit: string;
 };
 
-const AXISES = AXIS_THREE.map(({ label, value }) => ({
-  label,
-  value: value === 'xAxis' ? 0 : value === 'yAxis' ? 1 : 2
-})).map(({ value, label }) => ({ value, label: intl.get(label) }));
-
 export function WaveformData(props: { id: number }) {
   const { id } = props;
   const [field, setField] = React.useState(fields[0]);
@@ -100,7 +94,7 @@ const Content = <T extends Data>(props: {
     let series: any = [];
     if (!!values && !!xAxis) {
       series.push({
-        data: { [AXISES.map(({ label }) => label)[axis]]: values },
+        data: { [AXIS_OPTIONS.map(({ label }) => intl.get(label))[axis]]: values },
         xAxisValues: xAxis.map((n) => `${n}`),
         raw: {
           smooth: true
@@ -108,7 +102,7 @@ const Content = <T extends Data>(props: {
       });
       if (isShowEnvelope) {
         series.push({
-          data: { [AXISES.map(({ label }) => label)[axis]]: highEnvelopes },
+          data: { [AXIS_OPTIONS.map(({ label }) => intl.get(label))[axis]]: highEnvelopes },
           xAxisValues: xAxis.map((n) => `${n}`),
           raw: {
             lineStyle: {
@@ -122,7 +116,7 @@ const Content = <T extends Data>(props: {
           }
         });
         series.push({
-          data: { [AXISES.map(({ label }) => label)[axis]]: lowEnvelopes },
+          data: { [AXIS_OPTIONS.map(({ label }) => intl.get(label))[axis]]: lowEnvelopes },
           xAxisValues: xAxis.map((n) => `${n}`),
           raw: {
             lineStyle: {
@@ -142,7 +136,18 @@ const Content = <T extends Data>(props: {
         series={series}
         style={{ height: 600 }}
         config={{
-          opts: { title: { text: `${(frequency ?? 0) / 1000}KHz` }, xAxis: { name: xAxisUnit } },
+          opts: {
+            dataZoom: [{ start: 0, end: 100 }],
+            title: { text: `${(frequency ?? 0) / 1000}KHz` },
+            xAxis: {
+              name: xAxisUnit,
+              axisLabel: {
+                formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                interval: Math.floor(xAxis.length / 20)
+              }
+            },
+            grid: { top: 60, bottom: 60, right: 40 }
+          },
           switchs: { noDataZoom: false }
         }}
         yAxisMeta={{
@@ -169,17 +174,13 @@ const Content = <T extends Data>(props: {
             value={field.value}
           />
           <Select
-            defaultValue={0}
             onChange={(val) => {
               props.onAxisChange(val);
             }}
-          >
-            {AXISES.map(({ value, label }) => (
-              <Select.Option key={value} value={value}>
-                {label}
-              </Select.Option>
-            ))}
-          </Select>
+            options={AXIS_OPTIONS.map(({ label, value }) => ({ label: intl.get(label), value }))}
+            popupMatchSelectWidth={false}
+            value={axis}
+          />
           {field.value.indexOf('TimeDomain') !== -1 && (
             <Checkbox
               defaultChecked={isShowEnvelope}
@@ -192,6 +193,7 @@ const Content = <T extends Data>(props: {
           )}
         </Space>
       }
+      title={field.label ? intl.get(field.label) : undefined}
     >
       {renderChart()}
     </Card>

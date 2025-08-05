@@ -33,34 +33,32 @@ export const FakeVSRealChart = ({
           />
         )
       }
-      title={property && !hideTitle ? intl.get(property.name) : undefined}
+      title={property && !hideTitle ? intl.get(property.name) : ' '}
     >
-      {property && (
-        <LineChart
-          series={
-            property
-              ? [
-                  {
-                    data: {
-                      [intl.get(MONITORING_POINT)]: points.data
-                    },
-                    raw: { symbol: 'circle', type: 'scatter' },
-                    xAxisValues: points.indexs.map((n) => `${n}`)
+      <LineChart
+        series={
+          property
+            ? [
+                {
+                  data: {
+                    [intl.get(MONITORING_POINT)]: points.data
                   },
-                  {
-                    data: {
-                      [intl.get('BOLT')]: bolts
-                    },
-                    xAxisValues: bolts.map((n, i) => `${i + 1}`)
-                  }
-                ]
-              : []
-          }
-          style={{ height: 600 }}
-          config={{ opts: { xAxis: { data: bolts.map((n, i) => `${i + 1}`) } } }}
-          yAxisMeta={{ ...property, min: Math.min(...points.data), max: Math.max(...points.data) }}
-        />
-      )}
+                  raw: { symbol: 'circle', type: 'scatter' },
+                  xAxisValues: points.indexs.map((n) => `${n}`)
+                },
+                {
+                  data: {
+                    [intl.get('BOLT')]: bolts
+                  },
+                  xAxisValues: bolts.map((n, i) => `${i + 1}`)
+                }
+              ]
+            : []
+        }
+        style={{ height: 600 }}
+        config={{ opts: { xAxis: { data: bolts.map((n, i) => `${i + 1}`) } } }}
+        yAxisMeta={{ ...property, min: Math.min(...points.data), max: Math.max(...points.data) }}
+      />
     </Card>
   );
 };

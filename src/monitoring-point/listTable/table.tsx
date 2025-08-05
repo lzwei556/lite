@@ -23,7 +23,6 @@ export const MonitoringPointsTable = ({
   const { monitoringPoints = [] } = asset;
   const actualPoints = Points.filter(monitoringPoints);
   const { language } = useLocaleContext();
-  const [selectedType, setSelectedType] = React.useState(actualPoints?.[0]?.type);
 
   const tableProps = {
     ...rest,
@@ -34,33 +33,50 @@ export const MonitoringPointsTable = ({
   };
 
   if (actualPoints.length > 0) {
-    const columns = getColumns({
-      language,
-      point: actualPoints.filter((m) => m.type === selectedType)?.[0],
-      ...rest
-    });
     const types = uniq(actualPoints.map((m) => m.type));
     if (types.length > 1) {
-      return (
-        <Table
-          {...{
-            ...tableProps,
-            columns,
-            header: {
-              ...tableProps.header,
-              title: <TypeSwitcher onChange={setSelectedType} types={types} />
-            }
-          }}
-          dataSource={actualPoints.filter((m) => m.type === selectedType)}
-        />
-      );
+      return <TypedTable actualPoints={actualPoints} types={types} tableProps={tableProps} />;
     } else {
+      const columns = getColumns({ language, point: actualPoints[0], ...rest });
+      console.log('columns', columns);
       return <Table {...{ ...tableProps, columns }} dataSource={actualPoints} />;
     }
   } else {
     const columns = getColumns({ language, ...rest });
     return <Table {...{ ...tableProps, columns }} />;
   }
+};
+
+const TypedTable = ({
+  actualPoints,
+  types,
+  tableProps
+}: {
+  actualPoints: MonitoringPointRow[];
+  types: number[];
+  tableProps: any;
+}) => {
+  const { language } = useLocaleContext();
+  const [selectedType, setSelectedType] = React.useState(actualPoints[0].type);
+  const columns = getColumns({
+    language,
+    point: actualPoints.filter((m) => m.type === selectedType)[0],
+    more: tableProps.more,
+    operateCellProps: tableProps.operateCellProps
+  });
+  return (
+    <Table
+      {...{
+        ...tableProps,
+        columns,
+        header: {
+          ...tableProps.header,
+          title: <TypeSwitcher onChange={setSelectedType} types={types} />
+        }
+      }}
+      dataSource={actualPoints.filter((m) => m.type === selectedType)}
+    />
+  );
 };
 
 const TypeSwitcher = ({

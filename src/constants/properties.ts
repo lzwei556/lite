@@ -58,13 +58,6 @@ const TEMPERATURE: DisplayProperty = {
   unit: '℃',
   unit2: '°C'
 };
-const ENVIRONMENT_TEMPERATURE: DisplayProperty = {
-  key: 'temperature',
-  name: 'FIELD_ENVIRONMENT_TEMPERATURE',
-  precision: 1,
-  unit: '℃',
-  unit2: '°C'
-};
 const TOF: DisplayProperty = {
   key: 'tof',
   name: 'FIELD_TOF',
@@ -122,6 +115,7 @@ const CORROSION_RATE: DisplayProperty = {
 const CORROSION_LOSS: DisplayProperty = {
   key: 'corrosion_loss',
   name: 'FIELD_CORROSION_LOSS',
+  interval: 0.2,
   precision: 3,
   unit: 'mm'
 };
@@ -434,7 +428,7 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
       name: 'FIELD_ATTITUDE_INDEX',
       precision: 4
     },
-    ENVIRONMENT_TEMPERATURE
+    { ...TEMPERATURE, first: false }
   ],
   DS: SAS.slice(0, SAS.length - 1),
   DC_NORMAL: [

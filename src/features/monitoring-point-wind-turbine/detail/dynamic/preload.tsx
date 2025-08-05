@@ -3,8 +3,7 @@ import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { getValue, roundValue } from '../../../../utils/format';
 import { Card, Descriptions, Grid, LineChart, SeriesOption } from '../../../../components';
-import { AXIS_THREE } from '../../../device/detail/dynamicData/constants';
-import { Metadata, PropertyLightSelectFilter } from '../../../../asset-common';
+import { AXIS_OPTIONS, Metadata, PropertyLightSelectFilter } from '../../../../asset-common';
 import { PreloadDynamicData } from './types';
 
 const fields = [
@@ -60,10 +59,8 @@ export function Preload<T extends PreloadDynamicData>(props: { values: T }) {
         ];
       } else {
         type Dynamic_acceleration = Omit<PreloadDynamicData, 'metadata'>['dynamic_acceleration'];
-        series = AXIS_THREE.map(({ label, value }) => {
-          const axisData = (data as Dynamic_acceleration).map(
-            (item) => item[value as keyof Dynamic_acceleration[0]]
-          );
+        series = AXIS_OPTIONS.map(({ label, key }) => {
+          const axisData = (data as Dynamic_acceleration).map((item) => item[`${key}Axis`]);
           return {
             data: {
               [intl.get(label)]: axisData

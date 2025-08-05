@@ -1,9 +1,9 @@
 import React from 'react';
-import { Select, Space, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Language, useLocaleContext } from '../../../../localeProvider';
 import { Card, CardProps, Chart, getOptions } from '../../../../components';
-import { roundValue } from '../../../../utils/format';
+import { getValue, roundValue } from '../../../../utils/format';
 import { MonitoringPointTypeValue } from '../../../../config';
 import { HistoryData } from '../../../../asset-common';
 
@@ -41,23 +41,23 @@ export const PointsScatterChart = ({
   } else if (dynamicData && dynamicData.length > 0) {
     transformedData.push(...dynamicData);
   }
+  const dispalyPrefix = `${intl.get(
+    `FIELD_DISPLACEMENT_${type === MonitoringPointTypeValue.BaseInclination ? 'AXIAL' : 'RADIAL'}`
+  )} ${intl.get('FIELD_DISPLACEMENT')}`;
   const options = buildCirclePointsChartOfTower({
     datas: transformedData,
-    titles: [
-      `${intl.get(
-        `FIELD_DISPLACEMENT_${
-          type === MonitoringPointTypeValue.BaseInclination ? 'AXIAL' : 'RADIAL'
-        }`
-      )}${intl.get('FIELD_DISPLACEMENT')}`,
-      intl.get('FIELD_DIRECTION')
-    ],
+    titles: [dispalyPrefix, intl.get('FIELD_DIRECTION')],
     lang: language
   });
 
   return (
     <Card
       {...cardProps}
-      title={showTitle ? <Title transformedData={transformedData} type={type} /> : undefined}
+      title={
+        showTitle ? (
+          <Title transformedData={transformedData} dispalyPrefix={dispalyPrefix} />
+        ) : undefined
+      }
     >
       <Chart
         options={options ? getOptions(options as any) : undefined}
@@ -69,31 +69,25 @@ export const PointsScatterChart = ({
 
 function Title({
   transformedData,
-  type
+  dispalyPrefix
 }: {
   transformedData: Data[];
-  type: MonitoringPointTypeValue;
+  dispalyPrefix: string;
 }) {
-  const { main, displacement, direction } = getTitles(transformedData, type);
-  if (displacement.length > 0 || direction.length > 0) {
-    return (
-      <Space align='center'>
-        <Typography.Text>{main}</Typography.Text>
-        <Select
-          defaultValue={displacement}
-          labelInValue={true}
-          options={[displacement, direction].map((s) => ({ label: s, value: s }))}
-          size='small'
-          variant='filled'
-        />
+  const { main, displacement, direction } = getTitles(transformedData, dispalyPrefix);
+  if (displacement.value || direction.value) {
+    return [displacement, direction].map(({ label, value, unit }, i) => (
+      <Space key={i} style={{ display: 'flex', lineHeight: 1.35, fontSize: 14, fontWeight: 400 }}>
+        <Typography.Text type='secondary'>{label}</Typography.Text>
+        {getValue(value, unit)}
       </Space>
-    );
+    ));
   } else {
     return <>{main}</>;
   }
 }
 
-function getTitles(datas: Data[], type: MonitoringPointTypeValue) {
+function getTitles(datas: Data[], dispalyPrefix: string) {
   let displacement: number | undefined;
   let direction: number | undefined;
   datas.forEach(({ data }) => {
@@ -101,20 +95,11 @@ function getTitles(datas: Data[], type: MonitoringPointTypeValue) {
     displacement = Math.max(...displacements.filter((d) => !Number.isNaN(d)));
     direction = data.map((item) => item[1])[displacements.indexOf(displacement)];
   });
-  let displacementText = '';
-  if (displacement) {
-    displacementText += `${intl.get(
-      `FIELD_DISPLACEMENT_${type === MonitoringPointTypeValue.BaseInclination ? 'AXIAL' : 'RADIAL'}`
-    )}${intl.get('FIELD_DISPLACEMENT')} ${
-      displacement === Number.NEGATIVE_INFINITY ? '-' : `${displacement}mm`
-    }`;
-  }
+
   return {
     main: intl.get('SCATTERGRAM'),
-    displacement: displacementText,
-    direction: direction
-      ? `${intl.get('FIELD_DIRECTION')} ${direction ? `${direction}°` : '-'}`
-      : ''
+    displacement: { label: dispalyPrefix, value: displacement, unit: 'mm' },
+    direction: { label: intl.get('FIELD_DIRECTION'), value: direction, unit: '°' }
   };
 }
 

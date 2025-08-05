@@ -57,7 +57,7 @@ export const Envelope = ({
   }, [handleRefresh, x, y, data]);
 
   return (
-    <Grid>
+    <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{

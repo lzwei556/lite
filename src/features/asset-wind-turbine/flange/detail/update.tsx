@@ -45,7 +45,7 @@ export const Update = (props: ModalFormProps & { asset: AssetRow }) => {
       <Form form={form} layout='vertical' initialValues={{ ...Asset.convert(asset) }}>
         <UpdateFormItems
           asset={asset}
-          formItemColProps={generateColProps({ lg: 12, xl: 8, xxl: 8 })}
+          formItemColProps={generateColProps({ lg: 12, xl: 12, xxl: 8 })}
         />
       </Form>
     </Card>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Col, Empty, Spin } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Card, Flex, Grid, Table, useRange, RangeDatePicker } from '../components';
 import { Dayjs } from '../utils';
@@ -147,16 +148,16 @@ function TimestampsTable<T>(
               if (hasPermission(Permission.DeviceRawDataDownload)) {
                 return (
                   <Button
+                    icon={<DownloadOutlined />}
                     onClick={() => {
                       onDownload(text.timestamp);
                     }}
-                  >
-                    <a>{intl.get('DOWNLOAD')}</a>
-                  </Button>
+                    color='primary'
+                    variant='text'
+                  />
                 );
               }
-            },
-            width: 90
+            }
           }
         ]}
         pagination={false}

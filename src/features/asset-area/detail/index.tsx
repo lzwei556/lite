@@ -33,7 +33,7 @@ export const Index = (props: {
     <Tabs
       items={[
         {
-          label: intl.get('ASSET'),
+          label: intl.get('assets'),
           key: 'asset',
           children: (
             <Grid>

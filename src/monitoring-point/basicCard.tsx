@@ -6,8 +6,11 @@ import { Asset } from '../asset-common';
 import { Point } from './util';
 import { MonitoringPointRow } from './types';
 import { AXIS_ALIAS } from './constants';
+import { getPluralUnitInEnglish } from '../utils';
+import { useLocaleContext } from '../localeProvider';
 
 export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
+  const { language } = useLocaleContext();
   const { assetId, attributes, type } = monitoringPoint;
   const parents = useMonitoringPointParents(
     (asset) =>
@@ -78,13 +81,21 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
     if (corrosion_rate_short_term) {
       items.push({
         label: intl.get('CORROSION_RATE_SHORT_TERM'),
-        children: `${corrosion_rate_short_term}${intl.get('UNIT_DAY')}`
+        children: `${corrosion_rate_short_term}${getPluralUnitInEnglish(
+          corrosion_rate_short_term,
+          intl.get('UNIT_DAY'),
+          language
+        )}`
       });
     }
     if (corrosion_rate_long_term) {
       items.push({
         label: intl.get('CORROSION_RATE_LONG_TERM'),
-        children: `${corrosion_rate_long_term}${intl.get('UNIT_DAY')}`
+        children: `${corrosion_rate_long_term}${getPluralUnitInEnglish(
+          corrosion_rate_long_term,
+          intl.get('UNIT_DAY'),
+          language
+        )}`
       });
     }
     if (tower_install_height) {

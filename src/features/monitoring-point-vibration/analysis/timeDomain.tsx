@@ -30,7 +30,7 @@ export const TimeDomain = ({
   }, [handleRefresh, x, y]);
 
   return (
-    <Grid>
+    <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{

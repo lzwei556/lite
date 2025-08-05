@@ -137,7 +137,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
               <TimeFrequency {...{ ...props, axis, property, originalDomain }} />
             </ChartMark.Context>
           )
-        },
+        }
         // {
         //   key: 'water-fall',
         //   label: 'water.fall',
@@ -147,15 +147,15 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
         //     </ChartMark.Context>
         //   )
         // },
-        {
-          key: 'orbit-plot',
-          label: 'orbit.plot',
-          children: (
-            <ChartMark.Context>
-              <OrbitPlot {...{ ...props, axis, property, originalDomain }} />
-            </ChartMark.Context>
-          )
-        }
+        // {
+        //   key: 'orbit-plot',
+        //   label: 'orbit.plot',
+        //   children: (
+        //     <ChartMark.Context>
+        //       <OrbitPlot {...{ ...props, axis, property, originalDomain }} />
+        //     </ChartMark.Context>
+        //   )
+        // }
         // {
         //   key: 'trend-analysis',
         //   label: 'trend.analysis',

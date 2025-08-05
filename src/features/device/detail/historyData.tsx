@@ -99,7 +99,9 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
       } else {
         return (
           <HistoryDataFea.PropertyChart
-            config={{ opts: { yAxis: { name: property.unit } } }}
+            config={{
+              opts: { dataZoom: [{ start: 0, end: 100 }], yAxis: { name: property.unit } }
+            }}
             data={dataSource}
             property={property}
             style={{ height: 650 }}

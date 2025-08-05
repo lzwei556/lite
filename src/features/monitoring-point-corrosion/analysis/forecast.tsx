@@ -2,9 +2,10 @@ import React from 'react';
 import { DatePicker, Descriptions, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card } from '../../../components';
-import { Dayjs } from '../../../utils';
+import { Dayjs, getPluralUnitInEnglish } from '../../../utils';
 import { getValue, roundValue } from '../../../utils/format';
 import { MonitoringPointRow } from '../../../asset-common';
+import { useLocaleContext } from '../../../localeProvider';
 import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
 
 export const Forecast = ({
@@ -17,6 +18,7 @@ export const Forecast = ({
   const { id } = point;
   const [range, setRange] = React.useState(initialRange);
   const { analysisResult } = useAnalysisData(id, range);
+  const { language } = useLocaleContext();
 
   const render = () => {
     if (!analysisResult) {
@@ -41,7 +43,7 @@ export const Forecast = ({
           <Card.Grid hoverable={false} style={{ width: '50%' }}>
             <PropertyCardedContent
               label={intl.get('FIELD_RESIDUAL_LIFE')}
-              unit={intl.get(unit)}
+              unit={getPluralUnitInEnglish(duration, intl.get(unit), language)}
               value={duration}
             />
           </Card.Grid>

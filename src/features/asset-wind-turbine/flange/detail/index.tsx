@@ -40,8 +40,8 @@ export const Index = (props: {
   const historyDatas = useHistoryDatas(asset);
   const items: TabsProps['items'] = [
     {
-      label: intl.get('MONITOR'),
-      key: 'monitor',
+      label: intl.get('OVERVIEW'),
+      key: 'overview',
       children: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
           <Grid>
@@ -73,7 +73,7 @@ export const Index = (props: {
       key: 'monitoringPointList',
       children: (
         <MonitoringPointsTable
-          key={asset.id}
+          key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
           asset={asset}
           enableSettingColumnsCount={Points.filter(monitoringPoints).length > 0}
         />
@@ -120,7 +120,10 @@ export const Index = (props: {
                 language
               }),
               positionColumn,
-              getOperateColumn({ onDeleteSuccess: props.onSuccess, onUpdate: props.onUpdate })
+              getOperateColumn({
+                onDeleteSuccess: () => props.onSuccess(),
+                onUpdate: props.onUpdate
+              })
             ]}
             dataSource={Points.filter(monitoringPoints)}
             rowKey={(row) => row.id}

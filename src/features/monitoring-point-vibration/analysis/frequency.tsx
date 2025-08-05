@@ -67,7 +67,7 @@ export const Frequency = ({
   }, [handleRefresh, x, y, data, faultFrequency]);
 
   return (
-    <Grid>
+    <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{

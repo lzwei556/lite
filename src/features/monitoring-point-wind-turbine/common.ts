@@ -14,7 +14,7 @@ import {
   updateMeasurement,
   useContext
 } from '../../asset-common';
-import { flange, tower } from '../asset-wind-turbine/constants';
+import { flange, tower, wind } from '../asset-wind-turbine/constants';
 import { isFlangePreloadCalculation } from '../asset-wind-turbine/flange';
 
 export function getMonitoringPointTypes(asset: AssetRow) {
@@ -68,11 +68,13 @@ export function useParents(asset?: AssetRow) {
     return [];
   } else {
     const parents: AssetRow[] = [];
-    assets.forEach(({ children }) => {
-      if (children && children.length > 0) {
-        parents.push(...children);
-      }
-    });
+    assets
+      .filter((_asset) => _asset.type === wind.type && _asset.id === asset?.id)
+      .forEach(({ children }) => {
+        if (children && children.length > 0) {
+          parents.push(...children);
+        }
+      });
     return parents;
   }
 }

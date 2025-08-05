@@ -35,7 +35,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
   const renderChart = () => {
     if (runtimes.length === 0) {
       return (
-        <Card>
+        <Card title={intl.get('SIGNAL_STRENGTH')}>
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </Card>
       );
@@ -62,6 +62,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
             />
           </HasPermission>
         }
+        title={intl.get('SIGNAL_STRENGTH')}
       >
         <LineChart
           series={[

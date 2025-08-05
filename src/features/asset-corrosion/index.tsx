@@ -39,7 +39,13 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
           {
             key: 'monitoringPointList',
             label: intl.get('MONITORING_POINT_LIST'),
-            children: <MonitoringPointsTable asset={asset} enableSettingColumnsCount={true} />
+            children: (
+              <MonitoringPointsTable
+                key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
+                asset={asset}
+                enableSettingColumnsCount={true}
+              />
+            )
           },
           {
             key: 'settings',

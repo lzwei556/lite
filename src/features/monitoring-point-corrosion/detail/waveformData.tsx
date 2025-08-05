@@ -103,7 +103,9 @@ export function WaveformData<T extends ThicknessWaveData>(props: { values: T }) 
           config={{
             opts: {
               xAxis: { name: 'ns' },
-              dataZoom: isContained ? [{ startValue, endValue }] : [{ start: 70, end: 100 }]
+              // dataZoom: isContained ? [{ startValue, endValue }] : [{ start: 70, end: 100 }]
+              dataZoom: [{ start: 0, end: 100 }],
+              grid: { top: 60, bottom: 60, right: 40 }
             }
           }}
           yAxisMeta={{ precision: field.precision }}

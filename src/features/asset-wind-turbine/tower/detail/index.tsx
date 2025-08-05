@@ -46,7 +46,7 @@ export const Index = (props: {
           key: 'monitoringPointList',
           children: (
             <MonitoringPointsTable
-              key={asset.id}
+              key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
               asset={asset}
               enableSettingColumnsCount={Points.filter(monitoringPoints).length > 0}
             />
@@ -85,7 +85,7 @@ export const Index = (props: {
                     installHeight,
                     installRadius,
                     getOperateColumn({
-                      onDeleteSuccess: props.onSuccess,
+                      onDeleteSuccess: () => props.onSuccess(),
                       onUpdate: props.onUpdate
                     })
                   ]}
