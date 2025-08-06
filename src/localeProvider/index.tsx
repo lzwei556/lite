@@ -28,7 +28,9 @@ function useLocaleProvider() {
   const uaLang = window.navigator.language;
   const localLang = localStorage.getItem('lang');
   const initialLang =
-    (localLang || uaLang) !== LANGUAGES.chinese ? LANGUAGES.english : LANGUAGES.chinese;
+    (localLang || (process.env.REACT_APP_LOCALE ?? uaLang)) !== LANGUAGES.chinese
+      ? LANGUAGES.english
+      : LANGUAGES.chinese;
   const [locale, setLocale] = useState<LocalProviderProps>({
     language: initialLang
   } as LocalProviderProps);
