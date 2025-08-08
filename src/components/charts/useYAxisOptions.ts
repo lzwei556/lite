@@ -9,17 +9,15 @@ export type YAxisMeta = {
   precision?: number;
   interval?: number;
   unit?: string;
+  startValue?: number;
 };
 
 export function useYAxisOptions(meta?: YAxisMeta, opts?: ECOptions['yAxis']) {
-  const { min, max, interval } = meta || {};
-  const splited = split(max, min, interval);
-  return {
+  const { min, max, interval, startValue } = meta || {};
+  const splited = split({ max, min, interval, startValue });
+  const options = {
     ...opts,
     type: 'value',
-    min: splited?.[1],
-    max: splited?.[0],
-    interval: splited?.[2],
     axisLabel: {
       hideOverlap: true
     },
@@ -29,30 +27,72 @@ export function useYAxisOptions(meta?: YAxisMeta, opts?: ECOptions['yAxis']) {
       }
     }
   } as YAXisComponentOption;
+  return splited ? { ...options, ...splited } : { ...options, boundaryGap: ['20%', '20%'] };
 }
 
-function split(max?: number, min?: number, initial?: number) {
+function split(initial: { max?: number; min?: number; interval?: number; startValue?: number }) {
   const SPLIT_NUMBER = 6;
-  if (max === undefined || min === undefined || initial === undefined) return null;
-  const precision = pickPrecisionFromInterval(initial);
-  const newMax = getFitedValue(max, initial, precision, _.ceil);
-  const newMin = getFitedValue(min, initial, precision, _.floor);
-  const fitAllInterval = add(newMin, multiply(SPLIT_NUMBER, initial)) > newMax;
+  if (initial.max === undefined || initial.min === undefined || initial.interval === undefined)
+    return null;
+  const precision = pickPrecisionFromInterval(initial.interval);
+  const dataMax = getFitedValue({
+    value: initial.max + initial.interval,
+    interval: initial.interval,
+    precision,
+    formatFn: _.ceil
+  });
+  const datadMin = getFitedValue({
+    value: initial.min,
+    interval: initial.interval,
+    precision,
+    formatFn: _.floor
+  });
+  const interval = calculateInterval({
+    splitNumber: SPLIT_NUMBER,
+    initial: initial.interval,
+    min: datadMin,
+    max: dataMax,
+    precision
+  });
+  const min = initial.startValue ?? sub(dataMax, multiply(SPLIT_NUMBER, interval));
+  const max = Math.max(add(min, multiply(SPLIT_NUMBER, interval)), dataMax);
+  return { max, min, interval };
+}
+
+function calculateInterval({
+  splitNumber,
+  initial,
+  min,
+  max,
+  precision
+}: {
+  splitNumber: number;
+  initial: number;
+  min: number;
+  max: number;
+  precision: number;
+}) {
+  const fitAllInterval = add(min, multiply(splitNumber, initial)) > max;
   let interval = initial;
   if (!fitAllInterval) {
-    interval = _.ceil((newMax - newMin) / SPLIT_NUMBER, precision);
+    interval = _.ceil((max - min) / splitNumber, precision);
   }
-  return [newMax, sub(newMax, multiply(SPLIT_NUMBER, interval)), interval];
+  return interval;
 }
 
-function getFitedValue(
-  n: number,
-  interval: number,
-  precision: number,
-  fn: (n: number, p: number) => number
-) {
-  const m = fn(n, precision);
-  return mod(m, interval) === 0 ? m : multiply(fn(n / interval, 0), interval);
+function getFitedValue({
+  value,
+  interval,
+  precision,
+  formatFn
+}: {
+  value: number;
+  interval: number;
+  precision: number;
+  formatFn: (n: number, p: number) => number;
+}) {
+  const m = formatFn(value, precision);
+  return mod(m, interval) === 0 ? m : multiply(formatFn(value / interval, 0), interval);
 }
 
 function pickPrecisionFromInterval(interval: number) {

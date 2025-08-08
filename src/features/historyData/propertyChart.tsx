@@ -23,7 +23,8 @@ export const PropertyChart = (
         interval: property.interval,
         unit: property.unit,
         max: transformed?.max,
-        min: transformed?.min
+        min: transformed?.min,
+        startValue: property.min
       },
       config
     )
@@ -71,7 +72,13 @@ export function transform(
       }) ?? [];
   const values = series.map((s) => {
     const [name, data] = Object.entries(s)[0];
-    return { name, last: data[data.length - 1], min: Math.min(...data), max: Math.max(...data) };
+    const validData = data.filter((d) => !Number.isNaN(d));
+    return {
+      name,
+      last: data[data.length - 1],
+      min: property.min ?? Math.min(...validData),
+      max: Math.max(...validData)
+    };
   });
   return {
     series: series.map((s) => {

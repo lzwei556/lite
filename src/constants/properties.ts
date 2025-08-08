@@ -27,6 +27,7 @@ export interface DisplayProperty {
   parentKey?: string;
   group?: DisplayPropertyGroup;
   onlyShowFirstField?: boolean;
+  min?: number;
 }
 
 export type DisplayPropertyCategories = {
@@ -117,7 +118,8 @@ const CORROSION_LOSS: DisplayProperty = {
   name: 'FIELD_CORROSION_LOSS',
   interval: 0.2,
   precision: 3,
-  unit: 'mm'
+  unit: 'mm',
+  min: 0
 };
 const DC_TEMPERATURE: DisplayProperty = {
   key: 'temperature',
