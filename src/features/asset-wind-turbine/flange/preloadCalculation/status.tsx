@@ -95,7 +95,9 @@ export const Status: React.FC<AssetRow> = (props) => {
     if (!timestamp)
       return (
         <Empty
-          description={intl.get('PLEASE_SELECT_SOMETHING', { something: intl.get('TIMESTAMP') })}
+          description={intl.get('PLEASE_SELECT_SOMETHING', {
+            something: intl.get('TIMESTAMP').toLowerCase()
+          })}
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       );

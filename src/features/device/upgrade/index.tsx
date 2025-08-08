@@ -55,7 +55,9 @@ const UpgradeModal: FC<UpgradeModalProps> = ({ open, device, onCancel, onSuccess
 
   const onUpgrade = () => {
     if (firmware === undefined) {
-      message.success(intl.get('PLEASE_SELECT_FIRMWARE'));
+      message.success(
+        intl.get('PLEASE_SELECT_SOMETHING', { something: intl.get('firmware').toLowerCase() })
+      );
       return;
     }
     if (device) {

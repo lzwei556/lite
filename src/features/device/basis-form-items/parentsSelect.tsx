@@ -1,6 +1,5 @@
 import React from 'react';
 import { Select, SelectProps, Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
 import { toMac } from '../../../utils/format';
 import { DeviceType } from '../../../types/device_type';
 import { useAppType } from '../../../config';
@@ -64,7 +63,6 @@ export function ParentsSelect({
           )}
         </Space>
       )}
-      placeholder={intl.get('PLEASE_SELECT_PARENT')}
     />
   );
 }
