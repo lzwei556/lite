@@ -17,7 +17,7 @@ export const UpdateFormItems = ({
   formItemColProps?: ColProps;
 }) => {
   const { type } = monitoringPoint;
-  const parents = useParents();
+  const parents = useParents(undefined, monitoringPoint.type);
   const types = [{ id: type, label: Point.getTypeLabel(type) as string }];
   const deviceTypes = getRelatedDeviceTypes(type);
   const deviceTypeId =

@@ -62,17 +62,26 @@ export function isParentValid(asset?: AssetRow) {
   return type && (type === flange.type || type === tower.type);
 }
 
-export function useParents(asset?: AssetRow) {
+export function useParents(asset?: AssetRow, monitoringPointType?: number) {
   const { assets } = useContext();
   if (isParentValid(asset)) {
     return [];
   } else {
     const parents: AssetRow[] = [];
     assets
-      .filter((_asset) => _asset.type === wind.type && _asset.id === asset?.id)
+      .filter((asset) => asset.type === wind.type)
+      .filter((a) => (asset ? asset.id === a.id : true))
       .forEach(({ children }) => {
         if (children && children.length > 0) {
-          parents.push(...children);
+          parents.push(
+            ...children.filter((a) =>
+              monitoringPointType
+                ? getMonitoringPointTypes(a)
+                    .map(({ id }) => id)
+                    .includes(monitoringPointType)
+                : true
+            )
+          );
         }
       });
     return parents;
