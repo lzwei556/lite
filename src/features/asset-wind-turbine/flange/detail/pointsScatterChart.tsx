@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import intl from 'react-intl-universal';
-import { Chart, Card } from '../../../../components';
+import { Chart, chartColors } from '../../../../components';
 import { isMobile } from '../../../../utils/deviceDetection';
 import { ColorHealth } from '../../../../constants/color';
 import { getValue, roundValue } from '../../../../utils/format';
@@ -18,12 +18,10 @@ import { AlarmLevel, getColorByValue } from '../../../alarm';
 
 export const PointsScatterChart = ({
   asset,
-  title,
   big,
   style
 }: {
   asset: AssetRow;
-  title?: string;
   big?: boolean;
   style?: React.CSSProperties;
 }) => {
@@ -36,22 +34,20 @@ export const PointsScatterChart = ({
   }
 
   return (
-    <Card title={title}>
-      <Chart
-        options={options}
-        onEvents={{
-          click: (paras: any) => {
-            const index = paras.value[2];
-            if (points.length > index) {
-              navigate(`/${ASSET_PATHNAME}/${points[index].id}-${points[index].type}`, {
-                state: [`${points[index].id}-${points[index].type}`]
-              });
-            }
+    <Chart
+      options={options}
+      onEvents={{
+        click: (paras: any) => {
+          const index = paras.value[2];
+          if (points.length > index) {
+            navigate(`/${ASSET_PATHNAME}/${points[index].id}-${points[index].type}`, {
+              state: [`${points[index].id}-${points[index].type}`]
+            });
           }
-        }}
-        style={{ height: 600, ...style }}
-      />
-    </Card>
+        }
+      }}
+      style={{ height: 600, ...style }}
+    />
   );
 };
 
@@ -316,7 +312,7 @@ function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = fa
     type: 'line',
     name: intl.get('ACTUAL_VALUE'),
     data: [...seriesData, seriesData[0]],
-    itemStyle: { color: 'rgb(0,130,252)' },
+    itemStyle: { color: chartColors[0] },
     tooltip: { show: false },
     zlevel: 15,
     coordinateSystem: 'polar',

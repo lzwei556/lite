@@ -1,16 +1,14 @@
 import React from 'react';
-import { Col, TabsProps } from 'antd';
-import { useSize } from 'ahooks';
+import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../../utils/grid';
-import { Card, Grid, Tabs, Table } from '../../../../components';
+import { Grid, TabsDetail, Table, TabsDetailsItems, Card } from '../../../../components';
 import { useLocaleContext } from '../../../../localeProvider';
 import {
   StatisticBar,
   AssetRow,
   MONITORING_POINT_LIST,
   MonitoringPointRow,
-  TabBarExtraLeftContent,
   MonitoringPointsTable,
   Points,
   getMonitoringPointColumns,
@@ -36,24 +34,24 @@ export const Index = (props: {
 }) => {
   const { language } = useLocaleContext();
   const { asset, onSuccess } = props;
-  const { id, alertLevel, monitoringPoints } = asset;
+  const { monitoringPoints } = asset;
   const historyDatas = useHistoryDatas(asset);
-  const items: TabsProps['items'] = [
+  const items: TabsDetailsItems = [
     {
       label: intl.get('OVERVIEW'),
       key: 'overview',
-      children: (
+      content: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
           <Grid>
             <Col span={24}>
-              <Card>
-                <StatisticBar asset={asset} />
-              </Card>
+              <StatisticBar asset={asset} />
             </Col>
             <Col span={24}>
               <Grid>
                 <Col {...generateColProps({ xl: 12, xxl: 9 })}>
-                  <PointsScatterChart asset={asset} title={intl.get('BOLT_DIAGRAM')} big={true} />
+                  <Card title={intl.get('BOLT_DIAGRAM')}>
+                    <PointsScatterChart asset={asset} big={true} />
+                  </Card>
                 </Col>
                 <Col {...generateColProps({ xl: 12, xxl: 15 })}>
                   {isFlangePreloadCalculation(asset) ? (
@@ -71,7 +69,7 @@ export const Index = (props: {
     {
       label: intl.get(MONITORING_POINT_LIST),
       key: 'monitoringPointList',
-      children: (
+      content: (
         <MonitoringPointsTable
           key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
           asset={asset}
@@ -82,7 +80,7 @@ export const Index = (props: {
     {
       label: intl.get('HISTORY_DATA'),
       key: 'history',
-      children: (
+      content: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
           <History flange={asset} historyDatas={historyDatas} />
         </EmptyMonitoringPoints>
@@ -93,7 +91,7 @@ export const Index = (props: {
     items.push({
       label: intl.get('FLANGE_STATUS'),
       key: 'status',
-      children: (
+      content: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
           <PreloadCalculation.Status {...asset} />
         </EmptyMonitoringPoints>
@@ -103,7 +101,7 @@ export const Index = (props: {
   items.push({
     label: intl.get('SETTINGS'),
     key: 'settings',
-    children: (
+    content: (
       <Grid>
         <Col span={24}>
           <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
@@ -112,7 +110,6 @@ export const Index = (props: {
           <Table
             cardProps={{
               extra: <ActionBar {...props} />,
-              size: 'small',
               title: intl.get(MONITORING_POINT)
             }}
             columns={[
@@ -133,22 +130,5 @@ export const Index = (props: {
     )
   });
 
-  const ref = React.useRef<HTMLDivElement>(null);
-  const size = useSize(ref);
-
-  return (
-    <Tabs
-      items={items}
-      noStyle={true}
-      tabBarExtraContent={{
-        left: (
-          <TabBarExtraLeftContent alertLevel={alertLevel}>
-            <AssetNavigator id={id} containerDomWidth={size?.width} type={asset.type} />
-          </TabBarExtraLeftContent>
-        )
-      }}
-      tabListRef={ref}
-      tabsRighted={true}
-    />
-  );
+  return <TabsDetail items={items} title={<AssetNavigator asset={asset} />} />;
 };

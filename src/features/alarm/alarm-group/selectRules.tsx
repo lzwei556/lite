@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Checkbox, Form, ModalProps, Col, Button } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
+import { Card, Grid, TextFormItem } from '../../../components';
 import { getFilename } from '../../../utils/format';
 import { exportAlarmRules } from './services';
 import { AlarmRule } from './types';
-import { Card, Grid, TextFormItem } from '../../../components';
 
 export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void } & ModalProps> = (
   props
@@ -43,12 +43,13 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
         </Button>,
         <Button
           key='submitall'
-          type='primary'
           onClick={() => {
             setLoading(true);
             handleUpload();
           }}
           loading={loading}
+          color='primary'
+          variant='outlined'
         >
           {intl.get('EXPORT_ALL')}
         </Button>,

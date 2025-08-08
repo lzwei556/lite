@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
+import { Col, Progress, Row, Statistic, Tag, Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
+import intl from 'react-intl-universal';
 import { GetSystemRequest } from '../../apis/system';
-import { Col, Progress, Row, Statistic, Tag } from 'antd';
+import { Chart, Descriptions, Grid, MutedCard } from '../../components';
+import { generateColProps } from '../../utils/grid';
 import { System } from '../../types/system';
 import { ColorHealth } from '../../constants/color';
-import { Content } from 'antd/es/layout/layout';
-import { PageTitle } from '../../components/pageTitle';
-import intl from 'react-intl-universal';
-import { Card, Chart, Descriptions, Grid } from '../../components';
-import { generateColProps } from '../../utils/grid';
 
 const SystemPage = () => {
   const [data, setData] = useState<System>();
@@ -65,14 +64,10 @@ const SystemPage = () => {
 
   return (
     <Content>
-      <PageTitle items={[{ title: intl.get('MENU_SYSTEM_STATUS') }]} />
+      <Typography.Title level={4}>{intl.get('MENU_SYSTEM_STATUS')}</Typography.Title>
       <Grid>
         <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-          <Card
-            title={intl.get('SYSTEM_INFO')}
-            size={'small'}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-          >
+          <MutedCard title={intl.get('SYSTEM_INFO')} style={{ height: '100%' }}>
             <Descriptions
               items={[
                 { label: intl.get('OEPRATING_SYSTEM'), children: os.goos ?? '' },
@@ -85,33 +80,33 @@ const SystemPage = () => {
                 { label: intl.get('MQTT_PASSWORD'), children: mqtt.password ?? '' }
               ]}
             />
-          </Card>
+          </MutedCard>
         </Col>
         <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-          <Card
-            title={intl.get('HARD_DISK_STATUS')}
-            size={'small'}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-          >
+          <MutedCard title={intl.get('HARD_DISK_STATUS')}>
             <Row justify={'start'}>
-              <Col span={6}>
-                <Statistic title={intl.get('TOTAL_AMOUNT_MB')} value={disk.totalMB} />
-                <Statistic title={intl.get('TOTAL_AMOUNT_GB')} value={disk.totalGB} />
-              </Col>
-              <Col span={6}>
-                <Statistic title={intl.get('USED_AMOUNT_MB')} value={disk.usedMB} />
-                <Statistic title={intl.get('USED_AMOUNT_GB')} value={disk.usedGB} />
+              <Col span={12}>
+                <Grid>
+                  <Col span={12}>
+                    <Statistic title={intl.get('TOTAL_AMOUNT_MB')} value={disk.totalMB} />
+                  </Col>
+                  <Col span={12}>
+                    <Statistic title={intl.get('TOTAL_AMOUNT_GB')} value={disk.totalGB} />
+                  </Col>
+                  <Col span={12}>
+                    <Statistic title={intl.get('USED_AMOUNT_MB')} value={disk.usedMB} />
+                  </Col>
+                  <Col span={12}>
+                    <Statistic title={intl.get('USED_AMOUNT_GB')} value={disk.usedGB} />
+                  </Col>
+                </Grid>
               </Col>
               <Col span={12}>{renderUsedChart(disk.usedPercent ?? 0)}</Col>
             </Row>
-          </Card>
+          </MutedCard>
         </Col>
         <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-          <Card
-            title={intl.get('CPU_RUNNING_STATUS')}
-            size={'small'}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-          >
+          <MutedCard title={intl.get('CPU_RUNNING_STATUS')}>
             <Descriptions
               items={[
                 {
@@ -136,22 +131,24 @@ const SystemPage = () => {
                 }))
               ]}
             />
-          </Card>
+          </MutedCard>
         </Col>
         <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-          <Card
-            title={intl.get('MEMORY_STATUS')}
-            size={'small'}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-          >
+          <MutedCard title={intl.get('MEMORY_STATUS')}>
             <Row justify={'start'}>
               <Col span={12}>
-                <Statistic title={intl.get('TOTAL_AMOUNT_MB')} value={ram.totalMB} />
-                <Statistic title={intl.get('USED_AMOUNT_MB')} value={ram.usedMB} />
+                <Grid>
+                  <Col span={24}>
+                    <Statistic title={intl.get('TOTAL_AMOUNT_MB')} value={ram.totalMB} />
+                  </Col>
+                  <Col span={24}>
+                    <Statistic title={intl.get('USED_AMOUNT_MB')} value={ram.usedMB} />
+                  </Col>
+                </Grid>
               </Col>
               <Col span={12}>{renderUsedChart(ram.usedPercent ?? 0)}</Col>
             </Row>
-          </Card>
+          </MutedCard>
         </Col>
       </Grid>
     </Content>

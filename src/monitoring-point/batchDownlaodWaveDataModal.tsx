@@ -51,6 +51,8 @@ export const BatchDownlaodWaveDataModal = ({
           onClick={() => {
             handleDownlaod(timestamps.map((item) => item.timestamp));
           }}
+          color='primary'
+          variant='outlined'
         >
           {intl.get('DOWNLOAD_ALL')}
         </Button>,

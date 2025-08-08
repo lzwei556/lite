@@ -50,7 +50,7 @@ export const PointsScatterChart = ({
     lang: language
   });
 
-  return (
+  return cardProps ? (
     <Card
       {...cardProps}
       title={
@@ -64,6 +64,11 @@ export const PointsScatterChart = ({
         style={{ height: 600, ...style }}
       />
     </Card>
+  ) : (
+    <Chart
+      options={options ? getOptions(options as any) : undefined}
+      style={{ height: 600, ...style }}
+    />
   );
 };
 
@@ -142,7 +147,8 @@ function buildCirclePointsChartOfTower({
       }) => {
         const rest = `${displacement} ${displacementValue}mm<br/>${direction} ${directionValue}°`;
         return onlyOneSeries ? rest : `${seriesName}<br/>${rest}`;
-      }
+      },
+      confine: true
     },
     polar: { radius: 100, center: ['50%', '50%'] },
     angleAxis: {

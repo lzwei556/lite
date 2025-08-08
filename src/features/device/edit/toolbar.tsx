@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Tooltip, ButtonProps, Space } from 'antd';
-import { SaveOutlined, SelectOutlined } from '@ant-design/icons';
+import { Tooltip, Space } from 'antd';
+import { SelectOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { CanCopySettings } from './can-copying-settings';
 import { FormCommonProps, FormSubmitButtonProps } from '../settings-common';
+import { SaveIconButton } from '../../../components';
 
 type Props = Omit<FormCommonProps, 'device'> &
   Partial<Pick<FormCommonProps, 'device'>> &
@@ -17,8 +18,14 @@ export const Toolbar = (props: Props) => {
       {props.device && (
         <Tooltip title={selectButtonChildren}>
           <CanCopySettings
-            {...{ device: props.device, form: props.form }}
-            icon={<SelectOutlined />}
+            {...{
+              device: props.device,
+              form: props.form,
+              color: 'primary',
+              icon: <SelectOutlined />,
+              size: 'small',
+              variant: 'outlined'
+            }}
           />
         </Tooltip>
       )}
@@ -35,14 +42,4 @@ const useProps = (props: Props) => {
     },
     selectButtonChildren: intl.get('apply.settings.to.the.same.types')
   };
-};
-
-const SaveIconButton = ({ onClick, ...rest }: ButtonProps) => {
-  return (
-    onClick && (
-      <Tooltip title={intl.get('SAVE')}>
-        <Button {...rest} icon={<SaveOutlined />} onClick={onClick} />
-      </Tooltip>
-    )
-  );
 };

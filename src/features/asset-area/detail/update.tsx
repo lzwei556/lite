@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Form, Space } from 'antd';
+import { Form, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { Card } from '../../../components';
+import { Card, SaveIconButton } from '../../../components';
 import { AssetRow, updateAsset, AssetModel } from '../../../asset-common';
 import { UpdateFormItems } from '../updateFormItems';
-import { SaveOutlined } from '@ant-design/icons';
 import { generateColProps } from '../../../utils/grid';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
@@ -14,8 +13,7 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
     <Card
       extra={
         <Space>
-          <Button
-            color='primary'
+          <SaveIconButton
             onClick={() => {
               form.validateFields().then((values) => {
                 try {
@@ -27,13 +25,9 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
                 }
               });
             }}
-            icon={<SaveOutlined />}
-            size='small'
-            variant='outlined'
           />
         </Space>
       }
-      size='small'
       title={intl.get('BASIC_INFORMATION')}
     >
       <Form

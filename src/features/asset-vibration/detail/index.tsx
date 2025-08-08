@@ -1,13 +1,12 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { Grid, Tabs } from '../../../components';
+import { Grid, TabsDetail } from '../../../components';
 import {
   AssetNavigator,
   AssetRow,
   MonitoringPointRow,
-  MonitoringPointsTable,
-  TabBarExtraLeftContent
+  MonitoringPointsTable
 } from '../../../asset-common';
 import { Index as Overview } from './overview';
 import { Update } from './update';
@@ -20,21 +19,20 @@ export const Index = (props: {
   onUpdate: (m: MonitoringPointRow) => void;
 }) => {
   const { asset, onSuccess } = props;
-  const { id, alertLevel } = asset;
 
   return (
     <AssetProvider asset={asset}>
-      <Tabs
+      <TabsDetail
         items={[
           {
             key: 'overview',
             label: intl.get('OVERVIEW'),
-            children: <Overview asset={asset} key={asset.id} onSuccess={onSuccess} />
+            content: <Overview asset={asset} key={asset.id} onSuccess={onSuccess} />
           },
           {
             key: 'monitoringPointList',
             label: intl.get('MONITORING_POINT_LIST'),
-            children: (
+            content: (
               <MonitoringPointsTable
                 key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
                 asset={asset}
@@ -45,7 +43,7 @@ export const Index = (props: {
           {
             key: 'settings',
             label: intl.get('SETTINGS'),
-            children: (
+            content: (
               <Grid>
                 <Col span={24}>
                   <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
@@ -57,15 +55,7 @@ export const Index = (props: {
             )
           }
         ]}
-        noStyle={true}
-        tabBarExtraContent={{
-          left: (
-            <TabBarExtraLeftContent alertLevel={alertLevel}>
-              <AssetNavigator id={id} type={asset.type} />
-            </TabBarExtraLeftContent>
-          )
-        }}
-        tabsRighted={true}
+        title={<AssetNavigator asset={asset} />}
       />
     </AssetProvider>
   );

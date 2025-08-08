@@ -1,7 +1,8 @@
 import React from 'react';
-import { Col, Row, Statistic } from 'antd';
+import { Col, Statistic } from 'antd';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../utils/grid';
+import { Card, Grid } from '../../components';
 import { AssetRow } from '../types';
 import { Asset } from '..';
 
@@ -24,12 +25,14 @@ export const StatisticBar = ({ asset }: { asset: AssetRow }) => {
   };
 
   return (
-    <Row className='overview-statistic'>
-      {getItems().map(({ name, value }, index) => (
-        <Col key={index} {...generateColProps({ md: 12, lg: 12, xl: 4, xxl: 4 })}>
-          <Statistic title={name} value={value} />
-        </Col>
-      ))}
-    </Row>
+    <Card>
+      <Grid>
+        {getItems().map(({ name, value }, index) => (
+          <Col key={index} {...generateColProps({ md: 12, lg: 12, xl: 4, xxl: 4 })}>
+            <Statistic title={name} value={value} style={{ textAlign: 'center' }} />
+          </Col>
+        ))}
+      </Grid>
+    </Card>
   );
 };

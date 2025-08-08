@@ -1,14 +1,9 @@
 import React from 'react';
 import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Flex, Grid, Tabs } from '../../../components';
+import { Card, Flex, Grid, TabsDetail } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
-import {
-  AssetNavigator,
-  AssetRow,
-  StatisticBar,
-  TabBarExtraLeftContent
-} from '../../../asset-common';
+import { AssetNavigator, AssetRow, StatisticBar } from '../../../asset-common';
 import { ActionBar } from '../components/actionBar';
 import { Update } from './update';
 import { OverviewCard } from './overviewCard';
@@ -20,7 +15,6 @@ export const Index = (props: {
   onSuccess: () => void;
 }) => {
   const { asset, onUpdateAsset, onSuccess } = props;
-  const { id, alertLevel } = asset;
   const renderAssetList = (content: React.ReactNode) => {
     return (asset.children?.length ?? 0) > 0 ? (
       <Grid>{content}</Grid>
@@ -32,17 +26,15 @@ export const Index = (props: {
   };
 
   return (
-    <Tabs
+    <TabsDetail
       items={[
         {
           label: intl.get('assets'),
           key: 'asset',
-          children: (
+          content: (
             <Grid>
               <Col span={24}>
-                <Card>
-                  <StatisticBar asset={asset} />
-                </Card>
+                <StatisticBar asset={asset} />
               </Col>
               <Col span={24}>
                 {renderAssetList(
@@ -65,7 +57,7 @@ export const Index = (props: {
         {
           label: intl.get('SETTINGS'),
           key: 'settings',
-          children: (
+          content: (
             <Grid>
               <Col span={24}>
                 <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
@@ -87,15 +79,7 @@ export const Index = (props: {
           )
         }
       ]}
-      noStyle={true}
-      tabBarExtraContent={{
-        left: (
-          <TabBarExtraLeftContent alertLevel={alertLevel}>
-            <AssetNavigator id={id} type={asset.type} />
-          </TabBarExtraLeftContent>
-        )
-      }}
-      tabsRighted={true}
+      title={<AssetNavigator asset={asset} />}
     />
   );
 };

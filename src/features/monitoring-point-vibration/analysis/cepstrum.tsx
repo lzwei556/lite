@@ -38,9 +38,6 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
     <Grid>
       <Col span={24}>
         <ChartMark.Chart
-          cardProps={{
-            style: { border: 'solid 1px #d3d3d3' }
-          }}
           config={{
             opts: {
               xAxis: {

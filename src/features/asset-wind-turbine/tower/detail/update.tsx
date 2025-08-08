@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Form } from 'antd';
-import { SaveOutlined } from '@ant-design/icons';
+import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../../utils/grid';
 import { ModalFormProps } from '../../../../types/common';
-import { Card } from '../../../../components';
+import { Card, SaveIconButton } from '../../../../components';
 import { Asset, AssetModel, AssetRow, updateAsset } from '../../../../asset-common';
 import { UpdateFormItems } from '../_updateFormItems';
 
@@ -15,10 +14,7 @@ export const Update = (props: ModalFormProps & { asset: AssetRow }) => {
   return (
     <Card
       extra={
-        <Button
-          icon={<SaveOutlined />}
-          color='primary'
-          variant='outlined'
+        <SaveIconButton
           onClick={() => {
             form.validateFields().then((values) => {
               try {
@@ -28,10 +24,8 @@ export const Update = (props: ModalFormProps & { asset: AssetRow }) => {
               }
             });
           }}
-          size='small'
         />
       }
-      size='small'
       title={intl.get('BASIC_INFORMATION')}
     >
       <Form form={form} layout='vertical' initialValues={{ ...Asset.convert(asset) }}>

@@ -29,8 +29,7 @@ enum Status {
 export const FilterableAlarmRecordTable: React.FC<{
   sourceId?: number;
   storeKey?: 'alarmRecordList' | 'monitoringPointAlarmRecordList';
-  showTitle?: boolean;
-}> = ({ sourceId, storeKey = 'alarmRecordList', showTitle }) => {
+}> = ({ sourceId, storeKey = 'alarmRecordList' }) => {
   const [dataSource, setDataSource] = React.useState<PageResult<any[]>>();
   const [status, setStatus] = React.useState<Status[]>([]);
   const [store, setStore, gotoPage] = useStore(storeKey);
@@ -190,7 +189,6 @@ export const FilterableAlarmRecordTable: React.FC<{
         setStatus(_filters?.status ?? []);
       }}
       header={{
-        title: showTitle && intl.get('ALARM_RECORDS'),
         toolbar: [
           <>
             <Input

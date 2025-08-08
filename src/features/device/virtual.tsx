@@ -4,7 +4,7 @@ import { ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
-import { Card, Flex, Grid, Link } from '../../components';
+import { Card, Flex, Grid, Link, TitleExtraLayout } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { Dayjs } from '../../utils';
 import { Device } from '../../types/device';
@@ -75,36 +75,38 @@ export default function Virtual() {
   };
 
   return (
-    <Card
-      extra={
-        <Space>
-          <HasPermission value={Permission.NetworkAdd}>
-            <Link to='/devices/import'>
-              <Button type='primary'>
-                {intl.get('MENU_IMPORT_NETWORK')}
-                <ImportOutlined />
+    <Grid>
+      <Col span={24}>
+        <TitleExtraLayout
+          title={VIRTUAL_ROOT_DEVICE.name}
+          extra={
+            <Space>
+              <HasPermission value={Permission.NetworkAdd}>
+                <Link to='/devices/import'>
+                  <Button type='primary'>
+                    {intl.get('MENU_IMPORT_NETWORK')}
+                    <ImportOutlined />
+                  </Button>
+                </Link>
+              </HasPermission>
+              <Button type='primary' onClick={() => setOpen(true)}>
+                {intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })}
+                <PlusOutlined />
               </Button>
-            </Link>
-          </HasPermission>
-          <Button type='primary' onClick={() => setOpen(true)}>
-            {intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })}
-            <PlusOutlined />
-          </Button>
-          {open && (
-            <AddModal
-              open={open}
-              onCancel={() => setOpen(false)}
-              onSuccess={() => setOpen(false)}
-            />
-          )}
-        </Space>
-      }
-      style={{ backgroundColor: 'transparent' }}
-      styles={{ header: { backgroundColor: '#fff' }, body: { padding: 0 } }}
-      title={VIRTUAL_ROOT_DEVICE.name}
-    >
-      {renderBody()}
-    </Card>
+              {open && (
+                <AddModal
+                  open={open}
+                  onCancel={() => setOpen(false)}
+                  onSuccess={() => setOpen(false)}
+                />
+              )}
+            </Space>
+          }
+          paddingBlock={14}
+        />
+      </Col>
+      <Col span={24}>{renderBody()}</Col>
+    </Grid>
   );
 }
 

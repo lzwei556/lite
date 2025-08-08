@@ -33,9 +33,6 @@ export const TimeEnvelope = ({ property, originalDomain }: AnalysisCommonProps) 
 
   return (
     <ChartMark.Chart
-      cardProps={{
-        style: { border: 'solid 1px #d3d3d3' }
-      }}
       config={{
         opts: {
           xAxis: { axisLabel: { interval: Math.floor(x.length / 20) } },

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal, Space, Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import {
@@ -150,12 +151,12 @@ const ProjectPage = () => {
   const { paged, ds } = transformPagedresult(dataSource);
 
   return (
-    <>
+    <Content>
+      <Typography.Title level={4}>{intl.get('MENU_PROJECT_MANAGEMENT')}</Typography.Title>
       <Table
         columns={columns}
         dataSource={ds}
         header={{
-          title: intl.get('MENU_PROJECT_MANAGEMENT'),
           toolbar: [
             <HasPermission value={Permission.ProjectAdd}>
               <Button type={'primary'} onClick={() => trigger()}>
@@ -201,7 +202,7 @@ const ProjectPage = () => {
           <Typography.Text copyable={{ text: token }}>{token}</Typography.Text>
         </Card>
       </Modal>
-    </>
+    </Content>
   );
 };
 

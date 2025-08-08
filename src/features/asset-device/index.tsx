@@ -1,21 +1,20 @@
 import React from 'react';
 import { Col, Spin } from 'antd';
 import intl from 'react-intl-universal';
-import { Grid, Tabs } from '../../components';
+import { Grid, TabsDetail } from '../../components';
 import {
   AssetNavigator,
   AssetRow,
   ContextProps,
   MonitoringPointRow,
-  MonitoringPointsTable,
-  TabBarExtraLeftContent
+  MonitoringPointsTable
 } from '../../asset-common';
 import * as Point from '../monitoring-point-device';
 import { Update } from './update';
 import { PointsTable } from './pointsTable';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
-  const { id, type, alertLevel } = asset;
+  const { id } = asset;
   const [open, setOpen] = React.useState(false);
   const [mointoringPoint, setMonitoringPoint] = React.useState<MonitoringPointRow | undefined>();
   const props = {
@@ -34,12 +33,12 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
 
   return (
     <Spin spinning={loading}>
-      <Tabs
+      <TabsDetail
         items={[
           {
             key: 'monitoringPointList',
             label: intl.get('MONITORING_POINT_LIST'),
-            children: (
+            content: (
               <MonitoringPointsTable
                 key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
                 asset={asset}
@@ -50,7 +49,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
           {
             key: 'settings',
             label: intl.get('SETTINGS'),
-            children: (
+            content: (
               <Grid>
                 <Col span={24}>
                   <Update asset={asset} onSuccess={refresh} key={id} />
@@ -62,15 +61,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
             )
           }
         ]}
-        noStyle={true}
-        tabBarExtraContent={{
-          left: (
-            <TabBarExtraLeftContent alertLevel={alertLevel}>
-              <AssetNavigator id={id} type={type} />
-            </TabBarExtraLeftContent>
-          )
-        }}
-        tabsRighted={true}
+        title={<AssetNavigator asset={asset} />}
       />
       {mointoringPoint && (
         <Point.UpdateModal

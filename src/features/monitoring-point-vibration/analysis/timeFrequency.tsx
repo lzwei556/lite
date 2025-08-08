@@ -49,8 +49,7 @@ export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps)
               key='window_length'
             />
           </Space>
-        ),
-        style: { border: 'solid 1px #d3d3d3' }
+        )
       }}
       loading={loading}
       options={{

@@ -55,9 +55,7 @@ const HeaderLayout = (props: any) => {
         <Brand height={36} brandNameStyle={{ fontSize: 18 }} />
         {menus && <NavMenu menus={menus} />}
         <Space>
-          <Text style={{ color: 'white', fontFamily: 'monospace' }} strong>
-            {now}
-          </Text>
+          <Text style={{ color: 'white', fontFamily: 'monospace' }}>{now}</Text>
           {currentUser && <ProjectSelect variant='borderless' onChange={onProjectChange} />}
           <Dropdown
             menu={{

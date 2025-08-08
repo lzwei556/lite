@@ -55,7 +55,7 @@ export function CreateModal(props: ModalFormProps) {
       width={860}
     >
       <Form form={form} layout='vertical'>
-        <Grid justify='space-between'>
+        <Grid>
           <Col {...generateColProps({ xl: 12, xxl: 12 })}>
             <TextFormItem
               label='NAME'

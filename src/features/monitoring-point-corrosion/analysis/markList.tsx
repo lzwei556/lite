@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Divider, Input, List, Popover, Space, Typography } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card, ChartMark, useChartContext } from '../../../components';
+import { ChartMark, useChartContext } from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
 import { DisplayProperty } from '../../../constants/properties';
 
@@ -14,36 +14,35 @@ export const MarkList = ({ property }: { property: DisplayProperty }) => {
     propertyTitle = `${intl.get('FIELD_CORROSION_RATE')} (mm/a)`;
   }
   return (
-    <Card styles={{ body: { overflowY: 'auto', maxHeight: 500 } }}>
-      <List
-        dataSource={visibledMarks.map((mark) => {
-          const onChange = (input: string) => {
-            if (input.length > 0) {
-              dispatchMarks({ type: 'change_label', mark: { ...mark, label: input } });
-            }
-          };
-          const onRemove = () => {
-            dispatchMarks({ type: 'remove', mark });
-            ChartMark.brushAreas(
-              visibledMarks.filter((m) => m.name !== mark.name),
-              ref.current.getInstance()
-            );
-          };
-          return { ...mark, onChange, onRemove };
-        })}
-        header={
-          visibledMarks.length > 0 && (
-            <Space split={<Divider type='vertical' />} size={8}>
-              {intl.get('INDEX_NUMBER')}
-              {propertyTitle}
-            </Space>
-          )
-        }
-        renderItem={(item) => {
-          return <Item {...item} />;
-        }}
-      />
-    </Card>
+    <List
+      style={{ overflowY: 'auto', maxHeight: 500 }}
+      dataSource={visibledMarks.map((mark) => {
+        const onChange = (input: string) => {
+          if (input.length > 0) {
+            dispatchMarks({ type: 'change_label', mark: { ...mark, label: input } });
+          }
+        };
+        const onRemove = () => {
+          dispatchMarks({ type: 'remove', mark });
+          ChartMark.brushAreas(
+            visibledMarks.filter((m) => m.name !== mark.name),
+            ref.current.getInstance()
+          );
+        };
+        return { ...mark, onChange, onRemove };
+      })}
+      header={
+        visibledMarks.length > 0 && (
+          <Space split={<Divider type='vertical' />} size={8}>
+            {intl.get('INDEX_NUMBER')}
+            {propertyTitle}
+          </Space>
+        )
+      }
+      renderItem={(item) => {
+        return <Item {...item} />;
+      }}
+    />
   );
 };
 

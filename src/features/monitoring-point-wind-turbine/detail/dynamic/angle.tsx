@@ -99,6 +99,7 @@ export function Angle<T extends AngleDynamicData>(props: {
     <Grid>
       <Col {...generateColProps({ md: 24, lg: 24, xl: 10, xxl: 10 })}>
         <Tower.PointsScatterChart
+          cardProps={{}}
           data={[]}
           dynamicData={[
             {

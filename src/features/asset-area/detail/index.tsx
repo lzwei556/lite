@@ -2,13 +2,8 @@ import React from 'react';
 import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../utils/grid';
-import { Card, Grid, Tabs } from '../../../components';
-import {
-  AssetNavigator,
-  AssetRow,
-  StatisticBar,
-  TabBarExtraLeftContent
-} from '../../../asset-common';
+import { Card, Grid, TabsDetail } from '../../../components';
+import { AssetNavigator, AssetRow, StatisticBar } from '../../../asset-common';
 import { Update } from './update';
 import { OverviewCard } from './overviewCard';
 import { Settings } from './settings';
@@ -30,17 +25,15 @@ export const Index = (props: {
   };
 
   return (
-    <Tabs
+    <TabsDetail
       items={[
         {
           label: intl.get('assets'),
           key: 'asset',
-          children: (
+          content: (
             <Grid>
               <Col span={24}>
-                <Card>
-                  <StatisticBar asset={asset} />
-                </Card>
+                <StatisticBar asset={asset} />
               </Col>
               <Col span={24}>
                 {renderAssetList(
@@ -59,7 +52,7 @@ export const Index = (props: {
         {
           label: intl.get('SETTINGS'),
           key: 'settings',
-          children: (
+          content: (
             <Grid>
               <Col span={24}>
                 <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
@@ -76,15 +69,7 @@ export const Index = (props: {
           )
         }
       ]}
-      noStyle={true}
-      tabBarExtraContent={{
-        left: (
-          <TabBarExtraLeftContent alertLevel={asset.alertLevel}>
-            <AssetNavigator id={asset.id} type={asset.type} />
-          </TabBarExtraLeftContent>
-        )
-      }}
-      tabsRighted={true}
+      title={<AssetNavigator asset={asset} />}
     />
   );
 };

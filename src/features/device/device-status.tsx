@@ -4,7 +4,7 @@ import Icon, { WifiOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { DeviceType } from '../../types/device_type';
 import { Device } from '../../types/device';
-import { MetaCard } from '../../components';
+import { MutedCard } from '../../components';
 import { getValue } from '../../utils';
 import { ReactComponent as BatterySVG } from './battery.svg';
 
@@ -13,32 +13,25 @@ export const DeviceStatus = ({ device }: { device: Device }) => {
   return (
     fields.length > 0 && (
       <Col span={24}>
-        <MetaCard
-          description={
-            <Space
-              direction='vertical'
-              split={<Divider style={{ marginBlock: 8 }} />}
-              style={{ width: '100%' }}
-            >
-              {fields.map(({ label, value, icon, unit }) => (
-                <Space size={16} key={label}>
-                  <Avatar
-                    icon={icon}
-                    size={60}
-                    style={{ color: '#666', backgroundColor: '#fff' }}
-                  />
-                  <Statistic
-                    title={label}
-                    value={value}
-                    valueStyle={{ fontSize: 20 }}
-                    suffix={unit}
-                  />
-                </Space>
-              ))}
-            </Space>
-          }
-          title={intl.get('DEVICE_STATUS')}
-        />
+        <MutedCard title={intl.get('DEVICE_STATUS')}>
+          <Space
+            direction='vertical'
+            split={<Divider style={{ marginBlock: 8 }} />}
+            style={{ width: '100%' }}
+          >
+            {fields.map(({ label, value, icon, unit }) => (
+              <Space size={16} key={label}>
+                <Avatar icon={icon} size={60} style={{ color: '#666', backgroundColor: '#fff' }} />
+                <Statistic
+                  title={label}
+                  value={value}
+                  valueStyle={{ fontSize: 20 }}
+                  suffix={unit}
+                />
+              </Space>
+            ))}
+          </Space>
+        </MutedCard>
       </Col>
     )
   );

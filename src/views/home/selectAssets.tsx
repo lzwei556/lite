@@ -43,12 +43,13 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
         </Button>,
         <Button
           key='submitall'
-          type='primary'
           onClick={() => {
             setLoading(true);
             handleUpload();
           }}
           loading={loading}
+          color='primary'
+          variant='outlined'
         >
           {intl.get('EXPORT_ALL')}
         </Button>,

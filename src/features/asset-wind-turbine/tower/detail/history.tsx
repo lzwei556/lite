@@ -29,6 +29,7 @@ export const History = ({
       </Col>
       <Col span={8}>
         <PointsScatterChart
+          cardProps={{}}
           data={
             internalHistorys?.map((h) => {
               return {

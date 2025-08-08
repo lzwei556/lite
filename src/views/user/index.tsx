@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, Space } from 'antd';
+import { Button, Space, Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import { UserAddOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { DeleteIconButton, EditIconButton, Table, transformPagedresult } from '../../components';
@@ -111,12 +112,12 @@ const UserPage = () => {
   const { paged, ds } = transformPagedresult(dataSource);
 
   return (
-    <>
+    <Content>
+      <Typography.Title level={4}>{intl.get('MENU_USER_MANAGEMENT')}</Typography.Title>
       <Table
         columns={columns}
         dataSource={ds}
         header={{
-          title: intl.get('MENU_USER_MANAGEMENT'),
           toolbar: [
             <HasPermission value={Permission.UserAdd}>
               <Button type='primary' onClick={() => setOpen(true)}>
@@ -145,7 +146,7 @@ const UserPage = () => {
       ) : (
         <AddUserModal open={open} onCancel={reset} onSuccess={onAddUserSuccess} />
       )}
-    </>
+    </Content>
   );
 };
 

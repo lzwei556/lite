@@ -2,7 +2,7 @@ import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { roundValue } from '../../../utils/format';
-import { ChartMark, Card, Descriptions, Grid } from '../../../components';
+import { ChartMark, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../..';
 import { frequency, FrequencyAnalysis } from '../../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
@@ -70,10 +70,7 @@ export const Frequency = ({
     <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
-          cardProps={{
-            extra: <Toolbar />,
-            style: { position: 'relative', border: 'solid 1px #d3d3d3' }
-          }}
+          cardProps={{ extra: <Toolbar /> }}
           config={{
             opts: {
               xAxis: {
@@ -149,24 +146,21 @@ export const Frequency = ({
               key: 'overview',
               label: intl.get('BASIC_INFORMATION'),
               children: (
-                <Card>
-                  <Descriptions
-                    items={[
-                      { label: intl.get('SETTING_RANGE'), children: `${range}g` },
-                      {
-                        label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                        children: `${timeDomainFrequency}Hz`
-                      },
-                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
-                      {
-                        label: intl.get('motor.rotation_speed'),
-                        children: rotation_speed ? `${rotation_speed}RPM` : '-'
-                      }
-                    ]}
-                  />
-                </Card>
-              ),
-              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+                <Descriptions
+                  items={[
+                    { label: intl.get('SETTING_RANGE'), children: `${range}g` },
+                    {
+                      label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                      children: `${timeDomainFrequency}Hz`
+                    },
+                    { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
+                    {
+                      label: intl.get('motor.rotation_speed'),
+                      children: rotation_speed ? `${rotation_speed}RPM` : '-'
+                    }
+                  ]}
+                />
+              )
             },
             {
               key: 'marklist',
@@ -176,8 +170,7 @@ export const Frequency = ({
                   <FaultFrequencyMarkList faultFrequency={faultFrequency} />
                 ) : (
                   <MarkList />
-                ),
-              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+                )
             }
           ]}
         />

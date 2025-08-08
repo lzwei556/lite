@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Col, Form, FormListFieldData } from 'antd';
 import intl from 'react-intl-universal';
 import { cloneDeep } from 'lodash';
-import { getPropertiesByMeasurementType, updateAlarmRule } from './services';
 import { DisplayProperty } from '../../../constants/properties';
 import { App, useAppType } from '../../../config';
 import { generateColProps } from '../../../utils/grid';
@@ -16,6 +15,7 @@ import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
 import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
+import { getPropertiesByMeasurementType, updateAlarmRule } from './services';
 import { translateMetricName } from '.';
 
 export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
@@ -58,7 +58,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
           }))
         }}
       >
-        <Grid gutter={[0, 0]} justify='space-between'>
+        <Grid>
           <Col {...generateColProps({ xl: 12, xxl: 12 })}>
             <TextFormItem
               label='NAME'

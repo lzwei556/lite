@@ -50,7 +50,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
               key={name}
               style={{
                 marginTop: i === 0 ? 20 : 0,
-                borderRadius: 4,
+                border: 0,
                 fontSize: 12,
                 backgroundColor: '#f0f0f0'
               }}

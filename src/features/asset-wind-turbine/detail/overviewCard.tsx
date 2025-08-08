@@ -14,7 +14,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const historyData = useHistoryDatas(asset);
 
   const statistics = Asset.Statistics.resolveDescendant(flangeStatistics);
-  const style = { left: '-24px', top: '-20px', height: 450 };
+  const style = { left: '-24px', height: 450 };
 
   return (
     <Card styles={{ body: { padding: 24 } }}>
@@ -29,6 +29,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
                 label: intl.get(name),
                 children: value
               }))}
+              style={{ marginTop: 16 }}
             />
             {type === flange.type ? (
               <Flange.PointsScatterChart asset={asset} style={style} />

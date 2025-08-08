@@ -23,7 +23,7 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
     return (
       <Descriptions
         bordered={true}
-        column={{ xxl: 3, xl: 3, lg: 2, md: 2, xs: 1 }}
+        column={{ xxl: 3, xl: 2, lg: 2, md: 2, xs: 1 }}
         items={metaData.map(({ label, value, unit, precision }) => ({
           label: intl.get(label),
           children: getMetaProperty(values.metadata, value, unit, precision)

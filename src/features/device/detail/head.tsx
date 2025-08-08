@@ -1,8 +1,6 @@
 import React from 'react';
-import { Button, Space } from 'antd';
+import { Button } from 'antd';
 import { Device } from '../../../types/device';
-import { DeviceNavigator } from '../navigator';
-import { SingleDeviceStatus } from '../../../device/SingleDeviceStatus';
 import { DeviceType } from '../../../types/device_type';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
@@ -17,21 +15,6 @@ import { Network } from '../../../network';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from '..';
 import { AddModal } from '../add/modal';
-
-export const HeadLeft = ({
-  device,
-  size
-}: {
-  device: Device;
-  size?: { width: number; height: number };
-}) => {
-  return (
-    <Space style={{ marginRight: 30 }} size={30}>
-      <DeviceNavigator id={device.id} containerDomWidth={size?.width} />
-      <SingleDeviceStatus device={device} key={device.id} />
-    </Space>
-  );
-};
 
 export const HeadRight = ({ device, network }: { device: Device; network?: Network }) => {
   const navigate = useNavigate();

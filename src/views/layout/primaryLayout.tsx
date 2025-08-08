@@ -43,9 +43,9 @@ export const PrimaryLayout = () => {
   }
 
   return (
-    <Layout style={{ backgroundColor: 'var(--body-bg-color)' }}>
+    <Layout>
       <HeaderLayout menus={menus} />
-      <Layout style={{ overflowX: 'hidden', backgroundColor: 'var(--body-bg-color)' }}>
+      <Layout>
         <ValidateProject>
           <Outlet />
         </ValidateProject>

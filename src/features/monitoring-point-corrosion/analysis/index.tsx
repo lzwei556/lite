@@ -69,26 +69,23 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
             {
               key: 'overview',
               label: intl.get('OVERVIEW'),
-              children: <Overview point={props} history={history} />,
-              style: { border: 0 }
+              children: <Overview point={props} history={history} />
             },
             {
               key: 'forecast',
               label: intl.get('corrosion.analysis.forecast'),
-              children: <Forecast point={props} range={range} />,
-              style: { border: 0 }
+              children: <Forecast point={props} range={range} />
             },
             {
               key: 'marklist',
               label: intl.get('mark'),
-              children: <MarkList property={property} />,
-              style: { border: 0 },
-              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+              children: <MarkList property={property} />
             }
           ]}
           onChange={(keys) => {
             setActiveKey(keys[0]);
           }}
+          style={{ backgroundColor: 'transparent' }}
         />
       </Col>
     </Grid>

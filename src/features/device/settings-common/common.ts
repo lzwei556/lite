@@ -82,8 +82,8 @@ export const useGroupedSettings = (settings: DeviceSetting[], deviceType?: Devic
 };
 
 export const useGroupCardProps = (props: CardProps) => {
-  const { size = 'small', style = { marginBlock: 16 }, ...rest } = props;
-  return { size, style, ...rest } as CardProps;
+  const { style = { marginBlock: 16 }, ...rest } = props;
+  return { style, ...rest } as CardProps;
 };
 
 export const GROUPS = {

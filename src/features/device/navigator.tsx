@@ -4,17 +4,20 @@ import { DownOutlined } from '@ant-design/icons';
 import { tree2List } from '../../utils/tree';
 import { truncate } from '../../utils/format';
 import { Link } from '../../components';
+import { Device } from '../../types/device';
+import { SingleDeviceStatus } from '../../device/SingleDeviceStatus';
 import { DeviceTreeNode, useDeviceTreeData } from './deviceTree';
 
 export type TreeFlatListItem = DeviceTreeNode & { path: number[] };
 
 export const DeviceNavigator = ({
-  id,
-  containerDomWidth
+  device,
+  showStatus = true
 }: {
-  id: number;
-  containerDomWidth?: number;
+  device: Device;
+  showStatus?: boolean;
 }) => {
+  const { id } = device;
   const items: BreadcrumbProps['items'] = [];
   const treeData = useDeviceTreeData();
   const list: TreeFlatListItem[] = tree2List(treeData);
@@ -38,11 +41,10 @@ export const DeviceNavigator = ({
   }
 
   return (
-    <Breadcrumb
-      items={items.filter((item, index) =>
-        containerDomWidth && containerDomWidth < 1300 ? index === items.length - 1 : true
-      )}
-    />
+    <Space style={{ minWidth: items.length * 150 }} size={20}>
+      <Breadcrumb items={items} />
+      {showStatus && <SingleDeviceStatus device={device} key={id} />}
+    </Space>
   );
 };
 

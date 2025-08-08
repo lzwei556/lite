@@ -1,8 +1,7 @@
 import React from 'react';
 import { Col } from 'antd';
-import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
-import { Grid, Table, Tabs } from '../../../../components';
+import { Grid, Table, TabsDetail } from '../../../../components';
 import { useLocaleContext } from '../../../../localeProvider';
 import {
   AssetRow,
@@ -15,7 +14,6 @@ import {
   Points,
   positionColumn,
   installAngle,
-  TabBarExtraLeftContent,
   installHeight,
   installRadius,
   AssetNavigator,
@@ -33,18 +31,16 @@ export const Index = (props: {
 }) => {
   const { language } = useLocaleContext();
   const { asset, onSuccess } = props;
-  const { id, alertLevel, monitoringPoints } = asset;
+  const { monitoringPoints } = asset;
   const historyDatas = useHistoryDatas(asset);
-  const ref = React.useRef<HTMLDivElement>(null);
-  const size = useSize(ref);
 
   return (
-    <Tabs
+    <TabsDetail
       items={[
         {
           label: intl.get(MONITORING_POINT_LIST),
           key: 'monitoringPointList',
-          children: (
+          content: (
             <MonitoringPointsTable
               key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
               asset={asset}
@@ -55,7 +51,7 @@ export const Index = (props: {
         {
           label: intl.get('HISTORY_DATA'),
           key: 'history',
-          children: (
+          content: (
             <EmptyMonitoringPoints asset={asset} key={asset.id}>
               <History asset={asset} historyDatas={historyDatas} />
             </EmptyMonitoringPoints>
@@ -64,7 +60,7 @@ export const Index = (props: {
         {
           label: intl.get('SETTINGS'),
           key: 'settings',
-          children: (
+          content: (
             <Grid>
               <Col span={24}>
                 <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
@@ -73,7 +69,6 @@ export const Index = (props: {
                 <Table
                   cardProps={{
                     extra: <ActionBar {...props} />,
-                    size: 'small',
                     title: intl.get(MONITORING_POINT)
                   }}
                   columns={[
@@ -97,16 +92,7 @@ export const Index = (props: {
           )
         }
       ]}
-      noStyle={true}
-      tabBarExtraContent={{
-        left: (
-          <TabBarExtraLeftContent alertLevel={alertLevel}>
-            <AssetNavigator id={id} containerDomWidth={size?.width} type={asset.type} />
-          </TabBarExtraLeftContent>
-        )
-      }}
-      tabListRef={ref}
-      tabsRighted={true}
+      title={<AssetNavigator asset={asset} />}
     />
   );
 };

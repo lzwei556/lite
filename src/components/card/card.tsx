@@ -14,20 +14,16 @@ const CardComponent = React.forwardRef(function CardComponent(
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   const { styles, ...rest } = props;
+  const { header = {}, body = {}, ...stylesRest } = styles || {};
+  const { paddingInline = Space, fontWeight = 400, ...headerStyleRest } = header;
+  const headerStyles = { paddingInline, fontWeight, ...headerStyleRest };
+  const { padding = Space, ...bodyStyleRest } = body;
+  const bodyStyles = { padding, ...bodyStyleRest };
   return (
     <AntCard
       {...rest}
       ref={ref}
-      styles={{
-        header: {
-          minHeight: `calc(48px + 1px)`,
-          padding: `0 ${Space}px`,
-          fontWeight: 500,
-          ...styles?.header
-        },
-        body: { padding: Space, ...styles?.body },
-        actions: styles?.actions
-      }}
+      styles={{ ...stylesRest, header: headerStyles, body: bodyStyles }}
     />
   );
 });

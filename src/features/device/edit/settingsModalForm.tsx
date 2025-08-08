@@ -71,7 +71,7 @@ const Footer = (props: Props) => {
   const [cancelButtonProps, children, okButtonProps] = useFooter(props);
   return [
     <Button key='cancel' {...cancelButtonProps} />,
-    <CanCopySettings {...{ ...children, device, form }} />,
+    <CanCopySettings {...{ ...children, device, form, color: 'primary', variant: 'outlined' }} />,
     <Button key='ok' {...okButtonProps} />
   ];
 };

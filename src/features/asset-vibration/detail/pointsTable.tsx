@@ -88,7 +88,6 @@ export const PointsTable = (props: {
       columns={columns.map((c) => ({ ...c, width: 'auto' }))}
       cardProps={{
         extra: <ActionBar {...props} />,
-        size: 'small',
         title: intl.get(MONITORING_POINT)
       }}
       dataSource={Points.sort(actualPoints)}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, Empty, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Descriptions, Grid, Link, MetaCard } from '../../../components';
+import { Card, Descriptions, Grid, Link, MutedCard } from '../../../components';
 import { Dayjs, toMac } from '../../../utils';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
@@ -24,28 +24,24 @@ export const SensorDetail = ({ device }: { device: Device }) => {
   return (
     <Grid wrap={false}>
       <Col flex='auto'>
-        <MetaCard
-          description={<RecentHistory device={device} key={device.id} />}
-          title={intl.get('real.time.data')}
-        />
+        <MutedCard title={intl.get('real.time.data')}>
+          <RecentHistory device={device} key={device.id} />
+        </MutedCard>
       </Col>
       <Col flex='300px'>
         <Grid>
           <DeviceStatus device={device} />
           <Col span={24}>
-            <MetaCard
-              description={
-                <Descriptions
-                  column={1}
-                  contentStyle={{
-                    justifyContent: language === 'en-US' ? 'flex-start' : 'flex-end'
-                  }}
-                  items={[...basisFields, ...timeFields]}
-                  layout={language === 'en-US' ? 'vertical' : 'horizontal'}
-                />
-              }
-              title={intl.get('BASIC_INFORMATION')}
-            />
+            <MutedCard title={intl.get('BASIC_INFORMATION')}>
+              <Descriptions
+                column={1}
+                contentStyle={{
+                  justifyContent: language === 'en-US' ? 'flex-start' : 'flex-end'
+                }}
+                items={[...basisFields, ...timeFields]}
+                layout={language === 'en-US' ? 'vertical' : 'horizontal'}
+              />
+            </MutedCard>
           </Col>
         </Grid>
       </Col>

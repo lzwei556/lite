@@ -1,8 +1,7 @@
 import React from 'react';
-import { Col, TabsProps } from 'antd';
-import { useSize } from 'ahooks';
+import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { Grid, MetaCard, Tabs } from '../../../components';
+import { Grid, MutedCard, TabsDetail, TabsDetailsItems } from '../../../components';
 import { FilterableAlarmRecordTable } from '../../alarm';
 import usePermission, { Permission } from '../../../permission/permission';
 import { MonitoringPointTypeValue } from '../../../config';
@@ -12,8 +11,7 @@ import {
   DynamicData,
   MonitoringPointRow,
   Point,
-  RelatedDeviceCard,
-  TabBarExtraLeftContent
+  RelatedDeviceCard
 } from '../../../asset-common';
 import { Monitor } from './monitor';
 import { History } from './history';
@@ -27,45 +25,42 @@ import { AngleDynamicData, PreloadDynamicData, PreloadWaveData } from './dynamic
 export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
   const { hasPermission } = usePermission();
-  const { alertLevel, id, type } = monitoringPoint;
-  const items: TabsProps['items'] = [
+  const { id, type } = monitoringPoint;
+  const items: TabsDetailsItems = [
     {
       key: 'overview',
       label: intl.get('OVERVIEW'),
-      children: (
-        <div style={{ marginTop: 16 }}>
-          <Grid wrap={false}>
-            <Col flex='auto'>
-              <MetaCard
-                title={intl.get('real.time.data')}
-                description={<Monitor {...monitoringPoint} key={id} />}
-              />
-            </Col>
-            <Col flex='300px'>
-              <Grid>
-                <Col span={24}>
-                  <BasicCard monitoringPoint={monitoringPoint} />
-                </Col>
-                <Col span={24}>
-                  <RelatedDeviceCard {...monitoringPoint} />
-                </Col>
-              </Grid>
-            </Col>
-          </Grid>
-        </div>
+      content: (
+        <Grid wrap={false}>
+          <Col flex='auto'>
+            <MutedCard title={intl.get('real.time.data')}>
+              <Monitor {...monitoringPoint} key={id} />
+            </MutedCard>
+          </Col>
+          <Col flex='300px'>
+            <Grid>
+              <Col span={24}>
+                <BasicCard monitoringPoint={monitoringPoint} />
+              </Col>
+              <Col span={24}>
+                <RelatedDeviceCard {...monitoringPoint} />
+              </Col>
+            </Grid>
+          </Col>
+        </Grid>
       )
     },
     {
       key: 'history',
       label: intl.get('HISTORY_DATA'),
-      children: <History {...monitoringPoint} key={id} />
+      content: <History {...monitoringPoint} key={id} />
     }
   ];
   if (Point.Assert.isPreload(type)) {
     items.push({
       key: 'dynamicData',
       label: intl.get('DYNAMIC_DATA'),
-      children: (
+      content: (
         <DynamicData<PreloadDynamicData>
           children={(values) => <Preload {...{ values }} />}
           dataType='raw'
@@ -78,7 +73,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'dynamicData',
       label: intl.get('DYNAMIC_DATA'),
-      children: (
+      content: (
         <DynamicData<AngleDynamicData>
           children={(values) => <Angle {...{ values, monitoringPoint }} />}
           dataType='raw'
@@ -91,7 +86,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'dynamicData',
       label: intl.get('DYNAMIC_DATA'),
-      children: (
+      content: (
         <DynamicData<AngleDynamicData>
           children={(values) => <AngleBase {...{ values, monitoringPoint }} />}
           dataType='raw'
@@ -105,7 +100,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'waveformData',
       label: intl.get('WAVEFORM_DATA'),
-      children: (
+      content: (
         <DynamicData<PreloadWaveData>
           children={(values) => <PreloadWaveform {...{ values }} />}
           dataType='waveform'
@@ -118,7 +113,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   items.push({
     key: 'alerts',
     label: intl.get('ALARM_RECORDS'),
-    children: (
+    content: (
       <FilterableAlarmRecordTable
         sourceId={monitoringPoint.id}
         storeKey='monitoringPointAlarmRecordList'
@@ -130,26 +125,9 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'settings',
       label: intl.get('SETTINGS'),
-      children: <Settings point={monitoringPoint} onSuccess={onSuccess} key={id} />
+      content: <Settings point={monitoringPoint} onSuccess={onSuccess} key={id} />
     });
   }
 
-  const ref = React.useRef<HTMLDivElement>(null);
-  const size = useSize(ref);
-
-  return (
-    <Tabs
-      items={items}
-      noStyle={true}
-      tabBarExtraContent={{
-        left: (
-          <TabBarExtraLeftContent alertLevel={alertLevel}>
-            <AssetNavigator id={id} containerDomWidth={size?.width} type={type} />
-          </TabBarExtraLeftContent>
-        )
-      }}
-      tabListRef={ref}
-      tabsRighted={true}
-    />
-  );
+  return <TabsDetail items={items} title={<AssetNavigator asset={monitoringPoint} />} />;
 };

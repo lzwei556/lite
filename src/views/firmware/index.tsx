@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, message, Upload } from 'antd';
+import { Button, message, Typography, Upload } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import { UploadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import {
@@ -110,36 +111,39 @@ const FirmwarePage = () => {
   const { paged, ds } = transformPagedresult(dataSource);
 
   return (
-    <Table
-      columns={columns}
-      dataSource={ds}
-      header={{
-        title: intl.get('MENU_FIRMWARE_LIST'),
-        toolbar: [
-          <HasPermission value={Permission.FirmwareAdd}>
-            <Upload
-              accept={'.bin'}
-              name='file'
-              customRequest={onUpload}
-              showUploadList={false}
-              onChange={onFileChange}
-            >
-              <Button type='primary' loading={isUploading}>
-                {isUploading
-                  ? intl.get('FIRMWARE_IS_UPLOADING_PROMPT')
-                  : intl.get('UPLOAD_FIRMWARE')}
-                {isUploading ? null : <UploadOutlined />}
-              </Button>
-            </Upload>
-          </HasPermission>
-        ]
-      }}
-      pagination={{
-        ...paged,
-        onChange: (index, size) => setStore((prev) => ({ ...prev, pagedOptions: { index, size } }))
-      }}
-      rowKey={(row) => row.id}
-    />
+    <Content>
+      <Typography.Title level={4}>{intl.get('MENU_FIRMWARE_LIST')}</Typography.Title>
+      <Table
+        columns={columns}
+        dataSource={ds}
+        header={{
+          toolbar: [
+            <HasPermission value={Permission.FirmwareAdd}>
+              <Upload
+                accept={'.bin'}
+                name='file'
+                customRequest={onUpload}
+                showUploadList={false}
+                onChange={onFileChange}
+              >
+                <Button type='primary' loading={isUploading}>
+                  {isUploading
+                    ? intl.get('FIRMWARE_IS_UPLOADING_PROMPT')
+                    : intl.get('UPLOAD_FIRMWARE')}
+                  {isUploading ? null : <UploadOutlined />}
+                </Button>
+              </Upload>
+            </HasPermission>
+          ]
+        }}
+        pagination={{
+          ...paged,
+          onChange: (index, size) =>
+            setStore((prev) => ({ ...prev, pagedOptions: { index, size } }))
+        }}
+        rowKey={(row) => row.id}
+      />
+    </Content>
   );
 };
 

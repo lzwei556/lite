@@ -125,7 +125,6 @@ export const ChildrenAttrsTable = ({
     <Col span={24} key={type}>
       <Table
         cardProps={{
-          size: 'small',
           title: intl.get(type === flange.type ? flange.label : tower.label)
         }}
         columns={

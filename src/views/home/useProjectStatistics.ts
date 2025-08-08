@@ -12,23 +12,30 @@ export function useProjectStatistics() {
 }
 
 export const generatePieOptions = (
-  title: string,
+  total: number,
   data: { name: string; value: number; itemStyle: { color: string } }[],
-  language: Language
+  language: Language,
+  subtext: string
 ) => {
   return getOptions(getBarPieOption(), {
     title: {
-      text: title,
+      text: `${total}`,
+      subtext,
       left: 'center',
-      top: 120
+      top: 90,
+      textStyle: {
+        fontSize: 20,
+        fontWeight: 400,
+        color: 'rgba(0,0,0,.88)'
+      }
     },
     legend: getVerticalLegends(data, language),
     series: [
       {
         type: 'pie',
         name: '',
-        radius: ['45%', '55%'],
-        center: ['50%', '45%'],
+        radius: ['50%', '60%'],
+        center: ['50%', '42%'],
         label: { show: false, formatter: '{b} {c}' },
         data
       }

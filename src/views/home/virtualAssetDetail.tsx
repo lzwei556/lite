@@ -1,6 +1,7 @@
 import React from 'react';
+import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Descriptions, Tabs, Link } from '../../components';
+import { Card, Descriptions, Link, TabsDetail, Grid, Chart, MutedCard } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { App, useAppType } from '../../config';
 import { ColorHealth, ColorOffline } from '../../constants/color';
@@ -10,7 +11,6 @@ import {
   ASSET_PATHNAME,
   getVirturalAsset,
   MONITORING_POINT,
-  OverviewPage,
   ProjectStatistics,
   useContext
 } from '../../asset-common';
@@ -25,12 +25,7 @@ export default function VirtualAssetDetail() {
   const { assets } = useContext();
   const appType = useAppType();
   const projectStatistics = useProjectStatistics();
-  const colProps = generateColProps({ lg: 8, xl: 8, xxl: 5 });
   const { language } = useLocaleContext();
-
-  const getTotalTitle = (number: number) => {
-    return intl.get('TOTAL_WITH_NUMBER', { number });
-  };
 
   const getAssetPieOptions = (
     statics: ProjectStatistics | undefined,
@@ -47,13 +42,14 @@ export default function VirtualAssetDetail() {
       alarms = statics.monitoringPointAlarmNum;
     }
     return generatePieOptions(
-      getTotalTitle(total),
+      total,
       Asset.Statistics.resolveStatus(total, alarms).map((s) => ({
         ...s,
         name: intl.get(s.name),
         itemStyle: { color: s.color }
       })),
-      language
+      language,
+      intl.get('total')
     );
   };
 
@@ -62,7 +58,7 @@ export default function VirtualAssetDetail() {
     const total = statics.deviceNum;
     const offline = statics.deviceOfflineNum;
     return generatePieOptions(
-      getTotalTitle(total),
+      total,
       [
         {
           name: intl.get('ONLINE'),
@@ -75,75 +71,93 @@ export default function VirtualAssetDetail() {
           itemStyle: { color: ColorOffline }
         }
       ],
-      language
+      language,
+      intl.get('total')
     );
   };
 
   return (
-    <Tabs
+    <TabsDetail
       items={[
         {
           label: intl.get('OVERVIEW'),
           key: 'overview',
-          children: (
-            <OverviewPage
-              {...{
-                charts: [
-                  {
-                    colProps,
-                    options: getAssetPieOptions(projectStatistics, 'asset'),
-                    title: intl.get(App.isWindLike(appType) ? wind.label : area.label)
-                  },
-                  {
-                    colProps,
-                    options: getAssetPieOptions(projectStatistics, 'monitoring_point'),
-                    title: intl.get(MONITORING_POINT)
-                  },
-                  {
-                    colProps,
-                    options: getSensorPieOptions(projectStatistics),
-                    title: intl.get('SENSOR')
-                  },
-                  {
-                    colProps: generateColProps({ xl: 24, xxl: 9 }),
-                    render: <AlarmTrend title={intl.get('ALARM_TREND')} />
-                  }
-                ],
-                introductions: assets.map((item) => {
-                  const statistics = Asset.Statistics.resolveDescendant(item.statistics);
-                  return (
-                    <Card styles={{ body: { padding: 24 } }}>
-                      <Card.Meta
-                        avatar={<Icon node={item} />}
-                        description={
-                          <Descriptions
-                            contentStyle={{ transform: 'translate(-40px)' }}
-                            items={statistics.map(({ name, value }) => ({
-                              label: intl.get(name),
-                              children: value
-                            }))}
-                          />
-                        }
-                        title={
-                          <Link to={`/${ASSET_PATHNAME}/${item.id}-${item.type}`}>{item.name}</Link>
-                        }
+          content: (
+            <Grid>
+              <Col span={24}>
+                <Grid>
+                  <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
+                    <MutedCard
+                      title={intl.get(App.isWindLike(appType) ? wind.label : area.label)}
+                      titleCenter={true}
+                    >
+                      <Chart
+                        options={getAssetPieOptions(projectStatistics, 'asset')}
+                        style={{ height: 280 }}
                       />
-                    </Card>
-                  );
-                })
-              }}
-            />
+                    </MutedCard>
+                  </Col>
+                  <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
+                    <MutedCard title={intl.get(MONITORING_POINT)} titleCenter={true}>
+                      <Chart
+                        options={getAssetPieOptions(projectStatistics, 'monitoring_point')}
+                        style={{ height: 280 }}
+                      />
+                    </MutedCard>
+                  </Col>
+                  <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
+                    <MutedCard title={intl.get('SENSOR')} titleCenter={true}>
+                      <Chart
+                        options={getSensorPieOptions(projectStatistics)}
+                        style={{ height: 280 }}
+                      />
+                    </MutedCard>
+                  </Col>
+                  <Col {...generateColProps({ xxl: 9 })}>
+                    <AlarmTrend chartStyle={{ height: 280 }} title={intl.get('ALARM_TREND')} />
+                  </Col>
+                </Grid>
+              </Col>
+              <Col span={24}>
+                <Grid>
+                  {assets.map((item) => {
+                    const statistics = Asset.Statistics.resolveDescendant(item.statistics);
+                    return (
+                      <Col {...generateColProps({ lg: 12, xl: 8, xxl: 6 })}>
+                        <Card styles={{ body: { padding: 24 } }}>
+                          <Card.Meta
+                            avatar={<Icon node={item} />}
+                            description={
+                              <Descriptions
+                                contentStyle={{ transform: 'translate(-40px)' }}
+                                items={statistics.map(({ name, value }) => ({
+                                  label: intl.get(name),
+                                  children: value
+                                }))}
+                              />
+                            }
+                            title={
+                              <Link to={`/${ASSET_PATHNAME}/${item.id}-${item.type}`}>
+                                {item.name}
+                              </Link>
+                            }
+                          />
+                        </Card>
+                      </Col>
+                    );
+                  })}
+                </Grid>
+              </Col>
+            </Grid>
           )
         },
         {
           label: intl.get('SETTINGS'),
           key: 'settings',
-          children: <Settings />
+          content: <Settings />
         }
       ]}
-      noStyle={true}
-      tabBarExtraContent={{ left: getVirturalAsset().root.name }}
-      tabsRighted={true}
+      title={getVirturalAsset().root.name}
     />
   );
 }

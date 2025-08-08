@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, ButtonProps, Col, Form, FormProps, message, Space } from 'antd';
+import { Button, ButtonProps, Col, Form, FormProps, message, Space, Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { GetMyProfile, UpdateMyProfile } from '../../apis/profile';
 import { User } from '../../types/user';
-import { Card, Flex, Grid, TextFormItem } from '../../components';
+import { Flex, Grid, MutedCard, TextFormItem } from '../../components';
 import EditPassModal from './edit/editPassModal';
 
 const MePage = () => {
@@ -28,91 +29,94 @@ const MePage = () => {
   };
 
   return (
-    <Grid>
-      <Col span={24}>
-        <Card title={intl.get('BASIC_INFORMATION')} bordered={false}>
-          {renderItem(intl.get('ACCOUNT_NAME'), user?.username)}
-          {renderItem(
-            intl.get('CELLPHONE'),
-            user && (
-              <ProfileItemForm
-                formProps={{ form: phoneForm, initialValues: { phone: user.phone } }}
-                input={
-                  <TextFormItem
-                    name='phone'
-                    noStyle
-                    rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
-                  />
-                }
-                value={user.phone}
-                onSubmit={(values) =>
-                  UpdateMyProfile(values).then((res) => {
-                    if (res.code === 200) {
-                      message.success(intl.get('SAVED_SUCCESSFUL')).then();
-                      setUser(res.data);
-                    } else {
-                      message.error(intl.get('FAILED_TO_SAVE'));
-                    }
-                  })
-                }
-              />
-            )
-          )}
-          {renderItem(
-            intl.get('EMAIL'),
-            user && (
-              <ProfileItemForm
-                formProps={{ form: emailForm, initialValues: { email: user.email } }}
-                input={
-                  <TextFormItem
-                    name='email'
-                    noStyle
-                    rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
-                  />
-                }
-                value={user.email}
-                onSubmit={(values) =>
-                  UpdateMyProfile(values).then((res) => {
-                    if (res.code === 200) {
-                      message.success(intl.get('SAVED_SUCCESSFUL'));
-                      setUser(res.data);
-                    } else {
-                      message.error(intl.get('FAILED_TO_SAVE'));
-                    }
-                  })
-                }
-              />
-            )
-          )}
-        </Card>
-      </Col>
-      <Col span={24}>
-        <Card title={intl.get('ACCOUNT_SECURITY')} bordered={false}>
-          {renderItem(
-            intl.get('PASSWORD'),
-            <Space>
-              ****************
-              <Button
-                onClick={() => setIsPassEdit(true)}
-                icon={<EditOutlined />}
-                color='primary'
-                size='small'
-                variant='text'
-              />
-            </Space>
-          )}
-        </Card>
-      </Col>
-      <EditPassModal
-        open={isPassEdit}
-        onSuccess={() => {
-          setIsPassEdit(false);
-        }}
-        onCancel={() => {
-          setIsPassEdit(false);
-        }}
-      />
-    </Grid>
+    <Content>
+      <Typography.Title level={4}>{intl.get('MENU_USER_CENTER')}</Typography.Title>
+      <Grid>
+        <Col span={24}>
+          <MutedCard title={intl.get('BASIC_INFORMATION')}>
+            {renderItem(intl.get('ACCOUNT_NAME'), user?.username)}
+            {renderItem(
+              intl.get('CELLPHONE'),
+              user && (
+                <ProfileItemForm
+                  formProps={{ form: phoneForm, initialValues: { phone: user.phone } }}
+                  input={
+                    <TextFormItem
+                      name='phone'
+                      noStyle
+                      rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
+                    />
+                  }
+                  value={user.phone}
+                  onSubmit={(values) =>
+                    UpdateMyProfile(values).then((res) => {
+                      if (res.code === 200) {
+                        message.success(intl.get('SAVED_SUCCESSFUL')).then();
+                        setUser(res.data);
+                      } else {
+                        message.error(intl.get('FAILED_TO_SAVE'));
+                      }
+                    })
+                  }
+                />
+              )
+            )}
+            {renderItem(
+              intl.get('EMAIL'),
+              user && (
+                <ProfileItemForm
+                  formProps={{ form: emailForm, initialValues: { email: user.email } }}
+                  input={
+                    <TextFormItem
+                      name='email'
+                      noStyle
+                      rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
+                    />
+                  }
+                  value={user.email}
+                  onSubmit={(values) =>
+                    UpdateMyProfile(values).then((res) => {
+                      if (res.code === 200) {
+                        message.success(intl.get('SAVED_SUCCESSFUL'));
+                        setUser(res.data);
+                      } else {
+                        message.error(intl.get('FAILED_TO_SAVE'));
+                      }
+                    })
+                  }
+                />
+              )
+            )}
+          </MutedCard>
+        </Col>
+        <Col span={24}>
+          <MutedCard title={intl.get('ACCOUNT_SECURITY')}>
+            {renderItem(
+              intl.get('PASSWORD'),
+              <Space>
+                ****************
+                <Button
+                  onClick={() => setIsPassEdit(true)}
+                  icon={<EditOutlined />}
+                  color='primary'
+                  size='small'
+                  variant='text'
+                />
+              </Space>
+            )}
+          </MutedCard>
+        </Col>
+        <EditPassModal
+          open={isPassEdit}
+          onSuccess={() => {
+            setIsPassEdit(false);
+          }}
+          onCancel={() => {
+            setIsPassEdit(false);
+          }}
+        />
+      </Grid>
+    </Content>
   );
 };
 

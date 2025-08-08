@@ -114,12 +114,12 @@ export const BatchDownlaodHistoryDataModal = ({
           }}
           disabled={selectedIds.length === 0}
           loading={loading2}
+          type='primary'
         >
           {intl.get('OK')}
         </Button>,
         <Button
           key='all'
-          type='primary'
           loading={loading}
           onClick={() => {
             const mixedTree = mapTree(assets, (asset) => combine(asset));
@@ -134,6 +134,8 @@ export const BatchDownlaodHistoryDataModal = ({
               );
             }
           }}
+          color='primary'
+          variant='outlined'
         >
           {intl.get('DOWNLOAD_ALL')}
         </Button>

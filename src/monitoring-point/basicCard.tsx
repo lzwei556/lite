@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Descriptions, DescriptionsProps, MetaCard } from '../components';
+import { Descriptions, DescriptionsProps, MutedCard } from '../components';
 import { useMonitoringPointParents } from '../asset-variant';
 import { Asset } from '../asset-common';
 import { Point } from './util';
@@ -117,5 +117,9 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
       });
     }
   }
-  return <MetaCard description={<Descriptions items={items} />} title={intl.get('ASSET')} />;
+  return (
+    <MutedCard title={intl.get('ASSET')}>
+      <Descriptions items={items} />
+    </MutedCard>
+  );
 };

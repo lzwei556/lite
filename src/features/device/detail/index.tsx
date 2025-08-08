@@ -1,13 +1,12 @@
 import React from 'react';
-import { useSize } from 'ahooks';
 import { Spin, Empty } from 'antd';
-import { TabsProps } from 'antd/lib';
 import intl from 'react-intl-universal';
-import { Card, Tabs } from '../../../components';
+import { Card, TabsDetail, TabsDetailsItems } from '../../../components';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
 import { Network } from '../../../types/network';
 import userPermission, { Permission } from '../../../permission/permission';
+import { DeviceNavigator } from '../navigator';
 import { useContext } from '..';
 import { RuntimeChart } from '../RuntimeChart';
 import { QueryEventTable } from '../event';
@@ -16,7 +15,7 @@ import { HistoryDataPage } from './historyData';
 import { GatewayDetail } from './gatewayDetail';
 import { SensorDetail } from './sensorDetail';
 import { RouterDetail } from './router-detail';
-import { HeadLeft, HeadRight } from './head';
+import { HeadRight } from './head';
 
 const DeviceDetailPage = () => {
   const { device, network, loading, refresh } = useContext();
@@ -39,21 +38,21 @@ const DeviceDetailPage = () => {
   }
 
   function useDeviceTabs(deviceTypeId?: number) {
-    const tabs: TabsProps['items'] = [];
+    const tabs: TabsDetailsItems = [];
     const { hasPermission, hasPermissions } = userPermission();
     if (deviceTypeId === undefined || deviceTypeId === DeviceType.Router) return [];
     if (hasPermission(Permission.DeviceData)) {
       tabs.push({
         key: 'overview',
         label: intl.get('OVERVIEW'),
-        children: renderOverview(device, network)
+        content: renderOverview(device, network)
       });
     }
     if (DeviceType.isSensor(deviceTypeId) && hasPermission(Permission.DeviceData)) {
       tabs.push({
         key: 'historyData',
         label: intl.get('HISTORY_DATA'),
-        children: device && <HistoryDataPage device={device} key={device.id} />
+        content: device && <HistoryDataPage device={device} key={device.id} />
       });
     } else if (
       DeviceType.isGateway(deviceTypeId) &&
@@ -62,21 +61,21 @@ const DeviceDetailPage = () => {
       tabs.push({
         key: 'status',
         label: intl.get('STATUS_HISTORY'),
-        children: device && <RuntimeChart device={device} key={device.id} />
+        content: device && <RuntimeChart device={device} key={device.id} />
       });
     }
     if (hasPermission(Permission.DeviceEventList)) {
       tabs.push({
         key: 'events',
         label: intl.get('EVENTS'),
-        children: device && <QueryEventTable device={device} key={device.id} />
+        content: device && <QueryEventTable device={device} key={device.id} />
       });
     }
     if (hasPermissions(Permission.DeviceSettingsGet, Permission.DeviceSettingsEdit)) {
       tabs.push({
         key: 'settings',
         label: intl.get('SETTINGS'),
-        children: device && (
+        content: device && (
           <Index
             device={device}
             onUpdate={() => refresh(device.id)}
@@ -89,24 +88,18 @@ const DeviceDetailPage = () => {
     return tabs;
   }
 
-  const ref = React.useRef<HTMLDivElement>(null);
-  const size = useSize(ref);
-
   return (
     <Spin spinning={loading}>
       {device &&
         (device.typeId === DeviceType.Router ? (
           <RouterDetail device={device} onSuccess={() => refresh(device.id)} />
         ) : (
-          <Tabs
+          <TabsDetail
             items={tabs}
-            noStyle={true}
+            title={<DeviceNavigator device={device} />}
             tabBarExtraContent={{
-              left: <HeadLeft device={device} size={size} />,
               right: <HeadRight device={device} network={network} />
             }}
-            tabListRef={ref}
-            tabsRighted={true}
           />
         ))}
     </Spin>

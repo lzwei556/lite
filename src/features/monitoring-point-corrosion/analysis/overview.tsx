@@ -1,7 +1,7 @@
 import React from 'react';
-import { Empty, Space, Typography } from 'antd';
+import { Col, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { Card } from '../../../components';
+import { Card, Grid } from '../../../components';
 import { getValue, roundValue } from '../../../utils/format';
 import { HistoryData, MonitoringPointRow } from '../../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
@@ -34,28 +34,28 @@ export const Overview = (props: {
   const diff = history[0].values[0].data['FIELD_THICKNESS'] - crt;
 
   return (
-    <Card styles={{ body: { padding: 0 } }}>
-      <Card.Grid hoverable={false} style={{ width: '50%' }}>
+    <Grid>
+      <Col span={12}>
         <PropertyCardedContent label={intl.get('INITIAL_THICKNESS')} unit='mm' value={initial} />
-      </Card.Grid>
-      <Card.Grid hoverable={false} style={{ width: '50%' }}>
+      </Col>
+      <Col span={12}>
         <PropertyCardedContent label={intl.get('CRITICAL_THICKNESS')} unit='mm' value={critical} />
-      </Card.Grid>
-      <Card.Grid hoverable={false} style={{ width: '50%' }}>
+      </Col>
+      <Col span={12}>
         <PropertyCardedContent
           label={intl.get('corrosion.analysis.forecast.thickness')}
           unit='mm'
           value={crt}
         />
-      </Card.Grid>
-      <Card.Grid hoverable={false} style={{ width: '50%' }}>
+      </Col>
+      <Col span={12}>
         <PropertyCardedContent
           label={intl.get('corrosion.analysis.forecast.diff')}
           unit='mm'
           value={diff < 0 ? 0 : diff}
         />
-      </Card.Grid>
-    </Card>
+      </Col>
+    </Grid>
   );
 };
 
@@ -71,7 +71,7 @@ function PropertyCardedContent({
   return (
     <Space direction='vertical'>
       <Typography.Text type='secondary'>{label}</Typography.Text>
-      <Typography.Text style={{ fontSize: 18 }} strong={true}>
+      <Typography.Text style={{ fontSize: 18 }}>
         {value !== undefined ? getValue(roundValue(value, 3)) : '-'}
         {value !== undefined && (
           <Typography.Text style={{ marginLeft: 4 }} type='secondary'>

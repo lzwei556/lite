@@ -14,10 +14,7 @@ tbody.ant-table-tbody > tr.ant-table-row:hover > td {
   overflow-wrap: normal;
   white-space: nowrap;
 }
-.overview-statistic .ant-statistic {
-  max-width: 15em;
-  text-align: center;
-}
+
 .ant-statistic .ant-statistic-content-suffix {
   font-size: 14px;
 }
@@ -29,10 +26,4 @@ tbody.ant-table-tbody > tr.ant-table-row:hover > td {
 }
 .ant-select.unselected .ant-select-prefix {
   margin-inline-end: 0;
-}
-.corrosion-analysis-forecast .ant-descriptions .ant-descriptions-view {
-  border-radius: 0;
-}
-.ant-card.meta-card .ant-card-meta-title {
-  font-weight: 400;
 }

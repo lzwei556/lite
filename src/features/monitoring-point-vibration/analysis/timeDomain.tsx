@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { ChartMark, Card, Descriptions, Grid } from '../../../components';
+import { ChartMark, Descriptions, Grid } from '../../../components';
 import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
 import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
@@ -33,10 +33,7 @@ export const TimeDomain = ({
     <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
-          cardProps={{
-            extra: <SingleDoubleToggle />,
-            style: { border: 'solid 1px #d3d3d3' }
-          }}
+          cardProps={{ extra: <SingleDoubleToggle /> }}
           config={{
             opts: {
               xAxis: {
@@ -89,30 +86,26 @@ export const TimeDomain = ({
               key: 'overview',
               label: intl.get('BASIC_INFORMATION'),
               children: (
-                <Card>
-                  <Descriptions
-                    items={[
-                      { label: intl.get('SETTING_RANGE'), children: `${range}g` },
-                      {
-                        label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                        children: `${frequency}Hz`
-                      },
-                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
-                      {
-                        label: intl.get('motor.rotation_speed'),
-                        children: rotation_speed ? `${rotation_speed}RPM` : '-'
-                      }
-                    ]}
-                  />
-                </Card>
-              ),
-              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+                <Descriptions
+                  items={[
+                    { label: intl.get('SETTING_RANGE'), children: `${range}g` },
+                    {
+                      label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                      children: `${frequency}Hz`
+                    },
+                    { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
+                    {
+                      label: intl.get('motor.rotation_speed'),
+                      children: rotation_speed ? `${rotation_speed}RPM` : '-'
+                    }
+                  ]}
+                />
+              )
             },
             {
               key: 'marklist',
               label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
-              children: <MarkList />,
-              styles: { body: { borderTop: 'solid 1px #f0f0f0' } }
+              children: <MarkList />
             }
           ]}
         />

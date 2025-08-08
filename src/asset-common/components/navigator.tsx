@@ -4,22 +4,20 @@ import { DownOutlined } from '@ant-design/icons';
 import { mapTree, tree2List } from '../../utils/tree';
 import { truncate } from '../../utils/format';
 import { AssetTreeNode, combine, pickId } from '../../views/home/tree';
+import { MonitoringPointRow } from '../../monitoring-point';
 import { AssetRow } from '../types';
 import { ASSET_PATHNAME, getVirturalAsset } from '../constants';
 import { useContext } from './context';
 import { Link } from '../../components';
+import { AssetStatusTag } from '../assetStatusTag';
 
 export type TreeFlatListItem = AssetTreeNode & { path: number[] };
 
 export const AssetNavigator = ({
-  id,
-  type,
-  containerDomWidth
-}: {
-  id: number;
-  type: number;
-  containerDomWidth?: number;
-}) => {
+  asset,
+  showStatus = true
+}: { asset: AssetRow | MonitoringPointRow } & { showStatus?: Boolean }) => {
+  const { id, type, alertLevel } = asset;
   const items: BreadcrumbProps['items'] = [];
   const { assets } = useContext();
 
@@ -50,11 +48,10 @@ export const AssetNavigator = ({
   }
 
   return (
-    <Breadcrumb
-      items={items.filter((item, index) =>
-        containerDomWidth && containerDomWidth < 1300 ? index === items.length - 1 : true
-      )}
-    />
+    <Space style={{ minWidth: items.length * 150 }} size={20}>
+      <Breadcrumb items={items} />
+      {showStatus && <AssetStatusTag status={alertLevel ?? 0} />}
+    </Space>
   );
 };
 

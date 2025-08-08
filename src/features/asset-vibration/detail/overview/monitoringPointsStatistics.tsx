@@ -1,11 +1,11 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import {
-  Card,
   Chart,
   getBarPieOption,
   getOptions,
-  getVerticalLegends
+  getVerticalLegends,
+  MutedCard
 } from '../../../../components';
 import { useLocaleContext } from '../../../../localeProvider';
 import { Asset, AssetRow } from '../../../../asset-common';
@@ -26,11 +26,13 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
     ...getBarPieOption(),
     title: {
       text: `${statistics.monitoringPointNum}`,
-      subtext: intl.get('total'),
+      subtext: intl.get('monitoring.point.total'),
       left: 'center',
-      top: 95,
+      top: 90,
       textStyle: {
-        fontSize: 30
+        fontSize: 20,
+        fontWeight: 400,
+        color: 'rgba(0,0,0,.88)'
       }
     },
     legend: getVerticalLegends(statisticsData, language),
@@ -39,7 +41,7 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
         type: 'pie',
         name: '',
         radius: ['50%', '60%'],
-        center: ['50%', '48%'],
+        center: ['50%', '42%'],
         label: { show: false, formatter: '{b} {c}' },
         data: statisticsData
       }
@@ -47,19 +49,8 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
   });
 
   return (
-    <Card
-      styles={{
-        header: {
-          border: 0,
-          position: 'absolute',
-          width: '100%',
-          textAlign: 'center'
-        },
-        body: { height: '100%' }
-      }}
-      title={intl.get('monitoring.points.statistics')}
-    >
-      <Chart options={options} style={{ height: 265 }} />
-    </Card>
+    <MutedCard title={intl.get('monitoring.points.statistics')} titleCenter={true}>
+      <Chart options={options} style={{ height: 280 }} />
+    </MutedCard>
   );
 };

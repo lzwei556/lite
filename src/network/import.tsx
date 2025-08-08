@@ -6,7 +6,7 @@ import intl from 'react-intl-universal';
 import { ImportNetworkRequest } from '../apis/network';
 import { DeviceType } from '../types/device_type';
 import { generateColProps } from '../utils/grid';
-import { Card, Flex, Grid, JsonImporter, Link } from '../components';
+import { Card, Grid, JsonImporter, Link, TitleExtraLayout } from '../components';
 import * as WSN from '../wsn';
 import { useContext } from '../features/device';
 import { VIRTUAL_ROOT_DEVICE } from '../features/device/virtual';
@@ -80,22 +80,25 @@ const ImportNetworkPage = () => {
   return (
     <Grid>
       <Col span={24}>
-        <Card styles={{ body: { paddingBlock: 8 } }}>
-          <Flex justify='space-between' align='center'>
+        <TitleExtraLayout
+          title={
             <Breadcrumb
               items={[
                 { title: <Link to='/devices'>{VIRTUAL_ROOT_DEVICE.name}</Link> },
                 { title: intl.get('MENU_IMPORT_NETWORK') }
               ]}
             />
-            {!success && (
+          }
+          extra={
+            !success && (
               <Button type='primary' onClick={onSave}>
                 {intl.get('SAVE_NETWORK')}
                 <ImportOutlined />
               </Button>
-            )}
-          </Flex>
-        </Card>
+            )
+          }
+          paddingBlock={14}
+        />
       </Col>
       <Col span={24}>
         {!success && (
@@ -128,7 +131,7 @@ const ImportNetworkPage = () => {
             </Col>
             {isGatewayBLE && (
               <Col flex='300px'>
-                <Card size='small' title={intl.get('EDIT')}>
+                <Card title={intl.get('EDIT')}>
                   <Form form={form} layout='vertical' initialValues={initialValues}>
                     <WSN.FormItems
                       formItemColProps={generateColProps({})}

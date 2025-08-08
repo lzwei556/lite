@@ -67,8 +67,7 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
               />
             )}
           </Space>
-        ),
-        style: { border: 'solid 1px #d3d3d3' }
+        )
       }}
       options={{
         axisPointer: {

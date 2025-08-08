@@ -53,6 +53,7 @@ export const History = (point: MonitoringPointRow) => {
       {isTowerRelated && (
         <Col span={isMobile ? 24 : 8}>
           <Tower.PointsScatterChart
+            cardProps={{}}
             data={[
               {
                 name,

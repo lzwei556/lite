@@ -82,6 +82,7 @@
 
 .page-with-sidebar .content {
   flex: 1;
-  margin-left: var(--space);
+  /* margin-left: var(--space); */
+  padding: 20px 16px;
   overflow-x: hidden;
 }

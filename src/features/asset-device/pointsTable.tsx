@@ -35,7 +35,6 @@ export const PointsTable = (props: {
     <Table
       cardProps={{
         extra: <ActionBar {...props} />,
-        size: 'small',
         title: intl.get(MONITORING_POINT)
       }}
       columns={columns}

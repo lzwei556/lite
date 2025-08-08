@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import intl from 'react-intl-universal';
 import { GetRoleRequest, PagingRolesRequest } from '../../../apis/role';
 import { Role } from '../../../types/role';
@@ -70,13 +72,11 @@ const RolePage = () => {
   const { paged, ds } = transformPagedresult(dataSource);
 
   return (
-    <>
+    <Content>
+      <Typography.Title level={4}>{intl.get('MENU_ROLE_MANAGEMENT')}</Typography.Title>
       <Table
         columns={columns}
         dataSource={ds}
-        header={{
-          title: intl.get('MENU_USER_MANAGEMENT')
-        }}
         pagination={{
           ...paged,
           onChange: fetchRoles
@@ -110,7 +110,7 @@ const RolePage = () => {
           onCancel={() => setPermissionVisible(false)}
         />
       )}
-    </>
+    </Content>
   );
 };
 

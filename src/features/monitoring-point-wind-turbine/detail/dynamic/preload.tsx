@@ -29,7 +29,7 @@ export function Preload<T extends PreloadDynamicData>(props: { values: T }) {
     return (
       <Descriptions
         bordered={true}
-        column={{ xxl: 3, xl: 3, lg: 2, md: 2, xs: 1 }}
+        column={{ xxl: 3, xl: 2, lg: 2, md: 2, xs: 1 }}
         items={metaData.map(({ label, value, unit, precision }) => ({
           label: intl.get(label),
           children: getMetaProperty(values.metadata, value, unit, precision)
@@ -49,7 +49,7 @@ export function Preload<T extends PreloadDynamicData>(props: { values: T }) {
     }
     const data = values[field.value as keyof Omit<PreloadDynamicData, 'metadata'>];
     let series: SeriesOption[] = [];
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       if (typeof data[0] === 'number') {
         series = [
           {

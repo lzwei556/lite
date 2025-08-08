@@ -1003,7 +1003,6 @@
   "TIMESTAMP": "时间",
   "TOTAL_AMOUNT_GB": "总量(GB)",
   "TOTAL_AMOUNT_MB": "总量(MB)",
-  "TOTAL_WITH_NUMBER": "共{number}项",
   "TOWER": "塔筒",
   "TOWER_BASE_RADIUS": "塔基半径",
   "TOWER_INSTALL_ANGLE": "安装角度",
@@ -1321,7 +1320,7 @@
   "motor.bearing.type.roller": "滚动轴承",
   "motor.property": "电机属性",
   "monitoring.points.statistics": "监测点统计",
-  "total": "监测点总数",
+  "monitoring.point.total": "监测点总数",
   "phone.is.invalid": "手机号格式不正确",
   "email.is.invalid": "邮箱格式不正确",
   "replace.image": "上传图片",
@@ -1339,5 +1338,6 @@
   "compensation.start": "开始",
   "compensation.stop": "结束",
   "hours": "小时",
-  "assets": "资产"
+  "assets": "资产",
+  "total": "总数"
 }

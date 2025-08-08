@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Col, Form } from 'antd';
-import { SaveOutlined } from '@ant-design/icons';
+import { Col, Form } from 'antd';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../utils/grid';
 import {
@@ -9,7 +8,7 @@ import {
   MonitoringPointRow,
   Point
 } from '../../../asset-common';
-import { Card, Grid } from '../../../components';
+import { Card, Grid, SaveIconButton } from '../../../components';
 import { BasisFormItems } from '../basisFormItems';
 import { Others } from '../others';
 import { handleSubmit } from '../common';
@@ -23,19 +22,14 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
       <Col span={24}>
         <Card
           extra={
-            <Button
-              color='primary'
+            <SaveIconButton
               onClick={() => {
                 form.validateFields().then((values) => {
                   handleSubmit(monitoringPoint, values, onSuccess);
                 });
               }}
-              icon={<SaveOutlined />}
-              size='small'
-              variant='outlined'
             />
           }
-          size='small'
           title={intl.get('BASIC_INFORMATION')}
         >
           <Form form={form} layout='vertical' initialValues={{ ...Point.convert(monitoringPoint) }}>

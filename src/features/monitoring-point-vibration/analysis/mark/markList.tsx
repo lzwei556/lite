@@ -1,7 +1,7 @@
 import React from 'react';
 import { List } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, ChartMark } from '../../../../components';
+import { ChartMark } from '../../../../components';
 import { formatNumericData } from '../../../../utils/format';
 import Sideband from '../sideband';
 import { useMarkChartProps } from './hooks';
@@ -41,29 +41,28 @@ export const MarkList = () => {
     return <Sideband.MarkList />;
   } else {
     return (
-      <Card styles={{ body: { overflowY: 'auto', maxHeight: 350 } }}>
-        <List
-          dataSource={marks.concat(getDiff()).map(transformMarkData)}
-          renderItem={(mark, i) => {
-            const diffSymbol = mark.type === 'diff' ? '△' : '';
-            const [x, y] = mark.data;
+      <List
+        dataSource={marks.concat(getDiff()).map(transformMarkData)}
+        style={{ overflowY: 'auto', maxHeight: 350 }}
+        renderItem={(mark, i) => {
+          const diffSymbol = mark.type === 'diff' ? '△' : '';
+          const [x, y] = mark.data;
 
-            return (
-              <List.Item>
-                <List.Item.Meta description={getLabel(i)} />
-                <span style={{ width: 90 }}>
-                  X: {diffSymbol}
-                  {dispalyCoordValue(x)}
-                </span>
-                <span style={{ width: 90 }}>
-                  Y:{diffSymbol}
-                  {dispalyCoordValue(y)}
-                </span>
-              </List.Item>
-            );
-          }}
-        />
-      </Card>
+          return (
+            <List.Item>
+              <List.Item.Meta description={getLabel(i)} />
+              <span style={{ width: 90 }}>
+                X: {diffSymbol}
+                {dispalyCoordValue(x)}
+              </span>
+              <span style={{ width: 90 }}>
+                Y:{diffSymbol}
+                {dispalyCoordValue(y)}
+              </span>
+            </List.Item>
+          );
+        }}
+      />
     );
   }
 };

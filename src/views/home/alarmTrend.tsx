@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../utils';
 import { GetAlertStatisticsRequest } from '../../apis/statistic';
-import { Card, Chart, getBarPieOption, getOptions } from '../../components';
+import { Chart, getBarPieOption, getOptions, MutedCard } from '../../components';
 import { AlarmLevel, getColorByValue, getLabelByValue } from '../../features/alarm';
 
 type Statistics = { timestamp: number; info: number; warn: number; critical: number };
@@ -94,14 +94,8 @@ export const AlarmTrend = ({
 
   if (loading) return <Spin />;
   return (
-    <Card
-      styles={{
-        header: { border: 0, position: 'absolute', top: 6, width: '100%', textAlign: 'center' },
-        body: { height: '100%' }
-      }}
-      title={title}
-    >
+    <MutedCard title={title} titleCenter={true}>
       <Chart options={options} style={chartStyle} />
-    </Card>
+    </MutedCard>
   );
 };

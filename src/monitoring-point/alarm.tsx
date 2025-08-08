@@ -48,7 +48,6 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
       ],
       dataSource,
       pagination: false,
-      size: 'small',
       style: { marginLeft: 20, width: 770 },
       scroll: isMobile ? { x: 600 } : undefined
     };
@@ -168,7 +167,7 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
   return (
     <Table
       rowKey='id'
-      cardProps={{ size: 'small', title: intl.get('ALARM_RULES') }}
+      cardProps={{ title: intl.get('ALARM_RULES') }}
       columns={columns}
       dataSource={allRules}
       expandable={{

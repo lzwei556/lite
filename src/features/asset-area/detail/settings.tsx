@@ -63,10 +63,7 @@ export const Settings = (props: {
     } else if (children.every((asset) => Asset.Assert.isArea(asset.type))) {
       return (
         <Table
-          cardProps={{
-            size: 'small',
-            title: intl.get('ASSET')
-          }}
+          cardProps={{ title: intl.get('ASSET') }}
           columns={[nameColun, operationColumn]}
           dataSource={children.map(({ children, ...rest }) => rest)}
           pagination={false}
@@ -130,7 +127,6 @@ export const Settings = (props: {
       return (
         <Table
           cardProps={{
-            size: 'small',
             style: { marginTop: i !== 0 ? 16 : undefined },
             title: typeLabel ? intl.get(typeLabel) : intl.get('ASSET')
           }}

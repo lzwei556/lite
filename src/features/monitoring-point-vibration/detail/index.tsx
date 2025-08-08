@@ -1,15 +1,13 @@
 import React from 'react';
-import { Col, TabsProps } from 'antd';
-import { useSize } from 'ahooks';
+import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { Grid, MetaCard, Tabs } from '../../../components';
+import { Grid, MutedCard, TabsDetail, TabsDetailsItems } from '../../../components';
 import { FilterableAlarmRecordTable } from '../../alarm';
 import usePermission, { Permission } from '../../../permission/permission';
 import { useAppVibrationEnabled } from '../../../config';
 import {
   AssetNavigator,
   MonitoringPointRow,
-  TabBarExtraLeftContent,
   RelatedDeviceCard,
   BasicCard
 } from '../../../asset-common';
@@ -23,39 +21,36 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   const { monitoringPoint, onSuccess } = props;
   const { hasPermission } = usePermission();
   const vibrationEnabled = useAppVibrationEnabled();
-  const { alertLevel, id, type, attributes, assetId } = monitoringPoint;
+  const { id, attributes, assetId } = monitoringPoint;
 
-  const items: TabsProps['items'] = [
+  const items: TabsDetailsItems = [
     {
       key: 'overview',
       label: intl.get('OVERVIEW'),
-      children: (
-        <div style={{ marginTop: 16 }}>
-          <Grid wrap={false}>
-            <Col flex='auto'>
-              <MetaCard
-                title={intl.get('real.time.data')}
-                description={<Monitor {...monitoringPoint} key={id} />}
-              />
-            </Col>
-            <Col flex='300px'>
-              <Grid>
-                <Col span={24}>
-                  <BasicCard monitoringPoint={monitoringPoint} />
-                </Col>
-                <Col span={24}>
-                  <RelatedDeviceCard {...monitoringPoint} />
-                </Col>
-              </Grid>
-            </Col>
-          </Grid>
-        </div>
+      content: (
+        <Grid wrap={false}>
+          <Col flex='auto'>
+            <MutedCard title={intl.get('real.time.data')}>
+              <Monitor {...monitoringPoint} key={id} />
+            </MutedCard>
+          </Col>
+          <Col flex='300px'>
+            <Grid>
+              <Col span={24}>
+                <BasicCard monitoringPoint={monitoringPoint} />
+              </Col>
+              <Col span={24}>
+                <RelatedDeviceCard {...monitoringPoint} />
+              </Col>
+            </Grid>
+          </Col>
+        </Grid>
       )
     },
     {
       key: 'history',
       label: intl.get('HISTORY_DATA'),
-      children: <History {...monitoringPoint} key={id} />
+      content: <History {...monitoringPoint} key={id} />
     }
   ];
 
@@ -63,20 +58,20 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'analysis',
       label: intl.get('intelligent.analysis'),
-      children: <Analysis id={id} key={id} attributes={attributes} assetId={assetId} />
+      content: <Analysis id={id} key={id} attributes={attributes} assetId={assetId} />
     });
   } else {
     items.push({
       key: 'waveformData',
       label: intl.get('WAVEFORM_DATA'),
-      children: <WaveformData id={id} key={id} />
+      content: <WaveformData id={id} key={id} />
     });
   }
 
   items.push({
     key: 'alerts',
     label: intl.get('ALARM_RECORDS'),
-    children: (
+    content: (
       <FilterableAlarmRecordTable
         sourceId={id}
         storeKey='monitoringPointAlarmRecordList'
@@ -88,26 +83,9 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     items.push({
       key: 'settings',
       label: intl.get('SETTINGS'),
-      children: <Settings monitoringPoint={monitoringPoint} onSuccess={onSuccess} key={id} />
+      content: <Settings monitoringPoint={monitoringPoint} onSuccess={onSuccess} key={id} />
     });
   }
 
-  const ref = React.useRef<HTMLDivElement>(null);
-  const size = useSize(ref);
-
-  return (
-    <Tabs
-      items={items}
-      noStyle={true}
-      tabBarExtraContent={{
-        left: (
-          <TabBarExtraLeftContent alertLevel={alertLevel}>
-            <AssetNavigator id={id} containerDomWidth={size?.width} type={type} />
-          </TabBarExtraLeftContent>
-        )
-      }}
-      tabListRef={ref}
-      tabsRighted={true}
-    />
-  );
+  return <TabsDetail items={items} title={<AssetNavigator asset={monitoringPoint} />} />;
 };

@@ -11,15 +11,13 @@ export const AnalysisSidebarCollapse = ({ items, ...rest }: CollapseProps) => {
         ...item,
         style: {
           marginBottom: 16,
-          border: 'solid 1px #d3d3d3',
+          border: 'solid 1px #f0f0f0',
+          borderRadius: 8,
           backgroundColor: '#fff',
           ...item.style
-        },
-        styles: {
-          header: item.styles?.header,
-          body: { padding: 0, ...item.styles?.body }
         }
       }))}
+      style={{ backgroundColor: '#fff', ...rest.style }}
     />
   );
 };

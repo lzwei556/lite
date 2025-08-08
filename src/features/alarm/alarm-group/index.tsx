@@ -1,22 +1,23 @@
 import * as React from 'react';
-import { Button, message, Space, TableProps } from 'antd';
+import { Button, message, Space, TableProps, Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
-import { BindMonitoringPoints } from './bindMonitoringPoints';
-import { SelectRules } from './selectRules';
-import { deleteAlarmRule, getAlarmRules, importAlarmRules } from './services';
-import { AlarmRule } from './types';
 import { isMobile } from '../../../utils/deviceDetection';
 import { getValue } from '../../../utils/format';
 import { App, useAppType } from '../../../config';
 import { MONITORING_POINT } from '../../../asset-common';
 import { DeleteIconButton, EditIconButton, Table, JsonImporter } from '../../../components';
-import { CreateModal } from './createModal';
-import { UpdateModal } from './updateModal';
 import { AlarmLevelLightSelectFilter } from '../alarmLevelLightSelectFilter';
 import { AlarmLevelTag } from '..';
+import { CreateModal } from './createModal';
+import { UpdateModal } from './updateModal';
+import { BindMonitoringPoints } from './bindMonitoringPoints';
+import { SelectRules } from './selectRules';
+import { deleteAlarmRule, getAlarmRules, importAlarmRules } from './services';
+import { AlarmRule } from './types';
 
 export default function AlarmRuleList() {
   const appType = useAppType();
@@ -138,7 +139,6 @@ export default function AlarmRuleList() {
       ],
       dataSource,
       pagination: false,
-      size: 'small',
       style: { marginLeft: 40, width: columns.length === 2 ? 'auto' : 770 },
       scroll: isMobile ? { x: 600 } : undefined
     };
@@ -167,7 +167,8 @@ export default function AlarmRuleList() {
   }, [levels, monitoringPointType]);
 
   return (
-    <>
+    <Content>
+      <Typography.Title level={4}>{intl.get('ALARM_RULES')}</Typography.Title>
       <Table
         {...{
           rowKey: 'id',
@@ -180,14 +181,13 @@ export default function AlarmRuleList() {
           onChange: (paged, filters: any) => {
             setMontoringPointType(filters?.type ?? []);
           },
-          size: 'small',
+
           pagination: false,
           loading,
           dataSource: alarmRules,
           scroll: isMobile ? { x: 600 } : undefined
         }}
         header={{
-          title: intl.get('ALARM_RULES'),
           toolbar: [
             <>
               <AlarmLevelLightSelectFilter onChange={setLevels} value={levels} />
@@ -271,7 +271,7 @@ export default function AlarmRuleList() {
           }}
         />
       )}
-    </>
+    </Content>
   );
 }
 
