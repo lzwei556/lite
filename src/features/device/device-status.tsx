@@ -6,10 +6,12 @@ import { DeviceType } from '../../types/device_type';
 import { Device } from '../../types/device';
 import { MutedCard } from '../../components';
 import { getValue } from '../../utils';
+import { useGlobalStyles } from '../../styles';
 import { ReactComponent as BatterySVG } from './battery.svg';
 
 export const DeviceStatus = ({ device }: { device: Device }) => {
   const fields = useStateFields(device);
+  const { colorBgContainerStyle } = useGlobalStyles();
   return (
     fields.length > 0 && (
       <Col span={24}>
@@ -21,7 +23,11 @@ export const DeviceStatus = ({ device }: { device: Device }) => {
           >
             {fields.map(({ label, value, icon, unit }) => (
               <Space size={16} key={label}>
-                <Avatar icon={icon} size={60} style={{ color: '#666', backgroundColor: '#fff' }} />
+                <Avatar
+                  icon={icon}
+                  size={60}
+                  style={{ color: '#666', backgroundColor: colorBgContainerStyle.backgroundColor }}
+                />
                 <Statistic
                   title={label}
                   value={value}

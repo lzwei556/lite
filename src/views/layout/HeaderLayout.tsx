@@ -9,7 +9,7 @@ import { persistor, store } from '../../store';
 import { Dayjs } from '../../utils';
 import ProjectSelect from '../../components/select/projectSelect';
 import { GetMyProjectRequest } from '../../apis/project';
-import { LangSwitcher } from '../../localeProvider/switcher';
+import { LangSwitcher, ThemeSwitcher } from '../../localeProvider';
 import { NavMenu } from './NavMenu';
 import './layout.css';
 import { Brand } from './brand';
@@ -75,6 +75,7 @@ const HeaderLayout = (props: any) => {
             </Button>
           </Dropdown>
           <LangSwitcher style={{ color: '#fff', width: 60, paddingRight: 0 }} />
+          <ThemeSwitcher />
         </Space>
       </div>
       <div className='mobile'>

@@ -8,14 +8,16 @@ import { DeviceType } from '../../types/device_type';
 import { Card, Grid, LightSelectFilter } from '../../components';
 import { DisplayProperty, displayPropertyGroup } from '../../constants/properties';
 import { generateColProps } from '../../utils/grid';
-import { HistoryDataFea } from '..';
+import { useGlobalStyles } from '../../styles';
 import { HistoryData } from '../../asset-common';
+import { HistoryDataFea } from '..';
 import { getDisplayProperties } from './util';
 
 export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   const channels = DeviceType.getChannels(device.typeId);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const [channel, setChannel] = React.useState('1');
+  const { propertyHistoryCardStyle, colorBgContainerStyle } = useGlobalStyles();
 
   React.useEffect(() => {
     const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastHalfMonth);
@@ -72,10 +74,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                       <HistoryDataFea.PropertyChartCard
                         data={historyData}
                         property={p}
-                        cardProps={{
-                          style: { background: '#f0f0f0' },
-                          styles: { header: { fontWeight: 400, borderColor: 'rgb(0,0,0,.05)' } }
-                        }}
+                        cardProps={propertyHistoryCardStyle}
                       />
                     </Col>
                   );
@@ -84,7 +83,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
           )
         }))}
         size='small'
-        style={{ borderRadius: 0, backgroundColor: '#fff' }}
+        style={{ borderRadius: 0, backgroundColor: colorBgContainerStyle.backgroundColor }}
       />
     );
   } else {
@@ -97,10 +96,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                 <HistoryDataFea.PropertyChartCard
                   data={historyData}
                   property={p}
-                  cardProps={{
-                    style: { background: '#f0f0f0' },
-                    styles: { header: { fontWeight: 400, borderColor: 'rgb(0,0,0,.05)' } }
-                  }}
+                  cardProps={propertyHistoryCardStyle}
                 />
               </Col>
             );

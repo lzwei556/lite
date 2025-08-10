@@ -2,16 +2,18 @@ import React from 'react';
 import AntIcon from '@ant-design/icons';
 import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 import { Asset, AssetRow } from '../../asset-common';
+import { Flex } from '../../components';
+import { useGlobalStyles } from '../../styles';
 import { wind, flange, tower } from './constants';
 import { ReactComponent as WindSVG } from './wind_turbine.svg';
 import * as Flange from './flange';
 import * as Tower from './tower';
-import { Flex } from '../../components';
 
 export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRow }) => {
   const { asset, ...rest } = props;
   const assetStatusColor = Asset.Status.getColorByValue(asset.alertLevel);
   const commonProps = { ...rest, fill: assetStatusColor };
+  const { colorBgContainerStyle } = useGlobalStyles();
   if (asset.type === wind.type) {
     return (
       <Flex
@@ -21,7 +23,7 @@ export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRo
         <AntIcon
           component={() => (
             <WindSVG
-              fill='#fff'
+              fill={colorBgContainerStyle.backgroundColor}
               height={rest.height ? (rest.height as number) * 0.85 : undefined}
               width={rest.width ? (rest.width as number) * 0.85 : undefined}
             />

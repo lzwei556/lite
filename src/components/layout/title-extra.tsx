@@ -24,7 +24,7 @@ export const TitleExtraLayout = ({
   return (
     <Card
       ref={cardRef}
-      styles={{ body: isWrap ? { padding: `${Space}px unset 0` } : { paddingBlock } }}
+      styles={{ body: isWrap ? { padding: `${Space}px ${Space}px 0` } : { paddingBlock } }}
     >
       {cardSize && (
         <Flex align='center' justify='flex-start' wrap={isWrap}>

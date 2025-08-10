@@ -4,6 +4,7 @@ import intl from 'react-intl-universal';
 import { Card } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import { useFormBindingsProps } from '../../../hooks';
+import { useGlobalStyles } from '../../../styles';
 import {
   FormCommonProps,
   FormItemsProps,
@@ -78,6 +79,7 @@ const useSettingFormItemsCommonProps = (props: Props) => {
 };
 
 const useMultipleGroupSectionProps = (props: Props) => {
+  const { colorLayoutBgStyle } = useGlobalStyles();
   return {
     groupCardProps: {
       ...useGroupCardProps({
@@ -89,7 +91,7 @@ const useMultipleGroupSectionProps = (props: Props) => {
     settingsFormItemsProps: {
       ...useSettingFormItemsCommonProps(props),
       groupCardProps: useGroupCardProps({
-        style: { marginBlock: 16, backgroundColor: 'var(--body-bg-color)' }
+        style: colorLayoutBgStyle
       })
     }
   };

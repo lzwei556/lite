@@ -4,18 +4,20 @@ import { Grid } from '../../../components';
 import { DisplayProperty } from '../../../constants/properties';
 import { generateColProps } from '../../../utils/grid';
 import { Dayjs } from '../../../utils';
-import { HistoryDataFea } from '../..';
 import {
   getDataOfMonitoringPoint,
   HistoryData,
   MonitoringPointRow,
   Point
 } from '../../../asset-common';
+import { useGlobalStyles } from '../../../styles';
+import { HistoryDataFea } from '../..';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
+  const { propertyHistoryCardStyle } = useGlobalStyles();
 
   React.useEffect(() => {
     const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastWeek);
@@ -54,10 +56,7 @@ export const Monitor = (point: MonitoringPointRow) => {
             <HistoryDataFea.PropertyChartCard
               data={historyData}
               property={p}
-              cardProps={{
-                style: { background: '#f0f0f0' },
-                styles: { header: { fontWeight: 400, borderColor: 'rgb(0,0,0,.05)' } }
-              }}
+              cardProps={propertyHistoryCardStyle}
             />
           </Col>
         );

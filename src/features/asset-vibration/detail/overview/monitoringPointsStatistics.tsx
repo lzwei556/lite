@@ -2,16 +2,18 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import {
   Chart,
-  getBarPieOption,
   getOptions,
-  getVerticalLegends,
-  MutedCard
+  MutedCard,
+  useBarPieOption,
+  useVerticalLegends
 } from '../../../../components';
 import { useLocaleContext } from '../../../../localeProvider';
 import { Asset, AssetRow } from '../../../../asset-common';
+import { useGlobalStyles } from '../../../../styles';
 
 export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
   const { language } = useLocaleContext();
+  const { colorTextStyle } = useGlobalStyles();
   const { asset } = props;
   const { statistics } = asset;
   const statisticsData = Asset.Statistics.resolveStatus(
@@ -23,7 +25,7 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
     itemStyle: { color: s.color }
   }));
   const options = getOptions({
-    ...getBarPieOption(),
+    ...useBarPieOption(),
     title: {
       text: `${statistics.monitoringPointNum}`,
       subtext: intl.get('monitoring.point.total'),
@@ -32,10 +34,10 @@ export const MonitoringPointsStatistics = (props: { asset: AssetRow }) => {
       textStyle: {
         fontSize: 20,
         fontWeight: 400,
-        color: 'rgba(0,0,0,.88)'
+        ...colorTextStyle
       }
     },
-    legend: getVerticalLegends(statisticsData, language),
+    legend: useVerticalLegends(statisticsData, language),
     series: [
       {
         type: 'pie',

@@ -8,6 +8,7 @@ import { Grid, NumberFormItem, TextFormItem } from '../../components';
 import { GetDevicesRequest } from '../../apis/device';
 import { isMobile } from '../../utils/deviceDetection';
 import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
+import { useGlobalStyles } from '../../styles';
 import { getRelatedDeviceTypes } from './common';
 
 export const PointItemList = ({
@@ -25,6 +26,7 @@ export const PointItemList = ({
 }) => {
   const [devices, setDevices] = React.useState<Device[]>([]);
   const [open, setVisible] = React.useState(false);
+  const { colorBorderStyle } = useGlobalStyles();
 
   React.useEffect(() => {
     const deviceTypes = getRelatedDeviceTypes(type);
@@ -50,7 +52,7 @@ export const PointItemList = ({
             <div
               style={{
                 position: 'relative',
-                border: 'dashed 1px #d9d9d9',
+                border: `dashed 1px ${colorBorderStyle.color}`,
                 paddingTop: 16,
                 marginBottom: 16
               }}

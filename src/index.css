@@ -1,11 +1,9 @@
 @import 'antd/dist/reset.css';
 :root {
   --space: 16px;
-  --body-bg-color: rgb(240, 242, 245);
 }
 body {
   color: rgba(0, 0, 0, 0.88);
-  background-color: var(--body-bg-color);
 }
 tbody.ant-table-tbody > tr.ant-table-row:hover > td {
   background-color: #eee;

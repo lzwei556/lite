@@ -68,7 +68,7 @@ export const MarkChart = (
   const options = getOptions(
     useLinedSeriesOptions(series, yAxisMeta, {
       ...config,
-      opts: { ...config?.opts, ...ChartBrush.Options },
+      opts: { ...config?.opts, ...ChartBrush.useBrushOptions() },
       switchs: { noDataZoom: true, noArea: true, ...config?.switchs }
     })
   );

@@ -50,7 +50,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
   const property = _properties[0];
 
   return (
-    <Grid gutter={[Space, Space]}>
+    <Grid gutter={[Space, Space]} wrap={false}>
       {property && (
         <Col flex='auto'>
           <ThicknessChart

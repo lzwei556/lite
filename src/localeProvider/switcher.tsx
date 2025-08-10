@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import { Language, useLocaleContext } from '.';
+import { Language, LanguageOptions, useLocaleContext } from '.';
 
 export const LangSwitcher = ({ style }: { style?: React.CSSProperties }) => {
   const { setLocale, language } = useLocaleContext();
@@ -9,10 +9,7 @@ export const LangSwitcher = ({ style }: { style?: React.CSSProperties }) => {
   return (
     <Dropdown
       menu={{
-        items: [
-          { key: 'zh-CN', label: '中文' },
-          { key: 'en-US', label: 'EN' }
-        ],
+        items: LanguageOptions,
         onClick: ({ key }) => {
           if (key !== language) {
             setLocale((prev) => ({

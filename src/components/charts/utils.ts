@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { LegendComponentOption } from 'echarts/types/dist/shared';
 import { Language } from '../../localeProvider';
+import { useGlobalStyles } from '../../styles';
 import type { ECOptions } from './chart';
 
 export const chartColors = [
@@ -32,10 +33,11 @@ export function getOptions(...opts: ECOptions[]) {
   return _.merge({ grid, color, toolbox }, ...opts);
 }
 
-export function getBarPieOption() {
+export function useBarPieOption() {
+  const { colorTextDescriptionStyle } = useGlobalStyles();
   return {
     title: {
-      textStyle: { color: 'rgba(0,0,0,0.45)', fontWeight: 400, fontSize: 16 }
+      textStyle: { ...colorTextDescriptionStyle, fontWeight: 400, fontSize: 16 }
     },
     grid: { top: 48, bottom: 40 },
     legend: {
@@ -44,7 +46,7 @@ export function getBarPieOption() {
       itemHeight: 14,
       itemGap: 5,
       textStyle: {
-        color: 'rgba(0,0,0,0.45)',
+        ...colorTextDescriptionStyle,
         rich: {
           value: {
             display: 'inline-block',
@@ -57,10 +59,12 @@ export function getBarPieOption() {
   };
 }
 
-export const getVerticalLegends = (
+export const useVerticalLegends = (
   data: { name: string; value: number; itemStyle: { color: string } }[],
   language: Language
 ) => {
+  const { colorTextDescriptionStyle } = useGlobalStyles();
+  const barPieOpts = useBarPieOption();
   return data.length === 2
     ? {
         formatter: (itemName: string) => {
@@ -72,13 +76,13 @@ export const getVerticalLegends = (
         const even = i % 2 === 0;
         const top2 = i < 2;
         let opts: LegendComponentOption = {
-          ...getBarPieOption().legend,
+          ...barPieOpts.legend,
           data: [name],
           orient: 'vertical',
           bottom: even ? 20 : 'bottom',
           formatter: `{name|{name}} ${value}`,
           textStyle: {
-            color: 'rgba(0,0,0,0.45)',
+            ...colorTextDescriptionStyle,
             rich: { name: { width: language === 'en-US' ? 45 : 25 } }
           }
         };

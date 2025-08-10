@@ -18,7 +18,7 @@ import { wind } from '../../features/asset-wind-turbine/constants';
 import { area } from '../../asset-variant';
 import { AlarmTrend } from './alarmTrend';
 import { Icon } from './icon';
-import { generatePieOptions, useProjectStatistics } from './useProjectStatistics';
+import { usePieOptions, useProjectStatistics } from './useProjectStatistics';
 import { Settings } from './settings';
 
 export default function VirtualAssetDetail() {
@@ -27,11 +27,7 @@ export default function VirtualAssetDetail() {
   const projectStatistics = useProjectStatistics();
   const { language } = useLocaleContext();
 
-  const getAssetPieOptions = (
-    statics: ProjectStatistics | undefined,
-    type: 'asset' | 'monitoring_point'
-  ) => {
-    if (!statics) return null;
+  const useAssetPieOptions = (statics: ProjectStatistics, type: 'asset' | 'monitoring_point') => {
     let total = 0;
     let alarms: [number, number, number] = [0, 0, 0];
     if (type === 'asset') {
@@ -41,7 +37,7 @@ export default function VirtualAssetDetail() {
       total = statics.monitoringPointNum;
       alarms = statics.monitoringPointAlarmNum;
     }
-    return generatePieOptions(
+    return usePieOptions(
       total,
       Asset.Statistics.resolveStatus(total, alarms).map((s) => ({
         ...s,
@@ -53,11 +49,10 @@ export default function VirtualAssetDetail() {
     );
   };
 
-  const getSensorPieOptions = (statics: ProjectStatistics | undefined) => {
-    if (!statics) return null;
+  const useSensorPieOptions = (statics: ProjectStatistics) => {
     const total = statics.deviceNum;
     const offline = statics.deviceOfflineNum;
-    return generatePieOptions(
+    return usePieOptions(
       total,
       [
         {
@@ -76,6 +71,22 @@ export default function VirtualAssetDetail() {
     );
   };
 
+  const AssetStatics = ({ statics }: { statics: ProjectStatistics }) => {
+    return <Chart options={useAssetPieOptions(statics, 'asset')} style={{ height: 280 }} />;
+  };
+
+  const MonitoringPointStatics = ({ statics }: { statics: ProjectStatistics }) => {
+    return (
+      <Chart options={useAssetPieOptions(statics, 'monitoring_point')} style={{ height: 280 }} />
+    );
+  };
+
+  const SensorStatics = ({ statics }: { statics: ProjectStatistics }) => {
+    return <Chart options={useSensorPieOptions(statics)} style={{ height: 280 }} />;
+  };
+
+  const EmptyStatics = () => <Chart options={undefined} style={{ height: 280 }} />;
+
   return (
     <TabsDetail
       items={[
@@ -91,26 +102,29 @@ export default function VirtualAssetDetail() {
                       title={intl.get(App.isWindLike(appType) ? wind.label : area.label)}
                       titleCenter={true}
                     >
-                      <Chart
-                        options={getAssetPieOptions(projectStatistics, 'asset')}
-                        style={{ height: 280 }}
-                      />
+                      {projectStatistics ? (
+                        <AssetStatics statics={projectStatistics} />
+                      ) : (
+                        <EmptyStatics />
+                      )}
                     </MutedCard>
                   </Col>
                   <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
                     <MutedCard title={intl.get(MONITORING_POINT)} titleCenter={true}>
-                      <Chart
-                        options={getAssetPieOptions(projectStatistics, 'monitoring_point')}
-                        style={{ height: 280 }}
-                      />
+                      {projectStatistics ? (
+                        <MonitoringPointStatics statics={projectStatistics} />
+                      ) : (
+                        <EmptyStatics />
+                      )}
                     </MutedCard>
                   </Col>
                   <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
                     <MutedCard title={intl.get('SENSOR')} titleCenter={true}>
-                      <Chart
-                        options={getSensorPieOptions(projectStatistics)}
-                        style={{ height: 280 }}
-                      />
+                      {projectStatistics ? (
+                        <SensorStatics statics={projectStatistics} />
+                      ) : (
+                        <EmptyStatics />
+                      )}
                     </MutedCard>
                   </Col>
                   <Col {...generateColProps({ xxl: 9 })}>

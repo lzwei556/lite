@@ -2,6 +2,7 @@ import React from 'react';
 import { CardProps, Card, Chart } from '../../components';
 import { truncate } from '../../utils/format';
 import { DeviceTreeNode } from '../../features/device/deviceTree';
+import { useGlobalStyles } from '../../styles';
 
 export const TreeChart = ({
   treeData,
@@ -13,6 +14,7 @@ export const TreeChart = ({
   height: number;
   onClick?: (paras: any) => void;
 } & CardProps) => {
+  const { colorBgContainerStyle } = useGlobalStyles();
   return (
     <Card {...rest} style={{ height: 'calc(100vh - 126px)', overflow: 'auto' }}>
       <Chart
@@ -30,7 +32,7 @@ export const TreeChart = ({
                 formatter: ({ name, value }) => {
                   return `{name|${truncate(name, 12)}}\n{mac|${value}}`;
                 },
-                color: '#fff',
+                color: colorBgContainerStyle.backgroundColor,
                 borderRadius: 4,
                 rich: {
                   name: { padding: 8, align: 'center', fontSize: 14 },

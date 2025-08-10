@@ -11,7 +11,18 @@ import { Card, Flex, Grid, Link } from '../../../../components';
 import { ASSET_PATHNAME, AssetRow, updateAsset, uploadAssetImage } from '../../../../asset-common';
 import { getPropertyValues, MonitoringPointPropertyItem } from '../context';
 import DianJi from './dianji.png';
-import './style.css';
+import { createStyles } from 'antd-style';
+
+const useStyles = createStyles(({ token, css }) => ({
+  listItem: css`
+    padding: 1px 2px !important;
+    cursor: pointer;
+    &:hover,
+    &.selected {
+      background-color: ${token.colorInfoBgHover};
+    }
+  `
+}));
 
 export const DianJiImage = ({
   asset,
@@ -33,7 +44,7 @@ export const DianJiImage = ({
     properties.filter((p) => !!p.first).map((p) => p.key)
   );
   const [selected, setSelected] = React.useState<MonitoringPointPropertyItem | undefined>();
-
+  const { styles } = useStyles();
   return (
     <Card
       ref={ref}
@@ -55,7 +66,6 @@ export const DianJiImage = ({
             header: <Link to={`/${ASSET_PATHNAME}/${m.id}-${m.type}`}>{m.name}</Link>,
             body: (
               <List
-                className='asset-image-annotation-list'
                 dataSource={getPropertyValues(
                   m,
                   properties.filter((p) => visibledKeys.includes(p.key))
@@ -67,7 +77,7 @@ export const DianJiImage = ({
                     selected?.id === m.id && selected?.key === key && selected?.axisKey === axisKey;
                   return (
                     <List.Item
-                      className={`asset-image-annotation-list-item ${isSelected ? 'selected' : ''}`}
+                      className={`${styles.listItem} ${isSelected ? 'selected' : ''}`}
                       onClick={() => {
                         const mix = {
                           ...m,
@@ -89,6 +99,7 @@ export const DianJiImage = ({
                   );
                 }}
                 size='small'
+                style={{ top: 4 }}
               />
             ),
             footer: m.data?.timestamp ? Dayjs.format(m.data.timestamp) : undefined

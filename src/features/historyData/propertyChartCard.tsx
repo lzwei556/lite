@@ -6,6 +6,7 @@ import { useLocaleContext } from '../../localeProvider';
 import { DisplayProperty } from '../../constants/properties';
 import { getDisplayName, getValue, roundValue } from '../../utils/format';
 import { HistoryData } from '../../asset-common';
+import { useGlobalStyles } from '../../styles';
 import { PropertyChart, transform } from './propertyChart';
 
 export const PropertyChartCard = (props: {
@@ -37,6 +38,7 @@ const PropertyChartTitle = ({
   const { language } = useLocaleContext();
   const { name, unit, precision } = property;
   const values = transform(data, property).values;
+  const { colorTextDescriptionStyle } = useGlobalStyles();
 
   if (values.length <= 2) {
     return values.map(({ name, last }) => {
@@ -45,7 +47,7 @@ const PropertyChartTitle = ({
         <Space key={name} style={{ display: 'flex', lineHeight: 1.35 }}>
           <Term
             name={title}
-            nameProps={{ style: { color: 'rgba(0,0,0,.45)' } }}
+            nameProps={{ style: colorTextDescriptionStyle }}
             description={intl.get(`${name}_DESC`)}
           />
           {getValue(roundValue(last, precision), unit)}
@@ -58,7 +60,7 @@ const PropertyChartTitle = ({
         <Space style={{ display: 'flex' }}>
           <Term
             name={getDisplayName({ name: intl.get(name).d(name), suffix: unit, lang: language })}
-            nameProps={{ style: { color: 'rgba(0,0,0,.45)' } }}
+            nameProps={{ style: colorTextDescriptionStyle }}
             description={intl.get(`${name}_DESC`)}
           />
         </Space>

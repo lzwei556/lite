@@ -1,7 +1,9 @@
 import React from 'react';
 import { Collapse, CollapseProps } from 'antd';
+import { useGlobalStyles } from '../../styles';
 
 export const AnalysisSidebarCollapse = ({ items, ...rest }: CollapseProps) => {
+  const { colorBgContainerStyle, colorBorderStyle } = useGlobalStyles();
   return (
     <Collapse
       {...rest}
@@ -11,13 +13,13 @@ export const AnalysisSidebarCollapse = ({ items, ...rest }: CollapseProps) => {
         ...item,
         style: {
           marginBottom: 16,
-          border: 'solid 1px #f0f0f0',
+          border: `solid 1px ${colorBorderStyle.color}`,
           borderRadius: 8,
-          backgroundColor: '#fff',
+          ...colorBgContainerStyle,
           ...item.style
         }
       }))}
-      style={{ backgroundColor: '#fff', ...rest.style }}
+      style={{ ...colorBgContainerStyle, ...rest.style }}
     />
   );
 };
