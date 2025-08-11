@@ -52,7 +52,7 @@ export const Status: React.FC<AssetRow> = (props) => {
       );
     } else {
       return (
-        <Grid>
+        <Grid wrap={false}>
           <Col flex='220px'>{renderTimestampsTable()}</Col>
           <Col flex='auto'>{renderSelectedTimestampRelation()}</Col>
         </Grid>

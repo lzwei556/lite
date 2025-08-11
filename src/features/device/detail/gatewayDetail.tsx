@@ -20,7 +20,7 @@ export const GatewayDetail = ({ device, network }: { device: Device; network?: N
   }
 
   return (
-    <Grid>
+    <Grid wrap={false}>
       <Col flex='auto'>
         <Topology.Status network={network} key={network.gateway.macAddress} />
       </Col>

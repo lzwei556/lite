@@ -20,7 +20,7 @@ export const WaterFall = ({ timestamp, timestamps }: AnalysisCommonProps) => {
   );
 
   return (
-    <Grid>
+    <Grid wrap={false}>
       <Col flex='200px' style={{ overflow: 'auto', maxHeight: 480 }}>
         <Checkbox.Group value={selected} onChange={setSelected}>
           <List
