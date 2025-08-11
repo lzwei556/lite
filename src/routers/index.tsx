@@ -64,7 +64,7 @@ const AppRouter = () => {
     }
   }, [language, renderingKey, config]);
 
-  const customDarkAlgorithm = (seedToken, mapToken) => {
+  const customDarkAlgorithm = (seedToken: any, mapToken: any) => {
     const mergeToken = AntdTheme.darkAlgorithm(seedToken, mapToken);
 
     return {
