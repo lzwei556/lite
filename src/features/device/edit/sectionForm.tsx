@@ -91,7 +91,7 @@ const useMultipleGroupSectionProps = (props: Props) => {
     settingsFormItemsProps: {
       ...useSettingFormItemsCommonProps(props),
       groupCardProps: useGroupCardProps({
-        style: colorLayoutBgStyle
+        style: { ...colorLayoutBgStyle, marginBlock: 16 }
       })
     }
   };

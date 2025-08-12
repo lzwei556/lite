@@ -34,7 +34,11 @@ const ModalForm = (props: Props) => {
 
   return (
     <ModalWrapper {...modalProps}>
-      <Form {...formProps}>{<SettingsFormItems {...settingsFormItemsProps} />}</Form>
+      <Form {...formProps}>
+        {settingsFormItemsProps.settings.length > 0 && (
+          <SettingsFormItems {...settingsFormItemsProps} />
+        )}
+      </Form>
     </ModalWrapper>
   );
 };

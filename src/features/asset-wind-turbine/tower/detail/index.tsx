@@ -7,8 +7,6 @@ import {
   AssetRow,
   getMonitoringPointColumns,
   getOperateColumn,
-  MONITORING_POINT,
-  MONITORING_POINT_LIST,
   MonitoringPointRow,
   MonitoringPointsTable,
   Points,
@@ -38,7 +36,7 @@ export const Index = (props: {
     <TabsDetail
       items={[
         {
-          label: intl.get(MONITORING_POINT_LIST),
+          label: intl.get('monitoring.points'),
           key: 'monitoringPointList',
           content: (
             <MonitoringPointsTable
@@ -69,7 +67,7 @@ export const Index = (props: {
                 <Table
                   cardProps={{
                     extra: <ActionBar {...props} />,
-                    title: intl.get(MONITORING_POINT)
+                    title: intl.get('monitoring.points')
                   }}
                   columns={[
                     ...getMonitoringPointColumns({

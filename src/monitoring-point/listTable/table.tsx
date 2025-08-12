@@ -38,7 +38,6 @@ export const MonitoringPointsTable = ({
       return <TypedTable actualPoints={actualPoints} types={types} tableProps={tableProps} />;
     } else {
       const columns = getColumns({ language, point: actualPoints[0], ...rest });
-      console.log('columns', columns);
       return <Table {...{ ...tableProps, columns }} dataSource={actualPoints} />;
     }
   } else {

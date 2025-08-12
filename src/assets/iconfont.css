@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'iconfont'; /* Project id 3582066 */
-  src: url('iconfont.ttf?t=1677823832984') format('truetype');
+  font-family: 'iconfont'; /* Project id 4997189 */
+  src: url('iconfont.ttf?t=1754980119847') format('truetype');
 }
 
 .iconfont {
@@ -11,38 +11,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-report:before {
-  content: '\e811';
-}
-
-.icon-me:before {
-  content: '\e60b';
-}
-
-.icon-device-management:before {
-  content: '\eb94';
-}
-
-.icon-device-monitor:before {
-  content: '\e64b';
-}
-
-.icon-project-management:before {
-  content: '\e623';
-}
-
 .icon-system:before {
-  content: '\e619';
+  content: '\e93f';
 }
 
 .icon-alarm-management:before {
-  content: '\e601';
+  content: '\e66e';
 }
 
 .icon-asset-management:before {
-  content: '\e9eb';
+  content: '\e601';
 }
 
-.icon-user-management:before {
-  content: '\e699';
+.icon-device-management:before {
+  content: '\e7c4';
 }

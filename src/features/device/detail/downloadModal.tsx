@@ -66,7 +66,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
     >
       <Form form={form} layout='vertical'>
         <SelectFormItem
-          label='PROPERTY'
+          label='properties'
           name='properties'
           rules={[{ required: true }]}
           selectProps={{

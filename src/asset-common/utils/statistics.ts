@@ -1,5 +1,5 @@
 import { getColorByValue, getLabelByValue } from '../assetStatus';
-import { INVALID_MONITORING_POINT, MONITORING_POINT } from '../../monitoring-point';
+import { INVALID_MONITORING_POINT } from '../../monitoring-point';
 
 export type AssetChildrenStatistics = {
   alarmNum?: [number, number, number];
@@ -35,9 +35,9 @@ export function resolveDescendant(statis: AssetChildrenStatistics) {
     .slice(1)
     .reduce((prev, crt) => prev + crt);
   return [
-    { name: MONITORING_POINT, value: monitoringPointNum },
+    { name: 'monitoring.points', value: monitoringPointNum },
     { name: INVALID_MONITORING_POINT, value: anomalous },
-    { name: 'DEVICE', value: deviceNum },
-    { name: 'OFFLINE_DEVICE', value: offlineDeviceNum }
+    { name: 'devices', value: deviceNum },
+    { name: 'offline.devices', value: offlineDeviceNum }
   ];
 }

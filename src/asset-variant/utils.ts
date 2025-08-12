@@ -76,19 +76,23 @@ export function isDeviceRelated(type: number) {
   return type === device.type;
 }
 
-type TypeMeta = { label: string; settings?: { default: object } } | undefined;
+type TypeMeta = { label: string; settings?: { default: object }; labelPlural?: string } | undefined;
 
 export function getByType(type: number): TypeMeta {
   let typeInfo: TypeMeta;
   switch (type) {
     case motor.type:
-      return { label: motor.label, settings: { default: MotorDefaultSettings } };
+      return {
+        label: motor.label,
+        labelPlural: motor.labelPlural,
+        settings: { default: MotorDefaultSettings }
+      };
     case pipe.type:
-      return { label: pipe.label };
+      return { label: pipe.label, labelPlural: pipe.labelPlural };
     case tank.type:
-      return { label: tank.label };
+      return { label: tank.label, labelPlural: tank.labelPlural };
     case device.type:
-      return { label: device.label };
+      return { label: device.label, labelPlural: device.labelPlural };
     default:
       break;
   }

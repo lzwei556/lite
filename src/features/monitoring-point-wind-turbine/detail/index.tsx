@@ -15,12 +15,11 @@ import {
 } from '../../../asset-common';
 import { Monitor } from './monitor';
 import { History } from './history';
-import { Preload } from './dynamic/preload';
 import { Angle } from './dynamic/angle';
 import { AngleBase } from './dynamic/angleBase';
 import { PreloadWaveform } from './preloadWaveform';
 import { Settings } from './settings';
-import { AngleDynamicData, PreloadDynamicData, PreloadWaveData } from './dynamic/types';
+import { AngleDynamicData, PreloadWaveData } from './dynamic/types';
 
 export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
@@ -56,20 +55,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
       content: <History {...monitoringPoint} key={id} />
     }
   ];
-  if (Point.Assert.isPreload(type)) {
-    items.push({
-      key: 'dynamicData',
-      label: intl.get('DYNAMIC_DATA'),
-      content: (
-        <DynamicData<PreloadDynamicData>
-          children={(values) => <Preload {...{ values }} />}
-          dataType='raw'
-          id={id}
-          key={id}
-        />
-      )
-    });
-  } else if (type === MonitoringPointTypeValue.TopInclination) {
+  if (type === MonitoringPointTypeValue.TopInclination) {
     items.push({
       key: 'dynamicData',
       label: intl.get('DYNAMIC_DATA'),

@@ -21,7 +21,11 @@ export const PropertyChartList = (
     if (hasData(data) && property) {
       data!.forEach(({ name, data }) => {
         xAxisValues.push(...data.map(({ timestamp }) => timestamp));
-        const transformed = transform(data, property, { prefix: name });
+        const transformed = transform(
+          data,
+          { ...property, onlyShowFirstField: true },
+          { replace: name }
+        );
         if (transformed?.series) {
           series.push(...transformed.series);
         }

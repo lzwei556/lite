@@ -7,7 +7,6 @@ import {
   AssetRow,
   getMonitoringPointColumns,
   getOperateColumn,
-  MONITORING_POINT,
   MonitoringPointRow,
   Points,
   positionColumn
@@ -35,7 +34,7 @@ export const PointsTable = (props: {
     <Table
       cardProps={{
         extra: <ActionBar {...props} />,
-        title: intl.get(MONITORING_POINT)
+        title: intl.get('monitoring.points')
       }}
       columns={columns}
       dataSource={Points.sort(actualPoints)}

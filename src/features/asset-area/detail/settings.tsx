@@ -122,7 +122,7 @@ export const Settings = (props: {
         });
       }
       cols.push(operationColumn);
-      const typeLabel = getByType(t)?.label;
+      const typeLabel = getByType(t)?.labelPlural;
 
       return (
         <Table

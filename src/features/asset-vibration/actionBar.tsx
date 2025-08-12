@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../types/common';
-import { AssetRow, MONITORING_POINT } from '../../asset-common';
+import { AssetRow } from '../../asset-common';
 import { Create } from '../monitoring-point-vibration';
 
 export const ActionBar = ({ asset, onSuccess }: { asset?: AssetRow; onSuccess: () => void }) => {
@@ -32,7 +32,7 @@ export const ActionBar = ({ asset, onSuccess }: { asset?: AssetRow; onSuccess: (
         }}
         type='primary'
       >
-        {intl.get('CREATE_SOMETHING', { something: intl.get(MONITORING_POINT) })}
+        {intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') })}
         <PlusOutlined />
       </Button>
       <Create {...commonProps} asset={asset} />

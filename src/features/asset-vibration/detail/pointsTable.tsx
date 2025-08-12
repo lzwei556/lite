@@ -8,7 +8,6 @@ import {
   AXIS_ALIAS,
   getMonitoringPointColumns,
   getOperateColumn,
-  MONITORING_POINT,
   MonitoringPointRow,
   Point,
   Points,
@@ -88,7 +87,7 @@ export const PointsTable = (props: {
       columns={columns.map((c) => ({ ...c, width: 'auto' }))}
       cardProps={{
         extra: <ActionBar {...props} />,
-        title: intl.get(MONITORING_POINT)
+        title: intl.get('monitoring.points')
       }}
       dataSource={Points.sort(actualPoints)}
       pagination={false}

@@ -46,7 +46,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
                   }) ?? []
                 }
                 showTitle={false}
-                style={style}
+                style={{ height: 450 }}
                 type={realPoints?.[0]?.type}
               />
             )}

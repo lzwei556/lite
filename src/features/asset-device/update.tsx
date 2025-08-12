@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { Card, SaveIconButton } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { AssetModel, AssetRow, updateAsset } from '../../asset-common';
-import { BasisFormItems, pipe, SettingFormItems, tank } from '../../asset-variant';
+import { BasisFormItems, device, SettingFormItems } from '../../asset-variant';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const { name, parentId, type } = asset;
@@ -30,10 +30,7 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
       title={intl.get('BASIC_INFORMATION')}
     >
       <Form form={form} layout='vertical' initialValues={{ name, parent_id: parentId, type }}>
-        <BasisFormItems
-          types={[pipe, tank]}
-          formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
-        />
+        <BasisFormItems types={[device]} formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
         {type && (
           <SettingFormItems
             key={type}

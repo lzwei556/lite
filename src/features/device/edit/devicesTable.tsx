@@ -127,7 +127,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
   return (
     <>
       <Table
-        cardProps={{ title: intl.get('MENU_DEVICE_LSIT') }}
+        cardProps={{ title: intl.get('devices') }}
         columns={columns}
         dataSource={dataSource}
         rowKey={(row) => row.id}

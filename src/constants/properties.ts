@@ -194,7 +194,7 @@ const PULSE_FACTOR: DisplayProperty = {
   key: 'pulse_factor',
   name: 'FIELD_PULSE_FACTOR',
   precision: 3,
-  group: 'property.group.timeDomain'
+  group: 'property.group.statistics'
 };
 const MARGIN_FACTOR: DisplayProperty = {
   key: 'margin_factor',
@@ -258,7 +258,7 @@ const VARIANCE: DisplayProperty = {
   key: 'acc_var',
   name: 'FIELD_VARIANCE',
   precision: 3,
-  group: 'property.group.timeDomain'
+  group: 'property.group.statistics'
 };
 const SPECTRUM_VARIANCE: DisplayProperty = {
   key: 'spectrum_variance',
@@ -379,26 +379,26 @@ const SVT210 = [
   VELOCITY_RMS,
   ACCLERATION_ENVELOPE,
   { ...TEMPERATURE, group: 'property.group.core' as DisplayPropertyGroup },
+  FREQUENCY,
   ACCELERATION_RMS,
   ACCLERATION_PEAK,
-  DISPLACEMENT_PEAK_TO_PEAK,
   DISPLACEMENT_RMS,
-  FREQUENCY,
-  CREST_FACTOR,
-  PULSE_FACTOR,
-  MARGIN_FACTOR,
-  KURTOSIS,
-  KURTOSIS_NORM,
-  SKWENESS,
-  SKWENESS_NORM,
-  HALF_HARMONIC,
+  DISPLACEMENT_PEAK_TO_PEAK,
   FIRST_HARMONIC,
   SECOND_HARMONIC,
   THIRD_HARMONIC,
-  VARIANCE,
-  SPECTRUM_VARIANCE,
+  HALF_HARMONIC,
   SPECTRUM_MEAN,
+  SPECTRUM_VARIANCE,
   PPECTRUM_RMS,
+  SKWENESS,
+  SKWENESS_NORM,
+  KURTOSIS,
+  KURTOSIS_NORM,
+  CREST_FACTOR,
+  PULSE_FACTOR,
+  MARGIN_FACTOR,
+  VARIANCE,
   { ...INCLINATION, group: 'property.group.skew' as DisplayPropertyGroup },
   { ...PITCH, group: 'property.group.skew' as DisplayPropertyGroup },
   { ...ROLL, group: 'property.group.skew' as DisplayPropertyGroup }

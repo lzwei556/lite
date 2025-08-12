@@ -10,7 +10,6 @@ import {
   Asset,
   ASSET_PATHNAME,
   getVirturalAsset,
-  MONITORING_POINT,
   ProjectStatistics,
   useContext
 } from '../../asset-common';
@@ -87,6 +86,16 @@ export default function VirtualAssetDetail() {
 
   const EmptyStatics = () => <Chart options={undefined} style={{ height: 280 }} />;
 
+  const getTitle = () => {
+    let title = 'assets';
+    if (App.isWindLike(appType)) {
+      title = 'wind.turbines';
+    } else if (appType !== 'general') {
+      title = 'areas';
+    }
+    return title;
+  };
+
   return (
     <TabsDetail
       items={[
@@ -98,10 +107,7 @@ export default function VirtualAssetDetail() {
               <Col span={24}>
                 <Grid>
                   <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
-                    <MutedCard
-                      title={intl.get(App.isWindLike(appType) ? wind.label : area.label)}
-                      titleCenter={true}
-                    >
+                    <MutedCard title={intl.get(getTitle())} titleCenter={true}>
                       {projectStatistics ? (
                         <AssetStatics statics={projectStatistics} />
                       ) : (
@@ -110,7 +116,7 @@ export default function VirtualAssetDetail() {
                     </MutedCard>
                   </Col>
                   <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
-                    <MutedCard title={intl.get(MONITORING_POINT)} titleCenter={true}>
+                    <MutedCard title={intl.get('monitoring.points')} titleCenter={true}>
                       {projectStatistics ? (
                         <MonitoringPointStatics statics={projectStatistics} />
                       ) : (
@@ -119,7 +125,7 @@ export default function VirtualAssetDetail() {
                     </MutedCard>
                   </Col>
                   <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
-                    <MutedCard title={intl.get('SENSOR')} titleCenter={true}>
+                    <MutedCard title={intl.get('sensors')} titleCenter={true}>
                       {projectStatistics ? (
                         <SensorStatics statics={projectStatistics} />
                       ) : (

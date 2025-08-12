@@ -55,4 +55,4 @@ export type AssetRow = {
   } & Partial<MotorAttrs>;
 };
 
-export type AssetCategory = { type: number; label: string };
+export type AssetCategory = { type: number; label: string; labelPlural?: string };

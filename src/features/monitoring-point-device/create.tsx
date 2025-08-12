@@ -3,13 +3,7 @@ import { Form } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ModalFormProps } from '../../types/common';
-import {
-  addMonitoringPoints,
-  Asset,
-  AssetRow,
-  MONITORING_POINT,
-  MonitoringPointBatch
-} from '../../asset-common';
+import { addMonitoringPoints, Asset, AssetRow, MonitoringPointBatch } from '../../asset-common';
 import { getMonitoringPointTypes, getProcessId, isParentValid, useSelectPoints } from './common';
 import { PointItemList } from './pointItemList';
 import { SelectFormItem, TextFormItem } from '../../components';
@@ -47,7 +41,7 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
           form.resetFields();
           setSelectPoints([]);
         },
-        title: intl.get('CREATE_SOMETHING', { something: intl.get(MONITORING_POINT) }),
+        title: intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') }),
         okText: intl.get('CREATE'),
         ...props,
         width: 500,

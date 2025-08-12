@@ -15,8 +15,7 @@ import {
   positionColumn,
   getOperateColumn,
   AssetNavigator,
-  EmptyMonitoringPoints,
-  MONITORING_POINT
+  EmptyMonitoringPoints
 } from '../../../../asset-common';
 import { useHistoryDatas } from '../../utils';
 import { ActionBar } from '../../components/actionBar';
@@ -110,7 +109,7 @@ export const Index = (props: {
           <Table
             cardProps={{
               extra: <ActionBar {...props} />,
-              title: intl.get(MONITORING_POINT)
+              title: intl.get('monitoring.points')
             }}
             columns={[
               ...getMonitoringPointColumns({
