@@ -27,7 +27,7 @@ export const Trend = ({
   );
   const axisOptions = getAxisOptions(attributes);
   const downlaodRawDataHandler = useDownloadRawDataHandler(id, timestamp, 'originalDomain');
-
+  const chartProps = ChartMark.useAxisMarkLineStyleProps();
   const getSeries = () => {
     const series: SeriesOption[] = [];
     const xAxisValues = timestamps.map((t) => Dayjs.format(t));
@@ -51,7 +51,7 @@ export const Trend = ({
     const data = Dayjs.format(timestamp);
     dispatchMarks({
       type: 'append_single',
-      mark: { name: data, data, chartPorps: ChartMark.Axis_Mark_Line_Style_Props }
+      mark: { name: data, data, chartProps }
     });
     onClick(timestamp);
     setTimestamp(timestamp);
@@ -91,7 +91,7 @@ export const Trend = ({
       onEvents={{
         click: (coord: [string, number]) => handleClick(Dayjs.toTimestamp(Dayjs.dayjs(coord[0])))
       }}
-      series={ChartMark.mergeMarkDatas({
+      series={ChartMark.useMergeMarkDatas({
         series: getSeries(),
         marks: visibledMarks,
         lineStyle: { symbol: 'none' }

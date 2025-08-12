@@ -3,7 +3,7 @@ import { Button, Drawer } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import { useResponsive } from 'ahooks';
-import './sideBar.css';
+import { useStyles } from './styles';
 
 export const PageWithSideBar = ({
   content,
@@ -12,10 +12,12 @@ export const PageWithSideBar = ({
   content: React.ReactNode;
   sideBar: SideBarProps;
 }) => {
+  const { styles } = useStyles();
+
   return (
-    <Content className='page-with-sidebar'>
+    <Content className={styles.pageContainer}>
       <SideBar {...sideBar} />
-      <div className='content'>{content}</div>
+      <div className={styles.content}>{content}</div>
     </Content>
   );
 };
@@ -25,6 +27,7 @@ type SideBarProps = {
   head?: React.ReactNode;
 };
 const SideBar = ({ body, head }: SideBarProps) => {
+  const { cx, styles } = useStyles();
   const [expanded, setExpanded] = React.useState(true);
   const [sidebarBodyHeight, setSidebarBodyHeight] = React.useState(780);
   const sidebarRef = React.useRef<HTMLDivElement>(null);
@@ -50,23 +53,23 @@ const SideBar = ({ body, head }: SideBarProps) => {
   }, [head]);
 
   return xl ? (
-    <aside className={`sidebar-container ${expanded ? '' : 'collapsed'}`}>
-      <div className='sidebar' ref={sidebarRef}>
+    <aside className={cx(styles.sidebarContainer, expanded ? '' : 'collapsed')}>
+      <div className={styles.sidebar} ref={sidebarRef}>
         {expanded ? (
-          <div className='sidebar-inner'>
-            {head && <div className='sidebar-head'>{head}</div>}
-            <div className='sidebar-body' style={{ height: sidebarBodyHeight }}>
+          <div className={styles.sidebarInner}>
+            {head && <div className={styles.sidebarInnerHead}>{head}</div>}
+            <div className={styles.sidebarInnerBody} style={{ height: sidebarBodyHeight }}>
               {body(sidebarBodyHeight - 24)}
             </div>
             <Button
-              className='sidebar-switch'
+              className={styles.sidebarSwitch}
               icon={<DoubleLeftOutlined />}
               onClick={() => setExpanded(!expanded)}
               type='text'
             />
           </div>
         ) : (
-          <div className='sidebar-expand' onClick={() => setExpanded(!expanded)}>
+          <div className={styles.sidebarExpand} onClick={() => setExpanded(!expanded)}>
             <DoubleRightOutlined />
           </div>
         )}
@@ -74,13 +77,13 @@ const SideBar = ({ body, head }: SideBarProps) => {
     </aside>
   ) : (
     <>
-      <aside className='sidebar-container small' onClick={() => setOpen(true)}>
+      <aside className={cx(styles.sidebarContainer, 'small')} onClick={() => setOpen(true)}>
         <div ref={sidebarRef}>
           <DoubleRightOutlined />
         </div>
       </aside>
       <Drawer
-        className='sidebar-drawer'
+        className={styles.sidebarDrawer}
         open={open}
         onClose={() => setOpen(false)}
         placement='left'

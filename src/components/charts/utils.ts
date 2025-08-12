@@ -46,14 +46,7 @@ export function useBarPieOption() {
       itemHeight: 14,
       itemGap: 5,
       textStyle: {
-        ...colorTextDescriptionStyle,
-        rich: {
-          value: {
-            display: 'inline-block',
-            backgroundColor: '#fff',
-            width: 30
-          }
-        }
+        ...colorTextDescriptionStyle
       }
     }
   };

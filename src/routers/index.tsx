@@ -68,8 +68,9 @@ const AppRouter = () => {
     const mergeToken = AntdTheme.darkAlgorithm(seedToken, mapToken);
 
     return {
-      ...mergeToken
-      // colorBgLayout: '#f2f3f5'
+      ...mergeToken,
+      colorTextBase: '#141414',
+      colorBgBase: '#f2f3f5'
     };
   };
 
@@ -79,14 +80,14 @@ const AppRouter = () => {
         appearance={theme}
         theme={(appearance) =>
           appearance === 'dark'
-            ? { algorithm: [customDarkAlgorithm] }
-            : { token: { colorBgLayout: '#f2f3f5' } }
+            ? { algorithm: [customDarkAlgorithm], components: { Tree: { indentSize: 8 } } }
+            : {
+                token: { colorBgLayout: '#f2f3f5' },
+                components: { Menu: { itemHoverColor: '#1677ff' }, Tree: { indentSize: 8 } }
+              }
         }
       >
-        <ConfigProvider
-          locale={language === 'zh-CN' ? zhCN : enUS}
-          theme={{ components: { Menu: { itemHoverColor: '#1677ff' }, Tree: { indentSize: 8 } } }}
-        >
+        <ConfigProvider locale={language === 'zh-CN' ? zhCN : enUS}>
           <HashRouter>
             <Suspense
               fallback={

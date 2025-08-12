@@ -1,20 +1,40 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Divider, Drawer, Dropdown, Space, Typography } from 'antd';
+import { Badge, Button, Divider, Drawer, Dropdown, Space, Typography } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { DownOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
+import Icon, {
+  DownOutlined,
+  MenuOutlined,
+  PoweroffOutlined,
+  UserOutlined
+} from '@ant-design/icons';
 import intl from 'react-intl-universal';
+import { createStyles } from 'antd-style';
 import '../../assets/iconfont.css';
 import { persistor, store } from '../../store';
 import { Dayjs } from '../../utils';
 import ProjectSelect from '../../components/select/projectSelect';
 import { GetMyProjectRequest } from '../../apis/project';
-import { LangSwitcher, ThemeSwitcher } from '../../localeProvider';
+import {
+  Language,
+  LanguageOptions,
+  Theme,
+  ThemeOptions,
+  useLocaleContext
+} from '../../localeProvider';
+import { useGlobalStyles } from '../../styles';
 import { NavMenu } from './NavMenu';
 import './layout.css';
 import { Brand } from './brand';
+import { ReactComponent as LightSVG } from './light.svg';
+import { ReactComponent as DarkSVG } from './dark.svg';
 
-const { Text } = Typography;
+const useStyles = createStyles(({ css, token }) => ({
+  item: css`
+    color: ${token.colorText} !important;
+    background-color: transparent !important;
+  `
+}));
 
 const HeaderLayout = (props: any) => {
   const navigate = useNavigate();
@@ -22,6 +42,9 @@ const HeaderLayout = (props: any) => {
   const [currentUser] = useState<any>(store.getState().auth.data.user);
   const [now, setNow] = useState<string>(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
   const [open, setVisible] = useState(false);
+  const { colorWhiteStyle } = useGlobalStyles();
+  const { language, theme, setLocale } = useLocaleContext();
+  const { styles } = useStyles();
 
   setInterval(() => {
     setNow(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
@@ -48,6 +71,10 @@ const HeaderLayout = (props: any) => {
         console.log(e);
       });
   };
+  const [selectedKeys, setSelectedKeys] = useState<{ language: Language; theme: Theme }>({
+    language,
+    theme
+  });
 
   return (
     <Header className='ts-header'>
@@ -55,27 +82,79 @@ const HeaderLayout = (props: any) => {
         <Brand height={36} brandNameStyle={{ fontSize: 18 }} />
         {menus && <NavMenu menus={menus} />}
         <Space>
-          <Text style={{ color: 'white', fontFamily: 'monospace' }}>{now}</Text>
+          <Typography.Text style={{ color: 'white', fontFamily: 'monospace' }} id='current-time'>
+            {now}
+          </Typography.Text>
           {currentUser && <ProjectSelect variant='borderless' onChange={onProjectChange} />}
           <Dropdown
             menu={{
               items: [
-                { key: 'me', label: intl.get('MENU_USER_CENTER'), onClick: () => navigate('/me') },
-                { key: 'logout', label: intl.get('LOGOUT'), onClick: onLogout }
-              ]
+                {
+                  type: 'group',
+                  key: 'theme',
+                  label: intl.get('theme'),
+                  children: ThemeOptions.map(({ value, label }) => ({
+                    key: value,
+                    label: intl.get(label),
+                    icon: (
+                      <Icon component={() => (value === 'dark' ? <DarkSVG /> : <LightSVG />)} />
+                    ),
+                    onClick: () => {
+                      setLocale((prev) => ({ ...prev, theme: value }));
+                      if (value !== selectedKeys.theme) {
+                        setSelectedKeys((prev) => ({ ...prev, theme: value }));
+                      }
+                    },
+                    extra: selectedKeys.theme === value ? <Badge status='processing' /> : undefined,
+                    className: styles.item
+                  }))
+                },
+                {
+                  type: 'divider'
+                },
+                {
+                  type: 'group',
+                  key: 'language',
+                  label: intl.get('language'),
+                  children: LanguageOptions.map(({ key, label }) => ({
+                    key,
+                    label: key === 'en-US' ? 'English' : label,
+                    icon: <Icon component={() => (key === 'en-US' ? 'EN' : '中')} />,
+                    onClick: () => {
+                      setLocale((prev) => ({ ...prev, language: key }));
+                      if (key !== selectedKeys.language) {
+                        setSelectedKeys((prev) => ({ ...prev, language: key }));
+                      }
+                    },
+                    extra:
+                      selectedKeys.language === key ? <Badge status='processing' /> : undefined,
+                    className: styles.item
+                  }))
+                },
+                {
+                  type: 'divider'
+                },
+                {
+                  key: 'me',
+                  label: intl.get('MENU_USER_CENTER'),
+                  icon: <UserOutlined />,
+                  onClick: () => navigate('/me')
+                },
+                {
+                  key: 'logout',
+                  label: intl.get('LOGOUT'),
+                  icon: <PoweroffOutlined />,
+                  onClick: onLogout
+                }
+              ],
+              selectedKeys: [selectedKeys.language, selectedKeys.theme],
+              selectable: true,
+              multiple: true
             }}
+            overlayStyle={{ width: 160 }}
           >
-            <Button
-              type={'text'}
-              style={{ color: '#fff', paddingLeft: 0, paddingRight: 0 }}
-              icon={<UserOutlined />}
-            >
-              {currentUser?.username}
-              <DownOutlined />
-            </Button>
+            <Button type={'text'} style={{ ...colorWhiteStyle, top: 3 }} icon={<MenuOutlined />} />
           </Dropdown>
-          <LangSwitcher style={{ color: '#fff', width: 60, paddingRight: 0 }} />
-          <ThemeSwitcher />
         </Space>
       </div>
       <div className='mobile'>

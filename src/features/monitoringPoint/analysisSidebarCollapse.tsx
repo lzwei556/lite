@@ -3,7 +3,7 @@ import { Collapse, CollapseProps } from 'antd';
 import { useGlobalStyles } from '../../styles';
 
 export const AnalysisSidebarCollapse = ({ items, ...rest }: CollapseProps) => {
-  const { colorBgContainerStyle, colorBorderStyle } = useGlobalStyles();
+  const { colorBgContainerStyle, colorBorderSecondaryStyle } = useGlobalStyles();
   return (
     <Collapse
       {...rest}
@@ -13,7 +13,7 @@ export const AnalysisSidebarCollapse = ({ items, ...rest }: CollapseProps) => {
         ...item,
         style: {
           marginBottom: 16,
-          border: `solid 1px ${colorBorderStyle.color}`,
+          border: `solid 1px ${colorBorderSecondaryStyle.color}`,
           borderRadius: 8,
           ...colorBgContainerStyle,
           ...item.style

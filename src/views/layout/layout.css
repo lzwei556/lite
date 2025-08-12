@@ -71,3 +71,12 @@
     display: none;
   }
 }
+
+#current-time {
+  display: inherit;
+}
+@media (max-width: 1200px) {
+  #current-time {
+    display: none;
+  }
+}

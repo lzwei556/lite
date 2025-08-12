@@ -3,8 +3,9 @@ import { BasicDataNode } from 'antd/es/tree';
 import { mapTree } from '../../utils/tree';
 import { Device } from '../../types/device';
 import { toMac } from '../../utils/format';
-import { TreeChart } from './treeChart';
 import { CardProps } from '../../components';
+import { useGlobalStyles } from '../../styles';
+import { TreeChart } from './treeChart';
 
 type DeviceEx = Device & { address: string; parentAddress: string };
 
@@ -16,6 +17,7 @@ export type DeviceTreeNode = DeviceEx & {
 } & BasicDataNode;
 
 export const Preview = ({ devices, ...rest }: { devices: DeviceEx[] } & CardProps) => {
+  const { colorWarningHoverStyle, colorTextStyle } = useGlobalStyles();
   const leaveNodes = [];
   const treeData: DeviceTreeNode[] = mapTree(buildDeviceTreeData(devices, devices[0]), (device) => {
     if (!device.hasOwnProperty('children')) {
@@ -23,7 +25,7 @@ export const Preview = ({ devices, ...rest }: { devices: DeviceEx[] } & CardProp
     }
     return {
       ...device,
-      label: { backgroundColor: '#ffc843' }
+      label: { backgroundColor: colorWarningHoverStyle.color, color: colorTextStyle.color }
     };
   });
 

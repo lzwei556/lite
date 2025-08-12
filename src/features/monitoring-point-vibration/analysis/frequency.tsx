@@ -91,7 +91,7 @@ export const Frequency = ({
               handleClick(coord, x, y, xIndex);
             }
           }}
-          series={ChartMark.mergeMarkDatas({
+          series={ChartMark.useMergeMarkDatas({
             series: [
               {
                 data: { [intl.get(axis.label)]: y ?? [] },

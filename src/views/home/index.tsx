@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, useParams } from 'react-router-dom';
-import { PageWithSideBar } from '../../components/pageWithSideBar';
+import { PageWithSideBar } from '../../components';
 import { AssetTree, ContextProvider, getVirturalAsset } from '../../asset-common';
 
 export default function Index({ children }: { children?: React.ReactNode }) {

@@ -53,7 +53,7 @@ export const Power = ({ axis, property, originalDomain }: AnalysisCommonProps) =
             }
           }}
           loading={loading}
-          series={ChartMark.mergeMarkDatas({
+          series={ChartMark.useMergeMarkDatas({
             series: [
               {
                 data: { [intl.get(axis.label)]: y },

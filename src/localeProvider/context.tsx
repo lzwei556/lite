@@ -17,7 +17,7 @@ export const THEMES = {
   dark: 'dark' as 'dark'
 };
 
-type Theme = typeof THEMES[keyof typeof THEMES];
+export type Theme = typeof THEMES[keyof typeof THEMES];
 
 export const ThemeOptions = [
   { value: THEMES.light, label: 'theme.light' },
@@ -56,7 +56,6 @@ function useLocaleProvider() {
     localStorage.setItem('lang', locale.language);
   }, [locale.language]);
   useEffect(() => {
-    console.log('locale.theme', locale.theme);
     localStorage.setItem('theme', locale.theme);
   }, [locale.theme]);
 

@@ -6,7 +6,7 @@ export type Mark = {
   data: Coord | [Coord, Coord] | string;
   description?: string;
   type?: string;
-  chartPorps?: {
+  chartProps?: {
     label?: any;
     symbol?: string;
     lineStyle?: any;

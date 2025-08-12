@@ -4,6 +4,8 @@ import { useDispatch } from 'redux-react-hook';
 import intl from 'react-intl-universal';
 import { Button, Col, Form, Input, message, Row } from 'antd';
 import { KeyOutlined, UserOutlined } from '@ant-design/icons';
+import { TextFormItem } from '../../components';
+import { useGlobalStyles } from '../../styles';
 import { LoginRequest } from '../../apis/user';
 import ad from '../../assets/images/login-ad-dark.png';
 import { userLoginSuccess } from '../../store/actions/userLoginSuccess';
@@ -11,13 +13,13 @@ import { LangSwitcher, useLocaleContext } from '../../localeProvider';
 import { isLogin } from '../../utils/session';
 import { Brand } from '../layout/brand';
 import './login.css';
-import { TextFormItem } from '../../components';
 
 const LoginPage: FC = () => {
   const { language } = useLocaleContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { colorWhiteStyle } = useGlobalStyles();
 
   const login = (values: any) => {
     setIsLoading(true);
@@ -91,7 +93,7 @@ const LoginPage: FC = () => {
         </Form>
       </div>
       <div style={{ position: 'fixed', bottom: 20 }}>
-        <LangSwitcher style={{ color: '#fff' }} />
+        <LangSwitcher style={colorWhiteStyle} />
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import {
   Point,
   Points
 } from '../../../../asset-common';
+import { useGlobalStyles } from '../../../../styles';
 import { AlarmLevel, getColorByValue } from '../../../alarm';
 
 export const PointsScatterChart = ({
@@ -27,10 +28,11 @@ export const PointsScatterChart = ({
 }) => {
   const { monitoringPoints, attributes } = asset;
   const navigate = useNavigate();
+  const { colorWhiteStyle } = useGlobalStyles();
   let options;
   const points = Points.filter(monitoringPoints);
   if (points.length > 0) {
-    options = buildCirclePointsChartOfFlange(points, attributes, big);
+    options = buildCirclePointsChartOfFlange(points, colorWhiteStyle.color, attributes, big);
   }
 
   return (
@@ -53,6 +55,7 @@ export const PointsScatterChart = ({
 
 function buildCirclePointsChartOfFlange(
   measurements: MonitoringPointRow[],
+  color: string,
   attributes?: AssetRow['attributes'],
   isBig: boolean = false
 ) {
@@ -63,7 +66,7 @@ function buildCirclePointsChartOfFlange(
   const radiusAxis: any = [];
   const series: any = [];
   const sortedMeasurements = Points.sort(measurements);
-  const outer = generateOuter(sortedMeasurements, isBig);
+  const outer = generateOuter(sortedMeasurements, color, isBig);
   polar.push(outer.radius);
   angleAxis.push(outer.angleAxis);
   radiusAxis.push(outer.radiusAxis);
@@ -199,7 +202,7 @@ function getMax(max: number, attributes: AssetRow['attributes'], type: number) {
   return final;
 }
 
-function generateOuter(measurements: MonitoringPointRow[], isBig: boolean = false) {
+function generateOuter(measurements: MonitoringPointRow[], color: string, isBig: boolean = false) {
   let radius: any = { radius: isBig ? 180 : 150 };
   if (isMobile) {
     radius = { radius: isBig ? '90%' : '85%' };
@@ -235,7 +238,7 @@ function generateOuter(measurements: MonitoringPointRow[], isBig: boolean = fals
       value: [1, (360 / measurements.length) * index, index],
       label: {
         show: true,
-        color: '#fff',
+        color,
         formatter: (paras: any) => attributes?.index
       },
       tooltip: {

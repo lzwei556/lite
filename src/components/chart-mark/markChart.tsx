@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, Space } from 'antd';
 import { EChartsType } from 'echarts/core';
+import { useGlobalStyles } from '../../styles';
 import {
   Chart,
   ChartBrush,
@@ -72,6 +73,7 @@ export const MarkChart = (
       switchs: { noDataZoom: true, noArea: true, ...config?.switchs }
     })
   );
+  const { colorBorderStyle } = useGlobalStyles();
 
   useClick(props, ref);
 
@@ -112,7 +114,7 @@ export const MarkChart = (
             <Divider
               key='separation'
               type='vertical'
-              style={{ marginInline: 4, borderColor: '#d3d3d3' }}
+              style={{ marginInline: 4, borderColor: colorBorderStyle.color }}
             />
           }
         >

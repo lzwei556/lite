@@ -68,7 +68,7 @@ const Item = ({
           ? descriptions
           : descriptions.map((d, i) => (
               <Space key={i}>
-                {i === 0 ? start : end} {d}
+                {i === 0 ? start : end} <span style={{ fontSize: 13 }}>{d}</span>
               </Space>
             ))}
       </Space>

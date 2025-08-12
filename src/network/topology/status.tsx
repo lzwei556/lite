@@ -10,13 +10,14 @@ import {
   useDeviceTreeData
 } from '../../features/device/deviceTree';
 import { useContext } from '../../features/device';
+import { useGlobalStyles } from '../../styles';
 import { TreeChart } from './treeChart';
 
 export function Status({ network }: { network: Network }) {
   const navigate = useNavigate();
   useDeviceOnlineLiving();
   const { devicesLoading } = useContext();
-
+  const { colorWarningHoverStyle, colorWhiteStyle, colorTextStyle } = useGlobalStyles();
   const leaveNodes = [];
   const treeData: DeviceTreeNode[] = mapTree(useDeviceTreeData(network.gateway), (device) => {
     if (!device.hasOwnProperty('children') || device.children.length === 0) {
@@ -24,7 +25,10 @@ export function Status({ network }: { network: Network }) {
     }
     return {
       ...device,
-      label: { backgroundColor: device.state?.isOnline ? ColorHealth : '#f7bfa5' }
+      label: {
+        backgroundColor: device.state?.isOnline ? ColorHealth : colorWarningHoverStyle.color,
+        color: device.state?.isOnline ? colorWhiteStyle.color : colorTextStyle.color
+      }
     };
   });
 

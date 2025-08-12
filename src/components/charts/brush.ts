@@ -2,12 +2,12 @@ import { useGlobalStyles } from '../../styles';
 import { ECOptions } from './chart';
 
 export const useBrushOptions = (): ECOptions => {
-  const { colorFillTertiaryStyle } = useGlobalStyles();
+  const { colorFillTertiaryStyle, colorBorderStyle } = useGlobalStyles();
   return {
     brush: {
       brushType: 'lineX',
       brushMode: 'multiple',
-      brushStyle: { ...colorFillTertiaryStyle, borderColor: '#333' },
+      brushStyle: { ...colorFillTertiaryStyle, borderColor: colorBorderStyle.color },
       toolbox: ['clear'],
       xAxisIndex: 0,
       transformable: false,

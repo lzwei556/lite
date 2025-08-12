@@ -60,6 +60,7 @@ function Content({
   );
   const parents = useMonitoringPointParents((asset) => Asset.Assert.isVibrationRelated(asset.type));
   const lines: string[] = [];
+  const chartProps = ChartMark.useAxisMarkLineStyleProps();
   if (selected) {
     lines.push(Dayjs.format(selected));
   }
@@ -79,7 +80,7 @@ function Content({
               marks: lines.map((line) => ({
                 name: line,
                 data: line,
-                chartPorps: ChartMark.Axis_Mark_Line_Style_Props
+                chartProps
               }))
             }}
           >

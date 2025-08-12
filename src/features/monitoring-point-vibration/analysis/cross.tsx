@@ -1,7 +1,7 @@
 import React from 'react';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
-import { CardChart, LightSelectFilter } from '../../../components';
+import { CardChart, LightSelectFilter, useLegendStyles } from '../../../components';
 import { roundValue } from '../../../utils/format';
 import { cross } from '../../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
@@ -77,7 +77,7 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
             }
           ]
         },
-        legend: {},
+        legend: useLegendStyles(),
         grid: [
           {
             top: 60,

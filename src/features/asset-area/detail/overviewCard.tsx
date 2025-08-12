@@ -5,6 +5,7 @@ import { Card, Flex, Link } from '../../../components';
 import { getValue, roundValue } from '../../../utils';
 import { ASSET_PATHNAME, AssetRow, Point } from '../../../asset-common';
 import { Icon } from '../../../views/home/icon';
+import { useGlobalStyles } from '../../../styles';
 
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, monitoringPoints = [], name, type } = asset;
@@ -26,6 +27,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const [page, setPage] = React.useState(1);
   const pageSize = 4;
   const pagedItems = items.slice(pageSize * (page - 1), pageSize * page);
+  const { colorBorderSecondaryStyle } = useGlobalStyles();
   return (
     <Card
       actions={[
@@ -52,7 +54,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
                 marginTop: i === 0 ? 20 : 0,
                 border: 0,
                 fontSize: 12,
-                backgroundColor: '#f0f0f0'
+                backgroundColor: colorBorderSecondaryStyle.color
               }}
               styles={{
                 body: {

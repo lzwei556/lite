@@ -3,6 +3,7 @@ import { Checkbox, Select, Space } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, LineChart } from '../../../components';
 import { AXIS_OPTIONS, DynamicData, PropertyLightSelectFilter } from '../../../asset-common';
+import { useGlobalStyles } from '../../../styles';
 
 type Field = { label: string; value: string; unit: string; precision: number };
 
@@ -87,6 +88,7 @@ const Content = <T extends Data>(props: {
 }) => {
   const { axis, field } = props;
   const [isShowEnvelope, setIsShowEnvelope] = React.useState(false);
+  const { colorBorderStyle } = useGlobalStyles();
 
   function renderChart() {
     const { frequency, values, xAxis, xAxisUnit, yAxisUnit, highEnvelopes, lowEnvelopes } =
@@ -108,9 +110,7 @@ const Content = <T extends Data>(props: {
             lineStyle: {
               opacity: 0
             },
-            areaStyle: {
-              color: '#ccc'
-            },
+            areaStyle: colorBorderStyle,
             stack: 'confidence-band',
             smooth: true
           }
@@ -122,9 +122,7 @@ const Content = <T extends Data>(props: {
             lineStyle: {
               opacity: 0
             },
-            areaStyle: {
-              color: '#ccc'
-            },
+            areaStyle: colorBorderStyle,
             stack: 'confidence-band',
             smooth: true
           }

@@ -4,6 +4,7 @@ export * from './form/numberFormItem';
 export * from './form/numberFormItemWithSwitcher';
 export * from './form/selecFormItem';
 export * from './form/textFormItem';
+export * from './layout/pageWithSideBar';
 export * from './layout/title-extra';
 export * from './descriptions';
 export * from './flex';

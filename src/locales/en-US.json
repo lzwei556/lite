@@ -1292,5 +1292,9 @@
   "compensation.stop": "Stop",
   "hours": "Hours",
   "assets": "Assets",
-  "total": "Total"
+  "total": "Total",
+  "theme": "Theme",
+  "language": "Language",
+  "theme.light": "Default",
+  "theme.dark": "Dark"
 }

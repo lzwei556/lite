@@ -22,7 +22,7 @@ export const useMarkChartProps = () => {
             name: coord.join(),
             data: coord,
             type: markType,
-            chartPorps: { label: { formatter: `${xValue} ${yValue}` } }
+            chartProps: { label: { formatter: `${xValue} ${yValue}` } }
           }
         });
       } else if (markType === 'Multiple') {
@@ -104,7 +104,7 @@ export const useMarkChartProps = () => {
               name: `${xValue}${yValue}${index}`,
               data: [xValue, yValue],
               type: markType,
-              chartPorps: { default: true }
+              chartProps: { default: true }
             }
           });
         });
@@ -129,7 +129,7 @@ export const useMarkChartProps = () => {
                 name: `${xValue}${value}`,
                 data: [xValue, value],
                 type: markType,
-                chartPorps: { label: { formatter: label } }
+                chartProps: { label: { formatter: label } }
               }
             });
           }

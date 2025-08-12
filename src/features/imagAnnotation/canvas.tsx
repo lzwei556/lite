@@ -4,6 +4,7 @@ import { Layer, Stage, Image, Line, Circle } from 'react-konva';
 import useImage from 'use-image';
 import { Card } from '../../components';
 import { AssetRow } from '../../asset-common';
+import { useGlobalStyles } from '../../styles';
 import { Toolbar } from './toolbar';
 import { CanvasProvider, useCanvas } from './context';
 import { getPlaces, PlaceTextCardStyle, PlaceTextProps, Point, scaleStage, Size } from './common';
@@ -36,7 +37,7 @@ export const Canvas = ({
   const places = getPlaces(stageProps, size, placeTexts);
   const startingPoints = places.map((p) => ({ id: p.id, x: p.x, y: p.y }));
   const placeTextProps = places.map((p, i) => ({ ...placeTexts[i], style: p.style }));
-
+  const { colorInfoBorderStyle } = useGlobalStyles();
   return (
     startingPoints.length > 0 && (
       <CanvasProvider
@@ -70,7 +71,7 @@ export const Canvas = ({
                 style={{
                   ...style,
                   position: 'absolute',
-                  border: `solid ${PlaceTextCardStyle.BorderWidth}px #91caff`,
+                  border: `solid ${PlaceTextCardStyle.BorderWidth}px ${colorInfoBorderStyle.color}`,
                   width: PlaceTextCardStyle.width,
                   height: PlaceTextCardStyle.height,
                   borderRadius: 4
@@ -85,12 +86,21 @@ export const Canvas = ({
                   }
                 }}
               >
-                <div style={{ borderBottom: 'solid 1px #91caff', textAlign: 'center' }}>
+                <div
+                  style={{
+                    borderBottom: `solid 1px ${colorInfoBorderStyle.color}`,
+                    textAlign: 'center'
+                  }}
+                >
                   <Typography.Text ellipsis={true}>{header}</Typography.Text>
                 </div>
                 <div style={{ flex: 'auto', maxHeight: '100%', overflow: 'auto' }}>{body}</div>
                 <Typography.Text
-                  style={{ borderTop: 'solid 1px #91caff', minHeight: '1em', fontSize: 12 }}
+                  style={{
+                    borderTop: `solid 1px ${colorInfoBorderStyle.color}`,
+                    minHeight: '1em',
+                    fontSize: 12
+                  }}
                   type='secondary'
                 >
                   {footer}
@@ -160,16 +170,17 @@ function ConnectedLine({
 }) {
   const id = starting.id;
   const { editable } = useCanvas();
+  const { colorInfoBorderStyle, colorPrimaryStyle } = useGlobalStyles();
   return (
     <>
       <Line
         points={[starting.x, starting.y, starting.x, end.y, end.x, end.y]}
-        stroke={'#91caff'}
+        stroke={colorInfoBorderStyle.color}
         strokeWidth={1}
       />
       <Circle
         radius={5}
-        fill={'#1677ff'}
+        fill={colorPrimaryStyle.color}
         x={end.x}
         y={end.y}
         draggable

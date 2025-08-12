@@ -1,8 +1,9 @@
 import { EChartsType, MarkLineOption, MarkPointOption } from 'echarts/types/dist/shared';
+import { useGlobalStyles } from '../../styles';
 import { SeriesOption, ChartBrush } from '../charts';
 import { LineMark, Mark, PointMark } from './types';
 
-export function mergeMarkDatas({
+export function useMergeMarkDatas({
   series,
   marks,
   lineStyle,
@@ -13,7 +14,8 @@ export function mergeMarkDatas({
   lineStyle?: any;
   pointStyle?: any;
 }) {
-  const { lines, points } = buildMarkDatas(marks);
+  const { colorErrorHighLightStyle } = useGlobalStyles();
+  const { lines, points } = buildMarkDatas(marks, colorErrorHighLightStyle.color);
   return series.map((s) => {
     const { markLine: prevLine, markPoint: prevPoint, ...rest } = s.raw || {};
     const lineData = prevLine?.data ?? [];
@@ -24,14 +26,14 @@ export function mergeMarkDatas({
   });
 }
 
-function buildMarkDatas(marks: Mark[]) {
+function buildMarkDatas(marks: Mark[], color: string) {
   const lines: LineDataItem[] = [];
   const points: PointDataItem[] = [];
   marks.forEach((mark) => {
     if (isMarkLine(mark)) {
       lines.push(buildLineData(mark as LineMark));
     } else {
-      points.push(buildPointData(mark as PointMark));
+      points.push(buildPointData(mark as PointMark, color));
     }
   });
   return { lines, points };
@@ -44,13 +46,12 @@ export function isMarkLine(mark: Mark) {
 //point
 type PointDataItem = NonNullable<MarkPointOption['data']>[0];
 
-function buildPointData(mark: PointMark): PointDataItem {
-  const { data: coord, name, label: markLabel, value, chartPorps } = mark;
-  const { label, itemStyle, symbol } = chartPorps || {};
-  if (chartPorps?.default) {
+function buildPointData(mark: PointMark, color: string): PointDataItem {
+  const { data: coord, name, label: markLabel, value, chartProps } = mark;
+  const { label, itemStyle, symbol } = chartProps || {};
+  if (chartProps?.default) {
     return { name, coord, value: markLabel };
   }
-  const color = '#FF0000';
   const labelProps = {
     show: true,
     color,
@@ -77,22 +78,22 @@ function buildPointData(mark: PointMark): PointDataItem {
 type LineDataItem = NonNullable<MarkLineOption['data']>[0];
 
 function buildLineData(mark: LineMark): LineDataItem {
-  const { name, label, value, data, chartPorps } = mark;
+  const { name, label, value, data, chartProps } = mark;
   if (typeof data === 'string') {
-    return { ...chartPorps, name, xAxis: data };
+    return { ...chartProps, name, xAxis: data };
   } else {
     return data.map((coord, i) => {
       if (i === 0) {
         return {
-          ...chartPorps,
+          ...chartProps,
           name,
           coord,
           label: {
-            ...chartPorps?.label,
+            ...chartProps?.label,
             formatter:
               label && value
                 ? `${label}\n${
-                    chartPorps?.label?.formatterFn ? chartPorps?.label?.formatterFn(value) : value
+                    chartProps?.label?.formatterFn ? chartProps?.label?.formatterFn(value) : value
                   }`
                 : undefined
           }
@@ -115,8 +116,11 @@ export function brushAreas(marks: Mark[], ins?: EChartsType) {
   );
 }
 
-export const Axis_Mark_Line_Style_Props = {
-  symbol: 'none',
-  label: { show: false },
-  lineStyle: { color: '#FF0000', width: 2 }
+export const useAxisMarkLineStyleProps = () => {
+  const { colorErrorHighLightStyle } = useGlobalStyles();
+  return {
+    symbol: 'none',
+    label: { show: false },
+    lineStyle: { ...colorErrorHighLightStyle, width: 2 }
+  };
 };

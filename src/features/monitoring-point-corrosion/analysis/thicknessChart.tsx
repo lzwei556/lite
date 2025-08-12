@@ -6,6 +6,7 @@ import { DisplayProperty } from '../../../constants/properties';
 import { roundValue } from '../../../utils/format';
 import { ChartMark } from '../../../components';
 import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../../asset-common';
+import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
 
@@ -20,6 +21,7 @@ export const ThicknessChart = (
   const { cursor, marks, visibledMarks, dispatchMarks } = ChartMark.useContext();
   const { history, property, id, attributes, onDispatchMark } = props;
   const { series: initialSeries, min, max } = HistoryDataFea.transform(history, property);
+  const { colorWarningStyle } = useGlobalStyles();
   const defaultSeries = initialSeries.map((s) => ({
     ...s,
     raw: { animation: false, markLine: getMarkLine() }
@@ -43,7 +45,7 @@ export const ThicknessChart = (
         })
       }}
       config={{ opts: { yAxis: { name: property.unit } } }}
-      series={ChartMark.mergeMarkDatas({ series: defaultSeries, marks: visibledMarks })}
+      series={ChartMark.useMergeMarkDatas({ series: defaultSeries, marks: visibledMarks })}
       onEvents={{
         brushEnd: (areaCoords: [number, number][]) => {
           const areaValues = areaCoords.map(([start, end]) => {
@@ -61,7 +63,7 @@ export const ThicknessChart = (
                     name: areaCoords[i].join(),
                     data: line,
                     value: rate === 0 ? `${rate}` : rate,
-                    chartPorps: {
+                    chartProps: {
                       label: {
                         lineHeight: 10,
                         position: 'middle',
@@ -73,7 +75,7 @@ export const ThicknessChart = (
                           }
                         }
                       },
-                      lineStyle: { color: '#fa8c16', width: 3, type: 'solid' }
+                      lineStyle: { ...colorWarningStyle, width: 3, type: 'solid' }
                     },
                     description: `${areaValues[i].map((t) => Dayjs.format(t)).join()}`,
                     type: cursor

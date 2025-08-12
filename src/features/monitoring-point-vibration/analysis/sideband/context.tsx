@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChartMark } from '../../../../components';
+import { useGlobalStyles } from '../../../../styles';
 import { getNumsOfCursor, useMarkContext } from '../mark';
 
 export const cursors = ['center', 'side'] as const;
@@ -30,6 +31,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
   const [centeredIndex, setCenteredIndex] = React.useState<number>();
   const { visibledMarks, dispatchMarks } = ChartMark.useContext();
   const { markType } = useMarkContext();
+  const { colorWarningStyle } = useGlobalStyles();
   const triggerCenter = React.useCallback(
     (coord: [string, number]) => {
       if (cursor === 'center') {
@@ -40,7 +42,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
             label: 'sideband.center',
             data: coord,
             type: markType,
-            chartPorps: { itemStyle: { color: '#fa8c16' } }
+            chartProps: { itemStyle: colorWarningStyle }
           }
         });
         setCursor('side');

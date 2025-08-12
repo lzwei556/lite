@@ -3,21 +3,13 @@ import { Checkbox, Col, List } from 'antd';
 import { CardChart, chartColors, Grid } from '../../../components';
 import { AnalysisCommonProps } from './analysisContent';
 import { Dayjs } from '../../../utils';
+import { useGlobalStyles } from '../../../styles';
 
 export const WaterFall = ({ timestamp, timestamps }: AnalysisCommonProps) => {
   const [selected, setSelected] = React.useState<number[]>([timestamp]);
-  console.log('selected', selected);
   const formateds = selected.map((s) => Dayjs.format(s));
-
-  console.log(
-    formateds.map((y, i) => ({
-      type: 'line3D',
-      data: Array(20)
-        .fill(-1)
-        .map((n) => [Math.random(), y, Math.random() * 10]),
-      name: y
-    }))
-  );
+  const { colorBorderStyle, colorTextSecondaryStyle, colorTextDescriptionStyle } =
+    useGlobalStyles();
 
   return (
     <Grid wrap={false}>
@@ -36,32 +28,32 @@ export const WaterFall = ({ timestamp, timestamps }: AnalysisCommonProps) => {
       <Col flex='auto'>
         <CardChart
           cardProps={{
-            style: { border: 'solid 1px #d3d3d3' }
+            style: { border: `solid 1px ${colorBorderStyle.color}` }
           }}
           // loading={loading}
           options={{
             color: chartColors[0],
             xAxis3D: {
               type: 'value',
-              nameTextStyle: { color: '#333' }
+              nameTextStyle: colorTextSecondaryStyle
             },
             yAxis3D: {
               type: 'category',
-              nameTextStyle: { color: '#333' }
+              nameTextStyle: colorTextSecondaryStyle
               // data: formateds
             },
             zAxis3D: {
               type: 'value',
-              nameTextStyle: { color: '#333' }
+              nameTextStyle: colorTextSecondaryStyle
             },
             grid3D: {
               boxHeight: 80,
               boxDepth: 80,
               boxWidth: 200,
               viewControl: { alpha: 20, beta: 0 },
-              axisLine: { lineStyle: { color: '#888', width: 1 } },
-              splitLine: { show: true, lineStyle: { color: '#888' } },
-              axisLabel: { textStyle: { color: '#333' } }
+              axisLine: { lineStyle: { ...colorTextDescriptionStyle, width: 1 } },
+              splitLine: { show: true, lineStyle: colorTextDescriptionStyle },
+              axisLabel: { textStyle: colorTextSecondaryStyle }
             },
             //@ts-ignore
             series: formateds.map((y, i) => ({

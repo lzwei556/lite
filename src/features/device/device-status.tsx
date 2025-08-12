@@ -11,7 +11,7 @@ import { ReactComponent as BatterySVG } from './battery.svg';
 
 export const DeviceStatus = ({ device }: { device: Device }) => {
   const fields = useStateFields(device);
-  const { colorBgContainerStyle } = useGlobalStyles();
+  const { colorBgContainerStyle, colorTextSecondaryStyle } = useGlobalStyles();
   return (
     fields.length > 0 && (
       <Col span={24}>
@@ -26,7 +26,7 @@ export const DeviceStatus = ({ device }: { device: Device }) => {
                 <Avatar
                   icon={icon}
                   size={60}
-                  style={{ color: '#666', backgroundColor: colorBgContainerStyle.backgroundColor }}
+                  style={{ ...colorTextSecondaryStyle, ...colorBgContainerStyle }}
                 />
                 <Statistic
                   title={label}

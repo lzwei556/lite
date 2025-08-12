@@ -4,6 +4,7 @@ import { Space } from 'antd';
 import intl from 'react-intl-universal';
 import { CardChart, chartColors } from '../../../components';
 import { timeFrequency } from '../../../asset-common';
+import { useGlobalStyles } from '../../../styles';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, useWindowLength, WindowLengthPopup } from './settings';
 
@@ -16,6 +17,7 @@ export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps)
   const xAxisName = `${intl.get('FIELD_FREQUENCY')}（Hz）`;
   const yAxisName = `${intl.get('TIMESTAMP')}（s）`;
   const zAxisName = intl.get('amplitude');
+  const { colorTextSecondaryStyle, colorTextDescriptionStyle } = useGlobalStyles();
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -80,26 +82,26 @@ export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps)
         xAxis3D: {
           type: 'value',
           name: xAxisName,
-          nameTextStyle: { color: '#333' }
+          nameTextStyle: colorTextSecondaryStyle
         },
         yAxis3D: {
           type: 'value',
           name: yAxisName,
-          nameTextStyle: { color: '#333' }
+          nameTextStyle: colorTextSecondaryStyle
         },
         zAxis3D: {
           type: 'value',
           name: zAxisName,
-          nameTextStyle: { color: '#333' }
+          nameTextStyle: colorTextSecondaryStyle
         },
         grid3D: {
           boxHeight: 80,
           boxDepth: 80,
           boxWidth: 200,
           viewControl: { alpha: 20, beta: 0 },
-          axisLine: { lineStyle: { color: '#888', width: 1 } },
-          splitLine: { show: true, lineStyle: { color: '#888' } },
-          axisLabel: { textStyle: { color: '#333' } }
+          axisLine: { lineStyle: { ...colorTextDescriptionStyle, width: 1 } },
+          splitLine: { show: true, lineStyle: colorTextDescriptionStyle },
+          axisLabel: { textStyle: colorTextSecondaryStyle }
         },
         //@ts-ignore
         series: y.map((y, i) => ({

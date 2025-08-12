@@ -1,5 +1,6 @@
 import React from 'react';
 import { CardChart } from '../../../components';
+import { useGlobalStyles } from '../../../styles';
 import { AnalysisCommonProps } from './analysisContent';
 
 export const OrbitPlot = (props: AnalysisCommonProps) => {
@@ -12,11 +13,12 @@ export const OrbitPlot = (props: AnalysisCommonProps) => {
   }
   // 确保闭合：最后一个点与第一个点重合
   data.push(data[0]);
+  const { colorBorderStyle } = useGlobalStyles();
 
   return (
     <CardChart
       cardProps={{
-        style: { border: 'solid 1px #d3d3d3' }
+        style: { border: `solid 1px ${colorBorderStyle.color}` }
       }}
       // loading={loading}
       options={{

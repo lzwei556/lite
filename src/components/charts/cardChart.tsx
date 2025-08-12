@@ -1,5 +1,6 @@
 import React from 'react';
 import { Divider, Space } from 'antd';
+import { useGlobalStyles } from '../../styles';
 import { Card, CardProps } from '../card/card';
 import { Chart, ChartHandler, ChartProps } from './chart';
 import { getOptions } from './utils';
@@ -13,6 +14,7 @@ export const CardChart = ({
   const { extra, ...cardRestProps } = cardProps || {};
   const { options, filename, ...chartRest } = rest;
   const chartOptions = getOptions(options!);
+  const { colorBorderStyle } = useGlobalStyles();
   return (
     <Card
       {...cardRestProps}
@@ -24,7 +26,7 @@ export const CardChart = ({
               <Divider
                 key='separation'
                 type='vertical'
-                style={{ marginInline: 4, borderColor: '#d3d3d3' }}
+                style={{ marginInline: 4, borderColor: colorBorderStyle.color }}
               />
             )
           }
