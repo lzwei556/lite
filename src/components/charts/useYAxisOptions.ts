@@ -27,7 +27,15 @@ export function useYAxisOptions(meta?: YAxisMeta, opts?: ECOptions['yAxis']) {
       }
     }
   } as YAXisComponentOption;
-  return splited ? { ...options, ...splited } : { ...options, boundaryGap: ['20%', '20%'] };
+  return splited
+    ? { ...options, ...splited }
+    : {
+        ...options,
+        min: undefined,
+        max: undefined,
+        interval: undefined,
+        boundaryGap: ['20%', '20%']
+      };
 }
 
 function split(initial: { max?: number; min?: number; interval?: number; startValue?: number }) {
