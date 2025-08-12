@@ -130,6 +130,8 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
   const [enabled, setEnabled] = React.useState(is_enabled_2 ? is_enabled_2.value : false);
   let enabledField: DeviceSetting | undefined;
   const waveFields: DeviceSetting[] = [];
+  const waveFields2 = useWaveRealtedFields2(enabled, 3, settings) ?? [];
+  const waveFields3 = useWaveRealtedFields2(enabled, 4, settings) ?? [];
   if (is_enabled_2 && is_enabled_2.children && is_enabled_2.children.length > 0) {
     enabledField = { ...is_enabled_2, onChange: setEnabled, group: GROUPS.dat };
     const sample_period_2 = is_enabled_2.children.find((s) => s.key === 'sample_period_2');
@@ -139,6 +141,12 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
     const acc3_samples_2 = is_enabled_2.children.find((s) => s.key === 'acc3_samples_2');
     const acc1_odr_2 = is_enabled_2.children.find((s) => s.key === 'acc1_odr_2');
     const acc1_samples_2 = is_enabled_2.children.find((s) => s.key === 'acc1_samples_2');
+    const triaxial_sample_points_2 = is_enabled_2.children.find(
+      (s) => s.key === 'triaxial_sample_points_2'
+    );
+    const uniaxial_sample_points_2 = is_enabled_2.children.find(
+      (s) => s.key === 'uniaxial_sample_points_2'
+    );
     const data_axis = is_enabled_2.children.find((s) => s.key === 'data_axis');
     if (sample_period_2) {
       waveFields.push({ ...sample_period_2, group: GROUPS.dat });
@@ -155,11 +163,17 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
     if (acc3_samples_2) {
       waveFields.push({ ...acc3_samples_2, group: GROUPS.dap });
     }
+    if (triaxial_sample_points_2) {
+      waveFields.push({ ...triaxial_sample_points_2, group: GROUPS.dap });
+    }
     if (acc1_odr_2) {
       waveFields.push({ ...acc1_odr_2, group: GROUPS.dap });
     }
     if (acc1_samples_2) {
       waveFields.push({ ...acc1_samples_2, group: GROUPS.dap });
+    }
+    if (uniaxial_sample_points_2) {
+      waveFields.push({ ...uniaxial_sample_points_2, group: GROUPS.dap });
     }
     if (data_axis) {
       waveFields.push({ ...data_axis, group: GROUPS.dap });
@@ -169,8 +183,51 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
   if (isWaveformOnce) {
     return waveFields.filter((s) => s.key !== 'sample_period_2' && s.key !== 'sample_offset_2');
   } else if (enabledField) {
-    return enabled ? [enabledField, ...waveFields] : [enabledField];
+    return enabled ? [enabledField, ...waveFields, ...waveFields2, ...waveFields3] : [enabledField];
   } else {
     return [];
+  }
+}
+
+function useWaveRealtedFields2(enabled1: boolean, suffix: number, settings?: DeviceSetting[]) {
+  const is_enabled = settings?.find((s) => s.key === `is_enabled_${suffix}`);
+  let enabledField: DeviceSetting | undefined;
+  const [enabled, setEnabled] = React.useState(is_enabled ? enabled1 && is_enabled.value : false);
+  const waveFields: DeviceSetting[] = [];
+  if (is_enabled && is_enabled.children && is_enabled.children.length > 0) {
+    enabledField = { ...is_enabled, onChange: setEnabled, group: GROUPS.dat };
+    const acc3_range = is_enabled.children.find((s) => s.key === `acc3_range_${suffix}`);
+    const acc3_odr = is_enabled.children.find((s) => s.key === `acc3_odr_${suffix}`);
+    const acc3_samples = is_enabled.children.find((s) => s.key === `acc3_samples_${suffix}`);
+    const triaxial_sample_points = is_enabled.children.find(
+      (s) => s.key === `triaxial_sample_points_${suffix}`
+    );
+    const acc1_odr = is_enabled.children.find((s) => s.key === `acc1_odr_${suffix}`);
+    const acc1_samples = is_enabled.children.find((s) => s.key === `acc1_samples_${suffix}`);
+    const uniaxial_sample_points = is_enabled.children.find(
+      (s) => s.key === `uniaxial_sample_points_${suffix}`
+    );
+    if (acc3_range) {
+      waveFields.push({ ...acc3_range, group: GROUPS.dap });
+    }
+    if (acc3_odr) {
+      waveFields.push({ ...acc3_odr, group: GROUPS.dap });
+    }
+    if (acc3_samples) {
+      waveFields.push({ ...acc3_samples, group: GROUPS.dap });
+    }
+    if (triaxial_sample_points) {
+      waveFields.push({ ...triaxial_sample_points, group: GROUPS.dap });
+    }
+    if (acc1_odr) {
+      waveFields.push({ ...acc1_odr, group: GROUPS.dap });
+    }
+    if (acc1_samples) {
+      waveFields.push({ ...acc1_samples, group: GROUPS.dap });
+    }
+    if (uniaxial_sample_points) {
+      waveFields.push({ ...uniaxial_sample_points, group: GROUPS.dap });
+    }
+    return enabled ? [enabledField, ...waveFields] : [enabledField];
   }
 }

@@ -47,7 +47,7 @@ const ModalForm = (props: ModalFormProps) => {
           </Card>
           {deviceType && (
             <>
-              <SettingsFormItems {...settings} />
+              <SettingsFormItems {...settings} key={deviceType} />
               {isBLEGateway(deviceType) && (
                 <Card {...wsn.cardProps}>
                   <WSN.FormItems {...wsn.formItemsProps} />
