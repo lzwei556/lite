@@ -98,11 +98,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
             <HasPermission value={Permission.DeviceCommand}>
               <CommandDropdown
                 device={device}
-                target={
-                  <IconButton title={intl.get('DEVICE_COMMANDS')}>
-                    <Button icon={<CodeOutlined />} size='small' variant='outlined' />
-                  </IconButton>
-                }
+                target={<IconButton icon={<CodeOutlined />} size='small' variant='outlined' />}
               />
             </HasPermission>
             <HasPermission value={Permission.DeviceDelete}>

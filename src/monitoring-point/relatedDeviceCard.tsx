@@ -10,7 +10,7 @@ export const RelatedDeviceCard = ({ bindingDevices = [] }: MonitoringPointRow) =
   const device = bindingDevices[0];
   return (
     device && (
-      <MutedCard title={intl.get('bindings.device')}>
+      <MutedCard title={intl.get('SENSOR')}>
         <Descriptions
           items={[
             {

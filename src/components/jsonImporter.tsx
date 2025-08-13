@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { Button, message, Upload, UploadProps } from 'antd';
+import { ButtonProps, message, Upload, UploadProps } from 'antd';
 import { ImportOutlined, InboxOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
+import { IconButton } from './icon-button';
 
 export function JsonImporter<JSONContent>({
   onUpload,
-  dragger
+  dragger,
+  iconButtonProps
 }: {
   onUpload: (json: JSONContent) => Promise<void>;
   dragger?: boolean;
+  iconButtonProps?: ButtonProps;
 }) {
   const [loading, setLoading] = React.useState(false);
 
@@ -51,9 +54,13 @@ export function JsonImporter<JSONContent>({
 
   return (
     <Upload {...props}>
-      <Button icon={<ImportOutlined />} iconPosition='end' type='primary' loading={loading}>
-        {intl.get('IMPORT_SETTINGS')}
-      </Button>
+      <IconButton
+        {...iconButtonProps}
+        icon={<ImportOutlined />}
+        loading={loading}
+        tooltipProps={{ title: intl.get('IMPORT_SETTINGS') }}
+        type='primary'
+      />
     </Upload>
   );
 }

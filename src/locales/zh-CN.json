@@ -1253,7 +1253,6 @@
   "fault.frequency.bsf": "BSF",
   "fault.frequency.ftf": "FTF",
   "asset.parent": "父资产",
-  "bindings.device": "关联设备",
   "cursor.peak": "峰值",
   "cursor.double.start": "起始游标",
   "cursor.double.end": "终止游标",

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Drawer } from 'antd';
+import { Drawer } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import { useResponsive } from 'ahooks';
 import { useStyles } from './styles';
+import { IconButton } from '../icon-button';
 
 export const PageWithSideBar = ({
   content,
@@ -61,7 +62,7 @@ const SideBar = ({ body, head }: SideBarProps) => {
             <div className={styles.sidebarInnerBody} style={{ height: sidebarBodyHeight }}>
               {body(sidebarBodyHeight - 24)}
             </div>
-            <Button
+            <IconButton
               className={styles.sidebarSwitch}
               icon={<DoubleLeftOutlined />}
               onClick={() => setExpanded(!expanded)}

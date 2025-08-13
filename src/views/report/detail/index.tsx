@@ -1,18 +1,16 @@
 import React from 'react';
-import { Button, Tooltip } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { useLocation } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { Dayjs } from '../../../utils';
+import { useAppType } from '../../../config';
+import { DownloadIconButton } from '../../../components';
 import { AlarmPage } from './alarm';
 import { Status } from './status';
 import { A4_SIZE, PREFACES } from './report';
-import { Dayjs } from '../../../utils';
 import Cover from './cover.jpg';
 import './style.css';
-import { useLocation } from 'react-router-dom';
 import { ISO } from './iso';
-import intl from 'react-intl-universal';
-import { useAppType } from '../../../config';
 
 export default function Report() {
   const appType = useAppType();
@@ -63,45 +61,40 @@ export default function Report() {
   return (
     <div>
       <div className='report' ref={reportRef}>
-        <Tooltip title={intl.get('DOWNLOAD')}>
-          <Button
-            data-html2canvas-ignore='true'
-            loading={loading}
-            onClick={async () => {
-              if (reportRef?.current) {
-                const doc = new jsPDF('p', 'mm', 'a4', true);
-                const pages = reportRef.current.querySelectorAll('.page');
-                setLoading(true);
-                try {
-                  for (let index = 0; index < pages.length; index++) {
-                    const page = pages[index];
-                    const canvas = await html2canvas(page as HTMLDivElement, { scale: 2 });
-                    if (index > 0) {
-                      doc.addPage();
-                    }
-                    doc.addImage(
-                      canvas.toDataURL('image/jpeg'),
-                      'JPEG',
-                      0,
-                      0,
-                      A4_SIZE.width,
-                      A4_SIZE.height
-                    );
+        <DownloadIconButton
+          data-html2canvas-ignore='true'
+          loading={loading}
+          onClick={async () => {
+            if (reportRef?.current) {
+              const doc = new jsPDF('p', 'mm', 'a4', true);
+              const pages = reportRef.current.querySelectorAll('.page');
+              setLoading(true);
+              try {
+                for (let index = 0; index < pages.length; index++) {
+                  const page = pages[index];
+                  const canvas = await html2canvas(page as HTMLDivElement, { scale: 2 });
+                  if (index > 0) {
+                    doc.addPage();
                   }
-                  doc.save(report.reportName + duration);
-                } catch (error) {
-                } finally {
-                  setLoading(false);
+                  doc.addImage(
+                    canvas.toDataURL('image/jpeg'),
+                    'JPEG',
+                    0,
+                    0,
+                    A4_SIZE.width,
+                    A4_SIZE.height
+                  );
                 }
+                doc.save(report.reportName + duration);
+              } catch (error) {
+              } finally {
+                setLoading(false);
               }
-            }}
-            style={{ position: 'fixed', zIndex: 2 }}
-            type='text'
-          >
-            <DownloadOutlined />
-          </Button>
-        </Tooltip>
-
+            }
+          }}
+          style={{ position: 'fixed', zIndex: 2 }}
+          type='text'
+        />
         {renderCover()}
         {renderPreface()}
         <Status report={report} />

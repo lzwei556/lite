@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Empty } from 'antd';
+import { Button, Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Flex, Grid, TabsDetail } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
@@ -64,7 +64,9 @@ export const Index = (props: {
               </Col>
               <Col span={24}>
                 <Flex>
-                  <ActionBar {...props} />
+                  <Button.Group>
+                    <ActionBar {...props} />
+                  </Button.Group>
                 </Flex>
               </Col>
               <Col span={24}>

@@ -189,7 +189,7 @@ export const FilterableAlarmRecordTable: React.FC<{
         setStatus(_filters?.status ?? []);
       }}
       header={{
-        toolbar: [
+        toolbar: (
           <>
             <Input
               onBlur={(e) => setAlarmName(e.target.value)}
@@ -209,7 +209,7 @@ export const FilterableAlarmRecordTable: React.FC<{
             )}
             <RangeDatePicker onChange={setRange} />
           </>
-        ]
+        )
       }}
       pagination={{
         ...paged,

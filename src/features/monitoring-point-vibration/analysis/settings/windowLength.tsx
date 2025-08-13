@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form, Popover, Space, Tooltip } from 'antd';
+import { Button, Form, Popover, Space } from 'antd';
 import { ColumnWidthOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex, SelectFormItem, TextFormItem } from '../../../../components';
+import { Flex, IconButton, SelectFormItem, TextFormItem } from '../../../../components';
 
 export const WindowLength = {
   128: { value: 128 },
@@ -97,15 +97,14 @@ export const WindowLengthPopup = ({
       placement='leftTop'
       trigger='click'
     >
-      <Tooltip title={intl.get('analysis.vibration.window.length')}>
-        <Button
-          color='primary'
-          icon={<ColumnWidthOutlined />}
-          onClick={() => setOpen(true)}
-          variant='outlined'
-          size='small'
-        />
-      </Tooltip>
+      <IconButton
+        color='primary'
+        icon={<ColumnWidthOutlined />}
+        onClick={() => setOpen(true)}
+        size='small'
+        tooltipProps={{ title: intl.get('analysis.vibration.window.length') }}
+        variant='outlined'
+      />
     </Popover>
   );
 };

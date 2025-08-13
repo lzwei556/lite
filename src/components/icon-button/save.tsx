@@ -1,18 +1,16 @@
 import React from 'react';
-import { Button, ButtonProps, Tooltip } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
+import { IconButton, IconButtonProps } from './button';
 
 export const SaveIconButton = ({
   color = 'primary',
   icon = <SaveOutlined />,
-  size = 'small',
   variant = 'outlined',
+  tooltipProps = { title: intl.get('SAVE') },
   ...rest
-}: ButtonProps) => {
+}: IconButtonProps) => {
   return (
-    <Tooltip title={intl.get('SAVE')}>
-      <Button color={color} icon={icon} size={size} variant={variant} {...rest} />
-    </Tooltip>
+    <IconButton color={color} icon={icon} tooltipProps={tooltipProps} variant={variant} {...rest} />
   );
 };

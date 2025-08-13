@@ -1,8 +1,14 @@
 import React from 'react';
-import { Button, Form, Popover, Space, Tooltip } from 'antd';
+import { Button, Form, Popover, Space } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex, NumberFormItem, SelectFormItem, TextFormItem } from '../../../../components';
+import {
+  Flex,
+  IconButton,
+  NumberFormItem,
+  SelectFormItem,
+  TextFormItem
+} from '../../../../components';
 import {
   CutoffRange,
   FilterTypeRelatedFields,
@@ -101,15 +107,14 @@ export const FilterTypeRelated = ({
       placement='leftTop'
       trigger='click'
     >
-      <Tooltip title={intl.get('analysis.vibration.filter')}>
-        <Button
-          color='primary'
-          icon={<FilterOutlined />}
-          onClick={() => setOpen(true)}
-          variant='outlined'
-          size='small'
-        />
-      </Tooltip>
+      <IconButton
+        color='primary'
+        icon={<FilterOutlined />}
+        onClick={() => setOpen(true)}
+        size='small'
+        tooltipProps={{ title: intl.get('analysis.vibration.filter') }}
+        variant='outlined'
+      />
     </Popover>
   );
 };

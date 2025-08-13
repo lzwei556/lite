@@ -4,10 +4,10 @@ import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
-import { DeleteIconButton, IconButton } from '../../../components';
+import { DeleteIconButton, DownloadIconButton, IconButton } from '../../../components';
 import intl from 'react-intl-universal';
 import { DeleteNetworkRequest, ExportNetworkRequest } from '../../../apis/network';
-import { DownloadOutlined, ExportOutlined, PlusOutlined } from '@ant-design/icons';
+import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import { CommandDropdown } from '../commandDropdown';
 import DownloadModal from './downloadModal';
 import { DeleteDeviceRequest } from '../../../apis/device';
@@ -28,22 +28,22 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
       {DeviceType.isGateway(device.typeId) && network && (
         <>
           <HasPermission value={Permission.NetworkExport}>
-            <IconButton title={intl.get('EXPORT_NETWORK')}>
-              <Button
-                type='primary'
-                onClick={() => {
-                  ExportNetworkRequest(network.id).then((res) => {
-                    const url = window.URL.createObjectURL(new Blob([res.data]));
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.setAttribute('download', `${network.name}.json`);
-                    document.body.appendChild(link);
-                    link.click();
-                  });
-                }}
-                icon={<ExportOutlined />}
-              />
-            </IconButton>
+            <IconButton
+              icon={<ExportOutlined />}
+              onClick={() => {
+                ExportNetworkRequest(network.id).then((res) => {
+                  const url = window.URL.createObjectURL(new Blob([res.data]));
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.setAttribute('download', `${network.name}.json`);
+                  document.body.appendChild(link);
+                  link.click();
+                });
+              }}
+              tooltipProps={{ title: intl.get('EXPORT_NETWORK') }}
+              type='primary'
+              variant='solid'
+            />
           </HasPermission>
           <HasPermission value={Permission.NetworkDelete}>
             <DeleteIconButton
@@ -68,9 +68,16 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
               tooltipProps={{ placement: 'top' }}
             />
           </HasPermission>
-          <IconButton title={intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })}>
-            <Button type='primary' onClick={() => setOpen2(true)} icon={<PlusOutlined />} />
-          </IconButton>
+          <IconButton
+            icon={<PlusOutlined />}
+            onClick={() => setOpen2(true)}
+            tooltipProps={{
+              title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
+            }}
+            type='primary'
+            variant='solid'
+          />
+
           {open2 && (
             <AddModal
               open={open2}
@@ -108,9 +115,12 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
       )}
       {DeviceType.isSensor(device.typeId) && (
         <HasPermission value={Permission.DeviceData}>
-          <IconButton title={intl.get('DOWNLOAD_DATA')}>
-            <Button type='primary' onClick={() => setOpen(true)} icon={<DownloadOutlined />} />
-          </IconButton>
+          <DownloadIconButton
+            onClick={() => setOpen(true)}
+            tooltipProps={{ title: intl.get('DOWNLOAD_DATA') }}
+            type='primary'
+            variant='solid'
+          />
           <DownloadModal
             open={open}
             onCancel={() => setOpen(false)}

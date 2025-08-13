@@ -1,11 +1,19 @@
 import React from 'react';
-import { Button, ButtonProps, Col, Form, FormProps, message, Space, Typography } from 'antd';
+import { Col, Form, FormProps, message, Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { GetMyProfile, UpdateMyProfile } from '../../apis/profile';
 import { User } from '../../types/user';
-import { Flex, Grid, MutedCard, TextFormItem } from '../../components';
+import {
+  EditIconButton,
+  Flex,
+  Grid,
+  IconButton,
+  MutedCard,
+  SaveIconButton,
+  TextFormItem
+} from '../../components';
 import EditPassModal from './edit/editPassModal';
 
 const MePage = () => {
@@ -95,10 +103,9 @@ const MePage = () => {
               intl.get('PASSWORD'),
               <Space>
                 ****************
-                <Button
-                  onClick={() => setIsPassEdit(true)}
-                  icon={<EditOutlined />}
+                <EditIconButton
                   color='primary'
+                  onClick={() => setIsPassEdit(true)}
                   size='small'
                   variant='text'
                 />
@@ -119,18 +126,6 @@ const MePage = () => {
     </Content>
   );
 };
-
-const EditIconButton = (props: ButtonProps) => (
-  <Button {...props} icon={<EditOutlined />} color='primary' size='small' variant='text' />
-);
-
-const SaveIconButton = (props: ButtonProps) => (
-  <Button {...props} icon={<CheckOutlined />} color='primary' size='small' variant='text' />
-);
-
-const CancelIconButton = (props: ButtonProps) => (
-  <Button {...props} icon={<CloseOutlined />} color='danger' size='small' variant='text' />
-);
 
 const ProfileItemForm = ({
   formProps,
@@ -153,19 +148,27 @@ const ProfileItemForm = ({
             {input}
             <div>
               <SaveIconButton
+                icon={<CheckOutlined />}
                 onClick={() =>
                   formProps?.form
                     ?.validateFields()
                     .then((values) => onSubmit(values).then(() => setEditable(false)))
                 }
+                variant='text'
               />
-              <CancelIconButton onClick={() => setEditable(false)} />
+              <IconButton
+                color='danger'
+                icon={<CloseOutlined />}
+                onClick={() => setEditable(false)}
+                size='small'
+                variant='text'
+              />
             </div>
           </>
         ) : (
           <>
             {value && value.length > 0 ? value : intl.get('NOT_BOUND_PROMPT')}
-            <EditIconButton onClick={() => setEditable(true)} />
+            <EditIconButton color='primary' onClick={() => setEditable(true)} variant='text' />
           </>
         )}
       </Space>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Space, Typography } from 'antd';
+import { Modal, Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
@@ -9,7 +9,8 @@ import {
   DeleteIconButton,
   EditIconButton,
   Table,
-  transformPagedresult
+  transformPagedresult,
+  IconButton
 } from '../../components';
 import { PageResult } from '../../types/page';
 import {
@@ -157,14 +158,16 @@ const ProjectPage = () => {
         columns={columns}
         dataSource={ds}
         header={{
-          toolbar: [
+          toolbar: (
             <HasPermission value={Permission.ProjectAdd}>
-              <Button type={'primary'} onClick={() => trigger()}>
-                {intl.get('CREATE_PROJECT')}
-                <PlusOutlined />
-              </Button>
+              <IconButton
+                icon={<PlusOutlined />}
+                onClick={() => trigger()}
+                tooltipProps={{ title: intl.get('CREATE_PROJECT') }}
+                type='primary'
+              />
             </HasPermission>
-          ]
+          )
         }}
         pagination={{
           ...paged,

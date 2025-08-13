@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, ButtonProps, Popconfirm, PopconfirmProps, TooltipProps } from 'antd';
+import { ButtonProps, Popconfirm, PopconfirmProps, TooltipProps } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { IconButton } from './iconButton';
+import { IconButton } from './button';
 
 export const DeleteIconButton = (props: {
   confirmProps: Omit<PopconfirmProps, 'title'> & { title?: PopconfirmProps['title'] };
@@ -46,15 +46,14 @@ export const DeleteIconButton = (props: {
       okText={okText}
       placement={placement}
     >
-      <IconButton {...restTooltipProps} title={title} placement={tooltipPlacement}>
-        <Button
-          {...buttonRestProps}
-          icon={<DeleteOutlined />}
-          color={color}
-          variant={variant}
-          size={size}
-        />
-      </IconButton>
+      <IconButton
+        {...buttonRestProps}
+        color={color}
+        icon={<DeleteOutlined />}
+        size={size}
+        variant={variant}
+        tooltipProps={{ ...restTooltipProps, title, placement: tooltipPlacement }}
+      />
     </Popconfirm>
   );
 };

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Space, Tooltip } from 'antd';
+import { Space } from 'antd';
 import Icon from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { ChartMark } from '../../../../components';
+import { ChartMark, IconButton } from '../../../../components';
 import { MarkType, markTypes, useMarkContext } from './context';
 import { ReactComponent as BookmarksSVG } from './bookmarks.svg';
 import { ReactComponent as HarmonicSVG } from './harmonic.svg';
@@ -34,23 +34,23 @@ export const Toolbar = ({ hiddens }: { hiddens?: MarkType[] }) => {
         .filter((type) => !hiddens?.includes(type))
         .map((type) => {
           return (
-            <Tooltip key={type} title={intl.get(`analysis.vibration.cursor.${type.toLowerCase()}`)}>
-              <Button
-                color='primary'
-                onClick={() => {
-                  setMarkType(type);
-                  if (markType === 'Sideband' && cursor === 'side') {
-                    setCursor('center');
-                  }
-                  if (type !== markType) {
-                    dispatchMarks({ type: 'clear' });
-                  }
-                }}
-                icon={<Icon component={icons[type]} />}
-                variant={type === markType ? 'solid' : 'outlined'}
-                size='small'
-              />
-            </Tooltip>
+            <IconButton
+              key={type}
+              color='primary'
+              onClick={() => {
+                setMarkType(type);
+                if (markType === 'Sideband' && cursor === 'side') {
+                  setCursor('center');
+                }
+                if (type !== markType) {
+                  dispatchMarks({ type: 'clear' });
+                }
+              }}
+              icon={<Icon component={icons[type]} />}
+              size='small'
+              tooltipProps={{ title: intl.get(`analysis.vibration.cursor.${type.toLowerCase()}`) }}
+              variant={type === markType ? 'solid' : 'outlined'}
+            />
           );
         })}
     </Space>

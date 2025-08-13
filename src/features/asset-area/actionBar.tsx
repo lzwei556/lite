@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../types/common';
@@ -7,6 +6,7 @@ import { AssetRow } from '../../asset-common';
 import { area, CreateAsset, isAssetAreaParent, isAssetValidParent } from '../../asset-variant';
 import { useAssetCategories } from './utils';
 import { Create } from './create';
+import { IconButton } from '../../components';
 
 export const ActionBar = ({
   asset,
@@ -40,56 +40,57 @@ export const ActionBar = ({
     setType(undefined);
   };
 
-  const renderAreaCreateBtn = () => {
-    const { label } = area;
+  const shouldRenderAreaCreateBtn = !asset || isAssetAreaParent(asset);
+  const shouldAssetCreationBtn = !asset || isAssetValidParent(asset);
+  const both = shouldRenderAreaCreateBtn && shouldAssetCreationBtn;
 
-    if (!asset || isAssetAreaParent(asset)) {
-      return (
-        <>
-          <Button
-            key={1}
-            onClick={() => {
-              setOpen(true);
-              setType(1);
-            }}
-            type='primary'
-          >
-            {intl.get('CREATE_SOMETHING', { something: intl.get(label) })}
-            <PlusOutlined />
-          </Button>
-          {type === 1 && <Create {...commonProps} parentId={asset?.id} />}
-        </>
-      );
-    }
+  const AreaCreateBtn = () => {
+    const { label } = area;
+    const labelIntl = intl.get('CREATE_SOMETHING', { something: intl.get(label) });
+    return (
+      <>
+        <IconButton
+          icon={<PlusOutlined />}
+          key={1}
+          onClick={() => {
+            setOpen(true);
+            setType(1);
+          }}
+          tooltipProps={{
+            title: labelIntl
+          }}
+          type='primary'
+        />
+        {type === 1 && <Create {...commonProps} parentId={asset?.id} />}
+      </>
+    );
   };
 
-  const renderAssetCreationBtn = () => {
-    if (!asset || isAssetValidParent(asset)) {
-      return (
-        <>
-          <Button
-            key={2}
-            onClick={() => {
-              setOpen(true);
-              setType(2);
-            }}
-            type='primary'
-          >
-            {intl.get('CREATE_SOMETHING', { something: intl.get('ASSET') })}
-            <PlusOutlined />
-          </Button>
-          {type === 2 && (
-            <CreateAsset {...commonProps} parentId={asset?.id} types={assetCategories} />
-          )}
-        </>
-      );
-    }
+  const AssetCreationBtn = () => {
+    const labelIntl = intl.get('CREATE_SOMETHING', { something: intl.get('ASSET') });
+    return (
+      <>
+        <IconButton
+          icon={<PlusOutlined />}
+          key={2}
+          onClick={() => {
+            setOpen(true);
+            setType(2);
+          }}
+          tooltipProps={{ title: labelIntl }}
+          type={both ? 'default' : 'primary'}
+        />
+        {type === 2 && (
+          <CreateAsset {...commonProps} parentId={asset?.id} types={assetCategories} />
+        )}
+      </>
+    );
   };
 
   return (
-    <Space>
-      {renderAreaCreateBtn()}
-      {!short && <>{renderAssetCreationBtn()}</>}
-    </Space>
+    <>
+      {shouldRenderAreaCreateBtn && <AreaCreateBtn />}
+      {!short && shouldAssetCreationBtn && <AssetCreationBtn />}
+    </>
   );
 };

@@ -23,7 +23,6 @@ export const Toolbar = (props: Props) => {
               form: props.form,
               color: 'primary',
               icon: <SelectOutlined />,
-              size: 'small',
               variant: 'outlined'
             }}
           />

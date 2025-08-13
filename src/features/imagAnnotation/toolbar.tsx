@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, message, Space, Tooltip, Upload } from 'antd';
-import { CloseCircleOutlined, EditOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
+import { message, Space, Upload } from 'antd';
+import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
+import { EditIconButton, IconButton, SaveIconButton } from '../../components';
 import { MARGIN, Point } from './common';
 import { useCanvas } from './context';
 
@@ -33,66 +34,64 @@ export function Toolbar({
       {extras}
       {!editable && (
         <>
-          <Tooltip title={intl.get('EDIT')}>
-            <Button
-              icon={<EditOutlined />}
-              onClick={() => {
-                setPrevEnds(ends);
-                setEditable(true);
-              }}
-            />
-          </Tooltip>
+          <EditIconButton
+            onClick={() => {
+              setPrevEnds(ends);
+              setEditable(true);
+            }}
+            size='middle'
+            tooltipProps={{ title: intl.get('EDIT'), placement: 'top' }}
+          />
           {textSettingBtn}
         </>
       )}
       {editable && (
         <>
-          <Tooltip title={intl.get('replace.image')}>
-            <Upload
-              beforeUpload={(file) => {
-                const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-                if (!isJpgOrPng) {
-                  message.error(intl.get('only.jpeg.or.png'));
-                } else {
-                  const reader = new FileReader();
-                  reader.readAsDataURL(file);
-                  reader.onload = () => {
-                    const result = reader.result as string;
-                    beforeUpload?.(result);
-                  };
-                }
-                return false;
-              }}
-              showUploadList={false}
-            >
-              <Button icon={<PlusOutlined />} />
-            </Upload>
-          </Tooltip>
-          <Tooltip title={intl.get('SAVE')}>
-            <Button
-              icon={<SaveOutlined />}
-              onClick={() => {
-                setEditable(false);
-                setPrevEnds([]);
-                onSave({ canvasSnapshot: ends });
-                if (uploadedImageStr) {
-                  onUpload?.(uploadedImageStr);
-                }
-              }}
+          <Upload
+            beforeUpload={(file) => {
+              const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+              if (!isJpgOrPng) {
+                message.error(intl.get('only.jpeg.or.png'));
+              } else {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                  const result = reader.result as string;
+                  beforeUpload?.(result);
+                };
+              }
+              return false;
+            }}
+            showUploadList={false}
+          >
+            <IconButton
+              icon={<PlusOutlined />}
+              tooltipProps={{ title: intl.get('replace.image') }}
             />
-          </Tooltip>
-          <Tooltip title={intl.get('CANCEL')}>
-            <Button
-              icon={<CloseCircleOutlined />}
-              onClick={() => {
-                if (prevEnds.length > 0) {
-                  setEnds(prevEnds);
-                }
-                setEditable(false);
-                onCancel?.();
-              }}
-            />
-          </Tooltip>
+          </Upload>
+          <SaveIconButton
+            color='default'
+            onClick={() => {
+              setEditable(false);
+              setPrevEnds([]);
+              onSave({ canvasSnapshot: ends });
+              if (uploadedImageStr) {
+                onUpload?.(uploadedImageStr);
+              }
+            }}
+            size='middle'
+          />
+          <IconButton
+            icon={<CloseCircleOutlined />}
+            onClick={() => {
+              if (prevEnds.length > 0) {
+                setEnds(prevEnds);
+              }
+              setEditable(false);
+              onCancel?.();
+            }}
+            tooltipProps={{ title: intl.get('CANCEL') }}
+          />
         </>
       )}
     </Space>

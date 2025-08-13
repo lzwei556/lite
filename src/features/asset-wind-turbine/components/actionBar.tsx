@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
@@ -10,6 +9,7 @@ import * as Wind from '../create';
 import * as Flange from '../flange';
 import * as Tower from '../tower';
 import * as MonitoringPoint from '../../monitoring-point-wind-turbine';
+import { IconButton } from '../../../components';
 
 export const ActionBar = ({
   asset,
@@ -37,28 +37,34 @@ export const ActionBar = ({
     setOpen(false);
     setType(undefined);
   };
+  const hasFlangeAndTower = () => {
+    const types = descendent.map(({ type }) => type);
+    return types.includes(flange.type) && types.includes(tower.type);
+  };
 
   return (
-    <Space>
+    <>
       {descendent
-        .filter((a, i) => (short ? i === 0 : true))
-        .map(({ type, label }) => (
-          <Button
-            key={type}
-            onClick={() => {
-              setOpen(true);
-              setType(type);
-            }}
-            type='primary'
-          >
-            {intl.get('CREATE_SOMETHING', { something: intl.get(label) })}
-            <PlusOutlined />
-          </Button>
-        ))}
+        .filter((_, i) => (short ? i === 0 : true))
+        .map(({ type, label }) => {
+          const labelIntl = intl.get('CREATE_SOMETHING', { something: intl.get(label) });
+          return (
+            <IconButton
+              key={type}
+              icon={<PlusOutlined />}
+              onClick={() => {
+                setOpen(true);
+                setType(type);
+              }}
+              tooltipProps={{ title: labelIntl }}
+              type={type === flange.type ? 'primary' : hasFlangeAndTower() ? 'default' : 'primary'}
+            />
+          );
+        })}
       {type === wind.type && <Wind.Create {...commonProps} />}
       {type === flange.type && <Flange.Create {...commonProps} windId={asset?.id} />}
       {type === tower.type && <Tower.Create {...commonProps} windId={asset?.id} />}
       {type === 99999 && <MonitoringPoint.Create {...commonProps} asset={asset} />}
-    </Space>
+    </>
   );
 };

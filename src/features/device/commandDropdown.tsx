@@ -170,9 +170,12 @@ export const CommandDropdown = ({
         trigger={isMobile ? ['click'] : ['hover']}
       >
         {target ?? (
-          <IconButton title={intl.get('DEVICE_COMMANDS')}>
-            <Button type={'primary'} icon={<MoreOutlined />} />
-          </IconButton>
+          <IconButton
+            icon={<MoreOutlined />}
+            tooltipProps={{ title: intl.get('DEVICE_COMMANDS') }}
+            type='primary'
+            variant='solid'
+          />
         )}
       </Dropdown>
       {upgradeVisible && (

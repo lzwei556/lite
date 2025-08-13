@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Button, Space, Typography } from 'antd';
+import { Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import { UserAddOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { DeleteIconButton, EditIconButton, Table, transformPagedresult } from '../../components';
+import {
+  DeleteIconButton,
+  EditIconButton,
+  IconButton,
+  Table,
+  transformPagedresult
+} from '../../components';
 import { PagingUsersRequest, RemoveUserRequest } from '../../apis/user';
 import { User } from '../../types/user';
 import HasPermission from '../../permission';
@@ -13,6 +18,7 @@ import { Store, useStore } from '../../hooks/store';
 import { AddUserModal } from './add';
 import { EditUserModal } from './edit';
 import { useRoles } from './use-roles';
+import { UserAddOutlined } from '@ant-design/icons';
 
 const UserPage = () => {
   const [open, setOpen] = useState(false);
@@ -118,13 +124,16 @@ const UserPage = () => {
         columns={columns}
         dataSource={ds}
         header={{
-          toolbar: [
+          toolbar: (
             <HasPermission value={Permission.UserAdd}>
-              <Button type='primary' onClick={() => setOpen(true)}>
-                {intl.get('CREATE_USER')} <UserAddOutlined />
-              </Button>
+              <IconButton
+                icon={<UserAddOutlined />}
+                onClick={() => setOpen(true)}
+                tooltipProps={{ title: intl.get('CREATE_USER') }}
+                type='primary'
+              />
             </HasPermission>
-          ]
+          )
         }}
         pagination={{
           ...paged,

@@ -1,8 +1,15 @@
 import React from 'react';
 import { Button, Col, Empty, Spin } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card, Flex, Grid, Table, useRange, RangeDatePicker } from '../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  Table,
+  useRange,
+  RangeDatePicker,
+  DownloadIconButton
+} from '../components';
 import { Dayjs } from '../utils';
 import usePermission, { Permission } from '../permission/permission';
 import { getFilename } from '../utils/format';
@@ -126,11 +133,11 @@ function TimestampsTable<T>(
       <Table
         cardProps={{ style: { height: '100%' } }}
         header={{
-          toolbar: [
+          toolbar: (
             <Button onClick={() => setBatchDownloadModalVisible(true)}>
               {intl.get('BATCH_DOWNLOAD')}
             </Button>
-          ]
+          )
         }}
         scroll={{ y: 700 }}
         showHeader={false}
@@ -147,12 +154,10 @@ function TimestampsTable<T>(
             render: (text: TimestampObj) => {
               if (hasPermission(Permission.DeviceRawDataDownload)) {
                 return (
-                  <Button
-                    icon={<DownloadOutlined />}
+                  <DownloadIconButton
                     onClick={() => {
                       onDownload(text.timestamp);
                     }}
-                    color='primary'
                     variant='text'
                   />
                 );

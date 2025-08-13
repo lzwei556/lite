@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Breadcrumb, Button, Col, Form, message, Result } from 'antd';
-import { ImportOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ImportNetworkRequest } from '../apis/network';
 import { DeviceType } from '../types/device_type';
 import { generateColProps } from '../utils/grid';
-import { Card, Grid, JsonImporter, Link, TitleExtraLayout } from '../components';
+import { Card, Grid, JsonImporter, Link, SaveIconButton, TitleExtraLayout } from '../components';
 import * as WSN from '../wsn';
 import { useContext } from '../features/device';
 import { VIRTUAL_ROOT_DEVICE } from '../features/device/virtual';
@@ -91,10 +90,13 @@ const ImportNetworkPage = () => {
           }
           extra={
             !success && (
-              <Button type='primary' onClick={onSave}>
-                {intl.get('SAVE_NETWORK')}
-                <ImportOutlined />
-              </Button>
+              <SaveIconButton
+                color='primary'
+                onClick={onSave}
+                size='middle'
+                tooltipProps={{ title: intl.get('SAVE_NETWORK') }}
+                variant='solid'
+              />
             )
           }
           paddingBlock={14}

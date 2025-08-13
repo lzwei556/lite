@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Empty, Space, TableProps } from 'antd';
+import { Button, Col, Empty, Space, TableProps } from 'antd';
 import intl from 'react-intl-universal';
 import { uniq } from 'lodash';
 import {
@@ -143,7 +143,9 @@ export const Settings = (props: {
     <Grid>
       <Col span={24}>
         <Flex>
-          <ActionBar {...props} />
+          <Button.Group>
+            <ActionBar {...props} />
+          </Button.Group>
         </Flex>
       </Col>
       <Col span={24}>{renderAssets(children)}</Col>

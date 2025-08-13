@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Col, Tooltip } from 'antd';
+import { Col } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Card, Grid } from '../../../../components';
+import { Card, Grid, IconButton } from '../../../../components';
 import { ModalWrapper } from '../../../../components/modalWrapper';
 import { Dayjs } from '../../../../utils';
 import { HistoryDataFea } from '../../..';
@@ -67,13 +67,12 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
                 }}
                 viewIcon={
                   <React.Fragment key='view'>
-                    <Tooltip title={intl.get('CLICK_TO_VIEW')}>
-                      <Button
-                        icon={<EyeOutlined />}
-                        variant='outlined'
-                        onClick={() => setOpen(true)}
-                      />
-                    </Tooltip>
+                    <IconButton
+                      icon={<EyeOutlined />}
+                      onClick={() => setOpen(true)}
+                      tooltipProps={{ title: intl.get('CLICK_TO_VIEW') }}
+                      variant='outlined'
+                    />
                     <ModalWrapper
                       open={open}
                       onCancel={() => setOpen(false)}

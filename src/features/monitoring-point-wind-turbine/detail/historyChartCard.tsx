@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Space as AntSpace, Spin } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { Space as AntSpace, Spin } from 'antd';
 import { DisplayProperty } from '../../../constants/properties';
-import { Card } from '../../../components';
+import { Card, DownloadIconButton } from '../../../components';
 import { isMobile } from '../../../utils/deviceDetection';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
@@ -55,13 +54,10 @@ export const HistoryChartCard = ({
               value={property.key}
             />
             <HasPermission value={Permission.MeasurementDataDownload}>
-              <Button
-                color='primary'
-                icon={<DownloadOutlined />}
+              <DownloadIconButton
                 onClick={() => {
                   setVisible(true);
                 }}
-                variant='filled'
               />
             </HasPermission>
             <HasPermission value={Permission.MeasurementDataDelete}>

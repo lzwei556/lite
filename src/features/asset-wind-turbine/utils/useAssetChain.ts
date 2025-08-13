@@ -12,7 +12,7 @@ export function useDescendentTypes(type?: number) {
     return [top, ...children, leaf];
   }
   if (type === top.type) {
-    return [...children, leaf];
+    return children;
   } else {
     return [leaf];
   }

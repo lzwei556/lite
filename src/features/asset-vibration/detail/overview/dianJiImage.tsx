@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Col, List, Popover, Tooltip, Typography } from 'antd';
+import { Checkbox, Col, List, Popover, Typography } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
@@ -7,7 +7,7 @@ import { DisplayProperty } from '../../../../constants/properties';
 import { Dayjs } from '../../../../utils';
 import { base64toBlob } from '../../../../utils/image';
 import { ImageAnnotation } from '../../..';
-import { Card, Flex, Grid, Link } from '../../../../components';
+import { Card, Flex, Grid, IconButton, Link } from '../../../../components';
 import { ASSET_PATHNAME, AssetRow, updateAsset, uploadAssetImage } from '../../../../asset-common';
 import { getPropertyValues, MonitoringPointPropertyItem } from '../context';
 import DianJi from './dianji.png';
@@ -161,9 +161,7 @@ function SettingsButton({
       placement='leftBottom'
       trigger='click'
     >
-      <Tooltip title={intl.get('SETTINGS')}>
-        <Button icon={<SettingOutlined />} />
-      </Tooltip>
+      <IconButton icon={<SettingOutlined />} tooltipProps={{ title: intl.get('SETTINGS') }} />
     </Popover>
   );
 }

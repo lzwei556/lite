@@ -1,10 +1,11 @@
 import React from 'react';
 import { Badge, Button, Col, Empty, Space, Statistic, Typography } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
-import { Card, Flex, Grid, Link, TitleExtraLayout } from '../../components';
+import { Card, Flex, Grid, IconButton, Link, TitleExtraLayout } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { Dayjs } from '../../utils';
 import { Device } from '../../types/device';
@@ -23,6 +24,7 @@ export const VIRTUAL_ROOT_DEVICE = {
 export default function Virtual() {
   const { devices } = useContext();
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const renderBody = () => {
     if (devices.length === 0) {
@@ -80,19 +82,26 @@ export default function Virtual() {
         <TitleExtraLayout
           title={VIRTUAL_ROOT_DEVICE.name}
           extra={
-            <Space>
+            <Button.Group>
               <HasPermission value={Permission.NetworkAdd}>
-                <Link to='/devices/import'>
-                  <Button type='primary'>
-                    {intl.get('MENU_IMPORT_NETWORK')}
-                    <ImportOutlined />
-                  </Button>
-                </Link>
+                <IconButton
+                  icon={<ImportOutlined />}
+                  onClick={() => navigate('/devices/import')}
+                  tooltipProps={{ title: intl.get('MENU_IMPORT_NETWORK') }}
+                  type='primary'
+                  variant='solid'
+                />
               </HasPermission>
-              <Button type='primary' onClick={() => setOpen(true)}>
-                {intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })}
-                <PlusOutlined />
-              </Button>
+              <IconButton
+                icon={<PlusOutlined />}
+                onClick={() => setOpen(true)}
+                tooltipProps={{
+                  title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
+                }}
+                type='primary'
+                variant='solid'
+              />
+
               {open && (
                 <AddModal
                   open={open}
@@ -100,7 +109,7 @@ export default function Virtual() {
                   onSuccess={() => setOpen(false)}
                 />
               )}
-            </Space>
+            </Button.Group>
           }
           paddingBlock={14}
         />

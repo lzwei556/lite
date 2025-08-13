@@ -1,6 +1,7 @@
 import React from 'react';
 import { Divider, Space } from 'antd';
 import { EChartsType } from 'echarts/core';
+import intl from 'react-intl-universal';
 import { useGlobalStyles } from '../../styles';
 import {
   Chart,
@@ -13,10 +14,10 @@ import {
 import { Card, CardProps } from '../card/card';
 import { useChartContext } from '../charts';
 import { SaveImageIconButton } from '../charts/saveImageIconButton';
+import { DownloadIconButton } from '../icon-button';
 import { useContext } from './context';
 import {
   AreaMarkSwitcherIconButton,
-  DownloadIconButton,
   PointMarkSwitcherIconButton,
   RestoreIconButton,
   SettingsIconButton
@@ -137,7 +138,13 @@ export const MarkChart = (
             {visibles?.includes('download') && (
               <DownloadIconButton
                 onClick={toolbar?.download?.onClick}
-                tooltip={toolbar?.download?.tooltip}
+                size='small'
+                tooltipProps={{
+                  title: toolbar?.download?.tooltip
+                    ? intl.get(toolbar?.download?.tooltip)
+                    : undefined
+                }}
+                variant='outlined'
               />
             )}
             {visibles?.includes('save_image') && <SaveImageIconButton chartHandler={ref.current} />}

@@ -1,11 +1,9 @@
 import React from 'react';
 import {
-  Button,
   Checkbox,
   Col,
   Popover,
   Table as AntTable,
-  Tooltip,
   TableProps,
   Space as AntSpace,
   Typography,
@@ -18,11 +16,12 @@ import { Flex } from '../flex';
 import { Card, CardProps } from '../card/card';
 import { Space } from '../../common';
 import { PageResult } from '../../types/page';
+import { IconButton } from '../icon-button';
 
 type Header = {
   enableSettingColumnsCount?: boolean;
   title?: React.ReactNode;
-  toolbar?: React.ReactNodeArray;
+  toolbar?: React.ReactNode;
 };
 
 type Props<T> = Omit<TableProps<T>, 'title'> & {
@@ -98,18 +97,11 @@ export function Table<T>({
 
 function Head({ columnsSettingBtn, header }: { columnsSettingBtn?: JSX.Element; header: Header }) {
   const { enableSettingColumnsCount, title, toolbar } = header;
-  const toolbarEles: React.ReactNode[] = [];
-  if (toolbar) {
-    toolbarEles.push(...toolbar);
-  }
-  if (enableSettingColumnsCount) {
-    toolbarEles.push(columnsSettingBtn);
-  }
-  if (!title && toolbarEles.length === 0) {
+  if (!title && !toolbar && !enableSettingColumnsCount) {
     return null;
   }
   let justify: React.CSSProperties['justifyContent'] = 'flex-end';
-  if (title && toolbarEles.length > 0) {
+  if (title && (toolbar || enableSettingColumnsCount)) {
     justify = 'space-between';
   } else if (title) {
     justify = 'flex-start';
@@ -118,9 +110,8 @@ function Head({ columnsSettingBtn, header }: { columnsSettingBtn?: JSX.Element; 
     <Flex justify={justify} style={{ paddingBottom: Space }}>
       <Typography.Text style={{ fontWeight: 500, fontSize: 16 }}>{title}</Typography.Text>
       <AntSpace>
-        {toolbarEles.map((ele, i) => (
-          <React.Fragment key={i}>{ele}</React.Fragment>
-        ))}
+        {toolbar}
+        {enableSettingColumnsCount && columnsSettingBtn}
       </AntSpace>
     </Flex>
   );
@@ -155,9 +146,13 @@ function SettingsButton<T>({
       placement='leftBottom'
       trigger='click'
     >
-      <Tooltip title={intl.get('set.columns')}>
-        <Button color='primary' icon={<SettingOutlined />} size='small' variant='outlined' />
-      </Tooltip>
+      <IconButton
+        color='primary'
+        icon={<SettingOutlined />}
+        size='small'
+        tooltipProps={{ title: intl.get('set.columns') }}
+        variant='outlined'
+      />
     </Popover>
   );
 }

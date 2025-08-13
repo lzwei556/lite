@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Button, Col, Form, FormListFieldData } from 'antd';
+import { Col, Form, FormListFieldData } from 'antd';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { cloneDeep } from 'lodash';
 import { DisplayProperty } from '../../../constants/properties';
-import { Grid, SelectFormItem, Table, TextFormItem } from '../../../components';
+import { Grid, IconButton, SelectFormItem, Table, TextFormItem } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
@@ -184,7 +184,7 @@ export function CreateModal(props: ModalFormProps) {
                       width: 60,
                       render: (_, row: FormListFieldData) => {
                         return (
-                          <Button
+                          <IconButton
                             disabled={row.name === 0}
                             icon={<MinusCircleOutlined />}
                             size='small'
@@ -197,7 +197,7 @@ export function CreateModal(props: ModalFormProps) {
                   ]}
                   dataSource={fields}
                   footer={() => (
-                    <Button
+                    <IconButton
                       icon={<PlusCircleOutlined />}
                       size='small'
                       onClick={() => add(defaultValues)}

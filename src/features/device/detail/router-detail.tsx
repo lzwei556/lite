@@ -1,11 +1,11 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Button, Col } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
 import { Device } from '../../../types/device';
 import { useLocaleContext } from '../../../localeProvider';
 import {
   Descriptions,
+  EditIconButton,
   Grid,
   MutedCard,
   RangeDatePicker,
@@ -52,13 +52,11 @@ export const RouterDetail = ({ device, onSuccess }: { device: Device; onSuccess:
               <Table
                 {...tablePorps}
                 header={{
-                  toolbar: [
-                    dataSource && dataSource.total > 0 && (
-                      <HasPermission value={Permission.DeviceEventDelete}>
-                        <Button {...header.toolbar.deleteProps} />
-                      </HasPermission>
-                    )
-                  ]
+                  toolbar: dataSource && dataSource.total > 0 && (
+                    <HasPermission value={Permission.DeviceEventDelete}>
+                      <Button {...header.toolbar.deleteProps} />
+                    </HasPermission>
+                  )
                 }}
               />
             </MutedCard>
@@ -69,9 +67,8 @@ export const RouterDetail = ({ device, onSuccess }: { device: Device; onSuccess:
               <Col span={24}>
                 <MutedCard
                   extra={
-                    <Button
+                    <EditIconButton
                       color='primary'
-                      icon={<EditOutlined />}
                       onClick={() => setOpen(true)}
                       size='small'
                       variant='text'

@@ -62,7 +62,7 @@ export default function ReportList() {
       dataSource={ds}
       header={{
         title: intl.get('MENU_REPORTS'),
-        toolbar: [<RangeDatePicker onChange={setRange} />]
+        toolbar: <RangeDatePicker onChange={setRange} />
       }}
       pagination={{
         ...paged,

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Button, Divider, Input, List, Popover, Space, Typography } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { ChartMark, useChartContext } from '../../../components';
+import { ChartMark, DeleteIconButton, EditIconButton, useChartContext } from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
 import { DisplayProperty } from '../../../constants/properties';
 
@@ -75,7 +74,11 @@ const Item = ({
     );
   };
   return (
-    <List.Item actions={[<Button size='small' icon={<DeleteOutlined />} onClick={onRemove} />]}>
+    <List.Item
+      actions={[
+        <DeleteIconButton confirmProps={{}} buttonProps={{ onClick: onRemove, color: 'default' }} />
+      ]}
+    >
       <List.Item.Meta
         title={
           <Space split={<Divider type='vertical' />}>
@@ -117,7 +120,7 @@ function Pop({
       }}
       trigger={['click']}
     >
-      <Button icon={<EditOutlined />} size='small' type='link' />
+      <EditIconButton type='link' />
     </Popover>
   );
 }

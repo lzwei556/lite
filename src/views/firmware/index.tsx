@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, message, Typography, Upload } from 'antd';
+import { message, Typography, Upload } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { UploadOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
@@ -14,7 +14,7 @@ import { Permission } from '../../permission/permission';
 import { PageResult } from '../../types/page';
 import { Firmware } from '../../types/firmware';
 import { Store, useStore } from '../../hooks/store';
-import { DeleteIconButton, Table, transformPagedresult } from '../../components';
+import { DeleteIconButton, IconButton, Table, transformPagedresult } from '../../components';
 
 const FirmwarePage = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -117,7 +117,7 @@ const FirmwarePage = () => {
         columns={columns}
         dataSource={ds}
         header={{
-          toolbar: [
+          toolbar: (
             <HasPermission value={Permission.FirmwareAdd}>
               <Upload
                 accept={'.bin'}
@@ -126,15 +126,19 @@ const FirmwarePage = () => {
                 showUploadList={false}
                 onChange={onFileChange}
               >
-                <Button type='primary' loading={isUploading}>
-                  {isUploading
-                    ? intl.get('FIRMWARE_IS_UPLOADING_PROMPT')
-                    : intl.get('UPLOAD_FIRMWARE')}
-                  {isUploading ? null : <UploadOutlined />}
-                </Button>
+                <IconButton
+                  icon={<UploadOutlined />}
+                  loading={isUploading}
+                  tooltipProps={{
+                    title: isUploading
+                      ? intl.get('FIRMWARE_IS_UPLOADING_PROMPT')
+                      : intl.get('UPLOAD_FIRMWARE')
+                  }}
+                  type='primary'
+                />
               </Upload>
             </HasPermission>
-          ]
+          )
         }}
         pagination={{
           ...paged,

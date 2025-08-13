@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button, Form, Popover, Space, Tooltip } from 'antd';
+import { Button, Form, Popover, Space } from 'antd';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Flex, SelectFormItem, TextFormItem } from '../../../../components';
+import { Flex, IconButton, SelectFormItem, TextFormItem } from '../../../../components';
 
 const WindowSettings = {
   label: 'chart.window',
@@ -80,15 +80,14 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
       placement='leftTop'
       trigger='click'
     >
-      <Tooltip title={intl.get('analysis.vibration.window')}>
-        <Button
-          color='primary'
-          icon={<PlusSquareOutlined />}
-          onClick={() => setOpen(true)}
-          variant='outlined'
-          size='small'
-        />
-      </Tooltip>
+      <IconButton
+        color='primary'
+        icon={<PlusSquareOutlined />}
+        onClick={() => setOpen(true)}
+        size='small'
+        tooltipProps={{ title: intl.get('analysis.vibration.window') }}
+        variant='outlined'
+      />
     </Popover>
   );
 };

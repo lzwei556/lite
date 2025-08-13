@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, message, Space, TableProps, Typography } from 'antd';
+import { Button, message, Space, TableProps, theme, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
@@ -9,7 +9,13 @@ import { isMobile } from '../../../utils/deviceDetection';
 import { getValue } from '../../../utils/format';
 import { App, useAppType } from '../../../config';
 import { MONITORING_POINT } from '../../../asset-common';
-import { DeleteIconButton, EditIconButton, Table, JsonImporter } from '../../../components';
+import {
+  DeleteIconButton,
+  EditIconButton,
+  Table,
+  JsonImporter,
+  IconButton
+} from '../../../components';
 import { AlarmLevelLightSelectFilter } from '../alarmLevelLightSelectFilter';
 import { AlarmLevelTag } from '..';
 import { CreateModal } from './createModal';
@@ -18,6 +24,7 @@ import { BindMonitoringPoints } from './bindMonitoringPoints';
 import { SelectRules } from './selectRules';
 import { deleteAlarmRule, getAlarmRules, importAlarmRules } from './services';
 import { AlarmRule } from './types';
+import { useGlobalStyles } from '../../../styles';
 
 export default function AlarmRuleList() {
   const appType = useAppType();
@@ -25,6 +32,7 @@ export default function AlarmRuleList() {
   const [open, setOpen] = React.useState(false);
   const [levels, setLevels] = React.useState([1, 2, 3]);
   const [monitoringPointType, setMontoringPointType] = React.useState<number[]>([]);
+  const { colorPrimaryHoverStyle } = useGlobalStyles();
 
   const reset = () => {
     setOpen(false);
@@ -88,7 +96,7 @@ export default function AlarmRuleList() {
               </>
             )}
             <HasPermission value={Permission.AlarmRuleGroupBind}>
-              <Button
+              <IconButton
                 icon={<MoreOutlined />}
                 size='small'
                 onClick={() => {
@@ -188,51 +196,60 @@ export default function AlarmRuleList() {
           scroll: isMobile ? { x: 600 } : undefined
         }}
         header={{
-          toolbar: [
+          toolbar: (
             <>
               <AlarmLevelLightSelectFilter onChange={setLevels} value={levels} />
-              <HasPermission value={Permission.AlarmRuleGroupAdd}>
-                <Button
-                  type='primary'
-                  onClick={() => {
-                    setOpen(true);
-                    setType('create');
-                  }}
-                >
-                  {intl.get('CREATE_ALARM_RULE')}
-                  <PlusOutlined />
-                </Button>
-              </HasPermission>
-              <HasPermission value={Permission.AlarmRuleGroupExport}>
-                {alarmRules.length > 0 && (
-                  <Button
-                    type='primary'
+              <Button.Group>
+                <HasPermission value={Permission.AlarmRuleGroupAdd}>
+                  <IconButton
+                    icon={<PlusOutlined />}
                     onClick={() => {
                       setOpen(true);
-                      setType('export');
+                      setType('create');
                     }}
-                  >
-                    {intl.get('EXPORT_SETTINGS')}
-                    <ExportOutlined />
-                  </Button>
-                )}
-              </HasPermission>
-              <HasPermission value={Permission.AlarmRuleGroupImport}>
-                <JsonImporter
-                  onUpload={(data) => {
-                    return importAlarmRules(data).then((res) => {
-                      if (res.data.code === 200) {
-                        message.success(intl.get('IMPORTED_SUCCESSFUL'));
-                        fetchAlarmRules(levels, monitoringPointType);
-                      } else {
-                        message.error(
-                          `${intl.get('FAILED_TO_IMPORT')}${intl.get(res.data.msg).d(res.data.msg)}`
-                        );
+                    tooltipProps={{ title: intl.get('CREATE_ALARM_RULE') }}
+                    type='primary'
+                  />
+                </HasPermission>
+                <HasPermission value={Permission.AlarmRuleGroupExport}>
+                  {alarmRules.length > 0 && (
+                    <IconButton
+                      icon={<ExportOutlined />}
+                      onClick={() => {
+                        setOpen(true);
+                        setType('export');
+                      }}
+                      tooltipProps={{ title: intl.get('EXPORT_SETTINGS') }}
+                      type='primary'
+                    />
+                  )}
+                </HasPermission>
+                <HasPermission value={Permission.AlarmRuleGroupImport}>
+                  <JsonImporter
+                    iconButtonProps={{
+                      style: {
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                        borderInlineStartColor: colorPrimaryHoverStyle.color
                       }
-                    });
-                  }}
-                />
-              </HasPermission>
+                    }}
+                    onUpload={(data) => {
+                      return importAlarmRules(data).then((res) => {
+                        if (res.data.code === 200) {
+                          message.success(intl.get('IMPORTED_SUCCESSFUL'));
+                          fetchAlarmRules(levels, monitoringPointType);
+                        } else {
+                          message.error(
+                            `${intl.get('FAILED_TO_IMPORT')}${intl
+                              .get(res.data.msg)
+                              .d(res.data.msg)}`
+                          );
+                        }
+                      });
+                    }}
+                  />
+                </HasPermission>
+              </Button.Group>
               {open && type === 'create' && (
                 <CreateModal
                   {...modalProps}
@@ -256,7 +273,7 @@ export default function AlarmRuleList() {
                 />
               )}
             </>
-          ]
+          )
         }}
       />
       {open && type === 'bind' && selectedRow && (

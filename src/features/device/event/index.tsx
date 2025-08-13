@@ -26,13 +26,11 @@ export const QueryEventTable = ({ device }: { device: Device }) => {
         <Table
           {...tablePorps}
           header={{
-            toolbar: [
-              dataSource && dataSource.total > 0 && (
-                <HasPermission value={Permission.DeviceEventDelete}>
-                  <Button {...header.toolbar.deleteProps} />
-                </HasPermission>
-              )
-            ]
+            toolbar: dataSource && dataSource.total > 0 && (
+              <HasPermission value={Permission.DeviceEventDelete}>
+                <Button {...header.toolbar.deleteProps} />
+              </HasPermission>
+            )
           }}
         />
       </Col>

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Space } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { Space } from 'antd';
 import intl from 'react-intl-universal';
 import HasPermission from '../../../../permission';
 import { Permission } from '../../../../permission/permission';
-import { Card } from '../../../../components';
+import { Card, DownloadIconButton } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
 import { HistoryDataFea } from '../../..';
 import {
@@ -56,10 +55,7 @@ export const PointsLineChart = ({
             />
             {isFlangePreloadCalculation(flange) && (
               <HasPermission value={Permission.AssetDataDownload}>
-                <Button
-                  color='primary'
-                  variant='filled'
-                  icon={<DownloadOutlined />}
+                <DownloadIconButton
                   onClick={() => {
                     setOpen(true);
                   }}

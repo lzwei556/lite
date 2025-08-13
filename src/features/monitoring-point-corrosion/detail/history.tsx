@@ -1,8 +1,15 @@
 import React from 'react';
-import { Button, Col, Space as AntSpace } from 'antd';
-import { DownloadOutlined } from '@ant-design/icons';
+import { Col, Space as AntSpace } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Flex, Grid, useRange, RangeDatePicker, DeleteIconButton } from '../../../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  useRange,
+  RangeDatePicker,
+  DeleteIconButton,
+  DownloadIconButton
+} from '../../../components';
 import { DisplayProperty } from '../../../constants/properties';
 import { isMobile } from '../../../utils/deviceDetection';
 import { Dayjs } from '../../../utils';
@@ -74,13 +81,10 @@ export const History = (point: MonitoringPointRow) => {
                   value={property.key}
                 />
                 <HasPermission value={Permission.MeasurementDataDownload}>
-                  <Button
-                    color='primary'
-                    icon={<DownloadOutlined />}
+                  <DownloadIconButton
                     onClick={() => {
                       setVisible(true);
                     }}
-                    variant='filled'
                   />
                 </HasPermission>
                 <HasPermission value={Permission.MeasurementDataDelete}>
