@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { Card, CardProps, Term } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
 import { DisplayProperty } from '../../constants/properties';
-import { getDisplayName, getValue, roundValue } from '../../utils/format';
+import { getDisplayName, getValue } from '../../utils/format';
 import { HistoryData } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
 import { PropertyChart, transform } from './propertyChart';
@@ -50,7 +50,7 @@ const PropertyChartTitle = ({
             nameProps={{ style: colorTextDescriptionStyle }}
             description={intl.get(`${name}_DESC`)}
           />
-          {getValue(roundValue(last, precision), unit)}
+          {getValue({ value: last, unit, precision })}
         </Space>
       );
     });
@@ -70,7 +70,7 @@ const PropertyChartTitle = ({
               <Typography.Text style={{ fontSize: 13 }} type='secondary'>
                 {intl.get(name).d(name)}
               </Typography.Text>
-              {getValue(roundValue(last, precision))}
+              {getValue({ value: last, precision })}
             </React.Fragment>
           ))}
         </Space>

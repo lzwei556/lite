@@ -1,30 +1,59 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Descriptions } from '../../components';
+import { getOptionLabelByValue, getValue } from '../../utils';
+import {
+  BearingModel,
+  BearingType,
+  MotorType,
+  Mounting,
+  NominalPower,
+  RotationSpeed,
+  VariableFrequencyDrive
+} from './settings';
 
 export const SettingsDetail = ({ settings }: { settings: any }) => {
+  const getVariable = () => {
+    const value = settings[VariableFrequencyDrive.name];
+    const label = getOptionLabelByValue(VariableFrequencyDrive.options!, value);
+    return intl.get(label).d(label);
+  };
+  const getMounting = () => {
+    const value = settings[Mounting.name];
+    const label = getOptionLabelByValue(Mounting.options!, value);
+    return intl.get(label).d(label);
+  };
+  const getBearingType = () => {
+    const value = settings[BearingType.name];
+    const label = getOptionLabelByValue(BearingType.options!, value);
+    return intl.get(label).d(label);
+  };
+
   return (
     <Descriptions
       items={[
-        { label: intl.get(`motor.motor_type`), children: settings['motor_type'] },
-        { label: intl.get(`motor.rotation_speed`), children: `${settings['rotation_speed']}RPM` },
+        { label: intl.get(MotorType.label), children: settings[MotorType.name] },
         {
-          label: intl.get(`motor.variable_frequency_drive`),
-          children: settings['variable_frequency_drive'] ? intl.get('yes') : intl.get('no')
-        },
-        { label: intl.get(`motor.nominal_power`), children: `${settings['nominal_power']}kW` },
-        {
-          label: intl.get(`motor.mounting`),
-          children: settings['mounting'] === 1 ? intl.get('horizontal') : intl.get('vertical')
+          label: intl.get(RotationSpeed.label),
+          children: getValue({ value: settings[RotationSpeed.name], unit: RotationSpeed.unit })
         },
         {
-          label: intl.get(`motor.bearing_type`),
-          children:
-            settings['bearing_type'] === 1
-              ? intl.get('motor.bearing.type.roller')
-              : intl.get('motor.bearing.type.journal')
+          label: intl.get(VariableFrequencyDrive.label),
+          children: getVariable()
         },
-        { label: intl.get(`motor.bearing_model`), children: settings['bearing_model'] }
+        {
+          label: intl.get(NominalPower.label),
+          children: getValue({ value: settings[NominalPower.name], unit: NominalPower.unit })
+        },
+        {
+          label: intl.get(Mounting.label),
+          children: getMounting()
+        },
+        {
+          label: intl.get(BearingType.label),
+          children: getBearingType()
+        },
+        { label: intl.get(BearingModel.label), children: settings[BearingModel.name] }
       ]}
     />
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { NumberFormItem } from '../../../../components';
+import { TowerBaseRadius } from '../../../../monitoring-point';
 
 export const RadiusItem = ({
   nameIndex,
@@ -8,15 +9,15 @@ export const RadiusItem = ({
   nameIndex?: number;
   fieldKey?: number | undefined;
 }) => {
-  const commonNameProp = ['attributes', 'tower_base_radius'];
+  const commonNameProp = ['attributes', TowerBaseRadius.name];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
       {...rest}
-      label='TOWER_BASE_RADIUS'
+      label={TowerBaseRadius.label}
       name={nameProp}
-      inputNumberProps={{ addonAfter: 'm', min: 0 }}
+      inputNumberProps={{ addonAfter: TowerBaseRadius.unit, min: 0 }}
     />
   );
 };

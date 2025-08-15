@@ -3,7 +3,7 @@ import { Col, DatePicker, Descriptions, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Grid } from '../../../components';
 import { Dayjs, getPluralUnitInEnglish } from '../../../utils';
-import { getValue, roundValue } from '../../../utils/format';
+import { getValue } from '../../../utils/format';
 import { MonitoringPointRow } from '../../../asset-common';
 import { useLocaleContext } from '../../../localeProvider';
 import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
@@ -34,6 +34,7 @@ export const Forecast = ({
               label={intl.get('FIELD_CORROSION_RATE')}
               unit='mm/a'
               value={rate}
+              precision={3}
             />
           </Col>
           <Col span={12}>
@@ -41,6 +42,7 @@ export const Forecast = ({
               label={intl.get('FIELD_RESIDUAL_LIFE')}
               unit={getPluralUnitInEnglish(duration, intl.get(unit), language)}
               value={duration}
+              precision={0}
             />
           </Col>
         </Grid>
@@ -91,17 +93,19 @@ export const Forecast = ({
 function PropertyCardedContent({
   label,
   unit,
-  value
+  value,
+  precision
 }: {
   label: string;
   unit: string;
   value?: number;
+  precision?: number;
 }) {
   return (
     <Space direction='vertical'>
       <Typography.Text type='secondary'>{label}</Typography.Text>
       <Typography.Text style={{ fontSize: 18 }}>
-        {value !== undefined ? getValue(roundValue(value, 3)) : '-'}
+        {getValue({ value, precision })}
         {value !== undefined && (
           <Typography.Text style={{ marginLeft: 4 }} type='secondary'>
             {unit}

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { Metadata, PropertyLightSelectFilter } from '../../../asset-common';
-import { getValue, roundValue } from '../../../utils/format';
+import { getValue } from '../../../utils/format';
 import { Card, Descriptions, Grid, LineChart } from '../../../components';
 
 export interface ThicknessWaveData {
@@ -40,8 +40,7 @@ export function WaveformData<T extends ThicknessWaveData>(props: { values: T }) 
   };
 
   const getMetaProperty = (meta: Metadata, metaValue: string, unit: string, precision: number) => {
-    if (!meta) return '-';
-    return getValue(roundValue(meta[metaValue], precision), unit);
+    return getValue({ value: meta[metaValue], unit, precision });
   };
 
   const renderChart = () => {

@@ -231,7 +231,7 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
     )?.[0];
     let value = NaN;
     if (field && data) {
-      value = roundValue(data.values[field.key] as number, field.precision);
+      value = data.values[field.key] as number;
     }
     return {
       name,
@@ -244,7 +244,7 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
       tooltip: {
         formatter: `${
           alertLevel && alertLevel > 0 ? `${intl.get(`leveled.alarm.${alertLevel}`)}<br/>` : ''
-        }${generateRowOfTooltip('', name, getValue(value, field?.unit))}`
+        }${generateRowOfTooltip('', name, getValue({ value, ...field }))}`
       },
       itemStyle: {
         opacity: 1,

@@ -32,7 +32,7 @@ const SideBar = ({ body, head }: SideBarProps) => {
   const [expanded, setExpanded] = React.useState(true);
   const [sidebarBodyHeight, setSidebarBodyHeight] = React.useState(780);
   const sidebarRef = React.useRef<HTMLDivElement>(null);
-  const { xl } = useResponsive();
+  const { xxl } = useResponsive();
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -53,7 +53,7 @@ const SideBar = ({ body, head }: SideBarProps) => {
     };
   }, [head]);
 
-  return xl ? (
+  return xxl ? (
     <aside className={cx(styles.sidebarContainer, expanded ? '' : 'collapsed')}>
       <div className={styles.sidebar} ref={sidebarRef}>
         {expanded ? (

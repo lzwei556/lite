@@ -11,9 +11,9 @@ import {
   MonitoringPointsTable,
   Points,
   positionColumn,
-  installAngle,
-  installHeight,
-  installRadius,
+  getInstallAngleColumn,
+  getInstallHeightColumn,
+  getBaseRadiusColumn,
   AssetNavigator,
   EmptyMonitoringPoints
 } from '../../../../asset-common';
@@ -74,9 +74,9 @@ export const Index = (props: {
                       language
                     }),
                     positionColumn,
-                    installAngle,
-                    installHeight,
-                    installRadius,
+                    getInstallAngleColumn(language),
+                    getInstallHeightColumn(language),
+                    getBaseRadiusColumn(language),
                     getOperateColumn({
                       onDeleteSuccess: () => props.onSuccess(),
                       onUpdate: props.onUpdate

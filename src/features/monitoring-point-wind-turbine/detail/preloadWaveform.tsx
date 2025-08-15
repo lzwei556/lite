@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Descriptions, Grid, LineChart } from '../../../components';
-import { getValue, roundValue } from '../../../utils/format';
+import { getValue } from '../../../utils/format';
 import { Metadata, PropertyLightSelectFilter } from '../../../asset-common';
 import { PreloadWaveData } from './dynamic/types';
 
@@ -33,8 +33,7 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
   };
 
   const getMetaProperty = (meta: Metadata, metaValue: string, unit: string, precision: number) => {
-    if (!meta) return '-';
-    return getValue(roundValue(meta[metaValue], precision), unit);
+    return getValue({ value: meta[metaValue], unit, precision });
   };
 
   const renderChart = () => {

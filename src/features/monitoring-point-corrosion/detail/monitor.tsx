@@ -17,7 +17,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
-  const colProps = generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
+  const colProps = generateColProps({ lg: 12, xl: 12, xxl: 12 });
   const { propertyHistoryCardStyle } = useGlobalStyles();
 
   React.useEffect(() => {

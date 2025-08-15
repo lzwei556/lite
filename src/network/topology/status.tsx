@@ -9,17 +9,18 @@ import {
   useDeviceOnlineLiving,
   useDeviceTreeData
 } from '../../features/device/deviceTree';
+import { Device } from '../../types/device';
 import { useContext } from '../../features/device';
 import { useGlobalStyles } from '../../styles';
 import { TreeChart } from './treeChart';
 
-export function Status({ network }: { network: Network }) {
+export function Status({ device }: { device: Device }) {
   const navigate = useNavigate();
   useDeviceOnlineLiving();
   const { devicesLoading } = useContext();
   const { colorWarningHoverStyle, colorWhiteStyle, colorTextStyle } = useGlobalStyles();
   const leaveNodes = [];
-  const treeData: DeviceTreeNode[] = mapTree(useDeviceTreeData(network.gateway), (device) => {
+  const treeData: DeviceTreeNode[] = mapTree(useDeviceTreeData(device), (device) => {
     if (!device.hasOwnProperty('children') || device.children.length === 0) {
       leaveNodes.push(device);
     }

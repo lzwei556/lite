@@ -2,7 +2,13 @@ import React from 'react';
 import { Col, ColProps } from 'antd';
 import intl from 'react-intl-universal';
 import { NumberFormItem, NumberFormItemWithSwitcher } from '../../components';
-import { MonitoringPointRow } from '../../asset-common';
+import {
+  CorrosionRateLongTerm,
+  CorrosionRateShortTerm,
+  CriticalThickness,
+  InitialThickness,
+  MonitoringPointRow
+} from '../../asset-common';
 
 type FieldProps = {
   monitoringPoint?: MonitoringPointRow;
@@ -18,8 +24,8 @@ export const Others = ({ monitoringPoint, formItemColProps, ...props }: FieldPro
     <>
       <Col {...formItemColProps}>
         <NumberFormItemWithSwitcher
-          label={'INITIAL_THICKNESS'}
-          name={[...nameProp, 'initial_thickness']}
+          label={InitialThickness.label}
+          name={[...nameProp, InitialThickness.name]}
           enabled={monitoringPoint?.attributes?.initial_thickness_enabled}
           enabledFormItemProps={props}
           numberFormItemProps={props}
@@ -27,8 +33,8 @@ export const Others = ({ monitoringPoint, formItemColProps, ...props }: FieldPro
       </Col>
       <Col {...formItemColProps}>
         <NumberFormItemWithSwitcher
-          label={'CRITICAL_THICKNESS'}
-          name={[...nameProp, 'critical_thickness']}
+          label={CriticalThickness.label}
+          name={[...nameProp, CriticalThickness.name]}
           enabled={monitoringPoint?.attributes?.critical_thickness_enabled}
           enabledFormItemProps={props}
           numberFormItemProps={props}
@@ -46,30 +52,30 @@ export const Others = ({ monitoringPoint, formItemColProps, ...props }: FieldPro
 
 function ShortTerm(props: Omit<FieldProps, 'formItemColProps'>) {
   const { nameIndex, ...rest } = props;
-  const commonNameProp = ['attributes', 'corrosion_rate_short_term'];
+  const commonNameProp = ['attributes', CorrosionRateShortTerm.name];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
       {...rest}
-      label='CORROSION_RATE_SHORT_TERM'
+      label={CorrosionRateShortTerm.label}
       name={nameProp}
-      inputNumberProps={{ addonAfter: intl.get('UNIT_DAY') }}
+      inputNumberProps={{ addonAfter: intl.get(CorrosionRateShortTerm.unit!) }}
     />
   );
 }
 
 function LongTerm(props: Omit<FieldProps, 'formItemColProps'>) {
   const { nameIndex, ...rest } = props;
-  const commonNameProp = ['attributes', 'corrosion_rate_long_term'];
+  const commonNameProp = ['attributes', CorrosionRateLongTerm.name];
   const nameProp = nameIndex !== undefined ? [`${nameIndex}`, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
       {...rest}
-      label='CORROSION_RATE_LONG_TERM'
+      label={CorrosionRateLongTerm.label}
       name={nameProp}
-      inputNumberProps={{ addonAfter: intl.get('UNIT_DAY') }}
+      inputNumberProps={{ addonAfter: intl.get(CorrosionRateLongTerm.unit!) }}
     />
   );
 }

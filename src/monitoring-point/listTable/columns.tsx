@@ -2,15 +2,15 @@ import React from 'react';
 import { TableProps } from 'antd';
 import intl from 'react-intl-universal';
 import { MonitoringPointTypeValue } from '../../config';
-import { Dayjs } from '../../utils';
+import { Dayjs, getAttrValue } from '../../utils';
 import { Link } from '../../components';
-import { getDisplayName, getValue, roundValue } from '../../utils/format';
+import { getDisplayName, getValue } from '../../utils/format';
 import { Language } from '../../localeProvider';
 import { ASSET_PATHNAME } from '../../asset-common/constants';
 import { AssetStatusTag } from '../../asset-common/assetStatusTag';
 import { MonitoringPointRow } from '../types';
 import { Point } from '../util';
-import { AXIS_ALIAS } from '../constants';
+import { AXIS_ALIAS, TowerBaseRadius, TowerInstallAngle, TowerInstallHeight } from '../constants';
 import { OperateCell } from './operateCell';
 
 export type Column = Required<TableProps<MonitoringPointRow>>['columns'][0];
@@ -67,7 +67,7 @@ const time = {
 export const positionColumn = {
   title: () => intl.get('POSITION'),
   key: 'position',
-  render: (_: string, row: MonitoringPointRow) => row.attributes?.index ?? '-'
+  render: (_: string, row: MonitoringPointRow) => getAttrValue(row.attributes, 'index')
 };
 export type OperateCellProps = {
   onDeleteSuccess: (id: number) => void;
@@ -80,22 +80,44 @@ export const getOperateColumn = ({ onDeleteSuccess, onUpdate }: OperateCellProps
     <OperateCell {...{ onDeleteSuccess, onUpdate, point }} />
   )
 });
-export const installAngle = {
-  title: () => intl.get('TOWER_INSTALL_ANGLE'),
-  key: 'install.angle',
-  render: (_: string, row: MonitoringPointRow) => row.attributes?.tower_install_angle ?? '-'
+export const getInstallAngleColumn = (lang: Language) => {
+  return {
+    title: () =>
+      getDisplayName({
+        name: intl.get(TowerInstallAngle.label),
+        lang,
+        suffix: TowerInstallAngle.unit
+      }),
+    key: TowerInstallAngle.name,
+    render: (_: string, row: MonitoringPointRow) =>
+      getAttrValue(row.attributes, 'tower_install_angle')
+  };
 };
-
-export const installHeight = {
-  title: () => intl.get('TOWER_INSTALL_HEIGHT'),
-  key: 'install.height',
-  render: (_: string, row: MonitoringPointRow) => row.attributes?.tower_install_height ?? '-'
+export const getInstallHeightColumn = (lang: Language) => {
+  return {
+    title: () =>
+      getDisplayName({
+        name: intl.get(TowerInstallHeight.label),
+        lang,
+        suffix: TowerInstallHeight.unit
+      }),
+    key: TowerInstallHeight.name,
+    render: (_: string, row: MonitoringPointRow) =>
+      getAttrValue(row.attributes, 'tower_install_height')
+  };
 };
-
-export const installRadius = {
-  title: () => intl.get('TOWER_BASE_RADIUS'),
-  key: 'install.radius',
-  render: (_: string, row: MonitoringPointRow) => row.attributes?.tower_base_radius ?? '-'
+export const getBaseRadiusColumn = (lang: Language) => {
+  return {
+    title: () =>
+      getDisplayName({
+        name: intl.get(TowerBaseRadius.label),
+        lang,
+        suffix: TowerBaseRadius.unit
+      }),
+    key: TowerBaseRadius.name,
+    render: (_: string, row: MonitoringPointRow) =>
+      getAttrValue(row.attributes, 'tower_base_radius')
+  };
 };
 
 function getPropertyedCols(
@@ -114,7 +136,7 @@ function getPropertyedCols(
       return {
         key: subKey,
         render: (d: MonitoringPointRow) =>
-          getValue(roundValue(d?.data?.values[subKey] as number, precision)),
+          getValue({ value: d?.data?.values[subKey] as number, precision }),
         title: axis ? intl.get(axis.label) : intl.get(name)
       };
     });
@@ -128,7 +150,10 @@ function getPropertyedCols(
           render: (d: MonitoringPointRow) => {
             const attrs = d.attributes;
             const axisKey = attrs?.[aliasKey];
-            return getValue(roundValue(d?.data?.values[`${key}_${axisKey}`] as number, precision));
+            return getValue({
+              value: d?.data?.values[`${key}_${axisKey}`] as number,
+              precision
+            });
           },
           title: intl.get(label)
         };
@@ -140,7 +165,7 @@ function getPropertyedCols(
       : {
           key,
           render: (d: MonitoringPointRow) =>
-            getValue(roundValue(d?.data?.values[key] as number, precision)),
+            getValue({ value: d?.data?.values[key] as number, precision }),
           title,
           hidden: !first
         };

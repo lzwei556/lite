@@ -2,6 +2,8 @@ import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Descriptions, Grid } from '../../../components';
+import { getValue } from '../../../utils';
+import { RotationSpeed } from '../../../asset-variant';
 import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
 import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
@@ -88,15 +90,18 @@ export const TimeDomain = ({
               children: (
                 <Descriptions
                   items={[
-                    { label: intl.get('SETTING_RANGE'), children: `${range}g` },
+                    {
+                      label: intl.get('SETTING_RANGE'),
+                      children: getValue({ value: range, unit: 'g' })
+                    },
                     {
                       label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                      children: `${frequency}Hz`
+                      children: getValue({ value: frequency, unit: 'Hz' })
                     },
                     { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
                     {
-                      label: intl.get('motor.rotation_speed'),
-                      children: rotation_speed ? `${rotation_speed}RPM` : '-'
+                      label: intl.get(RotationSpeed.label),
+                      children: getValue({ value: rotation_speed, unit: RotationSpeed.unit })
                     }
                   ]}
                 />

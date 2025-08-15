@@ -34,7 +34,10 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
           dataIndex: 'condition',
           key: 'condition',
           render: (_: any, record: any) => {
-            return `${record.operation} ${getValue(record.threshold, record.metric.unit)} `;
+            return `${record.operation} ${getValue({
+              value: record.threshold,
+              unit: record.metric.unit
+            })} `;
           },
           width: 150
         },

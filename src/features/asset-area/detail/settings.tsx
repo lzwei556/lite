@@ -14,8 +14,19 @@ import {
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
 import { Asset, ASSET_PATHNAME, AssetRow, deleteAsset } from '../../../asset-common';
-import { getByType } from '../../../asset-variant';
+import {
+  BearingModel,
+  BearingType,
+  getByType,
+  MotorType,
+  Mounting,
+  NominalPower,
+  RotationSpeed,
+  VariableFrequencyDrive
+} from '../../../asset-variant';
 import { ActionBar } from '../actionBar';
+import { getDisplayName, getOptionLabelByValue } from '../../../utils';
+import { Language, useLocaleContext } from '../../../localeProvider';
 
 type Column = NonNullable<TableProps<AssetRow>['columns']>[0];
 
@@ -25,12 +36,18 @@ export const Settings = (props: {
   onUpdate: (asset: AssetRow) => void;
 }) => {
   const { asset, onSuccess, onUpdate } = props;
+  const { language } = useLocaleContext();
   const { children } = asset;
   const nameColun: Column = {
     title: intl.get('NAME'),
     dataIndex: 'name',
     render: (_, row: AssetRow) => (
-      <Link to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}>{row.name}</Link>
+      <Link
+        style={{ display: 'inline-block', minWidth: 160 }}
+        to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
+      >
+        {row.name}
+      </Link>
     )
   };
   const operationColumn: Column = {
@@ -53,7 +70,7 @@ export const Settings = (props: {
     )
   };
 
-  const renderAssets = (children?: AssetRow[]) => {
+  const renderAssets = (language: Language, children?: AssetRow[]) => {
     if (!children || children.length === 0) {
       return (
         <Card title={intl.get('ASSET')}>
@@ -71,54 +88,73 @@ export const Settings = (props: {
         />
       );
     } else {
-      return renderSpecificAssetChildren(children);
+      return renderSpecificAssetChildren(children, language);
     }
   };
 
-  const renderSpecificAssetChildren = (children: AssetRow[]) => {
+  const renderSpecificAssetChildren = (children: AssetRow[], lang: Language) => {
     const types = uniq(children.map((a) => a.type));
     return types.map((t, i) => {
       const cols = [nameColun];
       if (Asset.Assert.isVibrationRelated(t)) {
         cols.push({
-          key: 'motor_type',
-          render: ({ attributes }: any) => attributes?.motor_type,
-          title: intl.get('motor.motor_type')
+          key: MotorType.name,
+          render: ({ attributes }: any) => attributes?.[MotorType.name],
+          title: intl.get(MotorType.label)
         });
         cols.push({
-          key: 'rotation_speed',
-          render: ({ attributes }: any) => attributes?.rotation_speed,
-          title: intl.get('motor.rotation_speed')
+          key: RotationSpeed.name,
+          render: ({ attributes }: any) => attributes?.[RotationSpeed.name],
+          title: getDisplayName({
+            name: intl.get(RotationSpeed.label),
+            lang,
+            suffix: RotationSpeed.unit
+          })
         });
         cols.push({
-          key: 'variable_frequency_drive',
-          render: ({ attributes }: any) =>
-            !!attributes?.variable_frequency_drive === true ? intl.get('yes') : intl.get('no'),
-          title: intl.get('motor.variable_frequency_drive')
+          key: VariableFrequencyDrive.name,
+          render: ({ attributes }: any) => {
+            const value = attributes?.[VariableFrequencyDrive.name];
+            const label = getOptionLabelByValue(VariableFrequencyDrive.options!, value);
+            return intl.get(label).d(label);
+          },
+          title: intl.get(VariableFrequencyDrive.label)
         });
         cols.push({
-          key: 'nominal_power',
-          render: ({ attributes }: any) => attributes?.nominal_power,
-          title: intl.get('motor.nominal_power')
+          key: NominalPower.name,
+          render: ({ attributes }: any) => attributes?.[NominalPower.name],
+          title: getDisplayName({
+            name: intl.get(NominalPower.label),
+            lang,
+            suffix: NominalPower.unit
+          })
         });
         cols.push({
-          key: 'mounting',
-          render: ({ attributes }: any) =>
-            attributes?.mounting === 1 ? intl.get('horizontal') : intl.get('vertical'),
-          title: intl.get('motor.mounting')
+          key: Mounting.name,
+          render: ({ attributes }: any) => {
+            const value = attributes?.[Mounting.name];
+            const label = getOptionLabelByValue(Mounting.options!, value);
+            return intl.get(label).d(label);
+          },
+          title: intl.get(Mounting.label)
         });
         cols.push({
-          key: 'bearing_type',
-          render: ({ attributes }: any) =>
-            attributes?.bearing_type === 1
-              ? intl.get('motor.bearing.type.roller')
-              : intl.get('motor.bearing.type.journal'),
-          title: intl.get('motor.bearing_type')
+          key: BearingType.name,
+          render: ({ attributes }: any) => {
+            const value = attributes?.[BearingType.name];
+            const label = getOptionLabelByValue(BearingType.options!, value);
+            return intl.get(label).d(label);
+          },
+          title: (
+            <span style={{ display: 'inline-block', minWidth: 120 }}>
+              {intl.get(BearingType.label)}
+            </span>
+          )
         });
         cols.push({
-          key: 'bearing_model',
-          render: ({ attributes }: any) => attributes?.bearing_model,
-          title: intl.get('motor.bearing_model')
+          key: BearingModel.name,
+          render: ({ attributes }: any) => attributes?.[BearingModel.name],
+          title: intl.get(BearingModel.label)
         });
       }
       cols.push(operationColumn);
@@ -148,7 +184,7 @@ export const Settings = (props: {
           </Button.Group>
         </Flex>
       </Col>
-      <Col span={24}>{renderAssets(children)}</Col>
+      <Col span={24}>{renderAssets(language, children)}</Col>
     </Grid>
   );
 };

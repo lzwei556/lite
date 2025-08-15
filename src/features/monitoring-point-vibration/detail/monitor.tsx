@@ -19,7 +19,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties, attributes } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
-  const colProps = generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
+  const colProps = generateColProps({ lg: 12, xl: 12, xxl: 12 });
   const { propertyHistoryCardStyle, colorBgContainerStyle } = useGlobalStyles();
 
   React.useEffect(() => {
@@ -40,6 +40,7 @@ export const Monitor = (point: MonitoringPointRow) => {
 
   return (
     <Collapse
+      bordered={false}
       defaultActiveKey={displayPropertyGroup[0]}
       expandIconPosition='end'
       items={displayPropertyGroup.map((g) => ({

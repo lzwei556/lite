@@ -8,21 +8,24 @@ export const RangeDatePicker = ({
   defaultValue = Dayjs.CommonRange.PastWeek,
   onChange,
   showQuickRanges = true,
+  value,
   ...rest
 }: Omit<RangePickerProps, 'defaultValue' | 'onChange'> & {
   defaultValue?: Dayjs.RangeValue;
   onChange: (range: Dayjs.RangeValue) => void;
   showQuickRanges?: boolean;
 }) => {
+  const [range, setRange] = React.useState(defaultValue);
   const handleChange = (date: Dayjs.RangeValue) => {
     onChange(date);
+    setRange(date);
   };
-
   return (
     <DatePicker.RangePicker
       {...rest}
       allowClear={false}
       defaultValue={defaultValue}
+      value={value ?? range}
       renderExtraFooter={() => {
         return (
           showQuickRanges && (

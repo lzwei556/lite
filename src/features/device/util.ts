@@ -2,7 +2,7 @@ import { Device } from '../../types/device';
 import { Property } from '../../types/property';
 import { DeviceType, SENSOR_DISPLAY_PROPERTIES } from '../../types/device_type';
 import { DisplayProperty } from '../../constants/properties';
-import { getValue, roundValue } from '../../utils/format';
+import { getValue } from '../../utils/format';
 
 export const getValueOfFirstClassProperty = (device: Device) => {
   const properties = getDisplayProperties(device.properties, device.typeId).filter((p) => p.first);
@@ -28,22 +28,22 @@ export function pickDataOfFirstProperties(
     if (data && data.values) {
       const { values } = data;
       if (Object.hasOwn(values, key)) {
-        value = roundValue(values[key] as number, precision);
+        value = values[key] as number;
       } else if (fields && fields.length > 0) {
         const values = fields
           .map((f) => ({ name: f.name, value: data.values[f.key], first: f.first }))
           .filter((f) => !!f.first);
         if (values.length > 0) {
-          value = roundValue(values[0].value as number, precision);
+          value = values[0].value as number;
           fieldName = values[0].name;
         }
       }
     }
-    const value2 = getValue(value);
+    const value2 = getValue({ value, precision });
     return {
       name,
       key,
-      value: getValue(value, unit),
+      value: getValue({ value, unit, precision }),
       value2,
       unit: value2 !== '-' ? unit : '',
       fieldName

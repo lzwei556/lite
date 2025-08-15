@@ -5,20 +5,32 @@ import { useMonitoringPointParents } from '../asset-variant';
 import { Asset } from '../asset-common';
 import { Point } from './util';
 import { MonitoringPointRow } from './types';
-import { AXIS_ALIAS } from './constants';
-import { getPluralUnitInEnglish } from '../utils';
+import {
+  AXIS_ALIAS,
+  CorrosionRateLongTerm,
+  CorrosionRateShortTerm,
+  CriticalThickness,
+  InitialThickness,
+  TowerBaseRadius,
+  TowerInstallAngle,
+  TowerInstallHeight
+} from './constants';
+import { getPluralUnitInEnglish, getValue, truncate } from '../utils';
 import { useLocaleContext } from '../localeProvider';
+import { useParents } from '../features/monitoring-point-wind-turbine/common';
 
 export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
   const { language } = useLocaleContext();
   const { assetId, attributes, type } = monitoringPoint;
-  const parents = useMonitoringPointParents(
+  const parents1 = useMonitoringPointParents(
     (asset) =>
       Asset.Assert.isCorrosionRelated(asset.type) ||
       Asset.Assert.isVibrationRelated(asset.type) ||
-      Asset.Assert.isWindRelated(asset.type) // TODO filter type ='wind'
+      Asset.Assert.isDeviceRelated(asset.type)
   );
-  const asset = parents.find((p) => p.id === assetId);
+  const parents2 = useParents();
+
+  const asset = [...parents1, ...parents2].find((p) => p.id === assetId);
   const items: DescriptionsProps['items'] = [
     {
       label: intl.get('TYPE'),
@@ -26,7 +38,7 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
     }
   ];
   if (asset) {
-    items.push({ label: intl.get('asset.parent'), children: asset.name });
+    items.push({ label: intl.get('asset.parent'), children: truncate(asset.name, 24) });
   }
   if (attributes) {
     const {
@@ -68,52 +80,50 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
     }
     if (initial_thickness_enabled && initial_thickness) {
       items.push({
-        label: intl.get('INITIAL_THICKNESS'),
-        children: `${initial_thickness}mm`
+        label: intl.get(InitialThickness.label),
+        children: getValue({ value: initial_thickness, unit: InitialThickness.unit })
       });
     }
     if (critical_thickness_enabled && critical_thickness) {
       items.push({
-        label: intl.get('CRITICAL_THICKNESS'),
-        children: `${critical_thickness}mm`
+        label: intl.get(CriticalThickness.label),
+        children: getValue({ value: critical_thickness, unit: CriticalThickness.unit })
       });
     }
     if (corrosion_rate_short_term) {
       items.push({
-        label: intl.get('CORROSION_RATE_SHORT_TERM'),
-        children: `${corrosion_rate_short_term}${getPluralUnitInEnglish(
-          corrosion_rate_short_term,
-          intl.get('UNIT_DAY'),
-          language
-        )}`
+        label: intl.get(CorrosionRateShortTerm.label),
+        children: getValue({
+          value: corrosion_rate_short_term,
+          unit: getPluralUnitInEnglish(corrosion_rate_short_term, intl.get('UNIT_DAY'), language)
+        })
       });
     }
     if (corrosion_rate_long_term) {
       items.push({
-        label: intl.get('CORROSION_RATE_LONG_TERM'),
-        children: `${corrosion_rate_long_term}${getPluralUnitInEnglish(
-          corrosion_rate_long_term,
-          intl.get('UNIT_DAY'),
-          language
-        )}`
+        label: intl.get(CorrosionRateLongTerm.label),
+        children: getValue({
+          value: corrosion_rate_long_term,
+          unit: getPluralUnitInEnglish(corrosion_rate_long_term, intl.get('UNIT_DAY'), language)
+        })
       });
     }
     if (tower_install_height) {
       items.push({
-        label: intl.get('TOWER_INSTALL_HEIGHT'),
-        children: `${tower_install_height}m`
+        label: intl.get(TowerInstallHeight.label),
+        children: getValue({ value: tower_install_height, unit: TowerInstallHeight.unit })
       });
     }
     if (tower_install_angle) {
       items.push({
-        label: intl.get('TOWER_INSTALL_ANGLE'),
-        children: `${tower_install_angle}°`
+        label: intl.get(TowerInstallAngle.label),
+        children: getValue({ value: tower_install_angle, unit: TowerInstallAngle.unit })
       });
     }
     if (tower_base_radius) {
       items.push({
-        label: intl.get('TOWER_BASE_RADIUS'),
-        children: `${tower_base_radius}m`
+        label: intl.get(TowerBaseRadius.label),
+        children: getValue({ value: tower_base_radius, unit: TowerBaseRadius.unit })
       });
     }
   }

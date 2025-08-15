@@ -47,7 +47,7 @@ const useStateFields = (device: Device) => {
   const { typeId, state } = device;
   const fields = [];
   if (!DeviceType.isWiredDevice(typeId)) {
-    const batteryVoltage = getValue(state?.batteryVoltage);
+    const batteryVoltage = getValue({ value: state?.batteryVoltage });
     fields.push({
       label: intl.get('BATTERY_VOLTAGE'),
       value: batteryVoltage,
@@ -56,7 +56,7 @@ const useStateFields = (device: Device) => {
     });
   }
   if (!DeviceType.isWiredSensor(typeId)) {
-    const signalLevel = getValue(state?.signalLevel);
+    const signalLevel = getValue({ value: state?.signalLevel });
     fields.push({
       label: DeviceType.isGateway(typeId)
         ? intl.get('MOBILE_SIGNAL_STRENGTH')

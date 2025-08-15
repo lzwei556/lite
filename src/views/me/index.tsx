@@ -14,6 +14,7 @@ import {
   SaveIconButton,
   TextFormItem
 } from '../../components';
+import { useGlobalStyles } from '../../styles';
 import EditPassModal from './edit/editPassModal';
 
 const MePage = () => {
@@ -21,6 +22,7 @@ const MePage = () => {
   const [user, setUser] = React.useState<User>();
   const [phoneForm] = Form.useForm();
   const [emailForm] = Form.useForm();
+  const { colorTextDescriptionStyle } = useGlobalStyles();
   React.useEffect(() => {
     GetMyProfile().then(setUser);
   }, []);
@@ -28,7 +30,7 @@ const MePage = () => {
   const renderItem = (label: string, content: React.ReactNode) => {
     return (
       <Flex justify='flex-start' style={{ marginBlock: 8, height: 32, lineHeight: '32px' }}>
-        <span style={{ minWidth: 160 }}>{label}</span>
+        <span style={{ minWidth: 160, ...colorTextDescriptionStyle }}>{label}</span>
         <Flex flex={1} justify='flex-start' align='center'>
           {content}
         </Flex>

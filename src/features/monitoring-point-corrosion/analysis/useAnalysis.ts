@@ -3,8 +3,10 @@ import { floor } from 'lodash';
 import { Dayjs } from '../../../utils';
 import { ColorHealth } from '../../../constants/color';
 import {
+  CriticalThickness,
   getThicknessAnalysis,
   HistoryData,
+  InitialThickness,
   MonitoringPointRow,
   ThicknessAnalysis
 } from '../../../asset-common';
@@ -27,14 +29,14 @@ export const getDefaultLines = (attributes: MonitoringPointRow['attributes']) =>
   const lines = [];
   if (isInitialThicknessValid(attributes)) {
     lines.push({
-      name: 'INITIAL_THICKNESS',
+      name: InitialThickness.label,
       yAxis: attributes?.initial_thickness,
       lineStyle: { color: ColorHealth }
     });
   }
   if (isCriticalThicknessValid(attributes)) {
     lines.push({
-      name: 'CRITICAL_THICKNESS',
+      name: CriticalThickness.label,
       yAxis: attributes?.critical_thickness,
       lineStyle: { color: ColorHealth }
     });

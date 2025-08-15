@@ -45,7 +45,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
         xxl: 24 / propertyNums
       });
     } else {
-      return generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
+      return generateColProps({ lg: 12, xl: 12, xxl: 12 });
     }
   };
 
@@ -70,7 +70,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
                 .filter((p) => p.group === g)
                 .map((p: DisplayProperty, index: number) => {
                   return (
-                    <Col {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })} key={index}>
+                    <Col {...generateColProps({ lg: 12, xl: 12, xxl: 12 })} key={index}>
                       <HistoryDataFea.PropertyChartCard
                         data={historyData}
                         property={p}

@@ -34,13 +34,15 @@ const DeviceDetailPage = () => {
       return <GatewayDetail device={device} network={network} />;
     } else if (DeviceType.isSensor(typeId)) {
       return <SensorDetail device={device} />;
+    } else if (DeviceType.Router === typeId) {
+      return <RouterDetail device={device} />;
     }
   }
 
   function useDeviceTabs(deviceTypeId?: number) {
     const tabs: TabsDetailsItems = [];
     const { hasPermission, hasPermissions } = userPermission();
-    if (deviceTypeId === undefined || deviceTypeId === DeviceType.Router) return [];
+    if (deviceTypeId === undefined) return [];
     if (hasPermission(Permission.DeviceData)) {
       tabs.push({
         key: 'overview',
@@ -90,18 +92,15 @@ const DeviceDetailPage = () => {
 
   return (
     <Spin spinning={loading}>
-      {device &&
-        (device.typeId === DeviceType.Router ? (
-          <RouterDetail device={device} onSuccess={() => refresh(device.id)} />
-        ) : (
-          <TabsDetail
-            items={tabs}
-            title={<DeviceNavigator device={device} />}
-            tabBarExtraContent={{
-              right: <HeadRight device={device} network={network} />
-            }}
-          />
-        ))}
+      {device && (
+        <TabsDetail
+          items={tabs}
+          title={<DeviceNavigator device={device} />}
+          tabBarExtraContent={{
+            right: <HeadRight device={device} network={network} />
+          }}
+        />
+      )}
     </Spin>
   );
 };

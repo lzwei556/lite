@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Badge, Button, Divider, Drawer, Dropdown, Space, Typography } from 'antd';
+import { Badge, Button, Divider, Drawer, Dropdown, Space, Tag, Typography } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import Icon, {
   DownOutlined,
@@ -135,16 +135,27 @@ const HeaderLayout = (props: any) => {
                   type: 'divider'
                 },
                 {
-                  key: 'me',
-                  label: intl.get('MENU_USER_CENTER'),
-                  icon: <UserOutlined />,
-                  onClick: () => navigate('/me')
-                },
-                {
-                  key: 'logout',
-                  label: intl.get('LOGOUT'),
-                  icon: <PoweroffOutlined />,
-                  onClick: onLogout
+                  type: 'group',
+                  key: 'account',
+                  label: (
+                    <Tag color='success' bordered>
+                      {currentUser?.username}
+                    </Tag>
+                  ),
+                  children: [
+                    {
+                      key: 'me',
+                      label: intl.get('MENU_USER_CENTER'),
+                      icon: <UserOutlined />,
+                      onClick: () => navigate('/me')
+                    },
+                    {
+                      key: 'logout',
+                      label: intl.get('LOGOUT'),
+                      icon: <PoweroffOutlined />,
+                      onClick: onLogout
+                    }
+                  ]
                 }
               ],
               selectedKeys: [selectedKeys.language, selectedKeys.theme],

@@ -5,12 +5,17 @@ import usePermission, { Permission } from '../../permission/permission';
 import { useLocaleContext } from '../../localeProvider';
 import {
   AssetRow,
+  CorrosionRateLongTerm,
+  CorrosionRateShortTerm,
+  CriticalThickness,
   getMonitoringPointColumns,
   getOperateColumn,
+  InitialThickness,
   MonitoringPointRow,
   Points,
   positionColumn
 } from '../../asset-common';
+import { getDisplayName, getValue } from '../../utils';
 import { ActionBar } from './actionBar';
 
 export const PointsTable = (props: {
@@ -27,33 +32,51 @@ export const PointsTable = (props: {
   const columns = [...basicColumns, positionColumn];
 
   const initialCol = {
-    title: () => intl.get('INITIAL_THICKNESS'),
-    dataIndex: ['attributes', 'initial_thickness'],
-    key: 'initial_thickness',
-    render: (value: number) => value,
-    width: 120
+    title: () =>
+      getDisplayName({
+        name: intl.get(InitialThickness.label),
+        lang: language,
+        suffix: InitialThickness.unit
+      }),
+    dataIndex: ['attributes', InitialThickness.name],
+    key: InitialThickness.name,
+    render: (value: number) => getValue({ value })
   };
 
   const criticalCol = {
-    title: () => intl.get('CRITICAL_THICKNESS'),
-    dataIndex: ['attributes', 'critical_thickness'],
-    key: 'critical_thickness',
-    render: (value: number) => value,
-    width: 120
+    title: () =>
+      getDisplayName({
+        name: intl.get(CriticalThickness.label),
+        lang: language,
+        suffix: CriticalThickness.unit
+      }),
+    dataIndex: ['attributes', CriticalThickness.name],
+    key: CriticalThickness.name,
+    render: (value: number) => getValue({ value })
   };
 
   const shortTermCol = {
-    title: () => intl.get('CORROSION_RATE_SHORT_TERM'),
-    dataIndex: ['attributes', 'corrosion_rate_short_term'],
-    key: 'corrosion_rate_short_term',
-    width: 120
+    title: () =>
+      getDisplayName({
+        name: intl.get(CorrosionRateShortTerm.label),
+        lang: language,
+        suffix: intl.get(CorrosionRateShortTerm.unit!)
+      }),
+    dataIndex: ['attributes', CorrosionRateShortTerm.name],
+    key: CorrosionRateShortTerm.name,
+    render: (value: number) => getValue({ value })
   };
 
   const longTermCol = {
-    title: () => intl.get('CORROSION_RATE_LONG_TERM'),
-    dataIndex: ['attributes', 'corrosion_rate_long_term'],
-    key: 'corrosion_rate_long_term',
-    width: 120
+    title: () =>
+      getDisplayName({
+        name: intl.get(CorrosionRateLongTerm.label),
+        lang: language,
+        suffix: intl.get(CorrosionRateLongTerm.unit!)
+      }),
+    dataIndex: ['attributes', CorrosionRateLongTerm.name],
+    key: CorrosionRateLongTerm.name,
+    render: (value: number) => getValue({ value })
   };
 
   columns.push(initialCol);

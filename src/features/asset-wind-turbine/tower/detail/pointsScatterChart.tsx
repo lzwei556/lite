@@ -43,7 +43,7 @@ export const PointsScatterChart = ({
   }
   const dispalyPrefix = `${intl.get(
     `FIELD_DISPLACEMENT_${type === MonitoringPointTypeValue.BaseInclination ? 'AXIAL' : 'RADIAL'}`
-  )} ${intl.get('FIELD_DISPLACEMENT')}`;
+  )}${language === 'en-US' ? ' ' : ''}${intl.get('FIELD_DISPLACEMENT')}`;
   const options = buildCirclePointsChartOfTower({
     datas: transformedData,
     titles: [dispalyPrefix, intl.get('FIELD_DIRECTION')],
@@ -84,7 +84,7 @@ function Title({
     return [displacement, direction].map(({ label, value, unit }, i) => (
       <Space key={i} style={{ display: 'flex', lineHeight: 1.35, fontSize: 14, fontWeight: 400 }}>
         <Typography.Text type='secondary'>{label}</Typography.Text>
-        {getValue(value, unit)}
+        {getValue({ value, unit })}
       </Space>
     ));
   } else {
@@ -145,7 +145,7 @@ function buildCirclePointsChartOfTower({
         seriesName: string;
         data: [number, number];
       }) => {
-        const rest = `${displacement} ${displacementValue}mm<br/>${direction} ${directionValue}°`;
+        const rest = `${displacement} ${displacementValue} mm<br/>${direction} ${directionValue} °`;
         return onlyOneSeries ? rest : `${seriesName}<br/>${rest}`;
       },
       confine: true

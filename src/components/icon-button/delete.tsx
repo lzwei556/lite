@@ -17,8 +17,8 @@ export const DeleteIconButton = (props: {
     ...popRestProps
   } = props.confirmProps;
   const {
-    title = intl.get('DELETE'),
-    placement: tooltipPlacement = 'right',
+    // title = intl.get('DELETE'),
+    // placement: tooltipPlacement = 'right',
     ...restTooltipProps
   } = props.tooltipProps || {};
   const {
@@ -52,7 +52,7 @@ export const DeleteIconButton = (props: {
         icon={<DeleteOutlined />}
         size={size}
         variant={variant}
-        tooltipProps={{ ...restTooltipProps, title, placement: tooltipPlacement }}
+        tooltipProps={{ ...restTooltipProps }}
       />
     </Popconfirm>
   );

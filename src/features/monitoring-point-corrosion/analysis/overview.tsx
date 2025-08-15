@@ -2,8 +2,13 @@ import React from 'react';
 import { Col, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Grid } from '../../../components';
-import { getValue, roundValue } from '../../../utils/format';
-import { HistoryData, MonitoringPointRow } from '../../../asset-common';
+import { getValue } from '../../../utils/format';
+import {
+  CriticalThickness,
+  HistoryData,
+  InitialThickness,
+  MonitoringPointRow
+} from '../../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
 
 export const Overview = (props: {
@@ -36,10 +41,18 @@ export const Overview = (props: {
   return (
     <Grid>
       <Col span={12}>
-        <PropertyCardedContent label={intl.get('INITIAL_THICKNESS')} unit='mm' value={initial} />
+        <PropertyCardedContent
+          label={intl.get(InitialThickness.label)}
+          unit={InitialThickness.unit!}
+          value={initial}
+        />
       </Col>
       <Col span={12}>
-        <PropertyCardedContent label={intl.get('CRITICAL_THICKNESS')} unit='mm' value={critical} />
+        <PropertyCardedContent
+          label={CriticalThickness.label}
+          unit={CriticalThickness.unit!}
+          value={critical}
+        />
       </Col>
       <Col span={12}>
         <PropertyCardedContent
@@ -72,7 +85,7 @@ function PropertyCardedContent({
     <Space direction='vertical'>
       <Typography.Text type='secondary'>{label}</Typography.Text>
       <Typography.Text style={{ fontSize: 18 }}>
-        {value !== undefined ? getValue(roundValue(value, 3)) : '-'}
+        {getValue({ value, precision: 3 })}
         {value !== undefined && (
           <Typography.Text style={{ marginLeft: 4 }} type='secondary'>
             {unit}

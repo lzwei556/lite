@@ -7,6 +7,16 @@ import { StoreContext } from 'redux-react-hook';
 import AppRouter from './routers';
 import { LocaleProvider } from './localeProvider';
 import { AppProvider } from './config';
+import { configResponsive } from 'ahooks';
+
+configResponsive({
+  xs: 0,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1400
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement);
 root.render(

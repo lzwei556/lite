@@ -72,8 +72,7 @@ export function AngleBase<T extends AngleDynamicData>(props: {
   };
 
   const getMetaProperty = (meta: Metadata, metaValue: string, unit: string, precision: number) => {
-    if (!meta) return '-';
-    return getValue(roundValue(meta[metaValue], precision), unit);
+    return getValue({ value: meta[metaValue], unit, precision });
   };
 
   const renderChart = () => {

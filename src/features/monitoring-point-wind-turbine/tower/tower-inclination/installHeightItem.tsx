@@ -1,5 +1,6 @@
 import React from 'react';
 import { NumberFormItem } from '../../../../components';
+import { TowerInstallHeight } from '../../../../monitoring-point';
 
 export const InstallHeightItem = ({
   nameIndex,
@@ -8,15 +9,15 @@ export const InstallHeightItem = ({
   nameIndex?: number;
   fieldKey?: number | undefined;
 }) => {
-  const commonNameProp = ['attributes', 'tower_install_height'];
+  const commonNameProp = ['attributes', TowerInstallHeight.name];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
       {...rest}
-      label='TOWER_INSTALL_HEIGHT'
+      label={TowerInstallHeight.label}
       name={nameProp}
-      inputNumberProps={{ addonAfter: 'm', min: 0 }}
+      inputNumberProps={{ addonAfter: TowerInstallHeight.unit, min: 0 }}
     />
   );
 };

@@ -1,10 +1,11 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { roundValue } from '../../../utils/format';
+import { getValue, roundValue } from '../../../utils/format';
 import { ChartMark, Descriptions, Grid } from '../../../components';
-import { AnalysisSidebarCollapse } from '../..';
+import { RotationSpeed } from '../../../asset-variant';
 import { envelope, EnvelopeAnalysis } from '../../../asset-common';
+import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
 import Sideband from './sideband';
@@ -134,15 +135,18 @@ export const Envelope = ({
               children: (
                 <Descriptions
                   items={[
-                    { label: intl.get('SETTING_RANGE'), children: `${range}g` },
+                    {
+                      label: intl.get('SETTING_RANGE'),
+                      children: getValue({ value: range, unit: 'g' })
+                    },
                     {
                       label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                      children: `${timeDomainFrequency}Hz`
+                      children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
                     },
                     { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
                     {
-                      label: intl.get('motor.rotation_speed'),
-                      children: rotation_speed ? `${rotation_speed}RPM` : '-'
+                      label: intl.get(RotationSpeed.label),
+                      children: getValue({ value: rotation_speed, unit: RotationSpeed.unit })
                     }
                   ]}
                 />

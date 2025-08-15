@@ -1,5 +1,6 @@
 import React from 'react';
 import { NumberFormItem } from '../../../components';
+import { TowerInstallAngle } from '../../../monitoring-point';
 
 export const InstallAngletItem = ({
   nameIndex,
@@ -8,15 +9,15 @@ export const InstallAngletItem = ({
   nameIndex?: number;
   fieldKey?: number | undefined;
 }) => {
-  const commonNameProp = ['attributes', 'tower_install_angle'];
+  const commonNameProp = ['attributes', TowerInstallAngle.name];
   const nameProp = nameIndex !== undefined ? [nameIndex, ...commonNameProp] : commonNameProp;
 
   return (
     <NumberFormItem
       {...rest}
-      label='TOWER_INSTALL_ANGLE'
+      label={TowerInstallAngle.label}
       name={nameProp}
-      inputNumberProps={{ addonAfter: '°', min: -180, max: 180 }}
+      inputNumberProps={{ addonAfter: TowerInstallAngle.unit, min: -180, max: 180 }}
     />
   );
 };

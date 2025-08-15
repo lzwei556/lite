@@ -2,7 +2,7 @@ import React from 'react';
 import { Pagination, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Flex, Link } from '../../../components';
-import { getValue, roundValue } from '../../../utils';
+import { getValue } from '../../../utils';
 import { ASSET_PATHNAME, AssetRow, Point } from '../../../asset-common';
 import { Icon } from '../../../views/home/icon';
 import { useGlobalStyles } from '../../../styles';
@@ -76,7 +76,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
                   <Typography.Text style={{ whiteSpace: 'nowrap' }} type='secondary'>
                     {property ? intl.get(property.name) : '-'}
                   </Typography.Text>
-                  {getValue(roundValue(value, property?.precision), property?.unit)}
+                  {getValue({ value, ...property })}
                 </Space>
               </Flex>
             </Card>

@@ -10,6 +10,7 @@ import {
   TextFormItem
 } from '../../components';
 import { generateColProps } from '../../utils/grid';
+import { Field } from '../../types';
 
 export type MotorAttrs = {
   motor_type: 'AC' | 'DC';
@@ -26,6 +27,82 @@ export type MotorAttrs = {
   rotation_mode: 'inner' | 'outer';
 };
 
+type MotorAttrsField = Field<MotorAttrs>;
+
+export const MotorType: MotorAttrsField = {
+  name: 'motor_type',
+  label: 'motor.type',
+  description: 'motor.type.desc',
+  options: [
+    {
+      label: 'AC',
+      value: 'AC'
+    },
+    {
+      label: 'DC',
+      value: 'DC'
+    }
+  ]
+};
+export const RotationSpeed: MotorAttrsField = {
+  name: 'rotation_speed',
+  label: 'rotation.speed',
+  description: 'rotation.speed.desc',
+  unit: 'rpm'
+};
+export const VariableFrequencyDrive: MotorAttrsField = {
+  name: 'variable_frequency_drive',
+  label: 'variable.frequency.drive',
+  description: 'variable.frequency.drive.desc',
+  options: [
+    //@ts-ignore
+    { label: 'yes', value: true },
+    //@ts-ignore
+    { label: 'no', value: false }
+  ]
+};
+export const NominalPower: MotorAttrsField = {
+  name: 'nominal_power',
+  label: 'nominal.power',
+  description: 'nominal.power.desc',
+  unit: 'kW'
+};
+export const Mounting: MotorAttrsField = {
+  name: 'mounting',
+  label: 'mounting',
+  description: 'mounting.desc',
+  options: [
+    {
+      label: 'horizontal',
+      value: 1
+    },
+    {
+      label: 'vertical',
+      value: 2
+    }
+  ]
+};
+export const BearingType: MotorAttrsField = {
+  name: 'bearing_type',
+  label: 'bearing.type',
+  description: 'bearing.type.desc',
+  options: [
+    {
+      label: 'bearing.type.roller',
+      value: 1
+    },
+    {
+      label: 'bearing.type.journal',
+      value: 2
+    }
+  ]
+};
+export const BearingModel: MotorAttrsField = {
+  name: 'bearing_model',
+  label: 'bearing.model',
+  description: 'bearing.model.desc'
+};
+
 export const Settings = ({
   cardProps,
   formItemColProps = generateColProps({ xl: 12, xxl: 12 })
@@ -38,87 +115,64 @@ export const Settings = ({
       <Grid>
         <Col {...formItemColProps}>
           <SelectFormItem
-            label='motor.motor_type'
-            name={['attributes', 'motor_type']}
-            selectProps={{
-              options: [
-                {
-                  label: 'AC',
-                  value: 'AC'
-                },
-                {
-                  label: 'DC',
-                  value: 'DC'
-                }
-              ]
-            }}
+            label={MotorType.label}
+            name={['attributes', MotorType.name]}
+            selectProps={{ options: MotorType.options }}
           />
         </Col>
         <Col {...formItemColProps}>
           <NumberFormItem
-            label='motor.rotation_speed'
-            name={['attributes', 'rotation_speed']}
-            inputNumberProps={{ addonAfter: 'RMP', min: 1000 }}
+            label={RotationSpeed.label}
+            name={['attributes', RotationSpeed.name]}
+            inputNumberProps={{ addonAfter: RotationSpeed.unit, min: 1000 }}
           />
         </Col>
         <Col {...formItemColProps}>
           <TextFormItem
-            label='motor.variable_frequency_drive'
-            name={['attributes', 'variable_frequency_drive']}
+            label={VariableFrequencyDrive.label}
+            name={['attributes', VariableFrequencyDrive.name]}
           >
             <Radio.Group
-              options={[
-                { label: intl.get('yes'), value: true },
-                { label: intl.get('no'), value: false }
-              ]}
+              options={VariableFrequencyDrive.options?.map((opt) => ({
+                ...opt,
+                label: intl.get(opt.label)
+              }))}
             />
           </TextFormItem>
         </Col>
         <Col {...formItemColProps}>
           <NumberFormItem
-            label='motor.nominal_power'
-            name={['attributes', 'nominal_power']}
-            inputNumberProps={{ addonAfter: 'kW' }}
+            label={NominalPower.label}
+            name={['attributes', NominalPower.name]}
+            inputNumberProps={{ addonAfter: NominalPower.unit }}
           />
         </Col>
         <Col {...formItemColProps}>
           <SelectFormItem
-            label='motor.mounting'
-            name={['attributes', 'mounting']}
+            label={Mounting.label}
+            name={['attributes', Mounting.name]}
             selectProps={{
-              options: [
-                {
-                  label: intl.get('horizontal'),
-                  value: 1
-                },
-                {
-                  label: intl.get('vertical'),
-                  value: 2
-                }
-              ]
+              options: Mounting.options?.map((opt) => ({
+                ...opt,
+                label: intl.get(opt.label)
+              }))
             }}
           />
         </Col>
         <Col {...formItemColProps}>
           <SelectFormItem
-            label='motor.bearing_type'
-            name={['attributes', 'bearing_type']}
+            label={BearingType.label}
+            name={['attributes', BearingType.name]}
             selectProps={{
-              options: [
-                {
-                  label: intl.get('motor.bearing.type.roller'),
-                  value: 1
-                },
-                {
-                  label: intl.get('motor.bearing.type.journal'),
-                  value: 2
-                }
-              ]
+              options: BearingType.options?.map((opt) => ({
+                ...opt,
+                label: intl.get(opt.label)
+              }))
             }}
           />
         </Col>
         <Col {...formItemColProps}>
-          <TextFormItem label='motor.bearing_model' name={['attributes', 'bearing_model']} />
+          <TextFormItem label={BearingModel.label} name={['attributes', BearingModel.name]} />
         </Col>
         <Col {...formItemColProps}>
           <NumberFormItem

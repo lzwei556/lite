@@ -315,8 +315,8 @@ export function getAlarmDetail(
 ) {
   const { operation, threshold, value } = record;
   const { name, unit } = metric;
-  const thres = getValue(threshold, unit);
-  const alarmValue = getValue(value, unit);
+  const thres = getValue({ value: threshold, unit });
+  const alarmValue = getValue({ value, unit });
   return `${translateMetricName(name)} ${operation} ${thres} ${intl.get(
     'ALARM_VALUE'
   )}: ${alarmValue}`;

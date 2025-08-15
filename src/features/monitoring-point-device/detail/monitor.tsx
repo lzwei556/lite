@@ -44,7 +44,7 @@ export const Monitor = (point: MonitoringPointRow) => {
         xxl: 24 / propertyNums
       });
     } else {
-      return generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 });
+      return generateColProps({ lg: 12, xl: 12, xxl: 12 });
     }
   };
 

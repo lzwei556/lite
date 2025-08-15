@@ -1,9 +1,9 @@
 export {
   getColumns as getMonitoringPointColumns,
   positionColumn,
-  installAngle,
-  installHeight,
-  installRadius,
+  getInstallAngleColumn,
+  getInstallHeightColumn,
+  getBaseRadiusColumn,
   getOperateColumn
 } from './listTable/columns';
 export * from './alarm';

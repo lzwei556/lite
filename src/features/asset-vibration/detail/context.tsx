@@ -1,7 +1,7 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { DisplayProperty } from '../../../constants/properties';
-import { getValue, roundValue, truncate } from '../../../utils/format';
+import { getValue, truncate } from '../../../utils/format';
 import { AssetRow, AXIS_ALIAS, MonitoringPointRow, Point } from '../../../asset-common';
 
 type PropertyItem = {
@@ -77,10 +77,11 @@ export function getPropertyValues(m: MonitoringPointRow, properties: DisplayProp
           return {
             label: truncate(title, 24),
             title,
-            children: `${getValue(
-              roundValue(m?.data?.values[`${key}_${axisKey}`] as number, precision),
-              unit
-            )}`,
+            children: getValue({
+              value: m?.data?.values[`${key}_${axisKey}`] as number,
+              unit,
+              precision
+            }),
             axisKey,
             key
           };
@@ -90,7 +91,11 @@ export function getPropertyValues(m: MonitoringPointRow, properties: DisplayProp
       items.push({
         label: truncate(intl.get(name), 24),
         title: intl.get(name),
-        children: `${getValue(roundValue(m?.data?.values[key] as number, precision))}${unit}`,
+        children: getValue({
+          value: m?.data?.values[key] as number,
+          unit,
+          precision
+        }),
         axisKey: undefined,
         key
       });
