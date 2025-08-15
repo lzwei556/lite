@@ -3,13 +3,13 @@ import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
 import { AssetRow } from '../../../asset-common';
+import * as MonitoringPoint from '../../monitoring-point-wind-turbine';
+import { IconButton } from '../../../components';
 import { useDescendentTypes } from '../utils';
 import { wind, flange, tower } from '../constants';
 import * as Wind from '../create';
 import * as Flange from '../flange';
 import * as Tower from '../tower';
-import * as MonitoringPoint from '../../monitoring-point-wind-turbine';
-import { IconButton } from '../../../components';
 
 export const ActionBar = ({
   asset,
@@ -37,6 +37,14 @@ export const ActionBar = ({
     setOpen(false);
     setType(undefined);
   };
+
+  const getButtonType = (type: number) => {
+    if (hasFlangeAndTower() && type === tower.type) {
+      return 'default';
+    }
+    return 'primary';
+  };
+
   const hasFlangeAndTower = () => {
     const types = descendent.map(({ type }) => type);
     return types.includes(flange.type) && types.includes(tower.type);
@@ -57,7 +65,7 @@ export const ActionBar = ({
                 setType(type);
               }}
               tooltipProps={{ title: labelIntl }}
-              type={type === flange.type ? 'primary' : hasFlangeAndTower() ? 'default' : 'primary'}
+              type={getButtonType(type)}
             />
           );
         })}

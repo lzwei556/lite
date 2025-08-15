@@ -69,6 +69,14 @@ export const AlarmTrend = ({
     GetAlertStatisticsRequest(id !== undefined ? { asset_id: id } : undefined).then((data) => {
       setLoading(false);
       setCountAlarm(data);
+      // setCountAlarm([
+      //   { timestamp: 1754668800, info: 1, warn: 2, critical: 0 },
+      //   { timestamp: 1754773200, info: 1, warn: 2, critical: 0 },
+      //   { timestamp: 1754839799, info: 1, warn: 0, critical: 3 },
+      //   { timestamp: 1755048600, info: 0, warn: 0, critical: 5 },
+      //   { timestamp: 1755081000, info: 0, warn: 3, critical: 0 },
+      //   { timestamp: 1755221400, info: 0, warn: 2, critical: 0 }
+      // ]);
     });
   }, [id]);
 

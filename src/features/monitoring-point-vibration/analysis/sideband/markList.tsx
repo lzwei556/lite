@@ -1,25 +1,42 @@
 import React from 'react';
-import { List } from 'antd';
 import intl from 'react-intl-universal';
 import { dispalyCoordValue, transformMarkData, useMarkChartProps } from '../mark';
+import { ChartMark, Table } from '../../../../components';
 
 export const MarkList = () => {
   const { marks } = useMarkChartProps();
 
   return (
-    <List
-      style={{ overflowY: 'auto', maxHeight: 350 }}
+    <Table
+      cardProps={{ styles: { body: { padding: 0 } } }}
+      columns={[
+        {
+          key: 'name',
+          title: '',
+          render: (_, row: ChartMark.Mark) =>
+            row.label ? (
+              <span style={{ display: 'inline-block', minWidth: 65 }}>
+                {intl.get(row.label as string)}
+              </span>
+            ) : (
+              ''
+            )
+        },
+        {
+          key: 'x',
+          title: 'X',
+          render: (_, row: ChartMark.Mark) => dispalyCoordValue(row.data?.[0])
+        },
+        {
+          key: 'y',
+          title: 'Y',
+          render: (_, row: ChartMark.Mark) => dispalyCoordValue(row.data?.[1])
+        }
+      ]}
+      noScroll={true}
+      pagination={false}
       dataSource={marks.map(transformMarkData)}
-      renderItem={(mark) => {
-        const [x, y] = mark.data;
-        return (
-          <List.Item>
-            <List.Item.Meta description={mark.label ? intl.get(mark.label as string) : ''} />
-            <span style={{ width: 90 }}>X: {dispalyCoordValue(x)}</span>
-            <span style={{ width: 90 }}>Y: {dispalyCoordValue(y)}</span>
-          </List.Item>
-        );
-      }}
+      style={{ overflowY: 'auto', maxHeight: 350 }}
     />
   );
 };

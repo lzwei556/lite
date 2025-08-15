@@ -31,8 +31,14 @@ import { ReactComponent as DarkSVG } from './dark.svg';
 
 const useStyles = createStyles(({ css, token }) => ({
   item: css`
-    color: ${token.colorText} !important;
-    background-color: transparent !important;
+    &.selected.selected-theme,
+    &.selected.selected-lang {
+      color: ${token.colorText};
+      background-color: transparent;
+      &:hover {
+        background-color: ${token.controlItemBgHover};
+      }
+    }
   `
 }));
 
@@ -44,7 +50,7 @@ const HeaderLayout = (props: any) => {
   const [open, setVisible] = useState(false);
   const { colorWhiteStyle } = useGlobalStyles();
   const { language, theme, setLocale } = useLocaleContext();
-  const { styles } = useStyles();
+  const { styles, cx } = useStyles();
 
   setInterval(() => {
     setNow(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
@@ -93,21 +99,24 @@ const HeaderLayout = (props: any) => {
                   type: 'group',
                   key: 'theme',
                   label: intl.get('theme'),
-                  children: ThemeOptions.map(({ value, label }) => ({
-                    key: value,
-                    label: intl.get(label),
-                    icon: (
-                      <Icon component={() => (value === 'dark' ? <DarkSVG /> : <LightSVG />)} />
-                    ),
-                    onClick: () => {
-                      setLocale((prev) => ({ ...prev, theme: value }));
-                      if (value !== selectedKeys.theme) {
-                        setSelectedKeys((prev) => ({ ...prev, theme: value }));
-                      }
-                    },
-                    extra: selectedKeys.theme === value ? <Badge status='processing' /> : undefined,
-                    className: styles.item
-                  }))
+                  children: ThemeOptions.map(({ value, label }) => {
+                    const isSelected = selectedKeys.theme === value;
+                    return {
+                      key: value,
+                      label: intl.get(label),
+                      icon: (
+                        <Icon component={() => (value === 'dark' ? <DarkSVG /> : <LightSVG />)} />
+                      ),
+                      onClick: () => {
+                        setLocale((prev) => ({ ...prev, theme: value }));
+                        if (value !== selectedKeys.theme) {
+                          setSelectedKeys((prev) => ({ ...prev, theme: value }));
+                        }
+                      },
+                      extra: isSelected ? <Badge status='processing' /> : undefined,
+                      className: cx(styles.item, `${isSelected ? 'selected selected-theme' : ''}`)
+                    };
+                  })
                 },
                 {
                   type: 'divider'
@@ -116,20 +125,22 @@ const HeaderLayout = (props: any) => {
                   type: 'group',
                   key: 'language',
                   label: intl.get('language'),
-                  children: LanguageOptions.map(({ key, label }) => ({
-                    key,
-                    label: key === 'en-US' ? 'English' : label,
-                    icon: <Icon component={() => (key === 'en-US' ? 'EN' : '中')} />,
-                    onClick: () => {
-                      setLocale((prev) => ({ ...prev, language: key }));
-                      if (key !== selectedKeys.language) {
-                        setSelectedKeys((prev) => ({ ...prev, language: key }));
-                      }
-                    },
-                    extra:
-                      selectedKeys.language === key ? <Badge status='processing' /> : undefined,
-                    className: styles.item
-                  }))
+                  children: LanguageOptions.map(({ key, label }) => {
+                    const isSelected = selectedKeys.language === key;
+                    return {
+                      key,
+                      label: key === 'en-US' ? 'English' : label,
+                      icon: <Icon component={() => (key === 'en-US' ? 'EN' : '中')} />,
+                      onClick: () => {
+                        setLocale((prev) => ({ ...prev, language: key }));
+                        if (key !== selectedKeys.language) {
+                          setSelectedKeys((prev) => ({ ...prev, language: key }));
+                        }
+                      },
+                      extra: isSelected ? <Badge status='processing' /> : undefined,
+                      className: cx(styles.item, `${isSelected ? 'selected selected-lang' : ''}`)
+                    };
+                  })
                 },
                 {
                   type: 'divider'

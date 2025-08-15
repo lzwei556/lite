@@ -13,8 +13,6 @@ import {
   ProjectStatistics,
   useContext
 } from '../../asset-common';
-import { wind } from '../../features/asset-wind-turbine/constants';
-import { area } from '../../asset-variant';
 import { AlarmTrend } from './alarmTrend';
 import { Icon } from './icon';
 import { usePieOptions, useProjectStatistics } from './useProjectStatistics';
