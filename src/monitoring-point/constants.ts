@@ -36,9 +36,9 @@ export type AxisKey = typeof AXIS[keyof typeof AXIS]['key'];
 export const AXIS_OPTIONS = [AXIS.X, AXIS.Y, AXIS.Z];
 
 export const AXIS_ALIAS = {
-  Axial: { key: 'axial', label: 'axis.axial' },
-  Vertical: { key: 'vertical', label: 'axis.vertical' },
-  Horizontal: { key: 'horizontal', label: 'axis.horizontal' }
+  Axial: { key: 'axial', label: 'axis.axial', abbr: 'axis.axial.abbr' },
+  Vertical: { key: 'vertical', label: 'axis.vertical', abbr: 'axis.vertical.abbr' },
+  Horizontal: { key: 'horizontal', label: 'axis.horizontal', abbr: 'axis.horizontal.abbr' }
 } as const;
 
 type MonitoringPointAttrsField = Field<NonNullable<MonitoringPointRow['attributes']>>;

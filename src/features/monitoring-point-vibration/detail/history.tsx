@@ -25,7 +25,7 @@ import {
   Point,
   PropertyLightSelectFilter
 } from '../../../asset-common';
-import { appendAxisAliasLabelToField } from '../common';
+import { appendAxisAliasAbbrToField } from '../common';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type, attributes } = point;
@@ -33,7 +33,7 @@ export const History = (point: MonitoringPointRow) => {
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const { range, numberedRange, setRange } = useRange();
   const displayProperties = Point.getPropertiesByType(type, properties).map((p) =>
-    appendAxisAliasLabelToField(p, attributes)
+    appendAxisAliasAbbrToField(p, attributes)
   );
   const [property, setProperty] = React.useState<DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined

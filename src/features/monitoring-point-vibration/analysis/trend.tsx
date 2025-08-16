@@ -36,7 +36,7 @@ export const Trend = ({
         ...axisOptions.map((o) => ({
           xAxisValues,
           data: {
-            [intl.get(o.label)]: data.map(
+            [intl.get(o.abbr)]: data.map(
               ({ values }) =>
                 values[`${property.value}${o.key.toUpperCase()}RMS` as ValuesPropertyName]
             )

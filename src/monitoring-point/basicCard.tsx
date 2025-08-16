@@ -60,21 +60,21 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
     if (axial) {
       const axis = Point.getAxis(axial);
       items.push({
-        label: intl.get(AXIS_ALIAS.Axial.label),
+        label: intl.get(AXIS_ALIAS.Axial.abbr),
         children: axis ? intl.get(axis.label) : '-'
       });
     }
     if (vertical) {
       const axis = Point.getAxis(vertical);
       items.push({
-        label: intl.get(AXIS_ALIAS.Vertical.label),
+        label: intl.get(AXIS_ALIAS.Vertical.abbr),
         children: axis ? intl.get(axis.label) : '-'
       });
     }
     if (horizontal) {
       const axis = Point.getAxis(horizontal);
       items.push({
-        label: intl.get(AXIS_ALIAS.Horizontal.label),
+        label: intl.get(AXIS_ALIAS.Horizontal.abbr),
         children: axis ? intl.get(axis.label) : '-'
       });
     }

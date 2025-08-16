@@ -57,7 +57,7 @@ export const Cross = ({ id, timestamp, property, originalDomain }: AnalysisCommo
             {selectedPointId && (
               <LightSelectFilter
                 allowClear={false}
-                options={targetAxis.axies.map((a) => ({ ...a, label: intl.get(a.label) }))}
+                options={targetAxis.axies.map((a) => ({ ...a, label: intl.get(a.abbr) }))}
                 onChange={(value) =>
                   targetAxis.setAxies((prev) =>
                     prev.map((a) => ({ ...a, selected: a.value === value }))

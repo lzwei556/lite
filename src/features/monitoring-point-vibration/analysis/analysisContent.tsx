@@ -180,7 +180,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
             />
             <LightSelectFilter
               allowClear={false}
-              options={axies.map((a) => ({ ...a, label: intl.get(a.label) }))}
+              options={axies.map((a) => ({ ...a, label: intl.get(a.abbr) }))}
               onChange={(value) =>
                 setAxies((prev) => prev.map((a) => ({ ...a, selected: a.value === value })))
               }

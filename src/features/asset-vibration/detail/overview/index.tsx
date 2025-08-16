@@ -14,7 +14,7 @@ import {
 } from '../../../../asset-common';
 import { SettingsDetail } from '../../../../asset-variant';
 import { AlarmTrend } from '../../../../views/home/alarmTrend';
-import { appendAxisAliasLabelToField } from '../../../monitoring-point-vibration/common';
+import { appendAxisAliasAbbrToField } from '../../../monitoring-point-vibration/common';
 import { useAssetContext } from '../context';
 import { MonitoringPointsStatistics } from './monitoringPointsStatistics';
 import { DianJiImage } from './dianJiImage';
@@ -116,7 +116,7 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
                   switchs: { noDataZoom: true }
                 }}
                 data={historyData}
-                property={appendAxisAliasLabelToField(
+                property={appendAxisAliasAbbrToField(
                   selectedPoint.property,
                   selectedPoint.attributes
                 )}

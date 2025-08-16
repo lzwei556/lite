@@ -13,7 +13,7 @@ import {
 } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
-import { appendAxisAliasLabelToField } from '../common';
+import { appendAxisAliasAbbrToField } from '../common';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties, attributes } = point;
@@ -49,7 +49,7 @@ export const Monitor = (point: MonitoringPointRow) => {
         children: (
           <Grid>
             {Point.getPropertiesByType(type, properties)
-              .map((p) => appendAxisAliasLabelToField(p, attributes))
+              .map((p) => appendAxisAliasAbbrToField(p, attributes))
               .filter((p) => p.group === g)
               .map((p: DisplayProperty, index: number) => {
                 return (

@@ -85,7 +85,7 @@ export const Envelope = ({
           series={ChartMark.useMergeMarkDatas({
             series: [
               {
-                data: { [intl.get(axis.label)]: y },
+                data: { [intl.get(axis.abbr)]: y },
                 xAxisValues: x.map((n) => `${n}`)
               }
             ],

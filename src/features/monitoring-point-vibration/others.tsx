@@ -49,7 +49,7 @@ function Axial(props: Omit<FieldProps, 'formItemColProps'>) {
   return (
     <SelectFormItem
       {...restFields}
-      label={AXIS_ALIAS.Axial.label}
+      label={AXIS_ALIAS.Axial.abbr}
       name={nameProp}
       selectProps={{
         options: AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))
@@ -66,7 +66,7 @@ function Vertical(props: Omit<FieldProps, 'formItemColProps'>) {
   return (
     <SelectFormItem
       {...restFields}
-      label={AXIS_ALIAS.Vertical.label}
+      label={AXIS_ALIAS.Vertical.abbr}
       name={nameProp}
       selectProps={{
         options: AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))
@@ -83,7 +83,7 @@ function Horizontal(props: Omit<FieldProps, 'formItemColProps'>) {
   return (
     <SelectFormItem
       {...restFields}
-      label={AXIS_ALIAS.Horizontal.label}
+      label={AXIS_ALIAS.Horizontal.abbr}
       name={nameProp}
       selectProps={{
         options: AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }))

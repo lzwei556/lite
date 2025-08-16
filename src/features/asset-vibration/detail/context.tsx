@@ -70,10 +70,10 @@ export function getPropertyValues(m: MonitoringPointRow, properties: DisplayProp
   properties.forEach(({ fields = [], key, name, precision, unit }) => {
     if (fields.length > 1) {
       items.push(
-        ...Object.values(AXIS_ALIAS).map(({ key: aliasKey, label }) => {
+        ...Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
           const attrs = m.attributes;
           const axisKey = attrs?.[aliasKey];
-          const title = `${intl.get(name)} ${intl.get(label)}`;
+          const title = `${intl.get(name)} ${intl.get(abbr)}`;
           return {
             label: truncate(title, 24),
             title,

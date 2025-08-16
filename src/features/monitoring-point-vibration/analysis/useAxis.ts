@@ -1,10 +1,10 @@
 import React from 'react';
 import { AXIS, AXIS_ALIAS, AxisKey, MonitoringPointRow, Point } from '../../../asset-common';
 
-export type Axis = { label: string; value: number; selected?: boolean; key: AxisKey };
+export type Axis = { abbr: string; value: number; selected?: boolean; key: AxisKey };
 
 export const getAxisOptions = (attrs?: MonitoringPointRow['attributes']) => {
-  return Object.values(AXIS_ALIAS).map(({ key, label }, i) => {
+  return Object.values(AXIS_ALIAS).map(({ key, abbr }, i) => {
     let defaultAxisKey: AxisKey = AXIS.Z.key;
     switch (key) {
       case AXIS_ALIAS.Axial.key:
@@ -19,7 +19,7 @@ export const getAxisOptions = (attrs?: MonitoringPointRow['attributes']) => {
     }
     const axisKey = attrs?.[key] ?? defaultAxisKey;
     const axis = Point.getAxis(axisKey)!;
-    return { label, key: axis.key, value: axis.value, selected: i === 0 } as Axis;
+    return { abbr, key: axis.key, value: axis.value, selected: i === 0 } as Axis;
   });
 };
 

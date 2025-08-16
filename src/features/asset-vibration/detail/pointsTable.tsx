@@ -35,7 +35,7 @@ export const PointsTable = (props: {
       positionColumn,
       ...[
         {
-          title: intl.get(AXIS_ALIAS.Axial.label),
+          title: intl.get(AXIS_ALIAS.Axial.abbr),
           key: AXIS_ALIAS.Axial.key,
           render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.axial);
@@ -43,7 +43,7 @@ export const PointsTable = (props: {
           }
         },
         {
-          title: intl.get(AXIS_ALIAS.Vertical.label),
+          title: intl.get(AXIS_ALIAS.Vertical.abbr),
           key: AXIS_ALIAS.Vertical.key,
           render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.vertical);
@@ -51,7 +51,7 @@ export const PointsTable = (props: {
           }
         },
         {
-          title: intl.get(AXIS_ALIAS.Horizontal.label),
+          title: intl.get(AXIS_ALIAS.Horizontal.abbr),
           key: AXIS_ALIAS.Horizontal.key,
           render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.horizontal);

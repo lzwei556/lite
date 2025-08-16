@@ -144,7 +144,7 @@ function getPropertyedCols(
       measurement.type === MonitoringPointTypeValue.Vibration ||
       measurement.type === MonitoringPointTypeValue.VibrationRotation
     ) {
-      children = Object.values(AXIS_ALIAS).map(({ key: aliasKey, label }) => {
+      children = Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
         return {
           key: aliasKey,
           render: (d: MonitoringPointRow) => {
@@ -155,7 +155,7 @@ function getPropertyedCols(
               precision
             });
           },
-          title: intl.get(label)
+          title: intl.get(abbr)
         };
       });
     }

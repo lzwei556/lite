@@ -104,17 +104,17 @@ export function handleSubmit(
   }
 }
 
-export function appendAxisAliasLabelToField(
+export function appendAxisAliasAbbrToField(
   property: DisplayProperty,
   attrs?: MonitoringPointRow['attributes']
 ) {
   let fields = property.fields ?? [];
   const isMultiple = fields.length > 1;
   if (isMultiple) {
-    fields = Object.values(AXIS_ALIAS).map(({ key, label }) => {
+    fields = Object.values(AXIS_ALIAS).map(({ key, abbr }) => {
       const axisKey = attrs?.[key];
       const field = fields.find((field) => axisKey === field.key.replace(`${property.key}_`, ''))!;
-      return { ...field, alias: label };
+      return { ...field, alias: abbr };
     });
   }
   return { ...property, fields } as DisplayProperty;
