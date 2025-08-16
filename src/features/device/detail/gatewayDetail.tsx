@@ -7,6 +7,7 @@ import { Network } from '../../../types/network';
 import { Topology } from '../../../network';
 import { DeviceStatus } from '../device-status';
 import { useBasisFields } from './sensorDetail';
+import { DeviceChildrenStatistics } from '../device-children-statistics';
 
 export const GatewayDetail = ({ device, network }: { device: Device; network?: Network }) => {
   const basisFields = useBasisFields(device);
@@ -26,6 +27,7 @@ export const GatewayDetail = ({ device, network }: { device: Device; network?: N
       </Col>
       <Col flex='300px'>
         <Grid>
+          <DeviceChildrenStatistics devices={network.nodes} />
           <DeviceStatus device={device} />
           <Col span={24}>
             <MutedCard title={intl.get('BASIC_INFORMATION')}>
