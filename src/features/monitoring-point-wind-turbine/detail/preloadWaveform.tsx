@@ -6,17 +6,16 @@ import { getValue } from '../../../utils/format';
 import { Metadata, PropertyLightSelectFilter } from '../../../asset-common';
 import { PreloadWaveData } from './dynamic/types';
 
-const fields = [{ label: 'mV', value: 'mv', unit: '', precision: 2 }];
-const metaData = [
-  { label: 'FIELD_PRELOAD', value: 'preload', unit: 'kN', precision: 0 },
-  { label: 'FIELD_PRESSURE', value: 'pressure', unit: 'MPa', precision: 0 },
-  { label: 'FIELD_TOF', value: 'tof', unit: 'ns', precision: 0 },
-  { label: 'FIELD_TEMPERATURE', value: 'temperature', unit: '℃', precision: 1 },
-  { label: 'FIELD_LENGTH', value: 'thickness', unit: 'mm', precision: 1 }
-];
-
 export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T }) {
   const { values } = props;
+  const fields = [{ label: intl.get('amplitude'), value: 'mv', unit: 'mv', precision: 2 }];
+  const metaData = [
+    { label: 'FIELD_PRELOAD', value: 'preload', unit: 'kN', precision: 0 },
+    { label: 'FIELD_PRESSURE', value: 'pressure', unit: 'MPa', precision: 0 },
+    { label: 'FIELD_TOF', value: 'tof', unit: 'ns', precision: 0 },
+    { label: 'FIELD_TEMPERATURE', value: 'temperature', unit: '℃', precision: 1 },
+    { label: 'FIELD_LENGTH', value: 'thickness', unit: 'mm', precision: 1 }
+  ];
   const [field, setField] = React.useState(fields[0]);
 
   const renderMeta = () => {
@@ -34,6 +33,25 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
 
   const getMetaProperty = (meta: Metadata, metaValue: string, unit: string, precision: number) => {
     return getValue({ value: meta[metaValue], unit, precision });
+  };
+
+  const calculatePadding = (data: number[]) => {
+    const origin = 7;
+    const paddingLeft = 2;
+    const paddingRight = 1;
+    const paddingLeftLength = Math.floor((paddingLeft * data.length) / origin);
+    const paddingRightLength = Math.floor((paddingRight * data.length) / origin);
+    const interval =
+      ((Math.max(...data) - Math.min(...data)) / data.length) *
+      (origin / (origin + paddingLeft + paddingRight));
+    const paddingLefts = Array(paddingLeftLength)
+      .fill(data[0])
+      .map((n, i) => n - (i + 1) * interval)
+      .reverse();
+    const paddingRights = Array(paddingRightLength)
+      .fill(data[data.length - 1])
+      .map((n, i) => n + (i + 1) * interval);
+    return [paddingLefts, paddingRights];
   };
 
   const renderChart = () => {
@@ -68,12 +86,22 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
       startValue = index - offsetLeft;
       endValue = index + offsetRight;
     }
+    const [paddingLefts, paddingRights] = calculatePadding(tofs);
+
     return (
       <LineChart
         series={[
           {
-            data: { [field.label]: values['mv'] },
-            xAxisValues: tofs.map((n) => `${n}`),
+            data: {
+              [field.label]: [
+                ...Array(paddingLefts.length).fill(0),
+                ...values['mv'],
+                ...Array(paddingRights.length).fill(0)
+              ]
+            },
+            xAxisValues: [...paddingLefts, ...tofs, ...paddingRights].map((value) =>
+              getValue({ value })
+            ),
             raw: { smooth: true }
           }
         ]}
@@ -82,11 +110,12 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
           opts: {
             xAxis: { name: 'ns' },
             // dataZoom: isContained ? [{ startValue, endValue }] : [{ start: 70, end: 100 }]
+            yAxis: { name: field.unit },
             dataZoom: [{ start: 0, end: 100 }],
             grid: { top: 60, bottom: 60, right: 40 }
           }
         }}
-        yAxisMeta={{ precision: field.precision }}
+        yAxisMeta={field}
       />
     );
   };
@@ -98,18 +127,18 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
       </Col>
       <Col span={24}>
         <Card
-          extra={
-            <PropertyLightSelectFilter
-              onChange={(value) => {
-                const field = fields.find((f) => f.value === value);
-                if (field) {
-                  setField(field);
-                }
-              }}
-              properties={fields.map(({ label, value }) => ({ name: label, key: value }))}
-              value={field.value}
-            />
-          }
+        // extra={
+        //   <PropertyLightSelectFilter
+        //     onChange={(value) => {
+        //       const field = fields.find((f) => f.value === value);
+        //       if (field) {
+        //         setField(field);
+        //       }
+        //     }}
+        //     properties={fields.map(({ label, value }) => ({ name: label, key: value }))}
+        //     value={field.value}
+        //   />
+        // }
         >
           {renderChart()}
         </Card>
