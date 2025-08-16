@@ -68,7 +68,11 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
           }}
         />
         <TextFormItem label='DATE_RANGE'>
-          <RangeDatePicker onChange={setRange} style={{ width: '100%' }} />
+          <RangeDatePicker
+            onChange={setRange}
+            style={{ width: '100%' }}
+            defaultValue={props.range}
+          />
         </TextFormItem>
       </Form>
     </ModalWrapper>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Space as AntSpace } from 'antd';
+import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
 import {
   Card,
@@ -63,7 +63,16 @@ export const History = (point: MonitoringPointRow) => {
       <Col span={24}>
         <Card>
           <Flex>
-            <RangeDatePicker onChange={setRange} />
+            <Space>
+              <RangeDatePicker onChange={setRange} />
+              <HasPermission value={Permission.MeasurementDataDownload}>
+                <DownloadIconButton
+                  onClick={() => {
+                    setVisible(true);
+                  }}
+                />
+              </HasPermission>
+            </Space>
           </Flex>
         </Card>
       </Col>
@@ -72,7 +81,7 @@ export const History = (point: MonitoringPointRow) => {
           extra={
             hasData(historyData) &&
             property && (
-              <AntSpace direction={isMobile ? 'vertical' : 'horizontal'}>
+              <Space direction={isMobile ? 'vertical' : 'horizontal'}>
                 <PropertyLightSelectFilter
                   onChange={(value: string) => {
                     setProperty(displayProperties.find((item: any) => item.key === value));
@@ -80,13 +89,6 @@ export const History = (point: MonitoringPointRow) => {
                   properties={displayProperties}
                   value={property.key}
                 />
-                <HasPermission value={Permission.MeasurementDataDownload}>
-                  <DownloadIconButton
-                    onClick={() => {
-                      setVisible(true);
-                    }}
-                  />
-                </HasPermission>
                 <HasPermission value={Permission.MeasurementDataDelete}>
                   <DeleteIconButton
                     confirmProps={{
@@ -103,7 +105,7 @@ export const History = (point: MonitoringPointRow) => {
                     buttonProps={{ size: 'middle', variant: 'filled' }}
                   />
                 </HasPermission>
-              </AntSpace>
+              </Space>
             )
           }
           title={name}

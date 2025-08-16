@@ -1,14 +1,13 @@
 import React from 'react';
 import { Space as AntSpace, Spin } from 'antd';
 import { DisplayProperty } from '../../../constants/properties';
-import { Card, DownloadIconButton } from '../../../components';
+import { Card } from '../../../components';
 import { isMobile } from '../../../utils/deviceDetection';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
 import { HistoryDataFea } from '../..';
 import { Dayjs } from '../../../utils';
 import {
-  DownloadData,
   hasData,
   HistoryData,
   MonitoringPointRow,
@@ -34,7 +33,6 @@ export const HistoryChartCard = ({
   const [property, setProperty] = React.useState<DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined
   );
-  const [open, setVisible] = React.useState(false);
 
   if (loading) {
     return <Spin />;
@@ -53,25 +51,9 @@ export const HistoryChartCard = ({
               properties={displayProperties}
               value={property.key}
             />
-            <HasPermission value={Permission.MeasurementDataDownload}>
-              <DownloadIconButton
-                onClick={() => {
-                  setVisible(true);
-                }}
-              />
-            </HasPermission>
             <HasPermission value={Permission.MeasurementDataDelete}>
               {deleteIconButton}
             </HasPermission>
-            {open && (
-              <DownloadData
-                measurement={point}
-                open={open}
-                onSuccess={() => setVisible(false)}
-                onCancel={() => setVisible(false)}
-                range={range}
-              />
-            )}
           </AntSpace>
         )
       }

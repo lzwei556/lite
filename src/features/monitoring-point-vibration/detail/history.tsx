@@ -73,13 +73,6 @@ export const History = (point: MonitoringPointRow) => {
                 properties={displayProperties}
                 value={property!.key}
               />
-              <HasPermission value={Permission.MeasurementDataDownload}>
-                <DownloadIconButton
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                />
-              </HasPermission>
               <HasPermission value={Permission.MeasurementDataDelete}>
                 <DeleteIconButton
                   confirmProps={{
@@ -130,7 +123,16 @@ export const History = (point: MonitoringPointRow) => {
       <Col span={24}>
         <Card>
           <Flex>
-            <RangeDatePicker onChange={setRange} />
+            <Space>
+              <RangeDatePicker onChange={setRange} />
+              <HasPermission value={Permission.MeasurementDataDownload}>
+                <DownloadIconButton
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                />
+              </HasPermission>
+            </Space>
           </Flex>
         </Card>
       </Col>

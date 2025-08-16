@@ -1,11 +1,22 @@
 import React from 'react';
-import { Col } from 'antd';
+import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Flex, Grid, useRange, RangeDatePicker, DeleteIconButton } from '../../../components';
+import {
+  Card,
+  Flex,
+  Grid,
+  useRange,
+  RangeDatePicker,
+  DeleteIconButton,
+  DownloadIconButton
+} from '../../../components';
 import { isMobile } from '../../../utils/deviceDetection';
 import { Dayjs } from '../../../utils';
+import HasPermission from '../../../permission';
+import { Permission } from '../../../permission/permission';
 import {
   clearHistory,
+  DownloadData,
   getDataOfMonitoringPoint,
   HistoryData,
   MonitoringPointRow,
@@ -21,6 +32,7 @@ export const History = (point: MonitoringPointRow) => {
   const { range, numberedRange, setRange } = useRange();
   const [from, to] = numberedRange;
   const isTowerRelated = Point.Assert.isTowerRelated(type);
+  const [open, setVisible] = React.useState(false);
 
   const fetchData = (id: number, range: [number, number]) => {
     if (range) {
@@ -46,7 +58,25 @@ export const History = (point: MonitoringPointRow) => {
       <Col span={24}>
         <Card>
           <Flex>
-            <RangeDatePicker onChange={setRange} />
+            <Space>
+              <RangeDatePicker onChange={setRange} />
+              <HasPermission value={Permission.MeasurementDataDownload}>
+                <DownloadIconButton
+                  onClick={() => {
+                    setVisible(true);
+                  }}
+                />
+              </HasPermission>
+              {open && (
+                <DownloadData
+                  measurement={point}
+                  open={open}
+                  onSuccess={() => setVisible(false)}
+                  onCancel={() => setVisible(false)}
+                  range={range}
+                />
+              )}
+            </Space>
           </Flex>
         </Card>
       </Col>
