@@ -17,6 +17,13 @@ export const TabsDetail = ({
 }) => {
   const [activeKey, setActiveKey] = React.useState(items?.[0]?.key);
 
+  React.useEffect(() => {
+    const isActiveKeyValid = items.map(({ key }) => key).includes(activeKey);
+    if (activeKey && !isActiveKeyValid && items.length > 0) {
+      setActiveKey(items[0].key);
+    }
+  }, [items, activeKey]);
+
   return (
     <Grid>
       <Col span={24}>
@@ -38,7 +45,7 @@ export const TabsDetail = ({
       </Col>
       {items.length > 0 && (
         <Col span={24}>
-          {items.find((item) => item.key === (activeKey ?? items?.[0]?.key))?.content}
+          {items.find((item) => item.key === (activeKey ?? items[0].key))?.content}
         </Col>
       )}
     </Grid>

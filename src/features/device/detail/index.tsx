@@ -52,7 +52,7 @@ const DeviceDetailPage = () => {
     }
     if (DeviceType.isSensor(deviceTypeId) && hasPermission(Permission.DeviceData)) {
       tabs.push({
-        key: 'historyData',
+        key: 'history',
         label: intl.get('HISTORY_DATA'),
         content: device && <HistoryDataPage device={device} key={device.id} />
       });
@@ -61,7 +61,7 @@ const DeviceDetailPage = () => {
       hasPermission(Permission.DeviceRuntimeDataGet)
     ) {
       tabs.push({
-        key: 'status',
+        key: 'history',
         label: intl.get('STATUS_HISTORY'),
         content: device && <RuntimeChart device={device} key={device.id} />
       });
