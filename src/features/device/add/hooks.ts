@@ -12,6 +12,23 @@ import { FormCommonProps, transformSettings, useGroupCardProps } from '../settin
 import * as Basis from '../basis-form-items';
 import { useContext } from '..';
 
+export const useProps2 = () => {
+  const formProps = useFormBindingsProps({
+    layout: 'vertical',
+    initialValues: { ...transform(), protocol: Basis.WanProtocol.Tlv }
+  });
+  const { form } = formProps;
+  const { success, ...createProps } = useCreate(form);
+
+  return {
+    formProps,
+    success,
+    ...createProps.successProps,
+    handleSubmit: createProps.handleSubmit,
+    ...useFormSectionProps(form)
+  };
+};
+
 export const useProps = (props: ModalFormProps) => {
   const formProps = useFormBindingsProps({
     layout: 'vertical',
@@ -40,7 +57,7 @@ type CreateProps = {
   handleSubmit: (values: any) => void;
 };
 
-const useCreate = (form: FormCommonProps['form'], onSuccess: () => void): CreateProps => {
+const useCreate = (form: FormCommonProps['form'], onSuccess?: () => void): CreateProps => {
   const [success, setSuccess] = React.useState(false);
   const { refresh } = useContext();
 

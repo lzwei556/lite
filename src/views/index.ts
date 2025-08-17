@@ -6,6 +6,7 @@ export const VirtualAssetDetail = lazy(() => import('../views/home/virtualAssetD
 export const Asset = lazy(() => import('../views/home/main'));
 export const Device = lazy(() => import('../features/device'));
 export const DeviceVirtual = lazy(() => import('../features/device/virtual'));
+export const DeviceCreate = lazy(() => import('../features/device/add/create'));
 export const DeviceDetail = lazy(() => import('../features/device/detail'));
 export const ImportNetwork = lazy(() => import('../network/import'));
 export const AlarmRecord = lazy(() => import('../features/alarm/record'));

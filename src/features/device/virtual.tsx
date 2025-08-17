@@ -11,7 +11,6 @@ import { Dayjs } from '../../utils';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
 import { getProject } from '../../utils/session';
-import { AddModal } from './add/modal';
 import { DeviceNS, getValueOfFirstClassProperty } from './util';
 import { useContext } from '.';
 
@@ -23,7 +22,6 @@ export const VIRTUAL_ROOT_DEVICE = {
 
 export default function Virtual() {
   const { devices } = useContext();
-  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
   const renderBody = () => {
@@ -94,21 +92,13 @@ export default function Virtual() {
               </HasPermission>
               <IconButton
                 icon={<PlusOutlined />}
-                onClick={() => setOpen(true)}
+                onClick={() => navigate('/devices/0/create')}
                 tooltipProps={{
                   title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
                 }}
                 type='primary'
                 variant='solid'
               />
-
-              {open && (
-                <AddModal
-                  open={open}
-                  onCancel={() => setOpen(false)}
-                  onSuccess={() => setOpen(false)}
-                />
-              )}
             </Button.Group>
           }
           paddingBlock={14}

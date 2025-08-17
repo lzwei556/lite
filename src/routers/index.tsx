@@ -24,7 +24,8 @@ import {
   User,
   ImportNetwork,
   AlarmRecord,
-  DeviceVirtual
+  DeviceVirtual,
+  DeviceCreate
 } from '../views';
 import { PrimaryLayout } from '../views/layout/primaryLayout';
 import { useLocaleContext } from '../localeProvider';
@@ -115,6 +116,7 @@ const AppRouter = () => {
                     <Route index element={<DeviceVirtual />} />
                     <Route path='import' element={<ImportNetwork />} />
                     <Route path=':id' element={<DeviceDetail />} />
+                    <Route path=':id/create' element={<DeviceCreate />} />
                     <Route path='0' element={<DeviceVirtual />} />
                   </Route>
                   <Route path='alarmRules' element={<AlarmRuleGroups />} />

@@ -1,28 +1,26 @@
 import React from 'react';
 import { Button } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
+import intl from 'react-intl-universal';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
 import { DeleteIconButton, DownloadIconButton, IconButton } from '../../../components';
-import intl from 'react-intl-universal';
 import { DeleteNetworkRequest, ExportNetworkRequest } from '../../../apis/network';
-import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
-import { CommandDropdown } from '../commandDropdown';
-import DownloadModal from './downloadModal';
 import { DeleteDeviceRequest } from '../../../apis/device';
 import { Network } from '../../../network';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from '..';
-import { AddModal } from '../add/modal';
+import { CommandDropdown } from '../commandDropdown';
+import DownloadModal from './downloadModal';
 
 export const HeadRight = ({ device, network }: { device: Device; network?: Network }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { setDevice, refresh } = useContext();
-
   const [open, setOpen] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
+
   return (
     <Button.Group style={{ marginLeft: 30 }}>
       {DeviceType.isGateway(device.typeId) && network && (
@@ -70,21 +68,13 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
           </HasPermission>
           <IconButton
             icon={<PlusOutlined />}
-            onClick={() => setOpen2(true)}
+            onClick={() => navigate('create')}
             tooltipProps={{
               title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
             }}
             type='primary'
             variant='solid'
           />
-
-          {open2 && (
-            <AddModal
-              open={open2}
-              onCancel={() => setOpen2(false)}
-              onSuccess={() => setOpen2(false)}
-            />
-          )}
         </>
       )}
       {DeviceType.isRootDevice(device.typeId) && !DeviceType.isGateway(device.typeId) && (
