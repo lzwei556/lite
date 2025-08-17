@@ -36,7 +36,7 @@ export const useGroupedSettings = (settings: DeviceSetting[], deviceType?: Devic
   }
   const sampleRelatedFields = useSampleRelatedFields(deviceType, settings);
   const waveRelatedFields = useWaveRealtedFields(mode, action, settings);
-  if (mode === 0 || action === 1) {
+  if (mode !== 1) {
     settingsFields.push(...commonSampleRelatedFields, ...sampleRelatedFields, ...waveRelatedFields);
   } else if (action === 2) {
     settingsFields.push(...sampleRelatedFields);
@@ -61,31 +61,35 @@ function useAcquisitionModeRelatedFields(settings?: DeviceSetting[]) {
   const off_threshold = settings?.find((s) => s.key === 'off_threshold');
   const trigger_period = settings?.find((s) => s.key === 'trigger_period');
   const trigger_delay = settings?.find((s) => s.key === 'trigger_delay');
+  const trigger_silent_period = settings?.find((s) => s.key === 'trigger_silent_period');
+  const trigger_acquisition_count = settings?.find((s) => s.key === 'trigger_acquisition_count');
   const [mode, setMode] = React.useState<number>(acquisition_mode ? acquisition_mode.value : 0);
-  const [action, setAction] = React.useState<number>(trigger_action ? trigger_action.value : 1);
+  const [action, setAction] = React.useState<number>(trigger_action ? trigger_action.value : 2);
 
   const fields: DeviceSetting[] = [];
   if (!settings || settings.length === 0 || !acquisition_mode) return { mode, action, fields };
   fields.push({ ...acquisition_mode, onChange: setMode });
   if (mode !== 0) {
-    const actionRelatedFields: DeviceSetting[] = [];
     if (trigger_action) {
-      actionRelatedFields.push({ ...trigger_action, onChange: setAction });
+      fields.push({ ...trigger_action, onChange: setAction });
     }
     if (on_threshold) {
-      actionRelatedFields.push(on_threshold);
+      fields.push(on_threshold);
     }
-    if (action === 1 && off_threshold) {
-      actionRelatedFields.push(off_threshold);
+    if (off_threshold) {
+      fields.push(off_threshold);
     }
     if (trigger_period) {
-      actionRelatedFields.push(trigger_period);
+      fields.push(trigger_period);
     }
     if (trigger_delay) {
-      actionRelatedFields.push(trigger_delay);
+      fields.push(trigger_delay);
     }
-    if (actionRelatedFields.length > 0) {
-      fields.push(...actionRelatedFields);
+    if (trigger_silent_period) {
+      fields.push(trigger_silent_period);
+    }
+    if (trigger_acquisition_count) {
+      fields.push(trigger_acquisition_count);
     }
   }
 
@@ -181,7 +185,9 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
   }
   if (!settings || settings.length === 0) return [];
   if (isWaveformOnce) {
-    return waveFields.filter((s) => s.key !== 'sample_period_2' && s.key !== 'sample_offset_2');
+    return waveFields
+      .filter((s) => s.key !== 'sample_period_2' && s.key !== 'sample_offset_2')
+      .concat([...waveFields2, ...waveFields3]);
   } else if (enabledField) {
     return enabled ? [enabledField, ...waveFields, ...waveFields2, ...waveFields3] : [enabledField];
   } else {
