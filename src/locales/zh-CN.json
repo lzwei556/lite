@@ -1336,5 +1336,6 @@
   "motors": "电机",
   "pipes": "管道",
   "tanks": "罐体",
-  "asset.devices": "设备"
+  "asset.devices": "设备",
+  "network.topology": "网络拓扑"
 }

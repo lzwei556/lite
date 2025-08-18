@@ -3,7 +3,7 @@ import { BasicDataNode } from 'antd/es/tree';
 import { mapTree } from '../../utils/tree';
 import { Device } from '../../types/device';
 import { toMac } from '../../utils/format';
-import { CardProps } from '../../components';
+import { Card, CardProps } from '../../components';
 import { useGlobalStyles } from '../../styles';
 import { TreeChart } from './treeChart';
 
@@ -20,7 +20,7 @@ export const Preview = ({ devices, ...rest }: { devices: DeviceEx[] } & CardProp
   const { colorWarningHoverStyle, colorTextStyle } = useGlobalStyles();
   const leaveNodes = [];
   const treeData: DeviceTreeNode[] = mapTree(buildDeviceTreeData(devices, devices[0]), (device) => {
-    if (!device.hasOwnProperty('children')) {
+    if (!device.hasOwnProperty('children') || device.children.length === 0) {
       leaveNodes.push(device);
     }
     return {
@@ -29,7 +29,15 @@ export const Preview = ({ devices, ...rest }: { devices: DeviceEx[] } & CardProp
     };
   });
 
-  return <TreeChart {...rest} treeData={treeData} height={Math.max(leaveNodes.length * 70, 700)} />;
+  return (
+    <Card
+      {...rest}
+      style={{ height: 'calc(100vh - 178px)' }}
+      styles={{ body: { maxHeight: 'calc(100vh - 234px)', overflow: 'auto' } }}
+    >
+      <TreeChart {...rest} treeData={treeData} height={Math.max(leaveNodes.length * 70, 600)} />
+    </Card>
+  );
 };
 
 function buildDeviceTreeData(devices: DeviceEx[], root: DeviceEx): DeviceTreeNode[] {

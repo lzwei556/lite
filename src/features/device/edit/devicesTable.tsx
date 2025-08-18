@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dropdown, MenuProps, Space } from 'antd';
+import { Dropdown, MenuProps, Space } from 'antd';
 import { CodeOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Device } from '../../../types/device';

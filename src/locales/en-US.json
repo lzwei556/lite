@@ -1336,5 +1336,6 @@
   "motors": "Motros",
   "pipes": "Pipes",
   "tanks": "Tanks",
-  "asset.devices": "Devices"
+  "asset.devices": "Devices",
+  "network.topology": "Topology"
 }
