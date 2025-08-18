@@ -92,7 +92,7 @@ export default function Virtual() {
               </HasPermission>
               <IconButton
                 icon={<PlusOutlined />}
-                onClick={() => navigate('/devices/0/create')}
+                onClick={() => navigate('/devices/0/create', { state: { from: '/devices/0' } })}
                 tooltipProps={{
                   title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
                 }}

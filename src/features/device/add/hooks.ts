@@ -12,20 +12,20 @@ import { FormCommonProps, transformSettings, useGroupCardProps } from '../settin
 import * as Basis from '../basis-form-items';
 import { useContext } from '..';
 
-export const useProps2 = () => {
+export const useProps2 = (onSuccess: () => void) => {
   const formProps = useFormBindingsProps({
     layout: 'vertical',
     initialValues: { ...transform(), protocol: Basis.WanProtocol.Tlv }
   });
   const { form } = formProps;
-  const { success, ...createProps } = useCreate(form);
+  const { success, ...createProps } = useCreate(form, onSuccess);
 
   return {
     formProps,
     success,
     ...createProps.successProps,
     handleSubmit: createProps.handleSubmit,
-    ...useFormSectionProps(form)
+    ...useFormSectionProps(form, generateColProps({ xl: 12, xxl: 8 }))
   };
 };
 
@@ -104,7 +104,7 @@ const useCreate = (form: FormCommonProps['form'], onSuccess?: () => void): Creat
           setSuccess(false);
         }
       },
-      closeButtonProps: { children: intl.get('close'), onClick: onSuccess }
+      closeButtonProps: { children: intl.get('RETURN'), onClick: onSuccess }
     },
     handleSubmit
   };
@@ -127,9 +127,11 @@ const useModalProps = (
   });
 };
 
-const useFormSectionProps = (form: FormCommonProps['form']) => {
+const useFormSectionProps = (
+  form: FormCommonProps['form'],
+  formItemColProps = generateColProps({ xl: 12, xxl: 12 })
+) => {
   const { deviceType, settings } = Basis.useContext();
-  const formItemColProps = generateColProps({ xl: 12, xxl: 12 });
   return {
     deviceType,
     basis: {

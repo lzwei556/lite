@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Breadcrumb, Button, Col, Form, Result } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Grid, Link, SaveIconButton, TitleExtraLayout } from '../../../components';
@@ -10,7 +10,7 @@ import { useContext } from '..';
 import { DeviceNavigator } from '../navigator';
 import { useProps2 } from './hooks';
 
-export default function Create({ parentName }: { parentName?: string }) {
+export default function Create() {
   return (
     <Basis.ContextProvier>
       <CreateForm />
@@ -18,7 +18,9 @@ export default function Create({ parentName }: { parentName?: string }) {
   );
 }
 
-const CreateForm = ({ parentName }: { parentName?: string }) => {
+const CreateForm = () => {
+  const navigate = useNavigate();
+  const { pathname, state } = useLocation();
   const {
     handleSubmit,
     success,
@@ -30,9 +32,13 @@ const CreateForm = ({ parentName }: { parentName?: string }) => {
     basis,
     settings,
     wsn
-  } = useProps2();
+  } = useProps2(() => {
+    if (state && state.from) {
+      navigate(state.from);
+    }
+  });
   const { device } = useContext();
-  const { pathname } = useLocation();
+
   const id = Number(pathname.split('/')[2]);
 
   return (
@@ -40,28 +46,42 @@ const CreateForm = ({ parentName }: { parentName?: string }) => {
       <Col span={24}>
         <TitleExtraLayout
           title={
-            <Breadcrumb
-              items={[
-                { title: <Link to='/devices/0'>{parentName ?? VIRTUAL_ROOT_DEVICE.name}</Link> },
-                { title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') }) }
-              ]}
-            />
+            device && device.id === id ? (
+              <DeviceNavigator
+                device={device}
+                suffix={{ title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') }) }}
+              />
+            ) : (
+              <Breadcrumb
+                items={[
+                  { title: <Link to='/devices/0'>{VIRTUAL_ROOT_DEVICE.name}</Link> },
+                  { title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') }) }
+                ]}
+              />
+            )
           }
           extra={
-            <SaveIconButton color='primary' onClick={handleSubmit} size='middle' variant='solid' />
+            <SaveIconButton
+              color='primary'
+              onClick={() => formProps.form?.validateFields().then(handleSubmit)}
+              size='middle'
+              variant='solid'
+            />
           }
           paddingBlock={14}
         />
       </Col>
       <Col span={24}>
         {success && (
-          <Result
-            {...result}
-            extra={[
-              <Button key='continue' {...continueButtonProps} />,
-              <Button key='close' {...closeButtonProps} />
-            ]}
-          />
+          <Card>
+            <Result
+              {...result}
+              extra={[
+                <Button key='continue' {...continueButtonProps} />,
+                <Button key='close' {...closeButtonProps} />
+              ]}
+            />
+          </Card>
         )}
         {!success && (
           <Form {...formProps}>

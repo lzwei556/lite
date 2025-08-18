@@ -12,10 +12,12 @@ export type TreeFlatListItem = DeviceTreeNode & { path: number[] };
 
 export const DeviceNavigator = ({
   device,
-  showStatus = true
+  showStatus = true,
+  suffix
 }: {
   device: Device;
   showStatus?: boolean;
+  suffix?: NonNullable<BreadcrumbProps['items']>[0];
 }) => {
   const { id } = device;
   const items: BreadcrumbProps['items'] = [];
@@ -30,13 +32,16 @@ export const DeviceNavigator = ({
           .map((mix, index) => ({
             title: mix && (
               <BreadcrumbItemTitle
-                isLast={paths.length - 1 === index}
+                isLast={suffix ? false : paths.length - 1 === index}
                 mix={{ ...mix, name: truncate(mix.name, 30) }}
                 list={list}
               />
             )
           }))
       );
+      if (items.length > 0 && suffix) {
+        items.push(suffix);
+      }
     }
   }
 

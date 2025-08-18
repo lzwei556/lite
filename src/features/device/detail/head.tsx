@@ -68,7 +68,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
           </HasPermission>
           <IconButton
             icon={<PlusOutlined />}
-            onClick={() => navigate('create')}
+            onClick={() => navigate('create', { state: { from: location.pathname } })}
             tooltipProps={{
               title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
             }}
