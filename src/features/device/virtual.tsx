@@ -1,17 +1,18 @@
 import React from 'react';
-import { Badge, Button, Col, Empty, Space, Statistic, Typography } from 'antd';
+import { Button, Col, Empty } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import HasPermission from '../../permission';
 import { Permission } from '../../permission/permission';
-import { Card, Flex, Grid, IconButton, Link, TitleExtraLayout } from '../../components';
-import { generateColProps } from '../../utils/grid';
-import { Dayjs } from '../../utils';
+import { Card, Grid, IconButton, Link, MutedCard, Table, TitleExtraLayout } from '../../components';
+import { Dayjs, getDisplayName, getValue, toMac } from '../../utils';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
 import { getProject } from '../../utils/session';
-import { DeviceNS, getValueOfFirstClassProperty } from './util';
+import { SingleDeviceStatus } from '../../device/SingleDeviceStatus';
+import { useLocaleContext } from '../../localeProvider';
+import { DeviceNS } from './util';
 import { useContext } from '.';
 
 export const VIRTUAL_ROOT_DEVICE = {
@@ -23,6 +24,7 @@ export const VIRTUAL_ROOT_DEVICE = {
 export default function Virtual() {
   const { devices } = useContext();
   const navigate = useNavigate();
+  const { language } = useLocaleContext();
 
   const renderBody = () => {
     if (devices.length === 0) {
@@ -34,41 +36,128 @@ export default function Virtual() {
     } else {
       return (
         <Grid>
-          {devices.filter(DeviceNS.Assert.isRoot).map((d) => {
-            const { id, name, state } = d;
-            const isOnline = state && state.isOnline;
-            const connectedAt = state && state.connectedAt;
-            const channel = d.data?.values?.channel;
-
-            return (
-              <Col key={id} {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })}>
-                <Link to={`/devices/${id}`}>
-                  <Card size='small' hoverable={true}>
-                    <Flex justify='space-between'>
-                      {name}
-                      {channel ? ` (${intl.get('CHANNEL')}${channel})` : undefined}
-                      <Badge
-                        text={isOnline ? intl.get('ONLINE') : intl.get('OFFLINE')}
-                        status={isOnline ? 'success' : 'default'}
-                        size='small'
-                      />
-                    </Flex>
-                    <div style={{ paddingBlock: 20, textAlign: 'center' }}>
-                      <DataBar device={d} devices={devices} />
-                    </div>
-                    <Card.Meta
-                      description={
-                        <Space>
-                          {intl.get('LAST_CONNECTION_TIME')}
-                          <span>{connectedAt ? Dayjs.format(state.connectedAt) : '-'}</span>
-                        </Space>
+          <Col span={24}>
+            <MutedCard title={intl.get('gateways')}>
+              <Table
+                bordered={true}
+                cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
+                columns={[
+                  {
+                    dataIndex: 'name',
+                    key: 'name',
+                    title: intl.get('DEVICE_NAME'),
+                    render: (name: string, device: Device) => (
+                      <Link to={`/devices/${device.id}`}>{name}</Link>
+                    )
+                  },
+                  {
+                    dataIndex: 'macAddress',
+                    key: 'mac',
+                    title: intl.get('MAC_ADDRESS'),
+                    render: (mac: string) => toMac(mac.toUpperCase())
+                  },
+                  {
+                    key: 'state',
+                    title: intl.get('STATUS'),
+                    render: (_: string, device: Device) => {
+                      return <SingleDeviceStatus device={device} />;
+                    }
+                  },
+                  {
+                    key: 'sensors',
+                    title: intl.get('sensors'),
+                    children: [
+                      {
+                        key: 'online',
+                        title: intl.get('ONLINE'),
+                        render: (_: string, device: Device) => {
+                          return DeviceNS.Children.getOnlineStatusCount(device, devices).online;
+                        }
+                      },
+                      {
+                        key: 'offline',
+                        title: intl.get('OFFLINE'),
+                        render: (_: string, device: Device) => {
+                          return DeviceNS.Children.getOnlineStatusCount(device, devices).offline;
+                        }
                       }
-                    />
-                  </Card>
-                </Link>
-              </Col>
-            );
-          })}
+                    ]
+                  },
+                  {
+                    key: 'time',
+                    title: intl.get('LAST_CONNECTION_TIME'),
+                    render: (_: string, device: Device) => {
+                      return device.state?.connectedAt
+                        ? Dayjs.format(device.state?.connectedAt)
+                        : '-';
+                    }
+                  }
+                ]}
+                dataSource={devices.filter((device) => DeviceType.isGateway(device.typeId))}
+              />
+            </MutedCard>
+          </Col>
+          <Col span={24}>
+            <MutedCard title={intl.get('sensors')}>
+              <Table
+                bordered={true}
+                cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
+                columns={[
+                  {
+                    dataIndex: 'name',
+                    key: 'name',
+                    title: intl.get('DEVICE_NAME'),
+                    render: (name: string, device: Device) => (
+                      <Link to={`/devices/${device.id}`}>{name}</Link>
+                    )
+                  },
+                  {
+                    dataIndex: 'macAddress',
+                    key: 'mac',
+                    title: intl.get('MAC_ADDRESS'),
+                    render: (mac: string) => toMac(mac.toUpperCase())
+                  },
+                  {
+                    key: 'state',
+                    title: intl.get('STATUS'),
+                    render: (_: string, device: Device) => {
+                      return <SingleDeviceStatus device={device} />;
+                    }
+                  },
+                  {
+                    key: 'battery',
+                    title: getDisplayName({
+                      name: intl.get('BATTERY_VOLTAGE'),
+                      lang: language,
+                      suffix: 'mV'
+                    }),
+                    render: (_: string, device: Device) => {
+                      return getValue({ value: device.state?.batteryVoltage });
+                    }
+                  },
+                  {
+                    key: 'signal',
+                    title: getDisplayName({
+                      name: intl.get('SIGNAL_STRENGTH'),
+                      lang: language,
+                      suffix: 'dBm'
+                    }),
+                    render: (_: string, device: Device) => {
+                      return getValue({ value: device.state?.signalLevel });
+                    }
+                  },
+                  {
+                    key: 'time',
+                    title: intl.get('LAST_SAMPLING_TIME'),
+                    render: (_: string, device: Device) => {
+                      return device.data?.timestamp ? Dayjs.format(device.data?.timestamp) : '-';
+                    }
+                  }
+                ]}
+                dataSource={devices.filter((device) => DeviceType.isSensor(device.typeId))}
+              />
+            </MutedCard>
+          </Col>
         </Grid>
       );
     }
@@ -107,38 +196,4 @@ export default function Virtual() {
       <Col span={24}>{renderBody()}</Col>
     </Grid>
   );
-}
-
-function DataBar({ device, devices }: { device: Device; devices: Device[] }) {
-  const renderTitle = (name: string) => {
-    return (
-      <Typography.Text style={{ whiteSpace: 'nowrap' }} ellipsis={true} title={name}>
-        {name}
-      </Typography.Text>
-    );
-  };
-  if (DeviceType.isRootSensor(device.typeId)) {
-    const datas = getValueOfFirstClassProperty(device);
-    return (
-      <Grid>
-        {datas.map(({ name, value2, unit }) => (
-          <Col span={8} key={name}>
-            <Statistic value={value2} title={renderTitle(intl.get(name))} suffix={unit} />
-          </Col>
-        ))}
-      </Grid>
-    );
-  } else {
-    const count = DeviceNS.Children.getOnlineStatusCount(device, devices);
-    return (
-      <Grid justify='center'>
-        <Col span={8}>
-          <Statistic value={count.online} title={renderTitle(intl.get('ONLINE'))} />
-        </Col>
-        <Col span={8}>
-          <Statistic value={count.offline} title={renderTitle(intl.get('OFFLINE'))} />
-        </Col>
-      </Grid>
-    );
-  }
 }
