@@ -1338,5 +1338,6 @@
   "tanks": "Tanks",
   "asset.devices": "Devices",
   "network.topology": "Topology",
-  "gateways": "Gateways"
+  "gateways": "Gateways",
+  "sensors.number": "Number of Devices"
 }

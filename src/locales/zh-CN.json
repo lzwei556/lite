@@ -1338,5 +1338,6 @@
   "tanks": "罐体",
   "asset.devices": "设备",
   "network.topology": "网络拓扑",
-  "gateways": "网关"
+  "gateways": "网关",
+  "sensors.number": "设备数量"
 }

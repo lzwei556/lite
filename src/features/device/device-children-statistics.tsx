@@ -1,14 +1,14 @@
 import React from 'react';
-import { Device } from '../../types/device';
-import intl from 'react-intl-universal';
 import { Col, Statistic } from 'antd';
+import intl from 'react-intl-universal';
+import { Device } from '../../types/device';
 import { Grid, MutedCard } from '../../components';
 
 export const DeviceChildrenStatistics = ({ devices }: { devices: Device[] }) => {
   const fields = useStatisticsFields(devices);
   return (
     <Col span={24}>
-      <MutedCard title={'Statistics'}>
+      <MutedCard title={intl.get('sensors.number')}>
         <Grid>
           {fields.map(({ label, value }) => (
             <Col span={8} key={label}>
