@@ -7,6 +7,7 @@ import { Asset, MonitoringPointRow, TrendData } from '../../../asset-common';
 import { useTrendData } from './useTrend';
 import { AnalysisContent } from './analysisContent';
 import { Trend } from './trend';
+import { SidebarProvider } from './mark/sidebar';
 
 export const Index = ({
   id,
@@ -89,13 +90,15 @@ function Content({
         </Col>
         {selected && (
           <Col span={24}>
-            <AnalysisContent
-              id={id}
-              attributes={attributes}
-              timestamp={selected}
-              timestamps={data.map(({ timestamp }) => timestamp)}
-              parent={parents.find((asset) => asset.id === assetId)!}
-            />
+            <SidebarProvider>
+              <AnalysisContent
+                id={id}
+                attributes={attributes}
+                timestamp={selected}
+                timestamps={data.map(({ timestamp }) => timestamp)}
+                parent={parents.find((asset) => asset.id === assetId)!}
+              />
+            </SidebarProvider>
           </Col>
         )}
       </Grid>

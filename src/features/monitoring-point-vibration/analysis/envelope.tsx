@@ -12,6 +12,7 @@ import Sideband from './sideband';
 import { useMarkChartProps, MarkList, Toolbar, ConfigurableNumsOfCursor } from './mark';
 import { useFaultFrequency } from './useFaultFrequency';
 import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
+import { Sidebar } from './mark/sidebar';
 
 export const Envelope = ({
   axis,
@@ -125,7 +126,7 @@ export const Envelope = ({
           />
         </ChartMark.Chart>
       </Col>
-      <Col flex='300px'>
+      <Sidebar>
         <AnalysisSidebarCollapse
           defaultActiveKey={['overview', 'marklist']}
           items={[
@@ -164,7 +165,7 @@ export const Envelope = ({
             }
           ]}
         />
-      </Col>
+      </Sidebar>
     </Grid>
   );
 };

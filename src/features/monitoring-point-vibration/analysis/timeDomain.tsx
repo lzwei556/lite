@@ -8,6 +8,7 @@ import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
 import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
+import { Sidebar } from './mark/sidebar';
 
 export const TimeDomain = ({
   axis,
@@ -80,7 +81,7 @@ export const TimeDomain = ({
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>
-      <Col flex='300px'>
+      <Sidebar>
         <AnalysisSidebarCollapse
           defaultActiveKey={['overview', 'forecast', 'marklist']}
           items={[
@@ -114,7 +115,7 @@ export const TimeDomain = ({
             }
           ]}
         />
-      </Col>
+      </Sidebar>
     </Grid>
   );
 };

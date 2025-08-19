@@ -12,6 +12,7 @@ import { MarkList, Toolbar, useMarkChartProps, ConfigurableNumsOfCursor } from '
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { useFaultFrequency } from './useFaultFrequency';
 import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
+import { Sidebar } from './mark/sidebar';
 
 export const Frequency = ({
   axis,
@@ -139,7 +140,7 @@ export const Frequency = ({
           />
         </ChartMark.Chart>
       </Col>
-      <Col flex='300px'>
+      <Sidebar>
         <AnalysisSidebarCollapse
           defaultActiveKey={['overview', 'marklist']}
           items={[
@@ -178,7 +179,7 @@ export const Frequency = ({
             }
           ]}
         />
-      </Col>
+      </Sidebar>
     </Grid>
   );
 };
