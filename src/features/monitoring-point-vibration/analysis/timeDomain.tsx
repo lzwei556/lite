@@ -6,7 +6,7 @@ import { getValue } from '../../../utils';
 import { RotationSpeed } from '../../../asset-variant';
 import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
-import { MarkList, SingleDoubleToggle, useMarkChartProps } from './mark';
+import { MarkList, Toolbar, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { Sidebar } from './mark/sidebar';
 
@@ -36,7 +36,11 @@ export const TimeDomain = ({
     <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
-          cardProps={{ extra: <SingleDoubleToggle /> }}
+          cardProps={{
+            extra: (
+              <Toolbar hiddens={['Multiple', 'Harmonic', 'Sideband', 'Faultfrequency', 'Top10']} />
+            )
+          }}
           config={{
             opts: {
               xAxis: {
