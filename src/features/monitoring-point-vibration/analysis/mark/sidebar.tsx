@@ -5,7 +5,6 @@ import { Flex, Grid } from '../../../../components';
 
 export const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const { expanded, setExpanded } = useSidebarContext();
-  console.log('expanded', expanded);
 
   return expanded ? (
     <Col style={{ marginTop: 16 }} flex={'300px'}>

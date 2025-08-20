@@ -43,14 +43,49 @@ export type OriginalDomainResponse = {
   xAxisUnit?: string;
 };
 
+const analysisWithOnlyAcceleration = ['time-envelope', 'envelope', 'cross'];
+
 export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'property'>) => {
   const [activeKey, setActiveKey] = React.useState('time-domain');
+  const isAnalysisOnlyAcceleration = analysisWithOnlyAcceleration.includes(activeKey);
   const { property, properties, setProperties } = useProperties(
-    activeKey === 'time-envelope' || activeKey === 'envelope' ? 'acceleration' : undefined
+    isAnalysisOnlyAcceleration ? 'acceleration' : undefined
   );
   const { axis, axies, setAxies } = useAxis(props.attributes);
   const timeDomain = useTimeDomain({ ...props, axis, property });
   const originalDomain = useOriginalDomain(props.id, props.timestamp, axis.value);
+
+  const renderFilters = () => {
+    return (
+      <Space>
+        {!isAnalysisOnlyAcceleration && (
+          <LightSelectFilter
+            allowClear={false}
+            options={properties.map((p) => ({ ...p, label: intl.get(p.label) }))}
+            onChange={(value) =>
+              setProperties((prev) => prev.map((p) => ({ ...p, selected: p.value === value })))
+            }
+            value={property.value}
+          />
+        )}
+        {activeKey !== 'cross' && renderAxisSelect()}
+      </Space>
+    );
+  };
+
+  const renderAxisSelect = () => {
+    return (
+      <LightSelectFilter
+        allowClear={false}
+        options={axies.map((a) => ({ ...a, label: intl.get(a.abbr) }))}
+        onChange={(value) =>
+          setAxies((prev) => prev.map((a) => ({ ...a, selected: a.value === value })))
+        }
+        popupMatchSelectWidth={false}
+        value={axis.value}
+      />
+    );
+  };
 
   return (
     <Card styles={{ body: { paddingTop: 0 } }}>
@@ -108,7 +143,15 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
             label: 'cross.spectrum',
             children: (
               <ChartMark.Context>
-                <Cross {...{ ...props, axis, property, originalDomain }} />
+                <Cross
+                  {...{
+                    ...props,
+                    axis,
+                    property,
+                    originalDomain,
+                    currentFilters: <Space>{renderAxisSelect()}</Space>
+                  }}
+                />
               </ChartMark.Context>
             )
           },
@@ -168,27 +211,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
           // }
         ].map((item) => ({ ...item, label: intl.get(item.label) }))}
         size='large'
-        tabBarExtraContent={
-          <Space>
-            <LightSelectFilter
-              allowClear={false}
-              options={properties.map((p) => ({ ...p, label: intl.get(p.label) }))}
-              onChange={(value) =>
-                setProperties((prev) => prev.map((p) => ({ ...p, selected: p.value === value })))
-              }
-              value={property.value}
-            />
-            <LightSelectFilter
-              allowClear={false}
-              options={axies.map((a) => ({ ...a, label: intl.get(a.abbr) }))}
-              onChange={(value) =>
-                setAxies((prev) => prev.map((a) => ({ ...a, selected: a.value === value })))
-              }
-              popupMatchSelectWidth={false}
-              value={axis.value}
-            />
-          </Space>
-        }
+        tabBarExtraContent={renderFilters()}
         tabBarGutter={24}
       />
     </Card>
