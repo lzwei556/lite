@@ -49,7 +49,7 @@ export const Overview = (props: {
       </Col>
       <Col span={12}>
         <PropertyCardedContent
-          label={CriticalThickness.label}
+          label={intl.get(CriticalThickness.label)}
           unit={CriticalThickness.unit!}
           value={critical}
         />

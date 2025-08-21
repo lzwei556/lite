@@ -1,7 +1,12 @@
 import React from 'react';
-import { Button, Divider, Input, List, Popover, Space, Typography } from 'antd';
+import { Divider, Input, List, Popover, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { ChartMark, DeleteIconButton, EditIconButton, useChartContext } from '../../../components';
+import {
+  ChartMark,
+  DeleteIconButtonWithoutConfirm,
+  EditIconButton,
+  useChartContext
+} from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
 import { DisplayProperty } from '../../../constants/properties';
 
@@ -67,18 +72,15 @@ const Item = ({
           ? descriptions
           : descriptions.map((d, i) => (
               <Space key={i}>
-                {i === 0 ? start : end} <span style={{ fontSize: 13 }}>{d}</span>
+                <span style={{ display: 'inline-block', width: 40 }}>{i === 0 ? start : end}</span>
+                <span style={{ fontSize: 13 }}>{d}</span>
               </Space>
             ))}
       </Space>
     );
   };
   return (
-    <List.Item
-      actions={[
-        <DeleteIconButton confirmProps={{}} buttonProps={{ onClick: onRemove, color: 'default' }} />
-      ]}
-    >
+    <List.Item actions={[<DeleteIconButtonWithoutConfirm color='default' onClick={onRemove} />]}>
       <List.Item.Meta
         title={
           <Space split={<Divider type='vertical' />}>
