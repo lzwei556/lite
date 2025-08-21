@@ -20,7 +20,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   const { propertyHistoryCardStyle, colorBgContainerStyle } = useGlobalStyles();
 
   React.useEffect(() => {
-    const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastHalfMonth);
+    const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastWeek);
     FindDeviceDataRequest(device.id, from, to, channels.length > 0 ? { channel } : {}).then(
       setHistoryData
     );
