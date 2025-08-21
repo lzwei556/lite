@@ -13,7 +13,8 @@ import {
   PolarComponent,
   BrushComponent,
   MarkLineComponent,
-  MarkPointComponent
+  MarkPointComponent,
+  VisualMapComponent
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { useDeepCompareEffect, useSize } from 'ahooks';
@@ -27,7 +28,8 @@ import type {
   DataZoomComponentOption,
   BrushComponentOption,
   MarkLineComponentOption,
-  MarkPointComponentOption
+  MarkPointComponentOption,
+  VisualMapComponentOption
 } from 'echarts/components';
 import type {
   BarSeriesOption,
@@ -62,6 +64,7 @@ export type ECOptions = ComposeOption<
   | BrushComponentOption
   | MarkLineComponentOption
   | MarkPointComponentOption
+  | VisualMapComponentOption
   | BarSeriesOption
   | PieSeriesOption
   | LineSeriesOption
@@ -89,6 +92,7 @@ echarts.use([
   BrushComponent,
   MarkLineComponent,
   MarkPointComponent,
+  VisualMapComponent,
   BarChart,
   PieChart,
   LineChart,
