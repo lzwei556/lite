@@ -5,18 +5,18 @@ import intl from 'react-intl-universal';
 import { Card, Grid, IconButton } from '../../../../components';
 import { ModalWrapper } from '../../../../components/modalWrapper';
 import { Dayjs } from '../../../../utils';
-import { HistoryDataFea } from '../../..';
 import {
   AssetRow,
   EmptyMonitoringPoints,
   getDataOfMonitoringPoint,
-  HistoryData
+  HistoryData,
+  AlarmsObjectStatistics,
+  AlarmTrend
 } from '../../../../asset-common';
 import { SettingsDetail } from '../../../../asset-variant';
-import { AlarmTrend } from '../../../../views/home/alarmTrend';
 import { appendAxisAliasAbbrToField } from '../../../monitoring-point-vibration/common';
+import { HistoryDataFea } from '../../..';
 import { useAssetContext } from '../context';
-import { MonitoringPointsStatistics } from './monitoringPointsStatistics';
 import { DianJiImage } from './dianJiImage';
 
 export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
@@ -91,7 +91,13 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
             <Col flex='350px'>
               <Grid>
                 <Col span={24}>
-                  <MonitoringPointsStatistics {...props} />
+                  <AlarmsObjectStatistics
+                    total={asset.statistics.monitoringPointNum}
+                    alarms={asset.statistics.alarmNum}
+                    title={intl.get('monitoring.points.statistics')}
+                    subtext={intl.get('monitoring.points.total')}
+                    chartHeight={265}
+                  />
                 </Col>
                 <Col span={24}>
                   <AlarmTrend
