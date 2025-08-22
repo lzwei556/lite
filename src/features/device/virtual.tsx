@@ -34,130 +34,136 @@ export default function Virtual() {
         </Card>
       );
     } else {
+      const gateways = devices.filter((device) => DeviceType.isGateway(device.typeId));
+      const sensors = devices.filter((device) => DeviceType.isSensor(device.typeId));
       return (
         <Grid>
-          <Col span={24}>
-            <MutedCard title={intl.get('gateways')}>
-              <Table
-                bordered={true}
-                cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
-                columns={[
-                  {
-                    dataIndex: 'name',
-                    key: 'name',
-                    title: intl.get('DEVICE_NAME'),
-                    render: (name: string, device: Device) => (
-                      <Link to={`/devices/${device.id}`}>{name}</Link>
-                    )
-                  },
-                  {
-                    dataIndex: 'macAddress',
-                    key: 'mac',
-                    title: intl.get('MAC_ADDRESS'),
-                    render: (mac: string) => toMac(mac.toUpperCase())
-                  },
-                  {
-                    key: 'state',
-                    title: intl.get('STATUS'),
-                    render: (_: string, device: Device) => {
-                      return <SingleDeviceStatus device={device} />;
-                    }
-                  },
-                  {
-                    key: 'sensors',
-                    title: intl.get('sensors'),
-                    children: [
-                      {
-                        key: 'online',
-                        title: intl.get('ONLINE'),
-                        render: (_: string, device: Device) => {
-                          return DeviceNS.Children.getOnlineStatusCount(device, devices).online;
-                        }
-                      },
-                      {
-                        key: 'offline',
-                        title: intl.get('OFFLINE'),
-                        render: (_: string, device: Device) => {
-                          return DeviceNS.Children.getOnlineStatusCount(device, devices).offline;
-                        }
+          {gateways.length > 0 && (
+            <Col span={24}>
+              <MutedCard title={intl.get('gateways')}>
+                <Table
+                  bordered={true}
+                  cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
+                  columns={[
+                    {
+                      dataIndex: 'name',
+                      key: 'name',
+                      title: intl.get('DEVICE_NAME'),
+                      render: (name: string, device: Device) => (
+                        <Link to={`/devices/${device.id}`}>{name}</Link>
+                      )
+                    },
+                    {
+                      dataIndex: 'macAddress',
+                      key: 'mac',
+                      title: intl.get('MAC_ADDRESS'),
+                      render: (mac: string) => toMac(mac.toUpperCase())
+                    },
+                    {
+                      key: 'state',
+                      title: intl.get('STATUS'),
+                      render: (_: string, device: Device) => {
+                        return <SingleDeviceStatus device={device} />;
                       }
-                    ]
-                  },
-                  {
-                    key: 'time',
-                    title: intl.get('LAST_CONNECTION_TIME'),
-                    render: (_: string, device: Device) => {
-                      return device.state?.connectedAt
-                        ? Dayjs.format(device.state?.connectedAt)
-                        : '-';
+                    },
+                    {
+                      key: 'sensors',
+                      title: intl.get('sensors'),
+                      children: [
+                        {
+                          key: 'online',
+                          title: intl.get('ONLINE'),
+                          render: (_: string, device: Device) => {
+                            return DeviceNS.Children.getOnlineStatusCount(device, devices).online;
+                          }
+                        },
+                        {
+                          key: 'offline',
+                          title: intl.get('OFFLINE'),
+                          render: (_: string, device: Device) => {
+                            return DeviceNS.Children.getOnlineStatusCount(device, devices).offline;
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      key: 'time',
+                      title: intl.get('LAST_CONNECTION_TIME'),
+                      render: (_: string, device: Device) => {
+                        return device.state?.connectedAt
+                          ? Dayjs.format(device.state?.connectedAt)
+                          : '-';
+                      }
                     }
-                  }
-                ]}
-                dataSource={devices.filter((device) => DeviceType.isGateway(device.typeId))}
-              />
-            </MutedCard>
-          </Col>
-          <Col span={24}>
-            <MutedCard title={intl.get('sensors')}>
-              <Table
-                bordered={true}
-                cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
-                columns={[
-                  {
-                    dataIndex: 'name',
-                    key: 'name',
-                    title: intl.get('DEVICE_NAME'),
-                    render: (name: string, device: Device) => (
-                      <Link to={`/devices/${device.id}`}>{name}</Link>
-                    )
-                  },
-                  {
-                    dataIndex: 'macAddress',
-                    key: 'mac',
-                    title: intl.get('MAC_ADDRESS'),
-                    render: (mac: string) => toMac(mac.toUpperCase())
-                  },
-                  {
-                    key: 'state',
-                    title: intl.get('STATUS'),
-                    render: (_: string, device: Device) => {
-                      return <SingleDeviceStatus device={device} />;
+                  ]}
+                  dataSource={gateways}
+                />
+              </MutedCard>
+            </Col>
+          )}
+          {sensors.length > 0 && (
+            <Col span={24}>
+              <MutedCard title={intl.get('sensors')}>
+                <Table
+                  bordered={true}
+                  cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
+                  columns={[
+                    {
+                      dataIndex: 'name',
+                      key: 'name',
+                      title: intl.get('DEVICE_NAME'),
+                      render: (name: string, device: Device) => (
+                        <Link to={`/devices/${device.id}`}>{name}</Link>
+                      )
+                    },
+                    {
+                      dataIndex: 'macAddress',
+                      key: 'mac',
+                      title: intl.get('MAC_ADDRESS'),
+                      render: (mac: string) => toMac(mac.toUpperCase())
+                    },
+                    {
+                      key: 'state',
+                      title: intl.get('STATUS'),
+                      render: (_: string, device: Device) => {
+                        return <SingleDeviceStatus device={device} />;
+                      }
+                    },
+                    {
+                      key: 'battery',
+                      title: getDisplayName({
+                        name: intl.get('BATTERY_VOLTAGE'),
+                        lang: language,
+                        suffix: 'mV'
+                      }),
+                      render: (_: string, device: Device) => {
+                        return getValue({ value: device.state?.batteryVoltage });
+                      }
+                    },
+                    {
+                      key: 'signal',
+                      title: getDisplayName({
+                        name: intl.get('SIGNAL_STRENGTH'),
+                        lang: language,
+                        suffix: 'dBm'
+                      }),
+                      render: (_: string, device: Device) => {
+                        return getValue({ value: device.state?.signalLevel });
+                      }
+                    },
+                    {
+                      key: 'time',
+                      title: intl.get('LAST_SAMPLING_TIME'),
+                      render: (_: string, device: Device) => {
+                        return device.data?.timestamp ? Dayjs.format(device.data?.timestamp) : '-';
+                      }
                     }
-                  },
-                  {
-                    key: 'battery',
-                    title: getDisplayName({
-                      name: intl.get('BATTERY_VOLTAGE'),
-                      lang: language,
-                      suffix: 'mV'
-                    }),
-                    render: (_: string, device: Device) => {
-                      return getValue({ value: device.state?.batteryVoltage });
-                    }
-                  },
-                  {
-                    key: 'signal',
-                    title: getDisplayName({
-                      name: intl.get('SIGNAL_STRENGTH'),
-                      lang: language,
-                      suffix: 'dBm'
-                    }),
-                    render: (_: string, device: Device) => {
-                      return getValue({ value: device.state?.signalLevel });
-                    }
-                  },
-                  {
-                    key: 'time',
-                    title: intl.get('LAST_SAMPLING_TIME'),
-                    render: (_: string, device: Device) => {
-                      return device.data?.timestamp ? Dayjs.format(device.data?.timestamp) : '-';
-                    }
-                  }
-                ]}
-                dataSource={devices.filter((device) => DeviceType.isSensor(device.typeId))}
-              />
-            </MutedCard>
-          </Col>
+                  ]}
+                  dataSource={sensors}
+                />
+              </MutedCard>
+            </Col>
+          )}
         </Grid>
       );
     }
