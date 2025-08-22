@@ -10,7 +10,7 @@ export const Status = ({ report }: { report: Report }) => {
       <div className='container'>
         <div className='item' style={{ width: '80%' }}>
           <p className='title'>{title}</p>
-          <Card title=''>
+          <Card>
             <Chart
               options={{
                 title: {

@@ -2,9 +2,6 @@
 :root {
   --space: 16px;
 }
-body {
-  color: rgba(0, 0, 0, 0.88);
-}
 tbody.ant-table-tbody > tr.ant-table-row:hover > td {
   background-color: #eee;
 }

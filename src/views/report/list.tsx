@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import intl from 'react-intl-universal';
 import { Table, transformPagedresult, RangeDatePicker, useRange } from '../../components';
 import { Store, useStore } from '../../hooks/store';
@@ -32,8 +34,7 @@ export default function ReportList() {
     {
       title: intl.get('NAME'),
       dataIndex: 'reportName',
-      key: 'reportName',
-      width: 400
+      key: 'reportName'
     },
     {
       title: intl.get('REPORT_DATE'),
@@ -44,7 +45,7 @@ export default function ReportList() {
     {
       title: intl.get('OPERATION'),
       key: 'action',
-      render: (text: any, record: any) => {
+      render: (_: string, record: Report) => {
         return (
           <Link to={`/reports/${record.id}`} state={record}>
             查看报告
@@ -57,19 +58,20 @@ export default function ReportList() {
   const { paged, ds } = transformPagedresult(dataSource);
 
   return (
-    <Table
-      columns={columns}
-      dataSource={ds}
-      header={{
-        title: intl.get('MENU_REPORTS'),
-        toolbar: <RangeDatePicker onChange={setRange} />
-      }}
-      pagination={{
-        ...paged,
-        onChange: (index, size) => setStore((prev) => ({ ...prev, pagedOptions: { index, size } }))
-      }}
-      rowKey={(row) => row.id}
-    />
+    <Content>
+      <Typography.Title level={4}>{intl.get('MENU_REPORTS')}</Typography.Title>
+      <Table
+        columns={columns}
+        dataSource={ds}
+        header={{ toolbar: <RangeDatePicker onChange={setRange} /> }}
+        pagination={{
+          ...paged,
+          onChange: (index, size) =>
+            setStore((prev) => ({ ...prev, pagedOptions: { index, size } }))
+        }}
+        rowKey={(row) => row.id}
+      />
+    </Content>
   );
 }
 

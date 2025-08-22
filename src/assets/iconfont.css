@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 4997189 */
-  src: url('iconfont.ttf?t=1754980119847') format('truetype');
+  src: url('iconfont.ttf?t=1755748188025') format('truetype');
 }
 
 .iconfont {
@@ -9,6 +9,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-report:before {
+  content: '\e745';
 }
 
 .icon-system:before {
