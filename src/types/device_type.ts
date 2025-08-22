@@ -21,6 +21,8 @@ export enum DeviceType {
   DC210C = 0x40102,
   DC110H = 0x40104,
   DC110HC = 0x40105,
+  DC110HL = 0x40107,
+  DC210L = 0x40106,
   DC110L = 0x40201,
   SVT220520P = 0x50104,
   SVT520C = 0x50106,
@@ -85,6 +87,10 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_DC110H';
       case DeviceType.DC110HC:
         return 'DEVICE_TYPE_DC110HC';
+      case DeviceType.DC110HL:
+        return 'DEVICE_TYPE_DC110HL';
+      case DeviceType.DC210L:
+        return 'DEVICE_TYPE_DC210L';
       case DeviceType.DC110L:
         return 'DEVICE_TYPE_DC110L';
       case DeviceType.SVT220520P:
@@ -157,11 +163,11 @@ export namespace DeviceType {
   }
 
   export function getHighDCSensors() {
-    return [DeviceType.DC110H, DeviceType.DC110HC];
+    return [DeviceType.DC110H, DeviceType.DC110HC, DeviceType.DC110HL];
   }
 
   export function getUltraHighDCSensors() {
-    return [DeviceType.DC210, DeviceType.DC210C];
+    return [DeviceType.DC210, DeviceType.DC210C, DeviceType.DC210L];
   }
 
   export function getDCSensors() {
@@ -342,6 +348,8 @@ export const SENSOR_DISPLAY_PROPERTIES = {
   [DeviceType.DC110L]: PROPERTY_CATEGORIES.DC_NORMAL,
   [DeviceType.DC110H]: PROPERTY_CATEGORIES.DC_HIGH,
   [DeviceType.DC110HC]: PROPERTY_CATEGORIES.DC_HIGH,
+  [DeviceType.DC110HL]: PROPERTY_CATEGORIES.DC_HIGH,
+  [DeviceType.DC210L]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
   [DeviceType.DC210]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
   [DeviceType.DC210C]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
   [DeviceType.SVT220520P]: PROPERTY_CATEGORIES.SVT220520P,

@@ -134,6 +134,8 @@
   "DEVICE_TYPE_DC110C": "无线常温腐蚀传感器 (Cat.1)",
   "DEVICE_TYPE_DC110H": "无线高温腐蚀传感器",
   "DEVICE_TYPE_DC110HC": "无线高温腐蚀传感器 (Cat.1)",
+  "DEVICE_TYPE_DC110HL": "无线高温腐蚀传感器 (LoRa)",
+  "DEVICE_TYPE_DC210L": "无线超高温腐蚀传感器 (LoRa)",
   "DEVICE_TYPE_DC110L": "无线常温腐蚀传感器 (LoRa)",
   "DEVICE_TYPE_GATEWAY": "网关",
   "DEVICE_TYPE_GATEWAY_4G": "4G网关",
