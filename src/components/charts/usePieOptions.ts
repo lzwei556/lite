@@ -22,9 +22,9 @@ export const usePieOptions = ({ total, data, language, subtext }: PieOptionsProp
       text: `${total}`,
       subtext,
       left: 'center',
-      top: 90,
+      top: 60,
       textStyle: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 400,
         ...colorTextStyle
       }
@@ -35,7 +35,7 @@ export const usePieOptions = ({ total, data, language, subtext }: PieOptionsProp
         type: 'pie',
         name: '',
         radius: ['50%', '60%'],
-        center: ['50%', '42%'],
+        center: ['50%', '37%'],
         label: { show: false, formatter: '{b} {c}' },
         data
       }

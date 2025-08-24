@@ -61,7 +61,7 @@ function buildCirclePointsChartOfFlange(
 ) {
   const count = measurements.length;
   if (!count) return undefined;
-  const polar: { radius: number }[] = [];
+  const polar: { radius: number | string }[] = [];
   const angleAxis: any = [];
   const radiusAxis: any = [];
   const series: any = [];
@@ -203,10 +203,7 @@ function getMax(max: number, attributes: AssetRow['attributes'], type: number) {
 }
 
 function generateOuter(measurements: MonitoringPointRow[], color: string, isBig: boolean = false) {
-  let radius: any = { radius: isBig ? 180 : 150 };
-  if (isMobile) {
-    radius = { radius: isBig ? '90%' : '85%' };
-  }
+  let radius = { radius: isBig ? '80%' : '75%' };
   const angleAxis = {
     startAngle: 0,
     clockwise: false,
@@ -267,10 +264,7 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
 }
 
 function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = false) {
-  let radius: any = { radius: isBig ? 150 : 120 };
-  if (isMobile) {
-    radius = { radius: isBig ? '85%' : '80%' };
-  }
+  let radius = { radius: isBig ? '75%' : '70%' };
   const seriesData: any = [];
   let field = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
     (p) => p.first

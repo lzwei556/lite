@@ -20,9 +20,9 @@ export const PlaceTextCardStyle = {
 
 export function scaleStage(size: Size, img?: HTMLImageElement) {
   let aspectRatio = 1,
-    scaleX = 1.2,
-    scaleY = 1.2,
-    scale = 1.2,
+    scaleX = 1,
+    scaleY = 1,
+    scale = 1,
     x = 1,
     y = 1;
 

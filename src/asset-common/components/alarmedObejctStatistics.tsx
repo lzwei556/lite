@@ -9,7 +9,7 @@ export const AlarmsObjectStatistics = ({
   alarms = [0, 0, 0],
   title,
   subtext,
-  chartHeight = 280
+  chartHeight = 210
 }: {
   total?: number;
   alarms?: [number, number, number];

@@ -7,7 +7,7 @@ import { ColorHealth, ColorOffline } from '../../constants/color';
 export const SensorsStatistics = ({
   total,
   offlines,
-  chartHeight = 280
+  chartHeight = 210
 }: {
   total?: number;
   offlines?: number;

@@ -54,7 +54,7 @@ export const Index = (props: {
                     ))
                 )}
               </Col>
-              <Col flex='350px'>
+              <Col flex='300px'>
                 <Grid>
                   <Col span={24}>
                     <AlarmsObjectStatistics

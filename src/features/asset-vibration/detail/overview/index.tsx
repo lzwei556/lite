@@ -51,8 +51,8 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
     <EmptyMonitoringPoints asset={asset}>
       <Grid>
         <Col span={24}>
-          <Grid wrap={false}>
-            <Col flex='auto' style={{ minWidth: 560 }}>
+          <Grid wrap={false} align='stretch'>
+            <Col flex='auto'>
               <DianJiImage
                 asset={asset}
                 key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
@@ -88,7 +88,7 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
                 onSuccess={onSuccess}
               />
             </Col>
-            <Col flex='350px'>
+            <Col flex='300px'>
               <Grid>
                 <Col span={24}>
                   <AlarmsObjectStatistics
@@ -96,14 +96,13 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
                     alarms={asset.statistics.alarmNum}
                     title={intl.get('monitoring.points.statistics')}
                     subtext={intl.get('monitoring.points.total')}
-                    chartHeight={265}
                   />
                 </Col>
                 <Col span={24}>
                   <AlarmTrend
                     id={asset.id}
                     title={intl.get('ALARM_TREND')}
-                    chartStyle={{ height: 265 }}
+                    chartStyle={{ height: 210 }}
                   />
                 </Col>
               </Grid>
