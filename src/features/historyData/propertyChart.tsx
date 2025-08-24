@@ -4,6 +4,7 @@ import { HistoryData } from '../../asset-common';
 import { DisplayProperty } from '../../constants/properties';
 import { Dayjs } from '../../utils';
 import { Chart, useLinedSeriesOptions, ChartProps, getOptions } from '../../components';
+import { AlarmLevel } from '../alarm';
 
 export const PropertyChart = (
   props: {
@@ -11,14 +12,19 @@ export const PropertyChart = (
     property: DisplayProperty;
     axisKey?: string;
     config?: { opts?: ChartProps['options']; switchs?: { noDataZoom?: boolean; noArea?: boolean } };
+    alarm?: {
+      propertyKey: string;
+      rules: { value: number; condition: '>' | '>=' | '<' | '<='; level: AlarmLevel }[];
+    };
   } & Omit<ChartProps, 'options'>
 ) => {
-  const { data, property, config, axisKey, ...rest } = props;
+  const { data, property, config, axisKey, alarm, ...rest } = props;
   const transformed = transform(data, property, undefined, axisKey);
+  const seriesIndex = getIndex(alarm?.propertyKey, property.fields);
   const options = getOptions(
-    useLinedSeriesOptions(
-      transformed?.series,
-      {
+    useLinedSeriesOptions({
+      series: transformed?.series,
+      yAxisMeta: {
         precision: property.precision,
         interval: property.interval,
         unit: property.unit,
@@ -26,8 +32,9 @@ export const PropertyChart = (
         min: transformed?.min,
         startValue: property.min
       },
-      config
-    )
+      config,
+      alarm: alarm ? { rules: alarm.rules, seriesIndex } : undefined
+    })
   );
   return <Chart {...rest} options={options} />;
 };
@@ -88,4 +95,18 @@ export function transform(
     min: values[0]?.min,
     max: values[0]?.max
   };
+}
+
+function getIndex(key?: string, fields?: DisplayProperty['fields']) {
+  if (!key || !fields || fields.length === 0) {
+    return 0;
+  }
+  let seriesIndex = 0;
+  for (let index = 0; index < fields.length; index++) {
+    if (fields[index].key === key) {
+      seriesIndex = index;
+      break;
+    }
+  }
+  return seriesIndex;
 }
