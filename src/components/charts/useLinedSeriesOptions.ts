@@ -15,6 +15,11 @@ export interface SeriesOption {
   xAxisValues: string[] | number[];
 }
 
+export type SeriesAlarm = {
+  seriesIndex: number;
+  rules: { value: number; condition: '>' | '>=' | '<' | '<='; level: AlarmLevel }[];
+};
+
 export function useLinedSeriesOptions({
   series,
   yAxisMeta,
@@ -24,10 +29,7 @@ export function useLinedSeriesOptions({
   series: SeriesOption[];
   yAxisMeta?: YAxisMeta;
   config?: { opts?: ECOptions; switchs?: { noDataZoom?: boolean; noArea?: boolean } };
-  alarm?: {
-    seriesIndex: number;
-    rules: { value: number; condition: '>' | '>=' | '<' | '<='; level: AlarmLevel }[];
-  };
+  alarm?: SeriesAlarm;
 }): ECOptions {
   const options = config?.opts;
   const dataZoom = config?.switchs?.noDataZoom
@@ -44,32 +46,7 @@ export function useLinedSeriesOptions({
   });
   const legend = useLegend(series);
   const _series = useSeries(series, !config?.switchs?.noArea);
-  let visualMap;
-  if (alarm) {
-    const { seriesIndex, rules } = alarm;
-    const min = Math.min(...rules.map(({ value }) => value));
-    visualMap = {
-      type: 'piecewise',
-      show: false,
-      dimension: 1,
-      seriesIndex,
-      pieces: rules
-        .map(({ value, condition, level }) => {
-          let threshold = 'gt';
-          if (condition === '<') {
-            threshold = 'lt';
-          } else if (condition === '<=') {
-            threshold = 'lte';
-          } else if (condition === '>') {
-            threshold = 'gt';
-          } else if (condition === '>=') {
-            threshold = 'gte';
-          }
-          return { [threshold]: value, color: getColorByValue(level) };
-        })
-        .concat({ gt: -99999, lt: min, color: chartColors[seriesIndex] })
-    };
-  }
+  const visualMap = useVisualMap(alarm);
   const yAxis = useYAxisOptions(yAxisMeta, options?.yAxis);
   const opts: ECOptions = {
     dataset,
@@ -93,7 +70,6 @@ export function useLinedSeriesOptions({
     },
     yAxis
   };
-  console.log('visualMap', visualMap);
   const defaultOpts: ECOptions = visualMap ? { ...opts, visualMap } : opts;
   return _.merge(defaultOpts, options);
 }
@@ -136,7 +112,7 @@ const useSeries = (series: SeriesOption[], withArea?: boolean): LineSeriesOption
 
 function setAreaStyle(color: string, containerColor: string) {
   const areaStyle = {
-    opacity: 0.6,
+    opacity: 0.4,
     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
       {
         offset: 0,
@@ -149,4 +125,46 @@ function setAreaStyle(color: string, containerColor: string) {
     ])
   };
   return { areaStyle };
+}
+
+function useVisualMap(alarm?: SeriesAlarm) {
+  let visualMap;
+  if (alarm && alarm.rules.length > 0 && isRulesValid(alarm.rules)) {
+    const { seriesIndex, rules } = alarm;
+    visualMap = {
+      type: 'piecewise',
+      show: false,
+      dimension: 1,
+      seriesIndex,
+      pieces: getRanges(rules, chartColors[seriesIndex])
+    };
+  }
+  return visualMap;
+}
+
+function isRulesValid(rules: SeriesAlarm['rules']) {
+  const firstCondition = rules[0].condition;
+  return rules
+    .slice(1)
+    .every(
+      ({ condition }) =>
+        condition.indexOf(firstCondition) > -1 || firstCondition.indexOf(condition) > -1
+    );
+}
+
+function getRanges(rules: SeriesAlarm['rules'], color: string) {
+  const condition = rules[0].condition;
+  const values = rules.map(({ value }) => value);
+  const start = -99999;
+  const end = Infinity;
+  const range = [start, ...values.concat(values).sort((n1, n2) => n1 - n2), end];
+  const ranges = _.chunk(range, 2).map(([start, end], i) => ({ gt: start, lt: end }));
+  return ranges.map((r, i) => {
+    const gt = condition.indexOf('>') > -1;
+    let level;
+    if (gt && i !== 0) {
+      level = rules.sort((r1, r2) => r1.value - r2.value)[i - 1].level;
+    }
+    return { ...r, color: level ? getColorByValue(level) : color };
+  });
 }

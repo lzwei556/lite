@@ -6,9 +6,11 @@ import { generateColProps } from '../../../utils/grid';
 import { Dayjs } from '../../../utils';
 import {
   getDataOfMonitoringPoint,
+  getSeriesAlarm,
   HistoryData,
   MonitoringPointRow,
-  Point
+  Point,
+  useMonitoringPointContext
 } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
@@ -18,6 +20,7 @@ export const Monitor = (point: MonitoringPointRow) => {
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const { propertyHistoryCardStyle } = useGlobalStyles();
+  const { ruleGroups } = useMonitoringPointContext();
 
   React.useEffect(() => {
     const [from, to] = Dayjs.toRange(Dayjs.CommonRange.PastWeek);
@@ -54,9 +57,10 @@ export const Monitor = (point: MonitoringPointRow) => {
         return (
           <Col {...getCols(properties.length)} key={index}>
             <HistoryDataFea.PropertyChartCard
+              alarm={getSeriesAlarm(ruleGroups, p)}
+              cardProps={propertyHistoryCardStyle}
               data={historyData}
               property={p}
-              cardProps={propertyHistoryCardStyle}
             />
           </Col>
         );

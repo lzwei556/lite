@@ -3,8 +3,13 @@ import intl from 'react-intl-universal';
 import { HistoryData } from '../../asset-common';
 import { DisplayProperty } from '../../constants/properties';
 import { Dayjs } from '../../utils';
-import { Chart, useLinedSeriesOptions, ChartProps, getOptions } from '../../components';
-import { AlarmLevel } from '../alarm';
+import {
+  Chart,
+  useLinedSeriesOptions,
+  ChartProps,
+  getOptions,
+  SeriesAlarm
+} from '../../components';
 
 export const PropertyChart = (
   props: {
@@ -12,10 +17,7 @@ export const PropertyChart = (
     property: DisplayProperty;
     axisKey?: string;
     config?: { opts?: ChartProps['options']; switchs?: { noDataZoom?: boolean; noArea?: boolean } };
-    alarm?: {
-      propertyKey: string;
-      rules: { value: number; condition: '>' | '>=' | '<' | '<='; level: AlarmLevel }[];
-    };
+    alarm?: Pick<SeriesAlarm, 'rules'> & { propertyKey: string };
   } & Omit<ChartProps, 'options'>
 ) => {
   const { data, property, config, axisKey, alarm, ...rest } = props;

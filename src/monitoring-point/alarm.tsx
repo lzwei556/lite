@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Button, Space, Spin, TableProps, Tag } from 'antd';
 import intl from 'react-intl-universal';
-import { isMobile } from '../utils/deviceDetection';
-import { getValue } from '../utils/format';
 import { AlarmRule } from '../features/alarm/alarm-group/types';
 import { translateMetricName } from '../features/alarm/alarm-group';
 import {
@@ -10,13 +8,15 @@ import {
   getAlarmRules,
   unbindMeasurementsToAlarmRule
 } from '../features/alarm/alarm-group/services';
-import { MonitoringPointRow, Point } from '../asset-common';
+import { MonitoringPointRow, Point, useMonitoringPointContext } from '../asset-common';
 import { Table } from '../components';
 import { AlarmLevelTag } from '../features/alarm';
 
-export const AlarmRuleSetting = (point: MonitoringPointRow) => {
-  const [allRules, setAllRules] = React.useState<AlarmRule[]>();
+export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
+  const [rules, setRules] = React.useState<AlarmRule[]>();
   const [loading, setLoading] = React.useState(true);
+  const { ruleGroups, refresh } = useMonitoringPointContext();
+
   const getRules = (dataSource: AlarmRule['rules']): TableProps<any> => {
     return {
       rowKey: 'id',
@@ -26,33 +26,25 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
           title: intl.get('ALARM_METRIC'),
           dataIndex: 'metric',
           key: 'metric',
-          render: (metric: any) => translateMetricName(metric.name),
-          width: 120
+          render: (metric: any) => translateMetricName(metric.name)
         },
         {
           title: intl.get('ALARM_CONDITION'),
           dataIndex: 'condition',
           key: 'condition',
-          render: (_: any, record: any) => {
-            return `${record.operation} ${getValue({
-              value: record.threshold,
-              unit: record.metric.unit
-            })} `;
-          },
-          width: 150
+          render: (_: string, record: any) => {
+            return `${record.operation} ${record.threshold} ${record.metric.unit}`;
+          }
         },
         {
           title: intl.get('ALAMR_LEVEL'),
           dataIndex: 'level',
           key: 'level',
-          width: 100,
           render: (level: number) => <AlarmLevelTag level={level} />
         }
       ],
       dataSource,
-      pagination: false,
-      style: { marginLeft: 20, width: 770 },
-      scroll: isMobile ? { x: 600 } : undefined
+      pagination: false
     };
   };
   const columns = [
@@ -60,7 +52,6 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
       title: intl.get('STATUS'),
       dataIndex: 'bindedStatus',
       key: 'bindedStatus',
-      width: 100,
       render: (status: boolean) => (
         <Tag color={status ? 'green' : 'geekblue'}>
           {status ? intl.get('BOUND') : intl.get('UNBOUND')}
@@ -70,14 +61,12 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
     {
       title: intl.get('NAME'),
       dataIndex: 'name',
-      key: 'name',
-      width: 400
+      key: 'name'
     },
     {
       title: intl.get('TYPE'),
       dataIndex: 'type',
       key: 'type',
-      width: 200,
       render: (typeId: number) => {
         const label = Point.getTypeLabel(typeId);
         return label ? intl.get(label) : '-';
@@ -98,7 +87,10 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
                 onClick={() => {
                   updateRow(row.id, { bindingStatus: true });
                   unbindMeasurementsToAlarmRule(row.id, { monitoring_point_ids: [point.id] }).then(
-                    () => updateRow(row.id, { bindedStatus: false, bindingStatus: false })
+                    () => {
+                      updateRow(row.id, { bindedStatus: false, bindingStatus: false });
+                      refresh();
+                    }
                   );
                 }}
               >
@@ -112,7 +104,10 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
                 onClick={() => {
                   updateRow(row.id, { bindingStatus: true });
                   bindMeasurementsToAlarmRule(row.id, { monitoring_point_ids: [point.id] }).then(
-                    () => updateRow(row.id, { bindedStatus: true, bindingStatus: false })
+                    () => {
+                      updateRow(row.id, { bindedStatus: true, bindingStatus: false });
+                      refresh();
+                    }
                   );
                 }}
               >
@@ -126,9 +121,9 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
   ];
 
   const updateRow = (id: number, data: {}) => {
-    if (allRules && allRules.length > 0) {
-      setAllRules(
-        allRules.map((rule) => {
+    if (rules && rules.length > 0) {
+      setRules(
+        rules.map((rule) => {
           if (rule.id === id) {
             return { ...rule, ...data };
           } else {
@@ -139,40 +134,27 @@ export const AlarmRuleSetting = (point: MonitoringPointRow) => {
     }
   };
 
-  const fetchAlarmRules = (type: number) => {
+  const fetchAlarmRules = (type: number, bindeds: AlarmRule[]) => {
     getAlarmRules().then((data) => {
       setLoading(false);
-      setAllRules(data.filter((rule) => rule.type === type));
+      setRules(
+        data
+          .filter((rule) => rule.type === type)
+          .map((rule) => ({ ...rule, bindedStatus: !!bindeds.find(({ id }) => id === rule.id) }))
+      );
     });
   };
 
   React.useEffect(() => {
-    fetchAlarmRules(point.type);
-  }, [point.type]);
-
-  React.useEffect(() => {
-    if (
-      allRules &&
-      allRules.length > 0 &&
-      allRules.every(({ bindedStatus }) => bindedStatus === undefined || bindedStatus === null)
-    ) {
-      getAlarmRules(point.id).then((data) => {
-        setAllRules(
-          allRules.map((rule) => ({
-            ...rule,
-            bindedStatus: !!data.find(({ id }) => id === rule.id)
-          }))
-        );
-      });
-    }
-  }, [point.id, allRules]);
+    fetchAlarmRules(point.type, ruleGroups);
+  }, [point.type, ruleGroups]);
 
   return (
     <Table
       rowKey='id'
       cardProps={{ title: intl.get('ALARM_RULES') }}
       columns={columns}
-      dataSource={allRules}
+      dataSource={rules}
       expandable={{
         expandedRowRender: (record: AlarmRule) => (
           <Table {...getRules(record.rules)} noScroll={true} />

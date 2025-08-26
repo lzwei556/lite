@@ -8,11 +8,13 @@ import { Permission } from '../../../permission/permission';
 import { HistoryDataFea } from '../..';
 import { Dayjs } from '../../../utils';
 import {
+  getSeriesAlarm,
   hasData,
   HistoryData,
   MonitoringPointRow,
   Point,
-  PropertyLightSelectFilter
+  PropertyLightSelectFilter,
+  useMonitoringPointContext
 } from '../../../asset-common';
 
 export const HistoryChartCard = ({
@@ -33,7 +35,7 @@ export const HistoryChartCard = ({
   const [property, setProperty] = React.useState<DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined
   );
-
+  const { ruleGroups } = useMonitoringPointContext();
   if (loading) {
     return <Spin />;
   }
@@ -60,6 +62,7 @@ export const HistoryChartCard = ({
       title={name}
     >
       <HistoryDataFea.PropertyChart
+        alarm={getSeriesAlarm(ruleGroups, property!)}
         config={{ opts: { dataZoom: [{ start: 0, end: 100 }], yAxis: { name: property?.unit } } }}
         data={historyData}
         property={property!}
