@@ -35,7 +35,10 @@ export function getValue({
   precision?: number;
 }) {
   if (Number.isNaN(value) || value === null || value === undefined) return '-';
-  return `${roundValue(value, precision).toFixed(precision)}${unit ? ` ${unit}` : ''}`;
+  const roundedValue = precision
+    ? roundValue(value, precision).toFixed(precision)
+    : roundValue(value, precision);
+  return `${roundedValue}${unit ? ` ${unit}` : ''}`;
 }
 
 export function roundValue(value: number, precision?: number) {

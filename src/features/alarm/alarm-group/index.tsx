@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, message, Space, TableProps, theme, Typography } from 'antd';
+import { Button, message, Space, TableProps, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';

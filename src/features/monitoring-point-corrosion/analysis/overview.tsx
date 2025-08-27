@@ -85,7 +85,7 @@ function PropertyCardedContent({
     <Space direction='vertical'>
       <Typography.Text type='secondary'>{label}</Typography.Text>
       <Typography.Text style={{ fontSize: 18 }}>
-        {getValue({ value, precision: 3 })}
+        {getValue({ value })}
         {value !== undefined && (
           <Typography.Text style={{ marginLeft: 4 }} type='secondary'>
             {unit}

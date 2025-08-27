@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
-import { Metadata, PropertyLightSelectFilter } from '../../../asset-common';
+import { Metadata } from '../../../asset-common';
 import { getValue } from '../../../utils/format';
 import { Card, Descriptions, Grid, LineChart } from '../../../components';
 
@@ -96,20 +96,7 @@ export function WaveformData<T extends ThicknessWaveData>(props: { values: T }) 
     const [paddingLefts, paddingRights] = calculatePadding(tofs);
 
     return (
-      <Card
-      // extra={
-      //   <PropertyLightSelectFilter
-      //     onChange={(value) => {
-      //       const field = fields.find((f) => f.value === value);
-      //       if (field) {
-      //         setField(field);
-      //       }
-      //     }}
-      //     properties={fields.map(({ label, value }) => ({ name: label, key: value }))}
-      //     value={field.value}
-      //   />
-      // }
-      >
+      <Card>
         <LineChart
           series={[
             {

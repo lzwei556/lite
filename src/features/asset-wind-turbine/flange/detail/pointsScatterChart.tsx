@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import intl from 'react-intl-universal';
-import { Chart, chartColors } from '../../../../components';
+import { buildCustomTooltip, Chart, chartColors } from '../../../../components';
 import { isMobile } from '../../../../utils/deviceDetection';
 import { ColorHealth } from '../../../../constants/color';
 import { getValue, roundValue } from '../../../../utils/format';
@@ -239,12 +239,13 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
       label: {
         show: true,
         color,
-        formatter: (paras: any) => attributes?.index
+        formatter: () => attributes?.index
       },
       tooltip: {
-        formatter: `${
-          alertLevel && alertLevel > 0 ? `${intl.get(`leveled.alarm.${alertLevel}`)}<br/>` : ''
-        }${generateRowOfTooltip('', name, getValue({ value, ...field }))}`
+        formatter: buildCustomTooltip({
+          title: alertLevel && alertLevel > 0 ? intl.get(`leveled.alarm.${alertLevel}`) : undefined,
+          items: [{ marker: '', name, text: getValue({ value, ...field }) }]
+        })
       },
       itemStyle: {
         opacity: 1,
@@ -339,14 +340,6 @@ function getSeries(color: string, value: number | string | undefined, name: stri
     symbolSize: 0.01,
     name,
     lineStyle: { type: 'dashed', color, opacity: 0.6 }
-    // label: {show: true, formatter:(para:any)=>{
-    //   if(para.dataIndex === 0) return para.value[0];
-    //   return ''
-    // }}
   };
   return { series };
-}
-
-function generateRowOfTooltip(marker: string, seriesName: string, text: string) {
-  return `<div style='display:flex;justify-content:space-between;'><span style='flex:0 0 auto'>${marker} ${seriesName}</span><strong style='flex:0 0 auto; text-align:right;text-indent:1em;'>${text}</strong></div>`;
 }

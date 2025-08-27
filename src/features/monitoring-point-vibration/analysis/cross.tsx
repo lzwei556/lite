@@ -1,7 +1,13 @@
 import React from 'react';
 import { Space } from 'antd';
+import { LineOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { CardChart, LightSelectFilter, useLegendStyles } from '../../../components';
+import {
+  buildCustomTooltip,
+  CardChart,
+  LightSelectFilter,
+  useLegendStyles
+} from '../../../components';
 import { getValue } from '../../../utils/format';
 import { cross } from '../../../asset-common';
 import { AnalysisCommonProps } from './analysisContent';
@@ -9,7 +15,6 @@ import { useWindow, Window } from './settings';
 import { useCrossTarget } from './useCrossTarget';
 import { useOriginalDomain } from './useOriginalDomain';
 import { useAxis } from './useAxis';
-import { LineOutlined } from '@ant-design/icons';
 
 export const Cross = ({
   id,
@@ -131,18 +136,21 @@ export const Cross = ({
             if (Array.isArray(data) && data.length === 2) {
               const [first, second] = data;
               const firstCategory = category[first.seriesId as keyof typeof category];
-              const firstTooltip = generateRowOfTooltip(
-                first.marker,
-                first.seriesName.split('(')[0],
-                getValue({ value: first.value, ...firstCategory })
-              );
+              const firstTooltip = {
+                marker: first.marker,
+                name: first.seriesName.split('(')[0],
+                text: getValue({ value: first.value, ...firstCategory })
+              };
               const secondCategory = category[second.seriesId as keyof typeof category];
-              const secondTooltip = generateRowOfTooltip(
-                second.marker,
-                second.seriesName.split('(')[0],
-                getValue({ value: second.value, ...secondCategory })
-              );
-              return `<div style="line-height:1;">${first.axisValue}</div>\n${firstTooltip}\n${secondTooltip}`;
+              const secondTooltip = {
+                marker: second.marker,
+                name: second.seriesName.split('(')[0],
+                text: getValue({ value: second.value, ...secondCategory })
+              };
+              return buildCustomTooltip({
+                title: getValue({ value: first.axisValue }),
+                items: [firstTooltip, secondTooltip]
+              });
             } else {
               return '';
             }
@@ -191,7 +199,3 @@ export const Cross = ({
     />
   );
 };
-
-function generateRowOfTooltip(marker: string, seriesName: string, text: string) {
-  return `<div style='display:flex;justify-content:space-between;margin-top:10px;line-height:1;'><span style='flex:0 0 auto'>${marker} ${seriesName}</span><strong style='flex:0 0 auto; text-align:right;text-indent:1em;'>${text}</strong></div>`;
-}

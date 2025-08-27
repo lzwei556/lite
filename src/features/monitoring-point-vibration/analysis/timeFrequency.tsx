@@ -2,11 +2,12 @@ import React from 'react';
 import 'echarts-gl';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
-import { CardChart, chartColors } from '../../../components';
+import { buildCustomTooltip, CardChart, chartColors, TooltipItem } from '../../../components';
 import { timeFrequency } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, useWindowLength, WindowLengthPopup } from './settings';
+import { getValue } from '../../../utils';
 
 export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
@@ -66,17 +67,17 @@ export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps)
               y = value[1];
               z = value[2];
             }
-            let text = `${paras.marker} ${paras.seriesName}`;
+            const items: TooltipItem[] = [];
             if (x) {
-              text += `<br/>${xAxisName}${x}`;
+              items.push({ marker: '', name: xAxisName, text: getValue({ value: x }) });
             }
             if (y) {
-              text += `<br/>${yAxisName}${y}`;
+              items.push({ marker: '', name: yAxisName, text: getValue({ value: y }) });
             }
             if (z) {
-              text += `<br/>${zAxisName} ${z}`;
+              items.push({ marker: '', name: zAxisName, text: getValue({ value: z }) });
             }
-            return text;
+            return buildCustomTooltip({ title: `${paras.marker} ${paras.seriesName}`, items });
           }
         },
         xAxis3D: {
@@ -87,11 +88,13 @@ export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps)
         yAxis3D: {
           type: 'value',
           name: yAxisName,
+          nameGap: 30,
           nameTextStyle: colorTextSecondaryStyle
         },
         zAxis3D: {
           type: 'value',
           name: zAxisName,
+          nameGap: 35,
           nameTextStyle: colorTextSecondaryStyle
         },
         grid3D: {
