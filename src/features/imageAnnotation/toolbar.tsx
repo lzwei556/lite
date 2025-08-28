@@ -4,7 +4,7 @@ import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { EditIconButton, IconButton, SaveIconButton } from '../../components';
 import { MARGIN, Point } from './common';
-import { useCanvas } from './context';
+import { useCanvasContext } from './context';
 
 export function Toolbar({
   textSettingBtn,
@@ -23,8 +23,8 @@ export function Toolbar({
   onUpload?: (image: string) => void;
   uploadedImageStr?: string;
 }) {
-  const { ends, setEnds, editable, setEditable } = useCanvas();
-  const [prevEnds, setPrevEnds] = React.useState<Point[]>([]);
+  const { points, setPoints, editable, setEditable } = useCanvasContext();
+  const [prevPoints, setPrevPoints] = React.useState<Point[]>([]);
 
   return (
     <Space
@@ -36,7 +36,7 @@ export function Toolbar({
         <>
           <EditIconButton
             onClick={() => {
-              setPrevEnds(ends);
+              setPrevPoints(points);
               setEditable(true);
             }}
             size='middle'
@@ -73,8 +73,8 @@ export function Toolbar({
             color='default'
             onClick={() => {
               setEditable(false);
-              setPrevEnds([]);
-              onSave({ canvasSnapshot: ends });
+              setPrevPoints([]);
+              onSave({ canvasSnapshot: points });
               if (uploadedImageStr) {
                 onUpload?.(uploadedImageStr);
               }
@@ -84,8 +84,8 @@ export function Toolbar({
           <IconButton
             icon={<CloseCircleOutlined />}
             onClick={() => {
-              if (prevEnds.length > 0) {
-                setEnds(prevEnds);
+              if (prevPoints.length > 0) {
+                setPoints(prevPoints);
               }
               setEditable(false);
               onCancel?.();

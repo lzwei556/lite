@@ -8,10 +8,10 @@ import {
   MonitoringPointRow,
   MonitoringPointsTable
 } from '../../../asset-common';
+import { AssetModelProvider } from '../../../asset-model';
 import { Index as Overview } from './overview';
 import { Update } from './update';
 import { PointsTable } from './pointsTable';
-import { AssetProvider } from './context';
 
 export const Index = (props: {
   asset: AssetRow;
@@ -21,7 +21,7 @@ export const Index = (props: {
   const { asset, onSuccess } = props;
 
   return (
-    <AssetProvider asset={asset}>
+    <AssetModelProvider asset={asset} key={asset.id}>
       <TabsDetail
         items={[
           {
@@ -57,6 +57,6 @@ export const Index = (props: {
         ]}
         title={<AssetNavigator asset={asset} />}
       />
-    </AssetProvider>
+    </AssetModelProvider>
   );
 };

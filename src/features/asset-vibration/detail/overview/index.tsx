@@ -4,48 +4,19 @@ import { EyeOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Card, Grid, IconButton } from '../../../../components';
 import { ModalWrapper } from '../../../../components/modalWrapper';
-import { Dayjs } from '../../../../utils';
 import {
   AssetRow,
   EmptyMonitoringPoints,
-  getDataOfMonitoringPoint,
-  HistoryData,
   AlarmsObjectStatistics,
   AlarmTrend
 } from '../../../../asset-common';
 import { SettingsDetail } from '../../../../asset-variant';
-import { appendAxisAliasAbbrToField } from '../../../monitoring-point-vibration/common';
-import { HistoryDataFea } from '../../..';
-import { useAssetContext } from '../context';
+import { SelectedPointPropertyHistory } from '../../../../asset-model';
 import { DianJiImage } from './dianJiImage';
 
 export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
   const { asset, onSuccess } = props;
-  const [loading, setLoading] = React.useState(true);
-  const [historyData, setHistoryData] = React.useState<HistoryData>();
   const [open, setOpen] = React.useState(false);
-  const { selectedPoint, setSelectedPoint, firstPoint, properties } = useAssetContext();
-
-  const fetchData = (id: number, range: [number, number]) => {
-    if (range) {
-      const [from, to] = range;
-      setLoading(true);
-      getDataOfMonitoringPoint(id, from, to).then((data) => {
-        setLoading(false);
-        if (data.length > 0) {
-          setHistoryData(data);
-        } else {
-          setHistoryData(undefined);
-        }
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    if (firstPoint?.id && !historyData) {
-      fetchData(firstPoint.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
-    }
-  }, [firstPoint?.id, historyData]);
 
   return (
     <EmptyMonitoringPoints asset={asset}>
@@ -56,15 +27,6 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
               <DianJiImage
                 asset={asset}
                 key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
-                properties={properties}
-                onSelectMonitoringPointProperty={(item) => {
-                  if (item) {
-                    setSelectedPoint(item);
-                    if (!selectedPoint || selectedPoint.id !== item.id) {
-                      fetchData(item.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
-                    }
-                  }
-                }}
                 viewIcon={
                   <React.Fragment key='view'>
                     <IconButton
@@ -109,29 +71,9 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
             </Col>
           </Grid>
         </Col>
-        {selectedPoint && (
-          <Col span={24}>
-            <Card title={`${selectedPoint.name} ${selectedPoint.title}`} size='small'>
-              <HistoryDataFea.PropertyChart
-                config={{
-                  opts: {
-                    yAxis: { name: selectedPoint.property.unit },
-                    grid: { top: 30 }
-                  },
-                  switchs: { noDataZoom: true }
-                }}
-                data={historyData}
-                property={appendAxisAliasAbbrToField(
-                  selectedPoint.property,
-                  selectedPoint.attributes
-                )}
-                axisKey={selectedPoint.axisKey}
-                loading={loading}
-                style={{ height: 140 }}
-              />
-            </Card>
-          </Col>
-        )}
+        <Col span={24}>
+          <SelectedPointPropertyHistory />
+        </Col>
       </Grid>
     </EmptyMonitoringPoints>
   );

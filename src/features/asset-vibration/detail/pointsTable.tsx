@@ -13,8 +13,8 @@ import {
   Points,
   positionColumn
 } from '../../../asset-common';
+import { getSelected, transform2Selected, useAssetModelContext } from '../../../asset-model';
 import { ActionBar } from '../actionBar';
-import { getDefaultSelectedPoint, useAssetContext } from './context';
 
 export const PointsTable = (props: {
   asset: AssetRow;
@@ -28,7 +28,7 @@ export const PointsTable = (props: {
   const { hasPermission } = usePermission();
   const actualPoints = Points.filter(monitoringPoints);
   const columns = basicColumns;
-  const { selectedPoint, setSelectedPoint } = useAssetContext();
+  const { selectedMonitoringPoint, setSelectedMonitoringPoint } = useAssetModelContext();
 
   columns.push(
     ...[
@@ -67,13 +67,9 @@ export const PointsTable = (props: {
       getOperateColumn({
         onDeleteSuccess: (id: number) => {
           onSuccess();
-          if (selectedPoint?.id === id) {
+          if (selectedMonitoringPoint?.id === id) {
             const restPoints = (asset.monitoringPoints ?? []).filter((m) => m.id !== id);
-            setSelectedPoint(
-              restPoints.length > 0
-                ? getDefaultSelectedPoint({ ...asset, monitoringPoints: restPoints })
-                : undefined
-            );
+            setSelectedMonitoringPoint(transform2Selected(getSelected(restPoints?.[0])));
           }
         },
         onUpdate

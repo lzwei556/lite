@@ -1,50 +1,34 @@
 import React from 'react';
-import { Checkbox, Col, List, Popover, Typography } from 'antd';
+import { Checkbox, Col, Popover } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useSize } from 'ahooks';
 import intl from 'react-intl-universal';
+import { Canvas } from '../../../imageAnnotation';
 import { DisplayProperty } from '../../../../constants/properties';
-import { Dayjs } from '../../../../utils';
 import { base64toBlob } from '../../../../utils/image';
-import { ImageAnnotation } from '../../..';
-import { Card, Flex, Grid, IconButton, Link } from '../../../../components';
-import { ASSET_PATHNAME, AssetRow, updateAsset, uploadAssetImage } from '../../../../asset-common';
-import { getPropertyValues, MonitoringPointPropertyItem } from '../context';
+import { Card, Grid, IconButton } from '../../../../components';
+import { AssetRow, updateAsset, uploadAssetImage } from '../../../../asset-common';
+import { useAssetModelContext, usePlaceCards } from '../../../../asset-model';
 import DianJi from './dianji.png';
-import { createStyles } from 'antd-style';
-
-const useStyles = createStyles(({ token, css }) => ({
-  listItem: css`
-    padding: 1px 2px !important;
-    cursor: pointer;
-    &:hover,
-    &.selected {
-      background-color: ${token.colorInfoBgHover};
-    }
-  `
-}));
 
 export const DianJiImage = ({
   asset,
-  properties,
-  onSelectMonitoringPointProperty,
   viewIcon,
   onSuccess
 }: {
   asset: AssetRow;
-  properties: DisplayProperty[];
-  onSelectMonitoringPointProperty?: (item: MonitoringPointPropertyItem) => void;
   viewIcon: React.ReactElement;
   onSuccess: () => void;
 }) => {
   const ref = React.useRef(null);
   const size = useSize(ref);
-
+  const { selectedMonitoringPoint, selectedMonitoringPointExtend } = useAssetModelContext();
+  const properties = selectedMonitoringPointExtend?.properties ?? [];
   const [visibledKeys, setVisibledKeys] = React.useState<string[]>(
     properties.filter((p) => !!p.first).map((p) => p.key)
   );
-  const [selected, setSelected] = React.useState<MonitoringPointPropertyItem | undefined>();
-  const { styles } = useStyles();
+  const placeCardProps = usePlaceCards(asset, visibledKeys);
+
   return (
     <Card
       ref={ref}
@@ -57,53 +41,11 @@ export const DianJiImage = ({
       }}
     >
       {size && (
-        <ImageAnnotation
-          asset={asset}
+        <Canvas
           size={size}
           background={asset.image ? `/images/${asset.image}` : DianJi}
-          placeTexts={(asset.monitoringPoints ?? []).map((m) => ({
-            id: m.id,
-            header: <Link to={`/${ASSET_PATHNAME}/${m.id}-${m.type}`}>{m.name}</Link>,
-            body: (
-              <List
-                dataSource={getPropertyValues(
-                  m,
-                  properties.filter((p) => visibledKeys.includes(p.key))
-                )}
-                rowKey={(item) => `${item.key}_${item.axisKey}`}
-                renderItem={(item) => {
-                  const { axisKey, key, label, children } = item;
-                  const isSelected =
-                    selected?.id === m.id && selected?.key === key && selected?.axisKey === axisKey;
-                  return (
-                    <List.Item
-                      className={`${styles.listItem} ${isSelected ? 'selected' : ''}`}
-                      onClick={() => {
-                        const mix = {
-                          ...m,
-                          ...item,
-                          property: properties.find((p) => p.key === key)!
-                        };
-                        setSelected(mix);
-                        onSelectMonitoringPointProperty?.(mix);
-                      }}
-                      style={{ border: 0 }}
-                    >
-                      <Flex align='center' justify='space-between' style={{ width: '100%' }}>
-                        <Typography.Text type='secondary' style={{ fontSize: 12 }}>
-                          {label}
-                        </Typography.Text>
-                        <span style={{ fontSize: 12 }}>{children}</span>
-                      </Flex>
-                    </List.Item>
-                  );
-                }}
-                size='small'
-                style={{ top: 4 }}
-              />
-            ),
-            footer: m.data?.timestamp ? Dayjs.format(m.data.timestamp) : undefined
-          }))}
+          selectedItem={{ ...selectedMonitoringPoint, index: selectedMonitoringPoint?.id }}
+          placeCardProps={placeCardProps}
           textSettingBtn={
             <SettingsButton
               properties={properties}
