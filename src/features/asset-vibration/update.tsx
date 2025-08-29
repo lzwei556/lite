@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, SaveIconButton } from '../../../components';
-import { generateColProps } from '../../../utils/grid';
-import { AssetModel, AssetRow, updateAsset } from '../../../asset-common';
-import { BasisFormItems, SettingFormItems, getByType, motor } from '../../../asset-variant';
+import { Card, SaveIconButton } from '../../components';
+import { generateColProps } from '../../utils/grid';
+import { AssetModel, AssetRow, updateAsset } from '../../asset-common';
+import { BasisFormItems, SettingFormItems, getByType, motor } from '../../asset-variant';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const { name, parentId, type } = asset;

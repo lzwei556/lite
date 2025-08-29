@@ -5,4 +5,5 @@ export * from './context';
 export * from './lineChart';
 export * from './useCustomTooltip';
 export * from './useLinedSeriesOptions';
+export * from './usePieOptions';
 export * from './utils';

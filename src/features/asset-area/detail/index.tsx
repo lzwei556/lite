@@ -3,7 +3,12 @@ import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { generateColProps } from '../../../utils/grid';
 import { Card, Grid, TabsDetail } from '../../../components';
-import { AssetNavigator, AssetRow, StatisticBar } from '../../../asset-common';
+import {
+  AlarmsObjectStatistics,
+  AssetNavigator,
+  AssetRow,
+  SensorsStatistics
+} from '../../../asset-common';
 import { Update } from './update';
 import { OverviewCard } from './overviewCard';
 import { Settings } from './settings';
@@ -14,6 +19,7 @@ export const Index = (props: {
   onUpdateAsset: (asset: AssetRow) => void;
 }) => {
   const { asset, onSuccess, onUpdateAsset } = props;
+  const { statistics } = asset;
   const renderAssetList = (content: React.ReactNode) => {
     return (asset.children?.length ?? 0) > 0 ? (
       content
@@ -31,20 +37,37 @@ export const Index = (props: {
           label: intl.get('assets'),
           key: 'asset',
           content: (
-            <Grid>
-              <Col span={24}>
-                <StatisticBar asset={asset} />
+            <Grid wrap={false} align='stretch'>
+              <Col flex='auto'>
+                <Card style={{ height: '100%' }}>
+                  {renderAssetList(
+                    <Grid>
+                      {asset.children?.map((a) => (
+                        <Col key={a.id} {...generateColProps({ lg: 12, xl: 12, xxl: 8 })}>
+                          <OverviewCard asset={a} />
+                        </Col>
+                      ))}
+                    </Grid>
+                  )}
+                </Card>
               </Col>
-              <Col span={24}>
-                {renderAssetList(
-                  <Grid>
-                    {asset.children?.map((a) => (
-                      <Col key={a.id} {...generateColProps({ md: 12, lg: 12, xl: 12, xxl: 8 })}>
-                        <OverviewCard asset={a} />
-                      </Col>
-                    ))}
-                  </Grid>
-                )}
+              <Col flex='300px'>
+                <Grid>
+                  <Col span={24}>
+                    <AlarmsObjectStatistics
+                      total={statistics.monitoringPointNum}
+                      alarms={statistics.alarmNum}
+                      title={intl.get('monitoring.points')}
+                      subtext={intl.get('total')}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <SensorsStatistics
+                      total={statistics.deviceNum}
+                      offlines={statistics.offlineDeviceNum}
+                    />
+                  </Col>
+                </Grid>
               </Col>
             </Grid>
           )

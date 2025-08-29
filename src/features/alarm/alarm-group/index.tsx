@@ -5,7 +5,6 @@ import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import HasPermission from '../../../permission';
 import { Permission } from '../../../permission/permission';
-import { isMobile } from '../../../utils/deviceDetection';
 import { getValue } from '../../../utils/format';
 import { App, useAppType } from '../../../config';
 import { MONITORING_POINT } from '../../../asset-common';
@@ -69,7 +68,7 @@ export default function AlarmRuleList() {
     {
       title: intl.get('OPERATION'),
       key: 'action',
-      render: (x: any, row: AlarmRule) => {
+      render: (_: string, row: AlarmRule) => {
         return (
           <Space>
             {row.editable && (
@@ -134,7 +133,7 @@ export default function AlarmRuleList() {
           title: intl.get('ALARM_CONDITION'),
           dataIndex: 'condition',
           key: 'condition',
-          render: (_: any, record: any) => {
+          render: (_: string, record: any) => {
             return `${record.operation} ${record.threshold} ${record.metric.unit}`;
           }
         },
@@ -146,9 +145,7 @@ export default function AlarmRuleList() {
         }
       ],
       dataSource,
-      pagination: false,
-      style: { marginLeft: 40, width: columns.length === 2 ? 'auto' : 770 },
-      scroll: isMobile ? { x: 600 } : undefined
+      pagination: false
     };
   };
 
@@ -192,8 +189,7 @@ export default function AlarmRuleList() {
 
           pagination: false,
           loading,
-          dataSource: alarmRules,
-          scroll: isMobile ? { x: 600 } : undefined
+          dataSource: alarmRules
         }}
         header={{
           toolbar: (

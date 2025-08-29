@@ -13,9 +13,13 @@ export type LineChartProps = {
 export const LineChart = (props: LineChartProps) => {
   const { series, yAxisMeta, config, ...rest } = props;
   const options = getOptions(
-    useLinedSeriesOptions(series, yAxisMeta, {
-      ...config,
-      switchs: { noDataZoom: true, noArea: true, ...config?.switchs }
+    useLinedSeriesOptions({
+      series,
+      yAxisMeta,
+      config: {
+        ...config,
+        switchs: { noDataZoom: true, noArea: true, ...config?.switchs }
+      }
     })
   );
   return <Chart {...rest} options={options} />;

@@ -9,7 +9,8 @@ import {
   AssetNavigator,
   MonitoringPointRow,
   RelatedDeviceCard,
-  BasicCard
+  BasicCard,
+  MonitoringPointProvider
 } from '../../../asset-common';
 import { Index as Analysis } from '../analysis';
 import { Monitor } from './monitor';
@@ -87,5 +88,9 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     });
   }
 
-  return <TabsDetail items={items} title={<AssetNavigator asset={monitoringPoint} />} />;
+  return (
+    <MonitoringPointProvider id={id}>
+      <TabsDetail items={items} title={<AssetNavigator asset={monitoringPoint} />} />
+    </MonitoringPointProvider>
+  );
 };

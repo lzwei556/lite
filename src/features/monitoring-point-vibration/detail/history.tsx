@@ -19,11 +19,13 @@ import {
   clearHistory,
   DownloadData,
   getDataOfMonitoringPoint,
+  getSeriesAlarm,
   hasData,
   HistoryData,
   MonitoringPointRow,
   Point,
-  PropertyLightSelectFilter
+  PropertyLightSelectFilter,
+  useMonitoringPointContext
 } from '../../../asset-common';
 import { appendAxisAliasAbbrToField } from '../common';
 
@@ -40,6 +42,7 @@ export const History = (point: MonitoringPointRow) => {
   );
   const [open, setOpen] = React.useState(false);
   const [from, to] = numberedRange;
+  const { ruleGroups } = useMonitoringPointContext();
 
   const fetchData = (id: number, range: [number, number]) => {
     if (range) {
@@ -105,6 +108,7 @@ export const History = (point: MonitoringPointRow) => {
       >
         {property && (
           <HistoryDataFea.PropertyChart
+            alarm={getSeriesAlarm(ruleGroups, property)}
             config={{
               opts: { dataZoom: [{ start: 0, end: 100 }], yAxis: { name: property.unit } }
             }}
