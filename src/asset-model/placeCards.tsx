@@ -4,8 +4,9 @@ import { Link } from '../components';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { Dayjs } from '../utils';
 
-export const usePlaceCards = (asset: AssetRow, visibledKeys: string[]) => {
-  const { setSelectedMonitoringPoint, selectedMonitoringPointExtend } = useAssetModelContext();
+export const usePlaceCards = (asset: AssetRow, selected?: boolean) => {
+  const { selectedMonitoringPoint, setSelectedMonitoringPoint, selectedMonitoringPointExtend } =
+    useAssetModelContext();
 
   return (asset.monitoringPoints ?? []).map((m) => {
     const { id, name, type } = m;
@@ -14,18 +15,21 @@ export const usePlaceCards = (asset: AssetRow, visibledKeys: string[]) => {
       items: getPropertyItems(
         m,
         (selectedMonitoringPointExtend?.properties ?? []).filter((p) =>
-          visibledKeys.includes(p.key)
+          selectedMonitoringPoint?.visibleKeys.includes(p.key)
         )
       ).map((item) => ({
         ...item,
         index: id,
         selected: false,
         onClick: () => {
-          setSelectedMonitoringPoint({
-            id,
-            propertyKey: item.propertyKey,
-            axisKey: item.axisKey
-          });
+          if (selected) {
+            setSelectedMonitoringPoint((prev) => ({
+              id,
+              propertyKey: item.propertyKey,
+              axisKey: item.axisKey,
+              visibleKeys: prev?.visibleKeys ?? []
+            }));
+          }
         }
       })),
       footer: m.data?.timestamp ? Dayjs.format(m.data.timestamp) : undefined

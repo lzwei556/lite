@@ -20,6 +20,7 @@ export type PropertyItem = {
 
 type SelectedMonitoringPoint = Pick<PropertyItem, 'propertyKey' | 'axisKey'> & {
   id: number;
+  visibleKeys: string[];
 };
 
 type SelectedMonitoringPointExtend = {
@@ -75,10 +76,15 @@ export const AssetModelProvider = ({
   };
 
   React.useEffect(() => {
-    if (selectedMonitoringPoint?.id) {
+    const isSelectedPointValid = asset.monitoringPoints?.find(
+      (m) => m.id === selectedMonitoringPoint?.id
+    );
+    if (selectedMonitoringPoint?.id && isSelectedPointValid) {
       fetchData(selectedMonitoringPoint.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
+    } else {
+      setSelectedMonitoringPoint(transform2Selected(getSelected(asset.monitoringPoints?.[0])));
     }
-  }, [selectedMonitoringPoint?.id]);
+  }, [selectedMonitoringPoint?.id, asset]);
 
   return (
     <AssetModelContext.Provider
@@ -139,7 +145,8 @@ export const transform2Selected = (
     return {
       id: m.point.id,
       propertyKey: m.property.key,
-      axisKey: m.axisKey
+      axisKey: m.axisKey,
+      visibleKeys: m.properties.filter((p) => !!p.first).map((p) => p.key)
     };
   }
   return undefined;

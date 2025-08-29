@@ -2,7 +2,6 @@ import React from 'react';
 import { Layer, Stage, Image, Line, Circle } from 'react-konva';
 import useImage from 'use-image';
 import { useGlobalStyles } from '../../styles';
-import { Toolbar } from './toolbar';
 import { CanvasProvider, useCanvasContext } from './context';
 import { Point, Size, usePlaces, useProviderProps, useStageProps } from './common';
 import { PalceCardItem, PlaceCard, PlaceCardProps } from './placeCard';
@@ -12,54 +11,50 @@ export const Canvas = ({
   background,
   selectedItem,
   placeCardProps,
-  textSettingBtn,
-  onSave,
   initials,
-  toolbarExtras,
-  onUpload
+  editable
 }: {
   size: Size;
   background: string;
   selectedItem?: Partial<Pick<PalceCardItem, 'index' | 'propertyKey' | 'axisKey'>>;
   placeCardProps: PlaceCardProps[];
-  textSettingBtn: JSX.Element;
-  onSave: (snapshot: { canvasSnapshot: Point[] }) => void;
   initials?: Point[];
-  toolbarExtras?: React.ReactElement[];
-  onUpload?: (image: string) => void;
+  editable?: boolean;
 }) => {
-  const [uploadingImg, setUploadingImg] = React.useState<string>();
-  const [img] = useImage(uploadingImg ?? background);
+  const [img] = useImage(background);
   const [cursor, setCursor] = React.useState('default');
   const stageProps = useStageProps(size, img);
   const scaleProps = { x: stageProps.x, y: stageProps.y, scale: stageProps.scaleX };
   const places = usePlaces(scaleProps, size, placeCardProps.length);
   const startingPoints = places.map((p) => ({ x: p.x, y: p.y }));
-  const providerProps = useProviderProps(size, scaleProps, startingPoints, initials ?? []);
+  const providerProps = useProviderProps(
+    size,
+    scaleProps,
+    startingPoints,
+    initials ?? [],
+    editable
+  );
 
   return (
     <CanvasProvider {...providerProps} key={providerProps._key}>
       <div style={{ position: 'relative' }}>
         {img && (
-          <Stage {...stageProps} style={{ cursor }}>
-            <ImageLayer img={img} />
-            <Marks startingPoints={startingPoints} setCursor={setCursor} />
-          </Stage>
+          <>
+            <Stage {...stageProps} style={{ cursor }}>
+              <ImageLayer img={img} />
+              <Marks startingPoints={startingPoints} setCursor={setCursor} />
+            </Stage>
+            {placeCardProps.map((props, i) => (
+              <PlaceCard
+                {...props}
+                selected={!editable}
+                style={places?.[i].style}
+                key={i}
+                selectedItem={selectedItem}
+              />
+            ))}
+          </>
         )}
-        <Toolbar
-          textSettingBtn={textSettingBtn}
-          onSave={onSave}
-          extras={toolbarExtras}
-          beforeUpload={setUploadingImg}
-          onCancel={() => {
-            setUploadingImg(undefined);
-          }}
-          onUpload={onUpload}
-          uploadedImageStr={uploadingImg}
-        />
-        {placeCardProps.map((props, i) => (
-          <PlaceCard {...props} style={places?.[i].style} key={i} selectedItem={selectedItem} />
-        ))}
       </div>
     </CanvasProvider>
   );
@@ -119,7 +114,6 @@ function ConnectedLine({
   setCursor: React.Dispatch<React.SetStateAction<string>>;
   onDragMove: (point: Point) => void;
 }) {
-  // const id = starting.id;
   const { editable } = useCanvasContext();
   const { colorInfoBorderStyle, colorPrimaryStyle } = useGlobalStyles();
   return (

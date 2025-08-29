@@ -12,10 +12,12 @@ const cardStyles = { BorderWidth: 1, Padding: Space / 2, width: 220, height: 210
 const useStyles = createStyles(({ token, css }) => ({
   listItem: css`
     padding: 1px 2px !important;
-    cursor: pointer;
-    &:hover,
-    &.selected {
-      background-color: ${token.colorInfoBgHover};
+    .selected & {
+      cursor: pointer;
+      &:hover,
+      &.selected {
+        background-color: ${token.colorInfoBgHover};
+      }
     }
   `
 }));
@@ -31,6 +33,7 @@ export type PlaceCardProps = {
   items: PalceCardItem[];
   footer?: React.ReactNode;
   style?: React.CSSProperties;
+  selected?: boolean;
 };
 
 export const PlaceCard = ({
@@ -38,7 +41,8 @@ export const PlaceCard = ({
   title,
   items,
   footer,
-  style
+  style,
+  selected
 }: {
   selectedItem?: Partial<Pick<PalceCardItem, 'index' | 'propertyKey' | 'axisKey'>>;
 } & PlaceCardProps) => {
@@ -47,6 +51,7 @@ export const PlaceCard = ({
 
   return (
     <Card
+      className={selected ? 'selected' : ''}
       style={{
         ...style,
         position: 'absolute',

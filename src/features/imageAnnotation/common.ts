@@ -4,10 +4,8 @@ export type Size = { width: number; height: number };
 export type Point = { x: number; y: number };
 type StageProps = { x: number; y: number; scale: number };
 
-export const MARGIN = Space;
+const Margin = Space;
 const PlaceTextCardStyle = {
-  BorderWidth: 1,
-  Padding: Space / 2,
   width: 220,
   height: 210
 };
@@ -41,27 +39,27 @@ function scaleStage(size: Size, img?: HTMLImageElement) {
 export function usePlaces(stage: StageProps, size: Size, lengthLimit: number) {
   if (lengthLimit === 0) return [];
   const { x, y, scale } = stage;
-  const popoverXLen = PlaceTextCardStyle.width / 2 + MARGIN;
-  const popoverYLen = PlaceTextCardStyle.height + MARGIN;
+  const popoverXLen = PlaceTextCardStyle.width / 2 + Margin;
+  const popoverYLen = PlaceTextCardStyle.height + Margin;
   const leftTop = {
     x: (popoverXLen - x) / scale,
     y: (popoverYLen - y) / scale,
-    style: { top: MARGIN, left: MARGIN }
+    style: { top: Margin, left: Margin }
   };
   const rightTop = {
-    x: (size.width - popoverXLen - x - MARGIN * 3) / scale,
+    x: (size.width - popoverXLen - x - Margin * 3) / scale,
     y: (popoverYLen - y) / scale,
-    style: { top: MARGIN, right: MARGIN * 4 }
+    style: { top: Margin, right: Margin }
   };
   const leftBottom = {
     x: (popoverXLen - x) / scale,
     y: (size.height - popoverYLen - y) / scale,
-    style: { bottom: MARGIN, left: MARGIN }
+    style: { bottom: Margin, left: Margin }
   };
   const rightBottom = {
-    x: (size.width - popoverXLen - x - MARGIN * 3) / scale,
+    x: (size.width - popoverXLen - x - Margin * 3) / scale,
     y: (size.height - popoverYLen - y) / scale,
-    style: { bottom: MARGIN, right: MARGIN * 4 }
+    style: { bottom: Margin, right: Margin }
   };
   return [leftTop, rightTop, leftBottom, rightBottom].filter((_, i) => i < lengthLimit);
 }
@@ -70,13 +68,14 @@ export const useProviderProps = (
   size: Size,
   stage: StageProps,
   startingPoints: Point[],
-  initials: Point[]
+  initials: Point[],
+  editable?: boolean
 ) => {
   const { x, y, scale } = stage;
   const centralPoint = { x: (size.width / 2 - x) / scale, y: (size.height / 2 - y) / scale };
   return {
     _key: `${centralPoint.x}${centralPoint.y}`,
-    editable: false,
+    editable,
     initials: getInitials(initials, centralPoint, startingPoints)
   };
 };

@@ -1,8 +1,8 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Table } from '../../../components';
-import usePermission, { Permission } from '../../../permission/permission';
-import { useLocaleContext } from '../../../localeProvider';
+import { Table } from '../../components';
+import usePermission, { Permission } from '../../permission/permission';
+import { useLocaleContext } from '../../localeProvider';
 import {
   AssetRow,
   AXIS_ALIAS,
@@ -12,9 +12,8 @@ import {
   Point,
   Points,
   positionColumn
-} from '../../../asset-common';
-import { getSelected, transform2Selected, useAssetModelContext } from '../../../asset-model';
-import { ActionBar } from '../actionBar';
+} from '../../asset-common';
+import { ActionBar } from './actionBar';
 
 export const PointsTable = (props: {
   asset: AssetRow;
@@ -28,7 +27,6 @@ export const PointsTable = (props: {
   const { hasPermission } = usePermission();
   const actualPoints = Points.filter(monitoringPoints);
   const columns = basicColumns;
-  const { selectedMonitoringPoint, setSelectedMonitoringPoint } = useAssetModelContext();
 
   columns.push(
     ...[
@@ -63,18 +61,7 @@ export const PointsTable = (props: {
   );
 
   if (hasPermission(Permission.MeasurementAdd)) {
-    columns.push(
-      getOperateColumn({
-        onDeleteSuccess: (id: number) => {
-          onSuccess();
-          if (selectedMonitoringPoint?.id === id) {
-            const restPoints = (asset.monitoringPoints ?? []).filter((m) => m.id !== id);
-            setSelectedMonitoringPoint(transform2Selected(getSelected(restPoints?.[0])));
-          }
-        },
-        onUpdate
-      })
-    );
+    columns.push(getOperateColumn({ onDeleteSuccess: () => onSuccess(), onUpdate }));
   }
 
   return (
