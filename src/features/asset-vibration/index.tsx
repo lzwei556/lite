@@ -15,7 +15,6 @@ import { Overview } from './overview';
 import { Update } from './update';
 import { PointsTable } from './pointsTable';
 import { AssetAnnotationImage } from '../imageAnnotation';
-import DianJi from './dianji.png';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
   const [open, setOpen] = React.useState(false);
@@ -69,7 +68,6 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                   <Col span={24}>
                     <AssetAnnotationImage
                       asset={asset}
-                      backgroundImage={DianJi}
                       key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
                       editable={true}
                       title={intl.get('OVERVIEW')}

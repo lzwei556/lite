@@ -27,6 +27,7 @@ export const usePlaceCards = (asset: AssetRow, selected?: boolean) => {
               id,
               propertyKey: item.propertyKey,
               axisKey: item.axisKey,
+              fieldKey: item.fieldKey,
               visibleKeys: prev?.visibleKeys ?? []
             }));
           }

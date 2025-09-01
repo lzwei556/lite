@@ -1,19 +1,17 @@
 import React from 'react';
 import { AssetRow, updateAsset, uploadAssetImage } from '../../asset-common';
-import { useAssetModelContext, usePlaceCards } from '../../asset-model';
+import { getDefaultImage, useAssetModelContext, usePlaceCards } from '../../asset-model';
 import { base64toBlob } from '../../utils/image';
 import { Canvas } from './canvas';
 import { Toolbar } from './toolbar';
 
 export const AssetAnnotationImage = ({
   asset,
-  backgroundImage,
   editable,
   title,
   onSuccess
 }: {
   asset: AssetRow;
-  backgroundImage: string;
   editable?: boolean;
   title?: React.ReactNode;
   onSuccess?: () => void;
@@ -23,13 +21,19 @@ export const AssetAnnotationImage = ({
   const placeCardProps = usePlaceCards(asset, selected);
   const [uploadingImg, setUploadingImg] = React.useState<string>();
 
+  const getBackgroundImage = () => {
+    if (asset.image) {
+      return `/images/${asset.image}`;
+    } else if (uploadingImg) {
+      return uploadingImg;
+    } else {
+      return getDefaultImage(asset);
+    }
+  };
+
   return (
     <Canvas
-      background={
-        asset.image
-          ? `http://172.16.7.134:8268/images/${asset.image}`
-          : uploadingImg ?? backgroundImage
-      }
+      background={getBackgroundImage()}
       selectedItem={
         selected ? { ...selectedMonitoringPoint, index: selectedMonitoringPoint?.id } : undefined
       }

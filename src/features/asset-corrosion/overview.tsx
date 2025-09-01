@@ -1,10 +1,9 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { Grid, MutedCard } from '../../components';
+import { Grid } from '../../components';
 import { AssetRow, AlarmsObjectStatistics, AlarmTrend } from '../../asset-common';
 import { SelectedPointPropertyHistory } from '../../asset-model';
-import { SettingsDetail } from '../../asset-variant';
 import { AssetAnnotationImage } from '../imageAnnotation';
 
 export const Overview = (props: { asset: AssetRow; onSuccess?: () => void }) => {
@@ -31,11 +30,6 @@ export const Overview = (props: { asset: AssetRow; onSuccess?: () => void }) => 
       </Col>
       <Col flex='300px'>
         <Grid>
-          <Col span={24}>
-            <MutedCard title={intl.get('BASIC_INFORMATION')}>
-              <SettingsDetail settings={asset.attributes} type={asset.type} />
-            </MutedCard>
-          </Col>
           <Col span={24}>
             <AlarmsObjectStatistics
               total={asset.statistics.monitoringPointNum}

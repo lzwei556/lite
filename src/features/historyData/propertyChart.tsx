@@ -55,7 +55,7 @@ export function transform(
         property.onlyShowFirstField
           ? f.first
           : axisKey
-          ? f.key === `${property.key}_${axisKey}`
+          ? f.key === `${property.key}_${axisKey}` || f.key === axisKey
           : true
       )
       .map((f) => {

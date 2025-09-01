@@ -16,9 +16,10 @@ export type PropertyItem = {
   children: string;
   propertyKey: string;
   axisKey?: string;
+  fieldKey?: string;
 };
 
-type SelectedMonitoringPoint = Pick<PropertyItem, 'propertyKey' | 'axisKey'> & {
+type SelectedMonitoringPoint = Pick<PropertyItem, 'propertyKey' | 'axisKey' | 'fieldKey'> & {
   id: number;
   visibleKeys: string[];
 };
@@ -28,6 +29,7 @@ type SelectedMonitoringPointExtend = {
   properties: DisplayProperty[];
   property: DisplayProperty;
   axisKey?: string;
+  fieldKey?: string;
   title?: string;
 };
 
@@ -94,7 +96,8 @@ export const AssetModelProvider = ({
         selectedMonitoringPointExtend: getSelected(
           asset.monitoringPoints?.find((m) => m.id === selectedMonitoringPoint?.id),
           selectedMonitoringPoint?.propertyKey,
-          selectedMonitoringPoint?.axisKey
+          selectedMonitoringPoint?.axisKey,
+          selectedMonitoringPoint?.fieldKey
         ),
         loading,
         historyData
@@ -110,20 +113,33 @@ export const useAssetModelContext = () => React.useContext(AssetModelContext);
 export const getSelected = (
   point?: MonitoringPointRow,
   propertyKey?: string,
-  axisKey?: string
+  axisKey?: string,
+  fieldKey?: string
 ): SelectedMonitoringPointExtend | undefined => {
   if (point) {
     const properties = getProperties(point);
     const property = propertyKey ? properties.find((p) => p.key === propertyKey) : properties[0];
     if (property) {
       const items = getPropertyItem(point, property);
+      const fields = property.fields ?? [];
+      let title = items.find((item) => item.propertyKey === propertyKey)?.title;
+      if (axisKey) {
+        title = items.find(
+          (item) => item.propertyKey === propertyKey && item.axisKey === axisKey
+        )?.title;
+      }
+      if (fieldKey) {
+        title = items.find(
+          (item) => item.propertyKey === propertyKey && item.fieldKey === fieldKey
+        )?.title;
+      }
       return {
         point,
         properties,
         property,
         axisKey: axisKey ?? items?.[0].axisKey,
-        title: items.find((item) => item.propertyKey === propertyKey && item.axisKey === axisKey)
-          ?.title
+        fieldKey: fieldKey ?? fields.length > 1 ? fields[0].key : items?.[0].fieldKey,
+        title
       };
     }
   }
@@ -161,21 +177,37 @@ export function getPropertyItems(m: MonitoringPointRow, properties: DisplayPrope
 const getPropertyItem = (m: MonitoringPointRow, property: DisplayProperty): PropertyItem[] => {
   const { fields = [], key, name, precision, unit } = property;
   if (fields.length > 1) {
-    return Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
-      const attrs = m.attributes;
-      const axisKey = attrs?.[aliasKey];
-      const title = `${intl.get(name)} ${intl.get(abbr)}`;
-      return {
-        title,
-        children: getValue({
-          value: m?.data?.values[`${key}_${axisKey}`] as number,
-          unit,
-          precision
-        }),
-        axisKey,
-        propertyKey: key
-      };
-    });
+    if (Point.Assert.isVibrationRelated(m.type)) {
+      return Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
+        const attrs = m.attributes;
+        const axisKey = attrs?.[aliasKey];
+        const title = `${intl.get(name)} ${intl.get(abbr)}`;
+        return {
+          title,
+          children: getValue({
+            value: m?.data?.values[`${key}_${axisKey}`] as number,
+            unit,
+            precision
+          }),
+          axisKey,
+          propertyKey: key
+        };
+      });
+    } else {
+      return fields.map(({ key, name }) => {
+        const title = `${intl.get(name)}`;
+        return {
+          title,
+          children: getValue({
+            value: m?.data?.values[`${key}`] as number,
+            unit,
+            precision
+          }),
+          fieldKey: key,
+          propertyKey: property.key
+        };
+      });
+    }
   } else {
     return [
       {

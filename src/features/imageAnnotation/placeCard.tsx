@@ -44,7 +44,7 @@ export const PlaceCard = ({
   style,
   selected
 }: {
-  selectedItem?: Partial<Pick<PalceCardItem, 'index' | 'propertyKey' | 'axisKey'>>;
+  selectedItem?: Partial<Pick<PalceCardItem, 'index' | 'propertyKey' | 'axisKey' | 'fieldKey'>>;
 } & PlaceCardProps) => {
   const { colorInfoBorderStyle } = useGlobalStyles();
   const { styles } = useStyles();
@@ -81,10 +81,11 @@ export const PlaceCard = ({
               selected:
                 selectedItem?.index === item.index &&
                 selectedItem?.propertyKey === item.propertyKey &&
-                selectedItem?.axisKey === item.axisKey
+                selectedItem?.axisKey === item.axisKey &&
+                selectedItem?.fieldKey === item.fieldKey
             };
           })}
-          rowKey={(item) => `${item.propertyKey}_${item.axisKey}`}
+          rowKey={(item) => `${item.propertyKey}_${item.axisKey}_${item.fieldKey}`}
           renderItem={(item) => {
             const { title, children, selected, onClick } = item;
             return (
@@ -95,7 +96,7 @@ export const PlaceCard = ({
               >
                 <Flex align='center' justify='space-between' style={{ width: '100%' }}>
                   <Typography.Text type='secondary' style={{ fontSize: 12 }}>
-                    {truncate(title, 24)}
+                    {truncate(title, 20)}
                   </Typography.Text>
                   <span style={{ fontSize: 12 }}>{children}</span>
                 </Flex>
