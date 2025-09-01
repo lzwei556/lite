@@ -15,12 +15,21 @@ import { A4_SIZE, PREFACES } from './report';
 import Cover from './cover.jpg';
 import { ISO } from './iso';
 import { useStyles } from './styles';
+import { CorrosionFirst } from './corrosion-first';
 
 export default function Report() {
   const appType = useAppType();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const report = state;
+  // const report = state;
+  const report = {
+    id: 1,
+    start: 122223232,
+    end: 122223666,
+    filename: 'filename',
+    reportName: 'reportName',
+    reportDate: 453333333
+  };
   const reportRef = React.useRef<HTMLDivElement>(null);
   const [loading, setLoading] = React.useState(false);
   const duration = `${Dayjs.format(report.start, 'YYYY/MM/DD')}-${Dayjs.format(
@@ -123,9 +132,19 @@ export default function Report() {
         {renderDownloadButton()}
         {renderCover()}
         {renderPreface()}
-        <Status report={report} />
-        <AlarmPage report={report} />
-        {appType === 'vibration' && <ISO />}
+        {appType === 'vibration' && (
+          <>
+            <Status report={report} />
+            <AlarmPage report={report} />
+            <ISO />
+          </>
+        )}
+        <CorrosionFirst />
+        {appType === 'corrosion' && (
+          <>
+            <CorrosionFirst />
+          </>
+        )}
       </div>
     </Content>
   );
