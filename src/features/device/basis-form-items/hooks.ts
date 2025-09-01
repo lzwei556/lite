@@ -36,11 +36,18 @@ export const useProps = (form: CommonProps['form']) => {
     name: 'type',
     rules: [{ required: true }]
   });
+  const tag = useFormItemBindingsProps({ label: 'device.tag', name: 'tag' });
+  const applicationId = useFormItemBindingsProps({
+    label: 'application.id',
+    name: 'application_id'
+  });
 
   return {
     deviceName,
     mac,
-    deviceTypeProps: { ...deviceType, selectProps: useDeviceTypeSelectProps(form) }
+    deviceTypeProps: { ...deviceType, selectProps: useDeviceTypeSelectProps(form) },
+    tag,
+    applicationId
   };
 };
 

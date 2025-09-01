@@ -26,16 +26,52 @@ export const FormItems = ({
         <SelectFormItem {...deviceTypeProps} />
       </Col>
       {deviceType && (
-        <Col {...formItemColProps}>
+        <>
           {DeviceType.isRootDevice(deviceType) ? (
-            <ProtocolFormItem />
+            <RootDeviceFormItems
+              form={form}
+              formItemColProps={formItemColProps}
+              deviceType={deviceType}
+            />
           ) : (
-            <ParentFormItemsSection form={form} />
+            <Col {...formItemColProps}>
+              <ParentFormItemsSection form={form} />
+            </Col>
           )}
-        </Col>
+        </>
       )}
     </Grid>
   );
+};
+
+const RootDeviceFormItems = ({
+  form,
+  formItemColProps,
+  deviceType
+}: CommonProps & Pick<FormItemsProps, 'formItemColProps'> & { deviceType: DeviceType }) => {
+  const { tag, applicationId } = useProps(form);
+  const { selectProps, ...rest } = useProtocolProps();
+  if (DeviceType.isRootDevice(deviceType)) {
+    if (DeviceType.isLoraWAN(deviceType)) {
+      return (
+        <>
+          <Col {...formItemColProps}>
+            <TextFormItem hidden={true} {...rest} />
+            <TextFormItem {...tag} />
+          </Col>
+          <Col {...formItemColProps}>
+            <TextFormItem {...applicationId} />
+          </Col>
+        </>
+      );
+    } else {
+      return (
+        <Col {...formItemColProps}>
+          <ProtocolFormItem />
+        </Col>
+      );
+    }
+  }
 };
 
 const ProtocolFormItem = () => {

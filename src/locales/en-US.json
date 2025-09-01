@@ -159,6 +159,11 @@
   "DEVICE_TYPE_SVT510C": "Wireless Vibration Temperature Sensor (6K/5K Cat.1)",
   "DEVICE_TYPE_ST101S": "RS485 Temperature Sensor",
   "DEVICE_TYPE_WOERKE_PRESSURE": "WoErKe Pressure Sensor",
+  "DEVICE_TYPE_SVT510LoraWAN": "Wireless Vibration Temperature Sensor (6K/5K LoraWAN)",
+  "DEVICE_TYPE_STLoraWAN": "Wireless Temperature Sensor (LoRaWAN)",
+  "DEVICE_TYPE_DC110LoraWAN": "Wireless Corrosion Sensor (LoraWAN)",
+  "DEVICE_TYPE_DC210LoraWAN": "Wireless Ultra High Corrosion Sensor (LoraWAN)",
+  "DEVICE_TYPE_DC110HLoraWAN": "Wireless High Corrosion Sensor (LoraWAN)",
   "DEVICE_UPGRADING": "Device upgrade is in progress.",
   "DIMENSION": "Dimension",
   "DISABLED": "Disabled",
@@ -1341,5 +1346,7 @@
   "asset.devices": "Devices",
   "network.topology": "Topology",
   "gateways": "Gateways",
-  "sensors.number": "Number of Devices"
+  "sensors.number": "Number of Devices",
+  "device.tag": "Tag",
+  "application.id": "ApplicationId"
 }

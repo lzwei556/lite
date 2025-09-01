@@ -159,6 +159,11 @@
   "DEVICE_TYPE_SVT510C": "无线振动温度传感器 (6K/5K Cat.1)",
   "DEVICE_TYPE_ST101S": "RS485温度传感器",
   "DEVICE_TYPE_WOERKE_PRESSURE": "沃尔克压力传感器",
+  "DEVICE_TYPE_SVT510LoraWAN": "无线振动温度传感器 (6K/5K LoraWAN)",
+  "DEVICE_TYPE_STLoraWAN": "无线温度传感器 (LoRaWAN)",
+  "DEVICE_TYPE_DC110LoraWAN": "无线常温腐蚀传感器 (LoraWAN)",
+  "DEVICE_TYPE_DC210LoraWAN": "无线超高温腐蚀传感器 (LoraWAN)",
+  "DEVICE_TYPE_DC110HLoraWAN": "无线高温腐蚀传感器 (LoraWAN)",
   "DEVICE_UPGRADING": "设备升级",
   "DIMENSION": "指标维度",
   "DISABLED": "禁用",
@@ -1341,5 +1346,7 @@
   "asset.devices": "设备",
   "network.topology": "网络拓扑",
   "gateways": "网关",
-  "sensors.number": "设备数量"
+  "sensors.number": "设备数量",
+  "device.tag": "设备Tag",
+  "application.id": "应用Id"
 }
