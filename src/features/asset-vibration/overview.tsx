@@ -8,8 +8,8 @@ import { SettingsDetail } from '../../asset-variant';
 import { AssetAnnotationImage } from '../imageAnnotation';
 import DianJi from './dianji.png';
 
-export const Overview = (props: { asset: AssetRow }) => {
-  const { asset } = props;
+export const Overview = (props: { asset: AssetRow; onSuccess?: () => void }) => {
+  const { asset, onSuccess } = props;
   const number = asset.monitoringPoints?.length ?? 0;
 
   return (
@@ -21,6 +21,7 @@ export const Overview = (props: { asset: AssetRow }) => {
               asset={asset}
               backgroundImage={DianJi}
               key={`${asset.id}_${number}_${asset.image}`}
+              onSuccess={onSuccess}
             />
           </Col>
           {number > 0 && (

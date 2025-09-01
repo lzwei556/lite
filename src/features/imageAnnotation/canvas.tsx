@@ -1,43 +1,52 @@
 import React from 'react';
 import { Layer, Stage, Image, Line, Circle } from 'react-konva';
+import { useSize } from 'ahooks';
 import useImage from 'use-image';
+import { PalceCardItem, PlaceCard, PlaceCardProps } from './placeCard';
+import { Card, CardProps } from '../../components';
 import { useGlobalStyles } from '../../styles';
 import { CanvasProvider, useCanvasContext } from './context';
-import { Point, Size, usePlaces, useProviderProps, useStageProps } from './common';
-import { PalceCardItem, PlaceCard, PlaceCardProps } from './placeCard';
+import { Point, useContainerSize, usePlaces, useProviderProps, useStageProps } from './common';
 
 export const Canvas = ({
-  size,
   background,
   selectedItem,
   placeCardProps,
-  initials,
+  initials = [],
+  cardProps,
   editable
 }: {
-  size: Size;
   background: string;
   selectedItem?: Partial<Pick<PalceCardItem, 'index' | 'propertyKey' | 'axisKey'>>;
   placeCardProps: PlaceCardProps[];
   initials?: Point[];
+  cardProps?: CardProps;
   editable?: boolean;
 }) => {
+  const ref = React.useRef(null);
+  const size = useContainerSize(useSize(ref));
   const [img] = useImage(background);
   const [cursor, setCursor] = React.useState('default');
   const stageProps = useStageProps(size, img);
   const scaleProps = { x: stageProps.x, y: stageProps.y, scale: stageProps.scaleX };
   const places = usePlaces(scaleProps, size, placeCardProps.length);
   const startingPoints = places.map((p) => ({ x: p.x, y: p.y }));
-  const providerProps = useProviderProps(
+  const providerProps = useProviderProps({
     size,
-    scaleProps,
+    stage: scaleProps,
     startingPoints,
-    initials ?? [],
+    initials,
     editable
-  );
+  });
 
   return (
-    <CanvasProvider {...providerProps} key={providerProps._key}>
-      <div style={{ position: 'relative' }}>
+    <CanvasProvider {...providerProps} key={providerProps?._key}>
+      <Card
+        ref={ref}
+        {...cardProps}
+        style={{ height: '100%' }}
+        styles={{ body: { position: 'relative', padding: 0 } }}
+      >
         {img && (
           <>
             <Stage {...stageProps} style={{ cursor }}>
@@ -48,14 +57,14 @@ export const Canvas = ({
               <PlaceCard
                 {...props}
                 selected={!editable}
-                style={places?.[i].style}
+                style={places?.[i]?.style}
                 key={i}
                 selectedItem={selectedItem}
               />
             ))}
           </>
         )}
-      </div>
+      </Card>
     </CanvasProvider>
   );
 };

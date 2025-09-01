@@ -42,7 +42,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
             {
               key: 'overview',
               label: intl.get('OVERVIEW'),
-              content: <Overview asset={asset} key={asset.id} />
+              content: <Overview asset={asset} onSuccess={refresh} key={asset.id} />
             },
             {
               key: 'monitoringPointList',
@@ -73,6 +73,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                       key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
                       editable={true}
                       title={intl.get('OVERVIEW')}
+                      onSuccess={refresh}
                     />
                   </Col>
                 </Grid>
