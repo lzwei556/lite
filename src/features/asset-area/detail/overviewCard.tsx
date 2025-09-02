@@ -1,9 +1,10 @@
 import React from 'react';
-import { Col, Statistic, Typography } from 'antd';
+import { Col, Statistic, Typography, Image } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Flex, Grid, Link } from '../../../components';
-import { Asset, ASSET_PATHNAME, AssetImage, AssetRow, AssetStatusTag } from '../../../asset-common';
+import { Asset, ASSET_PATHNAME, AssetRow, AssetStatusTag } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
+import { getAssetImage } from '../../../asset-model';
 
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, name, type, statistics } = asset;
@@ -12,8 +13,8 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
     <Card
       cover={
         <div style={{ position: 'relative' }}>
-          <AssetImage
-            asset={asset}
+          <Image
+            src={getAssetImage(asset)}
             preview={false}
             height={210}
             width='100%'

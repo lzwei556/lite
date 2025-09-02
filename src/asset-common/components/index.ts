@@ -1,6 +1,5 @@
 export * from './alarmedObejctStatistics';
 export * from './alarmTrend';
-export * from '../image/assetImage';
 export * from './assetStatusTag';
 export * from './emptyMonitoringPoints';
 export * from './context';
