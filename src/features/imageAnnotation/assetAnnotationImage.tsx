@@ -18,7 +18,7 @@ export const AssetAnnotationImage = ({
 }) => {
   const { selectedMonitoringPoint } = useAssetModelContext();
   const selected = !editable;
-  const placeCardProps = usePlaceCards(asset, selected);
+  const placeCardProps = usePlaceCards(selected);
   const [uploadingImg, setUploadingImg] = React.useState<string>();
 
   const getBackgroundImage = () => {
@@ -35,7 +35,9 @@ export const AssetAnnotationImage = ({
     <Canvas
       background={getBackgroundImage()}
       selectedItem={
-        selected ? { ...selectedMonitoringPoint, index: selectedMonitoringPoint?.id } : undefined
+        selectedMonitoringPoint
+          ? { ...selectedMonitoringPoint, index: selectedMonitoringPoint?.self?.id }
+          : undefined
       }
       placeCardProps={placeCardProps}
       initials={asset.attributes?.canvasSnapshot}

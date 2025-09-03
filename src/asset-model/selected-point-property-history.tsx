@@ -2,34 +2,53 @@ import React from 'react';
 import { Card } from '../components';
 import { HistoryDataFea } from '../features';
 import { appendAxisAliasAbbrToField } from '../features/monitoring-point-vibration/common';
-import { useAssetModelContext } from './context';
-import { Point } from '../monitoring-point';
+import { getPropertyItems, useAssetModelContext } from './context';
+import { MonitoringPointRow, Point } from '../monitoring-point';
+import { DisplayProperty } from '../constants/properties';
 
 export const SelectedPointPropertyHistory = () => {
-  const { selectedMonitoringPointExtend, loading, historyData } = useAssetModelContext();
-  if (selectedMonitoringPointExtend) {
-    const { point, property, axisKey, fieldKey, title } = selectedMonitoringPointExtend;
+  const { selectedMonitoringPoint, loading, historyData } = useAssetModelContext();
+  if (selectedMonitoringPoint) {
+    const { self, property, axisKey, fieldKey } = selectedMonitoringPoint;
+
+    const getTitle = (m: MonitoringPointRow, property: DisplayProperty) => {
+      const key = property.key;
+      const items = getPropertyItems(m, Point.getPropertiesByType(m.type, m.properties));
+      let title = items.find((item) => item.property?.key === key)?.title;
+      if (axisKey) {
+        title = items.find((item) => item.property?.key === key && item.axisKey === axisKey)?.title;
+      }
+      if (fieldKey) {
+        title = items.find(
+          (item) => item.property?.key === key && item.fieldKey === fieldKey
+        )?.title;
+      }
+      return title;
+    };
+
     return (
-      <Card title={`${point.name} ${title}`} size='small'>
-        <HistoryDataFea.PropertyChart
-          config={{
-            opts: {
-              yAxis: { name: property.unit },
-              grid: { top: 30 }
-            },
-            switchs: { noDataZoom: true }
-          }}
-          data={historyData}
-          property={
-            Point.Assert.isVibrationRelated(point.type)
-              ? appendAxisAliasAbbrToField(property, point.attributes)
-              : property
-          }
-          axisKey={axisKey ?? fieldKey}
-          loading={loading}
-          style={{ height: 140 }}
-        />
-      </Card>
+      property && (
+        <Card title={`${self.name} ${getTitle(self, property)}`} size='small'>
+          <HistoryDataFea.PropertyChart
+            config={{
+              opts: {
+                yAxis: { name: property?.unit },
+                grid: { top: 30 }
+              },
+              switchs: { noDataZoom: true }
+            }}
+            data={historyData}
+            property={
+              Point.Assert.isVibrationRelated(self.type)
+                ? appendAxisAliasAbbrToField(property, self.attributes)
+                : property
+            }
+            axisKey={axisKey ?? fieldKey}
+            loading={loading}
+            style={{ height: 120 }}
+          />
+        </Card>
+      )
     );
   } else {
     return null;

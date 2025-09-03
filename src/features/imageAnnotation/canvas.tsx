@@ -17,7 +17,7 @@ export const Canvas = ({
   editable
 }: {
   background: string;
-  selectedItem?: Partial<Pick<PalceCardItem, 'index' | 'propertyKey' | 'axisKey'>>;
+  selectedItem?: Omit<PalceCardItem, 'title' | 'children'>;
   placeCardProps: PlaceCardProps[];
   initials?: Point[];
   cardProps?: CardProps;

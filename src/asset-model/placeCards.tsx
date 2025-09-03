@@ -1,21 +1,21 @@
 import React from 'react';
-import { ASSET_PATHNAME, AssetRow } from '../asset-common';
+import { ASSET_PATHNAME, Point } from '../asset-common';
 import { Link } from '../components';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { Dayjs } from '../utils';
 
-export const usePlaceCards = (asset: AssetRow, selected?: boolean) => {
-  const { selectedMonitoringPoint, setSelectedMonitoringPoint, selectedMonitoringPointExtend } =
-    useAssetModelContext();
+export const usePlaceCards = (selected?: boolean) => {
+  const { monitoringPoints, setMonitoringPoints } = useAssetModelContext();
 
-  return (asset.monitoringPoints ?? []).map((m) => {
-    const { id, name, type } = m;
+  return monitoringPoints.map((m) => {
+    const { self, visibleKeys } = m;
+    const { id, name, type, data } = self;
     return {
       title: <Link to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</Link>,
       items: getPropertyItems(
-        m,
-        (selectedMonitoringPointExtend?.properties ?? []).filter((p) =>
-          selectedMonitoringPoint?.visibleKeys.includes(p.key)
+        self,
+        Point.getPropertiesByType(self.type, self.properties).filter((p) =>
+          visibleKeys.includes(p.key)
         )
       ).map((item) => ({
         ...item,
@@ -23,17 +23,19 @@ export const usePlaceCards = (asset: AssetRow, selected?: boolean) => {
         selected: false,
         onClick: () => {
           if (selected) {
-            setSelectedMonitoringPoint((prev) => ({
-              id,
-              propertyKey: item.propertyKey,
-              axisKey: item.axisKey,
-              fieldKey: item.fieldKey,
-              visibleKeys: prev?.visibleKeys ?? []
-            }));
+            setMonitoringPoints((prev) =>
+              prev.map((m) => {
+                if (m.self.id === item.self.id) {
+                  return { ...m, ...item, selected: true };
+                } else {
+                  return { ...m, selected: false };
+                }
+              })
+            );
           }
         }
       })),
-      footer: m.data?.timestamp ? Dayjs.format(m.data.timestamp) : undefined
+      footer: data?.timestamp ? Dayjs.format(data.timestamp) : undefined
     };
   });
 };

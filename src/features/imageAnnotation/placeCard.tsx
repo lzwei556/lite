@@ -24,8 +24,7 @@ const useStyles = createStyles(({ token, css }) => ({
 
 export type PalceCardItem = PropertyItem & {
   index?: number;
-  selected: boolean;
-  onClick?: (item: Pick<PropertyItem, 'propertyKey' | 'axisKey'>) => void;
+  onClick?: (item: PropertyItem) => void;
 };
 
 export type PlaceCardProps = {
@@ -44,7 +43,7 @@ export const PlaceCard = ({
   style,
   selected
 }: {
-  selectedItem?: Partial<Pick<PalceCardItem, 'index' | 'propertyKey' | 'axisKey' | 'fieldKey'>>;
+  selectedItem?: Omit<PalceCardItem, 'title' | 'children'>;
 } & PlaceCardProps) => {
   const { colorInfoBorderStyle } = useGlobalStyles();
   const { styles } = useStyles();
@@ -80,12 +79,12 @@ export const PlaceCard = ({
               ...item,
               selected:
                 selectedItem?.index === item.index &&
-                selectedItem?.propertyKey === item.propertyKey &&
+                selectedItem?.property?.key === item.property?.key &&
                 selectedItem?.axisKey === item.axisKey &&
                 selectedItem?.fieldKey === item.fieldKey
             };
           })}
-          rowKey={(item) => `${item.propertyKey}_${item.axisKey}_${item.fieldKey}`}
+          rowKey={(item) => `${item.property?.key}_${item.axisKey}_${item.fieldKey}`}
           renderItem={(item) => {
             const { title, children, selected, onClick } = item;
             return (

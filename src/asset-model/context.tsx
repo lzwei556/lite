@@ -12,39 +12,28 @@ import { AssetRow } from '../asset-common';
 import { Dayjs, getValue } from '../utils';
 
 export type PropertyItem = {
+  selected: boolean;
   title: string;
   children: string;
-  propertyKey: string;
-  axisKey?: string;
-  fieldKey?: string;
-};
-
-type SelectedMonitoringPoint = Pick<PropertyItem, 'propertyKey' | 'axisKey' | 'fieldKey'> & {
-  id: number;
+  self: MonitoringPointRow;
+  property?: DisplayProperty;
   visibleKeys: string[];
-};
-
-type SelectedMonitoringPointExtend = {
-  point: MonitoringPointRow;
-  properties: DisplayProperty[];
-  property: DisplayProperty;
   axisKey?: string;
   fieldKey?: string;
-  title?: string;
 };
+
+type SelectedMonitoringPoint = Omit<PropertyItem, 'title' | 'children'>;
 
 const AssetModelContext = React.createContext<{
+  monitoringPoints: SelectedMonitoringPoint[];
+  setMonitoringPoints: React.Dispatch<React.SetStateAction<SelectedMonitoringPoint[]>>;
   selectedMonitoringPoint?: SelectedMonitoringPoint;
-  setSelectedMonitoringPoint: React.Dispatch<
-    React.SetStateAction<SelectedMonitoringPoint | undefined>
-  >;
-  selectedMonitoringPointExtend?: SelectedMonitoringPointExtend;
   loading: boolean;
   historyData?: HistoryData;
 }>({
+  monitoringPoints: [],
+  setMonitoringPoints: () => {},
   selectedMonitoringPoint: undefined,
-  setSelectedMonitoringPoint: () => {},
-  selectedMonitoringPointExtend: undefined,
   loading: false,
   historyData: undefined
 });
@@ -58,10 +47,9 @@ export const AssetModelProvider = ({
 }) => {
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
-  const [selectedMonitoringPoint, setSelectedMonitoringPoint] = React.useState<
-    SelectedMonitoringPoint | undefined
-  >(transform2Selected(getSelected(asset.monitoringPoints?.[0])));
-
+  const [monitoringPoints, setMonitoringPoints] = React.useState<SelectedMonitoringPoint[]>(
+    getInitial(asset)
+  );
   const fetchData = (id: number, range: [number, number]) => {
     if (range) {
       const [from, to] = range;
@@ -78,27 +66,21 @@ export const AssetModelProvider = ({
   };
 
   React.useEffect(() => {
-    const isSelectedPointValid = asset.monitoringPoints?.find(
-      (m) => m.id === selectedMonitoringPoint?.id
-    );
-    if (selectedMonitoringPoint?.id && isSelectedPointValid) {
-      fetchData(selectedMonitoringPoint.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
+    const isSelectedPointValid = monitoringPoints.every((m) => m.self.assetId === asset.id);
+    const selectedMonitoringPoint = monitoringPoints.find((m) => !!m.selected);
+    if (selectedMonitoringPoint?.self.id && isSelectedPointValid) {
+      fetchData(selectedMonitoringPoint.self.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
     } else {
-      setSelectedMonitoringPoint(transform2Selected(getSelected(asset.monitoringPoints?.[0])));
+      setMonitoringPoints(getInitial(asset));
     }
-  }, [selectedMonitoringPoint?.id, asset]);
+  }, [monitoringPoints, asset]);
 
   return (
     <AssetModelContext.Provider
       value={{
-        selectedMonitoringPoint,
-        setSelectedMonitoringPoint,
-        selectedMonitoringPointExtend: getSelected(
-          asset.monitoringPoints?.find((m) => m.id === selectedMonitoringPoint?.id),
-          selectedMonitoringPoint?.propertyKey,
-          selectedMonitoringPoint?.axisKey,
-          selectedMonitoringPoint?.fieldKey
-        ),
+        monitoringPoints,
+        setMonitoringPoints,
+        selectedMonitoringPoint: monitoringPoints.find((m) => !!m.selected),
         loading,
         historyData
       }}
@@ -110,62 +92,20 @@ export const AssetModelProvider = ({
 
 export const useAssetModelContext = () => React.useContext(AssetModelContext);
 
-export const getSelected = (
-  point?: MonitoringPointRow,
-  propertyKey?: string,
-  axisKey?: string,
-  fieldKey?: string
-): SelectedMonitoringPointExtend | undefined => {
-  if (point) {
-    const properties = getProperties(point);
-    const property = propertyKey ? properties.find((p) => p.key === propertyKey) : properties[0];
-    if (property) {
-      const items = getPropertyItem(point, property);
-      const fields = property.fields ?? [];
-      let title = items.find((item) => item.propertyKey === propertyKey)?.title;
-      if (axisKey) {
-        title = items.find(
-          (item) => item.propertyKey === propertyKey && item.axisKey === axisKey
-        )?.title;
-      }
-      if (fieldKey) {
-        title = items.find(
-          (item) => item.propertyKey === propertyKey && item.fieldKey === fieldKey
-        )?.title;
-      }
-      return {
-        point,
-        properties,
-        property,
-        axisKey: axisKey ?? items?.[0].axisKey,
-        fieldKey: fieldKey ?? fields.length > 1 ? fields[0].key : items?.[0].fieldKey,
-        title
-      };
-    }
-  }
-  return undefined;
-};
-
-const getProperties = (point?: MonitoringPointRow) => {
-  if (point) {
-    return Point.getPropertiesByType(point.type, point.properties);
-  } else {
-    return [];
-  }
-};
-
-export const transform2Selected = (
-  m?: SelectedMonitoringPointExtend
-): SelectedMonitoringPoint | undefined => {
-  if (m) {
+const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
+  return (asset.monitoringPoints ?? []).map((m, i) => {
+    const properties = Point.getPropertiesByType(m.type, m.properties);
+    const property = properties?.[0];
+    const items = getPropertyItem(m, property);
     return {
-      id: m.point.id,
-      propertyKey: m.property.key,
-      axisKey: m.axisKey,
-      visibleKeys: m.properties.filter((p) => !!p.first).map((p) => p.key)
+      selected: i === 0,
+      self: m,
+      property,
+      visibleKeys: properties.filter((p) => !!p.first).map((p) => p.key),
+      axisKey: items?.[0]?.axisKey,
+      fieldKey: items?.[0]?.fieldKey
     };
-  }
-  return undefined;
+  });
 };
 
 export function getPropertyItems(m: MonitoringPointRow, properties: DisplayProperty[]) {
@@ -176,6 +116,11 @@ export function getPropertyItems(m: MonitoringPointRow, properties: DisplayPrope
 
 const getPropertyItem = (m: MonitoringPointRow, property: DisplayProperty): PropertyItem[] => {
   const { fields = [], key, name, precision, unit } = property;
+  const self = m;
+  const selected = false;
+  const visibleKeys = Point.getPropertiesByType(m.type, m.properties)
+    .filter((p) => !!p.first)
+    .map((p) => p.key);
   if (fields.length > 1) {
     if (Point.Assert.isVibrationRelated(m.type)) {
       return Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
@@ -183,6 +128,9 @@ const getPropertyItem = (m: MonitoringPointRow, property: DisplayProperty): Prop
         const axisKey = attrs?.[aliasKey];
         const title = `${intl.get(name)} ${intl.get(abbr)}`;
         return {
+          selected,
+          self,
+          visibleKeys,
           title,
           children: getValue({
             value: m?.data?.values[`${key}_${axisKey}`] as number,
@@ -190,34 +138,44 @@ const getPropertyItem = (m: MonitoringPointRow, property: DisplayProperty): Prop
             precision
           }),
           axisKey,
-          propertyKey: key
+          fieldKey: undefined,
+          property
         };
       });
     } else {
       return fields.map(({ key, name }) => {
         const title = `${intl.get(name)}`;
         return {
+          selected,
+          self,
+          visibleKeys,
           title,
           children: getValue({
             value: m?.data?.values[`${key}`] as number,
             unit,
             precision
           }),
+          axisKey: undefined,
           fieldKey: key,
-          propertyKey: property.key
+          property
         };
       });
     }
   } else {
     return [
       {
+        selected,
+        self,
+        visibleKeys,
         title: intl.get(name),
         children: getValue({
           value: m?.data?.values[key] as number,
           unit,
           precision
         }),
-        propertyKey: key
+        property,
+        axisKey: undefined,
+        fieldKey: undefined
       }
     ];
   }
