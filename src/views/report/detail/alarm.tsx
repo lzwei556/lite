@@ -154,6 +154,7 @@ function AlarmRecordTable<T>({
   return (
     <Table
       className='alarm-record-table'
+      cardProps={{ styles: { body: { padding: 0 } } }}
       bordered={true}
       columns={[
         {
@@ -198,6 +199,7 @@ function AlarmRecordTable<T>({
         }
       ]}
       dataSource={dataSource}
+      noScroll={true}
       showHeader={showHeader}
       pagination={false}
       rowKey={(row) => row.id}

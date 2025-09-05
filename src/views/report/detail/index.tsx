@@ -16,20 +16,15 @@ import Cover from './cover.jpg';
 import { ISO } from './iso';
 import { useStyles } from './styles';
 import { CorrosionFirst } from './corrosion-first';
+import { Index as Corrosion } from '../corrosion';
+import { fakeReport } from './report-fake';
 
 export default function Report() {
   const appType = useAppType();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const report = state;
-  // const report = {
-  //   id: 1,
-  //   start: 122223232,
-  //   end: 122223666,
-  //   filename: 'filename',
-  //   reportName: 'reportName',
-  //   reportDate: 453333333
-  // };
+  // const report = state;
+  const report = fakeReport;
   const reportRef = React.useRef<HTMLDivElement>(null);
   const [loading, setLoading] = React.useState(false);
   const duration = `${Dayjs.format(report.start, 'YYYY/MM/DD')}-${Dayjs.format(
@@ -144,6 +139,7 @@ export default function Report() {
             <CorrosionFirst />
           </>
         )}
+        <Corrosion />
       </div>
     </Content>
   );

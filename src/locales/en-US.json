@@ -1348,5 +1348,7 @@
   "gateways": "Gateways",
   "sensors.number": "Number of Devices",
   "device.tag": "Tag",
-  "application.id": "ApplicationId"
+  "application.id": "ApplicationId",
+  "report.type.weekly": "Weekly",
+  "report.type.monthly": "Monthly"
 }

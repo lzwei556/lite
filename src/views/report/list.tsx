@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Typography } from 'antd';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Segmented, Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import intl from 'react-intl-universal';
 import { Table, transformPagedresult, RangeDatePicker, useRange } from '../../components';
@@ -8,27 +8,40 @@ import { Store, useStore } from '../../hooks/store';
 import { PageResult } from '../../types/page';
 import request from '../../utils/request';
 import { GetResponse } from '../../utils/response';
-import { Dayjs } from '../../utils';
+import { Dayjs, pickOptionsFromNumericEnum } from '../../utils';
 import { Report } from './detail/report';
+
+enum ReportType {
+  Weekly = 1,
+  Monthly
+}
 
 export default function ReportList() {
   const [dataSource, setDataSource] = useState<PageResult<Report[]>>();
   const { numberedRange, setRange } = useRange();
   const [store, setStore] = useStore('reportList');
+  const [searchParams, setSearchParams] = useSearchParams({ type: `${ReportType.Weekly}` });
+  const typeParamValue = searchParams.get('type');
+  const type = typeParamValue ? (Number(typeParamValue) as ReportType) : undefined;
 
-  const fetchReports = (store: Store['reportList'], from: number, to: number) => {
+  const fetchReports = (
+    store: Store['reportList'],
+    from: number,
+    to: number,
+    type = ReportType.Weekly
+  ) => {
     const {
       pagedOptions: { index, size }
     } = store;
-    getReports(index, size, from, to).then(setDataSource);
+    getReports(index, size, from, to, type).then(setDataSource);
   };
 
   useEffect(() => {
     if (numberedRange) {
       const [from, to] = numberedRange;
-      fetchReports(store, from, to);
+      fetchReports(store, from, to, type);
     }
-  }, [store, numberedRange]);
+  }, [store, numberedRange, type]);
 
   const columns = [
     {
@@ -63,7 +76,20 @@ export default function ReportList() {
       <Table
         columns={columns}
         dataSource={ds}
-        header={{ toolbar: <RangeDatePicker onChange={setRange} /> }}
+        header={{
+          toolbar: (
+            <Space>
+              <Segmented
+                options={pickOptionsFromNumericEnum(ReportType, 'report.type').map((opt) => ({
+                  ...opt,
+                  label: intl.get(opt.label)
+                }))}
+                onChange={(value) => setSearchParams({ type: `${value}` })}
+              />
+              <RangeDatePicker onChange={setRange} />
+            </Space>
+          )
+        }}
         pagination={{
           ...paged,
           onChange: (index, size) =>
@@ -75,8 +101,16 @@ export default function ReportList() {
   );
 }
 
-export function getReports(page: number, size: number, from: number, to: number) {
-  return request.get<PageResult<Report[]>>('/reports', { page, size, from, to }).then(GetResponse);
+function getReports(
+  page: number,
+  size: number,
+  from: number,
+  to: number,
+  type = ReportType.Weekly
+) {
+  return request
+    .get<PageResult<Report[]>>('/reports', { page, size, from, to, type })
+    .then(GetResponse);
 }
 
 export function downloadReport(filename: string) {

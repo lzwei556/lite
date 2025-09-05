@@ -1348,5 +1348,7 @@
   "gateways": "网关",
   "sensors.number": "设备数量",
   "device.tag": "设备Tag",
-  "application.id": "应用Id"
+  "application.id": "应用Id",
+  "report.type.weekly": "周报",
+  "report.type.monthly": "月报"
 }
