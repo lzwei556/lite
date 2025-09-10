@@ -4,10 +4,10 @@ import { PersistGate } from 'redux-persist/integration/react';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { StoreContext } from 'redux-react-hook';
-import AppRouter from './routers';
 import { LocaleProvider } from './localeProvider';
 import { AppProvider } from './config';
 import { configResponsive } from 'ahooks';
+import { Main } from './main';
 
 configResponsive({
   xs: 0,
@@ -24,7 +24,7 @@ root.render(
     <PersistGate loading={null} persistor={persistor}>
       <LocaleProvider>
         <AppProvider>
-          <AppRouter />
+          <Main />
         </AppProvider>
       </LocaleProvider>
     </PersistGate>
