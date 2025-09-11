@@ -22,6 +22,7 @@ import {
   ThemeOptions,
   useLocaleContext
 } from '../../localeProvider';
+import { getCurrentUser } from '../../utils/session';
 import { useGlobalStyles } from '../../styles';
 import { NavMenu } from './NavMenu';
 import './layout.css';
@@ -45,7 +46,7 @@ const useStyles = createStyles(({ css, token }) => ({
 const HeaderLayout = (props: any) => {
   const navigate = useNavigate();
   const { menus } = props;
-  const [currentUser] = useState<any>(store.getState().auth.data.user);
+  const currentUser = getCurrentUser();
   const [now, setNow] = useState<string>(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
   const [open, setVisible] = useState(false);
   const { colorWhiteStyle } = useGlobalStyles();

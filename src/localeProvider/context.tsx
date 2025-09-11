@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { ENV } from '../utils';
 
 export const LANGUAGES = {
   english: 'en-US' as 'en-US',
@@ -45,7 +46,7 @@ function useLocaleProvider() {
   const uaLang = window.navigator.language;
   const localLang = localStorage.getItem('lang');
   const initialLang =
-    (localLang || (process.env.REACT_APP_LOCALE ?? uaLang)) !== LANGUAGES.chinese
+    (localLang || (ENV.locale ?? uaLang)) !== LANGUAGES.chinese
       ? LANGUAGES.english
       : LANGUAGES.chinese;
   const [locale, setLocale] = useState<Omit<LocalProviderProps, 'setLocale'>>({
