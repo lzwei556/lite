@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Chart, getOptions, useBarPieOptions } from '../../../components';
-
+import { getValue } from '../../../utils';
 import { useGlobalStyles } from '../../../styles';
 import { ColorHealth, ColorOffline } from '../../../constants/color';
 import {
@@ -15,7 +15,7 @@ const Pages = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
   return (
     <CrossMultiplePagesList
       header={<Header list={list} />}
-      headerSize={headerSize}
+      headerSize={getHeaderSize(list)}
       list={list}
       renderPage={(page, index) => <DeviceTable dataSource={page} showHeader={index === 0} />}
     />
@@ -37,13 +37,13 @@ const Header = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
   );
 };
 
-const headerSize = 6;
+const getHeaderSize = <T,>(list: T[]) => 8 + (list.length > 0 ? 1 : 0);
 
 const DevicesRest = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
   return (
     <Rest
       header={<Header list={list} />}
-      headerSize={headerSize}
+      headerSize={getHeaderSize(list)}
       list={list}
       renderPage={(page, _, first) => <DeviceTable dataSource={page} showHeader={!!first} />}
     />
@@ -97,12 +97,34 @@ const DeviceTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns
   return (
     <ReportTable
       columns={[
-        { key: 'mac', dataIndex: 'mac', title: 'MAC地址', width: 150 },
-        { key: 'type', dataIndex: 'type', title: '设备类型', width: 80 },
-        { key: 'battery', dataIndex: 'battery', title: '电池电压', width: 80 },
-        { key: 'qiangdu', dataIndex: 'qiangdu', title: '信号强度', width: 80 },
-        { key: 'zhiliang', dataIndex: 'zhiliang', title: '信号质量', width: 80 },
-        { key: 'status', dataIndex: 'status', title: '状态' }
+        // {
+        //   key: 'mac',
+        //   dataIndex: 'mac',
+        //   title: 'MAC地址',
+        //   width: 150,
+        //   render: (mac: string) => (
+        //     <span style={{ display: 'inline-block', minHeight: 34, lineHeight: '34px' }}>
+        //       {mac}
+        //     </span>
+        //   )
+        // },
+        { key: 'typeName', dataIndex: 'typeName', title: '设备类型', width: 80 },
+        { key: 'batteryVoltage', dataIndex: 'batteryVoltage', title: '电池电压', width: 80 },
+        {
+          key: 'signalQuality',
+          dataIndex: 'signalQuality',
+          title: '信号强度',
+          width: 80,
+          render: (value: number) => getValue({ value, precision: 1 })
+        },
+        {
+          key: 'signalStrength',
+          dataIndex: 'signalStrength',
+          title: '信号质量',
+          width: 80,
+          render: (value: number) => getValue({ value, precision: 1 })
+        },
+        { key: 'evaluationReasons', dataIndex: 'evaluationReasons', title: '状态' }
       ]}
       dataSource={dataSource}
       showHeader={showHeader}
@@ -113,6 +135,5 @@ const DeviceTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns
 export const Device = {
   Pages,
   Rest: DevicesRest,
-  headerSize,
-  getRestSize: <T,>(list: T[]) => getRestSize(list, headerSize)
+  getRestSize: <T,>(list: T[]) => getRestSize(list, getHeaderSize(list))
 };

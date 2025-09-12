@@ -1,42 +1,59 @@
 import React from 'react';
 import { Device } from './device';
-import { MonitoringPointsInfo } from './monitoring-ponit';
+import { MonitoringPointsInfo } from './monitoring-ponit-info';
+import { Report } from '../types';
+import { transform } from '../utils';
+import { MonitoringPointsStatus } from './monitoring-ponit-status';
 
-export const Index = () => {
-  const devices = Array(0).fill({
-    mac: '00-1A-79-4A-3B-21',
-    type: 'DC210',
-    battery: 3580,
-    qiangdu: 0.4,
-    zhiliang: 50,
-    status: '信号质量差'
-  });
-
-  const points_info = Array(13).fill({
-    index: 1,
-    asset: '原料输送管道A线',
-    name: '监测点名称',
-    initial: 5.4,
-    cri: 6.2,
-    condition: '腐蚀率 > 1.0 减薄量 > 0.5'
-  });
-  console.log('Device.getRestSize(devices)', Device.getRestSize(devices));
-
+export const Index = ({ report }: { report: Report }) => {
+  const { devices, monitoringPoints } = transform(report);
+  const devicesRestSize = Device.getRestSize(devices);
+  const monitoringPointsInfoRestSize = MonitoringPointsInfo.getRestSize(
+    monitoringPoints,
+    devicesRestSize
+  );
+  const monitoringPointsStatusRestSize = MonitoringPointsStatus.getRestSize(
+    monitoringPoints,
+    monitoringPointsInfoRestSize
+  );
+  // console.log('devicesRestSize', devicesRestSize);
+  // console.log('monitoringPointsInfoRestSize', monitoringPointsInfoRestSize);
+  // console.log('monitoringPointsStatusRestSize', monitoringPointsStatusRestSize);
+  // console.log('mmmmmmmmmmmmm', monitoringPoints)
   return (
     <>
       <Device.Pages list={devices} />
       <MonitoringPointsInfo.Pages
-        list={points_info}
+        list={monitoringPoints}
         header={<Device.Rest list={devices} />}
-        headerSize={Device.getRestSize(devices)}
+        headerSize={devicesRestSize}
       />
-      <section className='page'>
-        <MonitoringPointsInfo.Rest
-          list={points_info}
-          header={<Device.Rest list={devices} />}
-          headerSize={Device.getRestSize(devices)}
-        />
-      </section>
+      <MonitoringPointsStatus.Pages
+        list={monitoringPoints}
+        header={
+          <MonitoringPointsInfo.Rest
+            list={monitoringPoints}
+            header={<Device.Rest list={devices} />}
+            headerSize={devicesRestSize}
+          />
+        }
+        headerSize={monitoringPointsInfoRestSize}
+      />
+      {monitoringPointsStatusRestSize > 0 && (
+        <section className='page last'>
+          <MonitoringPointsStatus.Rest
+            list={monitoringPoints}
+            header={
+              <MonitoringPointsInfo.Rest
+                list={monitoringPoints}
+                header={<Device.Rest list={devices} />}
+                headerSize={devicesRestSize}
+              />
+            }
+            headerSize={monitoringPointsInfoRestSize}
+          />
+        </section>
+      )}
     </>
   );
 };

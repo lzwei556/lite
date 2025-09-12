@@ -1,54 +1,65 @@
 import React from 'react';
 
-const PageSize = 15;
+const PageSize = 18;
 
 export type CrossMultiplePagesListProps<T> = {
   header?: React.ReactNode;
-  headerSize?: number; // 长度不超过PageSize, 否则请手动分页
+  headerSize?: number;
   list: T[];
   renderPage: (page: T[], index?: number, first?: boolean) => React.ReactNode;
 };
 
-export const CrossMultiplePagesList = <T,>({
-  header,
-  headerSize = 0,
-  list,
-  renderPage
-}: CrossMultiplePagesListProps<T>) => {
-  const pages = chunkList(list, PageSize - headerSize);
-  if (pages.length === 1 && pages[0].length + headerSize === PageSize) {
-    return (
-      <section>
-        {header}
-        {renderPage(pages[0], 0)}
-      </section>
-    );
-  } else {
-    return pages
-      .filter((_, i) => i !== pages.length - 1)
-      .map((page, index) => (
-        <section className='page'>
+export const CrossMultiplePagesList = <T,>(props: CrossMultiplePagesListProps<T>) => {
+  const { headerSize = 0, list, header, renderPage } = props;
+  const { pages } = chunkList(list, PageSize - headerSize);
+  // console.log('----------CrossMultiplePagesList-----------');
+  // console.log('headerSize, list,  pages', headerSize, list, pages);
+  // console.log('----------CrossMultiplePagesList-----------');
+
+  return pages.map((page, index) => {
+    const total = page.length + (index === 0 ? headerSize : 0);
+    if (total === PageSize) {
+      return (
+        <section className='page' key={index}>
           {index === 0 && header}
           {renderPage(page, index)}
         </section>
-      ));
-  }
+      );
+    } else if (total > PageSize) {
+      return (
+        <React.Fragment key={index}>
+          <section className='page'>{header}</section>
+          <section className='page'>{renderPage(page, index)}</section>
+        </React.Fragment>
+      );
+    }
+    return null;
+  });
 };
 
 const chunkList = <T,>(list: T[], firstChunkSize: number, skipFirst = false) => {
-  const res: T[][] = [];
+  const pages: T[][] = [];
   let index = 0;
   while (index < list.length) {
     let size = PageSize;
-    if (index === 0) {
+    if (index === 0 && firstChunkSize > 0) {
       size = firstChunkSize;
     }
     if (!skipFirst || index !== 0) {
-      res.push(list.slice(index, size + index));
+      pages.push(list.slice(index, size + index));
     }
     index += size;
   }
-  return res;
+  return { pages, availableSizeOnLast: getAvailableOnLast(pages, firstChunkSize) };
+};
+
+const getAvailableOnLast = <T,>(chunks: T[][], initial: number) => {
+  const initialAvailable = initial === 0 ? PageSize : initial;
+  if (chunks.length === 0) {
+    return initialAvailable;
+  }
+  const last = chunks[chunks.length - 1];
+  return chunks.length === 1 ? initialAvailable - last.length : PageSize - last.length;
 };
 
 export const Rest = <T,>({
@@ -57,34 +68,33 @@ export const Rest = <T,>({
   list,
   renderPage
 }: CrossMultiplePagesListProps<T>) => {
-  const pages = chunkList(list, PageSize - headerSize);
-  const availableSize = getAvailableOnLast(pages, headerSize);
+  const { pages, availableSizeOnLast } = chunkList(list, PageSize - headerSize);
   const last = pages[pages.length - 1];
+  // console.log('-------------rest--------------');
+  // console.log(
+  //   'pages headerSize availableSizeOnLast last',
+  //   pages,
+  //   headerSize,
+  //   availableSizeOnLast,
+  //   last
+  // );
+  // console.log('-------------rest--------------');
 
   return (
-    availableSize > 0 && (
+    availableSizeOnLast > 0 && (
       <>
-        {pages.length <= 1 && header}
-        {pages.length > 0 && renderPage(last, undefined, pages.length === 1)}
+        {pages.length <= 1 && headerSize !== PageSize && header}
+        {last && renderPage(last, undefined, pages.length === 1)}
       </>
     )
   );
-};
-
-const getAvailableOnLast = <T,>(chunks: T[][], initial: number) => {
-  if (chunks.length === 0) {
-    return initial;
-  }
-  const last = chunks[chunks.length - 1];
-  return chunks.length === 1 ? initial - last.length : PageSize - last.length;
 };
 
 export const getRestSize = <T,>(
   list: CrossMultiplePagesListProps<T>['list'],
   headerSize: CrossMultiplePagesListProps<T>['headerSize'] = 0
 ) => {
-  const availableSize = PageSize - headerSize;
-  const pages = chunkList(list, availableSize);
-  const used = PageSize - getAvailableOnLast(pages, availableSize);
+  const { availableSizeOnLast } = chunkList(list, PageSize - headerSize);
+  const used = PageSize - availableSizeOnLast;
   return used === PageSize ? 0 : used;
 };

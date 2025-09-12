@@ -26,6 +26,7 @@ import {
   AlarmRecord,
   DeviceVirtual,
   DeviceCreate,
+  Reports,
   ReportList,
   Report
 } from '../views';
@@ -123,8 +124,11 @@ const AppRouter = () => {
                   </Route>
                   <Route path='alarmRules' element={<AlarmRuleGroups />} />
                   <Route path='alerts' element={<AlarmRecord />} />
-                  <Route path='reports' element={<ReportList />} />
-                  <Route path='reports/:id' element={<Report />} />
+                  <Route path='reports' element={<Reports />}>
+                    <Route index element={<ReportList />} />
+                    <Route path=':id' element={<Report />} />
+                  </Route>
+
                   <Route path='projects' element={<Project />} />
                   <Route path='users' element={<User />} />
                   <Route path='roles' element={<Role />} />

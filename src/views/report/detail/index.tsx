@@ -11,20 +11,20 @@ import { useAppType } from '../../../config';
 import { DownloadIconButton, IconButton } from '../../../components';
 import { AlarmPage } from './alarm';
 import { Status } from './status';
-import { A4_SIZE, PREFACES } from './report';
-import Cover from './cover.jpg';
+import CoverImage from './cover.jpg';
 import { ISO } from './iso';
 import { useStyles } from './styles';
-import { CorrosionFirst } from './corrosion-first';
 import { Index as Corrosion } from '../corrosion';
-import { fakeReport } from './report-fake';
+import { Report } from '../types';
+import { A4_SIZE, PREFACES } from '../constants';
+import { getReportType } from '../utils';
+import { useTypeContext } from '../context';
 
-export default function Report() {
+export default function ReportDetail() {
   const appType = useAppType();
   const { state } = useLocation();
   const navigate = useNavigate();
-  // const report = state;
-  const report = fakeReport;
+  const report = state as Report;
   const reportRef = React.useRef<HTMLDivElement>(null);
   const [loading, setLoading] = React.useState(false);
   const duration = `${Dayjs.format(report.start, 'YYYY/MM/DD')}-${Dayjs.format(
@@ -86,11 +86,12 @@ export default function Report() {
     );
   };
 
-  const renderCover = () => {
+  const Cover = () => {
+    const { type } = useTypeContext();
     return (
       <section className={cx('page', 'index')}>
-        <img src={Cover} alt='cover' className='cover' />
-        <h1 className='title'>状态监测周评估报告</h1>
+        <img src={CoverImage} alt='cover' className='cover' />
+        <h1 className='title'>{`状态监测${getReportType(type)}评估报告`}</h1>
         <h3 className='title'>Condition Monitoring and Evaluation Report</h3>
         <section className='container introduce'>
           <p>
@@ -125,7 +126,7 @@ export default function Report() {
     <Content>
       <div className={styles.report} ref={reportRef}>
         {renderDownloadButton()}
-        {renderCover()}
+        <Cover />
         {renderPreface()}
         {appType === 'vibration' && (
           <>
@@ -134,12 +135,8 @@ export default function Report() {
             <ISO />
           </>
         )}
-        {appType === 'corrosion' && (
-          <>
-            <CorrosionFirst />
-          </>
-        )}
-        <Corrosion />
+        {appType === 'corrosion' && <></>}
+        {report && <Corrosion report={report} />}
       </div>
     </Content>
   );

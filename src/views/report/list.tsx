@@ -1,48 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Segmented, Space, Typography } from 'antd';
-import { Content } from 'antd/es/layout/layout';
 import intl from 'react-intl-universal';
-import { Table, transformPagedresult, RangeDatePicker, useRange } from '../../components';
-import { Store, useStore } from '../../hooks/store';
-import { PageResult } from '../../types/page';
+import { Table, RangeDatePicker } from '../../components';
 import request from '../../utils/request';
-import { GetResponse } from '../../utils/response';
 import { Dayjs, pickOptionsFromNumericEnum } from '../../utils';
-import { Report } from './detail/report';
-
-enum ReportType {
-  Weekly = 1,
-  Monthly
-}
+import { Report } from './types';
+import { useTypeContext } from './context';
+import { ReportType } from './constants';
+import { useReports } from './utils';
 
 export default function ReportList() {
-  const [dataSource, setDataSource] = useState<PageResult<Report[]>>();
-  const { numberedRange, setRange } = useRange();
-  const [store, setStore] = useStore('reportList');
-  const [searchParams, setSearchParams] = useSearchParams({ type: `${ReportType.Weekly}` });
-  const typeParamValue = searchParams.get('type');
-  const type = typeParamValue ? (Number(typeParamValue) as ReportType) : undefined;
+  return (
+    <>
+      <Typography.Title level={4}>{intl.get('MENU_REPORTS')}</Typography.Title>
+      <ReportsTable />
+    </>
+  );
+}
 
-  const fetchReports = (
-    store: Store['reportList'],
-    from: number,
-    to: number,
-    type = ReportType.Weekly
-  ) => {
-    const {
-      pagedOptions: { index, size }
-    } = store;
-    getReports(index, size, from, to, type).then(setDataSource);
-  };
-
-  useEffect(() => {
-    if (numberedRange) {
-      const [from, to] = numberedRange;
-      fetchReports(store, from, to, type);
-    }
-  }, [store, numberedRange, type]);
-
+const ReportsTable = () => {
   const columns = [
     {
       title: intl.get('NAME'),
@@ -58,60 +35,43 @@ export default function ReportList() {
     {
       title: intl.get('OPERATION'),
       key: 'action',
-      render: (_: string, record: Report) => {
+      render: (_: string, report: Report) => {
         return (
-          <Link to={`/reports/${record.id}`} state={record}>
+          <Link to={`/reports/${report.id}?type=${type}`} state={report}>
             查看报告
           </Link>
         );
       }
     }
   ];
-
-  const { paged, ds } = transformPagedresult(dataSource);
-
+  const { type, setSearchParams } = useTypeContext();
+  const { ds, paged, setStore, setRange } = useReports(type);
   return (
-    <Content>
-      <Typography.Title level={4}>{intl.get('MENU_REPORTS')}</Typography.Title>
-      <Table
-        columns={columns}
-        dataSource={ds}
-        header={{
-          toolbar: (
-            <Space>
-              <Segmented
-                options={pickOptionsFromNumericEnum(ReportType, 'report.type').map((opt) => ({
-                  ...opt,
-                  label: intl.get(opt.label)
-                }))}
-                onChange={(value) => setSearchParams({ type: `${value}` })}
-              />
-              <RangeDatePicker onChange={setRange} />
-            </Space>
-          )
-        }}
-        pagination={{
-          ...paged,
-          onChange: (index, size) =>
-            setStore((prev) => ({ ...prev, pagedOptions: { index, size } }))
-        }}
-        rowKey={(row) => row.id}
-      />
-    </Content>
+    <Table
+      columns={columns}
+      dataSource={ds}
+      header={{
+        toolbar: (
+          <Space>
+            <Segmented
+              options={pickOptionsFromNumericEnum(ReportType, 'report.type').map((opt) => ({
+                ...opt,
+                label: intl.get(opt.label)
+              }))}
+              onChange={(value) => setSearchParams({ type: `${value}` })}
+            />
+            <RangeDatePicker onChange={setRange} />
+          </Space>
+        )
+      }}
+      pagination={{
+        ...paged,
+        onChange: (index, size) => setStore((prev) => ({ ...prev, pagedOptions: { index, size } }))
+      }}
+      rowKey={(row) => row.id}
+    />
   );
-}
-
-function getReports(
-  page: number,
-  size: number,
-  from: number,
-  to: number,
-  type = ReportType.Weekly
-) {
-  return request
-    .get<PageResult<Report[]>>('/reports', { page, size, from, to, type })
-    .then(GetResponse);
-}
+};
 
 export function downloadReport(filename: string) {
   return request.download<any>(`/reports/${filename}`);

@@ -1,5 +1,5 @@
 import { createStyles } from 'antd-style';
-import { A4_SIZE, PAGE_GAP } from './report';
+import { A4_SIZE, PAGE_GAP } from '../constants';
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
