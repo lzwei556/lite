@@ -17,7 +17,7 @@ export const chartColors = [
 ];
 
 export function getOptions(...opts: ECOptions[]) {
-  const color = chartColors;
+  const color = [...chartColors];
   const grid = {
     top: '12%',
     bottom: '10%',
