@@ -8,8 +8,9 @@ import { Device } from '../../../types/device';
 import { App, useAppType } from '../../../config';
 import { pickOptionsFromNumericEnum } from '../../../utils';
 import { GetNetworksRequest } from '../../../apis/network';
-import * as Basis from '.';
+import { GetDefaultDeviceSettingsRequest } from '../../../apis/device';
 import { FormCommonProps, FormItemsProps } from '../settings-common';
+import * as Basis from '.';
 
 export type CommonProps = Pick<FormCommonProps, 'form'>;
 
@@ -45,13 +46,16 @@ export const useProps = (form: CommonProps['form']) => {
 };
 
 const useDeviceTypeSelectProps = (form: CommonProps['form']) => {
-  const { setDeviceType, settings, device } = Basis.useContext();
+  const { setDeviceType, device, setSettings } = Basis.useContext();
   return {
     disabled: !!device,
     options: useGroupedDeviceTypeOptions(),
     onChange: (deviceType: number) => {
-      setDeviceType(deviceType);
-      setSettingsInitialValues(settings, form);
+      GetDefaultDeviceSettingsRequest(deviceType).then((settings) => {
+        setDeviceType(deviceType);
+        setSettings(settings);
+        setSettingsInitialValues(settings, form);
+      });
     }
   };
 };

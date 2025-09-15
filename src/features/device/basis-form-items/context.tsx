@@ -1,16 +1,18 @@
 import React from 'react';
-import { GetDefaultDeviceSettingsRequest, GetDeviceSettingRequest } from '../../../apis/device';
+import { GetDeviceSettingRequest } from '../../../apis/device';
 import { FormItemsProps, FormCommonProps } from '../settings-common';
 
 type Props = Partial<Pick<FormCommonProps, 'device'>> &
   Pick<FormItemsProps, 'deviceType' | 'settings'> & {
     setDeviceType: React.Dispatch<React.SetStateAction<FormItemsProps['deviceType']>>;
+    setSettings: React.Dispatch<React.SetStateAction<FormItemsProps['settings']>>;
   };
 
 const Context = React.createContext<Props>({
   deviceType: undefined,
   setDeviceType: () => {},
   settings: [],
+  setSettings: () => {},
   device: undefined
 });
 
@@ -32,16 +34,12 @@ const useDeviceTypeSettings = (device: Props['device']) => {
   const [deviceType, setDeviceType] = React.useState<Props['deviceType']>(device?.typeId);
   const [settings, setSettings] = React.useState<Props['settings']>([]);
   React.useEffect(() => {
-    if (deviceType) {
-      if (device?.id) {
-        GetDeviceSettingRequest(device.id).then(setSettings);
-      } else {
-        GetDefaultDeviceSettingsRequest(deviceType).then(setSettings);
-      }
+    if (device?.id) {
+      GetDeviceSettingRequest(device.id).then(setSettings);
     }
     return () => setSettings([]);
-  }, [deviceType, device?.id]);
-  return { deviceType, setDeviceType, settings };
+  }, [device?.id]);
+  return { deviceType, setDeviceType, settings, setSettings };
 };
 
 export const useContext = () => React.useContext(Context);
