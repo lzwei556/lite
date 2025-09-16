@@ -196,7 +196,7 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
 }
 
 function useWaveRealtedFields2(enabled1: boolean, suffix: number, settings?: DeviceSetting[]) {
-  const is_enabled = settings?.find((s) => s.key === `is_enabled_${suffix}`);
+  const is_enabled = settings?.find((s) => s.key === `acc3_is_enabled_${suffix}`);
   let enabledField: DeviceSetting | undefined;
   const [enabled, setEnabled] = React.useState(is_enabled ? enabled1 && is_enabled.value : false);
   const waveFields: DeviceSetting[] = [];
