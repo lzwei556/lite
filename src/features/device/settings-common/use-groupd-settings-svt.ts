@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form } from 'antd';
 import { DeviceType } from '../../../types/device_type';
 import { DeviceSetting, GROUPS } from './common';
 
@@ -65,13 +66,26 @@ function useAcquisitionModeRelatedFields(settings?: DeviceSetting[]) {
   const trigger_acquisition_count = settings?.find((s) => s.key === 'trigger_acquisition_count');
   const [mode, setMode] = React.useState<number>(acquisition_mode ? acquisition_mode.value : 0);
   const [action, setAction] = React.useState<number>(trigger_action ? trigger_action.value : 2);
-
+  const form = Form.useFormInstance();
   const fields: DeviceSetting[] = [];
   if (!settings || settings.length === 0 || !acquisition_mode) return { mode, action, fields };
-  fields.push({ ...acquisition_mode, onChange: setMode });
+  fields.push({
+    ...acquisition_mode,
+    onChange: (value: number) => {
+      setMode(value);
+      if (value === 2) {
+        form.setFieldsValue?.({ [acquisition_mode.category]: { trigger_action: 2 } });
+      }
+    }
+  });
   if (mode !== 0) {
     if (trigger_action) {
-      fields.push({ ...trigger_action, onChange: setAction });
+      const options = getTriggerActionOption(mode, trigger_action.options);
+      fields.push({
+        ...trigger_action,
+        options,
+        onChange: setAction
+      });
     }
     if (on_threshold) {
       fields.push(on_threshold);
@@ -99,6 +113,22 @@ function useAcquisitionModeRelatedFields(settings?: DeviceSetting[]) {
     fields: fields.map((f) => ({ ...f, group: GROUPS.dat }))
   };
 }
+
+type TriggerActionOption = { [Key in '1' | '2' | '4']: string };
+
+const getTriggerActionOption = (mode: number, options: TriggerActionOption) => {
+  if (mode === 2) {
+    let opts: Partial<TriggerActionOption> = {};
+    Object.entries(options).forEach(([key, value]) => {
+      if (key !== '1') {
+        opts[key as keyof TriggerActionOption] = value;
+      }
+    });
+    return opts;
+  } else {
+    return options;
+  }
+};
 
 function useSampleRelatedFields(type?: DeviceType, settings?: DeviceSetting[]) {
   const acc3_range = settings?.find((s) => s.key === 'acc3_range');

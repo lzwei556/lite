@@ -35,7 +35,7 @@ export const SettingsFormItems = ({
       <Grid>
         {settings.map((s) => (
           <SettingFormItem
-            key={s.key}
+            key={`${s.key}${s.options ? Object.keys(s.options).join('') : ''}`}
             value={s}
             formItemColProps={formItemColProps}
             ignoreChildren={DeviceType.isVibration(deviceType)}
