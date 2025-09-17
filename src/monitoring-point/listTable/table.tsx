@@ -1,8 +1,7 @@
 import React from 'react';
-import { Radio } from 'antd';
 import intl from 'react-intl-universal';
 import { uniq } from 'lodash';
-import { Table } from '../../components';
+import { RadioFormItem, Table } from '../../components';
 import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
 import { useLocaleContext } from '../../localeProvider';
 import { AssetRow, MonitoringPointRow, Points } from '../../asset-common';
@@ -86,19 +85,20 @@ const TypeSwitcher = ({
   types: number[];
 }) => {
   return (
-    <Radio.Group
-      buttonStyle='solid'
-      defaultValue={types[0]}
-      onChange={(e) => onChange(e.target.value)}
-      options={types.map((t) => ({
-        value: t,
-        label: intl.get(
-          MonitoringPointTypeText[
-            MonitoringPointTypeValue[t] as keyof typeof MonitoringPointTypeText
-          ]
-        )
-      }))}
-      optionType='button'
+    <RadioFormItem
+      noStyle
+      radioGroupProps={{
+        defaultValue: types[0],
+        onChange: (e) => onChange(e.target.value),
+        options: types.map((t) => ({
+          value: t,
+          label: intl.get(
+            MonitoringPointTypeText[
+              MonitoringPointTypeValue[t] as keyof typeof MonitoringPointTypeText
+            ]
+          )
+        }))
+      }}
     />
   );
 };

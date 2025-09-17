@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button, ButtonProps, Checkbox, Col, Form } from 'antd';
-import { FormCommonProps, transformSettings } from '../settings-common';
-import { useModalBindingsProps } from '../../../hooks';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
-import { Grid, TextFormItem } from '../../../components';
+import { CheckboxFormItem, Grid } from '../../../components';
+import { useModalBindingsProps } from '../../../hooks';
 import { UpdateDeviceSettingRequest } from '../../../apis/device';
-import { useContext } from '..';
 import { DeviceType } from '../../../types/device_type';
+import { FormCommonProps, transformSettings } from '../settings-common';
+import { useContext } from '..';
 
 type Props = Omit<ButtonProps, 'form'> & FormCommonProps;
 
@@ -21,24 +21,28 @@ export const CanCopySettings = (props: Props) => {
         <Button {...rest} onClick={handleClick} />
         <ModalWrapper {...modalProps}>
           <Form {...formProps}>
-            <TextFormItem name='ids'>
-              <Checkbox.Group {...checkGroupProps}>
-                <Grid>
-                  <Col span={24}>
-                    <Checkbox {...checkAllProps} />
-                  </Col>
-                  <Col span={24}>
-                    <Grid gutter={[10, 10]}>
-                      {devices.map((dev) => (
-                        <Col key={dev.id} span={12}>
-                          <Checkbox value={dev.id}>{dev.name}</Checkbox>
-                        </Col>
-                      ))}
-                    </Grid>
-                  </Col>
-                </Grid>
-              </Checkbox.Group>
-            </TextFormItem>
+            <CheckboxFormItem
+              name='ids'
+              checkboxGroupProps={{
+                ...checkGroupProps,
+                children: (
+                  <Grid>
+                    <Col span={24}>
+                      <Checkbox {...checkAllProps} />
+                    </Col>
+                    <Col span={24}>
+                      <Grid gutter={[10, 10]}>
+                        {devices.map((dev) => (
+                          <Col key={dev.id} span={12}>
+                            <Checkbox value={dev.id}>{dev.name}</Checkbox>
+                          </Col>
+                        ))}
+                      </Grid>
+                    </Col>
+                  </Grid>
+                )
+              }}
+            />
           </Form>
         </ModalWrapper>
       </>

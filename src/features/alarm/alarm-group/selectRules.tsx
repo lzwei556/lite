@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Checkbox, Form, ModalProps, Col, Button } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
-import { Card, Grid, TextFormItem } from '../../../components';
+import { Card, CheckboxFormItem, Grid } from '../../../components';
 import { getFilename } from '../../../utils/format';
 import { exportAlarmRules } from './services';
 import { AlarmRule } from './types';
@@ -65,17 +65,23 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
     >
       <Card style={{ marginBottom: 16 }}>
         <Form form={form}>
-          <TextFormItem name='asset_ids' noStyle>
-            <Checkbox.Group onChange={(values) => setSelected(values)}>
-              <Grid>
-                {props.rules.map(({ id, name }) => (
-                  <Col span={12} key={id}>
-                    <Checkbox value={id}>{intl.get(name).d(name)}</Checkbox>
-                  </Col>
-                ))}
-              </Grid>
-            </Checkbox.Group>
-          </TextFormItem>
+          <CheckboxFormItem
+            name='asset_ids'
+            noStyle
+            checkboxGroupProps={{
+              children: (
+                <Grid>
+                  {props.rules.map(({ id, name }) => (
+                    <Col span={12} key={id}>
+                      <Checkbox value={id}>{intl.get(name).d(name)}</Checkbox>
+                    </Col>
+                  ))}
+                </Grid>
+              ),
+              onChange: setSelected,
+              style: { width: '100%' }
+            }}
+          />
         </Form>
       </Card>
     </ModalWrapper>

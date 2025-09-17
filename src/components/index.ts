@@ -1,8 +1,11 @@
 export * as ChartMark from './chart-mark';
 export * from './charts';
+export * from './form/checkboxFormItem';
+export * from './form/formItem';
 export * from './form/numberFormItem';
 export * from './form/numberFormItemWithSwitcher';
-export * from './form/selecFormItem';
+export * from './form/radioFormItem';
+export * from './form/selectFormItem';
 export * from './form/textFormItem';
 export * from './layout/pageWithSideBar';
 export * from './layout/title-extra';

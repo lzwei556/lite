@@ -1,6 +1,6 @@
 import React from 'react';
 import { Checkbox, Col, List } from 'antd';
-import { CardChart, chartColors, Grid } from '../../../components';
+import { CardChart, chartColors, CheckboxFormItem, Grid } from '../../../components';
 import { AnalysisCommonProps } from './analysisContent';
 import { Dayjs } from '../../../utils';
 import { useGlobalStyles } from '../../../styles';
@@ -14,16 +14,23 @@ export const WaterFall = ({ timestamp, timestamps }: AnalysisCommonProps) => {
   return (
     <Grid wrap={false}>
       <Col flex='200px' style={{ overflow: 'auto', maxHeight: 480 }}>
-        <Checkbox.Group value={selected} onChange={setSelected}>
-          <List
-            dataSource={timestamps}
-            renderItem={(item) => (
-              <List.Item>
-                <Checkbox value={item}>{Dayjs.format(item)}</Checkbox>
-              </List.Item>
-            )}
-          />
-        </Checkbox.Group>
+        <CheckboxFormItem
+          noStyle
+          checkboxGroupProps={{
+            children: (
+              <List
+                dataSource={timestamps}
+                renderItem={(item) => (
+                  <List.Item>
+                    <Checkbox value={item}>{Dayjs.format(item)}</Checkbox>
+                  </List.Item>
+                )}
+              />
+            ),
+            onChange: setSelected,
+            value: selected
+          }}
+        />
       </Col>
       <Col flex='auto'>
         <CardChart

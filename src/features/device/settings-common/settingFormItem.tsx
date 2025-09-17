@@ -1,8 +1,19 @@
 import { useState } from 'react';
-import { Checkbox, Col, ColProps, FormRule, Input, InputNumber, Radio, Select } from 'antd';
+import {
+  Col,
+  ColProps,
+  FormItemProps,
+  FormRule,
+  InputNumberProps,
+  InputProps,
+  RadioGroupProps,
+  SelectProps
+} from 'antd';
 import intl from 'react-intl-universal';
-import { Term, TextFormItem } from '../../../components';
+import { useFormItemBindingsProps } from '../../../hooks';
+import { FormItem, Term } from '../../../components';
 import { DeviceSetting } from './common';
+import { CheckboxGroupProps } from 'antd/es/checkbox';
 
 enum DeviceSettingValueType {
   uint8 = 'uint8',
@@ -25,61 +36,60 @@ export const SettingFormItem = ({
 }) => {
   const [setting, setSetting] = useState<DeviceSetting>(transformValue(value));
 
-  const renderComponents = () => {
-    const unit = setting.unit ? intl.get(setting.unit).d(setting.unit) : '';
-    switch (setting.type) {
-      case DeviceSettingValueType.bool:
-        return (
-          <Radio.Group
-            buttonStyle='solid'
-            onChange={(e) => {
-              if (setting.onChange) {
-                setting.onChange(e.target.value);
-              } else {
-                setSetting({ ...setting, value: e.target.value });
-              }
-            }}
-            options={[
-              { label: intl.get('ENABLED'), value: true },
-              { label: intl.get('DISABLED'), value: false }
-            ]}
-            optionType='button'
-          />
-        );
-    }
-    if (setting.options) {
-      if (setting.optionType === 'checkbox') {
-        return (
-          <Checkbox.Group
-            options={Object.keys(setting.options).map((value) => ({
-              label: intl.get(setting.options[value]),
-              value: Number(value)
-            }))}
-            onChange={(value) => setSetting({ ...setting, value })}
-          />
-        );
+  const renderFormItem = (props: FormItemProps) => {
+    const { options, optionType, onChange, type, unit } = setting;
+    let radioGroupProps: RadioGroupProps | undefined,
+      checkboxGroupProps: CheckboxGroupProps | undefined,
+      selectProps: SelectProps | undefined,
+      inputNumberProps: InputNumberProps | undefined,
+      inputProps: InputProps | undefined;
+    if (options) {
+      const props = {
+        onChange: (value: any) => {
+          if (onChange) {
+            onChange(value);
+          } else {
+            setSetting({ ...setting, value });
+          }
+        },
+        options: Object.keys(options).map((value) => ({
+          label: intl.get(options[value]).d(options[value]),
+          value: Number(value)
+        }))
+      };
+      if (optionType === 'checkbox') {
+        checkboxGroupProps = props;
+      } else {
+        selectProps = props;
       }
-      return (
-        <Select
-          onChange={(value) => {
-            if (setting.onChange) {
-              setting.onChange(value);
-            } else {
-              setSetting({ ...setting, value: value });
-            }
-          }}
-          options={Object.keys(setting.options).map((key) => ({
-            label: intl.get(setting.options[key]).d(setting.options[key]),
-            value: Number(key)
-          }))}
-        />
-      );
-    }
-    if (setting.type === DeviceSettingValueType.string) {
-      return <Input suffix={unit} />;
     } else {
-      return <InputNumber style={{ width: '100%' }} addonAfter={unit} />;
+      const intlUnit = unit ? intl.get(unit).d(unit) : '';
+      if (type === DeviceSettingValueType.bool) {
+        radioGroupProps = {
+          onChange: (e) => {
+            if (onChange) {
+              onChange(e.target.value);
+            } else {
+              setSetting({ ...setting, value: e.target.value });
+            }
+          }
+        };
+      } else if (type === DeviceSettingValueType.string) {
+        inputProps = { addonAfter: intlUnit };
+      } else {
+        inputNumberProps = { addonAfter: intlUnit, style: { width: '100%' } };
+      }
     }
+    return (
+      <FormItem
+        {...props}
+        checkboxGroupProps={checkboxGroupProps}
+        inputNumberProps={inputNumberProps}
+        inputProps={inputProps}
+        radioGroupProps={radioGroupProps}
+        selectProps={selectProps}
+      />
+    );
   };
 
   const renderChildren = () => {
@@ -151,21 +161,17 @@ export const SettingFormItem = ({
     return ret;
   }
 
+  const formItemProps = useFormItemBindingsProps({
+    label: <Term name={intl.get(setting.name)} description={intl.get(`${setting.name}_DESC`)} />,
+    name: [setting.category, setting.key],
+    initialValue: setting.value,
+    rules: getRules(setting),
+    messageVariables: { label: intl.get(setting.name).toLowerCase() }
+  });
+
   return (
     <>
-      <Col {...formItemColProps}>
-        <TextFormItem
-          label={
-            <Term name={intl.get(setting.name)} description={intl.get(`${setting.name}_DESC`)} />
-          }
-          name={[setting.category, setting.key]}
-          initialValue={setting.value}
-          rules={getRules(setting)}
-          messageVariables={{ label: intl.get(setting.name).toLowerCase() }}
-        >
-          {renderComponents()}
-        </TextFormItem>
-      </Col>
+      <Col {...formItemColProps}>{renderFormItem(formItemProps)}</Col>
       {!ignoreChildren && renderChildren()}
     </>
   );
