@@ -27,6 +27,8 @@ type ValidJson = {
   deviceList: ImportedJSONDevice[];
 };
 
+const GatewayLoraTypeTLV = 2147483653;
+
 const ImportNetworkPage = () => {
   const initialNetwork = { deviceList: [] };
   const [network, setNetwork] = useState<ValidJson>(initialNetwork);
@@ -39,7 +41,18 @@ const ImportNetworkPage = () => {
   const checkJSONFormat = (source: any) => {
     return source.hasOwnProperty('deviceList') && source.hasOwnProperty('wsn');
   };
-  const isGatewayBLE = deviceList.length > 0 && DeviceType.isBLEGateway(deviceList[0].type);
+
+  const verifyGatewayBLE = () => {
+    if (deviceList.length > 0) {
+      const { type } = deviceList[0];
+      if (DeviceType.isBLEGateway(type)) {
+        return true;
+      } else if (type > 10000 && type !== GatewayLoraTypeTLV) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   const onSave = () => {
     if (deviceList.length === 0) {
@@ -131,7 +144,7 @@ const ImportNetworkPage = () => {
                 </Card>
               )}
             </Col>
-            {isGatewayBLE && (
+            {verifyGatewayBLE() && (
               <Col flex='300px'>
                 <Card title={intl.get('EDIT')}>
                   <Form form={form} layout='vertical' initialValues={initialValues}>
