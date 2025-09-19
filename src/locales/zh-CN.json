@@ -1350,5 +1350,15 @@
   "device.tag": "设备Tag",
   "application.id": "应用Id",
   "report.type.weekly": "周报",
-  "report.type.monthly": "月报"
+  "report.type.monthly": "月报",
+  "device.eval.reason.normal": "正常",
+  "device.eval.reason.offline": "离线",
+  "device.eval.reason.low.battery": "电量低",
+  "device.eval.reason.low.signal.strength": "信号强度低",
+  "device.eval.reason.low.signal.quality": "信号质量低",
+  "device.eval.reason.signal.bad": "信号差",
+  "monitoring.point.eval.level.normal": "正常",
+  "monitoring.point.eval.level.minor": "低风险",
+  "monitoring.point.eval.level.major": "中风险",
+  "monitoring.point.eval.level.critical": "高风险"
 }

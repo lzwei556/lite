@@ -7,12 +7,13 @@ import {
   Rest
 } from '../cross-multiply-pages-list';
 import { ReportTable, ReportTableProps } from '../table';
+import { ReportMonitoringPoint } from '../types';
 
-const Pages = <T,>({
+const Pages = ({
   list,
   header,
   headerSize
-}: Pick<CrossMultiplePagesListProps<T>, 'list' | 'header' | 'headerSize'>) => {
+}: Pick<CrossMultiplePagesListProps<ReportMonitoringPoint>, 'list' | 'header' | 'headerSize'>) => {
   return (
     <CrossMultiplePagesList
       header={<Header header={header} list={list} />}
@@ -23,27 +24,30 @@ const Pages = <T,>({
   );
 };
 
-const Header = <T,>({ header, list }: Pick<CrossMultiplePagesListProps<T>, 'header' | 'list'>) => {
+const Header = ({
+  header,
+  list
+}: Pick<CrossMultiplePagesListProps<ReportMonitoringPoint>, 'header' | 'list'>) => {
   return (
     <>
       {header}
       {list.length > 0 && (
         <>
           <div className='split'></div>
-          <h3>二、监测点概况</h3>
+          <h3>四、监测点概况</h3>
         </>
       )}
     </>
   );
 };
 
-const getHeaderSize = <T,>(list: T[], prev = 0) => prev + (list.length > 0 ? 2 : 0);
+const getHeaderSize = (list: ReportMonitoringPoint[], prev = 0) => prev + (list.length > 0 ? 2 : 0);
 
-const MonitoringPointsRest = <T,>({
+const MonitoringPointsRest = ({
   list,
   header,
   headerSize
-}: Pick<CrossMultiplePagesListProps<T>, 'list' | 'header' | 'headerSize'>) => {
+}: Pick<CrossMultiplePagesListProps<ReportMonitoringPoint>, 'list' | 'header' | 'headerSize'>) => {
   return (
     <Rest
       header={<Header header={header} list={list} />}
@@ -54,7 +58,10 @@ const MonitoringPointsRest = <T,>({
   );
 };
 
-const InfoTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>) => {
+const InfoTable = ({
+  dataSource,
+  showHeader
+}: Omit<ReportTableProps<ReportMonitoringPoint>, 'columns'>) => {
   return (
     <ReportTable
       columns={[
@@ -87,7 +94,12 @@ const InfoTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>
           width: 55,
           render: (value: number) => getValue({ value, precision: 3 })
         },
-        { key: 'conditions', dataIndex: 'conditions', title: '报警条件' }
+        {
+          key: 'conditions',
+          dataIndex: 'conditions',
+          title: '报警条件',
+          render: (conditions: string[]) => conditions.join(' ')
+        }
       ]}
       dataSource={dataSource}
       showHeader={showHeader}
@@ -98,5 +110,6 @@ const InfoTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>
 export const MonitoringPointsInfo = {
   Pages,
   Rest: MonitoringPointsRest,
-  getRestSize: <T,>(list: T[], prev?: number) => getRestSize(list, getHeaderSize(list, prev))
+  getRestSize: (list: ReportMonitoringPoint[], prev?: number) =>
+    getRestSize(list, getHeaderSize(list, prev))
 };

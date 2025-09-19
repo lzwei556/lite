@@ -2,13 +2,14 @@ import { ObjectToCamel } from 'ts-case-convert';
 
 type DeviceFeature = {
   id: number;
+  mac: string;
   name: string;
   type: number;
   isOnline: boolean;
   batteryVoltage: number;
   features: { signal_quality: number; signal_strength: number };
   evaluationLevel: number;
-  evaluationReasons?: string;
+  evaluationReasons?: number[];
 };
 
 type AlarmRuleGroup = {
@@ -53,7 +54,7 @@ type MonitoringPointFeature = {
   };
   alarmRuleGroups: AlarmRuleGroup[];
   evaluationLevel: number;
-  evaluationReasons?: string;
+  evaluationReasons?: number[];
 };
 
 export type ReportDTO = {
@@ -83,17 +84,22 @@ export type ReportDTO = {
     majorAlarmNum: number;
     criticalAlarmNum: number;
   };
-  monitoringPointfeatures: MonitoringPointFeature[];
+  monitoringPointFeatures: MonitoringPointFeature[];
   devicesStat: { onlineNum: number; offlineNum: number };
   deviceFeatures: DeviceFeature[];
 };
 
+export type ReportDevice = DeviceFeature &
+  ObjectToCamel<DeviceFeature['features']> & { typeName: string };
+
+export type ReportMonitoringPoint = MonitoringPointFeature &
+  ObjectToCamel<MonitoringPointFeature['features']> &
+  ObjectToCamel<MonitoringPointFeature['attributes']> & {
+    indexName: string;
+    conditions: string[];
+  };
+
 export type Report = ReportDTO & {
-  devices: (DeviceFeature & ObjectToCamel<DeviceFeature['features']> & { typeName: string })[];
-  monitoringPoints: (MonitoringPointFeature &
-    ObjectToCamel<MonitoringPointFeature['features']> &
-    ObjectToCamel<MonitoringPointFeature['attributes']> & {
-      indexName: string;
-      conditions: string[];
-    })[];
+  devices: ReportDevice[];
+  monitoringPoints: ReportMonitoringPoint[];
 };

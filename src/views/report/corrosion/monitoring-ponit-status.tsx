@@ -1,5 +1,10 @@
 import React from 'react';
+import intl from 'react-intl-universal';
 import { getValue } from '../../../utils';
+import { useGlobalStyles } from '../../../styles';
+import { Card, Chart, getOptions, useBarPieOptions } from '../../../components';
+import { ColorDanger, ColorHealth, ColorInfo, ColorWarn } from '../../../constants/color';
+import { getDurationByDays } from '../../../features/monitoring-point-corrosion/analysis/useAnalysis';
 import {
   CrossMultiplePagesList,
   CrossMultiplePagesListProps,
@@ -7,58 +12,142 @@ import {
   Rest
 } from '../cross-multiply-pages-list';
 import { ReportTable, ReportTableProps } from '../table';
-import { getDurationByDays } from '../../../features/monitoring-point-corrosion/analysis/useAnalysis';
-import { Report } from '../types';
+import { ReportMonitoringPoint } from '../types';
 import { useTypeContext } from '../context';
 import { getReportType } from '../utils';
+import { getMonitoringPointEvalLevel } from '../constants';
 
-const Pages = <T,>({
+const PrevHeaderSizeMax = 11;
+
+const Pages = ({
   list,
   header,
-  headerSize
-}: Pick<CrossMultiplePagesListProps<T>, 'list' | 'header' | 'headerSize'>) => {
-  return (
-    <CrossMultiplePagesList
-      header={<Header header={header} list={list} />}
-      headerSize={getHeaderSize(list, headerSize)}
-      list={list}
-      renderPage={(page, index) => <InfoTable dataSource={page} showHeader={index === 0} />}
-    />
-  );
+  headerSize = 0,
+  statistics
+}: Pick<CrossMultiplePagesListProps<ReportMonitoringPoint>, 'list' | 'header' | 'headerSize'> & {
+  statistics: number[];
+}) => {
+  if (headerSize > PrevHeaderSizeMax) {
+    debugger;
+    return (
+      <>
+        <section className='page'>{header}</section>
+        <CrossMultiplePagesList
+          header={<Header header={null} statistics={statistics} />}
+          headerSize={getHeaderSize(list)}
+          list={list}
+          renderPage={(page, index) => <InfoTable dataSource={page} showHeader={index === 0} />}
+        />
+      </>
+    );
+  } else {
+    return (
+      <CrossMultiplePagesList
+        header={<Header header={header} statistics={statistics} />}
+        headerSize={getHeaderSize(list, headerSize)}
+        list={list}
+        renderPage={(page, index) => <InfoTable dataSource={page} showHeader={index === 0} />}
+      />
+    );
+  }
 };
 
-const Header = <T,>({ header, list }: Pick<CrossMultiplePagesListProps<T>, 'header' | 'list'>) => {
+const Header = ({
+  header,
+  statistics
+}: Pick<CrossMultiplePagesListProps<ReportMonitoringPoint>, 'header'> & {
+  statistics: number[];
+}) => {
   return (
     <>
       {header}
-      {list.length > 0 && (
-        <>
-          <div className='split'></div>
-          <h3>三、监测点状态</h3>
-        </>
-      )}
+      <div className='split'></div>
+      <h3>五、监测点状态</h3>
+      <PieChart statistics={statistics} />
+      <div className='split'></div>
     </>
   );
 };
 
-const getHeaderSize = <T,>(list: T[], prev = 0) => prev + (list.length > 0 ? 2 : 0);
+const getHeaderSize = (list: ReportMonitoringPoint[], prev = 0) =>
+  prev + 6 + (list.length > 0 ? 2 : 0);
 
-const MonitoringPointsRest = <T,>({
+const MonitoringPointsRest = ({
   list,
   header,
-  headerSize
-}: Pick<CrossMultiplePagesListProps<T>, 'list' | 'header' | 'headerSize'>) => {
+  headerSize = 0,
+  statistics
+}: Pick<CrossMultiplePagesListProps<ReportMonitoringPoint>, 'list' | 'header' | 'headerSize'> & {
+  statistics: number[];
+}) => {
+  if (headerSize > PrevHeaderSizeMax) {
+    return (
+      <Rest
+        header={<Header header={null} statistics={statistics} />}
+        headerSize={getHeaderSize(list)}
+        list={list}
+        renderPage={(page, _, first) => <InfoTable dataSource={page} showHeader={!!first} />}
+      />
+    );
+  } else {
+    return (
+      <Rest
+        header={<Header header={header} statistics={statistics} />}
+        headerSize={getHeaderSize(list, headerSize)}
+        list={list}
+        renderPage={(page, _, first) => <InfoTable dataSource={page} showHeader={!!first} />}
+      />
+    );
+  }
+};
+
+const PieChart = ({ statistics }: { statistics: number[] }) => {
+  const { colorTextDescriptionStyle } = useGlobalStyles();
+  const commonOptions = useBarPieOptions();
+  const options = getOptions(commonOptions, {
+    title: {
+      left: 'center',
+      top: 16,
+      text: '分布图'
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{c}'
+    },
+    legend: {
+      bottom: 16
+    },
+    dataset: {
+      source: {
+        item: ['正常', '低风险', '中风险', '高风险'],
+        data: statistics
+      }
+    },
+    series: [
+      {
+        type: 'pie',
+        radius: '50%',
+        label: {
+          show: true,
+          formatter: '{c}({d}%)',
+          ...colorTextDescriptionStyle
+        }
+      }
+    ],
+    color: [ColorHealth, ColorInfo, ColorWarn, ColorDanger]
+  });
+
   return (
-    <Rest
-      header={<Header header={header} list={list} />}
-      headerSize={getHeaderSize(list, headerSize)}
-      list={list}
-      renderPage={(page, _, first) => <InfoTable dataSource={page} showHeader={!!first} />}
-    />
+    <Card styles={{ body: { padding: 0 } }}>
+      <Chart options={options} />
+    </Card>
   );
 };
 
-const InfoTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>) => {
+const InfoTable = ({
+  dataSource,
+  showHeader
+}: Omit<ReportTableProps<ReportMonitoringPoint>, 'columns'>) => {
   const { type } = useTypeContext();
 
   return (
@@ -82,7 +171,7 @@ const InfoTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>
           key: 'thickness',
           title: '厚度',
           width: 120,
-          render: (_: string, m: Report['monitoringPoints'][0]) => {
+          render: (_: string, m: ReportMonitoringPoint) => {
             return (
               <>
                 <div>{`当前 ${getValue({ value: m.thicknessNew, precision: 3 })}`}</div>
@@ -116,7 +205,19 @@ const InfoTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>
           render: (value: number) =>
             getValue({ value: getDurationByDays(value).duration, precision: 0 })
         },
-        { key: 'evaluationReasons', dataIndex: 'evaluationReasons', title: '状态', width: 70 }
+        // {
+        //   key: 'evaluationReasons',
+        //   dataIndex: 'evaluationReasons',
+        //   title: '状态',
+        //   width: 70,
+        // }
+        {
+          key: 'evaluationLevel',
+          dataIndex: 'evaluationLevel',
+          title: '状态',
+          width: 70,
+          render: (level: number) => intl.get(getMonitoringPointEvalLevel(level))
+        }
       ]}
       dataSource={dataSource}
       showHeader={showHeader}
@@ -127,5 +228,11 @@ const InfoTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>
 export const MonitoringPointsStatus = {
   Pages,
   Rest: MonitoringPointsRest,
-  getRestSize: <T,>(list: T[], prev?: number) => getRestSize(list, getHeaderSize(list, prev))
+  getRestSize: (list: ReportMonitoringPoint[], prev?: number) => {
+    if (prev && prev > PrevHeaderSizeMax) {
+      return getRestSize(list, getHeaderSize(list));
+    } else {
+      return getRestSize(list, getHeaderSize(list, prev));
+    }
+  }
 };

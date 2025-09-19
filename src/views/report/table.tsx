@@ -2,9 +2,9 @@ import React from 'react';
 import { createStyles } from 'antd-style';
 import { Table } from '../../components';
 
-export type ReportTableProps = {
+export type ReportTableProps<T> = {
   columns: any;
-  dataSource: any;
+  dataSource: T[];
   showHeader: boolean;
   style?: React.CSSProperties;
 };
@@ -20,7 +20,7 @@ const useStyles = createStyles(({ token, css }) => ({
   `
 }));
 
-export const ReportTable = (props: ReportTableProps) => {
+export const ReportTable = <T,>(props: ReportTableProps<T>) => {
   const { styles } = useStyles();
   return (
     <Table

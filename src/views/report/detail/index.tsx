@@ -16,7 +16,7 @@ import { ISO } from './iso';
 import { useStyles } from './styles';
 import { Index as Corrosion } from '../corrosion';
 import { Report } from '../types';
-import { A4_SIZE, PREFACES } from '../constants';
+import { A4_SIZE, PREFACES, ReportType } from '../constants';
 import { getReportType } from '../utils';
 import { useTypeContext } from '../context';
 
@@ -106,10 +106,12 @@ export default function ReportDetail() {
     );
   };
 
-  const renderPreface = () => {
+  const Preface = () => {
+    const { type } = useTypeContext();
     return (
       <section className='page preface'>
-        <h2 className='title'>前言</h2>
+        <h2 className='title'>{`腐蚀测厚${getReportType(type)}报`}</h2>
+        <h3>一、前言</h3>
         <ul className='text-list'>
           {PREFACES.map((p, i) => (
             <li key={i} className='item'>
@@ -117,6 +119,13 @@ export default function ReportDetail() {
               <p className='desc'>{p}</p>
             </li>
           ))}
+        </ul>
+        <h3>二、基本信息</h3>
+        <ul className='text-list'>
+          <li>项目名称：{report.reportName}</li>
+          <li>报告周期：{duration}</li>
+          <li>报告日期：{Dayjs.format(report.reportDate, 'YYYY/MM/DD')}</li>
+          <li>监测方法：超声波测厚</li>
         </ul>
       </section>
     );
@@ -126,8 +135,8 @@ export default function ReportDetail() {
     <Content>
       <div className={styles.report} ref={reportRef}>
         {renderDownloadButton()}
-        <Cover />
-        {renderPreface()}
+        {/* <Cover /> */}
+        <Preface />
         {appType === 'vibration' && (
           <>
             <Status report={report} />

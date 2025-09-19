@@ -1,5 +1,6 @@
 import React from 'react';
 import { objectToCamel } from 'ts-case-convert';
+import intl from 'react-intl-universal';
 import { DeviceType } from '../../types/device_type';
 import { PageResult } from '../../types/page';
 import { transformPagedresult, useRange } from '../../components';
@@ -10,18 +11,26 @@ import { ReportType } from './constants';
 import { Report, ReportDTO } from './types';
 
 export const transform = (dto: ReportDTO): Report => {
-  const { deviceFeatures, monitoringPointfeatures } = dto;
+  const { deviceFeatures, monitoringPointFeatures } = dto;
   const devices = deviceFeatures.map((d) => {
     const typeName = getTypeName(d);
     return { ...d, typeName, ...objectToCamel(d.features) };
   });
-  const monitoringPoints = monitoringPointfeatures.map((m, i) => {
+  const monitoringPoints = monitoringPointFeatures.map((m, i) => {
+    const conditions: string[] = [];
+    m.alarmRuleGroups.forEach((g) => {
+      g.rules.forEach((rule) => {
+        const { metric, operation, threshold } = rule;
+        const name = metric && metric.name ? intl.get(metric.name) : '';
+        conditions.push(`${name} ${operation ?? ''} ${threshold ?? ''}`);
+      });
+    });
     return {
       ...m,
       indexName: `${i + 1}`,
       ...objectToCamel(m.attributes),
       ...objectToCamel(m.features),
-      conditions: []
+      conditions
     };
   });
   return { ...dto, devices, monitoringPoints };
@@ -79,4 +88,11 @@ function getReports(
 
 export const getReportType = (type: ReportType) => {
   return type === ReportType.Weekly ? '周' : '月';
+};
+
+export const formatNames = (names: string[]) => {
+  const maxLen = 2;
+  const join = '、';
+  const suffix = names.length > maxLen ? '等' : '';
+  return `（${names.filter((_, i) => i <= maxLen).join(join)}${suffix}）`;
 };

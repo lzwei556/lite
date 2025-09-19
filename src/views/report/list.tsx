@@ -59,6 +59,7 @@ const ReportsTable = () => {
                 label: intl.get(opt.label)
               }))}
               onChange={(value) => setSearchParams({ type: `${value}` })}
+              value={type}
             />
             <RangeDatePicker onChange={setRange} />
           </Space>

@@ -1,20 +1,18 @@
 import React from 'react';
+import intl from 'react-intl-universal';
 import { Card, Chart, getOptions, useBarPieOptions } from '../../../components';
-import { getValue } from '../../../utils';
+import { getValue, toMac } from '../../../utils';
 import { useGlobalStyles } from '../../../styles';
 import { ColorHealth, ColorOffline } from '../../../constants/color';
-import {
-  CrossMultiplePagesList,
-  CrossMultiplePagesListProps,
-  getRestSize,
-  Rest
-} from '../cross-multiply-pages-list';
+import { CrossMultiplePagesList, getRestSize, Rest } from '../cross-multiply-pages-list';
 import { ReportTable, ReportTableProps } from '../table';
+import { ReportDevice } from '../types';
+import { getDeviceEvalReason } from '../constants';
 
-const Pages = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
+const Pages = ({ list, statistics }: { list: ReportDevice[]; statistics: number[] }) => {
   return (
     <CrossMultiplePagesList
-      header={<Header list={list} />}
+      header={<Header chart={<PieChart statistics={statistics} />} list={list} />}
       headerSize={getHeaderSize(list)}
       list={list}
       renderPage={(page, index) => <DeviceTable dataSource={page} showHeader={index === 0} />}
@@ -22,11 +20,11 @@ const Pages = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
   );
 };
 
-const Header = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
+const Header = ({ chart, list }: { chart: React.ReactNode; list: ReportDevice[] }) => {
   return (
     <>
-      <h3>一、设备状态</h3>
-      <PieChart />
+      <h3>三、设备状态</h3>
+      {chart}
       {list.length > 0 && (
         <>
           <div className='split'></div>
@@ -37,12 +35,12 @@ const Header = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
   );
 };
 
-const getHeaderSize = <T,>(list: T[]) => 8 + (list.length > 0 ? 1 : 0);
+const getHeaderSize = (list: ReportDevice[]) => 8 + (list.length > 0 ? 1 : 0);
 
-const DevicesRest = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>) => {
+const DevicesRest = ({ list, statistics }: { list: ReportDevice[]; statistics: number[] }) => {
   return (
     <Rest
-      header={<Header list={list} />}
+      header={<Header chart={<PieChart statistics={statistics} />} list={list} />}
       headerSize={getHeaderSize(list)}
       list={list}
       renderPage={(page, _, first) => <DeviceTable dataSource={page} showHeader={!!first} />}
@@ -50,7 +48,7 @@ const DevicesRest = <T,>({ list }: Pick<CrossMultiplePagesListProps<T>, 'list'>)
   );
 };
 
-const PieChart = () => {
+const PieChart = ({ statistics }: { statistics: number[] }) => {
   const { colorTextDescriptionStyle } = useGlobalStyles();
   const commonOptions = useBarPieOptions();
   return (
@@ -72,7 +70,7 @@ const PieChart = () => {
           dataset: {
             source: {
               item: ['正常', '异常'],
-              data: [10, 5]
+              data: statistics
             }
           },
           series: [
@@ -93,21 +91,24 @@ const PieChart = () => {
   );
 };
 
-const DeviceTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns'>) => {
+const DeviceTable = ({
+  dataSource,
+  showHeader
+}: Omit<ReportTableProps<ReportDevice>, 'columns'>) => {
   return (
     <ReportTable
       columns={[
-        // {
-        //   key: 'mac',
-        //   dataIndex: 'mac',
-        //   title: 'MAC地址',
-        //   width: 150,
-        //   render: (mac: string) => (
-        //     <span style={{ display: 'inline-block', minHeight: 34, lineHeight: '34px' }}>
-        //       {mac}
-        //     </span>
-        //   )
-        // },
+        {
+          key: 'mac',
+          dataIndex: 'mac',
+          title: 'MAC地址',
+          width: 150,
+          render: (mac: string) => (
+            <span style={{ display: 'inline-block', minHeight: 34, lineHeight: '34px' }}>
+              {toMac(mac.toUpperCase())}
+            </span>
+          )
+        },
         { key: 'typeName', dataIndex: 'typeName', title: '设备类型', width: 80 },
         { key: 'batteryVoltage', dataIndex: 'batteryVoltage', title: '电池电压', width: 80 },
         {
@@ -124,7 +125,14 @@ const DeviceTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns
           width: 80,
           render: (value: number) => getValue({ value, precision: 1 })
         },
-        { key: 'evaluationReasons', dataIndex: 'evaluationReasons', title: '状态' }
+        {
+          key: 'evaluationReasons',
+          dataIndex: 'evaluationReasons',
+          title: '状态',
+          render: (reasons: number[], d: ReportDevice) => {
+            return intl.get(getDeviceEvalReason(d.evaluationLevel, reasons));
+          }
+        }
       ]}
       dataSource={dataSource}
       showHeader={showHeader}
@@ -135,5 +143,5 @@ const DeviceTable = ({ dataSource, showHeader }: Omit<ReportTableProps, 'columns
 export const Device = {
   Pages,
   Rest: DevicesRest,
-  getRestSize: <T,>(list: T[]) => getRestSize(list, getHeaderSize(list))
+  getRestSize: (list: ReportDevice[]) => getRestSize(list, getHeaderSize(list))
 };

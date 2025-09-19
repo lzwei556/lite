@@ -1350,5 +1350,15 @@
   "device.tag": "Tag",
   "application.id": "ApplicationId",
   "report.type.weekly": "Weekly",
-  "report.type.monthly": "Monthly"
+  "report.type.monthly": "Monthly",
+  "device.eval.reason.normal": "Normal",
+  "device.eval.reason.offline": "Offline",
+  "device.eval.reason.low.battery": "Low Battery",
+  "device.eval.reason.low.signal.strength": "Low Signal Strength",
+  "device.eval.reason.low.signal.quality": "Low Signal Quality",
+  "device.eval.reason.signal.bad": "Bad Signal",
+  "monitoring.point.eval.level.normal": "Normal",
+  "monitoring.point.eval.level.minor": "Low Risk",
+  "monitoring.point.eval.level.major": "Medium Risk",
+  "monitoring.point.eval.level.critical": "High Risk"
 }
