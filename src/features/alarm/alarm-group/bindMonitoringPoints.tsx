@@ -8,7 +8,7 @@ import { wind } from '../../asset-wind-turbine/constants';
 import { bindMeasurementsToAlarmRule2 } from './services';
 import { AlarmRule } from './types';
 import { MonitoringPointTypeValue } from '../../../config';
-import { Grid, TextFormItem } from '../../../components';
+import { CheckboxFormItem, Grid, TextFormItem } from '../../../components';
 
 type MixinAssetRow = AssetRow & {
   pointIds: number[];
@@ -184,22 +184,24 @@ export const BindMonitoringPoints: React.FC<
         </TextFormItem>
         {assets.map(({ id, children }) => (
           <div key={id} style={{ display: selectedAsset.id === id ? 'block' : 'none' }}>
-            <TextFormItem name={[`${id}`, 'ids']}>
-              <Checkbox.Group
-                style={{ width: '100%' }}
-                onChange={(e) => {
+            <CheckboxFormItem
+              name={[`${id}`, 'ids']}
+              checkboxGroupProps={{
+                children: (
+                  <Grid key={id} gutter={[0, 16]} style={{ marginBottom: 16, width: '100%' }}>
+                    {children?.map((asset) => renderAsset(asset))}
+                  </Grid>
+                ),
+                onChange: (e) => {
                   updateAssets(
                     selectedAsset,
                     selectedAsset.pointIds.length === e.length,
                     (e.length && e.length < selectedAsset.pointIds.length) || false
                   );
-                }}
-              >
-                <Grid key={id} gutter={[0, 16]} style={{ marginBottom: 16, width: '100%' }}>
-                  {children?.map((asset) => renderAsset(asset))}
-                </Grid>
-              </Checkbox.Group>
-            </TextFormItem>
+                },
+                style: { width: '100%' }
+              }}
+            />
           </div>
         ))}
       </>

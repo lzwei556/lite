@@ -1360,5 +1360,21 @@
   "monitoring.point.eval.level.normal": "Normal",
   "monitoring.point.eval.level.minor": "Low Risk",
   "monitoring.point.eval.level.major": "Medium Risk",
-  "monitoring.point.eval.level.critical": "High Risk"
+  "monitoring.point.eval.level.critical": "High Risk",
+  "single.stage.centrifugal.pump": "SingleStageCentrifugalPump",
+  "motor.poles.num": "Motor Poles Number",
+  "electric.supply.freq": "Electric Supply Frequency",
+  "rot.spe": "Rotation Speed",
+  "motor.non.drive.side.bearing": "Motor Non Drive Side Bearing",
+  "motor.drive.side.bearing": "Motor Drive Side Bearing",
+  "pump.drive.side.bearing": "Pump Drive Side Bearing",
+  "pump.non.drive.side.bearing": "Pump Non Drive Side Bearing",
+  "pump.blade.num": "Pump Blade Number",
+  "motor.non.drive.end": "Motor Non Drive End",
+  "motor.drive.end": "Motor Drive End",
+  "pump.drive.end": "Pump Drive End",
+  "pump.non.drive.end": "Pump Non Drive End",
+  "direction.axial": "Axial",
+  "direction.vertical": "Vertical",
+  "direction.horizontal": "Horizontal"
 }

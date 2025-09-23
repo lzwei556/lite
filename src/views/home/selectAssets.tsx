@@ -5,7 +5,7 @@ import { AssetRow, exportAssets } from '../../asset-common';
 import { getProject } from '../../utils/session';
 import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
-import { Card, Grid, TextFormItem } from '../../components';
+import { Card, CheckboxFormItem, Grid } from '../../components';
 
 export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void } & ModalProps> = (
   props
@@ -65,17 +65,22 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
     >
       <Card style={{ marginBottom: 16 }}>
         <Form form={form}>
-          <TextFormItem name='asset_ids' noStyle>
-            <Checkbox.Group onChange={(values) => setSelected(values)}>
-              <Grid>
-                {props.assets.map(({ id, name }) => (
-                  <Col span={12} key={id}>
-                    <Checkbox value={id}>{name}</Checkbox>
-                  </Col>
-                ))}
-              </Grid>
-            </Checkbox.Group>
-          </TextFormItem>
+          <CheckboxFormItem
+            name='asset_ids'
+            noStyle
+            checkboxGroupProps={{
+              children: (
+                <Grid>
+                  {props.assets.map(({ id, name }) => (
+                    <Col span={12} key={id}>
+                      <Checkbox value={id}>{name}</Checkbox>
+                    </Col>
+                  ))}
+                </Grid>
+              ),
+              onChange: setSelected
+            }}
+          />
         </Form>
       </Card>
     </ModalWrapper>

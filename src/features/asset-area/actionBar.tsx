@@ -7,6 +7,8 @@ import { area, CreateAsset, isAssetAreaParent, isAssetValidParent } from '../../
 import { useAssetCategories } from './utils';
 import { Create } from './create';
 import { IconButton } from '../../components';
+import { AddForm } from '../../asset-model2/addForm';
+import { generateColProps } from '../../utils/grid';
 
 export const ActionBar = ({
   asset,
@@ -87,10 +89,40 @@ export const ActionBar = ({
     );
   };
 
+  const AssetModelCreationBtn = () => {
+    const labelIntl = intl.get('CREATE_SOMETHING', {
+      something: intl.get('single.stage.centrifugal.pump')
+    });
+    return (
+      <>
+        <IconButton
+          icon={<PlusOutlined />}
+          key={3}
+          onClick={() => {
+            setOpen(true);
+            setType(3);
+          }}
+          tooltipProps={{ title: labelIntl }}
+          color='primary'
+          variant='outlined'
+        />
+        {type === 3 && (
+          <AddForm {...commonProps} formItemColProps={generateColProps({ xl: 12, xxl: 12 })} />
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       {shouldRenderAreaCreateBtn && <AreaCreateBtn />}
-      {!short && shouldAssetCreationBtn && <AssetCreationBtn />}
+      {!short && shouldAssetCreationBtn && (
+        <>
+          <AssetCreationBtn />
+          {/* asset model demo page entry */}
+          {/* <AssetModelCreationBtn /> */}
+        </>
+      )}
     </>
   );
 };

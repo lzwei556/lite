@@ -17,6 +17,7 @@ import { Card, CardProps } from '../card/card';
 import { Space } from '../../common';
 import { PageResult } from '../../types/page';
 import { IconButton } from '../icon-button';
+import { CheckboxFormItem } from '../form/checkboxFormItem';
 
 type Header = {
   enableSettingColumnsCount?: boolean;
@@ -130,17 +131,24 @@ function SettingsButton<T>({
     <Popover
       arrow={false}
       content={
-        <Checkbox.Group value={visibledColumnKeys} onChange={setVisibledColumnKeys}>
-          <Grid gutter={[0, 0]}>
-            {columns
-              .filter((c) => c.hasOwnProperty('hidden'))
-              .map((c) => (
-                <Col span={24} key={c.key}>
-                  <Checkbox value={c.key}>{c.title as React.ReactNode}</Checkbox>
-                </Col>
-              ))}
-          </Grid>
-        </Checkbox.Group>
+        <CheckboxFormItem
+          noStyle
+          checkboxGroupProps={{
+            children: (
+              <Grid gutter={[0, 0]}>
+                {columns
+                  .filter((c) => c.hasOwnProperty('hidden'))
+                  .map((c) => (
+                    <Col span={24} key={c.key}>
+                      <Checkbox value={c.key}>{c.title as React.ReactNode}</Checkbox>
+                    </Col>
+                  ))}
+              </Grid>
+            ),
+            onChange: setVisibledColumnKeys,
+            value: visibledColumnKeys
+          }}
+        />
       }
       overlayStyle={{ maxWidth: 300, maxHeight: 600, overflow: 'auto' }}
       placement='leftBottom'

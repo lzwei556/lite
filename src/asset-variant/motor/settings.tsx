@@ -1,11 +1,12 @@
 import React from 'react';
-import { Col, ColProps, Radio } from 'antd';
+import { Col, ColProps } from 'antd';
 import intl from 'react-intl-universal';
 import {
   Card,
   CardProps,
   Grid,
   NumberFormItem,
+  RadioFormItem,
   SelectFormItem,
   TextFormItem
 } from '../../components';
@@ -128,17 +129,17 @@ export const Settings = ({
           />
         </Col>
         <Col {...formItemColProps}>
-          <TextFormItem
+          <RadioFormItem
             label={VariableFrequencyDrive.label}
             name={['attributes', VariableFrequencyDrive.name]}
-          >
-            <Radio.Group
-              options={VariableFrequencyDrive.options?.map((opt) => ({
+            radioGroupProps={{
+              options: VariableFrequencyDrive.options?.map((opt) => ({
                 ...opt,
                 label: intl.get(opt.label)
-              }))}
-            />
-          </TextFormItem>
+              })),
+              optionType: 'default'
+            }}
+          />
         </Col>
         <Col {...formItemColProps}>
           <NumberFormItem
