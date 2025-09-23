@@ -15,6 +15,7 @@ export * from './DeviceSelection';
 export * from './downloadData';
 export * from './dynamicData';
 export * from './icon';
+export * from './provider';
 export * from './relatedDeviceCard';
 export * from './services';
 export * from './types';

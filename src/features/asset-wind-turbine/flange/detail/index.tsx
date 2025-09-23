@@ -1,11 +1,9 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { generateColProps } from '../../../../utils/grid';
 import { Grid, TabsDetail, Table, TabsDetailsItems, Card } from '../../../../components';
 import { useLocaleContext } from '../../../../localeProvider';
 import {
-  StatisticBar,
   AssetRow,
   MONITORING_POINT_LIST,
   MonitoringPointRow,
@@ -15,7 +13,9 @@ import {
   positionColumn,
   getOperateColumn,
   AssetNavigator,
-  EmptyMonitoringPoints
+  EmptyMonitoringPoints,
+  AlarmsObjectStatistics,
+  SensorsStatistics
 } from '../../../../asset-common';
 import { useHistoryDatas } from '../../utils';
 import { ActionBar } from '../../components/actionBar';
@@ -33,7 +33,7 @@ export const Index = (props: {
 }) => {
   const { language } = useLocaleContext();
   const { asset, onSuccess } = props;
-  const { monitoringPoints } = asset;
+  const { monitoringPoints, statistics } = asset;
   const historyDatas = useHistoryDatas(asset);
   const items: TabsDetailsItems = [
     {
@@ -41,23 +41,39 @@ export const Index = (props: {
       key: 'overview',
       content: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
-          <Grid>
-            <Col span={24}>
-              <StatisticBar asset={asset} />
-            </Col>
-            <Col span={24}>
+          <Grid wrap={false} align='stretch'>
+            <Col flex='auto'>
               <Grid>
-                <Col {...generateColProps({ xl: 12, xxl: 9 })}>
+                <Col span={24}>
                   <Card title={intl.get('BOLT_DIAGRAM')}>
                     <PointsScatterChart asset={asset} big={true} />
                   </Card>
                 </Col>
-                <Col {...generateColProps({ xl: 12, xxl: 15 })}>
+                <Col span={24}>
                   {isFlangePreloadCalculation(asset) ? (
                     <PreloadCalculation.RightConentInMonitorTab asset={asset} />
                   ) : (
                     <Plain.RightConentInMonitorTab asset={asset} historyDatas={historyDatas} />
                   )}
+                </Col>
+              </Grid>
+            </Col>
+            <Col flex='300px'>
+              {' '}
+              <Grid>
+                <Col span={24}>
+                  <AlarmsObjectStatistics
+                    total={statistics.monitoringPointNum}
+                    alarms={statistics.alarmNum}
+                    title={intl.get('monitoring.points')}
+                    subtext={intl.get('total')}
+                  />
+                </Col>
+                <Col span={24}>
+                  <SensorsStatistics
+                    total={statistics.deviceNum}
+                    offlines={statistics.offlineDeviceNum}
+                  />
                 </Col>
               </Grid>
             </Col>

@@ -11,16 +11,20 @@ import { useAppType } from '../../../config';
 import { DownloadIconButton, IconButton } from '../../../components';
 import { AlarmPage } from './alarm';
 import { Status } from './status';
-import { A4_SIZE, PREFACES } from './report';
-import Cover from './cover.jpg';
+import CoverImage from './cover.jpg';
 import { ISO } from './iso';
 import { useStyles } from './styles';
+import { Index as Corrosion } from '../corrosion';
+import { Report } from '../types';
+import { A4_SIZE, PREFACES, ReportType } from '../constants';
+import { getReportType } from '../utils';
+import { useTypeContext } from '../context';
 
-export default function Report() {
+export default function ReportDetail() {
   const appType = useAppType();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const report = state;
+  const report = state as Report;
   const reportRef = React.useRef<HTMLDivElement>(null);
   const [loading, setLoading] = React.useState(false);
   const duration = `${Dayjs.format(report.start, 'YYYY/MM/DD')}-${Dayjs.format(
@@ -82,11 +86,12 @@ export default function Report() {
     );
   };
 
-  const renderCover = () => {
+  const Cover = () => {
+    const { type } = useTypeContext();
     return (
       <section className={cx('page', 'index')}>
-        <img src={Cover} alt='cover' className='cover' />
-        <h1 className='title'>状态监测周评估报告</h1>
+        <img src={CoverImage} alt='cover' className='cover' />
+        <h1 className='title'>{`状态监测${getReportType(type)}评估报告`}</h1>
         <h3 className='title'>Condition Monitoring and Evaluation Report</h3>
         <section className='container introduce'>
           <p>
@@ -101,10 +106,12 @@ export default function Report() {
     );
   };
 
-  const renderPreface = () => {
+  const Preface = () => {
+    const { type } = useTypeContext();
     return (
       <section className='page preface'>
-        <h2 className='title'>前言</h2>
+        <h2 className='title'>{`腐蚀测厚${getReportType(type)}报`}</h2>
+        <h3>一、前言</h3>
         <ul className='text-list'>
           {PREFACES.map((p, i) => (
             <li key={i} className='item'>
@@ -112,6 +119,13 @@ export default function Report() {
               <p className='desc'>{p}</p>
             </li>
           ))}
+        </ul>
+        <h3>二、基本信息</h3>
+        <ul className='text-list'>
+          <li>项目名称：{report.reportName}</li>
+          <li>报告周期：{duration}</li>
+          <li>报告日期：{Dayjs.format(report.reportDate, 'YYYY/MM/DD')}</li>
+          <li>监测方法：超声波测厚</li>
         </ul>
       </section>
     );
@@ -121,11 +135,17 @@ export default function Report() {
     <Content>
       <div className={styles.report} ref={reportRef}>
         {renderDownloadButton()}
-        {renderCover()}
-        {renderPreface()}
-        <Status report={report} />
-        <AlarmPage report={report} />
-        {appType === 'vibration' && <ISO />}
+        {/* <Cover /> */}
+        <Preface />
+        {appType === 'vibration' && (
+          <>
+            <Status report={report} />
+            <AlarmPage report={report} />
+            <ISO />
+          </>
+        )}
+        {appType === 'corrosion' && <></>}
+        {report && <Corrosion report={report} />}
       </div>
     </Content>
   );

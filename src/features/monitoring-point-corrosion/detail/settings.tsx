@@ -21,6 +21,7 @@ export const Settings = ({
   onSuccess: () => void;
 }) => {
   const [form] = Form.useForm<MonitoringPoint & { device_id: number }>();
+
   return (
     <Grid>
       <Col span={24}>
@@ -57,7 +58,7 @@ export const Settings = ({
         </Card>
       </Col>
       <Col span={24}>
-        <AlarmRuleSetting {...point} key={point.id} />
+        <AlarmRuleSetting point={point} />
       </Col>
     </Grid>
   );

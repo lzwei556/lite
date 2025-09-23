@@ -1,7 +1,7 @@
 import React from 'react';
 import { Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, CardProps, Term } from '../../components';
+import { Card, CardProps, SeriesAlarm, Term } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
 import { DisplayProperty } from '../../constants/properties';
 import { getDisplayName, getValue } from '../../utils/format';
@@ -13,6 +13,7 @@ export const PropertyChartCard = (props: {
   data?: HistoryData;
   property: DisplayProperty;
   cardProps?: CardProps;
+  alarm?: Pick<SeriesAlarm, 'rules'> & { propertyKey: string };
 }) => {
   return (
     <Card {...props.cardProps} title={<PropertyChartTitle {...props} />}>

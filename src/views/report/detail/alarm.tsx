@@ -2,9 +2,9 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { getAlarmDetail } from '../../../features/alarm/alarm-group';
 import { Dayjs } from '../../../utils';
-import { Report } from './report';
 import { Table } from '../../../components';
 import { getLabelByValue } from '../../../features/alarm';
+import { Report } from '../types';
 
 const PAGE_ROWS = 15;
 const TITLE_ROWS = 2;
@@ -154,6 +154,7 @@ function AlarmRecordTable<T>({
   return (
     <Table
       className='alarm-record-table'
+      cardProps={{ styles: { body: { padding: 0 } } }}
       bordered={true}
       columns={[
         {
@@ -198,6 +199,7 @@ function AlarmRecordTable<T>({
         }
       ]}
       dataSource={dataSource}
+      noScroll={true}
       showHeader={showHeader}
       pagination={false}
       rowKey={(row) => row.id}

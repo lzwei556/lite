@@ -68,10 +68,14 @@ export const MarkChart = (
   const { cardProps, series, yAxisMeta, config, onEvents, toolbar, ...rest } = props;
   const visibles = toolbar?.visibles ?? Visibles;
   const options = getOptions(
-    useLinedSeriesOptions(series, yAxisMeta, {
-      ...config,
-      opts: { ...config?.opts, ...ChartBrush.useBrushOptions() },
-      switchs: { noDataZoom: true, noArea: true, ...config?.switchs }
+    useLinedSeriesOptions({
+      series,
+      yAxisMeta,
+      config: {
+        ...config,
+        opts: { ...config?.opts, ...ChartBrush.useBrushOptions() },
+        switchs: { noDataZoom: true, noArea: true, ...config?.switchs }
+      }
     })
   );
   const { colorBorderStyle } = useGlobalStyles();

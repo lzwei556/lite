@@ -18,7 +18,7 @@ export default function Main() {
     } else if (Asset.Assert.isDeviceRelated(type)) {
       return <Device.Index {...{ ...contextProps, asset: selectedNode as AssetRow }} />;
     } else if (Asset.Assert.isVibrationRelated(type)) {
-      return <Vibration.Index {...contextProps} />;
+      return <Vibration.Index {...{ ...contextProps, asset: selectedNode as AssetRow }} />;
     } else if (Asset.Assert.isCorrosionRelated(type)) {
       return <Corrosion.Index {...{ ...contextProps, asset: selectedNode as AssetRow }} />;
     } else if (Asset.Assert.isWindRelated(type)) {

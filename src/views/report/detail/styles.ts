@@ -1,5 +1,5 @@
 import { createStyles } from 'antd-style';
-import { A4_SIZE, PAGE_GAP } from './report';
+import { A4_SIZE, PAGE_GAP } from '../constants';
 
 export const useStyles = createStyles(({ token, css }) => {
   return {
@@ -32,7 +32,8 @@ export const useStyles = createStyles(({ token, css }) => {
         }
         h1.title,
         h2.title,
-        h3.title {
+        h3.title,
+        h4.title {
           text-align: center;
         }
         .value {
@@ -75,6 +76,9 @@ export const useStyles = createStyles(({ token, css }) => {
         }
         &.alarm > .alarm-record-table + .alarm-record-table {
           margin-top: 48px;
+        }
+        .split {
+          margin-top: 1em;
         }
       }
     `,

@@ -25,6 +25,7 @@ const Project = lazy(() => import('./project'));
 const Unauthorized = lazy(() => import('./403'));
 const NotFound = lazy(() => import('./404'));
 const ServerError = lazy(() => import('./500'));
+const Reports = lazy(() => import('./report'));
 const ReportList = lazy(() => import('./report/list'));
 const Report = lazy(() => import('./report/detail'));
 
@@ -62,8 +63,10 @@ const AppRouter = () => {
             </Route>
             <Route path='alarmRules' element={<AlarmRuleGroups />} />
             <Route path='alerts' element={<AlarmRecord />} />
-            <Route path='reports' element={<ReportList />} />
-            <Route path='reports/:id' element={<Report />} />
+            <Route path='reports' element={<Reports />}>
+              <Route index element={<ReportList />} />
+              <Route path=':id' element={<Report />} />
+            </Route>
             <Route path='projects' element={<Project />} />
             <Route path='users' element={<User />} />
             <Route path='roles' element={<Role />} />

@@ -7,6 +7,7 @@ import usePermission, { Permission } from '../../../permission/permission';
 import {
   AssetNavigator,
   BasicCard,
+  MonitoringPointProvider,
   MonitoringPointRow,
   RelatedDeviceCard
 } from '../../../asset-common';
@@ -69,5 +70,9 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     });
   }
 
-  return <TabsDetail items={items} title={<AssetNavigator asset={monitoringPoint} />} />;
+  return (
+    <MonitoringPointProvider id={id}>
+      <TabsDetail items={items} title={<AssetNavigator asset={monitoringPoint} />} />
+    </MonitoringPointProvider>
+  );
 };

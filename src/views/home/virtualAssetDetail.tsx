@@ -1,88 +1,27 @@
 import React from 'react';
-import { Col } from 'antd';
+import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, Descriptions, Link, TabsDetail, Grid, Chart, MutedCard } from '../../components';
+import { Card, Descriptions, Link, TabsDetail, Grid, MutedCard } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { App, useAppType } from '../../config';
-import { ColorHealth, ColorOffline } from '../../constants/color';
-import { useLocaleContext } from '../../localeProvider';
+
 import {
   Asset,
   ASSET_PATHNAME,
   getVirturalAsset,
-  ProjectStatistics,
-  useContext
+  useContext,
+  AlarmsObjectStatistics,
+  SensorsStatistics,
+  AlarmTrend
 } from '../../asset-common';
-import { AlarmTrend } from './alarmTrend';
 import { Icon } from './icon';
-import { usePieOptions, useProjectStatistics } from './useProjectStatistics';
+import { useProjectStatistics } from './useProjectStatistics';
 import { Settings } from './settings';
 
 export default function VirtualAssetDetail() {
   const { assets } = useContext();
   const appType = useAppType();
   const projectStatistics = useProjectStatistics();
-  const { language } = useLocaleContext();
-
-  const useAssetPieOptions = (statics: ProjectStatistics, type: 'asset' | 'monitoring_point') => {
-    let total = 0;
-    let alarms: [number, number, number] = [0, 0, 0];
-    if (type === 'asset') {
-      total = statics.rootAssetNum;
-      alarms = statics.rootAssetAlarmNum;
-    } else if (type === 'monitoring_point') {
-      total = statics.monitoringPointNum;
-      alarms = statics.monitoringPointAlarmNum;
-    }
-    return usePieOptions(
-      total,
-      Asset.Statistics.resolveStatus(total, alarms).map((s) => ({
-        ...s,
-        name: intl.get(s.name),
-        itemStyle: { color: s.color }
-      })),
-      language,
-      intl.get('total')
-    );
-  };
-
-  const useSensorPieOptions = (statics: ProjectStatistics) => {
-    const total = statics.deviceNum;
-    const offline = statics.deviceOfflineNum;
-    return usePieOptions(
-      total,
-      [
-        {
-          name: intl.get('ONLINE'),
-          value: total - offline,
-          itemStyle: { color: ColorHealth }
-        },
-        {
-          name: intl.get('OFFLINE'),
-          value: offline,
-          itemStyle: { color: ColorOffline }
-        }
-      ],
-      language,
-      intl.get('total')
-    );
-  };
-
-  const AssetStatics = ({ statics }: { statics: ProjectStatistics }) => {
-    return <Chart options={useAssetPieOptions(statics, 'asset')} style={{ height: 280 }} />;
-  };
-
-  const MonitoringPointStatics = ({ statics }: { statics: ProjectStatistics }) => {
-    return (
-      <Chart options={useAssetPieOptions(statics, 'monitoring_point')} style={{ height: 280 }} />
-    );
-  };
-
-  const SensorStatics = ({ statics }: { statics: ProjectStatistics }) => {
-    return <Chart options={useSensorPieOptions(statics)} style={{ height: 280 }} />;
-  };
-
-  const EmptyStatics = () => <Chart options={undefined} style={{ height: 280 }} />;
 
   const getTitle = () => {
     let title = 'assets';
@@ -101,69 +40,65 @@ export default function VirtualAssetDetail() {
           label: intl.get('OVERVIEW'),
           key: 'overview',
           content: (
-            <Grid>
-              <Col span={24}>
-                <Grid>
-                  <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
-                    <MutedCard title={intl.get(getTitle())} titleCenter={true}>
-                      {projectStatistics ? (
-                        <AssetStatics statics={projectStatistics} />
-                      ) : (
-                        <EmptyStatics />
-                      )}
-                    </MutedCard>
-                  </Col>
-                  <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
-                    <MutedCard title={intl.get('monitoring.points')} titleCenter={true}>
-                      {projectStatistics ? (
-                        <MonitoringPointStatics statics={projectStatistics} />
-                      ) : (
-                        <EmptyStatics />
-                      )}
-                    </MutedCard>
-                  </Col>
-                  <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
-                    <MutedCard title={intl.get('sensors')} titleCenter={true}>
-                      {projectStatistics ? (
-                        <SensorStatics statics={projectStatistics} />
-                      ) : (
-                        <EmptyStatics />
-                      )}
-                    </MutedCard>
-                  </Col>
-                  <Col {...generateColProps({ xxl: 9 })}>
-                    <AlarmTrend chartStyle={{ height: 280 }} title={intl.get('ALARM_TREND')} />
-                  </Col>
-                </Grid>
-              </Col>
-              <Col span={24}>
-                <Grid>
-                  {assets.map((item) => {
-                    const statistics = Asset.Statistics.resolveDescendant(item.statistics);
-                    return (
-                      <Col {...generateColProps({ lg: 12, xl: 8, xxl: 6 })}>
-                        <Card styles={{ body: { padding: 24 } }}>
-                          <Card.Meta
-                            avatar={<Icon node={item} />}
-                            description={
-                              <Descriptions
-                                contentStyle={{ transform: 'translate(-40px)' }}
-                                items={statistics.map(({ name, value }) => ({
-                                  label: intl.get(name),
-                                  children: value
-                                }))}
-                              />
-                            }
+            <Grid wrap={false} align='stretch'>
+              <Col flex='auto'>
+                <Card style={{ height: '100%' }}>
+                  <Grid>
+                    {assets.map((item) => {
+                      const statistics = Asset.Statistics.resolveDescendant(item.statistics);
+                      return (
+                        <Col {...generateColProps({ lg: 12, xl: 8, xxl: 6 })}>
+                          <MutedCard
                             title={
-                              <Link to={`/${ASSET_PATHNAME}/${item.id}-${item.type}`}>
-                                {item.name}
-                              </Link>
+                              <Space size={24}>
+                                <Icon node={item} />
+                                <Link to={`/${ASSET_PATHNAME}/${item.id}-${item.type}`}>
+                                  {item.name}
+                                </Link>
+                              </Space>
                             }
-                          />
-                        </Card>
-                      </Col>
-                    );
-                  })}
+                          >
+                            <Descriptions
+                              contentStyle={{ transform: 'translate(-40px)' }}
+                              items={statistics.map(({ name, value }) => ({
+                                label: intl.get(name),
+                                children: value
+                              }))}
+                            />
+                          </MutedCard>
+                        </Col>
+                      );
+                    })}
+                  </Grid>
+                </Card>
+              </Col>
+              <Col flex='300px'>
+                <Grid>
+                  <Col span={24}>
+                    <AlarmsObjectStatistics
+                      total={projectStatistics?.rootAssetNum}
+                      alarms={projectStatistics?.rootAssetAlarmNum}
+                      title={intl.get(getTitle())}
+                      subtext={intl.get('total')}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <AlarmsObjectStatistics
+                      total={projectStatistics?.monitoringPointNum}
+                      alarms={projectStatistics?.monitoringPointAlarmNum}
+                      title={intl.get('monitoring.points')}
+                      subtext={intl.get('total')}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <SensorsStatistics
+                      total={projectStatistics?.deviceNum}
+                      offlines={projectStatistics?.deviceOfflineNum}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <AlarmTrend chartStyle={{ height: 210 }} title={intl.get('ALARM_TREND')} />
+                  </Col>
                 </Grid>
               </Col>
             </Grid>

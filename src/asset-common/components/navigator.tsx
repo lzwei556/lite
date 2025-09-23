@@ -5,11 +5,11 @@ import { mapTree, tree2List } from '../../utils/tree';
 import { truncate } from '../../utils/format';
 import { AssetTreeNode, combine, pickId } from '../../views/home/tree';
 import { MonitoringPointRow } from '../../monitoring-point';
+import { Link } from '../../components';
 import { AssetRow } from '../types';
 import { ASSET_PATHNAME, getVirturalAsset } from '../constants';
 import { useContext } from './context';
-import { Link } from '../../components';
-import { AssetStatusTag } from '../assetStatusTag';
+import { AssetStatusTag } from './assetStatusTag';
 
 export type TreeFlatListItem = AssetTreeNode & { path: number[] };
 

@@ -12,6 +12,9 @@ import {
 import * as Point from '../monitoring-point-corrosion';
 import { Update } from './update';
 import { PointsTable } from './pointsTable';
+import { Overview } from './overview';
+import { AssetModelProvider } from '../../asset-model';
+import { AssetAnnotationImage } from '../imageAnnotation';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
   const { id } = asset;
@@ -33,36 +36,52 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
 
   return (
     <Spin spinning={loading}>
-      <TabsDetail
-        items={[
-          {
-            key: 'monitoringPointList',
-            label: intl.get('MONITORING_POINT_LIST'),
-            content: (
-              <MonitoringPointsTable
-                key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
-                asset={asset}
-                enableSettingColumnsCount={true}
-              />
-            )
-          },
-          {
-            key: 'settings',
-            label: intl.get('SETTINGS'),
-            content: (
-              <Grid>
-                <Col span={24}>
-                  <Update asset={asset} onSuccess={refresh} key={id} />
-                </Col>
-                <Col span={24}>
-                  <PointsTable {...props} />
-                </Col>
-              </Grid>
-            )
-          }
-        ]}
-        title={<AssetNavigator asset={asset} />}
-      />
+      <AssetModelProvider asset={asset}>
+        <TabsDetail
+          items={[
+            {
+              key: 'overview',
+              label: intl.get('OVERVIEW'),
+              content: <Overview asset={asset} onSuccess={refresh} key={asset.id} />
+            },
+            {
+              key: 'monitoringPointList',
+              label: intl.get('MONITORING_POINT_LIST'),
+              content: (
+                <MonitoringPointsTable
+                  key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
+                  asset={asset}
+                  enableSettingColumnsCount={true}
+                />
+              )
+            },
+            {
+              key: 'settings',
+              label: intl.get('SETTINGS'),
+              content: (
+                <Grid>
+                  <Col span={24}>
+                    <Update asset={asset} onSuccess={refresh} key={id} />
+                  </Col>
+                  <Col span={24}>
+                    <PointsTable {...props} />
+                  </Col>
+                  <Col span={24}>
+                    <AssetAnnotationImage
+                      asset={asset}
+                      key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
+                      editable={true}
+                      title={intl.get('OVERVIEW')}
+                      onSuccess={refresh}
+                    />
+                  </Col>
+                </Grid>
+              )
+            }
+          ]}
+          title={<AssetNavigator asset={asset} />}
+        />
+      </AssetModelProvider>
       {mointoringPoint && (
         <Point.UpdateModal
           key={mointoringPoint.id}

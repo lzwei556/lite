@@ -3,7 +3,12 @@ import { Button, Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Flex, Grid, TabsDetail } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
-import { AssetNavigator, AssetRow, StatisticBar } from '../../../asset-common';
+import {
+  AlarmsObjectStatistics,
+  AssetNavigator,
+  AssetRow,
+  SensorsStatistics
+} from '../../../asset-common';
 import { ActionBar } from '../components/actionBar';
 import { Update } from './update';
 import { OverviewCard } from './overviewCard';
@@ -15,6 +20,7 @@ export const Index = (props: {
   onSuccess: () => void;
 }) => {
   const { asset, onUpdateAsset, onSuccess } = props;
+  const { statistics } = asset;
   const renderAssetList = (content: React.ReactNode) => {
     return (asset.children?.length ?? 0) > 0 ? (
       <Grid>{content}</Grid>
@@ -32,11 +38,8 @@ export const Index = (props: {
           label: intl.get('assets'),
           key: 'asset',
           content: (
-            <Grid>
-              <Col span={24}>
-                <StatisticBar asset={asset} />
-              </Col>
-              <Col span={24}>
+            <Grid wrap={false}>
+              <Col flex='auto'>
                 {renderAssetList(
                   asset.children
                     ?.sort((prev, next) => {
@@ -45,11 +48,29 @@ export const Index = (props: {
                       return prevIndex - nextIndex;
                     })
                     ?.map((a) => (
-                      <Col key={a.id} {...generateColProps({ xl: 12, xxl: 8 })}>
+                      <Col key={a.id} {...generateColProps({ xl: 12, xxl: 12 })}>
                         <OverviewCard asset={a} />
                       </Col>
                     ))
                 )}
+              </Col>
+              <Col flex='300px'>
+                <Grid>
+                  <Col span={24}>
+                    <AlarmsObjectStatistics
+                      total={statistics.monitoringPointNum}
+                      alarms={statistics.alarmNum}
+                      title={intl.get('monitoring.points')}
+                      subtext={intl.get('total')}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <SensorsStatistics
+                      total={statistics.deviceNum}
+                      offlines={statistics.offlineDeviceNum}
+                    />
+                  </Col>
+                </Grid>
               </Col>
             </Grid>
           )

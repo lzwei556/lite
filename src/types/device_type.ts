@@ -41,7 +41,12 @@ export enum DeviceType {
   PressureWoErKe = 0x1000002,
   SPT510 = 0x80002,
   SQ100 = 0x90001,
-  SQ110C = 0x90003
+  SQ110C = 0x90003,
+  SVT510LoraWAN = 0x4005010e,
+  STLoraWAN = 0x40060201,
+  DC110LoraWAN = 0x40040201,
+  DC210LoraWAN = 0x40040106,
+  DC110HLoraWAN = 0x40040107
 }
 
 export namespace DeviceType {
@@ -129,6 +134,16 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_SQ100';
       case DeviceType.SQ110C:
         return 'DEVICE_TYPE_SQ110C';
+      case DeviceType.SVT510LoraWAN:
+        return 'DEVICE_TYPE_SVT510LoraWAN';
+      case DeviceType.STLoraWAN:
+        return 'DEVICE_TYPE_STLoraWAN';
+      case DeviceType.DC110LoraWAN:
+        return 'DEVICE_TYPE_DC110LoraWAN';
+      case DeviceType.DC210LoraWAN:
+        return 'DEVICE_TYPE_DC210LoraWAN';
+      case DeviceType.DC110HLoraWAN:
+        return 'DEVICE_TYPE_DC110HLoraWAN';
       default:
         return 'DEVICE_TYPE_UNKNOWN';
     }
@@ -159,15 +174,15 @@ export namespace DeviceType {
   }
 
   export function getNormalDCSensors() {
-    return [DeviceType.DC110, DeviceType.DC110C, DeviceType.DC110L];
+    return [DeviceType.DC110, DeviceType.DC110C, DeviceType.DC110L, DeviceType.DC110LoraWAN];
   }
 
   export function getHighDCSensors() {
-    return [DeviceType.DC110H, DeviceType.DC110HC, DeviceType.DC110HL];
+    return [DeviceType.DC110H, DeviceType.DC110HC, DeviceType.DC110HL, DeviceType.DC110HLoraWAN];
   }
 
   export function getUltraHighDCSensors() {
-    return [DeviceType.DC210, DeviceType.DC210C, DeviceType.DC210L];
+    return [DeviceType.DC210, DeviceType.DC210C, DeviceType.DC210L, DeviceType.DC210LoraWAN];
   }
 
   export function getDCSensors() {
@@ -194,9 +209,11 @@ export namespace DeviceType {
       DeviceType.SVT220S1,
       DeviceType.SVT220S3,
       DeviceType.SVT510L,
+      DeviceType.SVT510LoraWAN,
       DeviceType.ST100,
       DeviceType.ST101S,
       DeviceType.ST101L,
+      DeviceType.STLoraWAN,
       DeviceType.PressureGuoDa,
       DeviceType.PressureWoErKe,
       DeviceType.SPT510,
@@ -252,7 +269,7 @@ export namespace DeviceType {
   }
 
   export function isRootDevice(type: number) {
-    return isGateway(type) || isMultiChannel(type) || isCat1(type);
+    return isGateway(type) || isMultiChannel(type) || isCat1(type) || isLoraWAN(type);
   }
 
   export function isRootSensor(type: number) {
@@ -310,6 +327,7 @@ export namespace DeviceType {
       case DeviceType.SVT220S1:
       case DeviceType.SVT220S3:
       case DeviceType.SVT510L:
+      case DeviceType.SVT510LoraWAN:
         return true;
     }
     return false;
@@ -326,12 +344,23 @@ export namespace DeviceType {
       DeviceType.SVT210S,
       DeviceType.SVT220S1,
       DeviceType.SVT220S3,
-      DeviceType.SVT510L
+      DeviceType.SVT510L,
+      DeviceType.SVT510LoraWAN
     ];
   }
 
   export function isSVTLora(type: number) {
     return type === DeviceType.SVT510L;
+  }
+
+  export function isLoraWAN(type: number) {
+    return (
+      type === DeviceType.DC110LoraWAN ||
+      type === DeviceType.DC210LoraWAN ||
+      type === DeviceType.DC110HLoraWAN ||
+      type === DeviceType.SVT510LoraWAN ||
+      type === DeviceType.STLoraWAN
+    );
   }
 }
 

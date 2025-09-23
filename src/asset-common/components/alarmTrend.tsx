@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../utils';
 import { GetAlertStatisticsRequest } from '../../apis/statistic';
-import { Chart, getOptions, MutedCard, useBarPieOption } from '../../components';
+import { Chart, getOptions, MutedCard, useBarPieOptions } from '../../components';
 import { AlarmLevel, getColorByValue, getLabelByValue } from '../../features/alarm';
 
 type Statistics = { timestamp: number; info: number; warn: number; critical: number };
@@ -29,7 +29,7 @@ export const AlarmTrend = ({
       return false;
     return true;
   };
-  const barPieOpts = useBarPieOption();
+  const barPieOpts = useBarPieOptions();
   const options = hasValidData(countAlarm)
     ? getOptions(barPieOpts, {
         title: {
