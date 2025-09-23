@@ -1,42 +1,62 @@
 import React from 'react';
-import { Form, FormItemProps, InputNumberProps } from 'antd';
+import { Col, ColProps, FormItemProps, InputNumberProps } from 'antd';
+import intl from 'react-intl-universal';
 import _ from 'lodash';
-import { Card, FormItem, TextFormItem } from '../components';
-import { PrimaryAssetModel } from './common';
+import { toSnake } from 'ts-case-convert';
+import { VibrationMonitoringPoint } from '../features';
+import { Card, FormItem, Grid, TextFormItem } from '../components';
+import {
+  PrimaryAssetModel,
+  PrimaryAssetModelMeasureItem,
+  PrimaryAssetModelPropertyValue
+} from './common';
+import { transformSnake2Dot } from '../utils';
 
-export const FormItems = <P extends object>({ model }: { model: PrimaryAssetModel<P> }) => {
-  const properties = useProperties(model);
-  console.log('properties', properties);
-  const monitoringPoints = useMonitoringPoints(model);
+type GeneralFormItemProps = FormItemProps & { inputNumberProps?: InputNumberProps };
+
+export const FormItems = <P extends object, M extends object>({
+  model,
+  formItemColProps
+}: {
+  model: PrimaryAssetModel<P, M>;
+  formItemColProps: ColProps;
+}) => {
+  const properties = useGroupedProperties(model.property);
+  const monitoringPoints = useMonitoringPoints(model.measure);
+
   return (
     <>
       {properties.map(({ group, items }, index) => (
         <Card
           key={`${group}${index}`}
           style={{ marginTop: index !== 0 ? 16 : undefined }}
-          title={group}
+          title={intl.get(group.length > 0 ? group : 'properties')}
         >
-          {items.map((item) => (
-            <FormItem {...item} key={item.name} />
-          ))}
+          <Grid>
+            {items.map((item) => (
+              <Col {...formItemColProps} key={item.name}>
+                <FormItem {...item} />
+              </Col>
+            ))}
+          </Grid>
         </Card>
       ))}
-      <Card style={{ marginTop: 16 }} title='监测点'>
-        <Form.List
-          name='monitoring_points'
-          initialValue={monitoringPoints.map((m) => ({ name: m.name }))}
-        >
-          {(fields) =>
-            fields.map((field) => <TextFormItem {...field} name={[field.name, 'name']} />)
-          }
-        </Form.List>
-      </Card>
+      {monitoringPoints.map((m) => (
+        <Card style={{ marginTop: 16 }} title={intl.get(m.name)} key={m.name}>
+          <Grid>
+            <TextFormItem name='type' hidden={true} />
+            <VibrationMonitoringPoint.FormItems
+              monitoringPoint={{ ...m, name: intl.get(m.name) }}
+              formItemColProps={formItemColProps}
+            />
+          </Grid>
+        </Card>
+      ))}
     </>
   );
 };
 
-const useProperties = <P extends object>(model: PrimaryAssetModel<P>) => {
-  const { property } = model;
+const useGroupedProperties = (property: { [key: string]: PrimaryAssetModelPropertyValue }) => {
   const propertyWithName = _.mapValues(property, (value, key) => ({ ...value, name: key }));
   const dic = _.groupBy(propertyWithName, (value) => value.group ?? '');
   return Object.entries(dic).map(([group, items]) => {
@@ -44,9 +64,9 @@ const useProperties = <P extends object>(model: PrimaryAssetModel<P>) => {
   });
 };
 
-const transform = <P extends object>(
-  item: { name: string } & PrimaryAssetModel<P>['property'][keyof PrimaryAssetModel<P>['property']]
-): FormItemProps & { inputNumberProps?: InputNumberProps } => {
+const transform = (
+  item: { name: string } & PrimaryAssetModelPropertyValue
+): GeneralFormItemProps => {
   const { desc, name, type, unit, value } = item;
   let inputNumberProps: InputNumberProps | undefined;
   if (type === 'float' || type === 'int') {
@@ -55,8 +75,11 @@ const transform = <P extends object>(
   return { label: desc, name, initialValue: value, inputNumberProps };
 };
 
-const useMonitoringPoints = <P extends object>(model: PrimaryAssetModel<P>) => {
-  const { measure } = model;
-  const measureWithName = _.mapValues(measure, (value, key) => ({ ...value, key }));
+const useMonitoringPoints = (measure: { [key: string]: PrimaryAssetModelMeasureItem }) => {
+  const measureWithName = _.mapValues(measure, (value, key) => ({
+    ...value,
+    key,
+    name: transformSnake2Dot(toSnake(key))
+  }));
   return Object.values(measureWithName);
 };

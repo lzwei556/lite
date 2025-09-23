@@ -1,13 +1,13 @@
 import { MonitoringPointTypeValue } from '../config';
 
-export type PrimaryAssetModel<P extends object> = {
+export type PrimaryAssetModel<P extends object, M extends object> = {
   name: string;
   type: string;
-  property: { [Key in keyof P]: PropertyValue };
-  measure: { [key: string]: MeasureItem };
+  property: { [Key in keyof P]: PrimaryAssetModelPropertyValue };
+  measure: { [Key in keyof M]: PrimaryAssetModelMeasureItem };
 };
 
-type PropertyValue = {
+export type PrimaryAssetModelPropertyValue = {
   desc: string;
   type: 'string' | 'float' | 'int';
   unit?: string;
@@ -15,47 +15,66 @@ type PropertyValue = {
   group?: string;
 };
 
-type MeasureItem = {
-  name: string;
+export type PrimaryAssetModelMeasureItem = {
   type: number;
 };
 
 type SingleStageCentrifugalPump = {
-  rotationSpeed: number;
-  frequency: number;
-  poleNum: number;
   bladeNum: number;
+  electricSupplyFreq: number;
+  motorPolesNum: number;
+  motorNonDriveSideBearing: number;
+  motorDriveSideBearing: number;
+  pumpDriveSideBearing: number;
+  pumpNonDriveSideBearing: number;
+  rotSpe: number;
 };
 
-export const SingleStageCentrifugalPumpObj: PrimaryAssetModel<SingleStageCentrifugalPump> = {
+type SingleStageCentrifugalPumpMeasure = {
+  motorNonDriveEnd: string;
+  motorDriveEnd: string;
+  pumpDriveEnd: string;
+  pumpNonDriveEnd: string;
+};
+
+export const SingleStageCentrifugalPumpObj: PrimaryAssetModel<
+  SingleStageCentrifugalPump,
+  SingleStageCentrifugalPumpMeasure
+> = {
   type: '',
-  name: '单级离心泵',
+  name: '',
   property: {
-    rotationSpeed: { desc: 'rotation.speed', type: 'int', unit: 'RPM', value: 1200, group: '电机' },
-    frequency: { desc: '电机供电频率', type: 'float', unit: 'Hz', value: 50, group: '电机' },
-    poleNum: { desc: '电机极数', type: 'float', value: 4 },
+    motorPolesNum: { desc: 'motor.poles.num', type: 'float', value: 4 },
+    electricSupplyFreq: {
+      desc: 'electric.supply.freq',
+      type: 'float',
+      unit: 'Hz',
+      value: 50,
+      group: ''
+    },
+    rotSpe: { desc: 'rot.spe', type: 'int', unit: 'RPM', value: 1200, group: '' },
+    motorNonDriveSideBearing: { desc: 'motor.non.drive.side.bearing', type: 'float', value: 4 },
+    motorDriveSideBearing: { desc: 'motor.drive.side.bearing', type: 'float', value: 4 },
+    pumpDriveSideBearing: { desc: 'pump.drive.side.bearing', type: 'float', value: 4 },
+    pumpNonDriveSideBearing: { desc: 'pump.non.drive.side.bearing', type: 'float', value: 4 },
     bladeNum: {
-      desc: '叶轮叶片数量',
+      desc: 'pump.blade.num',
       type: 'int',
       value: 5,
-      group: '泵'
+      group: ''
     }
   },
   measure: {
-    motorDriveEnd: {
-      name: '电机驱动端',
+    motorNonDriveEnd: {
       type: MonitoringPointTypeValue.Vibration
     },
-    motorNonDriveEnd: {
-      name: '电机非驱动端',
+    motorDriveEnd: {
       type: MonitoringPointTypeValue.Vibration
     },
     pumpDriveEnd: {
-      name: '泵驱动端',
       type: MonitoringPointTypeValue.Vibration
     },
     pumpNonDriveEnd: {
-      name: '泵非驱动端',
       type: MonitoringPointTypeValue.Vibration
     }
   }

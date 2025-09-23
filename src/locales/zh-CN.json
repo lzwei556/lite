@@ -1341,5 +1341,21 @@
   "asset.devices": "设备",
   "network.topology": "网络拓扑",
   "gateways": "网关",
-  "sensors.number": "设备数量"
+  "sensors.number": "设备数量",
+  "single.stage.centrifugal.pump": "悬臂离心泵",
+  "motor.poles.num": "电机极数",
+  "electric.supply.freq": "电机供电频率",
+  "rot.spe": "电机额定转速",
+  "motor.non.drive.side.bearing": "电机非驱动端轴承",
+  "motor.drive.side.bearing": "电机驱动端轴承",
+  "pump.drive.side.bearing": "泵驱动端轴承",
+  "pump.non.drive.side.bearing": "泵非驱动端轴承",
+  "pump.blade.num": "泵叶轮叶片数量",
+  "motor.non.drive.end": "电机非驱动端",
+  "motor.drive.end": "电机驱动端",
+  "pump.drive.end": "泵驱动端",
+  "pump.non.drive.end": "泵非驱动端",
+  "direction.axial": "轴向",
+  "direction.vertical": "径向",
+  "direction.horizontal": "水平向"
 }
