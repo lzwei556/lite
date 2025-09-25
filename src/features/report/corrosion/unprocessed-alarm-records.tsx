@@ -9,8 +9,8 @@ import {
 import { ReportTable, ReportTableProps } from '../table';
 import { Report } from '../types';
 import intl from 'react-intl-universal';
-import { AlarmLevelTag } from '../../../features/alarm';
-import { getAlarmDetail } from '../../../features/alarm/alarm-group';
+import { AlarmLevelTag } from '../../alarm';
+import { getAlarmDetail } from '../../alarm/alarm-group';
 
 type Record = Report['alarmRecords'][0];
 

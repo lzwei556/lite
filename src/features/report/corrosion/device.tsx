@@ -48,11 +48,11 @@ const DevicesRest = ({ list, statistics }: { list: ReportDevice[]; statistics: n
   );
 };
 
-const PieChart = ({ statistics }: { statistics: number[] }) => {
+export const PieChart = ({ statistics }: { statistics: number[] }) => {
   const { colorTextDescriptionStyle } = useGlobalStyles();
   const commonOptions = useBarPieOptions();
   return (
-    <Card styles={{ body: { padding: 0 } }}>
+    <Card style={{ border: 0, marginBottom: 16 }} styles={{ body: { padding: 0 } }}>
       <Chart
         options={getOptions(commonOptions, {
           title: {

@@ -1,9 +1,9 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { getAlarmDetail } from '../../../features/alarm/alarm-group';
+import { getAlarmDetail } from '../../alarm/alarm-group';
 import { Dayjs } from '../../../utils';
 import { Table } from '../../../components';
-import { getLabelByValue } from '../../../features/alarm';
+import { getLabelByValue } from '../../alarm';
 import { Report } from '../types';
 
 const PAGE_ROWS = 15;

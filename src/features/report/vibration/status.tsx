@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Chart } from '../../../components';
 import { ColorHealth, ColorOffline } from '../../../constants/color';
-import { AlarmLevel, getColorByValue } from '../../../features/alarm';
+import { AlarmLevel, getColorByValue } from '../../alarm';
 import { Report } from '../types';
 import { ALARM_LEVELS } from '../constants';
 

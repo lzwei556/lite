@@ -4,7 +4,7 @@ import { getValue } from '../../../utils';
 import { useGlobalStyles } from '../../../styles';
 import { Card, Chart, getOptions, useBarPieOptions } from '../../../components';
 import { ColorDanger, ColorHealth, ColorInfo, ColorWarn } from '../../../constants/color';
-import { getDurationByDays } from '../../../features/monitoring-point-corrosion/analysis/useAnalysis';
+import { getDurationByDays } from '../../monitoring-point-corrosion/analysis/useAnalysis';
 import {
   CrossMultiplePagesList,
   CrossMultiplePagesListProps,
