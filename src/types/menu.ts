@@ -1,4 +1,4 @@
-export type Menu = {
+type MenuDTO = {
   id: number;
   title: string;
   name: string;
@@ -7,6 +7,8 @@ export type Menu = {
   isAuth: boolean;
   icon: string;
   view: string;
-  children: Menu[];
+  children: MenuDTO[];
   sort?: number;
 };
+
+export type Menu = MenuDTO;

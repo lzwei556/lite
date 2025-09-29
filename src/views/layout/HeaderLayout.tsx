@@ -24,11 +24,11 @@ import {
 } from '../../localeProvider';
 import { getCurrentUser } from '../../utils/session';
 import { useGlobalStyles } from '../../styles';
-import { NavMenu } from './NavMenu';
 import './layout.css';
 import { Brand } from './brand';
 import { ReactComponent as LightSVG } from './light.svg';
 import { ReactComponent as DarkSVG } from './dark.svg';
+import { MenuNavigator } from '../../features/user-profile';
 
 const useStyles = createStyles(({ css, token }) => ({
   item: css`
@@ -43,9 +43,8 @@ const useStyles = createStyles(({ css, token }) => ({
   `
 }));
 
-const HeaderLayout = (props: any) => {
+const HeaderLayout = () => {
   const navigate = useNavigate();
-  const { menus } = props;
   const currentUser = getCurrentUser();
   const [now, setNow] = useState<string>(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
   const [open, setVisible] = useState(false);
@@ -87,7 +86,7 @@ const HeaderLayout = (props: any) => {
     <Header className='ts-header'>
       <div className='pc'>
         <Brand height={36} brandNameStyle={{ fontSize: 18 }} />
-        {menus && <NavMenu menus={menus} />}
+        <MenuNavigator className='ts-menu' mode='horizontal' />
         <Space>
           <Typography.Text style={{ color: 'white', fontFamily: 'monospace' }} id='current-time'>
             {now}
@@ -196,7 +195,7 @@ const HeaderLayout = (props: any) => {
           onClose={() => setVisible(false)}
           styles={{ body: { paddingLeft: 0, paddingRight: 0 } }}
         >
-          <NavMenu menus={menus} mode='inline' />
+          <MenuNavigator className='ts-menu' mode='inline' />
           <Divider />
           {currentUser && (
             <div style={{ paddingLeft: 24, paddingBottom: 100 }}>
