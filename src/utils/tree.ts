@@ -11,9 +11,10 @@ export function mapTree<I extends TreeNode, O>(
     return nodeList.map((node) => {
       const path = [...parent, node.id];
       if (node.children) {
-        const sub = inner(node.children as I[], path);
-        // return sub.length > 0 ? { ...fn(node, path), children: sub } : fn(node, path);
-        return fn(sub.length > 0 ? { ...node, children: sub } : node, path);
+        const { children: nodeChildren } = node;
+        const transformed = fn(node, path);
+        const children = inner(nodeChildren as I[], path);
+        return children && children.length > 0 ? { ...transformed, children } : transformed;
       } else {
         return fn(node, path);
       }
