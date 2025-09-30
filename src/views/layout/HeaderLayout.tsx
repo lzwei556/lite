@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Badge, Button, Divider, Drawer, Dropdown, Space, Tag, Typography } from 'antd';
+import { Badge, Button, Divider, Drawer, Dropdown, Space, Tag } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import Icon, {
   DownOutlined,
@@ -12,7 +12,6 @@ import intl from 'react-intl-universal';
 import { createStyles } from 'antd-style';
 import '../../assets/iconfont.css';
 import { persistor, store } from '../../store';
-import { Dayjs } from '../../utils';
 import ProjectSelect from '../../components/select/projectSelect';
 import { GetMyProjectRequest } from '../../apis/project';
 import {
@@ -29,6 +28,7 @@ import { Brand } from './brand';
 import { ReactComponent as LightSVG } from './light.svg';
 import { ReactComponent as DarkSVG } from './dark.svg';
 import { MenuNavigator } from '../../features/user-profile';
+import { Clock } from './clock';
 
 const useStyles = createStyles(({ css, token }) => ({
   item: css`
@@ -46,15 +46,10 @@ const useStyles = createStyles(({ css, token }) => ({
 const HeaderLayout = () => {
   const navigate = useNavigate();
   const currentUser = getCurrentUser();
-  const [now, setNow] = useState<string>(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
   const [open, setVisible] = useState(false);
   const { colorWhiteStyle } = useGlobalStyles();
   const { language, theme, setLocale } = useLocaleContext();
   const { styles, cx } = useStyles();
-
-  setInterval(() => {
-    setNow(Dayjs.dayjs().format('YYYY-MM-DD HH:mm:ss'));
-  }, 1000);
 
   const onLogout = () => {
     persistor.purge().then((_) => {
@@ -88,9 +83,7 @@ const HeaderLayout = () => {
         <Brand height={36} brandNameStyle={{ fontSize: 18 }} />
         <MenuNavigator className='ts-menu' mode='horizontal' />
         <Space>
-          <Typography.Text style={{ color: 'white', fontFamily: 'monospace' }} id='current-time'>
-            {now}
-          </Typography.Text>
+          <Clock />
           {currentUser && <ProjectSelect variant='borderless' onChange={onProjectChange} />}
           <Dropdown
             menu={{
