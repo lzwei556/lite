@@ -7,7 +7,7 @@ type MenuDTO = {
   isAuth: boolean;
   icon: string;
   view: string;
-  children: MenuDTO[];
+  children?: MenuDTO[];
   sort?: number;
 };
 

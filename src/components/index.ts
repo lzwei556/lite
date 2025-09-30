@@ -11,6 +11,7 @@ export * from './layout/pageWithSideBar';
 export * from './layout/title-extra';
 export * from './descriptions';
 export * from './flex';
+export * from './fontIcon';
 export * from './grid';
 export * from './card/card';
 export * from './card/muted-card';
