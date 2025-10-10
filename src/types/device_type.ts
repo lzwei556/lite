@@ -37,11 +37,11 @@ export enum DeviceType {
   ST100 = 0x60001,
   ST101S = 0x60101,
   ST101L = 0x60201,
-  PressureGuoDa = 0x1000001,
-  PressureWoErKe = 0x1000002,
   SPT510 = 0x80002,
   SQ100 = 0x90001,
-  SQ110C = 0x90003
+  SQ110C = 0x90003,
+  PressureGuoDa = 0x1000001,
+  PressureWoErKe = 0x1000002
 }
 
 export namespace DeviceType {
@@ -119,16 +119,16 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_ST101S';
       case DeviceType.ST101L:
         return 'DEVICE_TYPE_ST101L';
-      case DeviceType.PressureGuoDa:
-        return 'DEVICE_TYPE_GUODA_PRESSURE';
-      case DeviceType.PressureWoErKe:
-        return 'DEVICE_TYPE_WOERKE_PRESSURE';
       case DeviceType.SPT510:
         return 'DEVICE_TYPE_SPT510';
       case DeviceType.SQ100:
         return 'DEVICE_TYPE_SQ100';
       case DeviceType.SQ110C:
         return 'DEVICE_TYPE_SQ110C';
+      case DeviceType.PressureGuoDa:
+        return 'DEVICE_TYPE_GUODA_PRESSURE';
+      case DeviceType.PressureWoErKe:
+        return 'DEVICE_TYPE_WOERKE_PRESSURE';
       default:
         return 'DEVICE_TYPE_UNKNOWN';
     }
