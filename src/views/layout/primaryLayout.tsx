@@ -1,6 +1,6 @@
 import { Layout } from 'antd';
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useDispatch } from 'redux-react-hook';
 import { GetCasbinRequest } from '../../apis/role';
 import AlertMessageNotification from '../../components/notification/alert';
@@ -24,10 +24,6 @@ export const PrimaryLayout = () => {
       });
     }
   }, [dispatch]);
-
-  if (!isLogin()) {
-    return <Navigate to='/login' />;
-  }
 
   return (
     <Layout>

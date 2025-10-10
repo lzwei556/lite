@@ -4,6 +4,7 @@ import { Spin } from 'antd';
 import { ASSET_PATHNAME } from '../asset-common';
 import { isLogin } from '../utils/session';
 import { PrimaryLayout } from './layout/primaryLayout';
+import { Authenticated } from '../features/auth';
 
 const AlarmRuleGroups = lazy(() => import('../features/alarm/alarm-group/index'));
 const Login = lazy(() => import('./login'));
@@ -40,7 +41,14 @@ const AppRouter = () => {
         }
       >
         <Routes>
-          <Route path='/' element={<PrimaryLayout />}>
+          <Route
+            path='/'
+            element={
+              <Authenticated>
+                <PrimaryLayout />
+              </Authenticated>
+            }
+          >
             <Route
               index
               element={
