@@ -65,7 +65,9 @@ export function tranformDeviceDTO2Entity(device: Device) {
     type: device.typeId,
     protocol: filterInvalidProtocolValues(device.protocol),
     network: device.network && device.network.id,
-    parent: device.parent
+    parent: device.parent,
+    tag: device.tag,
+    application_id: device.applicationId
   };
 }
 
