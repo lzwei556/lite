@@ -24,4 +24,5 @@ export type Device = {
   data?: any;
   tag?: string;
   parentName?: string;
+  applicationId?: string;
 };
