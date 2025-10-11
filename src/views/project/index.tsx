@@ -22,10 +22,10 @@ import { Project } from '../../types/project';
 import HasPermission from '../../permission';
 import usePermission, { Permission } from '../../permission/permission';
 import { Store, useStore } from '../../hooks/store';
-import { store as reduxStore } from '../../store';
 import { useProjectTypeOptions } from '../../project';
 import { EditProjectModal } from './editProjectModal';
 import { AllocUserDrawer } from './allocUserDrawer';
+import { ProfileContext, useDeleteProject } from '../../providers/user-profile';
 
 type ModalType = 'update' | 'assign' | undefined;
 
@@ -38,6 +38,8 @@ const ProjectPage = () => {
   const [store, setStore, gotoPage] = useStore('projectList');
   const projectTypeOptions = useProjectTypeOptions();
   const [token, setToken] = React.useState<string>();
+  const { selectedProject } = React.useContext(ProfileContext);
+  const deleteProject = useDeleteProject();
 
   const fetchProjects = (store: Store['projectList']) => {
     const {
@@ -64,15 +66,14 @@ const ProjectPage = () => {
 
   const onDelete = (id: number) => {
     DeleteProjectRequest(id).then(() => {
-      reduxStore.dispatch({
-        type: 'SET_PROJECT',
-        payload: { id: 0 }
-      });
-      if (dataSource) {
-        const { size, page, total } = dataSource;
-        gotoPage({ size, total, index: page }, 'prev');
+      if (selectedProject?.id === id) {
+        deleteProject().then(() => {
+          if (dataSource) {
+            const { size, page, total } = dataSource;
+            gotoPage({ size, total, index: page }, 'prev');
+          }
+        });
       }
-      window.location.reload();
     });
   };
 
@@ -139,7 +140,9 @@ const ProjectPage = () => {
               <DeleteIconButton
                 confirmProps={{
                   description: intl.get('DELETE_PROJECT_PROMPT'),
-                  onConfirm: () => onDelete(record.id)
+                  onConfirm: () => {
+                    onDelete(record.id);
+                  }
                 }}
               />
             </HasPermission>

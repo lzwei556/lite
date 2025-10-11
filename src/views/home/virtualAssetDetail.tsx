@@ -8,11 +8,11 @@ import { App, useAppType } from '../../config';
 import {
   Asset,
   ASSET_PATHNAME,
-  getVirturalAsset,
   useContext,
   AlarmsObjectStatistics,
   SensorsStatistics,
-  AlarmTrend
+  AlarmTrend,
+  useVirturalAsset
 } from '../../asset-common';
 import { Icon } from './icon';
 import { useProjectStatistics } from './useProjectStatistics';
@@ -22,6 +22,7 @@ export default function VirtualAssetDetail() {
   const { assets } = useContext();
   const appType = useAppType();
   const projectStatistics = useProjectStatistics();
+  const { root } = useVirturalAsset();
 
   const getTitle = () => {
     let title = 'assets';
@@ -110,7 +111,7 @@ export default function VirtualAssetDetail() {
           content: <Settings />
         }
       ]}
-      title={getVirturalAsset().root.name}
+      title={root.name}
     />
   );
 }

@@ -3,7 +3,7 @@ import { Breadcrumb, Button, Col, Form, Result } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Grid, Link, SaveIconButton, TitleExtraLayout } from '../../../components';
 import * as WSN from '../../../wsn';
-import { VIRTUAL_ROOT_DEVICE } from '../virtual';
+import { useVirtualRootDevice } from '../virtual';
 import * as Basis from '../basis-form-items';
 import { isBLEGateway, SettingsFormItems } from '../settings-common';
 import { useContext } from '..';
@@ -38,7 +38,7 @@ const CreateForm = () => {
     }
   });
   const { device } = useContext();
-
+  const rootDevice = useVirtualRootDevice();
   const id = Number(pathname.split('/')[2]);
 
   return (
@@ -54,7 +54,7 @@ const CreateForm = () => {
             ) : (
               <Breadcrumb
                 items={[
-                  { title: <Link to='/devices/0'>{VIRTUAL_ROOT_DEVICE.name}</Link> },
+                  { title: <Link to='/devices/0'>{rootDevice.name}</Link> },
                   { title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') }) }
                 ]}
               />

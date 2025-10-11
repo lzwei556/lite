@@ -1376,5 +1376,6 @@
   "pump.non.drive.end": "Pump Non Drive End",
   "direction.axial": "Axial",
   "direction.vertical": "Vertical",
-  "direction.horizontal": "Horizontal"
+  "direction.horizontal": "Horizontal",
+  "no.available.project": "No available project"
 }

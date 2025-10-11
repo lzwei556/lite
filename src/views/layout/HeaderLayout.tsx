@@ -2,18 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Badge, Button, Divider, Drawer, Dropdown, Space, Tag } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import Icon, {
-  DownOutlined,
-  MenuOutlined,
-  PoweroffOutlined,
-  UserOutlined
-} from '@ant-design/icons';
+import Icon, { MenuOutlined, PoweroffOutlined, UserOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { createStyles } from 'antd-style';
 import '../../assets/iconfont.css';
-import { persistor, store } from '../../store';
-import ProjectSelect from '../../components/select/projectSelect';
-import { GetMyProjectRequest } from '../../apis/project';
+import { persistor } from '../../store';
 import {
   Language,
   LanguageOptions,
@@ -27,7 +20,7 @@ import './layout.css';
 import { Brand } from './brand';
 import { ReactComponent as LightSVG } from './light.svg';
 import { ReactComponent as DarkSVG } from './dark.svg';
-import { MenuNavigator } from '../../features/user-profile';
+import { MenuNavigator, ProjectsSelect } from '../../features/user-profile';
 import { Clock } from './clock';
 
 const useStyles = createStyles(({ css, token }) => ({
@@ -58,20 +51,6 @@ const HeaderLayout = () => {
     });
   };
 
-  const onProjectChange = (value: any) => {
-    GetMyProjectRequest(value)
-      .then((data) => {
-        localStorage.removeItem('store');
-        store.dispatch({
-          type: 'SET_PROJECT',
-          payload: { id: data.id, name: data.name, type: data.type }
-        });
-        window.location.href = '/';
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
   const [selectedKeys, setSelectedKeys] = useState<{ language: Language; theme: Theme }>({
     language,
     theme
@@ -84,7 +63,7 @@ const HeaderLayout = () => {
         <MenuNavigator className='ts-menu' mode='horizontal' />
         <Space>
           <Clock />
-          {currentUser && <ProjectSelect variant='borderless' onChange={onProjectChange} />}
+          {currentUser && <ProjectsSelect />}
           <Dropdown
             menu={{
               items: [
@@ -192,11 +171,7 @@ const HeaderLayout = () => {
           <Divider />
           {currentUser && (
             <div style={{ paddingLeft: 24, paddingBottom: 100 }}>
-              <ProjectSelect
-                suffixIcon={<DownOutlined />}
-                style={{ width: '120px', textAlign: 'center' }}
-                onChange={onProjectChange}
-              />
+              <ProjectsSelect />
             </div>
           )}
         </Drawer>

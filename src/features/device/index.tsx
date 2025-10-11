@@ -8,13 +8,12 @@ import { DeviceType } from '../../types/device_type';
 import { Network } from '../../types/network';
 import { Dayjs } from '../../utils';
 import { DeviceTree } from './deviceTree';
-import { VIRTUAL_ROOT_DEVICE } from './virtual';
 import { SelectedDeviceRangeProps, useSelectedDeviceRange } from './use-selected-device';
-
-const virtualPathId = `${VIRTUAL_ROOT_DEVICE.id}`;
+import { useVirtualRootDevice } from './virtual';
 
 const DevicePage = () => {
-  const { id: pathId = virtualPathId } = useParams();
+  const rootDevice = useVirtualRootDevice();
+  const { id: pathId = `${rootDevice.id}` } = useParams();
 
   return (
     <ContextProvider>
@@ -58,7 +57,8 @@ const Context = React.createContext<ContextProps>({
 });
 
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { id: pathId = virtualPathId } = useParams();
+  const rootDevice = useVirtualRootDevice();
+  const { id: pathId = `${rootDevice.id}` } = useParams();
   const id = Number(pathId);
   const [devicesLoading, setDeviceLoading] = React.useState(false);
   const [devices, setDevices] = React.useState<Device[]>([]);

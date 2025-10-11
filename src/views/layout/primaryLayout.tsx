@@ -8,7 +8,6 @@ import { store } from '../../store';
 import { SET_PERMISSION } from '../../store/actions/types';
 import { isLogin } from '../../utils/session';
 import HeaderLayout from './HeaderLayout';
-import { ValidateProject } from './validateProject';
 import './layout.css';
 
 export const PrimaryLayout = () => {
@@ -29,9 +28,7 @@ export const PrimaryLayout = () => {
     <Layout>
       <HeaderLayout />
       <Layout>
-        <ValidateProject>
-          <Outlet />
-        </ValidateProject>
+        <Outlet />
       </Layout>
       <AlertMessageNotification />
     </Layout>

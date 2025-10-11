@@ -5,6 +5,7 @@ import { ASSET_PATHNAME } from '../asset-common';
 import { isLogin } from '../utils/session';
 import { PrimaryLayout } from './layout/primaryLayout';
 import { Authenticated } from '../features/auth';
+import { ProfileProvider, ProjectVerification } from '../providers/user-profile';
 
 const AlarmRuleGroups = lazy(() => import('../features/alarm/alarm-group/index'));
 const Login = lazy(() => import('./login'));
@@ -45,40 +46,93 @@ const AppRouter = () => {
             path='/'
             element={
               <Authenticated>
-                <PrimaryLayout />
+                <ProfileProvider>
+                  <PrimaryLayout />
+                </ProfileProvider>
               </Authenticated>
             }
           >
             <Route
               index
               element={
-                <Assets>
-                  <VirtualAssetDetail />
-                </Assets>
+                <ProjectVerification>
+                  <Assets>
+                    <VirtualAssetDetail />
+                  </Assets>
+                </ProjectVerification>
               }
             />
-            <Route path={ASSET_PATHNAME} element={<Assets />}>
+            <Route
+              path={ASSET_PATHNAME}
+              element={
+                <ProjectVerification>
+                  <Assets />
+                </ProjectVerification>
+              }
+            >
               <Route index element={<VirtualAssetDetail />} />
               <Route path=':id' element={<Asset />} />
               <Route path='0-0' element={<VirtualAssetDetail />} />
             </Route>
-            <Route path='devices' element={<Device />}>
+            <Route
+              path='devices'
+              element={
+                <ProjectVerification>
+                  <Device />
+                </ProjectVerification>
+              }
+            >
               <Route index element={<DeviceVirtual />} />
               <Route path='import' element={<ImportNetwork />} />
               <Route path=':id' element={<DeviceDetail />} />
               <Route path=':id/create' element={<DeviceCreate />} />
               <Route path='0' element={<DeviceVirtual />} />
             </Route>
-            <Route path='alarmRules' element={<AlarmRuleGroups />} />
-            <Route path='alerts' element={<AlarmRecord />} />
-            <Route path='reports' element={<Reports />}>
+            <Route
+              path='alarmRules'
+              element={
+                <ProjectVerification>
+                  <AlarmRuleGroups />
+                </ProjectVerification>
+              }
+            />
+            <Route
+              path='alerts'
+              element={
+                <ProjectVerification>
+                  <AlarmRecord />
+                </ProjectVerification>
+              }
+            />
+            <Route
+              path='reports'
+              element={
+                <ProjectVerification>
+                  <Reports />
+                </ProjectVerification>
+              }
+            >
               <Route index element={<ReportList />} />
               <Route path=':id' element={<Report />} />
             </Route>
             <Route path='projects' element={<Project />} />
-            <Route path='users' element={<User />} />
+            <Route
+              path='users'
+              element={
+                <ProjectVerification>
+                  <User />
+                </ProjectVerification>
+              }
+            />
             <Route path='roles' element={<Role />} />
-            <Route path='firmwares' element={<Firmware />} />
+            <Route
+              path='firmwares'
+              element={
+                <ProjectVerification>
+                  <Firmware />
+                </ProjectVerification>
+              }
+            />
             <Route path='systeminfo' element={<System />} />
             <Route path='me' element={<Me />} />
           </Route>

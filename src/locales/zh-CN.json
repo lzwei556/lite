@@ -1376,5 +1376,6 @@
   "pump.non.drive.end": "泵非驱动端",
   "direction.axial": "轴向",
   "direction.vertical": "径向",
-  "direction.horizontal": "水平向"
+  "direction.horizontal": "水平向",
+  "no.available.project": "没有可用的项目"
 }

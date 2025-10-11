@@ -4,7 +4,6 @@ import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import { cloneDeep } from 'lodash';
 import intl from 'react-intl-universal';
 import { Table, JsonImporter, Link, DownloadIconButton, IconButton } from '../../components';
-import { getProject } from '../../utils/session';
 import { App, useAppType } from '../../config';
 import { ASSET_PATHNAME, AssetRow, importAssets, useContext } from '../../asset-common';
 import * as Area from '../../features/asset-area';
@@ -14,9 +13,11 @@ import { SelectAssets } from './selectAssets';
 import { OperateCell } from './_operateCell';
 import { CreateAsset } from './create-asset';
 import { useGlobalStyles } from '../../styles';
+import { useSelectedProject } from '../../providers/user-profile';
 
 export const Settings = () => {
   const { colorPrimaryHoverStyle } = useGlobalStyles();
+  const selectedProject = useSelectedProject();
   const { assets, refresh } = useContext();
   const appType = useAppType();
   const [open, setOpen] = React.useState(false);
@@ -101,25 +102,27 @@ export const Settings = () => {
                 tooltipProps={{ title: intl.get('EXPORT_SETTINGS') }}
                 type='primary'
               />
-              <JsonImporter
-                iconButtonProps={{
-                  style: {
-                    borderTopLeftRadius: 0,
-                    borderBottomLeftRadius: 0,
-                    borderInlineStartColor: colorPrimaryHoverStyle.color
-                  }
-                }}
-                onUpload={(data) => {
-                  return importAssets(getProject().id, data).then((res) => {
-                    if (res.data.code === 200) {
-                      message.success(intl.get('IMPORTED_SUCCESSFUL'));
-                      refresh();
-                    } else {
-                      message.error(`${intl.get('FAILED_TO_IMPORT')}: ${res.data.msg}`);
+              {selectedProject && (
+                <JsonImporter
+                  iconButtonProps={{
+                    style: {
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                      borderInlineStartColor: colorPrimaryHoverStyle.color
                     }
-                  });
-                }}
-              />
+                  }}
+                  onUpload={(data) => {
+                    return importAssets(selectedProject.id, data).then((res) => {
+                      if (res.data.code === 200) {
+                        message.success(intl.get('IMPORTED_SUCCESSFUL'));
+                        refresh();
+                      } else {
+                        message.error(`${intl.get('FAILED_TO_IMPORT')}: ${res.data.msg}`);
+                      }
+                    });
+                  }}
+                />
+              )}
             </Button.Group>
           )
         }}

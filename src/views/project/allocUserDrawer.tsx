@@ -6,6 +6,8 @@ import { Project } from '../../types/project';
 import { AllocUsersRequest, GetAllocUsersRequest } from '../../apis/project';
 import { AllocUser } from '../../types/alloc_user';
 import { Grid } from '../../components';
+import { getCurrentUser } from '../../utils/session';
+import { ProfileContext, useInit } from '../../providers/user-profile';
 
 type Item = AllocUser & { checked: boolean };
 
@@ -21,6 +23,7 @@ export const AllocUserDrawer = ({
   );
   const treeData = convertTreeData(filteredUsers);
   const checkedKeys = convertCheckedKeys(filteredUsers);
+  const { init } = useInit(React.useContext(ProfileContext).setProjects);
 
   React.useEffect(() => {
     GetAllocUsersRequest(project.id).then((users) =>
@@ -49,7 +52,13 @@ export const AllocUserDrawer = ({
   }
 
   const onSave = () => {
-    AllocUsersRequest(project.id, { user_ids: checkedKeys }).then((_) => onSuccess());
+    AllocUsersRequest(project.id, { user_ids: checkedKeys }).then(() => {
+      onSuccess();
+      const crtUser = getCurrentUser();
+      if (crtUser && checkedKeys.includes(crtUser.id)) {
+        init();
+      }
+    });
   };
 
   return (

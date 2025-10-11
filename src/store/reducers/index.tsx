@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import userLogin from './user';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import setProject from './project';
 import setPermission from './permission';
 
 export interface State<T> {
@@ -14,11 +13,6 @@ const authPersistConfig = {
   storage: storage
 };
 
-const projectPersistConfig = {
-  key: 'project',
-  storage: storage
-};
-
 const permissionPersistConfig = {
   key: 'permission',
   storage: storage
@@ -26,6 +20,5 @@ const permissionPersistConfig = {
 
 export default combineReducers({
   auth: persistReducer(authPersistConfig, userLogin),
-  project: persistReducer(projectPersistConfig, setProject),
   permission: persistReducer(permissionPersistConfig, setPermission)
 });

@@ -9,10 +9,6 @@ export const getToken = (): string => {
   return store.getState().auth.data.token;
 };
 
-export const getProject = () => {
-  return store.getState().project.data;
-};
-
 export const getPermission = () => {
   return store.getState().permission.data;
 };

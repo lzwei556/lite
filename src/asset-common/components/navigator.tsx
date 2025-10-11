@@ -7,7 +7,7 @@ import { AssetTreeNode, combine, pickId } from '../../views/home/tree';
 import { MonitoringPointRow } from '../../monitoring-point';
 import { Link } from '../../components';
 import { AssetRow } from '../types';
-import { ASSET_PATHNAME, getVirturalAsset } from '../constants';
+import { ASSET_PATHNAME, useVirturalAsset } from '../constants';
 import { useContext } from './context';
 import { AssetStatusTag } from './assetStatusTag';
 
@@ -20,10 +20,11 @@ export const AssetNavigator = ({
   const { id, type, alertLevel } = asset;
   const items: BreadcrumbProps['items'] = [];
   const { assets } = useContext();
+  const { root: virturalAsset } = useVirturalAsset();
 
   if (assets.length > 0) {
     const root = {
-      ...getVirturalAsset().root,
+      ...virturalAsset,
       children: assets
     } as AssetRow;
     const list: TreeFlatListItem[] = tree2List(mapTree([root], (node) => combine(node)));

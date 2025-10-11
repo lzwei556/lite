@@ -8,9 +8,9 @@ import { generateColProps } from '../utils/grid';
 import { Card, Grid, JsonImporter, Link, SaveIconButton, TitleExtraLayout } from '../components';
 import * as WSN from '../wsn';
 import { useContext } from '../features/device';
-import { VIRTUAL_ROOT_DEVICE } from '../features/device/virtual';
 import { Preview } from './topology/preview';
 import { WanProtocol } from '../features/device/basis-form-items';
+import { useVirtualRootDevice } from '../features/device/virtual';
 
 export type ImportedJSONDevice = {
   id: number;
@@ -41,6 +41,7 @@ const ImportNetworkPage = () => {
   const checkJSONFormat = (source: any) => {
     return source.hasOwnProperty('deviceList') && source.hasOwnProperty('wsn');
   };
+  const rootDevice = useVirtualRootDevice();
 
   const verifyGatewayBLE = () => {
     if (deviceList.length > 0) {
@@ -96,7 +97,7 @@ const ImportNetworkPage = () => {
           title={
             <Breadcrumb
               items={[
-                { title: <Link to='/devices'>{VIRTUAL_ROOT_DEVICE.name}</Link> },
+                { title: <Link to='/devices'>{rootDevice.name}</Link> },
                 { title: intl.get('MENU_IMPORT_NETWORK') }
               ]}
             />

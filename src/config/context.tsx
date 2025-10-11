@@ -8,8 +8,8 @@ import * as Wind from './wind';
 import * as WindPro from './windpro';
 import * as Vibration from './vibration';
 import * as General from './general';
-import { getProject } from '../utils/session';
 import { ProjectType } from '../project';
+import { useSelectedProject } from '../providers/user-profile';
 
 type AppType =
   | 'windTurbine'
@@ -67,7 +67,8 @@ export function useAppConfig() {
 
 export function useAppType() {
   let appType = useAppContext().type;
-  const projectType = getProject().type;
+  const selectedProject = useSelectedProject();
+  const projectType = selectedProject?.type;
   if (appType === 'general') {
     if (projectType === ProjectType.WindPowerBoltMonitoring) {
       appType = 'windTurbinePro';

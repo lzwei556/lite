@@ -6,8 +6,8 @@ import { Device } from '../../types/device';
 import useSocket, { SocketTopic } from '../../socket';
 import { toMac, truncate } from '../../utils/format';
 import { DeviceNS } from './util';
-import { VIRTUAL_ROOT_DEVICE } from './virtual';
 import { useContext } from '.';
+import { useVirtualRootDevice } from './virtual';
 
 export const DeviceTree = ({
   height,
@@ -22,6 +22,7 @@ export const DeviceTree = ({
   useDeviceOnlineLiving();
   const { devicesLoading } = useContext();
   const treeData = useDeviceTreeData();
+  const rootDevice = useVirtualRootDevice();
 
   return (
     <Spin spinning={devicesLoading}>
@@ -33,7 +34,7 @@ export const DeviceTree = ({
           treeData={treeData}
           titleRender={(node) => {
             const title = truncate(node.title as string, 30);
-            if (node.id === VIRTUAL_ROOT_DEVICE.id) {
+            if (node.id === rootDevice.id) {
               return title;
             }
             return <Badge status={node?.state?.isOnline ? 'success' : 'default'} text={title} />;
@@ -75,14 +76,15 @@ export function useDeviceOnlineLiving() {
 }
 
 export function useDeviceTreeData(root?: Device) {
+  const rootDevice = useVirtualRootDevice();
   const { devices: originalDevices } = useContext();
   const devices = originalDevices.filter((d) => (root ? d.macAddress !== root.macAddress : true));
-  const rootNode = root ? root : (VIRTUAL_ROOT_DEVICE as Device);
+  const rootNode = root ? root : (rootDevice as Device);
   const devs: Device[] = [rootNode];
   if (devices.length > 0) {
     devs.push(
       ...devices.map((d) => {
-        if (DeviceNS.Assert.isRoot(d) && rootNode.macAddress === VIRTUAL_ROOT_DEVICE.macAddress) {
+        if (DeviceNS.Assert.isRoot(d) && rootNode.macAddress === rootDevice.macAddress) {
           return { ...d, parent: rootNode.macAddress };
         } else {
           return d;

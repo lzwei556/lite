@@ -9,22 +9,22 @@ import { Card, Grid, IconButton, Link, MutedCard, Table, TitleExtraLayout } from
 import { Dayjs, getDisplayName, getValue, toMac } from '../../utils';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
-import { getProject } from '../../utils/session';
 import { SingleDeviceStatus } from '../../device/SingleDeviceStatus';
 import { useLocaleContext } from '../../localeProvider';
 import { DeviceNS } from './util';
 import { useContext } from '.';
+import { useSelectedProject } from '../../providers/user-profile';
 
-export const VIRTUAL_ROOT_DEVICE = {
-  macAddress: '000000000000',
-  id: 0,
-  name: getProject().name
+export const useVirtualRootDevice = () => {
+  const selectedProject = useSelectedProject();
+  return { macAddress: '000000000000', id: 0, name: selectedProject?.name };
 };
 
 export default function Virtual() {
   const { devices } = useContext();
   const navigate = useNavigate();
   const { language } = useLocaleContext();
+  const rootDevice = useVirtualRootDevice();
 
   const renderBody = () => {
     if (devices.length === 0) {
@@ -173,7 +173,7 @@ export default function Virtual() {
     <Grid>
       <Col span={24}>
         <TitleExtraLayout
-          title={VIRTUAL_ROOT_DEVICE.name}
+          title={rootDevice.name}
           extra={
             <Button.Group>
               <HasPermission value={Permission.NetworkAdd}>

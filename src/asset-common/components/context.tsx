@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { AssetRow } from '../types';
 import { getAsset, getAssets } from '../services';
 import { getMeasurement, MonitoringPointRow } from '../../monitoring-point';
-import { getVirturalAsset } from '../constants';
+import { useVirturalAsset } from '../constants';
 
 export type ContextProps = {
   assets: AssetRow[];
@@ -24,7 +24,8 @@ const Context = React.createContext<ContextProps>({
 export const useContext = () => React.useContext(Context);
 
 export function ContextProvider({ children }: { children?: JSX.Element }) {
-  const { id: pathId = getVirturalAsset().homePathId } = useParams();
+  const { homePathId } = useVirturalAsset();
+  const { id: pathId = homePathId } = useParams();
   const [idStr, typeStr] = pathId.split('-');
   const id = Number(idStr);
   const type = Number(typeStr);

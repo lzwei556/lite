@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { ResponseResult } from '../types/response';
-import { getProject, getToken, isLogin } from './session';
+import { getToken, isLogin } from './session';
 import { message } from 'antd';
-import { Dayjs } from '../utils';
+import { Dayjs, GlobalStore } from '../utils';
 
 axios.defaults.timeout = 30 * 1000;
 axios.defaults.baseURL = '/api';
@@ -13,7 +13,11 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    config.headers.Project = getProject().id;
+    const store = GlobalStore.getInstance(true);
+    const selectedProjectId = store.get('selectedProjectId');
+    if (selectedProjectId) {
+      config.headers.Project = selectedProjectId;
+    }
     config.headers.Timezone = Dayjs.dayjs.tz.guess();
   }
   return config;

@@ -5,10 +5,10 @@ import { mapTree } from '../../utils/tree';
 import {
   ASSET_PATHNAME,
   AssetRow,
-  getVirturalAsset,
   MonitoringPointRow,
   Points,
-  useContext
+  useContext,
+  useVirturalAsset
 } from '../../asset-common';
 import { Icon } from './icon';
 
@@ -19,7 +19,7 @@ export const AssetTree: React.FC<{
 }> = ({ height, onClick, selectedKeys }) => {
   const { assets, assetsLoading } = useContext();
   const navigate = useNavigate();
-  const { root } = getVirturalAsset();
+  const { root } = useVirturalAsset();
   const mixedTree = mapTree(
     [
       {
