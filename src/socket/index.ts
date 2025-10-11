@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { ResponseResult } from '../types/response';
-import { isLogin } from '../utils/session';
+import { useIsAuthenticated } from '../providers/auth';
 
 const io = require('socket.io-client');
 const PubSub = require('pubsub-js');
@@ -15,7 +15,7 @@ export const SocketTopic = {
 };
 
 const useSocket = () => {
-  if (isLogin()) {
+  if (useIsAuthenticated()) {
     if (!socket) {
       socket = io.connect('/', {
         transports: ['websocket']

@@ -11,6 +11,7 @@ import zh_CN from './locales/zh-CN.json';
 import { Dayjs } from './utils';
 import { App, useAppType } from './config';
 import AppRouter from './views/router';
+import { AuthProvider } from './providers/auth';
 
 export const Main = () => {
   const config = useAppType();
@@ -62,7 +63,9 @@ export const Main = () => {
         }
       >
         <ConfigProvider locale={language === 'zh-CN' ? zhCN : enUS}>
-          <AppRouter />
+          <AuthProvider>
+            <AppRouter />
+          </AuthProvider>
         </ConfigProvider>
       </ThemeProvider>
     )

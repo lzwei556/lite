@@ -1,18 +1,16 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { ResponseResult } from '../types/response';
-import { getToken, isLogin } from './session';
 import { message } from 'antd';
 import { Dayjs, GlobalStore } from '../utils';
+import { getAuthToken } from '../providers/auth';
 
 axios.defaults.timeout = 30 * 1000;
 axios.defaults.baseURL = '/api';
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
-  if (isLogin()) {
-    const token = getToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  const token = getAuthToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
     const store = GlobalStore.getInstance(true);
     const selectedProjectId = store.get('selectedProjectId');
     if (selectedProjectId) {

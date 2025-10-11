@@ -1,8 +1,7 @@
 import React, { lazy, Suspense } from 'react';
-import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { HashRouter, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import { Spin } from 'antd';
 import { ASSET_PATHNAME } from '../asset-common';
-import { isLogin } from '../utils/session';
 import { PrimaryLayout } from './layout/primaryLayout';
 import { Authenticated } from '../features/auth';
 import { ProfileProvider, ProjectVerification } from '../providers/user-profile';
@@ -136,7 +135,15 @@ const AppRouter = () => {
             <Route path='systeminfo' element={<System />} />
             <Route path='me' element={<Me />} />
           </Route>
-          <Route path='/login' element={isLogin() ? <Navigate to='/' /> : <Login />} />
+          <Route
+            element={
+              <Authenticated fallback={<Outlet />}>
+                <Navigate to='/' />
+              </Authenticated>
+            }
+          >
+            <Route path='/login' element={<Login />} />
+          </Route>
           <Route path='/403' element={<Unauthorized />} />
           <Route path='/500' element={<ServerError />} />
           <Route path='*' element={<NotFound />} />

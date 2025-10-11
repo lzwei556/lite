@@ -14,7 +14,6 @@ import {
   ThemeOptions,
   useLocaleContext
 } from '../../localeProvider';
-import { getCurrentUser } from '../../utils/session';
 import { useGlobalStyles } from '../../styles';
 import './layout.css';
 import { Brand } from './brand';
@@ -22,6 +21,7 @@ import { ReactComponent as LightSVG } from './light.svg';
 import { ReactComponent as DarkSVG } from './dark.svg';
 import { MenuNavigator, ProjectsSelect } from '../../features/user-profile';
 import { Clock } from './clock';
+import { useGetIdentity } from '../../providers/auth';
 
 const useStyles = createStyles(({ css, token }) => ({
   item: css`
@@ -38,7 +38,6 @@ const useStyles = createStyles(({ css, token }) => ({
 
 const HeaderLayout = () => {
   const navigate = useNavigate();
-  const currentUser = getCurrentUser();
   const [open, setVisible] = useState(false);
   const { colorWhiteStyle } = useGlobalStyles();
   const { language, theme, setLocale } = useLocaleContext();
@@ -63,7 +62,7 @@ const HeaderLayout = () => {
         <MenuNavigator className='ts-menu' mode='horizontal' />
         <Space>
           <Clock />
-          {currentUser && <ProjectsSelect />}
+          <ProjectsSelect />
           <Dropdown
             menu={{
               items: [
@@ -122,7 +121,7 @@ const HeaderLayout = () => {
                   key: 'account',
                   label: (
                     <Tag color='success' bordered>
-                      {currentUser?.username}
+                      {useGetIdentity()?.username}
                     </Tag>
                   ),
                   children: [
@@ -169,11 +168,9 @@ const HeaderLayout = () => {
         >
           <MenuNavigator className='ts-menu' mode='inline' />
           <Divider />
-          {currentUser && (
-            <div style={{ paddingLeft: 24, paddingBottom: 100 }}>
-              <ProjectsSelect />
-            </div>
-          )}
+          <div style={{ paddingLeft: 24, paddingBottom: 100 }}>
+            <ProjectsSelect />
+          </div>
         </Drawer>
       </div>
     </Header>

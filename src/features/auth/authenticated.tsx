@@ -1,7 +1,13 @@
 import React from 'react';
-import { isLogin } from '../../utils/session';
 import { Navigate } from 'react-router-dom';
+import { useIsAuthenticated } from '../../providers/auth';
 
-export const Authenticated = ({ children }: { children: React.ReactNode }) => {
-  return isLogin() ? children : <Navigate to='/login' />;
+export const Authenticated = ({
+  children,
+  fallback
+}: {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}) => {
+  return useIsAuthenticated() ? children : fallback ? fallback : <Navigate to='/login' />;
 };
