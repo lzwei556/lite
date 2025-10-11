@@ -37,16 +37,16 @@ export enum DeviceType {
   ST100 = 0x60001,
   ST101S = 0x60101,
   ST101L = 0x60201,
-  PressureGuoDa = 0x1000001,
-  PressureWoErKe = 0x1000002,
   SPT510 = 0x80002,
   SQ100 = 0x90001,
   SQ110C = 0x90003,
-  SVT510LoraWAN = 0x4005010e,
-  STLoraWAN = 0x40060201,
-  DC110LoraWAN = 0x40040201,
+  PressureGuoDa = 0x1000001,
+  PressureWoErKe = 0x1000002,
   DC210LoraWAN = 0x40040106,
-  DC110HLoraWAN = 0x40040107
+  DC110HLoraWAN = 0x40040107,
+  DC110LoraWAN = 0x40040201,
+  SVT510LoraWAN = 0x4005010e,
+  STLoraWAN = 0x40060201
 }
 
 export namespace DeviceType {
@@ -124,26 +124,26 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_ST101S';
       case DeviceType.ST101L:
         return 'DEVICE_TYPE_ST101L';
-      case DeviceType.PressureGuoDa:
-        return 'DEVICE_TYPE_GUODA_PRESSURE';
-      case DeviceType.PressureWoErKe:
-        return 'DEVICE_TYPE_WOERKE_PRESSURE';
       case DeviceType.SPT510:
         return 'DEVICE_TYPE_SPT510';
       case DeviceType.SQ100:
         return 'DEVICE_TYPE_SQ100';
       case DeviceType.SQ110C:
         return 'DEVICE_TYPE_SQ110C';
-      case DeviceType.SVT510LoraWAN:
-        return 'DEVICE_TYPE_SVT510LoraWAN';
-      case DeviceType.STLoraWAN:
-        return 'DEVICE_TYPE_STLoraWAN';
-      case DeviceType.DC110LoraWAN:
-        return 'DEVICE_TYPE_DC110LoraWAN';
+      case DeviceType.PressureGuoDa:
+        return 'DEVICE_TYPE_GUODA_PRESSURE';
+      case DeviceType.PressureWoErKe:
+        return 'DEVICE_TYPE_WOERKE_PRESSURE';
       case DeviceType.DC210LoraWAN:
         return 'DEVICE_TYPE_DC210LoraWAN';
       case DeviceType.DC110HLoraWAN:
         return 'DEVICE_TYPE_DC110HLoraWAN';
+      case DeviceType.DC110LoraWAN:
+        return 'DEVICE_TYPE_DC110LoraWAN';
+      case DeviceType.SVT510LoraWAN:
+        return 'DEVICE_TYPE_SVT510LoraWAN';
+      case DeviceType.STLoraWAN:
+        return 'DEVICE_TYPE_STLoraWAN';
       default:
         return 'DEVICE_TYPE_UNKNOWN';
     }
