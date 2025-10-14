@@ -11,12 +11,12 @@ import {
   DownloadIconButton
 } from '../components';
 import { Dayjs } from '../utils';
-import usePermission, { Permission } from '../permission/permission';
 import { getFilename } from '../utils/format';
 import { useLocaleContext } from '../localeProvider';
 import { BatchDownlaodWaveDataModal } from './batchDownlaodWaveDataModal';
 import { downloadRawHistory, getDataOfMonitoringPoint, getDynamicData } from './services';
 import { DataType } from './types';
+import { Permission, useCan } from '../providers/access-control';
 
 type DynamicDataProps<T> = {
   children: (values: T) => React.ReactElement;
@@ -125,7 +125,7 @@ function TimestampsTable<T>(
   }
 ) {
   const { onDownload, onRowClick, timestamp, timestamps } = props;
-  const { hasPermission } = usePermission();
+  const canDownloadDeviceRawData = useCan(Permission.DeviceRawDataDownload);
   const [batchDownloadModalVisible, setBatchDownloadModalVisible] = React.useState(false);
 
   return (
@@ -152,7 +152,7 @@ function TimestampsTable<T>(
             title: intl.get('OPERATION'),
             key: 'action',
             render: (text: TimestampObj) => {
-              if (hasPermission(Permission.DeviceRawDataDownload)) {
+              if (canDownloadDeviceRawData) {
                 return (
                   <DownloadIconButton
                     onClick={() => {

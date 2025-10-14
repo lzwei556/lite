@@ -5,8 +5,6 @@ import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { DeleteIconButton, DownloadIconButton, IconButton } from '../../../components';
 import { DeleteNetworkRequest, ExportNetworkRequest } from '../../../apis/network';
 import { DeleteDeviceRequest } from '../../../apis/device';
@@ -14,6 +12,7 @@ import { Network } from '../../../network';
 import { useContext } from '..';
 import { CommandDropdown } from '../commandDropdown';
 import DownloadModal from './downloadModal';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const HeadRight = ({ device, network }: { device: Device; network?: Network }) => {
   const navigate = useNavigate();
@@ -25,7 +24,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
     <Button.Group style={{ marginLeft: 30 }}>
       {DeviceType.isGateway(device.typeId) && network && (
         <>
-          <HasPermission value={Permission.NetworkExport}>
+          <CanAccess {...Permission.NetworkExport}>
             <IconButton
               icon={<ExportOutlined />}
               onClick={() => {
@@ -42,8 +41,8 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
               type='primary'
               variant='solid'
             />
-          </HasPermission>
-          <HasPermission value={Permission.NetworkDelete}>
+          </CanAccess>
+          <CanAccess {...Permission.NetworkDelete}>
             <DeleteIconButton
               confirmProps={{
                 description: intl.get('DELETE_SOMETHING_PROMPT', {
@@ -65,7 +64,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
               }}
               tooltipProps={{ placement: 'top' }}
             />
-          </HasPermission>
+          </CanAccess>
           <IconButton
             icon={<PlusOutlined />}
             onClick={() => navigate('create', { state: { from: location.pathname } })}
@@ -78,7 +77,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
         </>
       )}
       {DeviceType.isRootDevice(device.typeId) && !DeviceType.isGateway(device.typeId) && (
-        <HasPermission value={Permission.DeviceDelete}>
+        <CanAccess {...Permission.DeviceDelete}>
           <DeleteIconButton
             confirmProps={{
               description: intl.get('DELETE_SOMETHING_PROMPT', {
@@ -101,10 +100,10 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
             }}
             tooltipProps={{ placement: 'top' }}
           />
-        </HasPermission>
+        </CanAccess>
       )}
       {DeviceType.isSensor(device.typeId) && (
-        <HasPermission value={Permission.DeviceData}>
+        <CanAccess {...Permission.DeviceData}>
           <DownloadIconButton
             onClick={() => setOpen(true)}
             tooltipProps={{ title: intl.get('DOWNLOAD_DATA') }}
@@ -117,11 +116,11 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
             device={device}
             onSuccess={() => setOpen(false)}
           />
-        </HasPermission>
+        </CanAccess>
       )}
-      <HasPermission value={Permission.DeviceCommand}>
+      <CanAccess {...Permission.DeviceCommand}>
         <CommandDropdown device={device} initialUpgradeCode={location.state} network={network} />
-      </HasPermission>
+      </CanAccess>
     </Button.Group>
   );
 };

@@ -9,8 +9,6 @@ import {
   RemoveDeviceDataRequest,
   RemoveDeviceRuntimeRequest
 } from '../../../apis/device';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { DeviceType } from '../../../types/device_type';
 import { DisplayProperty } from '../../../constants/properties';
 import {
@@ -26,6 +24,7 @@ import { HistoryDataFea } from '../..';
 import { HistoryData } from '../../../asset-common';
 import { getDisplayProperties } from '../util';
 import { useContext } from '..';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 const batteryVoltage: DisplayProperty = {
   key: 'batteryVoltage',
@@ -150,7 +149,7 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
                       value={property.key}
                     />
                   )}
-                  <HasPermission value={Permission.DeviceDataDelete}>
+                  <CanAccess {...Permission.DeviceDataDelete}>
                     <DeleteIconButton
                       confirmProps={{
                         description: intl.get('DELETE_DEVICE_DATA_PROMPT', {
@@ -166,7 +165,7 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
                       }}
                       buttonProps={{ size: 'middle', variant: 'filled' }}
                     />
-                  </HasPermission>
+                  </CanAccess>
                 </>
               )}
             </AntSpace>

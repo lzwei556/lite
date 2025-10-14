@@ -1,7 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Table } from '../../components';
-import usePermission, { Permission } from '../../permission/permission';
 import { useLocaleContext } from '../../localeProvider';
 import {
   AssetRow,
@@ -17,6 +16,7 @@ import {
 } from '../../asset-common';
 import { getDisplayName, getValue } from '../../utils';
 import { ActionBar } from './actionBar';
+import { Permission, useCan } from '../../providers/access-control';
 
 export const PointsTable = (props: {
   asset: AssetRow;
@@ -27,7 +27,6 @@ export const PointsTable = (props: {
   const { language } = useLocaleContext();
   const basicColumns = getMonitoringPointColumns({ language });
   const { monitoringPoints = [] } = asset;
-  const { hasPermission } = usePermission();
   const actualPoints = Points.filter(monitoringPoints);
   const columns = [...basicColumns, positionColumn];
 
@@ -84,7 +83,7 @@ export const PointsTable = (props: {
   columns.push(shortTermCol);
   columns.push(longTermCol);
 
-  if (hasPermission(Permission.MeasurementAdd)) {
+  if (useCan(Permission.MeasurementAdd)) {
     columns.push(getOperateColumn({ onDeleteSuccess: () => onSuccess(), onUpdate }));
   }
 

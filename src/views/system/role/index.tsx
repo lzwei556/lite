@@ -5,12 +5,12 @@ import intl from 'react-intl-universal';
 import { GetRoleRequest, PagingRolesRequest } from '../../../apis/role';
 import { Role } from '../../../types/role';
 import { Link, Table, transformPagedresult } from '../../../components';
-import usePermission, { Permission } from '../../../permission/permission';
 import { PageResult } from '../../../types/page';
 import AddRoleModal from './modal/add';
 import EditRoleModal from './modal/edit';
 import MenuDrawer from './menuDrawer';
 import PermissionDrawer from './permissionDrawer';
+import { Permission, useCan } from '../../../providers/access-control';
 
 const RolePage = () => {
   const [addVisible, setAddVisible] = useState(false);
@@ -20,7 +20,7 @@ const RolePage = () => {
   const [role, setRole] = useState<Role>();
   const [dataSource, setDataSource] = useState<PageResult<any>>();
   const [refreshKey, setRefreshKey] = useState(0);
-  const { hasPermission } = usePermission();
+  const canAssignMenus = useCan(Permission.RoleList);
 
   const fetchRoles = useCallback((current: number, size: number) => {
     PagingRolesRequest(current, size).then(setDataSource);
@@ -59,7 +59,7 @@ const RolePage = () => {
       key: 'action',
       render: (_: string, record: any) => {
         return (
-          hasPermission(Permission.RoleAllocMenus) && (
+          canAssignMenus && (
             <Link onClick={() => onAllocMenus(record.id)} variant='button'>
               {intl.get('ASSIGN_MENU')}
             </Link>

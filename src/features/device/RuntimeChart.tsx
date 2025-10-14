@@ -12,9 +12,8 @@ import {
   RangeDatePicker,
   DeleteIconButton
 } from '../../components';
-import HasPermission from '../../permission';
-import { Permission } from '../../permission/permission';
 import { Device } from '../../types/device';
+import { CanAccess, Permission } from '../../providers/access-control';
 
 export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
   const [runtimes, setRuntimes] = React.useState<
@@ -45,7 +44,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
     return (
       <Card
         extra={
-          <HasPermission value={Permission.DeviceDataDelete}>
+          <CanAccess {...Permission.DeviceDataDelete}>
             <DeleteIconButton
               confirmProps={{
                 description: intl.get('DELETE_DEVICE_DATA_PROMPT', {
@@ -60,7 +59,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
               }}
               buttonProps={{ size: 'middle', variant: 'filled' }}
             />
-          </HasPermission>
+          </CanAccess>
         }
         title={intl.get('SIGNAL_STRENGTH')}
       >

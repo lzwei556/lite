@@ -3,8 +3,6 @@ import { Space as AntSpace, Spin } from 'antd';
 import { DisplayProperty } from '../../../constants/properties';
 import { Card } from '../../../components';
 import { isMobile } from '../../../utils/deviceDetection';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { HistoryDataFea } from '../..';
 import { Dayjs } from '../../../utils';
 import {
@@ -16,6 +14,7 @@ import {
   PropertyLightSelectFilter,
   useMonitoringPointContext
 } from '../../../asset-common';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const HistoryChartCard = ({
   point,
@@ -53,9 +52,7 @@ export const HistoryChartCard = ({
               properties={displayProperties}
               value={property.key}
             />
-            <HasPermission value={Permission.MeasurementDataDelete}>
-              {deleteIconButton}
-            </HasPermission>
+            <CanAccess {...Permission.MeasurementDataDelete}>{deleteIconButton}</CanAccess>
           </AntSpace>
         )
       }

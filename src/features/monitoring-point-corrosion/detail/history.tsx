@@ -13,8 +13,6 @@ import {
 import { DisplayProperty } from '../../../constants/properties';
 import { isMobile } from '../../../utils/deviceDetection';
 import { Dayjs } from '../../../utils';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { HistoryDataFea } from '../..';
 import {
   clearHistory,
@@ -28,6 +26,7 @@ import {
   PropertyLightSelectFilter,
   useMonitoringPointContext
 } from '../../../asset-common';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type } = point;
@@ -68,13 +67,13 @@ export const History = (point: MonitoringPointRow) => {
           <Flex>
             <Space>
               <RangeDatePicker onChange={setRange} />
-              <HasPermission value={Permission.MeasurementDataDownload}>
+              <CanAccess {...Permission.MeasurementDataDownload}>
                 <DownloadIconButton
                   onClick={() => {
                     setVisible(true);
                   }}
                 />
-              </HasPermission>
+              </CanAccess>
             </Space>
           </Flex>
         </Card>
@@ -92,7 +91,7 @@ export const History = (point: MonitoringPointRow) => {
                   properties={displayProperties}
                   value={property.key}
                 />
-                <HasPermission value={Permission.MeasurementDataDelete}>
+                <CanAccess {...Permission.MeasurementDataDelete}>
                   <DeleteIconButton
                     confirmProps={{
                       description: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
@@ -107,7 +106,7 @@ export const History = (point: MonitoringPointRow) => {
                     }}
                     buttonProps={{ size: 'middle', variant: 'filled' }}
                   />
-                </HasPermission>
+                </CanAccess>
               </Space>
             )
           }

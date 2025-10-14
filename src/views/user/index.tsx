@@ -11,14 +11,13 @@ import {
 } from '../../components';
 import { PagingUsersRequest, RemoveUserRequest } from '../../apis/user';
 import { User } from '../../types/user';
-import HasPermission from '../../permission';
-import { Permission } from '../../permission/permission';
 import { PageResult } from '../../types/page';
 import { Store, useStore } from '../../hooks/store';
 import { AddUserModal } from './add';
 import { EditUserModal } from './edit';
 import { useRoles } from './use-roles';
 import { UserAddOutlined } from '@ant-design/icons';
+import { CanAccess, Permission } from '../../providers/access-control';
 
 const UserPage = () => {
   const [open, setOpen] = useState(false);
@@ -92,22 +91,22 @@ const UserPage = () => {
         return (
           record.id !== 1 && (
             <Space>
-              <HasPermission value={Permission.UserEdit}>
+              <CanAccess {...Permission.UserEdit}>
                 <EditIconButton
                   onClick={() => {
                     setUser(record);
                     setOpen(true);
                   }}
                 />
-              </HasPermission>
-              <HasPermission value={Permission.UserDelete}>
+              </CanAccess>
+              <CanAccess {...Permission.UserDelete}>
                 <DeleteIconButton
                   confirmProps={{
                     description: intl.get('DELETE_USER_PROMPT'),
                     onConfirm: () => onDelete(record.id)
                   }}
                 />
-              </HasPermission>
+              </CanAccess>
             </Space>
           )
         );
@@ -125,14 +124,14 @@ const UserPage = () => {
         dataSource={ds}
         header={{
           toolbar: (
-            <HasPermission value={Permission.UserAdd}>
+            <CanAccess {...Permission.UserAdd}>
               <IconButton
                 icon={<UserAddOutlined />}
                 onClick={() => setOpen(true)}
                 tooltipProps={{ title: intl.get('CREATE_USER') }}
                 type='primary'
               />
-            </HasPermission>
+            </CanAccess>
           )
         }}
         pagination={{

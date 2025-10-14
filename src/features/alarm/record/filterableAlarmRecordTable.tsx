@@ -12,14 +12,13 @@ import {
   DeleteIconButton
 } from '../../../components';
 import { PagingAlarmRecordRequest, RemoveAlarmRecordRequest } from '../../../apis/alarm';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { Store, useStore } from '../../../hooks/store';
 import { pickOptionsFromNumericEnum } from '../../../utils';
 import { App, useAppType } from '../../../config';
 import { getAlarmDetail } from '../alarm-group';
 import { MONITORING_POINT } from '../../../asset-common';
 import { alarmLevelOptions, AlarmLevelTag } from '..';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 enum Status {
   UnProcessd = 0,
@@ -163,14 +162,14 @@ export const FilterableAlarmRecordTable: React.FC<{
       render: (_: any, record: any) => {
         return (
           <Space>
-            <HasPermission value={Permission.AlarmRecordDelete}>
+            <CanAccess {...Permission.AlarmRecordDelete}>
               <DeleteIconButton
                 confirmProps={{
                   description: intl.get('DELETE_ALARM_RECORD_PROMPT'),
                   onConfirm: () => onDelete(record.id)
                 }}
               />
-            </HasPermission>
+            </CanAccess>
           </Space>
         );
       }

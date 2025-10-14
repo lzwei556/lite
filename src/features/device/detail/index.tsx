@@ -5,7 +5,6 @@ import { Card, TabsDetail, TabsDetailsItems } from '../../../components';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
 import { Network } from '../../../types/network';
-import userPermission, { Permission } from '../../../permission/permission';
 import { DeviceNavigator } from '../navigator';
 import { useContext } from '..';
 import { RuntimeChart } from '../RuntimeChart';
@@ -16,6 +15,7 @@ import { GatewayDetail } from './gatewayDetail';
 import { SensorDetail } from './sensorDetail';
 import { RouterDetail } from './router-detail';
 import { HeadRight } from './head';
+import { Permission, useCan } from '../../../providers/access-control';
 
 const DeviceDetailPage = () => {
   const { device, network, loading, refresh } = useContext();
@@ -41,39 +41,39 @@ const DeviceDetailPage = () => {
 
   function useDeviceTabs(deviceTypeId?: number) {
     const tabs: TabsDetailsItems = [];
-    const { hasPermission, hasPermissions } = userPermission();
+    const canReadDeviceData = useCan(Permission.DeviceData);
+    const canReadDeviceRuntimeData = useCan(Permission.DeviceRuntimeDataGet);
+    const canReadDeviceEvent = useCan(Permission.DeviceEventList);
+    const canEditDeviceSettings = useCan(Permission.DeviceSettingsEdit);
     if (deviceTypeId === undefined) return [];
-    if (hasPermission(Permission.DeviceData)) {
+    if (canReadDeviceData) {
       tabs.push({
         key: 'overview',
         label: intl.get('OVERVIEW'),
         content: renderOverview(device, network)
       });
     }
-    if (DeviceType.isSensor(deviceTypeId) && hasPermission(Permission.DeviceData)) {
+    if (DeviceType.isSensor(deviceTypeId) && canReadDeviceData) {
       tabs.push({
         key: 'history',
         label: intl.get('HISTORY_DATA'),
         content: device && <HistoryDataPage device={device} key={device.id} />
       });
-    } else if (
-      DeviceType.isGateway(deviceTypeId) &&
-      hasPermission(Permission.DeviceRuntimeDataGet)
-    ) {
+    } else if (DeviceType.isGateway(deviceTypeId) && canReadDeviceRuntimeData) {
       tabs.push({
         key: 'history',
         label: intl.get('STATUS_HISTORY'),
         content: device && <RuntimeChart device={device} key={device.id} />
       });
     }
-    if (hasPermission(Permission.DeviceEventList)) {
+    if (canReadDeviceEvent) {
       tabs.push({
         key: 'events',
         label: intl.get('EVENTS'),
         content: device && <QueryEventTable device={device} key={device.id} />
       });
     }
-    if (hasPermissions(Permission.DeviceSettingsGet, Permission.DeviceSettingsEdit)) {
+    if (canEditDeviceSettings) {
       tabs.push({
         key: 'settings',
         label: intl.get('SETTINGS'),

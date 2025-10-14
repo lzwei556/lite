@@ -19,13 +19,12 @@ import {
   PagingProjectsRequest
 } from '../../apis/project';
 import { Project } from '../../types/project';
-import HasPermission from '../../permission';
-import usePermission, { Permission } from '../../permission/permission';
 import { Store, useStore } from '../../hooks/store';
 import { useProjectTypeOptions } from '../../project';
 import { EditProjectModal } from './editProjectModal';
 import { AllocUserDrawer } from './allocUserDrawer';
 import { ProfileContext, useDeleteProject } from '../../providers/user-profile';
+import { CanAccess, Permission } from '../../providers/access-control';
 
 type ModalType = 'update' | 'assign' | undefined;
 
@@ -34,7 +33,6 @@ const ProjectPage = () => {
   const [modalType, setModalType] = React.useState<ModalType>();
   const [dataSource, setDataSource] = React.useState<PageResult<any>>();
   const [project, setProject] = React.useState<Project>();
-  const { hasPermissions } = usePermission();
   const [store, setStore, gotoPage] = useStore('projectList');
   const projectTypeOptions = useProjectTypeOptions();
   const [token, setToken] = React.useState<string>();
@@ -128,15 +126,15 @@ const ProjectPage = () => {
       render: (_: string, record: Project) => {
         return (
           <Space>
-            {hasPermissions(Permission.ProjectAllocUser, Permission.ProjectAllocUserGet) && (
+            <CanAccess {...Permission.ProjectAllocUser}>
               <Link onClick={() => trigger('assign', record)} variant='button'>
                 {intl.get('ASSIGN_USERS')}
               </Link>
-            )}
-            <HasPermission value={Permission.ProjectEdit}>
+            </CanAccess>
+            <CanAccess {...Permission.ProjectEdit}>
               <EditIconButton onClick={() => trigger('update', record)} />
-            </HasPermission>
-            <HasPermission value={Permission.ProjectDelete}>
+            </CanAccess>
+            <CanAccess {...Permission.ProjectDelete}>
               <DeleteIconButton
                 confirmProps={{
                   description: intl.get('DELETE_PROJECT_PROMPT'),
@@ -145,7 +143,7 @@ const ProjectPage = () => {
                   }
                 }}
               />
-            </HasPermission>
+            </CanAccess>
           </Space>
         );
       }
@@ -162,14 +160,14 @@ const ProjectPage = () => {
         dataSource={ds}
         header={{
           toolbar: (
-            <HasPermission value={Permission.ProjectAdd}>
+            <CanAccess {...Permission.ProjectAdd}>
               <IconButton
                 icon={<PlusOutlined />}
                 onClick={() => trigger()}
                 tooltipProps={{ title: intl.get('CREATE_PROJECT') }}
                 type='primary'
               />
-            </HasPermission>
+            </CanAccess>
           )
         }}
         pagination={{

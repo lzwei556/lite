@@ -11,8 +11,6 @@ import {
   Link,
   Table
 } from '../../../components';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { Asset, ASSET_PATHNAME, AssetRow, deleteAsset } from '../../../asset-common';
 import {
   BearingModel,
@@ -27,6 +25,7 @@ import {
 import { ActionBar } from '../actionBar';
 import { getDisplayName, getOptionLabelByValue } from '../../../utils';
 import { Language, useLocaleContext } from '../../../localeProvider';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 type Column = NonNullable<TableProps<AssetRow>['columns']>[0];
 
@@ -55,17 +54,17 @@ export const Settings = (props: {
     key: 'action',
     render: (row: AssetRow) => (
       <Space>
-        <HasPermission value={Permission.AssetEdit}>
+        <CanAccess {...Permission.AssetEdit}>
           <EditIconButton onClick={() => onUpdate(row)} />
-        </HasPermission>
-        <HasPermission value={Permission.AssetDelete}>
+        </CanAccess>
+        <CanAccess {...Permission.AssetDelete}>
           <DeleteIconButton
             confirmProps={{
               description: intl.get('DELETE_SOMETHING_PROMPT', { something: row.name }),
               onConfirm: () => deleteAsset(row.id).then(onSuccess)
             }}
           />
-        </HasPermission>
+        </CanAccess>
       </Space>
     )
   };

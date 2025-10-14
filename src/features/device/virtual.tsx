@@ -3,8 +3,6 @@ import { Button, Col, Empty } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import HasPermission from '../../permission';
-import { Permission } from '../../permission/permission';
 import { Card, Grid, IconButton, Link, MutedCard, Table, TitleExtraLayout } from '../../components';
 import { Dayjs, getDisplayName, getValue, toMac } from '../../utils';
 import { Device } from '../../types/device';
@@ -14,6 +12,7 @@ import { useLocaleContext } from '../../localeProvider';
 import { DeviceNS } from './util';
 import { useContext } from '.';
 import { useSelectedProject } from '../../providers/user-profile';
+import { CanAccess, Permission } from '../../providers/access-control';
 
 export const useVirtualRootDevice = () => {
   const selectedProject = useSelectedProject();
@@ -176,7 +175,7 @@ export default function Virtual() {
           title={rootDevice.name}
           extra={
             <Button.Group>
-              <HasPermission value={Permission.NetworkAdd}>
+              <CanAccess {...Permission.NetworkAdd}>
                 <IconButton
                   icon={<ImportOutlined />}
                   onClick={() => navigate('/devices/import')}
@@ -184,7 +183,7 @@ export default function Virtual() {
                   type='primary'
                   variant='solid'
                 />
-              </HasPermission>
+              </CanAccess>
               <IconButton
                 icon={<PlusOutlined />}
                 onClick={() => navigate('/devices/0/create', { state: { from: '/devices/0' } })}

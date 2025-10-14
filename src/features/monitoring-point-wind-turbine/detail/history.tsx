@@ -12,8 +12,6 @@ import {
 } from '../../../components';
 import { isMobile } from '../../../utils/deviceDetection';
 import { Dayjs } from '../../../utils';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import {
   clearHistory,
   DownloadData,
@@ -24,6 +22,7 @@ import {
 } from '../../../asset-common';
 import * as Tower from '../../asset-wind-turbine/tower';
 import { HistoryChartCard } from './historyChartCard';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, type, attributes } = point;
@@ -60,13 +59,13 @@ export const History = (point: MonitoringPointRow) => {
           <Flex>
             <Space>
               <RangeDatePicker onChange={setRange} />
-              <HasPermission value={Permission.MeasurementDataDownload}>
+              <CanAccess {...Permission.MeasurementDataDownload}>
                 <DownloadIconButton
                   onClick={() => {
                     setVisible(true);
                   }}
                 />
-              </HasPermission>
+              </CanAccess>
               {open && (
                 <DownloadData
                   measurement={point}

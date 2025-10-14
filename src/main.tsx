@@ -12,6 +12,7 @@ import { Dayjs } from './utils';
 import { App, useAppType } from './config';
 import AppRouter from './views/router';
 import { AuthProvider } from './providers/auth';
+import { AccessControlProvider } from './providers/access-control';
 
 export const Main = () => {
   const config = useAppType();
@@ -64,7 +65,9 @@ export const Main = () => {
       >
         <ConfigProvider locale={language === 'zh-CN' ? zhCN : enUS}>
           <AuthProvider>
-            <AppRouter />
+            <AccessControlProvider>
+              <AppRouter />
+            </AccessControlProvider>
           </AuthProvider>
         </ConfigProvider>
       </ThemeProvider>

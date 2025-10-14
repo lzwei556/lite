@@ -9,12 +9,11 @@ import {
   UploadFirmwareRequest
 } from '../../apis/firmware';
 import { Dayjs } from '../../utils';
-import HasPermission from '../../permission';
-import { Permission } from '../../permission/permission';
 import { PageResult } from '../../types/page';
 import { Firmware } from '../../types/firmware';
 import { Store, useStore } from '../../hooks/store';
 import { DeleteIconButton, IconButton, Table, transformPagedresult } from '../../components';
+import { CanAccess, Permission } from '../../providers/access-control';
 
 const FirmwarePage = () => {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -118,7 +117,7 @@ const FirmwarePage = () => {
         dataSource={ds}
         header={{
           toolbar: (
-            <HasPermission value={Permission.FirmwareAdd}>
+            <CanAccess {...Permission.FirmwareAdd}>
               <Upload
                 accept={'.bin'}
                 name='file'
@@ -137,7 +136,7 @@ const FirmwarePage = () => {
                   type='primary'
                 />
               </Upload>
-            </HasPermission>
+            </CanAccess>
           )
         }}
         pagination={{

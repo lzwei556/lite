@@ -3233,11 +3233,6 @@ autoprefixer@^9.6.1:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-await-lock@^2.0.1:
-  version "2.1.0"
-  resolved "https://registry.npmmirror.com/await-lock/download/await-lock-2.1.0.tgz#bc78c51d229a34d5d90965a1c94770e772c6145e"
-  integrity sha1-vHjFHSKaNNXZCWWhyUdw53LGFF4=
-
 axe-core@^4.0.2:
   version "4.3.3"
   resolved "https://registry.npmmirror.com/axe-core/download/axe-core-4.3.3.tgz?cache=0&sync_timestamp=1629832722172&other_urls=https%3A%2F%2Fregistry.nlark.com%2Faxe-core%2Fdownload%2Faxe-core-4.3.3.tgz#b55cd8e8ddf659fe89b064680e1c6a4dceab0325"
@@ -3477,7 +3472,7 @@ base64-arraybuffer@^1.0.2:
   resolved "https://registry.npmmirror.com/base64-arraybuffer/-/base64-arraybuffer-1.0.2.tgz#1c37589a7c4b0746e34bd1feb951da2df01c1bdc"
   integrity sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==
 
-base64-js@^1.0.2, base64-js@^1.3.1:
+base64-js@^1.0.2:
   version "1.5.1"
   resolved "https://registry.npmmirror.com/base64-js/download/base64-js-1.5.1.tgz#1b1b440160a5bf7ad40b650f095963481903930a"
   integrity sha1-GxtEAWClv3rUC2UPCVljSBkDkwo=
@@ -3763,14 +3758,6 @@ buffer@^4.3.0:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffer@^6.0.3:
-  version "6.0.3"
-  resolved "https://registry.npmmirror.com/buffer/download/buffer-6.0.3.tgz#2ace578459cc8fbe2a70aaa8f52ee63b6a74c6c6"
-  integrity sha1-Ks5XhFnMj74qcKqo9S7mO2p0xsY=
-  dependencies:
-    base64-js "^1.3.1"
-    ieee754 "^1.2.1"
-
 builtin-modules@^3.1.0:
   version "3.2.0"
   resolved "https://registry.npmmirror.com/builtin-modules/download/builtin-modules-3.2.0.tgz#45d5db99e7ee5e6bc4f362e008bf917ab5049887"
@@ -3940,17 +3927,6 @@ capture-exit@^2.0.0:
   integrity sha1-+5U7+uvreB9iiYI52rtCbQilCaQ=
   dependencies:
     rsvp "^4.8.4"
-
-casbin.js@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmmirror.com/casbin.js/download/casbin.js-1.0.1.tgz#e0c3b671d6eab74d977f3b8ca6a2a07bce507e83"
-  integrity sha1-4MO2cdbqt02XfzuMpqKge85QfoM=
-  dependencies:
-    await-lock "^2.0.1"
-    buffer "^6.0.3"
-    expression-eval "^4.0.0"
-    path-browserify "^1.0.1"
-    picomatch "^2.3.0"
 
 case-sensitive-paths-webpack-plugin@2.3.0:
   version "2.3.0"
@@ -5911,13 +5887,6 @@ express@^4.17.1:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-expression-eval@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmmirror.com/expression-eval/download/expression-eval-4.0.0.tgz#d6a07c93e8b33e635710419d4a595d9208b9cc5e"
-  integrity sha1-1qB8k+izPmNXEEGdSlldkgi5zF4=
-  dependencies:
-    jsep "^0.3.0"
-
 ext@^1.1.2:
   version "1.5.0"
   resolved "https://registry.npmmirror.com/ext/download/ext-1.5.0.tgz#e93b97ae0cb23f8370380f6107d2d2b7887687ad"
@@ -6819,7 +6788,7 @@ identity-obj-proxy@3.0.0:
   dependencies:
     harmony-reflect "^1.4.6"
 
-ieee754@^1.1.4, ieee754@^1.2.1:
+ieee754@^1.1.4:
   version "1.2.1"
   resolved "https://registry.npmmirror.com/ieee754/download/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha1-jrehCmP/8l0VpXsAFYbRd9Gw01I=
@@ -7970,11 +7939,6 @@ jsdom@^16.4.0:
     whatwg-url "^8.5.0"
     ws "^7.4.6"
     xml-name-validator "^3.0.0"
-
-jsep@^0.3.0:
-  version "0.3.5"
-  resolved "https://registry.npmmirror.com/jsep/download/jsep-0.3.5.tgz#3fd79ebd92f6f434e4857d5272aaeef7d948264d"
-  integrity sha1-P9eevZL29DTkhX1Scqru99lIJk0=
 
 jsesc@^2.5.1:
   version "2.5.2"
@@ -9402,11 +9366,6 @@ path-browserify@0.0.1:
   resolved "https://registry.npmmirror.com/path-browserify/download/path-browserify-0.0.1.tgz#e6c4ddd7ed3aa27c68a20cc4e50e1a4ee83bbc4a"
   integrity sha1-5sTd1+06onxoogzE5Q4aTug7vEo=
 
-path-browserify@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmmirror.com/path-browserify/download/path-browserify-1.0.1.tgz#d98454a9c3753d5790860f16f68867b9e46be1fd"
-  integrity sha1-2YRUqcN1PVeQhg8W9ohnueRr4f0=
-
 path-dirname@^1.0.0:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/path-dirname/download/path-dirname-1.0.2.tgz#cc33d24d525e099a5388c0336c6e32b9160609e0"
@@ -9490,7 +9449,7 @@ picocolors@^1.1.1:
   resolved "https://registry.npmmirror.com/picocolors/-/picocolors-1.1.1.tgz#3d321af3eab939b083c8f929a1d12cda81c26b6b"
   integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
 
-picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.2, picomatch@^2.2.3, picomatch@^2.3.0:
+picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.2, picomatch@^2.2.3:
   version "2.3.0"
   resolved "https://registry.npmmirror.com/picomatch/download/picomatch-2.3.0.tgz?cache=0&sync_timestamp=1621648246651&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fpicomatch%2Fdownload%2Fpicomatch-2.3.0.tgz#f1f061de8f6a4bf022892e2d128234fb98302972"
   integrity sha1-8fBh3o9qS/AiiS4tEoI0+5gwKXI=
@@ -11155,17 +11114,7 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redux-persist@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmmirror.com/redux-persist/download/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
-  integrity sha1-tNKXL5hZWXwTDUDUsUb+zatRs6g=
-
-redux-react-hook@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.npmmirror.com/redux-react-hook/download/redux-react-hook-4.0.3.tgz#859a9ba517f7e2e934def3b6aaa5c5a8da921cdc"
-  integrity sha1-hZqbpRf34uk03vO2qqXFqNqSHNw=
-
-redux@*, redux@^4.0.0, redux@^4.1.1:
+redux@*, redux@^4.0.0:
   version "4.1.1"
   resolved "https://registry.npmmirror.com/redux/download/redux-4.1.1.tgz#76f1c439bb42043f985fbd9bf21990e60bd67f47"
   integrity sha1-dvHEObtCBD+YX72b8hmQ5gvWf0c=

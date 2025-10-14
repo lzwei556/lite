@@ -9,7 +9,6 @@
     "antd": "^5.22.6",
     "antd-style": "^3.7.1",
     "axios": "^0.21.1",
-    "casbin.js": "^1.0.1",
     "echarts": "5.6.0",
     "echarts-gl": "^2.0.9",
     "html2canvas": "^1.4.1",
@@ -25,9 +24,6 @@
     "react-konva": "18",
     "react-router-dom": "^6.8.2",
     "react-socket-io": "^0.2.5",
-    "redux": "^4.1.1",
-    "redux-persist": "^6.0.0",
-    "redux-react-hook": "^4.0.3",
     "socket.io-client": "1.4.8",
     "use-image": "^1.0.8",
     "web-vitals": "^1.0.1"

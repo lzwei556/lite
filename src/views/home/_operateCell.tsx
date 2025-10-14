@@ -1,23 +1,22 @@
 import React from 'react';
 import { Form, Space } from 'antd';
 import intl from 'react-intl-universal';
-import HasPermission from '../../permission';
-import { Permission } from '../../permission/permission';
 import { AssetModel, AssetRow, deleteAsset, updateAsset, useContext } from '../../asset-common';
 import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { DeleteIconButton, EditIconButton, SelectFormItem, TextFormItem } from '../../components';
 import { isAssetAreaParent } from '../../asset-variant';
+import { CanAccess, Permission } from '../../providers/access-control';
 
 export const OperateCell = ({ asset }: { asset: AssetRow }) => {
   const { refresh } = useContext();
   const [open, setOpen] = React.useState(false);
   return (
     <Space>
-      <HasPermission value={Permission.MeasurementEdit}>
+      <CanAccess {...Permission.MeasurementEdit}>
         <EditIconButton onClick={() => setOpen(true)} />
-      </HasPermission>
-      <HasPermission value={Permission.MeasurementDelete}>
+      </CanAccess>
+      <CanAccess {...Permission.MeasurementDelete}>
         <DeleteIconButton
           confirmProps={{
             description: intl.get('DELETE_SOMETHING_PROMPT', { something: asset.name }),
@@ -26,7 +25,7 @@ export const OperateCell = ({ asset }: { asset: AssetRow }) => {
             }
           }}
         />
-      </HasPermission>
+      </CanAccess>
       {open && (
         <UpdateAssetModal
           asset={asset}

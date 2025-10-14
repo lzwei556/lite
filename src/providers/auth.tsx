@@ -8,10 +8,11 @@ import { ResponseResult } from '../types/response';
 const store = GlobalStore.getInstance(true);
 
 export type LoginResponse = { token: string };
-export type AuthIdentity = { id: number; username: string };
+export type AuthIdentity = { id: number; username: string; role: number };
 
 type AuthProviderProps = {
   login: (params: LoginInput) => Promise<ResponseResult<LoginResponse>>;
+  logout: (onSuccess: () => void) => void;
   check: () => boolean;
   getIndentity: () => Promise<AuthIdentity>;
 };
@@ -20,7 +21,20 @@ const AuthContext = React.createContext<Partial<AuthProviderProps>>({});
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <AuthContext.Provider value={{ login, check, getIndentity }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        login,
+        logout: (onSuccess: () => void) => {
+          localStorage.clear();
+          store.clear();
+          onSuccess();
+        },
+        check,
+        getIndentity
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 
@@ -40,7 +54,10 @@ export const useLogin = (onSuccess: () => void, onError: (e: Error) => void) => 
   });
 };
 
-export const useLogout = () => {};
+export const useLogout = () => {
+  const { logout } = React.useContext(AuthContext);
+  return logout;
+};
 
 export const useIsAuthenticated = () => {
   const { check } = React.useContext(AuthContext);
@@ -51,8 +68,11 @@ export const getAuthToken = () => store.get('authToken');
 
 export const useGetIdentity = () => {
   const { getIndentity } = React.useContext(AuthContext);
-  const { data } = useRequest(getIndentity!);
-  return ENV.authenticated === 'true' ? { id: 1, username: 'admin' } : data;
+  const { data } = useRequest(getIndentity!, {
+    cacheKey: `${getAuthToken()}_profile`,
+    staleTime: -1
+  });
+  return ENV.authenticated === 'true' ? { id: 1, username: 'admin', role: 0 } : data;
 };
 
 type LoginInput = { username: string; password: string };

@@ -12,8 +12,6 @@ import {
   DownloadIconButton
 } from '../../../components';
 import { Dayjs } from '../../../utils';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { HistoryDataFea } from '../..';
 import {
   clearHistory,
@@ -28,6 +26,7 @@ import {
   useMonitoringPointContext
 } from '../../../asset-common';
 import { appendAxisAliasAbbrToField } from '../common';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type, attributes } = point;
@@ -76,7 +75,7 @@ export const History = (point: MonitoringPointRow) => {
                 properties={displayProperties}
                 value={property!.key}
               />
-              <HasPermission value={Permission.MeasurementDataDelete}>
+              <CanAccess {...Permission.MeasurementDataDelete}>
                 <DeleteIconButton
                   confirmProps={{
                     description: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
@@ -91,7 +90,7 @@ export const History = (point: MonitoringPointRow) => {
                   }}
                   buttonProps={{ size: 'middle', variant: 'filled' }}
                 />
-              </HasPermission>
+              </CanAccess>
               {open && (
                 <DownloadData
                   measurement={point}
@@ -129,13 +128,13 @@ export const History = (point: MonitoringPointRow) => {
           <Flex>
             <Space>
               <RangeDatePicker onChange={setRange} />
-              <HasPermission value={Permission.MeasurementDataDownload}>
+              <CanAccess {...Permission.MeasurementDataDownload}>
                 <DownloadIconButton
                   onClick={() => {
                     setOpen(true);
                   }}
                 />
-              </HasPermission>
+              </CanAccess>
             </Space>
           </Flex>
         </Card>

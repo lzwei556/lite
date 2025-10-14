@@ -5,8 +5,6 @@ import intl from 'react-intl-universal';
 import { Device } from '../../../types/device';
 import { toMac } from '../../../utils/format';
 import { DeleteIconButton, EditIconButton, IconButton, Table, Link } from '../../../components';
-import HasPermission from '../../../permission';
-import usePermission, { Permission } from '../../../permission/permission';
 import { DeleteDeviceRequest, GetDeviceRequest } from '../../../apis/device';
 import { DeviceType } from '../../../types/device_type';
 import { tree2List } from '../../../utils/tree';
@@ -16,9 +14,11 @@ import { SingleDeviceStatus } from '../../../device/SingleDeviceStatus';
 import { useContext } from '..';
 import { BasisModalForm } from './basisModalForm';
 import { SettingsModalForm } from './settingsModalForm';
+import { CanAccess, Permission, useCan } from '../../../providers/access-control';
 
 export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: () => void }) => {
-  const { hasPermission } = usePermission();
+  const canEditDevice = useCan(Permission.DeviceEdit);
+  const canEditDeviceSettings = useCan(Permission.DeviceSettingsEdit);
   useDeviceOnlineLiving();
   const { refresh } = useContext();
   const [open, setOpen] = React.useState(false);
@@ -31,10 +31,10 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
 
   const renderMenus = (device: Device) => {
     const items: MenuProps['items'] = [];
-    if (hasPermission(Permission.DeviceEdit)) {
+    if (canEditDevice) {
       items.push({ key: 'edit', label: intl.get('EDIT_DEVICE_INFO') });
     }
-    if (hasPermission(Permission.DeviceSettingsEdit)) {
+    if (canEditDeviceSettings) {
       items.push({ key: 'editSettings', label: intl.get('EDIT_DEVICE_SETTINGS') });
     }
     return {
@@ -80,8 +80,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
         return (
           <Space>
             {DeviceType.hasDeviceSettings(device.typeId) ? (
-              (hasPermission(Permission.DeviceEdit) ||
-                hasPermission(Permission.DeviceSettingsEdit)) && (
+              (canEditDevice || canEditDeviceSettings) && (
                 <Dropdown menu={renderMenus(device)}>
                   <EditIconButton />
                 </Dropdown>
@@ -95,20 +94,20 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
                 }}
               />
             )}
-            <HasPermission value={Permission.DeviceCommand}>
+            <CanAccess {...Permission.DeviceCommand}>
               <CommandDropdown
                 device={device}
                 target={<IconButton icon={<CodeOutlined />} size='small' variant='outlined' />}
               />
-            </HasPermission>
-            <HasPermission value={Permission.DeviceDelete}>
+            </CanAccess>
+            <CanAccess {...Permission.DeviceDelete}>
               <DeleteIconButton
                 confirmProps={{
                   description: intl.get('DELETE_DEVICE_PROMPT'),
                   onConfirm: () => DeleteDeviceRequest(device.id).then(() => refresh())
                 }}
               />
-            </HasPermission>
+            </CanAccess>
           </Space>
         );
       }

@@ -3,9 +3,8 @@ import { Role } from '../../../types/role';
 import { FC, useEffect, useState } from 'react';
 import { GetPermissionsWithGroupRequest } from '../../../apis/permission';
 import { AllocPermissionsRequest } from '../../../apis/role';
-import { Permission } from '../../../permission/permission';
-import HasPermission from '../../../permission';
 import intl from 'react-intl-universal';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export interface PermissionDrawerProps extends DrawerProps {
   role: Role;
@@ -55,11 +54,11 @@ const PermissionDrawer: FC<PermissionDrawerProps> = (props) => {
     return (
       <Space>
         <Button onClick={onCancel}>{intl.get('CANCEL')}</Button>
-        <HasPermission value={Permission.RoleAllocPermissions}>
+        <CanAccess {...Permission.RoleAllocPermissions}>
           <Button type={'primary'} onClick={onSave}>
             {intl.get('SAVE')}
           </Button>
-        </HasPermission>
+        </CanAccess>
       </Space>
     );
   };

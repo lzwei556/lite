@@ -3,7 +3,6 @@ import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { Grid, MutedCard, TabsDetail, TabsDetailsItems } from '../../../components';
 import { FilterableAlarmRecordTable } from '../../alarm';
-import usePermission, { Permission } from '../../../permission/permission';
 import {
   AssetNavigator,
   BasicCard,
@@ -17,10 +16,11 @@ import { Monitor } from './monitor';
 import { History } from './history';
 import { Settings } from './settings';
 import { ThicknessWaveData, WaveformData } from './waveformData';
+import { Permission, useCan } from '../../../providers/access-control';
 
 export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
-  const { hasPermission } = usePermission();
+  const canEditMeasurement = useCan(Permission.MeasurementEdit);
   const { id } = monitoringPoint;
 
   const items: TabsDetailsItems = [
@@ -84,7 +84,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
       />
     )
   });
-  if (hasPermission(Permission.MeasurementEdit)) {
+  if (canEditMeasurement) {
     items.push({
       key: 'settings',
       label: intl.get('SETTINGS'),

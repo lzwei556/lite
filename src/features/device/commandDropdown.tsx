@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dropdown, MenuProps, message } from 'antd';
+import { Dropdown, MenuProps, message } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { DeviceCommand } from '../../types/device_command';
-import userPermission, { Permission } from '../../permission/permission';
 import { DeviceType } from '../../types/device_type';
 import { DeviceUpgradeRequest, SendDeviceCommandRequest } from '../../apis/device';
 import UpgradeModal from './upgrade';
@@ -17,6 +16,7 @@ import { Network } from '../../types/network';
 import { useAppType } from '../../config';
 import { IconButton } from '../../components';
 import { Compensation } from './edit/compensation';
+import { Permission, useCan } from '../../providers/access-control';
 
 export const CommandDropdown = ({
   device,
@@ -35,7 +35,6 @@ export const CommandDropdown = ({
   const [upgradedCode, setUpgradeCode] = useState(initialUpgradeCode ?? device.upgradeStatus?.code);
   const [upgradeVisible, setUpgradeVisible] = useState(false);
   const [openCalibrate, setVisibleCalibrate] = useState(false);
-  const { hasPermissions } = userPermission();
   const chanels = DeviceType.getChannels(typeId);
   const [compensationOpen, setCompensationOpen] = useState(false);
 
@@ -150,7 +149,7 @@ export const CommandDropdown = ({
       items.push({ key: DeviceCommand.Compensation, label: intl.get('compensation') });
     }
   }
-  if (hasPermissions(Permission.DeviceUpgrade, Permission.DeviceFirmwares)) {
+  if (useCan(Permission.DeviceUpgrade)) {
     if (!upgrading) {
       if (appType !== 'corrosionWirelessHART') {
         items.push({ key: DeviceCommand.Upgrade, label: intl.get('UPGRADE_FIRMWARE') });

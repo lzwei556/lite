@@ -3,8 +3,6 @@ import { Button, message, Space, TableProps, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { getValue } from '../../../utils/format';
 import { App, useAppType } from '../../../config';
 import { MONITORING_POINT } from '../../../asset-common';
@@ -24,6 +22,7 @@ import { SelectRules } from './selectRules';
 import { deleteAlarmRule, getAlarmRules, importAlarmRules } from './services';
 import { AlarmRule } from './types';
 import { useGlobalStyles } from '../../../styles';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export default function AlarmRuleList() {
   const appType = useAppType();
@@ -80,7 +79,7 @@ export default function AlarmRuleList() {
                     setSelectedRow(row);
                   }}
                 />
-                <HasPermission value={Permission.AlarmRuleDelete}>
+                <CanAccess {...Permission.AlarmRuleDelete}>
                   <DeleteIconButton
                     confirmProps={{
                       description: intl.get('DELETE_RULE_PROMPT'),
@@ -91,10 +90,10 @@ export default function AlarmRuleList() {
                       }
                     }}
                   />
-                </HasPermission>
+                </CanAccess>
               </>
             )}
-            <HasPermission value={Permission.AlarmRuleGroupBind}>
+            <CanAccess {...Permission.AlarmRuleGroupBind}>
               <IconButton
                 icon={<MoreOutlined />}
                 size='small'
@@ -104,7 +103,7 @@ export default function AlarmRuleList() {
                   setOpen(true);
                 }}
               />
-            </HasPermission>
+            </CanAccess>
           </Space>
         );
       }
@@ -196,7 +195,7 @@ export default function AlarmRuleList() {
             <>
               <AlarmLevelLightSelectFilter onChange={setLevels} value={levels} />
               <Button.Group>
-                <HasPermission value={Permission.AlarmRuleGroupAdd}>
+                <CanAccess {...Permission.AlarmRuleGroupAdd}>
                   <IconButton
                     icon={<PlusOutlined />}
                     onClick={() => {
@@ -206,8 +205,8 @@ export default function AlarmRuleList() {
                     tooltipProps={{ title: intl.get('CREATE_ALARM_RULE') }}
                     type='primary'
                   />
-                </HasPermission>
-                <HasPermission value={Permission.AlarmRuleGroupExport}>
+                </CanAccess>
+                <CanAccess {...Permission.AlarmRuleGroupExport}>
                   {alarmRules.length > 0 && (
                     <IconButton
                       icon={<ExportOutlined />}
@@ -219,8 +218,8 @@ export default function AlarmRuleList() {
                       type='primary'
                     />
                   )}
-                </HasPermission>
-                <HasPermission value={Permission.AlarmRuleGroupImport}>
+                </CanAccess>
+                <CanAccess {...Permission.AlarmRuleGroupImport}>
                   <JsonImporter
                     iconButtonProps={{
                       style: {
@@ -244,7 +243,7 @@ export default function AlarmRuleList() {
                       });
                     }}
                   />
-                </HasPermission>
+                </CanAccess>
               </Button.Group>
               {open && type === 'create' && (
                 <CreateModal

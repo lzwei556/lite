@@ -2,13 +2,13 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { transformPagedresult } from '../../../components';
 import { PageResult } from '../../../types/page';
-import usePermission, { Permission } from '../../../permission/permission';
-import { store } from '../../../store';
 import { BatchDeleteDeviceEventsRequest, PagingDeviceEventsRequest } from '../../../apis/device';
 import { Device } from '../../../types/device';
 import { Dayjs } from '../../../utils';
 import { useButtonBindingsProps } from '../../../hooks';
 import { useContext } from '..';
+import { useGetIdentity } from '../../../providers/auth';
+import { Permission, useCan } from '../../../providers/access-control';
 
 export const useEvents = (device: Device) => {
   const { range, numberedRange, onChange } = useContext();
@@ -40,7 +40,7 @@ export const useEventTableProps = ({
   dataSource?: PageResult<any>;
   fetch: (crt: number, size: number) => void;
 }) => {
-  const { hasPermission } = usePermission();
+  const canDeleteDeviceEvent = useCan(Permission.DeviceEventDelete);
   const [selectedRowKeys, setSelectedRowKeys] = React.useState<any[]>([]);
   const onBatchDelete = () => {
     BatchDeleteDeviceEventsRequest(device.id, selectedRowKeys).then(() => {
@@ -60,7 +60,7 @@ export const useEventTableProps = ({
       columns: useColumns(),
       dataSource: ds,
       pagination: { ...paged, onChange: fetch },
-      rowSelection: hasPermission(Permission.DeviceEventDelete) ? rowSelection : undefined,
+      rowSelection: canDeleteDeviceEvent ? rowSelection : undefined,
       rowKey: (row: Device) => row.id
     },
     header: {
@@ -76,9 +76,7 @@ export const useEventTableProps = ({
 };
 
 const useColumns = () => {
-  const isPlatformAccount =
-    store.getState().permission.data.subject === 'admin' ||
-    store.getState().permission.data.subject === '平台管理员';
+  const identity = useGetIdentity();
   const columns: any = [
     {
       title: intl.get('TYPE'),
@@ -101,7 +99,7 @@ const useColumns = () => {
       }
     }
   ];
-  if (isPlatformAccount) {
+  if (identity?.role === 0 || identity?.role === 1) {
     columns.push({
       title: intl.get('DETAIL'),
       dataIndex: 'message',

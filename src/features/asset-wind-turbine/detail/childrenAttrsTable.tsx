@@ -2,12 +2,11 @@ import React from 'react';
 import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
 import { DeleteIconButton, EditIconButton, Link, Table } from '../../../components';
-import HasPermission from '../../../permission';
-import { Permission } from '../../../permission/permission';
 import { ASSET_PATHNAME, AssetRow, deleteAsset } from '../../../asset-common';
 import { AlarmLevel } from '../../alarm';
 import { categories } from '../flange';
 import { flange, tower } from '../constants';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const ChildrenAttrsTable = ({
   assets,
@@ -106,17 +105,17 @@ export const ChildrenAttrsTable = ({
     key: 'action',
     render: (row: AssetRow) => (
       <Space>
-        <HasPermission value={Permission.AssetEdit}>
+        <CanAccess {...Permission.AssetEdit}>
           <EditIconButton onClick={() => operateCellProps.onUpdate(row)} />
-        </HasPermission>
-        <HasPermission value={Permission.AssetDelete}>
+        </CanAccess>
+        <CanAccess {...Permission.AssetDelete}>
           <DeleteIconButton
             confirmProps={{
               description: intl.get('DELETE_SOMETHING_PROMPT', { something: row.name }),
               onConfirm: () => deleteAsset(row.id).then(operateCellProps.onSuccess)
             }}
           />
-        </HasPermission>
+        </CanAccess>
       </Space>
     )
   };

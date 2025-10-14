@@ -4,9 +4,8 @@ import { Role } from '../../../types/role';
 import { GetMenusTreeRequest } from '../../../apis/menu';
 import { Menu } from '../../../types/menu';
 import { AllocMenusRequest } from '../../../apis/role';
-import { Permission } from '../../../permission/permission';
-import HasPermission from '../../../permission';
 import intl from 'react-intl-universal';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export interface MenuDrawerProps extends DrawerProps {
   role: Role;
@@ -37,11 +36,11 @@ const MenuDrawer: FC<MenuDrawerProps> = (props) => {
     return (
       <Space>
         <Button onClick={onCancel}>{intl.get('CANCEL')}</Button>
-        <HasPermission value={Permission.RoleAllocMenus}>
+        <CanAccess {...Permission.RoleList}>
           <Button type={'primary'} onClick={onSave}>
             {intl.get('SAVE')}
           </Button>
-        </HasPermission>
+        </CanAccess>
       </Space>
     );
   };

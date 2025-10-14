@@ -1,8 +1,6 @@
 import React from 'react';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
-import HasPermission from '../../../../permission';
-import { Permission } from '../../../../permission/permission';
 import { Card, DownloadIconButton } from '../../../../components';
 import { DisplayProperty } from '../../../../constants/properties';
 import { HistoryDataFea } from '../../..';
@@ -16,6 +14,7 @@ import {
   PropertyLightSelectFilter
 } from '../../../../asset-common';
 import { isFlangePreloadCalculation } from '../common';
+import { CanAccess, Permission } from '../../../../providers/access-control';
 
 export const PointsLineChart = ({
   flange,
@@ -54,13 +53,13 @@ export const PointsLineChart = ({
               value={property?.key}
             />
             {isFlangePreloadCalculation(flange) && (
-              <HasPermission value={Permission.AssetDataDownload}>
+              <CanAccess {...Permission.AssetDataDownload}>
                 <DownloadIconButton
                   onClick={() => {
                     setOpen(true);
                   }}
                 />
-              </HasPermission>
+              </CanAccess>
             )}
             {open && flange.monitoringPoints && (
               <DownloadData
