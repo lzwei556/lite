@@ -176,13 +176,15 @@ export const Settings = (props: {
 
   return (
     <Grid>
-      <Col span={24}>
-        <Flex>
-          <Button.Group>
-            <ActionBar {...props} />
-          </Button.Group>
-        </Flex>
-      </Col>
+      <CanAccess {...Permission.AssetAdd}>
+        <Col span={24}>
+          <Flex>
+            <Button.Group>
+              <ActionBar {...props} />
+            </Button.Group>
+          </Flex>
+        </Col>
+      </CanAccess>
       <Col span={24}>{renderAssets(language, children)}</Col>
     </Grid>
   );

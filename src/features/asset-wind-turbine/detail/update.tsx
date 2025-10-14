@@ -4,6 +4,7 @@ import intl from 'react-intl-universal';
 import { Card, Grid, SaveIconButton, TextFormItem } from '../../../components';
 import { AssetRow, updateAsset, AssetModel } from '../../../asset-common';
 import { generateColProps } from '../../../utils/grid';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const [form] = Form.useForm<AssetModel>();
@@ -11,19 +12,21 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
   return (
     <Card
       extra={
-        <SaveIconButton
-          onClick={() => {
-            form.validateFields().then((values) => {
-              try {
-                updateAsset(asset.id, { ...values, type: asset.type }).then(() => {
-                  onSuccess();
-                });
-              } catch (error) {
-                console.log(error);
-              }
-            });
-          }}
-        />
+        <CanAccess {...Permission.AssetEdit}>
+          <SaveIconButton
+            onClick={() => {
+              form.validateFields().then((values) => {
+                try {
+                  updateAsset(asset.id, { ...values, type: asset.type }).then(() => {
+                    onSuccess();
+                  });
+                } catch (error) {
+                  console.log(error);
+                }
+              });
+            }}
+          />
+        </CanAccess>
       }
       title={intl.get('BASIC_INFORMATION')}
     >

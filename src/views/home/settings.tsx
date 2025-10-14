@@ -14,6 +14,7 @@ import { OperateCell } from './_operateCell';
 import { CreateAsset } from './create-asset';
 import { useGlobalStyles } from '../../styles';
 import { useSelectedProject } from '../../providers/user-profile';
+import { CanAccess, Permission, useCan } from '../../providers/access-control';
 
 export const Settings = () => {
   const { colorPrimaryHoverStyle } = useGlobalStyles();
@@ -56,6 +57,7 @@ export const Settings = () => {
     }
   };
   const dataSource = cloneDeep(assets);
+  const canCreateAsset = useCan(Permission.AssetAdd);
 
   return (
     <>
@@ -83,7 +85,7 @@ export const Settings = () => {
         header={{
           toolbar: (
             <Button.Group>
-              {renderActionBar()}
+              {canCreateAsset && renderActionBar()}
               <DownloadIconButton
                 onClick={() => {
                   setOpen(true);
@@ -103,25 +105,27 @@ export const Settings = () => {
                 type='primary'
               />
               {selectedProject && (
-                <JsonImporter
-                  iconButtonProps={{
-                    style: {
-                      borderTopLeftRadius: 0,
-                      borderBottomLeftRadius: 0,
-                      borderInlineStartColor: colorPrimaryHoverStyle.color
-                    }
-                  }}
-                  onUpload={(data) => {
-                    return importAssets(selectedProject.id, data).then((res) => {
-                      if (res.data.code === 200) {
-                        message.success(intl.get('IMPORTED_SUCCESSFUL'));
-                        refresh();
-                      } else {
-                        message.error(`${intl.get('FAILED_TO_IMPORT')}: ${res.data.msg}`);
+                <CanAccess {...Permission.AssetImport}>
+                  <JsonImporter
+                    iconButtonProps={{
+                      style: {
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0,
+                        borderInlineStartColor: colorPrimaryHoverStyle.color
                       }
-                    });
-                  }}
-                />
+                    }}
+                    onUpload={(data) => {
+                      return importAssets(selectedProject.id, data).then((res) => {
+                        if (res.data.code === 200) {
+                          message.success(intl.get('IMPORTED_SUCCESSFUL'));
+                          refresh();
+                        } else {
+                          message.error(`${intl.get('FAILED_TO_IMPORT')}: ${res.data.msg}`);
+                        }
+                      });
+                    }}
+                  />
+                </CanAccess>
               )}
             </Button.Group>
           )

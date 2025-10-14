@@ -25,6 +25,7 @@ import { isFlangePreloadCalculation } from '../common';
 import { History } from './history';
 import { PointsScatterChart } from './pointsScatterChart';
 import { Update } from './update';
+import { Permission, useCan } from '../../../../providers/access-control';
 
 export const Index = (props: {
   asset: AssetRow;
@@ -35,6 +36,7 @@ export const Index = (props: {
   const { asset, onSuccess } = props;
   const { monitoringPoints, statistics } = asset;
   const historyDatas = useHistoryDatas(asset);
+  const canAddMonitoringPoint = useCan(Permission.MeasurementAdd);
   const items: TabsDetailsItems = [
     {
       label: intl.get('OVERVIEW'),
@@ -59,7 +61,6 @@ export const Index = (props: {
               </Grid>
             </Col>
             <Col flex='300px'>
-              {' '}
               <Grid>
                 <Col span={24}>
                   <AlarmsObjectStatistics
@@ -124,7 +125,7 @@ export const Index = (props: {
         <Col span={24}>
           <Table
             cardProps={{
-              extra: <ActionBar {...props} />,
+              extra: canAddMonitoringPoint && <ActionBar {...props} />,
               title: intl.get('monitoring.points')
             }}
             columns={[

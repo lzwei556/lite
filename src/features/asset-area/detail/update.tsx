@@ -5,6 +5,7 @@ import { Card, SaveIconButton } from '../../../components';
 import { AssetRow, updateAsset, AssetModel } from '../../../asset-common';
 import { UpdateFormItems } from '../updateFormItems';
 import { generateColProps } from '../../../utils/grid';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const [form] = Form.useForm<AssetModel>();
@@ -12,21 +13,23 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
   return (
     <Card
       extra={
-        <Space>
-          <SaveIconButton
-            onClick={() => {
-              form.validateFields().then((values) => {
-                try {
-                  updateAsset(asset.id, { ...values, type: asset.type }).then(() => {
-                    onSuccess();
-                  });
-                } catch (error) {
-                  console.log(error);
-                }
-              });
-            }}
-          />
-        </Space>
+        <CanAccess {...Permission.AssetEdit}>
+          <Space>
+            <SaveIconButton
+              onClick={() => {
+                form.validateFields().then((values) => {
+                  try {
+                    updateAsset(asset.id, { ...values, type: asset.type }).then(() => {
+                      onSuccess();
+                    });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                });
+              }}
+            />
+          </Space>
+        </CanAccess>
       }
       title={intl.get('BASIC_INFORMATION')}
     >

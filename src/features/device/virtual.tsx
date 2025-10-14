@@ -184,15 +184,17 @@ export default function Virtual() {
                   variant='solid'
                 />
               </CanAccess>
-              <IconButton
-                icon={<PlusOutlined />}
-                onClick={() => navigate('/devices/0/create', { state: { from: '/devices/0' } })}
-                tooltipProps={{
-                  title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
-                }}
-                type='primary'
-                variant='solid'
-              />
+              <CanAccess {...Permission.DeviceAdd}>
+                <IconButton
+                  icon={<PlusOutlined />}
+                  onClick={() => navigate('/devices/0/create', { state: { from: '/devices/0' } })}
+                  tooltipProps={{
+                    title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
+                  }}
+                  type='primary'
+                  variant='solid'
+                />
+              </CanAccess>
             </Button.Group>
           }
           paddingBlock={14}

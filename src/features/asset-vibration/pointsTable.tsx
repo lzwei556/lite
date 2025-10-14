@@ -26,6 +26,7 @@ export const PointsTable = (props: {
   const { monitoringPoints = [] } = asset;
   const actualPoints = Points.filter(monitoringPoints);
   const columns = basicColumns;
+  const canAddMonitoringPoint = useCan(Permission.MeasurementAdd);
 
   columns.push(
     ...[
@@ -68,7 +69,7 @@ export const PointsTable = (props: {
       rowKey={(record) => record.id}
       columns={columns.map((c) => ({ ...c, width: 'auto' }))}
       cardProps={{
-        extra: <ActionBar {...props} />,
+        extra: canAddMonitoringPoint && <ActionBar {...props} />,
         title: intl.get('monitoring.points')
       }}
       dataSource={Points.sort(actualPoints)}

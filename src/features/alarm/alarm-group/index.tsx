@@ -72,13 +72,15 @@ export default function AlarmRuleList() {
           <Space>
             {row.editable && (
               <>
-                <EditIconButton
-                  onClick={() => {
-                    setOpen(true);
-                    setType('update');
-                    setSelectedRow(row);
-                  }}
-                />
+                <CanAccess {...Permission.AlarmRuleGroupEdit}>
+                  <EditIconButton
+                    onClick={() => {
+                      setOpen(true);
+                      setType('update');
+                      setSelectedRow(row);
+                    }}
+                  />
+                </CanAccess>
                 <CanAccess {...Permission.AlarmRuleDelete}>
                   <DeleteIconButton
                     confirmProps={{

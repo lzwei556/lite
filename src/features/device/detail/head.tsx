@@ -65,15 +65,17 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
               tooltipProps={{ placement: 'top' }}
             />
           </CanAccess>
-          <IconButton
-            icon={<PlusOutlined />}
-            onClick={() => navigate('create', { state: { from: location.pathname } })}
-            tooltipProps={{
-              title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
-            }}
-            type='primary'
-            variant='solid'
-          />
+          <CanAccess {...Permission.DeviceAdd}>
+            <IconButton
+              icon={<PlusOutlined />}
+              onClick={() => navigate('create', { state: { from: location.pathname } })}
+              tooltipProps={{
+                title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
+              }}
+              type='primary'
+              variant='solid'
+            />
+          </CanAccess>
         </>
       )}
       {DeviceType.isRootDevice(device.typeId) && !DeviceType.isGateway(device.typeId) && (

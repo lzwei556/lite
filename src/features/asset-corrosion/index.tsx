@@ -15,11 +15,13 @@ import { PointsTable } from './pointsTable';
 import { Overview } from './overview';
 import { AssetModelProvider } from '../../asset-model';
 import { AssetAnnotationImage } from '../imageAnnotation';
+import { Permission, useCan } from '../../providers/access-control';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
   const { id } = asset;
   const [open, setOpen] = React.useState(false);
   const [mointoringPoint, setMonitoringPoint] = React.useState<MonitoringPointRow | undefined>();
+  const canEditMonitoringPoint = useCan(Permission.MeasurementEdit);
   const props = {
     asset,
     onSuccess: refresh,
@@ -70,7 +72,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                     <AssetAnnotationImage
                       asset={asset}
                       key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
-                      editable={true}
+                      editable={canEditMonitoringPoint}
                       title={intl.get('OVERVIEW')}
                       onSuccess={refresh}
                     />

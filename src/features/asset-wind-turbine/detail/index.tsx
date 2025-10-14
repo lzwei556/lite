@@ -13,6 +13,7 @@ import { ActionBar } from '../components/actionBar';
 import { Update } from './update';
 import { OverviewCard } from './overviewCard';
 import { ChildrenAttrsTable } from './childrenAttrsTable';
+import { CanAccess, Permission } from '../../../providers/access-control';
 
 export const Index = (props: {
   asset: AssetRow;
@@ -83,13 +84,15 @@ export const Index = (props: {
               <Col span={24}>
                 <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
               </Col>
-              <Col span={24}>
-                <Flex>
-                  <Button.Group>
-                    <ActionBar {...props} />
-                  </Button.Group>
-                </Flex>
-              </Col>
+              <CanAccess {...Permission.AssetAdd}>
+                <Col span={24}>
+                  <Flex>
+                    <Button.Group>
+                      <ActionBar {...props} />
+                    </Button.Group>
+                  </Flex>
+                </Col>
+              </CanAccess>
               <Col span={24}>
                 {renderAssetList(
                   <ChildrenAttrsTable

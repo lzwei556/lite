@@ -21,6 +21,7 @@ import { ActionBar } from '../../components/actionBar';
 import { useHistoryDatas } from '../../utils';
 import { History } from './history';
 import { Update } from './update';
+import { Permission, useCan } from '../../../../providers/access-control';
 
 export const Index = (props: {
   asset: AssetRow;
@@ -31,6 +32,7 @@ export const Index = (props: {
   const { asset, onSuccess } = props;
   const { monitoringPoints } = asset;
   const historyDatas = useHistoryDatas(asset);
+  const canAddMonitoringPoint = useCan(Permission.MeasurementAdd);
 
   return (
     <TabsDetail
@@ -66,7 +68,7 @@ export const Index = (props: {
               <Col span={24}>
                 <Table
                   cardProps={{
-                    extra: <ActionBar {...props} />,
+                    extra: canAddMonitoringPoint && <ActionBar {...props} />,
                     title: intl.get('monitoring.points')
                   }}
                   columns={[
