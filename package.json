@@ -70,6 +70,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.1.0",
     "prettier": "^2.7.1",
+    "react-error-overlay": "^6.0.9",
     "react-scripts": "4.0.3",
     "source-map-explorer": "^2.5.3",
     "ts-case-convert": "^2.1.0",
@@ -80,5 +81,8 @@
   },
   "overrides": {
     "typescript": "^5.9.3"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
   }
 }
