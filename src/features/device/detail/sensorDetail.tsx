@@ -5,12 +5,10 @@ import { Card, Descriptions, Grid, Link, MutedCard } from '../../../components';
 import { Dayjs, toMac } from '../../../utils';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
-import { useLocaleContext } from '../../../localeProvider';
 import { RecentHistory } from '../RecentHistory';
 import { DeviceStatus } from '../device-status';
 
 export const SensorDetail = ({ device }: { device: Device }) => {
-  const { language } = useLocaleContext();
   const basisFields = useBasisFields(device);
   const timeFields = useTimeFileds(device);
   if (!device) {
@@ -36,10 +34,10 @@ export const SensorDetail = ({ device }: { device: Device }) => {
               <Descriptions
                 column={1}
                 contentStyle={{
-                  justifyContent: language === 'en-US' ? 'flex-start' : 'flex-end'
+                  justifyContent: 'flex-start'
                 }}
                 items={[...basisFields, ...timeFields]}
-                layout={language === 'en-US' ? 'vertical' : 'horizontal'}
+                layout='vertical'
               />
             </MutedCard>
           </Col>
@@ -50,7 +48,7 @@ export const SensorDetail = ({ device }: { device: Device }) => {
 };
 
 export const useBasisFields = (device: Device) => {
-  const { macAddress, typeId, parentName, information } = device;
+  const { macAddress, typeId, parentName, information, tag, applicationId } = device;
   const version = information?.firmware_version;
   const productId = information?.product_id;
   const fields = [
@@ -92,6 +90,12 @@ export const useBasisFields = (device: Device) => {
   const iccid = information?.iccid_4g;
   if (iccid) {
     fields.push({ label: intl.get('4G_CARD_NO'), children: iccid });
+  }
+  if (tag) {
+    fields.push({ label: intl.get('device.tag'), children: tag });
+  }
+  if (applicationId) {
+    fields.push({ label: intl.get('application.id'), children: applicationId });
   }
   return fields;
 };
