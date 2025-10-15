@@ -93,19 +93,25 @@ export const AssetModelProvider = ({
 export const useAssetModelContext = () => React.useContext(AssetModelContext);
 
 const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
-  return (asset.monitoringPoints ?? []).map((m, i) => {
-    const properties = Point.getPropertiesByType(m.type, m.properties);
-    const property = properties?.[0];
-    const items = getPropertyItem(m, property);
-    return {
-      selected: i === 0,
-      self: m,
-      property,
-      visibleKeys: properties.filter((p) => !!p.first).map((p) => p.key),
-      axisKey: items?.[0]?.axisKey,
-      fieldKey: items?.[0]?.fieldKey
-    };
-  });
+  return (asset.monitoringPoints ?? [])
+    .sort((prev, crt) => {
+      const { index: prevIndex } = prev.attributes || { index: 88 };
+      const { index: nextIndex } = crt.attributes || { index: 88 };
+      return prevIndex - nextIndex;
+    })
+    .map((m, i) => {
+      const properties = Point.getPropertiesByType(m.type, m.properties);
+      const property = properties?.[0];
+      const items = getPropertyItem(m, property);
+      return {
+        selected: i === 0,
+        self: m,
+        property,
+        visibleKeys: properties.filter((p) => !!p.first).map((p) => p.key),
+        axisKey: items?.[0]?.axisKey,
+        fieldKey: items?.[0]?.fieldKey
+      };
+    });
 };
 
 export function getPropertyItems(m: MonitoringPointRow, properties: DisplayProperty[]) {

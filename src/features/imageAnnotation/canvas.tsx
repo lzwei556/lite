@@ -29,7 +29,7 @@ export const Canvas = ({
   const [cursor, setCursor] = React.useState('default');
   const stageProps = useStageProps(size, img);
   const scaleProps = { x: stageProps.x, y: stageProps.y, scale: stageProps.scaleX };
-  const places = usePlaces(scaleProps, size, placeCardProps.length);
+  const places = usePlaces(scaleProps, size);
   const startingPoints = places.map((p) => ({ x: p.x, y: p.y }));
   const providerProps = useProviderProps({
     size,
@@ -53,15 +53,17 @@ export const Canvas = ({
               <ImageLayer img={img} />
               <Marks startingPoints={startingPoints} setCursor={setCursor} />
             </Stage>
-            {placeCardProps.map((props, i) => (
-              <PlaceCard
-                {...props}
-                selected={!editable}
-                style={places?.[i]?.style}
-                key={i}
-                selectedItem={selectedItem}
-              />
-            ))}
+            {placeCardProps
+              .filter((_, i) => i < places.length)
+              .map((props, i) => (
+                <PlaceCard
+                  {...props}
+                  selected={!editable}
+                  style={places?.[i]?.style}
+                  key={i}
+                  selectedItem={selectedItem}
+                />
+              ))}
           </>
         )}
       </Card>
