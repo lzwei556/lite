@@ -3,8 +3,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Space } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Content } from 'antd/es/layout/layout';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../../utils';
 import { useAppType } from '../../../config';

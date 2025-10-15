@@ -61,7 +61,7 @@ const ReportsTable = () => {
               onChange={(value) => setSearchParams({ type: `${value}` })}
               value={type}
             />
-            <RangeDatePicker onChange={setRange} />
+            <RangeDatePicker onChange={setRange} defaultValue={Dayjs.CommonRange.PastHalfYear}/>
           </Space>
         )
       }}

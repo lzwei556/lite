@@ -84,9 +84,9 @@ export type ReportDTO = {
     majorAlarmNum: number;
     criticalAlarmNum: number;
   };
-  monitoringPointFeatures: MonitoringPointFeature[];
+  monitoringPointFeatures?: MonitoringPointFeature[];
   devicesStat: { onlineNum: number; offlineNum: number };
-  deviceFeatures: DeviceFeature[];
+  deviceFeatures?: DeviceFeature[];
 };
 
 export type ReportDevice = DeviceFeature &

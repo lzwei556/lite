@@ -101,7 +101,7 @@ const MonitoringPointsRest = ({
   }
 };
 
-const PieChart = ({ statistics }: { statistics: number[] }) => {
+export const PieChart = ({ statistics }: { statistics: number[] }) => {
   const { colorTextDescriptionStyle } = useGlobalStyles();
   const commonOptions = useBarPieOptions();
   const options = getOptions(commonOptions, {
@@ -138,7 +138,7 @@ const PieChart = ({ statistics }: { statistics: number[] }) => {
   });
 
   return (
-    <Card styles={{ body: { padding: 0 } }}>
+    <Card style={{ border: 0, marginBottom: 16 }} styles={{ body: { padding: 0 } }}>
       <Chart options={options} />
     </Card>
   );

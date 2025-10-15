@@ -9,14 +9,15 @@ import request from '../../utils/request';
 import { GetResponse } from '../../utils/response';
 import { ReportType } from './constants';
 import { Report, ReportDTO } from './types';
+import { Dayjs } from '../../utils';
 
 export const transform = (dto: ReportDTO): Report => {
   const { deviceFeatures, monitoringPointFeatures } = dto;
-  const devices = deviceFeatures.map((d) => {
+  const devices = (deviceFeatures ?? []).map((d) => {
     const typeName = getTypeName(d);
     return { ...d, typeName, ...objectToCamel(d.features) };
   });
-  const monitoringPoints = monitoringPointFeatures.map((m, i) => {
+  const monitoringPoints = (monitoringPointFeatures ?? []).map((m, i) => {
     const conditions: string[] = [];
     m.alarmRuleGroups.forEach((g) => {
       g.rules.forEach((rule) => {
@@ -36,7 +37,7 @@ export const transform = (dto: ReportDTO): Report => {
   return { ...dto, devices, monitoringPoints };
 };
 
-const getTypeName = (d: Report['deviceFeatures'][0]) => {
+const getTypeName = (d: NonNullable<Report['deviceFeatures']>[0]) => {
   if (DeviceType.getNormalDCSensors().includes(d.type)) {
     return 'DC110';
   } else if (DeviceType.getHighDCSensors().includes(d.type)) {
@@ -49,7 +50,7 @@ const getTypeName = (d: Report['deviceFeatures'][0]) => {
 
 export const useReports = (type: ReportType) => {
   const [dataSource, setDataSource] = React.useState<PageResult<Report[]>>();
-  const { numberedRange, setRange } = useRange();
+  const { numberedRange, setRange } = useRange(Dayjs.CommonRange.PastHalfYear);
   const [store, setStore] = useStore('reportList');
 
   const fetchReports = (
