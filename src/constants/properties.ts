@@ -47,7 +47,8 @@ export type DisplayPropertyCategories = {
     | 'SPT'
     | 'SQ'
     | 'TopInclination'
-    | 'BaseInclination']: readonly DisplayProperty[];
+    | 'BaseInclination'
+    | 'OilFiller']: readonly DisplayProperty[];
 };
 
 //generic properties start
@@ -514,5 +515,14 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
     DIRECTION,
     WAGGLE,
     { ...TEMPERATURE, first: false }
+  ],
+  OilFiller: [
+    {
+      key: 'remaining_oil',
+      name: 'FIELD_REMAINING_OIL',
+      first: true,
+      precision: 1,
+      unit: '％'
+    }
   ]
 } as const;

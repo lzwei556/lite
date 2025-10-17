@@ -7,6 +7,7 @@ export enum DeviceType {
   GatewayLora = 0x5,
   GatewayDual4G = 0x6,
   Gateway5G = 0x7,
+  GatewayGS280 = 0x9,
   Router = 0x101,
   SA = 0x20001,
   SA_S = 0x20101,
@@ -42,6 +43,7 @@ export enum DeviceType {
   SQ110C = 0x90003,
   PressureGuoDa = 0x1000001,
   PressureWoErKe = 0x1000002,
+  OilFiller = 0x08100001,
   DC210LoraWAN = 0x40040106,
   DC110HLoraWAN = 0x40040107,
   DC110LoraWAN = 0x40040201,
@@ -64,6 +66,8 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_GATEWAY_DUAL_4G';
       case DeviceType.Gateway5G:
         return 'DEVICE_TYPE_GATEWAY_5G';
+      case DeviceType.GatewayGS280:
+        return 'DEVICE_TYPE_GATEWAY_GS280';
       case DeviceType.Router:
         return 'DEVICE_TYPE_RELAY';
       case DeviceType.SA:
@@ -134,6 +138,8 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_GUODA_PRESSURE';
       case DeviceType.PressureWoErKe:
         return 'DEVICE_TYPE_WOERKE_PRESSURE';
+      case DeviceType.OilFiller:
+        return 'DEVICE_TYPE_Oil_Filler';
       case DeviceType.DC210LoraWAN:
         return 'DEVICE_TYPE_DC210LoraWAN';
       case DeviceType.DC110HLoraWAN:
@@ -158,7 +164,7 @@ export namespace DeviceType {
   ];
 
   export function getGateways() {
-    return [...BLE_gateways, DeviceType.GatewayLora];
+    return [...BLE_gateways, DeviceType.GatewayLora, DeviceType.GatewayGS280];
   }
 
   export function isGateway(type: number) {
@@ -216,6 +222,7 @@ export namespace DeviceType {
       DeviceType.STLoraWAN,
       DeviceType.PressureGuoDa,
       DeviceType.PressureWoErKe,
+      DeviceType.OilFiller,
       DeviceType.SPT510,
       DeviceType.SQ100,
       DeviceType.SQ110C

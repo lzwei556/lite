@@ -17,6 +17,7 @@ import { useAppType } from '../../config';
 import { IconButton } from '../../components';
 import { Compensation } from './edit/compensation';
 import { Permission, useCan } from '../../providers/access-control';
+import { FillModalForm } from './edit/fillModalForm';
 
 export const CommandDropdown = ({
   device,
@@ -37,6 +38,7 @@ export const CommandDropdown = ({
   const [openCalibrate, setVisibleCalibrate] = useState(false);
   const chanels = DeviceType.getChannels(typeId);
   const [compensationOpen, setCompensationOpen] = useState(false);
+  const [fillOpen, setFillOpen] = useState(false);
 
   useEffect(() => {
     PubSub.subscribe(SocketTopic.upgradeStatus, (msg: string, status: any) => {
@@ -99,6 +101,9 @@ export const CommandDropdown = ({
         case DeviceCommand.Compensation:
           setCompensationOpen(true);
           break;
+        case DeviceCommand.Fill:
+          setFillOpen(true);
+          break;
         default:
           SendDeviceCommandRequest(id, commandKey, channel ? { channel } : {}).then((res) => {
             if (res.code === 200) {
@@ -116,49 +121,54 @@ export const CommandDropdown = ({
 
   type MenuItem = Required<MenuProps>['items'][number];
   const items: MenuProps['items'] = [];
+  const canUpgrade = useCan(Permission.DeviceUpgrade);
 
-  if (!upgrading) {
-    if (DeviceType.isGateway(typeId)) {
-      items.push({ key: 'sync', label: intl.get('SYNC_NETWORK') });
-      items.push({ key: 'provision', label: intl.get('PROVISION') });
+  if (DeviceType.OilFiller === typeId) {
+    items.push({ key: DeviceCommand.Fill, label: intl.get('oil.filler.fill') });
+  } else {
+    if (!upgrading) {
+      if (DeviceType.isGateway(typeId)) {
+        items.push({ key: 'sync', label: intl.get('SYNC_NETWORK') });
+        items.push({ key: 'provision', label: intl.get('PROVISION') });
+      }
+      items.push({ key: DeviceCommand.Reboot, label: intl.get('RESTART') });
+      if (DeviceType.isSensor(typeId)) {
+        const resetItem: MenuItem = { key: DeviceCommand.ResetData, label: intl.get('RESET_DATA') };
+        if (chanels.length > 0) {
+          items.push({
+            ...resetItem,
+            children: chanels.map((c) => ({
+              key: `[${DeviceCommand.ResetData},${c.value}]`,
+              label: c.label
+            }))
+          });
+        } else {
+          items.push({
+            key: DeviceCommand.AcquireSensorData,
+            label: intl.get('ACQUIRE_SENSOR_DATA')
+          });
+          items.push(resetItem);
+        }
+      }
+      items.push({ key: DeviceCommand.Reset, label: intl.get('RESTORE_FACTORY_SETTINGS') });
+      if (DeviceType.canSupportingCalibrate(typeId)) {
+        items.push({ key: DeviceCommand.Calibrate, label: intl.get('CALIBRATE') });
+      }
+      if (DeviceType.canSupportingCompensation(typeId)) {
+        items.push({ key: DeviceCommand.Compensation, label: intl.get('compensation') });
+      }
     }
-    items.push({ key: DeviceCommand.Reboot, label: intl.get('RESTART') });
-    if (DeviceType.isSensor(typeId)) {
-      const resetItem: MenuItem = { key: DeviceCommand.ResetData, label: intl.get('RESET_DATA') };
-      if (chanels.length > 0) {
-        items.push({
-          ...resetItem,
-          children: chanels.map((c) => ({
-            key: `[${DeviceCommand.ResetData},${c.value}]`,
-            label: c.label
-          }))
-        });
+    if (canUpgrade) {
+      if (!upgrading) {
+        if (appType !== 'corrosionWirelessHART') {
+          items.push({ key: DeviceCommand.Upgrade, label: intl.get('UPGRADE_FIRMWARE') });
+        }
       } else {
         items.push({
-          key: DeviceCommand.AcquireSensorData,
-          label: intl.get('ACQUIRE_SENSOR_DATA')
+          key: DeviceCommand.CancelUpgrade,
+          label: intl.get('CANCEL_UPGRADING_FIRMWARE')
         });
-        items.push(resetItem);
       }
-    }
-    items.push({ key: DeviceCommand.Reset, label: intl.get('RESTORE_FACTORY_SETTINGS') });
-    if (DeviceType.canSupportingCalibrate(typeId)) {
-      items.push({ key: DeviceCommand.Calibrate, label: intl.get('CALIBRATE') });
-    }
-    if (DeviceType.canSupportingCompensation(typeId)) {
-      items.push({ key: DeviceCommand.Compensation, label: intl.get('compensation') });
-    }
-  }
-  if (useCan(Permission.DeviceUpgrade)) {
-    if (!upgrading) {
-      if (appType !== 'corrosionWirelessHART') {
-        items.push({ key: DeviceCommand.Upgrade, label: intl.get('UPGRADE_FIRMWARE') });
-      }
-    } else {
-      items.push({
-        key: DeviceCommand.CancelUpgrade,
-        label: intl.get('CANCEL_UPGRADING_FIRMWARE')
-      });
     }
   }
 
@@ -220,6 +230,22 @@ export const CommandDropdown = ({
               }
             });
             setCompensationOpen(false);
+          }}
+        />
+      )}
+      {fillOpen && (
+        <FillModalForm
+          open={fillOpen}
+          onCancel={() => setFillOpen(false)}
+          onSuccess={(params) => {
+            SendDeviceCommandRequest(id, DeviceCommand.Fill, params).then((res) => {
+              if (res.code === 200) {
+                message.success(intl.get('COMMAND_SENT_SUCCESSFUL'));
+              } else {
+                message.error(intl.get(res.msg).d(res.msg));
+              }
+            });
+            setFillOpen(false);
           }}
         />
       )}

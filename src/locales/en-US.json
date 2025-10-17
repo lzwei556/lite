@@ -129,6 +129,7 @@
   "DEVICE_TYPE_GATEWAY_LORA": "LoRa Gateway",
   "DEVICE_TYPE_GATEWAY_DUAL_4G": "Dual 4G Gateway",
   "DEVICE_TYPE_GATEWAY_5G": "5G Gateway",
+  "DEVICE_TYPE_GATEWAY_GS280": "GS280",
   "DEVICE_TYPE_RELAY": "Wireless Relay",
   "DEVICE_TYPE_SA": "Wireless Bolt Loosening Sensor",
   "DEVICE_TYPE_SA_S": "RS485 Bolt Loosening Sensor",
@@ -165,6 +166,7 @@
   "DEVICE_TYPE_GUODA_PRESSURE": "GuoDa Pressure Sensor",
   "DEVICE_TYPE_WOERKE_PRESSURE": "WoErKe Pressure Sensor",
   "DEVICE_TYPE_DC210LoraWAN": "Wireless Ultra High Corrosion Sensor (LoraWAN)",
+  "DEVICE_TYPE_Oil_Filler": "Oil Filler",
   "DEVICE_TYPE_DC110HLoraWAN": "Wireless High Corrosion Sensor (LoraWAN)",
   "DEVICE_TYPE_DC110LoraWAN": "Wireless Corrosion Sensor (LoraWAN)",
   "DEVICE_TYPE_SVT510LoraWAN": "Wireless Vibration Temperature Sensor (6K/5K LoraWAN)",
@@ -1377,5 +1379,8 @@
   "direction.axial": "Axial",
   "direction.vertical": "Vertical",
   "direction.horizontal": "Horizontal",
-  "no.available.project": "No available project"
+  "no.available.project": "No available project",
+  "oil.filler.fill": "Fill",
+  "oil.filler.fill.count": "Fill Count",
+  "FIELD_REMAINING_OIL": "Remaining Oil"
 }

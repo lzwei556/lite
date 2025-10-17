@@ -14,6 +14,13 @@ import * as Basis from '.';
 
 export type CommonProps = Pick<FormCommonProps, 'form'>;
 
+export const useFilterParentDeviceTypes = (deviceType?: DeviceType) => {
+  if (deviceType === DeviceType.OilFiller) {
+    return [DeviceType.GatewayGS280];
+  }
+  return [];
+};
+
 export const useProps = (form: CommonProps['form']) => {
   const deviceName = useFormItemBindingsProps({
     label: 'DEVICE_NAME',
@@ -42,13 +49,14 @@ export const useProps = (form: CommonProps['form']) => {
     label: 'application.id',
     name: 'application_id'
   });
-
+  const port = useFormItemBindingsProps({ label: 'PORT', name: 'port' });
   return {
     deviceName,
     mac,
     deviceTypeProps: { ...deviceType, selectProps: useDeviceTypeSelectProps(form) },
     tag,
-    applicationId
+    applicationId,
+    port: { ...port, selectProps: { options: [1, 2].map((n) => ({ label: `${n}`, value: n })) } }
   };
 };
 
@@ -112,7 +120,7 @@ export enum WanProtocol {
   Tlv = 3
 }
 
-export const useProtocolProps = () => {
+export const useProtocolProps = (disabledValue?: WanProtocol) => {
   return {
     ...useFormItemBindingsProps({
       label: 'wan.interface.protocol',
@@ -121,13 +129,20 @@ export const useProtocolProps = () => {
     selectProps: {
       options: pickOptionsFromNumericEnum(WanProtocol, 'wan.interface.protocol').map((opts) => ({
         ...opts,
-        label: intl.get(opts.label)
+        label: intl.get(opts.label),
+        disabled: opts.value === disabledValue
       }))
     }
   };
 };
 
-export const useParentProps = (form: CommonProps['form']) => {
+export const useDisabledProtocal = (deviceType: DeviceType) => {
+  if (DeviceType.GatewayGS280 === deviceType) {
+    return WanProtocol.Protobuf;
+  }
+};
+
+export const useParentProps = (form: CommonProps['form'], filterTypes?: DeviceType[]) => {
   const parent = useFormItemBindingsProps({
     label: 'PARENT',
     name: 'parent',
@@ -137,16 +152,21 @@ export const useParentProps = (form: CommonProps['form']) => {
   return {
     networkId,
     parent,
-    selectProps: useParentSelectProps(form, setNetworkId),
+    selectProps: useParentSelectProps(form, setNetworkId, filterTypes),
     network: useFormItemBindingsProps({ name: 'network', hidden: true })
   };
 };
 
-const useParentSelectProps = (form: CommonProps['form'], setNetworkId?: (id: number) => void) => {
+const useParentSelectProps = (
+  form: CommonProps['form'],
+  setNetworkId: (id: number) => void,
+  filterTypes?: DeviceType[]
+) => {
   const { device } = Basis.useContext();
   return {
     device,
     dispalyField: device ? 'macAddress' : ('id' as keyof Pick<Device, 'id' | 'macAddress'>),
+    filterTypes,
     onChange: (_: string, option: any) => {
       GetNetworksRequest().then((networks) => {
         const network = networks.find((network) => network.gateway.id === option.gatewayId);

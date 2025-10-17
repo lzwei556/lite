@@ -7,5 +7,6 @@ export enum DeviceCommand {
   Provision,
   Calibrate,
   AcquireSensorData,
-  Compensation
+  Compensation,
+  Fill = 101
 }

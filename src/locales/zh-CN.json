@@ -129,6 +129,7 @@
   "DEVICE_TYPE_GATEWAY_LORA": "LoRa网关",
   "DEVICE_TYPE_GATEWAY_DUAL_4G": "双4G网关",
   "DEVICE_TYPE_GATEWAY_5G": "5G网关",
+  "DEVICE_TYPE_GATEWAY_GS280": "GS280",
   "DEVICE_TYPE_RELAY": "无线中继器",
   "DEVICE_TYPE_SA": "无线螺栓松动传感器",
   "DEVICE_TYPE_SA_S": "RS485螺栓松动传感器",
@@ -164,6 +165,7 @@
   "DEVICE_TYPE_SQ110C": "无线倾角传感器 (Cat.1)",
   "DEVICE_TYPE_GUODA_PRESSURE": "国大压力传感器",
   "DEVICE_TYPE_WOERKE_PRESSURE": "沃尔克压力传感器",
+  "DEVICE_TYPE_Oil_Filler": "加注器",
   "DEVICE_TYPE_DC210LoraWAN": "无线超高温腐蚀传感器 (LoraWAN)",
   "DEVICE_TYPE_DC110HLoraWAN": "无线高温腐蚀传感器 (LoraWAN)",
   "DEVICE_TYPE_DC110LoraWAN": "无线常温腐蚀传感器 (LoraWAN)",
@@ -1377,5 +1379,8 @@
   "direction.axial": "轴向",
   "direction.vertical": "径向",
   "direction.horizontal": "水平向",
-  "no.available.project": "没有可用的项目"
+  "no.available.project": "没有可用的项目",
+  "oil.filler.fill": "加注",
+  "oil.filler.fill.count": "加油次数",
+  "FIELD_REMAINING_OIL": "剩余油量"
 }

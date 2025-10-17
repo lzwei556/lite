@@ -5,14 +5,23 @@ import { DeviceType } from '../../../types/device_type';
 import { FormItemsProps } from '../settings-common';
 import { ParentsSelect } from './parentsSelect';
 import { useContext } from './context';
-import { useProps, useProtocolProps, useParentProps, CommonProps } from './hooks';
+import {
+  useProps,
+  useProtocolProps,
+  useParentProps,
+  CommonProps,
+  useFilterParentDeviceTypes,
+  WanProtocol,
+  useDisabledProtocal
+} from './hooks';
 
 export const FormItems = ({
   form,
   formItemColProps
 }: CommonProps & Pick<FormItemsProps, 'formItemColProps'>) => {
   const { deviceType } = useContext();
-  const { deviceName, mac, deviceTypeProps } = useProps(form);
+  const { deviceName, mac, deviceTypeProps, port } = useProps(form);
+  const filterTypes = useFilterParentDeviceTypes(deviceType);
 
   return (
     <Grid>
@@ -35,10 +44,15 @@ export const FormItems = ({
             />
           ) : (
             <Col {...formItemColProps}>
-              <ParentFormItemsSection form={form} />
+              <ParentFormItemsSection form={form} filterTypes={filterTypes} />
             </Col>
           )}
         </>
+      )}
+      {DeviceType.OilFiller === deviceType && (
+        <Col {...formItemColProps}>
+          <SelectFormItem {...port} />
+        </Col>
       )}
     </Grid>
   );
@@ -51,35 +65,37 @@ const RootDeviceFormItems = ({
 }: CommonProps & Pick<FormItemsProps, 'formItemColProps'> & { deviceType: DeviceType }) => {
   const { tag, applicationId } = useProps(form);
   const { selectProps, ...rest } = useProtocolProps();
-  if (DeviceType.isRootDevice(deviceType)) {
-    if (DeviceType.isLoraWAN(deviceType)) {
-      return (
-        <>
-          <Col {...formItemColProps}>
-            <TextFormItem hidden={true} {...rest} />
-            <TextFormItem {...tag} />
-          </Col>
-          <Col {...formItemColProps}>
-            <TextFormItem {...applicationId} />
-          </Col>
-        </>
-      );
-    } else {
-      return (
+  const disabledProtocol = useDisabledProtocal(deviceType);
+  if (DeviceType.isLoraWAN(deviceType)) {
+    return (
+      <>
         <Col {...formItemColProps}>
-          <ProtocolFormItem />
+          <TextFormItem hidden={true} {...rest} />
+          <TextFormItem {...tag} />
         </Col>
-      );
-    }
+        <Col {...formItemColProps}>
+          <TextFormItem {...applicationId} />
+        </Col>
+      </>
+    );
+  } else {
+    return (
+      <Col {...formItemColProps}>
+        <ProtocolFormItem disabledValue={disabledProtocol} />
+      </Col>
+    );
   }
 };
 
-const ProtocolFormItem = () => {
-  return <SelectFormItem {...useProtocolProps()} />;
+const ProtocolFormItem = ({ disabledValue }: { disabledValue?: WanProtocol }) => {
+  return <SelectFormItem {...useProtocolProps(disabledValue)} />;
 };
 
-const ParentFormItemsSection = ({ form }: CommonProps) => {
-  const { networkId, parent, selectProps, network } = useParentProps(form);
+const ParentFormItemsSection = ({
+  form,
+  filterTypes
+}: CommonProps & { filterTypes?: DeviceType[] }) => {
+  const { networkId, parent, selectProps, network } = useParentProps(form, filterTypes);
   return (
     <>
       <SelectFormItem {...parent}>

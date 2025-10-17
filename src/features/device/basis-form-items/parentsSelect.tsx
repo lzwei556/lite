@@ -20,14 +20,19 @@ type ParentSelectOption = {
 export function ParentsSelect({
   device,
   dispalyField = 'id',
+  filterTypes = [],
   ...rest
-}: SelectProps & { dispalyField?: keyof Pick<Device, 'id' | 'macAddress'>; device?: Device }) {
+}: SelectProps & {
+  dispalyField?: keyof Pick<Device, 'id' | 'macAddress'>;
+  device?: Device;
+  filterTypes?: DeviceType[];
+}) {
   const appType = useAppType();
   const { devices } = useContext();
   const parents: Parent[] = [];
-  let all = devices.filter((d) =>
-    [...DeviceType.getGateways(), DeviceType.Router].includes(d.typeId)
-  );
+  let all = devices
+    .filter((d) => [...DeviceType.getGateways(), DeviceType.Router].includes(d.typeId))
+    .filter((d) => (filterTypes.length > 0 ? filterTypes.includes(d.typeId) : true));
 
   foreachTree(buildParentsTreeData(all), (dev, path) => {
     const current = { ...dev, gatewayId: path?.[0] } as Parent;

@@ -25,4 +25,5 @@ export type Device = {
   tag?: string;
   parentName?: string;
   applicationId?: string;
+  port?: number;
 };

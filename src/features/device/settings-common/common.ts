@@ -67,7 +67,8 @@ export function tranformDeviceDTO2Entity(device: Device) {
     network: device.network && device.network.id,
     parent: device.parent,
     tag: device.tag,
-    application_id: device.applicationId
+    application_id: device.applicationId,
+    port: device.port
   };
 }
 
