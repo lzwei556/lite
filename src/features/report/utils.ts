@@ -23,7 +23,11 @@ export const transform = (dto: ReportDTO): Report => {
       g.rules.forEach((rule) => {
         const { metric, operation, threshold } = rule;
         const name = metric && metric.name ? intl.get(metric.name) : '';
-        conditions.push(`${name} ${operation ?? ''} ${threshold ?? ''}`);
+        conditions.push(
+          `${name} ${operation ?? ''} ${threshold ?? ''} ${
+            metric && metric.unit ? metric.unit : ''
+          }`
+        );
       });
     });
     return {

@@ -3,11 +3,13 @@ import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import timezone from 'dayjs/plugin/timezone';
+import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 dayjs.extend(timezone);
+dayjs.extend(localizedFormat);
 
 export type Range = [number, number];
 export type RangeValue = [dayjs.Dayjs, dayjs.Dayjs];

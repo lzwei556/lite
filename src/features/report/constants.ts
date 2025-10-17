@@ -1,5 +1,3 @@
-import { getKeyByValue } from '../../utils';
-
 export const A4_SIZE = { width: 210, height: 297, unit: 'mm', padding: 20 };
 export const A4_HEIGHT = 1122.519;
 const PREFACE_PLATFORM = '博感云平台';
@@ -17,45 +15,3 @@ export enum ReportType {
   Weekly = 1,
   Monthly
 }
-
-export enum DeviceEvalLevel {
-  Normal = 0x00,
-  Error = 0x01
-}
-
-export enum DeviceEvalReason {
-  Offline = 0x01,
-  LowBattery = 0x02,
-  LowSignalStrength = 0x11,
-  LowSignalQuality = 0x12
-}
-
-export const getDeviceEvalReason = (level: number, reasons: number[]): string => {
-  if (reasons.length > 0 && level === DeviceEvalLevel.Error) {
-    return getKeyByValue(DeviceEvalReason, reasons[0], 'device.eval.reason');
-  } else {
-    return 'device.eval.reason.normal';
-  }
-};
-
-export enum MonitoringPointEvalLevel {
-  Normal = 0x00,
-  Minor = 0x01,
-  Major = 0x02,
-  Critical = 0x03
-}
-
-export enum MonitoringPointEvalReason {
-  HasAlarms = 0x01,
-  HighCorrosionRate = 0x11,
-  HighCorrosionLoss = 0x12,
-  LowResidualLife = 0x13
-}
-
-export const getMonitoringPointEvalLevel = (level: number): string => {
-  if (level === MonitoringPointEvalLevel.Normal) {
-    return 'monitoring.point.eval.level.normal';
-  } else {
-    return getKeyByValue(MonitoringPointEvalLevel, level, 'monitoring.point.eval.level');
-  }
-};
