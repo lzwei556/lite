@@ -50,8 +50,8 @@ function scaleStage(size?: Size, img?: HTMLImageElement) {
   return { x, y, scale };
 }
 
-export function usePlaces(stage: StageProps, size?: Size) {
-  if (!size) return [];
+export function usePlaces(stage: StageProps, size?: Size, lengthLimit = 4) {
+  if (!size || lengthLimit === 0) return [];
   const { x, y, scale } = stage;
   const popoverXLen = PlaceTextCardStyle.width / 2 + Margin;
   const popoverYLen = PlaceTextCardStyle.height + Margin;
@@ -75,7 +75,7 @@ export function usePlaces(stage: StageProps, size?: Size) {
     y: (size.height - popoverYLen - y) / scale,
     style: { bottom: Margin, right: Margin }
   };
-  return [leftTop, rightTop, leftBottom, rightBottom];
+  return [leftTop, rightTop, leftBottom, rightBottom].filter((_, i) => i < lengthLimit);
 }
 
 export const useProviderProps = ({

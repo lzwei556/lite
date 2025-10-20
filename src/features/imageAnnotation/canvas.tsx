@@ -29,7 +29,7 @@ export const Canvas = ({
   const [cursor, setCursor] = React.useState('default');
   const stageProps = useStageProps(size, img);
   const scaleProps = { x: stageProps.x, y: stageProps.y, scale: stageProps.scaleX };
-  const places = usePlaces(scaleProps, size);
+  const places = usePlaces(scaleProps, size, placeCardProps.length);
   const startingPoints = places.map((p) => ({ x: p.x, y: p.y }));
   const providerProps = useProviderProps({
     size,
