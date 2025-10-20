@@ -128,7 +128,7 @@ export const AppMenu = () => {
       }}
       overlayStyle={{ width: 160 }}
     >
-      <Button type={'text'} style={{ ...colorWhiteStyle, top: 3 }} icon={<MenuOutlined />} />
+      <Button type={'text'} style={{ ...colorWhiteStyle, fontSize: 16 }} icon={<MenuOutlined />} />
     </Dropdown>
   );
 };
