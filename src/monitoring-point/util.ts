@@ -28,7 +28,15 @@ export const Point = {
       return (
         type === MonitoringPointTypeValue.Vibration ||
         type === MonitoringPointTypeValue.VibrationRotationSingleAxis ||
-        type === MonitoringPointTypeValue.VibrationRotation
+        type === MonitoringPointTypeValue.VibrationRotation ||
+        type === MonitoringPointTypeValue.VibrationAudio
+      );
+    },
+    isThreeAxisedVibrationRelated: (type: MonitoringPointTypeValue) => {
+      return (
+        type === MonitoringPointTypeValue.Vibration ||
+        type === MonitoringPointTypeValue.VibrationRotation ||
+        type === MonitoringPointTypeValue.VibrationAudio
       );
     },
     isCorrosionRelated: (type: MonitoringPointTypeValue) => {

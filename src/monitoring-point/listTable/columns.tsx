@@ -1,7 +1,6 @@
 import React from 'react';
 import { TableProps } from 'antd';
 import intl from 'react-intl-universal';
-import { MonitoringPointTypeValue } from '../../config';
 import { Dayjs, getAttrValue } from '../../utils';
 import { Link } from '../../components';
 import { getDisplayName, getValue } from '../../utils/format';
@@ -139,10 +138,7 @@ function getPropertyedCols(
         title: axis ? intl.get(axis.label) : intl.get(name)
       };
     });
-    if (
-      measurement.type === MonitoringPointTypeValue.Vibration ||
-      measurement.type === MonitoringPointTypeValue.VibrationRotation
-    ) {
+    if (Point.Assert.isThreeAxisedVibrationRelated(measurement.type)) {
       children = Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
         return {
           key: aliasKey,

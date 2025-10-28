@@ -13,5 +13,9 @@ export const MONITORING_POINTS = [
   {
     id: MonitoringPointTypeValue.VibrationRotation,
     label: MonitoringPointTypeText.VibrationRotation
+  },
+  {
+    id: MonitoringPointTypeValue.VibrationAudio,
+    label: MonitoringPointTypeText.VibrationAudio
   }
 ];

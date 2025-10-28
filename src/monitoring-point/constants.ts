@@ -15,6 +15,7 @@ export const MONITORING_POINT_DISPLAY_PROPERTIES = {
   [MonitoringPointTypeValue.Vibration]: PROPERTY_CATEGORIES.SVT210510P,
   [MonitoringPointTypeValue.VibrationRotationSingleAxis]: PROPERTY_CATEGORIES.SVT220S1S3,
   [MonitoringPointTypeValue.VibrationRotation]: PROPERTY_CATEGORIES.SVT220S1S3,
+  [MonitoringPointTypeValue.VibrationAudio]: PROPERTY_CATEGORIES.SVT210SU,
   [MonitoringPointTypeValue.TopInclination]: PROPERTY_CATEGORIES.TopInclination,
   [MonitoringPointTypeValue.BaseInclination]: PROPERTY_CATEGORIES.BaseInclination,
   [MonitoringPointTypeValue.Pressure]: PROPERTY_CATEGORIES.SPT,
@@ -31,7 +32,7 @@ export const AXIS = {
   Z: { key: 'z', value: 2, label: 'AXIS_Z' }
 } as const;
 
-export type AxisKey = typeof AXIS[keyof typeof AXIS]['key'];
+export type AxisKey = (typeof AXIS)[keyof typeof AXIS]['key'];
 
 export const AXIS_OPTIONS = [AXIS.X, AXIS.Y, AXIS.Z];
 

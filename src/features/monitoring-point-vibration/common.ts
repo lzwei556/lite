@@ -23,6 +23,10 @@ export const monitoringPointTypes = [
   {
     id: MonitoringPointTypeValue.VibrationRotation,
     label: MonitoringPointTypeText.VibrationRotation
+  },
+  {
+    id: MonitoringPointTypeValue.VibrationAudio,
+    label: MonitoringPointTypeText.VibrationAudio
   }
 ];
 
@@ -42,7 +46,8 @@ export const relatedDeviceTypes = new Map([
   [
     MonitoringPointTypeValue.VibrationRotation,
     [DeviceType.SVT210S, DeviceType.SVT220S3, DeviceType.SVT510L, DeviceType.SVT210SU]
-  ]
+  ],
+  [MonitoringPointTypeValue.VibrationAudio, [DeviceType.SVT210SU]]
 ]);
 
 export function useSelectPoints(form: FormInstance<MonitoringPointBatch>) {

@@ -1245,6 +1245,7 @@
   "monitoring.point.type.vibration": "Vibration",
   "monitoring.point.type.vibration.rotation.single.axis": "Vibration Rotation Single Axis",
   "monitoring.point.type.vibration.rotation": "Vibration Rotation",
+  "monitoring.point.type.vibration.audio": "Vibration Audio",
   "monitoring.point.type.inclination": "Inclination",
   "monitoring.point.type.top.inclination": "Top Inclination",
   "monitoring.point.type.base.inclination": "Base Inclination",

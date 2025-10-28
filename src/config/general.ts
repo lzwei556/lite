@@ -33,6 +33,10 @@ export const MONITORING_POINTS = [
     label: MonitoringPointTypeText.VibrationRotation
   },
   {
+    id: MonitoringPointTypeValue.VibrationAudio,
+    label: MonitoringPointTypeText.VibrationAudio
+  },
+  {
     id: MonitoringPointTypeValue.TopInclination,
     label: MonitoringPointTypeText.TopInclination
   },

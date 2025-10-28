@@ -7,9 +7,13 @@ import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { useLocaleContext } from '../../localeProvider';
 import { mapTree, tree2List } from '../../utils/tree';
-import { AssetRow, downloadHistory, MONITORING_POINT_DISPLAY_PROPERTIES } from '../../asset-common';
+import {
+  AssetRow,
+  downloadHistory,
+  MONITORING_POINT_DISPLAY_PROPERTIES,
+  Point
+} from '../../asset-common';
 import { combine } from './tree';
-import { MonitoringPointTypeValue } from '../../config';
 import { DisplayProperty, displayPropertyGroup } from '../../constants/properties';
 
 export const BatchDownlaodHistoryDataModal = ({
@@ -45,11 +49,7 @@ export const BatchDownlaodHistoryDataModal = ({
           type as keyof typeof MONITORING_POINT_DISPLAY_PROPERTIES
         ];
       let propertyKeys = properties.map(({ key }) => key);
-      if (
-        type === MonitoringPointTypeValue.Vibration ||
-        type === MonitoringPointTypeValue.VibrationRotationSingleAxis ||
-        type === MonitoringPointTypeValue.VibrationRotation
-      ) {
+      if (Point.Assert.isVibrationRelated(type)) {
         propertyKeys = getVibrationDisplayPropertiesOrderByGroup(properties);
       }
       return downloadHistory(id, from, to, JSON.stringify(propertyKeys), language);

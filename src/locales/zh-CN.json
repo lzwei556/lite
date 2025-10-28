@@ -1245,6 +1245,7 @@
   "monitoring.point.type.vibration": "振动监测点",
   "monitoring.point.type.vibration.rotation.single.axis": "单轴振动转速监测点",
   "monitoring.point.type.vibration.rotation": "振动转速监测点",
+  "monitoring.point.type.vibration.audio": "振动声音监测点",
   "monitoring.point.type.inclination": "倾角监测点",
   "monitoring.point.type.top.inclination": "塔筒倾斜监测点",
   "monitoring.point.type.base.inclination": "塔基沉降监测点",
