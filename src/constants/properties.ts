@@ -43,6 +43,7 @@ export type DisplayPropertyCategories = {
     | 'SVT210K'
     | 'SVT210A'
     | 'SVT220S1S3'
+    | 'SVT210SU'
     | 'ST'
     | 'SPT'
     | 'SQ'
@@ -285,6 +286,30 @@ const RPM: DisplayProperty = {
   precision: 3,
   group: 'property.group.core'
 };
+const SOUND_PRESSURE_LEVEL: DisplayProperty = {
+  key: 'sound_pressure_level',
+  name: 'FIELD_SOUND_PRESSURE_LEVEL',
+  precision: 1,
+  group: 'property.group.core'
+};
+const ENERGY_RATIO: DisplayProperty = {
+  key: 'energy_ratio',
+  name: 'FIELD_ENERGY_RATIO',
+  precision: 1,
+  group: 'property.group.core'
+};
+const DOMINANT_FREQUENCY: DisplayProperty = {
+  key: 'dominant_frequency',
+  name: 'FIELD_DOMINANT_FREQUENCY',
+  precision: 1,
+  group: 'property.group.core'
+};
+const STATIONARITY: DisplayProperty = {
+  key: 'stationarity',
+  name: 'FIELD_STATIONARITY',
+  precision: 1,
+  group: 'property.group.core'
+};
 //SVT specific end
 
 //tower start
@@ -489,6 +514,19 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
     DISPLACEMENT_PEAK_TO_PEAK,
     FREQUENCY,
     RPM
+  ],
+  SVT210SU: [
+    VELOCITY_RMS,
+    ACCLERATION_ENVELOPE,
+    TEMPERATURE,
+    ACCLERATION_PEAK,
+    DISPLACEMENT_PEAK_TO_PEAK,
+    FREQUENCY,
+    RPM,
+    SOUND_PRESSURE_LEVEL,
+    ENERGY_RATIO,
+    DOMINANT_FREQUENCY,
+    STATIONARITY
   ],
   ST: [TEMPERATURE],
   SPT: [

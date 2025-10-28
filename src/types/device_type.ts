@@ -35,6 +35,7 @@ export enum DeviceType {
   SVT220S1 = 0x50203,
   SVT220S3 = 0x50204,
   SVT510L = 0x5010e,
+  SVT210SU = 0x50210,
   ST100 = 0x60001,
   ST101S = 0x60101,
   ST101L = 0x60201,
@@ -123,6 +124,8 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_SVT220S3';
       case DeviceType.SVT510L:
         return 'DEVICE_TYPE_SVT510L';
+      case DeviceType.SVT210SU:
+        return 'DEVICE_TYPE_SVT210SU';
       case DeviceType.ST100:
         return 'DEVICE_TYPE_ST100';
       case DeviceType.ST101S:
@@ -220,6 +223,7 @@ export namespace DeviceType {
       DeviceType.SVT220S3,
       DeviceType.SVT510L,
       DeviceType.SVT510LoraWAN,
+      DeviceType.SVT210SU,
       DeviceType.ST100,
       DeviceType.ST101S,
       DeviceType.ST101L,
@@ -263,7 +267,8 @@ export namespace DeviceType {
       type === DeviceType.SVT210S ||
       type === DeviceType.SVT220S1 ||
       type === DeviceType.SVT220S3 ||
-      type === DeviceType.ST101S
+      type === DeviceType.ST101S ||
+      type === DeviceType.SVT210SU
     );
   }
 
@@ -335,6 +340,7 @@ export namespace DeviceType {
       case DeviceType.SVT220S3:
       case DeviceType.SVT510L:
       case DeviceType.SVT510LoraWAN:
+      case DeviceType.SVT210SU:
         return true;
     }
     return false;
@@ -352,7 +358,8 @@ export namespace DeviceType {
       DeviceType.SVT220S1,
       DeviceType.SVT220S3,
       DeviceType.SVT510L,
-      DeviceType.SVT510LoraWAN
+      DeviceType.SVT510LoraWAN,
+      DeviceType.SVT210SU
     ];
   }
 
@@ -400,6 +407,7 @@ export const SENSOR_DISPLAY_PROPERTIES = {
   [DeviceType.SVT220S1]: PROPERTY_CATEGORIES.SVT220S1S3,
   [DeviceType.SVT220S3]: PROPERTY_CATEGORIES.SVT220S1S3,
   [DeviceType.SVT510L]: PROPERTY_CATEGORIES.SVT220S1S3,
+  [DeviceType.SVT210SU]: PROPERTY_CATEGORIES.SVT210SU,
   [DeviceType.ST100]: PROPERTY_CATEGORIES.ST,
   [DeviceType.ST101S]: PROPERTY_CATEGORIES.ST,
   [DeviceType.ST101L]: PROPERTY_CATEGORIES.ST,
@@ -420,5 +428,6 @@ export const SVT_DEVICE_TYPE_SENSOR_TYPE_MAPPING = {
   [DeviceType.SVT210S]: SVT_SENSOR_TYPES[0],
   [DeviceType.SVT220S1]: SVT_SENSOR_TYPES[2],
   [DeviceType.SVT220S3]: SVT_SENSOR_TYPES[1],
-  [DeviceType.SVT510L]: SVT_SENSOR_TYPES[1]
+  [DeviceType.SVT510L]: SVT_SENSOR_TYPES[1],
+  [DeviceType.SVT210SU]: SVT_SENSOR_TYPES[0]
 };
