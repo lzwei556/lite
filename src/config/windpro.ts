@@ -7,6 +7,7 @@ export const SENSORS = [
   DeviceType.SA,
   DeviceType.SA_S,
   DeviceType.SAS,
+  DeviceType.SASLoraWAN,
   DeviceType.DS4,
   DeviceType.DS8,
   DeviceType.SQ100,

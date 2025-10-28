@@ -166,6 +166,7 @@
   "DEVICE_TYPE_GUODA_PRESSURE": "国大压力传感器",
   "DEVICE_TYPE_WOERKE_PRESSURE": "沃尔克压力传感器",
   "DEVICE_TYPE_Oil_Filler": "加注器",
+  "DEVICE_TYPE_SASLoraWAN": "无线螺栓预紧力传感器 (LoraWAN)",
   "DEVICE_TYPE_DC210LoraWAN": "无线超高温腐蚀传感器 (LoraWAN)",
   "DEVICE_TYPE_DC110HLoraWAN": "无线高温腐蚀传感器 (LoraWAN)",
   "DEVICE_TYPE_DC110LoraWAN": "无线常温腐蚀传感器 (LoraWAN)",

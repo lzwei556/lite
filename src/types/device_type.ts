@@ -44,6 +44,7 @@ export enum DeviceType {
   PressureGuoDa = 0x1000001,
   PressureWoErKe = 0x1000002,
   OilFiller = 0x08100001,
+  SASLoraWAN = 0x40030001,
   DC210LoraWAN = 0x40040106,
   DC110HLoraWAN = 0x40040107,
   DC110LoraWAN = 0x40040201,
@@ -140,6 +141,8 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_WOERKE_PRESSURE';
       case DeviceType.OilFiller:
         return 'DEVICE_TYPE_Oil_Filler';
+      case DeviceType.SASLoraWAN:
+        return 'DEVICE_TYPE_SASLoraWAN';
       case DeviceType.DC210LoraWAN:
         return 'DEVICE_TYPE_DC210LoraWAN';
       case DeviceType.DC110HLoraWAN:
@@ -200,6 +203,7 @@ export namespace DeviceType {
       DeviceType.SA,
       DeviceType.SA_S,
       DeviceType.SAS,
+      DeviceType.SASLoraWAN,
       DeviceType.DS4,
       DeviceType.DS8,
       DeviceType.SAS120D,
@@ -301,6 +305,7 @@ export namespace DeviceType {
   export function canSupportingCalibrate(type: number) {
     return (
       type === DeviceType.SAS ||
+      type === DeviceType.SASLoraWAN ||
       DeviceType.isSASMultiChannel(type) ||
       DeviceType.isMultiChannel(type) ||
       getDCSensors().includes(type) ||
@@ -312,13 +317,8 @@ export namespace DeviceType {
   }
 
   export function canSupportingCompensation(type: number) {
-    return getDCSensors().includes(type) || type === DeviceType.SAS;
-  }
-
-  export function hasGroupedSettings(type: number) {
     return (
-      (type === DeviceType.SAS || isSASMultiChannel(type) || isMultiChannel(type)) &&
-      !isVibration(type)
+      getDCSensors().includes(type) || type === DeviceType.SAS || type === DeviceType.SASLoraWAN
     );
   }
 
@@ -362,6 +362,7 @@ export namespace DeviceType {
 
   export function isLoraWAN(type: number) {
     return (
+      type === DeviceType.SASLoraWAN ||
       type === DeviceType.DC110LoraWAN ||
       type === DeviceType.DC210LoraWAN ||
       type === DeviceType.DC110HLoraWAN ||
@@ -375,6 +376,7 @@ export const SENSOR_DISPLAY_PROPERTIES = {
   [DeviceType.SA]: PROPERTY_CATEGORIES.SA,
   [DeviceType.SA_S]: PROPERTY_CATEGORIES.SA,
   [DeviceType.SAS]: PROPERTY_CATEGORIES.SAS,
+  [DeviceType.SASLoraWAN]: PROPERTY_CATEGORIES.SAS,
   [DeviceType.SAS120D]: PROPERTY_CATEGORIES.DS,
   [DeviceType.SAS120Q]: PROPERTY_CATEGORIES.DS,
   [DeviceType.DS4]: PROPERTY_CATEGORIES.DS,

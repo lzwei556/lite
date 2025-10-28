@@ -165,6 +165,7 @@
   "DEVICE_TYPE_SQ110C": "Wireless Inclination Sensor (Cat.1)",
   "DEVICE_TYPE_GUODA_PRESSURE": "GuoDa Pressure Sensor",
   "DEVICE_TYPE_WOERKE_PRESSURE": "WoErKe Pressure Sensor",
+  "DEVICE_TYPE_SASLoraWAN": "Wireless Bolt Preload Sensor (LoraWAN)",
   "DEVICE_TYPE_DC210LoraWAN": "Wireless Ultra High Corrosion Sensor (LoraWAN)",
   "DEVICE_TYPE_Oil_Filler": "Automatic Lubrication Dispenser",
   "DEVICE_TYPE_DC110HLoraWAN": "Wireless High Corrosion Sensor (LoraWAN)",
