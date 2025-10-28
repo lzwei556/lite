@@ -166,7 +166,7 @@
   "DEVICE_TYPE_GUODA_PRESSURE": "GuoDa Pressure Sensor",
   "DEVICE_TYPE_WOERKE_PRESSURE": "WoErKe Pressure Sensor",
   "DEVICE_TYPE_DC210LoraWAN": "Wireless Ultra High Corrosion Sensor (LoraWAN)",
-  "DEVICE_TYPE_Oil_Filler": "Oil Filler",
+  "DEVICE_TYPE_Oil_Filler": "Automatic Lubrication Dispenser",
   "DEVICE_TYPE_DC110HLoraWAN": "Wireless High Corrosion Sensor (LoraWAN)",
   "DEVICE_TYPE_DC110LoraWAN": "Wireless Corrosion Sensor (LoraWAN)",
   "DEVICE_TYPE_SVT510LoraWAN": "Wireless Vibration Temperature Sensor (6K/5K LoraWAN)",
