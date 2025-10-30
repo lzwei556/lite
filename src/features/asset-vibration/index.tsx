@@ -16,6 +16,8 @@ import { Update } from './update';
 import { PointsTable } from './pointsTable';
 import { AssetAnnotationImage } from '../imageAnnotation';
 import { Permission, useCan } from '../../providers/access-control';
+import { ProcessList } from '../process';
+import { Device } from '../../types/device';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
   const [open, setOpen] = React.useState(false);
@@ -34,6 +36,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
     setOpen(false);
     setMonitoringPoint(undefined);
   };
+  const monitoringPoints = asset.monitoringPoints ?? [];
 
   return (
     <Spin spinning={loading}>
@@ -50,7 +53,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
               label: intl.get('MONITORING_POINT_LIST'),
               content: (
                 <MonitoringPointsTable
-                  key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
+                  key={`${monitoringPoints.map(({ id }) => id).join()}`}
                   asset={asset}
                   enableSettingColumnsCount={true}
                 />
@@ -70,10 +73,21 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                   <Col span={24}>
                     <AssetAnnotationImage
                       asset={asset}
-                      key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
+                      key={`${asset.id}_${monitoringPoints.length}_${asset.image}`}
                       editable={canEditMonitoringPoint}
                       title={intl.get('OVERVIEW')}
                       onSuccess={refresh}
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <ProcessList
+                      {...{
+                        id: asset.id,
+                        processList: asset.actions ?? [],
+                        monitoringPoints,
+                        devices: getDevicesFromAsset(asset),
+                        onSuccess: refresh
+                      }}
                     />
                   </Col>
                 </Grid>
@@ -97,4 +111,18 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
       )}
     </Spin>
   );
+};
+
+const getDevicesFromAsset = (asset: AssetRow) => {
+  const all = (asset.monitoringPoints ?? []).reduce(
+    (prev, crt) => prev.concat(crt.bindingDevices ?? []),
+    [] as Device[]
+  );
+  const devices: Device[] = [];
+  all.forEach((device) => {
+    if (!devices.map((d) => d.id).includes(device.id)) {
+      devices.push(device);
+    }
+  });
+  return devices;
 };

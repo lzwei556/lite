@@ -1391,5 +1391,13 @@
   "no.available.project": "No available project",
   "oil.filler.fill": "Fill",
   "oil.filler.fill.count": "Fill Count",
-  "FIELD_REMAINING_OIL": "Remaining Oil"
+  "FIELD_REMAINING_OIL": "Remaining Oil",
+  "process": "Process",
+  "process.type": "Type",
+  "source.id": "Source",
+  "bind.process": "Binding Process",
+  "process.type.auto.fill": "Automatic Fill",
+  "auto.fill.target.device.id": "Sensor",
+  "auto.fill.source.filling.capacity": "Capacity",
+  "delete.process.prompt": "Are you sure you want to delete this process?"
 }

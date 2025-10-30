@@ -1391,5 +1391,13 @@
   "no.available.project": "没有可用的项目",
   "oil.filler.fill": "加注",
   "oil.filler.fill.count": "加油次数",
-  "FIELD_REMAINING_OIL": "剩余油量"
+  "FIELD_REMAINING_OIL": "剩余油量",
+  "process": "流程",
+  "process.type": "类型",
+  "source.id": "数据来源",
+  "bind.process": "绑定流程",
+  "process.type.auto.fill": "自动加注",
+  "auto.fill.target.device.id": "加注器",
+  "auto.fill.source.filling.capacity": "加注量",
+  "delete.process.prompt": "确认要删除该流程吗？"
 }
