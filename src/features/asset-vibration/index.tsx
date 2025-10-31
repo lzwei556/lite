@@ -17,7 +17,6 @@ import { PointsTable } from './pointsTable';
 import { AssetAnnotationImage } from '../imageAnnotation';
 import { Permission, useCan } from '../../providers/access-control';
 import { ProcessList } from '../process';
-import { Device } from '../../types/device';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
   const [open, setOpen] = React.useState(false);
@@ -85,7 +84,6 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                         id: asset.id,
                         processList: asset.actions ?? [],
                         monitoringPoints,
-                        devices: getDevicesFromAsset(asset),
                         onSuccess: refresh
                       }}
                     />
@@ -111,18 +109,4 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
       )}
     </Spin>
   );
-};
-
-const getDevicesFromAsset = (asset: AssetRow) => {
-  const all = (asset.monitoringPoints ?? []).reduce(
-    (prev, crt) => prev.concat(crt.bindingDevices ?? []),
-    [] as Device[]
-  );
-  const devices: Device[] = [];
-  all.forEach((device) => {
-    if (!devices.map((d) => d.id).includes(device.id)) {
-      devices.push(device);
-    }
-  });
-  return devices;
 };

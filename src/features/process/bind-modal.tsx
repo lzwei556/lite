@@ -98,18 +98,25 @@ const useSourceIdSelectFormItemProps = ({
       options: monitoringPoints
         .filter((m) => (type ? ProcessType.Key.getSourceType(type) === m.type : () => true))
         .map((m) => ({ label: m.name, value: m.id })),
-      disabled
+      disabled: disabled || !type
     } as SelectProps
   };
 };
 
-const useParametersFormItemsProps = ({ type, devices }: { type?: number; devices: Device[] }) => {
+const useParametersFormItemsProps = ({
+  type,
+  devices = []
+}: {
+  type?: number;
+  devices?: Device[];
+}) => {
   if (!type) {
     return [];
   }
   return ProcessType.Key.getParameters(type).map((settings) => {
-    const { options: opts, deviceType, ...rest } = settings;
+    const { options: opts, ...rest } = settings;
     let options: Option[] | undefined;
+    const deviceType = ProcessType.Key.getDeviceType(type);
     if (opts && deviceType) {
       options = devices
         .filter((d) => d.typeId === deviceType)

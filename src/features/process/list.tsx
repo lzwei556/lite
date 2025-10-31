@@ -10,7 +10,7 @@ import { useModalBindingsProps } from '../../hooks';
 import { CommonProps, sourceId, type } from './common';
 import { BindModal } from './bind-modal';
 import intl from 'react-intl-universal';
-import { Process, ProcessDTO, transform2Process, unbindAction } from './use-services';
+import { Process, ProcessDTO, transform2Process, unbindAction, useDevices } from './use-services';
 import { Space, TableProps } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { autoFillParameter } from '../../process-type';
@@ -18,15 +18,17 @@ import { getDisplayName } from '../../utils';
 import { useLocaleContext } from '../../localeProvider';
 
 export const ProcessList = (props: CommonProps) => {
-  const { trigger, modal } = useBindProps(props);
+  const { data: devices = [] } = useDevices();
+  const { trigger, modal } = useBindProps({ ...props, devices });
   const tableProps = useTableProps({
     ...props,
+    devices,
     extra: <IconButton icon={<PlusOutlined />} {...trigger.bindIconButtonProps} />,
     operationCellRender: (_: string, process: ProcessDTO) => (
       <OperationCell
         {...{
           editButtonProps: trigger.getEditIconButtonProps(process),
-          deleteButtonProps: getDeleteIconButtonProps(process, props.onSuccess)
+          deleteButtonProps: getDeleteIconButtonProps(props.id, process, props.onSuccess)
         }}
       />
     )
@@ -54,11 +56,11 @@ const OperationCell = ({
   );
 };
 
-const getDeleteIconButtonProps = (process: ProcessDTO, onSuccess: () => void) => {
+const getDeleteIconButtonProps = (assetId: number, process: ProcessDTO, onSuccess: () => void) => {
   return {
     confirmProps: {
       description: intl.get('delete.process.prompt'),
-      onConfirm: () => unbindAction(process.id).then(onSuccess)
+      onConfirm: () => unbindAction(assetId, process.id).then(onSuccess)
     }
   };
 };
@@ -144,7 +146,7 @@ const useTableProps = (
       transform2Process(
         p,
         (id) => props.monitoringPoints.find((m) => m.id === id)?.name ?? `${id}`,
-        (id) => props.devices.find((d) => d.id === id)?.name ?? `${id}`
+        (id) => props.devices?.find((d) => d.id === id)?.name ?? `${id}`
       )
     ),
     renderKey: (p: Process) => p.id

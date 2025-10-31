@@ -17,6 +17,6 @@ export type CommonProps = {
   processList: ProcessDTO[];
   process?: ProcessDTO;
   monitoringPoints: MonitoringPointRow[];
-  devices: Device[];
+  devices?: Device[];
   onSuccess: () => void;
 };

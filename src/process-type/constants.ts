@@ -20,12 +20,12 @@ export const processTypes: ProcessType[] = [
     key: ProcessTypeKey.AutoFill,
     label: ProcessTypeKey[ProcessTypeKey.AutoFill],
     sourceType: MonitoringPointTypeValue.VibrationAudio,
+    deviceType: DeviceType.OilFiller,
     parameters: [
       {
         ...autoFillParameter.targetDeviceId,
         type: 'number',
         options: [],
-        deviceType: DeviceType.SVT210SU,
         rules: [{ required: true }]
       },
       {

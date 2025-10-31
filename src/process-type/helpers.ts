@@ -15,6 +15,9 @@ export const Key = {
   getSourceType: (key: ProcessTypeKey) => {
     return get(key)?.sourceType;
   },
+  getDeviceType: (key: ProcessTypeKey) => {
+    return get(key)?.deviceType;
+  },
   getParameters: (key: ProcessTypeKey) => {
     return get(key)?.parameters ?? [];
   }

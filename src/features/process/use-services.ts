@@ -2,6 +2,7 @@ import { useRequest } from 'ahooks';
 import request from '../../utils/request';
 import { autoFillParameter, ProcessType } from '../../process-type';
 import intl from 'react-intl-universal';
+import { Device } from '../../types/device';
 
 type AutoFillParameter = { [Key in keyof typeof autoFillParameter]: number };
 
@@ -56,6 +57,13 @@ const bindAction = async (id: number, data: ProcessFormDataDTO) => {
   request.put(`/assets/${id}/bindAction`, data);
 };
 
-export const unbindAction = async (id: number) => {
-  request.put(`/assets/${id}/unbindAction`, { id });
+export const unbindAction = async (assetId: number, id: number) => {
+  request.put(`/assets/${assetId}/unbindAction`, { id });
+};
+
+export const useDevices = () => useRequest(getDevices);
+
+const getDevices = async () => {
+  const res = await request.get<Device[]>('/devices', {});
+  return res.data.data;
 };
