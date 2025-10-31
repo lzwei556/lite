@@ -277,16 +277,16 @@ const useAudioRelatedFields = (enabled1: boolean, settings?: DeviceSetting[]) =>
   const [enabled, setEnabled] = React.useState(
     audio_wave_enable ? enabled1 && audio_wave_enable.value : false
   );
+  const fields: DeviceSetting[] = [];
   if (audio_wave_enable) {
     enabledField = { ...audio_wave_enable, onChange: setEnabled, group: GROUPS.dat };
+    const audio_duration = audio_wave_enable.children?.find((s) => s.key === 'audio_duration');
+    if (audio_duration) {
+      fields.push({ ...audio_duration, group: GROUPS.dat });
+    }
   }
   if (!enabledField) {
     return [];
-  }
-  const fields: DeviceSetting[] = [];
-  const audio_duration = settings?.find((s) => s.key === 'audio_duration');
-  if (audio_duration) {
-    fields.push(audio_duration);
   }
   return enabled ? [enabledField, ...fields] : [enabledField];
 };
