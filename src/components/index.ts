@@ -6,6 +6,7 @@ export * from './form/numberFormItem';
 export * from './form/numberFormItemWithSwitcher';
 export * from './form/radioFormItem';
 export * from './form/selectFormItem';
+export * from './form/sliderFormItem';
 export * from './form/textFormItem';
 export * from './layout/pageWithSideBar';
 export * from './layout/title-extra';

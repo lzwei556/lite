@@ -9,6 +9,8 @@ import { addAsset, AssetCategory, AssetModel } from '../asset-common';
 import { SettingFormItems } from './settingFormItems';
 import { getByType, useParents } from './utils';
 import { TypeFormItem } from './typeFormItem';
+import { motor } from './constants';
+import { MotorBasicSettings } from './motor/settings';
 
 export const Create = (props: ModalFormProps & { parentId?: number; types: AssetCategory[] }) => {
   const { onSuccess, parentId, types } = props;
@@ -75,9 +77,14 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
                 types={types}
               />
             </Col>
+            {type === motor.type && (
+              <MotorBasicSettings formItemColProps={generateColProps({ xl: 12, xxl: 12 })} />
+            )}
           </Grid>
         </Card>
-        {type && <SettingFormItems key={type} type={type} />}
+        {type && (
+          <SettingFormItems key={type} type={type} velBaseFormItemColProps={{ xl: 24, xxl: 24 }} />
+        )}
       </Form>
     </ModalWrapper>
   );

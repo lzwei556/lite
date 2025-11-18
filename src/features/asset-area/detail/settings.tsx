@@ -12,18 +12,9 @@ import {
   Table
 } from '../../../components';
 import { Asset, ASSET_PATHNAME, AssetRow, deleteAsset } from '../../../asset-common';
-import {
-  BearingModel,
-  BearingType,
-  getByType,
-  MotorType,
-  Mounting,
-  NominalPower,
-  RotationSpeed,
-  VariableFrequencyDrive
-} from '../../../asset-variant';
+import { getByType, rotationSpeed, envBand, powerFreq, gearTeeth } from '../../../asset-variant';
 import { ActionBar } from '../actionBar';
-import { getDisplayName, getOptionLabelByValue } from '../../../utils';
+import { getDisplayName } from '../../../utils';
 import { Language, useLocaleContext } from '../../../localeProvider';
 import { CanAccess, Permission } from '../../../providers/access-control';
 
@@ -97,63 +88,40 @@ export const Settings = (props: {
       const cols = [nameColun];
       if (Asset.Assert.isVibrationRelated(t)) {
         cols.push({
-          key: MotorType.name,
-          render: ({ attributes }: any) => attributes?.[MotorType.name],
-          title: intl.get(MotorType.label)
-        });
-        cols.push({
-          key: RotationSpeed.name,
-          render: ({ attributes }: any) => attributes?.[RotationSpeed.name],
+          key: rotationSpeed.name,
+          render: ({ attributes }: any) => attributes?.[rotationSpeed.name],
           title: getDisplayName({
-            name: intl.get(RotationSpeed.label),
+            name: intl.get(rotationSpeed.label),
             lang,
-            suffix: RotationSpeed.unit
+            suffix: rotationSpeed.unit
           })
         });
         cols.push({
-          key: VariableFrequencyDrive.name,
-          render: ({ attributes }: any) => {
-            const value = attributes?.[VariableFrequencyDrive.name];
-            const label = getOptionLabelByValue(VariableFrequencyDrive.options!, value);
-            return intl.get(label).d(label);
-          },
-          title: intl.get(VariableFrequencyDrive.label)
-        });
-        cols.push({
-          key: NominalPower.name,
-          render: ({ attributes }: any) => attributes?.[NominalPower.name],
+          key: envBand.name,
+          render: ({ attributes }: any) => attributes?.[envBand.name],
           title: getDisplayName({
-            name: intl.get(NominalPower.label),
+            name: intl.get(envBand.label),
             lang,
-            suffix: NominalPower.unit
+            suffix: envBand.unit
           })
         });
         cols.push({
-          key: Mounting.name,
-          render: ({ attributes }: any) => {
-            const value = attributes?.[Mounting.name];
-            const label = getOptionLabelByValue(Mounting.options!, value);
-            return intl.get(label).d(label);
-          },
-          title: intl.get(Mounting.label)
+          key: powerFreq.name,
+          render: ({ attributes }: any) => attributes?.[powerFreq.name],
+          title: getDisplayName({
+            name: intl.get(powerFreq.label),
+            lang,
+            suffix: powerFreq.unit
+          })
         });
         cols.push({
-          key: BearingType.name,
-          render: ({ attributes }: any) => {
-            const value = attributes?.[BearingType.name];
-            const label = getOptionLabelByValue(BearingType.options!, value);
-            return intl.get(label).d(label);
-          },
-          title: (
-            <span style={{ display: 'inline-block', minWidth: 120 }}>
-              {intl.get(BearingType.label)}
-            </span>
-          )
-        });
-        cols.push({
-          key: BearingModel.name,
-          render: ({ attributes }: any) => attributes?.[BearingModel.name],
-          title: intl.get(BearingModel.label)
+          key: gearTeeth.name,
+          render: ({ attributes }: any) => attributes?.[gearTeeth.name],
+          title: getDisplayName({
+            name: intl.get(gearTeeth.label),
+            lang,
+            suffix: gearTeeth.unit
+          })
         });
       }
       cols.push(operationColumn);

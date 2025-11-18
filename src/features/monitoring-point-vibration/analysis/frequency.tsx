@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { getValue, roundValue } from '../../../utils/format';
 import { ChartMark, Descriptions, Grid } from '../../../components';
 import { frequency, FrequencyAnalysis } from '../../../asset-common';
-import { RotationSpeed } from '../../../asset-variant';
+import { rotationSpeed } from '../../../asset-variant';
 import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
 import Sideband from './sideband';
@@ -160,8 +160,8 @@ export const Frequency = ({
                     },
                     { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
                     {
-                      label: intl.get(RotationSpeed.label),
-                      children: getValue({ value: rotation_speed, unit: RotationSpeed.unit })
+                      label: intl.get(rotationSpeed.label),
+                      children: getValue({ value: rotation_speed, unit: rotationSpeed.unit })
                     }
                   ]}
                 />

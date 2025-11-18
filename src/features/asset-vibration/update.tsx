@@ -12,48 +12,52 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
   const [form] = Form.useForm<AssetModel>();
 
   return (
-    <Card
-      extra={
-        <CanAccess {...Permission.AssetEdit}>
-          <SaveIconButton
-            onClick={() => {
-              form.validateFields().then((values) => {
-                try {
-                  updateAsset(asset.id, { ...values, type }).then(() => {
-                    onSuccess();
-                  });
-                } catch (error) {
-                  console.log(error);
-                }
-              });
-            }}
-          />
-        </CanAccess>
-      }
-      title={intl.get('BASIC_INFORMATION')}
+    <Form
+      form={form}
+      layout='vertical'
+      initialValues={{
+        name,
+        parent_id: parentId,
+        type,
+        ...(asset.attributes
+          ? { attributes: asset.attributes }
+          : getByType(type)?.settings?.default)
+      }}
     >
-      <Form
-        form={form}
-        layout='vertical'
-        initialValues={{
-          name,
-          parent_id: parentId,
-          type,
-          ...(asset.attributes
-            ? { attributes: asset.attributes }
-            : getByType(type)?.settings?.default)
-        }}
+      <Card
+        extra={
+          <CanAccess {...Permission.AssetEdit}>
+            <SaveIconButton
+              onClick={() => {
+                form.validateFields().then((values) => {
+                  try {
+                    updateAsset(asset.id, { ...values, type }).then(() => {
+                      onSuccess();
+                    });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                });
+              }}
+            />
+          </CanAccess>
+        }
+        title={intl.get('BASIC_INFORMATION')}
       >
-        <BasisFormItems types={[motor]} formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
+        <BasisFormItems
+          type={asset.type}
+          types={[motor]}
+          formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
+        />
         {type && (
           <SettingFormItems
             key={type}
             type={type}
-            cardProps={{ type: 'inner' }}
             formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
+            velBaseFormItemColProps={generateColProps({ xl: 24, xxl: 16 })}
           />
         )}
-      </Form>
-    </Card>
+      </Card>
+    </Form>
   );
 };

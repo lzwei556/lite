@@ -1,13 +1,5 @@
-export type { MotorAttrs } from './motor/settings';
-export {
-  MotorType,
-  RotationSpeed,
-  VariableFrequencyDrive,
-  NominalPower,
-  Mounting,
-  BearingType,
-  BearingModel
-} from './motor/settings';
+export type { MotorAttrsDTO } from './motor/settings';
+export { rotationSpeed, envBand, powerFreq, gearTeeth } from './motor/settings';
 export * from './basisFormItems';
 export * from './constants';
 export { Create as CreateAsset } from './create';

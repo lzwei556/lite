@@ -52,6 +52,7 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
       >
         <Card size='small' style={{ marginBottom: 16 }} title={intl.get('BASIC_INFORMATION')}>
           <BasisFormItems
+            type={asset.type}
             types={useAssetCategories()}
             formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
           />
@@ -61,6 +62,7 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
             key={type}
             type={type}
             formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
+            velBaseFormItemColProps={generateColProps({ xxl: 24 })}
           />
         )}
       </Form>
