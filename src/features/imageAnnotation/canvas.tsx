@@ -6,7 +6,7 @@ import { PalceCardItem, PlaceCard, PlaceCardProps } from './placeCard';
 import { Card, CardProps } from '../../components';
 import { useGlobalStyles } from '../../styles';
 import { CanvasProvider, useCanvasContext } from './context';
-import { Point, useContainerSize, usePlaces, useProviderProps, useStageProps } from './common';
+import { Point, useStageSize, usePlaces, useProviderProps, useStageProps } from './common';
 
 export const Canvas = ({
   background,
@@ -24,7 +24,7 @@ export const Canvas = ({
   editable?: boolean;
 }) => {
   const ref = React.useRef(null);
-  const size = useContainerSize(useSize(ref));
+  const size = useStageSize(useSize(ref));
   const [img] = useImage(background);
   const [cursor, setCursor] = React.useState('default');
   const stageProps = useStageProps(size, img);
@@ -42,13 +42,12 @@ export const Canvas = ({
   return (
     <CanvasProvider {...providerProps} key={providerProps?._key}>
       <Card
-        ref={ref}
         {...cardProps}
-        style={{ height: '100%' }}
-        styles={{ body: { position: 'relative', padding: 0 } }}
+        style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+        styles={{ body: { flex: 1, position: 'relative', padding: 0 } }}
       >
         {img && (
-          <>
+          <div ref={ref} style={{ height: '100%' }}>
             <Stage {...stageProps} style={{ cursor }}>
               <ImageLayer img={img} />
               <Marks startingPoints={startingPoints} setCursor={setCursor} />
@@ -64,7 +63,7 @@ export const Canvas = ({
                   selectedItem={selectedItem}
                 />
               ))}
-          </>
+          </div>
         )}
       </Card>
     </CanvasProvider>
