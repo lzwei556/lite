@@ -1,7 +1,6 @@
 import React from 'react';
 import { TableProps } from 'antd';
 import intl from 'react-intl-universal';
-import { MonitoringPointTypeValue } from '../../config';
 import { Dayjs, getAttrValue } from '../../utils';
 import { Link } from '../../components';
 import { getDisplayName, getValue } from '../../utils/format';
@@ -11,6 +10,7 @@ import { MonitoringPointRow } from '../types';
 import { Point } from '../util';
 import { AXIS_ALIAS, TowerBaseRadius, TowerInstallAngle, TowerInstallHeight } from '../constants';
 import { OperateCell } from './operateCell';
+import { MonitoringPointType } from 'common';
 
 export type Column = Required<TableProps<MonitoringPointRow>>['columns'][0];
 
@@ -125,9 +125,10 @@ function getPropertyedCols(
   needToFilterFirstProperties = false
 ): Column[] {
   if (!measurement) return [];
-  const properties = Point.getPropertiesByType(measurement.type, measurement.properties).filter(
-    (p) => (needToFilterFirstProperties ? p.first : true)
-  );
+  const properties = MonitoringPointType.Key.getProperties(
+    measurement.type,
+    measurement.properties
+  ).filter((p) => (needToFilterFirstProperties ? p.first : true));
   return properties.map(({ fields = [], first, key, name, precision, unit }) => {
     let children = fields.map(({ key: subKey, name }) => {
       const axisKey = subKey.replace(`${key}_`, '');
@@ -140,8 +141,8 @@ function getPropertyedCols(
       };
     });
     if (
-      measurement.type === MonitoringPointTypeValue.Vibration ||
-      measurement.type === MonitoringPointTypeValue.VibrationRotation
+      measurement.type === MonitoringPointType.Value.Vibration ||
+      measurement.type === MonitoringPointType.Value.VibrationRotation
     ) {
       children = Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
         return {

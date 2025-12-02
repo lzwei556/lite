@@ -2,7 +2,6 @@ import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import { generateColProps } from '../../../utils/grid';
 import { Grid } from '../../../components';
-import { DisplayProperty } from '../../../constants/properties';
 import {
   getDataOfMonitoringPoint,
   getSeriesAlarm,
@@ -15,6 +14,7 @@ import { Dayjs } from '../../../utils';
 import { useGlobalStyles } from '../../../styles';
 import * as Tower from '../../asset-wind-turbine/tower';
 import { HistoryDataFea } from '../..';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, name, type, attributes, properties } = point;
@@ -59,18 +59,20 @@ export const Monitor = (point: MonitoringPointRow) => {
           />
         </Col>
       )}
-      {Point.getPropertiesByType(type, properties).map((p: DisplayProperty, index: number) => {
-        return (
-          <Col {...colProps} key={index}>
-            <HistoryDataFea.PropertyChartCard
-              alarm={getSeriesAlarm(ruleGroups, p)}
-              cardProps={propertyHistoryCardStyle}
-              data={historyData}
-              property={p}
-            />
-          </Col>
-        );
-      })}
+      {MonitoringPointType.Key.getProperties(type, properties).map(
+        (p: CharacteristicData.DisplayProperty, index: number) => {
+          return (
+            <Col {...colProps} key={index}>
+              <HistoryDataFea.PropertyChartCard
+                alarm={getSeriesAlarm(ruleGroups, p)}
+                cardProps={propertyHistoryCardStyle}
+                data={historyData}
+                property={p}
+              />
+            </Col>
+          );
+        }
+      )}
     </Grid>
   );
 };

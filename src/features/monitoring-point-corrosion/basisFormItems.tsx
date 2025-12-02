@@ -4,9 +4,9 @@ import intl from 'react-intl-universal';
 import DeviceSelect from '../../components/select/deviceSelect';
 import { Grid, NumberFormItem, SelectFormItem, TextFormItem } from '../../components';
 import { generateColProps } from '../../utils/grid';
-import { Asset, MonitoringPointRow, Point } from '../../asset-common';
+import { Asset, MonitoringPointRow } from '../../asset-common';
 import { useMonitoringPointParents } from '../../asset-variant';
-import { relatedDeviceTypes } from './common';
+import { MonitoringPointType } from 'common';
 
 export const BasisFormItems = ({
   monitoringPoint,
@@ -18,8 +18,8 @@ export const BasisFormItems = ({
   const { type } = monitoringPoint;
   const parents = useMonitoringPointParents((asset) => Asset.Assert.isCorrosionRelated(asset.type));
 
-  const types = [{ id: type, label: Point.getTypeLabel(type) as string }];
-  const deviceTypes = relatedDeviceTypes.get(type);
+  const types = [{ id: type, label: MonitoringPointType.Key.getLabel(type) }];
+  const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
 
   return (
     <Grid>

@@ -10,7 +10,6 @@ import {
   RemoveDeviceRuntimeRequest
 } from '../../../apis/device';
 import { DeviceType } from '../../../types/device_type';
-import { DisplayProperty } from '../../../constants/properties';
 import {
   Card,
   Flex,
@@ -25,14 +24,15 @@ import { HistoryData } from '../../../asset-common';
 import { getDisplayProperties } from '../util';
 import { useContext } from '..';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { CharacteristicData } from 'common';
 
-const batteryVoltage: DisplayProperty = {
+const batteryVoltage: CharacteristicData.DisplayProperty = {
   key: 'batteryVoltage',
   name: 'BATTERY_VOLTAGE',
   precision: 0,
   unit: 'mV'
 };
-const signalStrength: DisplayProperty = {
+const signalStrength: CharacteristicData.DisplayProperty = {
   key: 'signalStrength',
   name: 'SIGNAL_STRENGTH',
   precision: 0,
@@ -45,7 +45,7 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
     properties.push(batteryVoltage);
   }
   properties.push(signalStrength);
-  const [property, setProperty] = useState<DisplayProperty | undefined>(
+  const [property, setProperty] = useState<CharacteristicData.DisplayProperty | undefined>(
     properties.length > 0 ? properties[0] : undefined
   );
   const { range, numberedRange, onChange } = useContext();

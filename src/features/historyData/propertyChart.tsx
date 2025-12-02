@@ -1,7 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { HistoryData } from '../../asset-common';
-import { DisplayProperty } from '../../constants/properties';
 import { Dayjs } from '../../utils';
 import {
   Chart,
@@ -10,11 +9,12 @@ import {
   getOptions,
   SeriesAlarm
 } from '../../components';
+import { CharacteristicData } from 'common';
 
 export const PropertyChart = (
   props: {
     data?: HistoryData;
-    property: DisplayProperty;
+    property: CharacteristicData.DisplayProperty;
     axisKey?: string;
     config?: { opts?: ChartProps['options']; switchs?: { noDataZoom?: boolean; noArea?: boolean } };
     alarm?: Pick<SeriesAlarm, 'rules'> & { propertyKey: string };
@@ -43,7 +43,7 @@ export const PropertyChart = (
 
 export function transform(
   origin: HistoryData | undefined | null,
-  property: DisplayProperty,
+  property: CharacteristicData.DisplayProperty,
   naming?: { replace?: string; prefix?: string },
   axisKey?: string
 ) {
@@ -72,9 +72,7 @@ export function transform(
         }
         return {
           [seriesName]: origin.map(({ values }) => {
-            const value = values.find((v) =>
-              property.parentKey ? v.key === property.parentKey : v.key === property.key
-            );
+            const value = values.find((v) => v.key === property.key);
             return value?.data?.[f.name] ?? NaN;
           })
         };
@@ -99,7 +97,7 @@ export function transform(
   };
 }
 
-function getIndex(key?: string, fields?: DisplayProperty['fields']) {
+function getIndex(key?: string, fields?: CharacteristicData.DisplayProperty['fields']) {
   if (!key || !fields || fields.length === 0) {
     return 0;
   }

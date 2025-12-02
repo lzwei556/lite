@@ -1,7 +1,5 @@
 import React from 'react';
 import { FormInstance } from 'antd';
-import { DeviceType } from '../../types/device_type';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
 import {
   AssetRow,
   bindDevice,
@@ -13,26 +11,16 @@ import {
   updateMeasurement
 } from '../../asset-common';
 import { device } from '../../asset-variant';
+import { MonitoringPointType } from 'common';
 
-export function getMonitoringPointTypes() {
-  return [
-    { id: MonitoringPointTypeValue.Pressure, label: MonitoringPointTypeText.Pressure },
-    { id: MonitoringPointTypeValue.Temperature, label: MonitoringPointTypeText.Temperature }
-  ];
-}
+export const getMonitoringPointTypeOptions = () => {
+  return MonitoringPointType.Categories.getOptions(['pressure', 'temperature']);
+};
 
 export function isParentValid(asset?: AssetRow) {
   const type = asset?.type;
   return type && type === device.type;
 }
-
-export const getRelatedDeviceTypes = (type: number) => {
-  const relatedDeviceTypes = new Map([
-    [MonitoringPointTypeValue.Pressure, [DeviceType.SPT510]],
-    [MonitoringPointTypeValue.Temperature, [DeviceType.ST100, DeviceType.ST101L, DeviceType.ST101S]]
-  ]);
-  return relatedDeviceTypes.get(type);
-};
 
 export function useSelectPoints(form: FormInstance<MonitoringPointBatch>, channelName?: string) {
   const [selectedPoints, setSelectPoints] = React.useState<MonitoringPointInfo[]>([]);

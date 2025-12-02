@@ -1,4 +1,4 @@
-import { MonitoringPointTypeValue } from '../config';
+import { MonitoringPointType } from 'common';
 
 export type PrimaryAssetModel<P extends object, M extends object> = {
   name: string;
@@ -66,16 +66,16 @@ export const SingleStageCentrifugalPumpObj: PrimaryAssetModel<
   },
   measure: {
     motorNonDriveEnd: {
-      type: MonitoringPointTypeValue.Vibration
+      type: MonitoringPointType.Value.Vibration
     },
     motorDriveEnd: {
-      type: MonitoringPointTypeValue.Vibration
+      type: MonitoringPointType.Value.Vibration
     },
     pumpDriveEnd: {
-      type: MonitoringPointTypeValue.Vibration
+      type: MonitoringPointType.Value.Vibration
     },
     pumpNonDriveEnd: {
-      type: MonitoringPointTypeValue.Vibration
+      type: MonitoringPointType.Value.Vibration
     }
   }
 };

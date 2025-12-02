@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { DisplayProperty } from '../../../constants/properties';
 import {
   Card,
   Flex,
@@ -21,22 +20,21 @@ import {
   hasData,
   HistoryData,
   MonitoringPointRow,
-  Point,
   PropertyLightSelectFilter,
   useMonitoringPointContext
 } from '../../../asset-common';
-import { appendAxisAliasAbbrToField } from '../common';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type, attributes } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const { range, numberedRange, setRange } = useRange();
-  const displayProperties = Point.getPropertiesByType(type, properties).map((p) =>
-    appendAxisAliasAbbrToField(p, attributes)
+  const displayProperties = MonitoringPointType.Key.getProperties(type, properties).map((p) =>
+    CharacteristicData.appendAxisAliasAbbrToField(p, attributes)
   );
-  const [property, setProperty] = React.useState<DisplayProperty | undefined>(
+  const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined
   );
   const [open, setOpen] = React.useState(false);

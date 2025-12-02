@@ -1,17 +1,8 @@
-import { DeviceType } from '../types/device_type';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from './common';
+import { MonitoringPointType } from 'common';
 
-export const SITE_NAME = 'IOT_CLOUD_MONITORING_SYSTEM';
-
-export const SENSORS = DeviceType.vibrationSensors();
-export const MONITORING_POINTS = [
-  { id: MonitoringPointTypeValue.Vibration, label: MonitoringPointTypeText.Vibration },
-  {
-    id: MonitoringPointTypeValue.VibrationRotationSingleAxis,
-    label: MonitoringPointTypeText.VibrationRotationSingleAxis
-  },
-  {
-    id: MonitoringPointTypeValue.VibrationRotation,
-    label: MonitoringPointTypeText.VibrationRotation
-  }
-];
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  SiteName: 'IOT_CLOUD_MONITORING_SYSTEM',
+  MonitoringPointTypeOptions: MonitoringPointType.Categories.getOptions(['vibration']),
+  DeviceTypes: MonitoringPointType.Categories.getDeviceTypes(['vibration'])
+};

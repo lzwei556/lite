@@ -1,8 +1,8 @@
 import React from 'react';
 import { Cascader, CascaderProps } from 'antd';
 import intl from 'react-intl-universal';
-import { DisplayProperty } from '../../../constants/properties';
 import { TextFormItem } from '../../../components';
+import { CharacteristicData } from 'common';
 
 export const IndexFormItem = ({
   disabled,
@@ -13,7 +13,7 @@ export const IndexFormItem = ({
   disabled: boolean;
   onChange: (metric: { key: string; name: string; unit: string }) => void;
   nameIndex: number;
-  properties: DisplayProperty[];
+  properties: CharacteristicData.DisplayProperty[];
 }) => {
   const handleChange: CascaderProps['onChange'] = (e, selectOptions) => {
     if (e !== undefined) {

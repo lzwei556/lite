@@ -10,7 +10,6 @@ import {
   DeleteIconButton,
   DownloadIconButton
 } from '../../../components';
-import { DisplayProperty } from '../../../constants/properties';
 import { isMobile } from '../../../utils/deviceDetection';
 import { Dayjs } from '../../../utils';
 import { HistoryDataFea } from '../..';
@@ -22,19 +21,19 @@ import {
   hasData,
   HistoryData,
   MonitoringPointRow,
-  Point,
   PropertyLightSelectFilter,
   useMonitoringPointContext
 } from '../../../asset-common';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const History = (point: MonitoringPointRow) => {
   const { id, name, properties, type } = point;
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const { range, numberedRange, setRange } = useRange();
-  const displayProperties = Point.getPropertiesByType(type, properties);
-  const [property, setProperty] = React.useState<DisplayProperty | undefined>(
+  const displayProperties = MonitoringPointType.Key.getProperties(type, properties);
+  const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined
   );
   const [open, setVisible] = React.useState(false);

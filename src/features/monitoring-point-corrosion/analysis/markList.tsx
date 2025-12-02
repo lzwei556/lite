@@ -8,9 +8,9 @@ import {
   useChartContext
 } from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
-import { DisplayProperty } from '../../../constants/properties';
+import { CharacteristicData } from 'common';
 
-export const MarkList = ({ property }: { property: DisplayProperty }) => {
+export const MarkList = ({ property }: { property: CharacteristicData.DisplayProperty }) => {
   const ref = useChartContext();
   const { cursor, visibledMarks, dispatchMarks } = ChartMark.useContext();
   let propertyTitle = `${intl.get(property.name)} (${property.unit})`;

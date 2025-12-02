@@ -43,13 +43,15 @@ export const MotorType: MotorAttrsField = {
       label: 'DC',
       value: 'DC'
     }
-  ]
+  ],
+  type: 'enum'
 };
 export const RotationSpeed: MotorAttrsField = {
   name: 'rotation_speed',
   label: 'rotation.speed',
   description: 'rotation.speed.desc',
-  unit: 'rpm'
+  unit: 'rpm',
+  type: 'number'
 };
 export const VariableFrequencyDrive: MotorAttrsField = {
   name: 'variable_frequency_drive',
@@ -60,13 +62,15 @@ export const VariableFrequencyDrive: MotorAttrsField = {
     { label: 'yes', value: true },
     //@ts-ignore
     { label: 'no', value: false }
-  ]
+  ],
+  type: 'boolean'
 };
 export const NominalPower: MotorAttrsField = {
   name: 'nominal_power',
   label: 'nominal.power',
   description: 'nominal.power.desc',
-  unit: 'kW'
+  unit: 'kW',
+  type: 'number'
 };
 export const Mounting: MotorAttrsField = {
   name: 'mounting',
@@ -81,7 +85,8 @@ export const Mounting: MotorAttrsField = {
       label: 'vertical',
       value: 2
     }
-  ]
+  ],
+  type: 'enum'
 };
 export const BearingType: MotorAttrsField = {
   name: 'bearing_type',
@@ -96,12 +101,14 @@ export const BearingType: MotorAttrsField = {
       label: 'bearing.type.journal',
       value: 2
     }
-  ]
+  ],
+  type: 'enum'
 };
 export const BearingModel: MotorAttrsField = {
   name: 'bearing_model',
   label: 'bearing.model',
-  description: 'bearing.model.desc'
+  description: 'bearing.model.desc',
+  type: 'string'
 };
 
 export const Settings = ({

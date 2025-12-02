@@ -1382,5 +1382,8 @@
   "no.available.project": "No available project",
   "oil.filler.fill": "Fill",
   "oil.filler.fill.count": "Fill Count",
-  "FIELD_REMAINING_OIL": "Remaining Oil"
+  "FIELD_REMAINING_OIL": "Remaining Oil",
+  "low.envelope": "Low",
+  "high.envelope": "High",
+  "monitoirng.point.position": "Position"
 }

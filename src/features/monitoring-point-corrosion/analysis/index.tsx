@@ -3,14 +3,14 @@ import { Col, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, ChartMark, Flex, Grid, RangeDatePicker, useRange } from '../../../components';
 import { AnalysisSidebarCollapse } from '../..';
-import { Space } from '../../../common';
 import { Dayjs } from '../../../utils';
-import { MonitoringPointRow, Point } from '../../../asset-common';
+import { MonitoringPointRow } from '../../../asset-common';
 import { Forecast } from './forecast';
 import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
 import { MarkList } from './markList';
+import { MonitoringPointType } from 'common';
 
 export const Analysis = (props: MonitoringPointRow) => {
   const { numberedRange, setRange } = useRange(Dayjs.CommonRange.PastYear);
@@ -45,7 +45,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
       </Card>
     );
   }
-  const _properties = Point.getPropertiesByType(type, properties);
+  const _properties = MonitoringPointType.Key.getProperties(type, properties);
   if (_properties.length === 0) return null;
   const property = _properties[0];
 

@@ -5,8 +5,8 @@ import { Field } from '../../types';
 import { SelectFormItem, TextFormItem } from '../../components';
 import React from 'react';
 import { Device } from '../../types/device';
-import { relatedDeviceTypes } from '../monitoring-point-vibration/common';
 import { GetDevicesRequest } from '../../apis/device';
+import { MonitoringPointType } from 'common';
 
 type VibrationEntity = {
   position: string;
@@ -26,7 +26,7 @@ export const FormItems = ({
   const { name, type, key } = monitoringPoint;
 
   React.useEffect(() => {
-    const deviceTypes = relatedDeviceTypes.get(type);
+    const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
     if (deviceTypes) GetDevicesRequest({ types: deviceTypes.join(',') }).then(setDevices);
   }, [type]);
 
@@ -36,19 +36,22 @@ export const FormItems = ({
     label: 'direction.axial',
     name: 'direction_axial',
     description: 'direction.axial.desc',
-    options
+    options,
+    type: 'enum'
   };
   const vertical: Field<VibrationEntity> = {
     label: 'direction.vertical',
     name: 'direction_vertical',
     description: 'direction.vertical.desc',
-    options
+    options,
+    type: 'enum'
   };
   const horizontal: Field<VibrationEntity> = {
     label: 'direction.horizontal',
     name: 'direction_horizontal',
     description: 'direction.horizontal.desc',
-    options
+    options,
+    type: 'enum'
   };
   return (
     <>

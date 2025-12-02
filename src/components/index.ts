@@ -7,6 +7,7 @@ export * from './form/numberFormItemWithSwitcher';
 export * from './form/radioFormItem';
 export * from './form/selectFormItem';
 export * from './form/textFormItem';
+export * from './layout/content-top-bottom-layout';
 export * from './layout/pageWithSideBar';
 export * from './layout/title-extra';
 export * from './descriptions';

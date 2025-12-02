@@ -2,13 +2,11 @@ import * as React from 'react';
 import { Col, Form, FormListFieldData } from 'antd';
 import intl from 'react-intl-universal';
 import { cloneDeep } from 'lodash';
-import { DisplayProperty } from '../../../constants/properties';
 import { App, useAppType } from '../../../config';
 import { generateColProps } from '../../../utils/grid';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
 import { Grid, SelectFormItem, Table, TextFormItem } from '../../../components';
-import { Point } from '../../../asset-common';
 import { AlarmRule } from './types';
 import { NameFormItem } from './nameFormItem';
 import { DurationFormItem } from './durationFormItem';
@@ -17,12 +15,13 @@ import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
 import { getPropertiesByMeasurementType, updateAlarmRule } from './services';
 import { translateMetricName } from '.';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
   const { alarm, ...rest } = props;
   const appType = useAppType();
   const [form] = Form.useForm();
-  const [properties, setProperties] = React.useState<DisplayProperty[]>([]);
+  const [properties, setProperties] = React.useState<CharacteristicData.DisplayProperty[]>([]);
   const [metric, setMetric] = React.useState<{ key: string; name: string; unit?: string }[]>([]);
 
   return (
@@ -76,11 +75,13 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                 onChange: (e) => {
                   getPropertiesByMeasurementType(e).then((res) => {
                     const measurementType = App.getMonitoringPointTypes(appType).find(
-                      ({ id }) => e === id
-                    )?.id;
+                      ({ value }) => e === value
+                    )?.value;
                     if (measurementType) {
                       setProperties(
-                        removeDulpicateProperties(Point.getPropertiesByType(measurementType, res))
+                        removeDulpicateProperties(
+                          MonitoringPointType.Key.getProperties(measurementType, res)
+                        )
                       );
                     }
                   });
@@ -94,9 +95,9 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     });
                   }
                 },
-                options: App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
+                options: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
                   label: intl.get(label),
-                  value: id
+                  value
                 }))
               }}
             />
@@ -196,7 +197,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
   );
 }
 
-function removeDulpicateProperties(properties: DisplayProperty[]) {
+function removeDulpicateProperties(properties: CharacteristicData.DisplayProperty[]) {
   const final = cloneDeep(properties);
   return final.map((property) => {
     const fields = property.fields;

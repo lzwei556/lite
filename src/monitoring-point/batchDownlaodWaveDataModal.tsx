@@ -5,7 +5,7 @@ import { getFilename } from '../utils/format';
 import { Table } from '../components';
 import { ModalWrapper } from '../components/modalWrapper';
 import { isMobile } from '../utils/deviceDetection';
-import { Dayjs } from '../utils';
+import { Dayjs, downloadFile } from '../utils';
 import { batchDownload } from './services';
 
 export const BatchDownlaodWaveDataModal = ({
@@ -27,12 +27,7 @@ export const BatchDownlaodWaveDataModal = ({
   const handleDownlaod = (timestamps: number[]) => {
     batchDownload(id, type, timestamps, isVibration).then((res) => {
       if (res.status === 200) {
-        const url = window.URL.createObjectURL(new Blob([res.data as any]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', getFilename(res));
-        document.body.appendChild(link);
-        link.click();
+        downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
       }
     });
   };

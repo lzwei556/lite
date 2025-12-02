@@ -1,9 +1,9 @@
 import React from 'react';
-import { DisplayProperty } from '../../constants/properties';
 import { LineChart, LineChartProps, SeriesOption } from '../../components';
 import { Dayjs } from '../../utils';
 import { hasData, HistoryData } from '../../asset-common';
 import { transform } from './propertyChart';
+import { CharacteristicData } from 'common';
 
 export const PropertyChartList = (
   props: {
@@ -11,7 +11,7 @@ export const PropertyChartList = (
       name: string;
       data: HistoryData;
     }[];
-    property: DisplayProperty;
+    property: CharacteristicData.DisplayProperty;
   } & Partial<LineChartProps>
 ) => {
   const { data, property, ...rest } = props;

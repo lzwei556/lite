@@ -2,11 +2,12 @@ import * as React from 'react';
 import { Form, ModalProps } from 'antd';
 import intl from 'react-intl-universal';
 import { RangeDatePicker, SelectFormItem, TextFormItem, useRange } from '../components';
-import { Dayjs } from '../utils';
+import { Dayjs, downloadFile } from '../utils';
 import { getFilename } from '../utils/format';
 import { useLocaleContext } from '../localeProvider';
 import { ModalWrapper } from '../components/modalWrapper';
-import { downloadHistory, MonitoringPointRow, Point } from '../asset-common';
+import { downloadHistory, MonitoringPointRow } from '../asset-common';
+import { MonitoringPointType } from 'common';
 
 export interface DownloadModalProps extends ModalProps {
   measurement: MonitoringPointRow;
@@ -22,7 +23,10 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
   const [form] = Form.useForm();
   const { language } = useLocaleContext();
 
-  const properties = Point.getPropertiesByType(measurement.type, measurement.properties);
+  const properties = MonitoringPointType.Key.getProperties(
+    measurement.type,
+    measurement.properties
+  );
   const onDownload = () => {
     form.validateFields().then((values) => {
       if (numberedRange) {
@@ -35,12 +39,7 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
           language === 'en-US' ? 'en' : 'zh',
           assetId
         ).then((res) => {
-          const url = window.URL.createObjectURL(new Blob([res.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', getFilename(res));
-          document.body.appendChild(link);
-          link.click();
+          downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
           onSuccess();
         });
       }

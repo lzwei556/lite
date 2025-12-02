@@ -8,14 +8,15 @@ import { useLocaleContext } from '../../../localeProvider';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { getDisplayProperties } from '../util';
 import { DeviceType } from '../../../types/device_type';
-import { DisplayProperty } from '../../../constants/properties';
 import { DownloadDeviceDataRequest } from '../../../apis/device';
 import { useContext } from '..';
+import { CharacteristicData } from 'common';
+import { downloadFile } from 'utils';
 
 export interface DownloadModalProps extends ModalProps {
   device: Device;
   property?: any;
-  properties: DisplayProperty[];
+  properties: CharacteristicData.DisplayProperty[];
   onSuccess: () => void;
   channel?: string;
 }
@@ -42,12 +43,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
           language === 'en-US' ? 'en' : 'zh'
         ).then((res) => {
           if (res.status === 200) {
-            const url = window.URL.createObjectURL(new Blob([res.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${device.name}.xlsx`);
-            document.body.appendChild(link);
-            link.click();
+            downloadFile(window.URL.createObjectURL(new Blob([res.data])), `${device.name}.xlsx`);
             onSuccess();
           }
         });

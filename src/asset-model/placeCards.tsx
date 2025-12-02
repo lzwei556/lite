@@ -1,8 +1,9 @@
 import React from 'react';
-import { ASSET_PATHNAME, Point } from '../asset-common';
+import { ASSET_PATHNAME } from '../asset-common';
 import { Link } from '../components';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { Dayjs } from '../utils';
+import { MonitoringPointType } from 'common';
 
 export const usePlaceCards = (selected?: boolean) => {
   const { monitoringPoints, setMonitoringPoints } = useAssetModelContext();
@@ -14,7 +15,7 @@ export const usePlaceCards = (selected?: boolean) => {
       title: <Link to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</Link>,
       items: getPropertyItems(
         self,
-        Point.getPropertiesByType(self.type, self.properties).filter((p) =>
+        MonitoringPointType.Key.getProperties(self.type, self.properties).filter((p) =>
           visibleKeys.includes(p.key)
         )
       ).map((item) => ({

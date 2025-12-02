@@ -1,10 +1,6 @@
 import React from 'react';
 import { FormInstance } from 'antd';
-import { DeviceType } from '../../types/device_type';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
-import { DisplayProperty } from '../../constants/properties';
 import {
-  AXIS_ALIAS,
   bindDevice,
   MonitoringPoint,
   MonitoringPointBatch,
@@ -13,37 +9,6 @@ import {
   unbindDevice,
   updateMeasurement
 } from '../../asset-common';
-
-export const monitoringPointTypes = [
-  { id: MonitoringPointTypeValue.Vibration, label: MonitoringPointTypeText.Vibration },
-  {
-    id: MonitoringPointTypeValue.VibrationRotationSingleAxis,
-    label: MonitoringPointTypeText.VibrationRotationSingleAxis
-  },
-  {
-    id: MonitoringPointTypeValue.VibrationRotation,
-    label: MonitoringPointTypeText.VibrationRotation
-  }
-];
-
-export const relatedDeviceTypes = new Map([
-  [
-    MonitoringPointTypeValue.Vibration,
-    [
-      DeviceType.SVT220520P,
-      DeviceType.SVT520C,
-      DeviceType.SVT210510P,
-      DeviceType.SVT510C,
-      DeviceType.SVT210K,
-      DeviceType.SVT210A
-    ]
-  ],
-  [MonitoringPointTypeValue.VibrationRotationSingleAxis, [DeviceType.SVT220S1]],
-  [
-    MonitoringPointTypeValue.VibrationRotation,
-    [DeviceType.SVT210S, DeviceType.SVT220S3, DeviceType.SVT510L]
-  ]
-]);
 
 export function useSelectPoints(form: FormInstance<MonitoringPointBatch>) {
   const [selectedPoints, setSelectPoints] = React.useState<MonitoringPointInfo[]>([]);
@@ -102,20 +67,4 @@ export function handleSubmit(
   } catch (error) {
     console.log(error);
   }
-}
-
-export function appendAxisAliasAbbrToField(
-  property: DisplayProperty,
-  attrs?: MonitoringPointRow['attributes']
-) {
-  let fields = property.fields ?? [];
-  const isMultiple = fields.length > 1;
-  if (isMultiple) {
-    fields = Object.values(AXIS_ALIAS).map(({ key, abbr }) => {
-      const axisKey = attrs?.[key];
-      const field = fields.find((field) => axisKey === field.key.replace(`${property.key}_`, ''))!;
-      return { ...field, alias: abbr };
-    });
-  }
-  return { ...property, fields } as DisplayProperty;
 }

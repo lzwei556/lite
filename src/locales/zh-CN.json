@@ -451,7 +451,7 @@
   "FIELD_INCLINATION_EW": "东西",
   "FIELD_INCLINATION_EW2": "东西倾角",
   "FIELD_INCLINATION_NS": "南北",
-  "FIELD_INCLINATION_NS2": "径向倾角",
+  "FIELD_INCLINATION_NS2": "南北倾角",
   "FIELD_INCLINATION_RADIAL": "径向",
   "FIELD_INCLINATION_RADIAL2": "径向倾角",
   "FIELD_INCLINATION_AXIAL": "轴向",
@@ -1382,5 +1382,8 @@
   "no.available.project": "没有可用的项目",
   "oil.filler.fill": "加注",
   "oil.filler.fill.count": "加油次数",
-  "FIELD_REMAINING_OIL": "剩余油量"
+  "FIELD_REMAINING_OIL": "剩余油量",
+  "low.envelope": "低",
+  "high.envelope": "高",
+  "monitoirng.point.position": "位置"
 }

@@ -7,16 +7,16 @@ import {
   MonitoringPointRow,
   Point
 } from '../monitoring-point';
-import { DisplayProperty } from '../constants/properties';
 import { AssetRow } from '../asset-common';
 import { Dayjs, getValue } from '../utils';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export type PropertyItem = {
   selected: boolean;
   title: string;
   children: string;
   self: MonitoringPointRow;
-  property?: DisplayProperty;
+  property?: CharacteristicData.DisplayProperty;
   visibleKeys: string[];
   axisKey?: string;
   fieldKey?: string;
@@ -100,7 +100,7 @@ const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
       return prevIndex - nextIndex;
     })
     .map((m, i) => {
-      const properties = Point.getPropertiesByType(m.type, m.properties);
+      const properties = MonitoringPointType.Key.getProperties(m.type, m.properties);
       const property = properties?.[0];
       const items = getPropertyItem(m, property);
       return {
@@ -114,17 +114,23 @@ const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
     });
 };
 
-export function getPropertyItems(m: MonitoringPointRow, properties: DisplayProperty[]) {
+export function getPropertyItems(
+  m: MonitoringPointRow,
+  properties: CharacteristicData.DisplayProperty[]
+) {
   const items: PropertyItem[] = [];
   properties.forEach((p) => items.push(...getPropertyItem(m, p)));
   return items;
 }
 
-const getPropertyItem = (m: MonitoringPointRow, property: DisplayProperty): PropertyItem[] => {
+const getPropertyItem = (
+  m: MonitoringPointRow,
+  property: CharacteristicData.DisplayProperty
+): PropertyItem[] => {
   const { fields = [], key, name, precision, unit } = property;
   const self = m;
   const selected = false;
-  const visibleKeys = Point.getPropertiesByType(m.type, m.properties)
+  const visibleKeys = MonitoringPointType.Key.getProperties(m.type, m.properties)
     .filter((p) => !!p.first)
     .map((p) => p.key);
   if (fields.length > 1) {

@@ -55,12 +55,12 @@ export default function AlarmRuleList() {
       title: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) }),
       dataIndex: 'type',
       key: 'type',
-      filters: App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
+      filters: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
         text: intl.get(label),
-        value: id
+        value
       })),
       render: (typeId: number) => {
-        const label = App.getMonitoringPointTypes(appType).find((m) => m.id === typeId)?.label;
+        const label = App.getMonitoringPointTypes(appType).find((m) => m.value === typeId)?.label;
         return label ? intl.get(label) : '-';
       }
     },
