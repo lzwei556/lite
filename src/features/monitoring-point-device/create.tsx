@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ModalFormProps } from '../../types/common';
 import { addMonitoringPoints, Asset, AssetRow, MonitoringPointBatch } from '../../asset-common';
-import { getMonitoringPointTypes, getProcessId, isParentValid, useSelectPoints } from './common';
+import { getMonitoringPointTypeOptions, getProcessId, isParentValid, useSelectPoints } from './common';
 import { PointItemList } from './pointItemList';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { useMonitoringPointParents } from '../../asset-variant';
@@ -18,11 +18,11 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
 
   const reloadTypes = (asset?: AssetRow) => {
     if (asset) {
-      const types = getMonitoringPointTypes();
+      const types = getMonitoringPointTypeOptions()
       const type = form.getFieldValue('type') as number | undefined;
-      if (type && !types.map(({ id }) => id).includes(type) && types.length > 0) {
-        form.setFieldValue('type', types[0].id);
-        handleTypeChange(types[0].id);
+      if (type && !types.map(({ value }) => value).includes(type) && types.length > 0) {
+        form.setFieldValue('type', types[0].value);
+        handleTypeChange(types[0].value);
       }
     }
   };
@@ -131,9 +131,9 @@ function TypeSelection({ parent, onChange }: { parent: AssetRow; onChange: (id: 
       rules={[{ required: true }]}
       selectProps={{
         onChange,
-        options: getMonitoringPointTypes().map(({ id, label }) => ({
+        options: getMonitoringPointTypeOptions().map(({ value, label }) => ({
           label: intl.get(label),
-          value: id
+          value
         }))
       }}
     />

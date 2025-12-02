@@ -54,27 +54,31 @@ export const rotationSpeed: MotorAttrsField = {
   name: 'rpm',
   label: 'rotation.speed',
   description: 'rotation.speed.desc',
-  unit: 'rpm'
+  unit: 'rpm',
+  type: 'number'
 };
 
 export const envBand: MotorAttrsField = {
   name: 'envBand',
   label: 'env.band',
   description: 'env.band.desc',
-  unit: 'Hz'
+  unit: 'Hz',
+  type: 'number'
 };
 
 export const powerFreq: MotorAttrsField = {
   name: 'powerFreq',
   label: 'power.freq',
   description: 'power.freq.desc',
-  unit: 'Hz'
+  unit: 'Hz',
+  type: 'number'
 };
 
 export const gearTeeth: MotorAttrsField = {
   name: 'gearTeeth',
   label: 'gear.teeth',
-  description: 'gear.teeth.desc'
+  description: 'gear.teeth.desc',
+  type: 'number'
 };
 
 export const MotorBasicSettings = ({

@@ -3,7 +3,6 @@ import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { Grid, MutedCard, TabsDetail, TabsDetailsItems } from '../../../components';
 import { FilterableAlarmRecordTable } from '../../alarm';
-import { MonitoringPointTypeValue } from '../../../config';
 import {
   AssetNavigator,
   BasicCard,
@@ -21,6 +20,7 @@ import { PreloadWaveform } from './preloadWaveform';
 import { Settings } from './settings';
 import { AngleDynamicData, PreloadWaveData } from './dynamic/types';
 import { Permission, useCan } from '../../../providers/access-control';
+import { MonitoringPointType } from 'common';
 
 export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
@@ -56,7 +56,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
       content: <History {...monitoringPoint} key={id} />
     }
   ];
-  if (type === MonitoringPointTypeValue.TopInclination) {
+  if (type === MonitoringPointType.Value.TopInclination) {
     items.push({
       key: 'dynamicData',
       label: intl.get('DYNAMIC_DATA'),
@@ -69,7 +69,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
         />
       )
     });
-  } else if (type === MonitoringPointTypeValue.BaseInclination) {
+  } else if (type === MonitoringPointType.Value.BaseInclination) {
     items.push({
       key: 'dynamicData',
       label: intl.get('DYNAMIC_DATA'),

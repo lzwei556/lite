@@ -9,8 +9,8 @@ import { isMobile } from '../../utils/deviceDetection';
 import { GetDevicesRequest } from '../../apis/device';
 import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
-import { relatedDeviceTypes } from './common';
 import { Others } from './others';
+import { MonitoringPointType } from 'common';
 
 export const PointItemList = ({
   onSelect,
@@ -30,7 +30,7 @@ export const PointItemList = ({
   const { colorBorderStyle } = useGlobalStyles();
 
   React.useEffect(() => {
-    const deviceTypes = relatedDeviceTypes.get(type);
+    const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
     if (deviceTypes) GetDevicesRequest({ types: deviceTypes.join(',') }).then(setDevices);
   }, [type]);
 
@@ -47,7 +47,7 @@ export const PointItemList = ({
         }
       ]}
     >
-      {(fields, { add, remove }, { errors }) => (
+      {(fields, { remove }, { errors }) => (
         <>
           {fields.map(({ key, name, ...restFields }, index) => (
             <div
@@ -83,7 +83,12 @@ export const PointItemList = ({
                     rules={[{ required: true }]}
                   />
                 </Col>
-                <Others {...restFields} nameIndex={name} formItemColProps={formItemColProps} />
+                <Others
+                  {...restFields}
+                  namePrefix='monitoring_points'
+                  nameIndex={name}
+                  formItemColProps={formItemColProps}
+                />
               </Grid>
             </div>
           ))}
@@ -102,8 +107,8 @@ export const PointItemList = ({
                           attributes: {
                             corrosion_rate_short_term: 30,
                             corrosion_rate_long_term: 365,
-                            initial_thickness: { enabled: false },
-                            critical_thickness: { enabled: false }
+                            initial_thickness_enabled: false,
+                            critical_thickness_enabled: false
                           }
                         }))
                       );

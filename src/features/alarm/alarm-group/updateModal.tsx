@@ -1,29 +1,24 @@
 import * as React from 'react';
 import { Col, Form, FormListFieldData } from 'antd';
 import intl from 'react-intl-universal';
-import { cloneDeep } from 'lodash';
-import { DisplayProperty } from '../../../constants/properties';
 import { App, useAppType } from '../../../config';
 import { generateColProps } from '../../../utils/grid';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
 import { Grid, SelectFormItem, Table, TextFormItem } from '../../../components';
-import { Point } from '../../../asset-common';
 import { AlarmRule } from './types';
 import { NameFormItem } from './nameFormItem';
 import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
 import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
-import { getPropertiesByMeasurementType, updateAlarmRule } from './services';
+import { updateAlarmRule } from './services';
 import { translateMetricName } from '.';
 
 export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
   const { alarm, ...rest } = props;
   const appType = useAppType();
   const [form] = Form.useForm();
-  const [properties, setProperties] = React.useState<DisplayProperty[]>([]);
-  const [metric, setMetric] = React.useState<{ key: string; name: string; unit?: string }[]>([]);
 
   return (
     <ModalWrapper
@@ -73,30 +68,9 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
               rules={[{ required: true }]}
               selectProps={{
                 disabled: true,
-                onChange: (e) => {
-                  getPropertiesByMeasurementType(e).then((res) => {
-                    const measurementType = App.getMonitoringPointTypes(appType).find(
-                      ({ id }) => e === id
-                    )?.id;
-                    if (measurementType) {
-                      setProperties(
-                        removeDulpicateProperties(Point.getPropertiesByType(measurementType, res))
-                      );
-                    }
-                  });
-                  const formData: AlarmRule['rules'] = form.getFieldValue('rules');
-                  if (formData && formData.length > 0) {
-                    form.setFieldsValue({
-                      rules: formData.map((field) => {
-                        delete field.index;
-                        return field;
-                      })
-                    });
-                  }
-                },
-                options: App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
+                options: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
                   label: intl.get(label),
-                  value: id
+                  value
                 }))
               }}
             />
@@ -127,28 +101,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       title: intl.get('INDEX'),
                       width: 150,
                       render: (_, row: FormListFieldData) => (
-                        <IndexFormItem
-                          disabled={true}
-                          nameIndex={row.name}
-                          onChange={(metric) => {
-                            setMetric((prev) => {
-                              if (prev.length === 0) {
-                                return [metric];
-                              } else if (prev.length < row.name + 1) {
-                                return [...prev, metric];
-                              } else {
-                                return prev.map((item, n) => {
-                                  if (n === row.name) {
-                                    return metric;
-                                  } else {
-                                    return item;
-                                  }
-                                });
-                              }
-                            });
-                          }}
-                          properties={properties}
-                        />
+                        <IndexFormItem disabled={true} nameIndex={row.name} properties={[]} />
                       )
                     },
                     {
@@ -163,13 +116,13 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       key: 'condition',
                       title: intl.get('CONDITION'),
                       width: 180,
-                      render: (_, row: FormListFieldData) => {
-                        let unitText = '';
-                        if (metric.length > 0 && metric[row.name] && metric[row.name].unit) {
-                          const unit = metric[row.name].unit as string;
-                          unitText = intl.get(unit).d(unit);
-                        }
-                        return <ConditionFormItem nameIndex={row.name} unitText={unitText} />;
+                      render: (_, row: FormListFieldData, index: number) => {
+                        return (
+                          <ConditionFormItem
+                            nameIndex={row.name}
+                            unitText={alarm.rules[index]?.metric.unit}
+                          />
+                        );
                       }
                     },
                     {
@@ -194,16 +147,4 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
       </Form>
     </ModalWrapper>
   );
-}
-
-function removeDulpicateProperties(properties: DisplayProperty[]) {
-  const final = cloneDeep(properties);
-  return final.map((property) => {
-    const fields = property.fields;
-    if (fields?.every((field) => field.key === property.key)) {
-      return { ...property, fields: [] };
-    } else {
-      return property;
-    }
-  });
 }

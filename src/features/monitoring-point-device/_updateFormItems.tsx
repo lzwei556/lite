@@ -4,9 +4,9 @@ import intl from 'react-intl-universal';
 import { generateColProps } from '../../utils/grid';
 import { Grid, NumberFormItem, SelectFormItem, TextFormItem } from '../../components';
 import DeviceSelect from '../../components/select/deviceSelect';
-import { Asset, MonitoringPointRow, Point } from '../../asset-common';
-import { getRelatedDeviceTypes } from './common';
+import { Asset, MonitoringPointRow } from '../../asset-common';
 import { useMonitoringPointParents } from '../../asset-variant';
+import { MonitoringPointType } from 'common';
 
 export const UpdateFormItems = ({
   monitoringPoint,
@@ -17,8 +17,8 @@ export const UpdateFormItems = ({
 }) => {
   const { type } = monitoringPoint;
   const parents = useMonitoringPointParents((asset) => Asset.Assert.isDeviceRelated(asset.type));
-  const types = [{ id: type, label: Point.getTypeLabel(type) as string }];
-  const deviceTypes = getRelatedDeviceTypes(type);
+  const types = [{ id: type, label: MonitoringPointType.Key.getLabel(type) }];
+  const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
 
   return (
     <Grid>

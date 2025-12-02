@@ -12,12 +12,12 @@ export const RangeDatePicker = ({
   ...rest
 }: Omit<RangePickerProps, 'defaultValue' | 'onChange'> & {
   defaultValue?: Dayjs.RangeValue;
-  onChange: (range: Dayjs.RangeValue) => void;
+  onChange?: (range: Dayjs.RangeValue) => void;
   showQuickRanges?: boolean;
 }) => {
   const [range, setRange] = React.useState(defaultValue);
   const handleChange = (date: Dayjs.RangeValue) => {
-    onChange(date);
+    onChange?.(date);
     setRange(date);
   };
   return (

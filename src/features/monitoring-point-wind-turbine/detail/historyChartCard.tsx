@@ -1,6 +1,5 @@
 import React from 'react';
 import { Space as AntSpace, Spin } from 'antd';
-import { DisplayProperty } from '../../../constants/properties';
 import { Card } from '../../../components';
 import { isMobile } from '../../../utils/deviceDetection';
 import { HistoryDataFea } from '../..';
@@ -10,11 +9,11 @@ import {
   hasData,
   HistoryData,
   MonitoringPointRow,
-  Point,
   PropertyLightSelectFilter,
   useMonitoringPointContext
 } from '../../../asset-common';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const HistoryChartCard = ({
   point,
@@ -30,8 +29,8 @@ export const HistoryChartCard = ({
   deleteIconButton: React.ReactElement;
 }) => {
   const { name, properties, type } = point;
-  const displayProperties = Point.getPropertiesByType(type, properties);
-  const [property, setProperty] = React.useState<DisplayProperty | undefined>(
+  const displayProperties = MonitoringPointType.Key.getProperties(type, properties);
+  const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined
   );
   const { ruleGroups } = useMonitoringPointContext();

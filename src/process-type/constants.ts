@@ -1,4 +1,4 @@
-import { MonitoringPointTypeValue } from '../config';
+import { MonitoringPointType } from 'common';
 import { DeviceType } from '../types/device_type';
 import { ProcessType } from './types';
 
@@ -19,7 +19,7 @@ export const processTypes: ProcessType[] = [
   {
     key: ProcessTypeKey.AutoFill,
     label: ProcessTypeKey[ProcessTypeKey.AutoFill],
-    sourceType: MonitoringPointTypeValue.VibrationAudio,
+    sourceType: MonitoringPointType.Value.VibrationAudio,
     deviceType: DeviceType.OilFiller,
     parameters: [
       {

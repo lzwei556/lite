@@ -1,17 +1,12 @@
+import { AXIS_ALIAS } from 'monitoring-point/constants';
+import { MonitoringPointRow } from 'monitoring-point/types';
+
 type DisplayPropertyGroup = `property.group.${
   | 'core'
   | 'timeDomain'
   | 'frequency'
   | 'statistics'
   | 'skew'}`;
-
-export const displayPropertyGroup: DisplayPropertyGroup[] = [
-  'core',
-  'timeDomain',
-  'frequency',
-  'statistics',
-  'skew'
-].map((g) => `property.group.${g}` as DisplayPropertyGroup);
 
 export interface DisplayProperty {
   key: string;
@@ -20,14 +15,13 @@ export interface DisplayProperty {
   precision: number;
   unit?: string;
   unit2?: string;
-  losingOnMonitoringPoint?: boolean;
   interval?: number;
   fields?: { name: string; key: string; dataIndex: number; first?: boolean; alias?: string }[];
   defaultFirstFieldKey?: string;
-  parentKey?: string;
   group?: DisplayPropertyGroup;
   onlyShowFirstField?: boolean;
   min?: number;
+  hidden?: boolean;
 }
 
 export type DisplayPropertyCategories = {
@@ -52,8 +46,18 @@ export type DisplayPropertyCategories = {
     | 'OilFiller']: readonly DisplayProperty[];
 };
 
+// constants begin
+
+export const displayPropertyGroup: DisplayPropertyGroup[] = [
+  'core',
+  'timeDomain',
+  'frequency',
+  'statistics',
+  'skew'
+].map((g) => `property.group.${g}` as DisplayPropertyGroup);
+
 //generic properties start
-const TEMPERATURE: DisplayProperty = {
+export const TEMPERATURE: DisplayProperty = {
   key: 'temperature',
   name: 'FIELD_TEMPERATURE',
   first: true,
@@ -61,46 +65,51 @@ const TEMPERATURE: DisplayProperty = {
   unit: '℃',
   unit2: '°C'
 };
-const TOF: DisplayProperty = {
+export const TOF: DisplayProperty = {
   key: 'tof',
   name: 'FIELD_TOF',
   precision: 0,
   unit: 'ns',
   interval: 600
 };
-const SIGNAL_STRENGTH: DisplayProperty = {
+export const SIGNAL_STRENGTH: DisplayProperty = {
   key: 'signal_strength',
   name: 'FIELD_SIGNAL_STRENGTH',
   precision: 1
 };
-const SIGNAL_QUALITY: DisplayProperty = {
+export const SIGNAL_QUALITY: DisplayProperty = {
   key: 'signal_quality',
   name: 'FIELD_SIGNAL_QUALITY',
   precision: 1
 };
-const INCLINATION: DisplayProperty = {
+export const INCLINATION: DisplayProperty = {
   key: 'inclination',
   name: 'FIELD_INCLINATION',
   precision: 4,
   unit: '°'
 };
-const PITCH: DisplayProperty = {
+export const PITCH: DisplayProperty = {
   key: 'pitch',
   name: 'FIELD_PITCH',
   precision: 4,
   unit: '°'
 };
-const ROLL: DisplayProperty = {
+export const ROLL: DisplayProperty = {
   key: 'roll',
   name: 'FIELD_ROLL',
   precision: 4,
   unit: '°'
 };
-const WAGGLE: DisplayProperty = { key: 'waggle', name: 'FIELD_WAGGLE', precision: 3, unit: 'g' };
+export const WAGGLE: DisplayProperty = {
+  key: 'waggle',
+  name: 'FIELD_WAGGLE',
+  precision: 3,
+  unit: 'g'
+};
 //generic properties end
 
 //DC specific start
-const THICKNESS: DisplayProperty = {
+export const THICKNESS: DisplayProperty = {
   key: 'thickness',
   name: 'FIELD_THICKNESS',
   first: true,
@@ -134,7 +143,7 @@ const DC_TEMPERATURE: DisplayProperty = {
 //DC specific end
 
 //SVT specific start
-const VELOCITY_RMS: DisplayProperty = {
+export const VELOCITY_RMS: DisplayProperty = {
   key: 'vibration_severity',
   name: 'FIELD_VELOCITY_RMS',
   precision: 3,
@@ -150,7 +159,7 @@ const ACCLERATION_ENVELOPE: DisplayProperty = {
   unit: 'gE',
   group: 'property.group.core'
 };
-const ACCELERATION_RMS: DisplayProperty = {
+export const ACCELERATION_RMS: DisplayProperty = {
   key: 'acceleration_rms',
   name: 'FIELD_ACCELERATION_RMS',
   precision: 3,
@@ -171,7 +180,7 @@ const DISPLACEMENT_PEAK_TO_PEAK: DisplayProperty = {
   unit: 'μm',
   group: 'property.group.timeDomain'
 };
-const DISPLACEMENT_RMS: DisplayProperty = {
+export const DISPLACEMENT_RMS: DisplayProperty = {
   key: 'displacement',
   name: 'FIELD_DISPLACEMENT_RMS',
   precision: 3,
@@ -313,7 +322,7 @@ const STATIONARITY: DisplayProperty = {
 //SVT specific end
 
 //tower start
-const TopInclination_DISPLACEMENT_COMBINED: DisplayProperty = {
+export const TopInclination_DISPLACEMENT_COMBINED: DisplayProperty = {
   key: 'displacement_combined',
   first: true,
   name: 'FIELD_DISPLACEMENT_COMBINED',
@@ -321,7 +330,7 @@ const TopInclination_DISPLACEMENT_COMBINED: DisplayProperty = {
   unit: 'mm',
   defaultFirstFieldKey: 'displacement_radial'
 };
-const TopInclination_INCLINATION_COMBINED: DisplayProperty = {
+export const TopInclination_INCLINATION_COMBINED: DisplayProperty = {
   key: 'inclination_combined',
   first: true,
   name: 'FIELD_INCLINATION_COMBINED',
@@ -345,7 +354,7 @@ const BaseInclination_INCLINATION_COMBINED: DisplayProperty = {
   unit: '°',
   defaultFirstFieldKey: 'inclination_axial'
 };
-const DIRECTION: DisplayProperty = {
+export const DIRECTION: DisplayProperty = {
   key: 'direction',
   first: true,
   name: 'FIELD_DIRECTION',
@@ -354,30 +363,34 @@ const DIRECTION: DisplayProperty = {
 };
 //tower end
 
+export const PRELOAD = {
+  key: 'preload',
+  name: 'FIELD_PRELOAD',
+  first: true,
+  interval: 20,
+  precision: 0,
+  unit: 'kN'
+};
+export const PRESSURE = {
+  key: 'pressure',
+  name: 'FIELD_STRESS',
+  first: true,
+  interval: 20,
+  precision: 0,
+  unit: 'MPa'
+};
+export const LENGTH = {
+  key: 'length',
+  name: 'FIELD_LENGTH',
+  interval: 1,
+  precision: 1,
+  unit: 'mm'
+};
+
 const SAS: DisplayProperty[] = [
-  {
-    key: 'preload',
-    name: 'FIELD_PRELOAD',
-    first: true,
-    interval: 20,
-    precision: 0,
-    unit: 'kN'
-  },
-  {
-    key: 'pressure',
-    name: 'FIELD_STRESS',
-    first: true,
-    interval: 20,
-    precision: 0,
-    unit: 'MPa'
-  },
-  {
-    key: 'length',
-    name: 'FIELD_LENGTH',
-    interval: 1,
-    precision: 1,
-    unit: 'mm'
-  },
+  PRELOAD,
+  PRESSURE,
+  LENGTH,
   { ...TEMPERATURE, key: 'bolt_temperature', name: 'FIELD_BOLT_TEMPERATURE' },
   TOF,
   {
@@ -430,7 +443,7 @@ const SVT210 = [
   { ...ROLL, group: 'property.group.skew' as DisplayPropertyGroup }
 ];
 
-export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
+export const CATEGORIES: DisplayPropertyCategories = {
   SAS,
   SA: [
     {
@@ -564,3 +577,37 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
     }
   ]
 } as const;
+
+// constants end
+
+export function getPropertiesOrderByGroup(properties: readonly DisplayProperty[]) {
+  const _properties: DisplayProperty[] = [];
+  if (properties.every((p) => !p.group)) {
+    return properties;
+  }
+  displayPropertyGroup.forEach((g) => {
+    properties.filter((p) => p.group === g).forEach((p) => _properties.push(p));
+  });
+  return _properties;
+}
+
+export function appendAxisAliasAbbrToField(
+  property: DisplayProperty,
+  attrs?: MonitoringPointRow['attributes']
+) {
+  const fields: DisplayProperty['fields'] = [];
+  const origin = property.fields ?? [];
+  if (origin.length > 1) {
+    Object.values(AXIS_ALIAS).forEach(({ key, abbr }) => {
+      const axisKey = attrs?.[key];
+      const field = origin.find((field) => axisKey === field.key.replace(`${property.key}_`, ''));
+      if (field) {
+        fields.push({ ...field, alias: abbr });
+      }
+    });
+  }
+  return {
+    ...property,
+    fields: fields.length === origin.length && fields.length > 1 ? fields : origin
+  } as DisplayProperty;
+}

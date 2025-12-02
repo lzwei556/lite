@@ -1,19 +1,18 @@
 import React from 'react';
-import { MonitoringPointTypeValue } from '../../../../config';
 import { roundValue } from '../../../../utils/format';
-import { DisplayProperty } from '../../../../constants/properties';
-import { AssetRow, Point, Points } from '../../../../asset-common';
+import { AssetRow, Points } from '../../../../asset-common';
 import { FakeVSRealChart } from './fakeVSRealChart';
+import { MonitoringPointType, CharacteristicData } from 'common';
 
 export const RightConentInMonitorTab = ({ asset }: { asset: AssetRow }) => {
   const points = asset.monitoringPoints ?? [];
   const actuals = Points.filter(points).filter((point) => !!point.data);
   const fakes = points
-    .filter((point) => point.type === MonitoringPointTypeValue.FlangeBoltPreload)
+    .filter((point) => MonitoringPointType.Key.filterNonVirtualTypes(point.type))
     .filter((point) => !!point.data);
-  let properties: DisplayProperty[] = [];
+  let properties: CharacteristicData.DisplayProperty[] = [];
   if (actuals.length > 0) {
-    properties = Point.getPropertiesByType(actuals[0].type, actuals[0].properties);
+    properties = MonitoringPointType.Key.getProperties(actuals[0].type, actuals[0].properties);
   }
   const property = properties.length > 0 ? properties[0] : undefined;
   let bolts: number[] = [];

@@ -9,7 +9,7 @@ import {
 } from '../../../asset-common';
 import { Card, Grid, SaveIconButton } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
-import { handleSubmit, parseAttrs } from '../common';
+import { handleSubmit } from '../common';
 import { BasisFormItems } from '../basisFormItems';
 import { Others } from '../others';
 
@@ -21,6 +21,11 @@ export const Settings = ({
   onSuccess: () => void;
 }) => {
   const [form] = Form.useForm<MonitoringPoint & { device_id: number }>();
+
+  React.useEffect(() => {
+    const initialValues = Point.convert(point);
+    if (initialValues) form.setFieldsValue(initialValues);
+  }, [form, point]);
 
   return (
     <Grid>
@@ -37,11 +42,7 @@ export const Settings = ({
           }
           title={intl.get('BASIC_INFORMATION')}
         >
-          <Form
-            form={form}
-            layout='vertical'
-            initialValues={{ ...Point.convert(point, parseAttrs) }}
-          >
+          <Form form={form} layout='vertical'>
             <BasisFormItems
               monitoringPoint={point}
               formItemColProps={generateColProps({ xl: 12, xxl: 8 })}

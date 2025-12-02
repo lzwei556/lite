@@ -3,15 +3,15 @@ import { Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, CardProps, SeriesAlarm, Term } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
-import { DisplayProperty } from '../../constants/properties';
 import { getDisplayName, getValue } from '../../utils/format';
 import { HistoryData } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
 import { PropertyChart, transform } from './propertyChart';
+import { CharacteristicData } from 'common';
 
 export const PropertyChartCard = (props: {
   data?: HistoryData;
-  property: DisplayProperty;
+  property: CharacteristicData.DisplayProperty;
   cardProps?: CardProps;
   alarm?: Pick<SeriesAlarm, 'rules'> & { propertyKey: string };
 }) => {
@@ -34,7 +34,7 @@ const PropertyChartTitle = ({
   property
 }: {
   data?: HistoryData;
-  property: DisplayProperty;
+  property: CharacteristicData.DisplayProperty;
 }) => {
   const { language } = useLocaleContext();
   const { name, unit, precision } = property;

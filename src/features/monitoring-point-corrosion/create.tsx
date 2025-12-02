@@ -6,8 +6,9 @@ import { ModalWrapper } from '../../components/modalWrapper';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { addMonitoringPoints, Asset, AssetRow, MonitoringPointBatch } from '../../asset-common';
 import { useMonitoringPointParents } from '../../asset-variant';
-import { monitoringPointTypes, resolveAttrs, useSelectPoints } from './common';
+import { useSelectPoints } from './common';
 import { PointItemList } from './pointItemList';
+import { MonitoringPointType } from 'common';
 
 export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
   const { asset, onSuccess } = props;
@@ -43,7 +44,7 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
                   return {
                     name,
                     type: values.type,
-                    attributes: resolveAttrs(attributes),
+                    attributes,
                     device_binding,
                     asset_id: values.asset_id
                   };
@@ -102,10 +103,12 @@ function TypeSelection({ onChange }: { onChange: (id: number) => void }) {
       rules={[{ required: true }]}
       selectProps={{
         onChange,
-        options: monitoringPointTypes.map(({ id, label }) => ({
-          label: intl.get(label),
-          value: id
-        }))
+        options: MonitoringPointType.Categories.getOptions(['corrosion']).map(
+          ({ value, label }) => ({
+            label: intl.get(label),
+            value
+          })
+        )
       }}
     />
   );

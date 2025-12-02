@@ -1,16 +1,15 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Card } from '../../../../components';
-import { DisplayProperty } from '../../../../constants/properties';
 import { HistoryDataFea } from '../../..';
 import {
   AssetRow,
   hasData,
   HistoryData,
-  Point,
   Points,
   PropertyLightSelectFilter
 } from '../../../../asset-common';
+import { MonitoringPointType, CharacteristicData } from 'common';
 
 export const PointsLineChart = ({
   asset,
@@ -22,10 +21,12 @@ export const PointsLineChart = ({
   const getProperties = () => {
     const points = Points.filter(asset.monitoringPoints);
     const firstPoint = points[0];
-    return Point.getPropertiesByType(firstPoint.type, firstPoint.properties);
+    return MonitoringPointType.Key.getProperties(firstPoint.type, firstPoint.properties);
   };
   const properties = getProperties();
-  const [property, setProperty] = React.useState<DisplayProperty | undefined>(properties?.[0]);
+  const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
+    properties?.[0]
+  );
   const getTitle = () => {
     return property
       ? intl.get('OBJECT_TREND_CHART', {

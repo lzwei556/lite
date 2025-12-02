@@ -9,7 +9,7 @@ import { GetDevicesRequest } from '../../apis/device';
 import { isMobile } from '../../utils/deviceDetection';
 import { DeviceSelection, MonitoringPointInfo } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
-import { getRelatedDeviceTypes } from './common';
+import { MonitoringPointType } from 'common';
 
 export const PointItemList = ({
   onSelect,
@@ -29,7 +29,7 @@ export const PointItemList = ({
   const { colorBorderStyle } = useGlobalStyles();
 
   React.useEffect(() => {
-    const deviceTypes = getRelatedDeviceTypes(type);
+    const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
     if (deviceTypes) GetDevicesRequest({ types: deviceTypes.join(',') }).then(setDevices);
   }, [type]);
 
@@ -46,7 +46,7 @@ export const PointItemList = ({
         }
       ]}
     >
-      {(fields, { add, remove }, { errors }) => (
+      {(fields, { remove }, { errors }) => (
         <>
           {fields.map(({ key, name, ...restFields }, index) => (
             <div

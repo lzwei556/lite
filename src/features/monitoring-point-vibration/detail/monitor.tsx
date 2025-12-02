@@ -3,19 +3,17 @@ import { Col, Collapse, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../../utils';
 import { Grid } from '../../../components';
-import { DisplayProperty, displayPropertyGroup } from '../../../constants/properties';
 import { generateColProps } from '../../../utils/grid';
 import {
   getDataOfMonitoringPoint,
   getSeriesAlarm,
   HistoryData,
   MonitoringPointRow,
-  Point,
   useMonitoringPointContext
 } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
-import { appendAxisAliasAbbrToField } from '../common';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties, attributes } = point;
@@ -44,17 +42,17 @@ export const Monitor = (point: MonitoringPointRow) => {
   return (
     <Collapse
       bordered={false}
-      defaultActiveKey={displayPropertyGroup[0]}
+      defaultActiveKey={CharacteristicData.displayPropertyGroup[0]}
       expandIconPosition='end'
-      items={displayPropertyGroup.map((g) => ({
+      items={CharacteristicData.displayPropertyGroup.map((g) => ({
         key: g,
         label: intl.get(g),
         children: (
           <Grid>
-            {Point.getPropertiesByType(type, properties)
-              .map((p) => appendAxisAliasAbbrToField(p, attributes))
+            {MonitoringPointType.Key.getProperties(type, properties)
+              .map((p) => CharacteristicData.appendAxisAliasAbbrToField(p, attributes))
               .filter((p) => p.group === g)
-              .map((p: DisplayProperty, index: number) => {
+              .map((p: CharacteristicData.DisplayProperty, index: number) => {
                 return (
                   <Col {...colProps} key={index}>
                     <HistoryDataFea.PropertyChartCard

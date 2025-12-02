@@ -6,6 +6,7 @@ import { Card, CheckboxFormItem, Grid } from '../../../components';
 import { getFilename } from '../../../utils/format';
 import { exportAlarmRules } from './services';
 import { AlarmRule } from './types';
+import { downloadFile } from 'utils';
 
 export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void } & ModalProps> = (
   props
@@ -17,12 +18,7 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
   const handleUpload = (ruleIds?: number[]) => {
     exportAlarmRules(ruleIds)
       .then((res) => {
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', getFilename(res));
-        document.body.appendChild(link);
-        link.click();
+        downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
         if (!ruleIds) props.onSuccess();
       })
       .finally(() => {

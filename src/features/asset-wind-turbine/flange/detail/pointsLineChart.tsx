@@ -2,19 +2,18 @@ import React from 'react';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, DownloadIconButton } from '../../../../components';
-import { DisplayProperty } from '../../../../constants/properties';
 import { HistoryDataFea } from '../../..';
 import {
   AssetRow,
   DownloadData,
   hasData,
   HistoryData,
-  Point,
   Points,
   PropertyLightSelectFilter
 } from '../../../../asset-common';
 import { isFlangePreloadCalculation } from '../common';
 import { CanAccess, Permission } from '../../../../providers/access-control';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const PointsLineChart = ({
   flange,
@@ -29,10 +28,12 @@ export const PointsLineChart = ({
   const getProperties = () => {
     const points = Points.filter(flange.monitoringPoints);
     const firstPoint = points[0];
-    return Point.getPropertiesByType(firstPoint.type, firstPoint.properties);
+    return MonitoringPointType.Key.getProperties(firstPoint.type, firstPoint.properties);
   };
   const properties = getProperties();
-  const [property, setProperty] = React.useState<DisplayProperty | undefined>(properties?.[0]);
+  const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
+    properties?.[0]
+  );
   const getTitle = () => {
     return property
       ? intl.get('OBJECT_TREND_CHART', {

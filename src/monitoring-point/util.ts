@@ -1,55 +1,38 @@
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../config';
-import { DisplayProperty } from '../constants/properties';
-import { AXIS, AXIS_ALIAS, MONITORING_POINT_DISPLAY_PROPERTIES } from './constants';
-import { HistoryData, MonitoringPoint, MonitoringPointRow, Property } from './types';
+import { MonitoringPointType } from '../common';
+import { AXIS, AXIS_ALIAS } from './constants';
+import { HistoryData, MonitoringPoint, MonitoringPointRow } from './types';
 
 export const Point = {
   Assert: {
-    isTowerRelated: (type: MonitoringPointTypeValue) => {
-      return (
-        type === MonitoringPointTypeValue.BaseInclination ||
-        type === MonitoringPointTypeValue.TopInclination
-      );
+    isTowerRelated: (type: MonitoringPointType.Value) => {
+      return MonitoringPointType.Categories.getKeys(['inclination']).includes(type);
     },
     isPreload: (type: number) => {
-      return (
-        type === MonitoringPointTypeValue.BoltPreload ||
-        type === MonitoringPointTypeValue.AnchorPreload
-      );
+      return MonitoringPointType.Categories.getKeys(['preload']).includes(type);
     },
-    isWindRelated: (type: MonitoringPointTypeValue) => {
+    isWindRelated: (type: MonitoringPointType.Value) => {
       return (
         Point.Assert.isPreload(type) ||
         Point.Assert.isTowerRelated(type) ||
-        type === MonitoringPointTypeValue.BoltLoosening
+        MonitoringPointType.Categories.getKeys(['loosening']).includes(type)
       );
     },
-    isVibrationRelated: (type: MonitoringPointTypeValue) => {
+    isVibrationRelated: (type: MonitoringPointType.Value) => {
+      return MonitoringPointType.Categories.getKeys(['vibration']).includes(type);
+    },
+    isThreeAxisedVibrationRelated: (type: MonitoringPointType.Value) => {
       return (
-        type === MonitoringPointTypeValue.Vibration ||
-        type === MonitoringPointTypeValue.VibrationRotationSingleAxis ||
-        type === MonitoringPointTypeValue.VibrationRotation ||
-        type === MonitoringPointTypeValue.VibrationAudio
+        Point.Assert.isVibrationRelated(type) &&
+        type !== MonitoringPointType.Value.VibrationRotationSingleAxis
       );
     },
-    isThreeAxisedVibrationRelated: (type: MonitoringPointTypeValue) => {
-      return (
-        type === MonitoringPointTypeValue.Vibration ||
-        type === MonitoringPointTypeValue.VibrationRotation ||
-        type === MonitoringPointTypeValue.VibrationAudio
-      );
+    isCorrosionRelated: (type: MonitoringPointType.Value) => {
+      return MonitoringPointType.Categories.getKeys(['corrosion']).includes(type);
     },
-    isCorrosionRelated: (type: MonitoringPointTypeValue) => {
-      return (
-        type === MonitoringPointTypeValue.Corrosion ||
-        type === MonitoringPointTypeValue.HighTemperatureCorrosion ||
-        type === MonitoringPointTypeValue.UltraHighTemperatureCorrosion
-      );
-    },
-    isTemperatureRelated: (type: MonitoringPointTypeValue) =>
-      type === MonitoringPointTypeValue.Temperature,
-    isPressureRelated: (type: MonitoringPointTypeValue) =>
-      type === MonitoringPointTypeValue.Pressure
+    isTemperatureRelated: (type: MonitoringPointType.Value) =>
+      MonitoringPointType.Categories.getKeys(['temperature']).includes(type),
+    isPressureRelated: (type: MonitoringPointType.Value) =>
+      MonitoringPointType.Categories.getKeys(['pressure']).includes(type)
   },
   convert: (
     values?: MonitoringPointRow,
@@ -69,52 +52,6 @@ export const Point = {
       attributes: !!resolveFn ? resolveFn(values.attributes) : values.attributes,
       channel: firstDevice?.channel === 0 ? 1 : firstDevice?.channel
     };
-  },
-  getPropertiesByType: (
-    monitoringPointType: MonitoringPointTypeValue,
-    properties: Property[] = []
-  ) => {
-    const dispalyPropertiesSettings =
-      MONITORING_POINT_DISPLAY_PROPERTIES[
-        monitoringPointType as keyof typeof MONITORING_POINT_DISPLAY_PROPERTIES
-      ];
-    if (!dispalyPropertiesSettings || dispalyPropertiesSettings.length === 0) {
-      return properties
-        .filter((p) => !!p.isShow)
-        .sort((prev, crt) => prev.sort - crt.sort) as DisplayProperty[];
-    } else {
-      return dispalyPropertiesSettings
-        .filter((p) => !p.losingOnMonitoringPoint)
-        .map((p) => {
-          const remote = properties.find((r) =>
-            p.parentKey ? r.key === p.parentKey : r.key === p.key
-          );
-          return {
-            ...p,
-            fields:
-              p.fields ??
-              remote?.fields
-                ?.filter((f) => (p.parentKey ? f.key === p.key : true))
-                .map((f, i) => ({
-                  ...f,
-                  first: p.defaultFirstFieldKey
-                    ? f.key === p.defaultFirstFieldKey
-                    : i === remote?.fields.length - 1
-                }))
-          };
-        })
-        .filter((p) => !!p.fields) as DisplayProperty[];
-    }
-  },
-  getTypeLabel: (type: MonitoringPointTypeValue) => {
-    for (const key in MonitoringPointTypeValue) {
-      if (!Number.isNaN(Number(key)) && type === Number(key)) {
-        const _key: keyof typeof MonitoringPointTypeValue = MonitoringPointTypeValue[
-          key
-        ] as keyof typeof MonitoringPointTypeValue;
-        return MonitoringPointTypeText[_key];
-      }
-    }
   },
   getAxis: (key?: string) => {
     if (key === AXIS.X.key) {
@@ -145,8 +82,8 @@ export const Point = {
 export const Points = {
   filter: (measurements?: MonitoringPointRow[]) => {
     if (!measurements) return [];
-    return measurements.filter(
-      (point) => point.type !== MonitoringPointTypeValue.FlangeBoltPreload
+    return measurements.filter((point) =>
+      MonitoringPointType.Key.filterNonVirtualTypes(point.type)
     );
   },
   sort: (measurements: MonitoringPointRow[]) => {

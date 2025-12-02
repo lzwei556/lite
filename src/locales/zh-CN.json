@@ -453,7 +453,7 @@
   "FIELD_INCLINATION_EW": "东西",
   "FIELD_INCLINATION_EW2": "东西倾角",
   "FIELD_INCLINATION_NS": "南北",
-  "FIELD_INCLINATION_NS2": "径向倾角",
+  "FIELD_INCLINATION_NS2": "南北倾角",
   "FIELD_INCLINATION_RADIAL": "径向",
   "FIELD_INCLINATION_RADIAL2": "径向倾角",
   "FIELD_INCLINATION_AXIAL": "轴向",
@@ -1438,5 +1438,8 @@
   "diagnosis.description": "状态描述",
   "diagnosis.suggestion": "维修建议",
   "diagnosis.health.index": "健康指数",
-  "component.health.status":"组件健康状态"
+  "component.health.status":"组件健康状态",
+  "low.envelope": "低",
+  "high.envelope": "高",
+  "monitoirng.point.position": "位置"
 }

@@ -2,18 +2,18 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { useLocaleContext } from '../../../localeProvider';
 import { Dayjs } from '../../../utils';
-import { DisplayProperty } from '../../../constants/properties';
 import { roundValue } from '../../../utils/format';
 import { ChartMark } from '../../../components';
 import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
+import { CharacteristicData } from 'common';
 
 export const ThicknessChart = (
   props: MonitoringPointRow & {
     history?: HistoryData;
-    property: DisplayProperty;
+    property: CharacteristicData.DisplayProperty;
     onDispatchMark?: () => void;
   }
 ) => {

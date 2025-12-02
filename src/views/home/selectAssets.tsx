@@ -6,6 +6,7 @@ import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { Card, CheckboxFormItem, Grid } from '../../components';
 import { useSelectedProject } from '../../providers/user-profile';
+import { downloadFile } from 'utils';
 
 export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void } & ModalProps> = (
   props
@@ -20,12 +21,7 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
       exportAssets(selectedProject.id, windIds)
         .then((res) => {
           if (!windIds) props.onSuccess();
-          const url = window.URL.createObjectURL(new Blob([res.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', getFilename(res));
-          document.body.appendChild(link);
-          link.click();
+          downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
         })
         .finally(() => {
           setLoading(false);

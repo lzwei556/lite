@@ -199,9 +199,9 @@ export const FilterableAlarmRecordTable: React.FC<{
                 maxTagCount={2}
                 mode='multiple'
                 onChange={setMontoringPointType}
-                options={App.getMonitoringPointTypes(appType).map(({ label, id }) => ({
+                options={App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
                   label: intl.get(label),
-                  value: id
+                  value
                 }))}
                 prefix={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
               />

@@ -8,6 +8,7 @@ export * from './form/radioFormItem';
 export * from './form/selectFormItem';
 export * from './form/sliderFormItem';
 export * from './form/textFormItem';
+export * from './layout/content-top-bottom-layout';
 export * from './layout/pageWithSideBar';
 export * from './layout/title-extra';
 export * from './descriptions';

@@ -18,6 +18,7 @@ import {
 import { getPluralUnitInEnglish, getValue, truncate } from '../utils';
 import { useLocaleContext } from '../localeProvider';
 import { useParents } from '../features/monitoring-point-wind-turbine/common';
+import { MonitoringPointType } from 'common';
 
 export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
   const { language } = useLocaleContext();
@@ -34,7 +35,7 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
   const items: DescriptionsProps['items'] = [
     {
       label: intl.get('TYPE'),
-      children: intl.get(Point.getTypeLabel(type)!)
+      children: intl.get(MonitoringPointType.Key.getLabel(type))
     }
   ];
   if (asset) {

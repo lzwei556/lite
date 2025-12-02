@@ -1438,5 +1438,8 @@
   "diagnosis.description": "Description",
   "diagnosis.suggestion": "Suggestion",
   "diagnosis.health.index": "Health Index",
-  "component.health.status": "Components Status"
+  "component.health.status": "Components Status",
+  "low.envelope": "Low",
+  "high.envelope": "High",
+  "monitoirng.point.position": "Position"
 }

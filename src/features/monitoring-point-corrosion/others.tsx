@@ -11,33 +11,34 @@ import {
 } from '../../asset-common';
 
 type FieldProps = {
-  monitoringPoint?: MonitoringPointRow;
   formItemColProps: ColProps;
+  monitoringPoint?: MonitoringPointRow;
+  namePrefix?: string;
   nameIndex?: number;
   fieldKey?: number | undefined;
 };
 
-export const Others = ({ monitoringPoint, formItemColProps, ...props }: FieldProps) => {
+export const Others = ({ monitoringPoint, formItemColProps, namePrefix, ...props }: FieldProps) => {
   const { nameIndex } = props;
-  const nameProp = nameIndex !== undefined ? [`${nameIndex}`, 'attributes'] : ['attributes'];
+  const nameProp = nameIndex !== undefined ? [nameIndex, 'attributes'] : ['attributes'];
   return (
     <>
       <Col {...formItemColProps}>
         <NumberFormItemWithSwitcher
+          {...props}
+          enabled={monitoringPoint?.attributes?.initial_thickness_enabled}
           label={InitialThickness.label}
           name={[...nameProp, InitialThickness.name]}
-          enabled={monitoringPoint?.attributes?.initial_thickness_enabled}
-          enabledFormItemProps={props}
-          numberFormItemProps={props}
+          namePrefix={namePrefix}
         />
       </Col>
       <Col {...formItemColProps}>
         <NumberFormItemWithSwitcher
+          {...props}
+          enabled={monitoringPoint?.attributes?.critical_thickness_enabled}
           label={CriticalThickness.label}
           name={[...nameProp, CriticalThickness.name]}
-          enabled={monitoringPoint?.attributes?.critical_thickness_enabled}
-          enabledFormItemProps={props}
-          numberFormItemProps={props}
+          namePrefix={namePrefix}
         />
       </Col>
       <Col {...formItemColProps}>
