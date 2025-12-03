@@ -3,6 +3,7 @@ import { generateColProps } from 'utils/grid';
 import { CollapseProps, ColProps } from 'antd';
 import { CharacteristicData } from 'common';
 import { CharacteristicDataDTO } from '../types';
+import { getGroupedProperties } from 'common/characteristic-data';
 
 export type RecentWeekProps = {
   properties: CharacteristicData.DisplayProperty[];
@@ -11,25 +12,25 @@ export type RecentWeekProps = {
   colProps?: ColProps;
 };
 
-export const useGroupedPropertyChartsGridCollapseProps = () => {
+export const useGroupedPropertyChartsGridCollapseProps = (
+  properties: CharacteristicData.DisplayProperty[]
+) => {
   const styles = useGlobalStyles();
+  const groups = getGroupedProperties(properties);
   return {
     collapseProps: {
       bordered: false,
-      defaultActiveKey: CharacteristicData.displayPropertyGroup[0],
+      defaultActiveKey: groups[0][0],
       expandIconPosition: 'end',
       style: { borderRadius: 0, backgroundColor: styles.colorBgContainerStyle.backgroundColor }
     } as CollapseProps,
-    groups: CharacteristicData.displayPropertyGroup
+    groups
   };
 };
 
-export const useGridItemsProps = (
-  params: RecentWeekProps & { colProps?: ColProps; group?: string }
-) => {
-  const properties = params.properties.filter((p) => p.group === params.group);
+export const useGridItemsProps = (params: RecentWeekProps & { colProps?: ColProps }) => {
   const styles = useGlobalStyles();
-  return properties.map((property) => {
+  return params.properties.map((property) => {
     const chartCardProps = getPropertyChartCardProps({ ...params, property, styles });
     return { colProps: params.colProps, chartCardProps };
   });

@@ -36,17 +36,17 @@ const Charts = (props: Props) => {
 };
 
 const GroupedPropertyChartsGridCollapse = (props: Props) => {
-  const { collapseProps, groups } = useGroupedPropertyChartsGridCollapseProps();
+  const { collapseProps, groups } = useGroupedPropertyChartsGridCollapseProps(props.properties);
 
   return (
     <Collapse
       {...collapseProps}
-      items={groups.map((g) => ({
+      items={groups.map(([g, properties]) => ({
         key: g,
         label: intl.get(g),
         children: (
           <Grid>
-            <GridItems {...props} group={g} />
+            <GridItems {...{ ...props, properties }} group={g} />
           </Grid>
         )
       }))}

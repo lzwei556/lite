@@ -2,7 +2,7 @@ import { transformSnake2Dot } from 'utils';
 import { DeviceType } from '../types/device_type';
 import { toSnake } from 'ts-case-convert';
 import { Property } from 'monitoring-point/types';
-import { DisplayProperty, getPropertiesOrderByGroup, CATEGORIES } from './characteristic-data';
+import { DisplayProperty, CATEGORIES } from './characteristic-data';
 import {
   AttributesField,
   baseInclinationFields,
@@ -258,7 +258,7 @@ export const Key = {
         .filter((p) => !!p.isShow)
         .sort((prev, crt) => prev.sort - crt.sort) as DisplayProperty[];
     } else {
-      return getPropertiesOrderByGroup(dispalyProperties).map((p) => {
+      return dispalyProperties.map((p) => {
         const fields = properties.find((r) => r.key === p.key)?.fields ?? [];
         return {
           ...p,

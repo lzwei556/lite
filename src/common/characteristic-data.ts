@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { AXIS_ALIAS } from 'monitoring-point/constants';
 import { MonitoringPointRow } from 'monitoring-point/types';
 
@@ -47,14 +48,6 @@ export type DisplayPropertyCategories = {
 };
 
 // constants begin
-
-export const displayPropertyGroup: DisplayPropertyGroup[] = [
-  'core',
-  'timeDomain',
-  'frequency',
-  'statistics',
-  'skew'
-].map((g) => `property.group.${g}` as DisplayPropertyGroup);
 
 //generic properties start
 export const TEMPERATURE: DisplayProperty = {
@@ -296,27 +289,27 @@ const RPM: DisplayProperty = {
   group: 'property.group.core'
 };
 const SOUND_PRESSURE_LEVEL: DisplayProperty = {
-  key: 'sound_pressure_level',
+  key: 'pressure_level',
   name: 'FIELD_SOUND_PRESSURE_LEVEL',
-  precision: 1,
+  precision: 3,
   group: 'property.group.core'
 };
 const ENERGY_RATIO: DisplayProperty = {
   key: 'energy_ratio',
   name: 'FIELD_ENERGY_RATIO',
-  precision: 1,
+  precision: 3,
   group: 'property.group.core'
 };
 const DOMINANT_FREQUENCY: DisplayProperty = {
   key: 'dominant_frequency',
   name: 'FIELD_DOMINANT_FREQUENCY',
-  precision: 1,
+  precision: 3,
   group: 'property.group.core'
 };
 const STATIONARITY: DisplayProperty = {
   key: 'stationarity',
   name: 'FIELD_STATIONARITY',
-  precision: 1,
+  precision: 3,
   group: 'property.group.core'
 };
 //SVT specific end
@@ -522,24 +515,24 @@ export const CATEGORIES: DisplayPropertyCategories = {
   SVT220S1S3: [
     VELOCITY_RMS,
     ACCLERATION_ENVELOPE,
-    TEMPERATURE,
+    { ...TEMPERATURE, group: 'property.group.core' as DisplayPropertyGroup },
+    FREQUENCY,
     ACCLERATION_PEAK,
     DISPLACEMENT_PEAK_TO_PEAK,
-    FREQUENCY,
     RPM
   ],
   SVT210SU: [
     VELOCITY_RMS,
     ACCLERATION_ENVELOPE,
-    TEMPERATURE,
-    ACCLERATION_PEAK,
-    DISPLACEMENT_PEAK_TO_PEAK,
+    { ...TEMPERATURE, group: 'property.group.core' as DisplayPropertyGroup },
     FREQUENCY,
-    RPM,
     SOUND_PRESSURE_LEVEL,
     ENERGY_RATIO,
     DOMINANT_FREQUENCY,
-    STATIONARITY
+    STATIONARITY,
+    ACCLERATION_PEAK,
+    DISPLACEMENT_PEAK_TO_PEAK,
+    RPM
   ],
   ST: [TEMPERATURE],
   SPT: [
@@ -580,15 +573,8 @@ export const CATEGORIES: DisplayPropertyCategories = {
 
 // constants end
 
-export function getPropertiesOrderByGroup(properties: readonly DisplayProperty[]) {
-  const _properties: DisplayProperty[] = [];
-  if (properties.every((p) => !p.group)) {
-    return properties;
-  }
-  displayPropertyGroup.forEach((g) => {
-    properties.filter((p) => p.group === g).forEach((p) => _properties.push(p));
-  });
-  return _properties;
+export function getGroupedProperties(properties: readonly DisplayProperty[]) {
+  return Object.entries(_.groupBy(properties, (p) => p.group));
 }
 
 export function appendAxisAliasAbbrToField(

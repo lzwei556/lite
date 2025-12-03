@@ -14,6 +14,7 @@ import {
 import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
 import { CharacteristicData, MonitoringPointType } from 'common';
+import { getGroupedProperties } from 'common/characteristic-data';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties, attributes } = point;
@@ -38,20 +39,20 @@ export const Monitor = (point: MonitoringPointRow) => {
   if (loading) return <Spin />;
   if (!historyData || historyData.length === 0)
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+  const groups = getGroupedProperties(MonitoringPointType.Key.getProperties(type, properties));
 
   return (
     <Collapse
       bordered={false}
-      defaultActiveKey={CharacteristicData.displayPropertyGroup[0]}
+      defaultActiveKey={groups[0][0]}
       expandIconPosition='end'
-      items={CharacteristicData.displayPropertyGroup.map((g) => ({
+      items={groups.map(([g, properties]) => ({
         key: g,
         label: intl.get(g),
         children: (
           <Grid>
-            {MonitoringPointType.Key.getProperties(type, properties)
+            {properties
               .map((p) => CharacteristicData.appendAxisAliasAbbrToField(p, attributes))
-              .filter((p) => p.group === g)
               .map((p: CharacteristicData.DisplayProperty, index: number) => {
                 return (
                   <Col {...colProps} key={index}>

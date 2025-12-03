@@ -12,6 +12,7 @@ import { HistoryData } from '../../asset-common';
 import { HistoryDataFea } from '..';
 import { getDisplayProperties } from './util';
 import { CharacteristicData } from 'common';
+import { getGroupedProperties } from 'common/characteristic-data';
 
 export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   const channels = DeviceType.getChannels(device.typeId);
@@ -56,29 +57,28 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
       </Card>
     );
   } else if (DeviceType.isVibration(device.typeId)) {
+    const groups = getGroupedProperties(getDisplayProperties(device.properties, device.typeId));
     return (
       <Collapse
         bordered={false}
-        defaultActiveKey={CharacteristicData.displayPropertyGroup[0]}
+        defaultActiveKey={groups[0][0]}
         expandIconPosition='end'
-        items={CharacteristicData.displayPropertyGroup.map((g) => ({
+        items={groups.map(([g, properties]) => ({
           key: g,
           label: intl.get(g),
           children: (
             <Grid>
-              {getDisplayProperties(device.properties, device.typeId)
-                .filter((p) => p.group === g)
-                .map((p: CharacteristicData.DisplayProperty, index: number) => {
-                  return (
-                    <Col {...generateColProps({ lg: 12, xl: 12, xxl: 12 })} key={index}>
-                      <HistoryDataFea.PropertyChartCard
-                        data={historyData}
-                        property={p}
-                        cardProps={propertyHistoryCardStyle}
-                      />
-                    </Col>
-                  );
-                })}
+              {properties.map((p: CharacteristicData.DisplayProperty, index: number) => {
+                return (
+                  <Col {...generateColProps({ lg: 12, xl: 12, xxl: 12 })} key={index}>
+                    <HistoryDataFea.PropertyChartCard
+                      data={historyData}
+                      property={p}
+                      cardProps={propertyHistoryCardStyle}
+                    />
+                  </Col>
+                );
+              })}
             </Grid>
           )
         }))}
