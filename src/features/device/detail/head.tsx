@@ -120,7 +120,12 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
         </CanAccess>
       )}
       <CanAccess {...Permission.DeviceCommand}>
-        <CommandDropdown device={device} initialUpgradeCode={location.state} network={network} />
+        <CommandDropdown
+          device={device}
+          initialUpgradeCode={location.state}
+          network={network}
+          key={device.macAddress}
+        />
       </CanAccess>
     </Button.Group>
   );
