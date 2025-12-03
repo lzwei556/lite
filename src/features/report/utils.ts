@@ -48,6 +48,8 @@ const getTypeName = (d: NonNullable<Report['deviceFeatures']>[0]) => {
     return 'DC110H';
   } else if (DeviceType.getUltraHighDCSensors().includes(d.type)) {
     return 'DC210';
+  } else if (DeviceType.isGateway(d.type)) {
+    return intl.get('GATEWAY');
   }
   return '';
 };
