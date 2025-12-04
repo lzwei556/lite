@@ -33,7 +33,7 @@ export enum Value {
   Temperature = 10801
 }
 
-export const CONFIGS: Config[] = [
+const configs: Config[] = [
   {
     key: Value.BoltLoosening,
     label: Value[Value.BoltLoosening],
@@ -225,7 +225,14 @@ const toOption = (type: Config) => ({
   label: Key.getLabel(type.key)
 });
 
-const flatten = (initial: number[], value: Config) => initial.concat(value.deviceTypes);
+const flatten = (initial: number[], value: Config) => {
+  value.deviceTypes.forEach((type) => {
+    if (!initial.includes(type)) {
+      initial.push(type);
+    }
+  });
+  return initial;
+};
 
 const getGeneralByCategory = () => {
   return getByCategory([
@@ -240,7 +247,7 @@ const getGeneralByCategory = () => {
 };
 
 const getByCategory = (categories: Config['category'][]) => {
-  return CONFIGS.filter((type) => categories.includes(type.category));
+  return configs.filter((type) => categories.includes(type.category));
 };
 
 const PREFIX = 'monitoring.point.type.';
@@ -282,7 +289,7 @@ export const Key = {
 };
 
 function get(key: Value) {
-  return CONFIGS.find((type) => type.key === key) || null;
+  return configs.find((type) => type.key === key) || null;
 }
 // helpers end
 
