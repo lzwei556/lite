@@ -54,7 +54,7 @@ export const MonitoringPointWaveform = (props: Props) => {
 };
 
 const useVibrationProps = ({ vibrationDirectionAttrs, type }: Props) => {
-  const options = Axis.OPTIONS.map((opt) => {
+  const options = Axis.options.map((opt) => {
     const direction = getVibrationDirectionByAxisKey(opt.key, vibrationDirectionAttrs);
     return { ...opt, label: direction ? direction.label : opt.label } as Axis.Option;
   });

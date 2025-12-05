@@ -121,14 +121,15 @@ const corrosionRateLongTerm: AttributesField = {
   type: 'number',
   defaultValue: 365
 };
-const options = Axis.OPTIONS.map((opt) => ({ label: opt.label, value: opt.key }));
+const options = Axis.options.map((opt) => ({ label: opt.label, value: opt.key }));
 const axial: AttributesField = {
   source: 'vibration',
   label: 'direction.axial',
   name: 'axial',
   description: 'axial.desc',
   options,
-  type: 'enum'
+  type: 'enum',
+  defaultValue: Axis.axisObject.Z.key
 };
 const vertical: AttributesField = {
   source: 'vibration',
@@ -136,7 +137,8 @@ const vertical: AttributesField = {
   name: 'vertical',
   description: 'vertical.desc',
   options,
-  type: 'enum'
+  type: 'enum',
+  defaultValue: Axis.axisObject.Y.key
 };
 const horizontal: AttributesField = {
   source: 'vibration',
@@ -144,7 +146,8 @@ const horizontal: AttributesField = {
   name: 'horizontal',
   description: 'horizontal.desc',
   options,
-  type: 'enum'
+  type: 'enum',
+  defaultValue: Axis.axisObject.X.key
 };
 export const topInclinationFields: AttributesField[] = [
   positionField,
