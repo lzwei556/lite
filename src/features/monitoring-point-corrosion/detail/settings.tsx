@@ -49,10 +49,7 @@ export const Settings = ({
             />
             <Card size='small' title={intl.get('monitoring.point.attr')} type='inner'>
               <Grid>
-                <Others
-                  monitoringPoint={point}
-                  formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
-                />
+                <Others formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
               </Grid>
             </Card>
           </Form>

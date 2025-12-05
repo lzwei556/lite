@@ -6,13 +6,11 @@ import { getRequiredMessage, useFormItemIntlProps } from './use-form-item-props'
 import { NameMode } from 'types';
 
 export type NumberFormItemWithSwitcherProps = FormItemProps & {
-  enabled?: boolean;
   nameMode?: NameMode;
   namePrefix?: string;
 };
 
 export const NumberFormItemWithSwitcher = ({
-  enabled: enabledFromProps,
   name,
   nameMode = 'separated',
   namePrefix,
@@ -20,9 +18,10 @@ export const NumberFormItemWithSwitcher = ({
 }: NumberFormItemWithSwitcherProps) => {
   const namePath = Array.isArray(name) ? name : [name];
   const { enabledName, valueName } = getName(namePath, nameMode);
-  const [enabled, setEnabled] = React.useState(enabledFromProps ?? false);
+  const [enabled, setEnabled] = React.useState(false);
   const { label, rules = [] } = useFormItemIntlProps(rest);
   const form = Form.useFormInstance();
+  const required = Form.useWatch(enabledName) ?? enabled;
 
   return (
     <TextFormItem
@@ -45,10 +44,7 @@ export const NumberFormItemWithSwitcher = ({
       <NumberFormItem
         {...{
           ...rest,
-          rules: [
-            { required: enabled, message: getRequiredMessage(rest.label as string) },
-            ...rules
-          ]
+          rules: [{ required, message: getRequiredMessage(rest.label as string) }, ...rules]
         }}
         noStyle={true}
         name={valueName}

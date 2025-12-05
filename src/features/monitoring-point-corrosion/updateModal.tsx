@@ -34,10 +34,7 @@ export const UpdateModal = (props: ModalFormProps & { monitoringPoint: Monitorin
         </Card>
         <Card size='small' style={{ marginBlock: 16 }} title={intl.get('monitoring.point.attr')}>
           <Grid>
-            <Others
-              monitoringPoint={monitoringPoint}
-              formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
-            />
+            <Others formItemColProps={generateColProps({ xl: 12, xxl: 12 })} />
           </Grid>
         </Card>
       </Form>
