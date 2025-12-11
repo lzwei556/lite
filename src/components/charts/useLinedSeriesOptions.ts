@@ -30,7 +30,7 @@ export function useLinedSeriesOptions(
         }
       ];
   const dataset = serieOpts.map((s) => {
-    return { source: { x: s.xAxisValues, ...s.data } };
+    return { source: { '': s.xAxisValues, ...s.data } };
   });
   const legend = useLegend(serieOpts);
   const series = useSeries(serieOpts, !config?.switchs?.noArea);
