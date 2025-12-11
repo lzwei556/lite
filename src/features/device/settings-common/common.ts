@@ -94,5 +94,8 @@ export const GROUPS = {
   inclinometer: 'SETTING_GROUP_INCLINOMETER',
   basic: 'settings.group.basic',
   dat: 'settings.group.data.acquisition.time',
-  dap: 'settings.group.data.acquisition.parameter'
+  dap: 'settings.group.data.acquisition.parameter',
+  dwp: 'settings.group.data.waveform.parameter.1',
+  dwp3: 'settings.group.data.waveform.parameter.2',
+  dwp4: 'settings.group.data.waveform.parameter.3'
 };
