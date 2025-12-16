@@ -4,7 +4,8 @@ import intl from 'react-intl-universal';
 import { Card, SaveIconButton } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import { AssetModel, AssetRow, updateAsset } from '../../../asset-common';
-import { BasisFormItems, SettingFormItems, getByType, motor } from '../../../asset-variant';
+import { BasisFormItems, SettingFormItems } from '../../../asset-variant';
+import { AssetCategory } from '../../../asset-category';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const { name, parentId, type } = asset;
@@ -33,15 +34,16 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
         form={form}
         layout='vertical'
         initialValues={{
+          ...asset,
           name,
           parent_id: parentId,
-          type,
-          ...(asset.attributes
-            ? { attributes: asset.attributes }
-            : getByType(type)?.settings?.default)
+          type
         }}
       >
-        <BasisFormItems types={[motor]} formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
+        <BasisFormItems
+          types={AssetCategory.vibrationAssetOptions}
+          formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
+        />
         {type && (
           <SettingFormItems
             key={type}

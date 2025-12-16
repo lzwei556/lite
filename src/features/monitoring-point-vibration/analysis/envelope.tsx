@@ -3,7 +3,6 @@ import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { getValue, roundValue } from '../../../utils/format';
 import { ChartMark, Descriptions, Grid } from '../../../components';
-import { RotationSpeed } from '../../../asset-variant';
 import { envelope, EnvelopeAnalysis } from '../../../asset-common';
 import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
@@ -13,6 +12,7 @@ import { useMarkChartProps, MarkList, Toolbar, ConfigurableNumsOfCursor } from '
 import { useFaultFrequency } from './useFaultFrequency';
 import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
 import { Sidebar } from './mark/sidebar';
+import { rotationSpeed } from '../../../asset-category';
 
 export const Envelope = ({
   axis,
@@ -146,8 +146,8 @@ export const Envelope = ({
                     },
                     { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
                     {
-                      label: intl.get(RotationSpeed.label),
-                      children: getValue({ value: rotation_speed, unit: RotationSpeed.unit })
+                      label: intl.get(rotationSpeed.label),
+                      children: getValue({ value: rotation_speed, unit: rotationSpeed.unit })
                     }
                   ]}
                 />

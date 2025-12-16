@@ -83,7 +83,12 @@ export const PointItemList = ({
                     rules={[{ required: true }]}
                   />
                 </Col>
-                <Others {...restFields} nameIndex={name} formItemColProps={formItemColProps} />
+                <Others
+                  {...restFields}
+                  nameIndex={name}
+                  namePrefix='monitoring_points'
+                  formItemColProps={formItemColProps}
+                />
               </Grid>
             </div>
           ))}
@@ -102,8 +107,8 @@ export const PointItemList = ({
                           attributes: {
                             corrosion_rate_short_term: 30,
                             corrosion_rate_long_term: 365,
-                            initial_thickness: { enabled: false },
-                            critical_thickness: { enabled: false }
+                            initial_thickness_enabled: false,
+                            critical_thickness_enabled: false
                           }
                         }))
                       );

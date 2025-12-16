@@ -16,6 +16,6 @@ export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRo
   } else if (asset.type === device.type) {
     return <DeviceIcon {...commonProps} />;
   } else {
-    return null;
+    return <MotorIcon {...commonProps} />;
   }
 };

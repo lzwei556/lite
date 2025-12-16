@@ -194,7 +194,8 @@ export const useProvisioningMode = (initial?: ProvisioningMode) => {
 const ProvisioningModeField: Field<WSN> = {
   name: 'provisioningMode',
   label: 'provisioning.mode',
-  description: 'provisioning.mode.desc'
+  description: 'provisioning.mode.desc',
+  type: 'enum'
 };
 
 export const useProvisioningModeField = (onChange: (mode: ProvisioningMode) => void) => {
@@ -231,7 +232,8 @@ export const useCommunicationPeriod = (
 const CommunicationOffsetField: Field<WSN> = {
   name: 'communicationOffset',
   label: 'communication.offset',
-  description: 'communication.offset.desc'
+  description: 'communication.offset.desc',
+  type: 'enum'
 };
 
 export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name']) => {
@@ -272,7 +274,8 @@ export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name
 const IntervalCnt: Field<WSN> = {
   name: 'intervalCnt',
   label: 'interval.cnt',
-  description: 'interval.cnt.desc'
+  description: 'interval.cnt.desc',
+  type: 'enum'
 };
 
 export const useIntervalCnt = () => {
@@ -289,7 +292,8 @@ export const useIntervalCnt = () => {
 const GroupSize: Field<WSN> = {
   name: 'groupSize',
   label: 'group.size',
-  description: 'group.size.desc'
+  description: 'group.size.desc',
+  type: 'enum'
 };
 
 export const useGroupSize = () => {
@@ -305,7 +309,8 @@ export const useGroupSize = () => {
 const GroupSize2: Field<WSN> = {
   name: 'groupSize2',
   label: 'group.size.2',
-  description: 'group.size.2.desc'
+  description: 'group.size.2.desc',
+  type: 'enum'
 };
 
 export const useGroupSize2 = () => {

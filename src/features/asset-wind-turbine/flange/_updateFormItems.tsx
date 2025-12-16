@@ -62,27 +62,38 @@ export const UpdateFormItems = ({
         />
       </Col>
       <Col {...formItemColProps}>
-        <NumberFormItemWithSwitcher label='RATING' name={['attributes', 'normal']} />
+        <NumberFormItemWithSwitcher
+          label='RATING'
+          name={['attributes', 'normal']}
+          nameMode='mixed'
+        />
       </Col>
       <Col {...formItemColProps}>
-        <NumberFormItemWithSwitcher label='INITIAL_VALUE' name={['attributes', 'initial']} />
+        <NumberFormItemWithSwitcher
+          label='INITIAL_VALUE'
+          name={['attributes', 'initial']}
+          nameMode='mixed'
+        />
       </Col>
       <Col {...formItemColProps}>
         <NumberFormItemWithSwitcher
           label={`leveled.alarm.${AlarmLevel.Minor}`}
           name={['attributes', 'info']}
+          nameMode='mixed'
         />
       </Col>
       <Col {...formItemColProps}>
         <NumberFormItemWithSwitcher
           label={`leveled.alarm.${AlarmLevel.Major}`}
           name={['attributes', 'warn']}
+          nameMode='mixed'
         />
       </Col>
       <Col {...formItemColProps}>
         <NumberFormItemWithSwitcher
           label={`leveled.alarm.${AlarmLevel.Critical}`}
           name={['attributes', 'danger']}
+          nameMode='mixed'
         />
       </Col>
       <Col {...formItemColProps}>

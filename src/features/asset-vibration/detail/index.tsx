@@ -49,7 +49,7 @@ export const Index = (props: {
                   <Update asset={asset} onSuccess={onSuccess} key={asset.id} />
                 </Col>
                 <Col span={24}>
-                  <PointsTable {...props} />
+                  <PointsTable {...props} key={asset.id} />
                 </Col>
               </Grid>
             )

@@ -80,7 +80,7 @@ export const Index = (props: { asset: AssetRow; onSuccess: () => void }) => {
                       footer={null}
                     >
                       <Card>
-                        <SettingsDetail settings={asset.attributes} type={asset.type} />
+                        <SettingsDetail attributes={asset.attributes} type={asset.type} />
                       </Card>
                     </ModalWrapper>
                   </React.Fragment>

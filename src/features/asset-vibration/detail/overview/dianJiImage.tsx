@@ -10,8 +10,8 @@ import { ImageAnnotation } from '../../..';
 import { Card, Flex, Grid, IconButton, Link } from '../../../../components';
 import { ASSET_PATHNAME, AssetRow, updateAsset, uploadAssetImage } from '../../../../asset-common';
 import { getPropertyValues, MonitoringPointPropertyItem } from '../context';
-import DianJi from './dianji.png';
 import { createStyles } from 'antd-style';
+import { AssetCategory } from '../../../../asset-category';
 
 const useStyles = createStyles(({ token, css }) => ({
   listItem: css`
@@ -60,7 +60,9 @@ export const DianJiImage = ({
         <ImageAnnotation
           asset={asset}
           size={size}
-          background={asset.image ? `/images/${asset.image}` : DianJi}
+          background={
+            asset.image ? `/images/${asset.image}` : AssetCategory.Key.getImage(asset.type)!
+          }
           placeTexts={(asset.monitoringPoints ?? []).map((m) => ({
             id: m.id,
             header: <Link to={`/${ASSET_PATHNAME}/${m.id}-${m.type}`}>{m.name}</Link>,
