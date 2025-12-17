@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Col, Empty } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Descriptions, Grid, LineChart } from '../../../components';
-import { getValue } from '../../../utils/format';
-import { Metadata, PropertyLightSelectFilter } from '../../../asset-common';
+import { getValue, roundValue } from '../../../utils/format';
+import { Metadata } from '../../../asset-common';
 import { PreloadWaveData } from './dynamic/types';
+import { findClosest } from '../../../utils';
 
 export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T }) {
   const { values } = props;
@@ -54,38 +55,22 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
     return [paddingLefts, paddingRights];
   };
 
+  const getTofMarkPointData = (tofs: number[]) => {
+    const tof = values.metadata['tof'];
+    const nearestTof = findClosest([...tofs], tof);
+    if (nearestTof) {
+      const tofIndex = tofs.indexOf(nearestTof);
+      return [nearestTof, values.mv[tofIndex]];
+    }
+    return null;
+  };
+
   const renderChart = () => {
     if (!values) {
       return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
     const tofs = values['tof'];
-    const tof = values.metadata['tof'];
-    const isContained =
-      tof && !Number.isNaN(tof) && tof <= Math.max(...tofs) && tof >= Math.min(...tofs);
-    const _tofs = Array.from(new Set([...tofs, tof].sort((prev, crt) => prev - crt)));
-    const index = _tofs.indexOf(tof);
-
-    let startValue = 0;
-    let endValue = 100;
-    if (isContained && index !== -1) {
-      const percentage = (index / _tofs.length) * 100;
-      const interval = { default: 10, medium: 15, large: 20, xLarge: 25 };
-      let offsetRight = interval.default;
-      let offsetLeft = interval.default;
-      if (percentage <= 20) {
-        offsetRight = interval.xLarge;
-      } else if (percentage <= 30) {
-        offsetRight = interval.large;
-      } else if (percentage <= 40) {
-        offsetRight = interval.medium;
-      } else if (percentage >= 60) {
-        offsetLeft = interval.medium;
-      } else if (percentage >= 80) {
-        offsetLeft = interval.large;
-      }
-      startValue = index - offsetLeft;
-      endValue = index + offsetRight;
-    }
+    const markPointData = getTofMarkPointData(tofs);
     const [paddingLefts, paddingRights] = calculatePadding(tofs);
 
     return (
@@ -100,16 +85,29 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
               ]
             },
             xAxisValues: [...paddingLefts, ...tofs, ...paddingRights].map((value) =>
-              getValue({ value })
+              roundValue(value)
             ),
-            raw: { smooth: true }
+            raw: markPointData
+              ? {
+                  markPoint: {
+                    data: [
+                      { name: 'tof', coord: markPointData, value: roundValue(markPointData[0]) }
+                    ]
+                  },
+                  smooth: true
+                }
+              : { smooth: true }
           }
         ]}
         style={{ height: 450 }}
         config={{
           opts: {
-            xAxis: { name: 'ns' },
-            // dataZoom: isContained ? [{ startValue, endValue }] : [{ start: 70, end: 100 }]
+            xAxis: {
+              name: 'ns',
+              scale: true,
+              type: 'value',
+              axisPointer: { label: { precision: 3 } }
+            },
             yAxis: { name: field.unit },
             dataZoom: [{ start: 0, end: 100 }],
             grid: { top: 60, bottom: 60, right: 40 }

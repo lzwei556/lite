@@ -3,12 +3,12 @@ import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Descriptions, Grid } from '../../../components';
 import { getValue } from '../../../utils';
-import { RotationSpeed } from '../../../asset-variant';
 import { AnalysisSidebarCollapse } from '../..';
 import { AnalysisCommonProps } from './analysisContent';
 import { MarkList, Toolbar, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { Sidebar } from './mark/sidebar';
+import { rotationSpeed } from '../../../asset-category';
 
 export const TimeDomain = ({
   axis,
@@ -105,8 +105,8 @@ export const TimeDomain = ({
                     },
                     { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
                     {
-                      label: intl.get(RotationSpeed.label),
-                      children: getValue({ value: rotation_speed, unit: RotationSpeed.unit })
+                      label: intl.get(rotationSpeed.label),
+                      children: getValue({ value: rotation_speed, unit: rotationSpeed.unit })
                     }
                   ]}
                 />

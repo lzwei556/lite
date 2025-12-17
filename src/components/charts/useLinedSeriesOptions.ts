@@ -42,7 +42,7 @@ export function useLinedSeriesOptions({
         }
       ];
   const dataset = series.map((s) => {
-    return { source: { x: s.xAxisValues, ...s.data } };
+    return { source: { '': s.xAxisValues, ...s.data } };
   });
   const legend = useLegend(series);
   const _series = useSeries(series, !config?.switchs?.noArea);

@@ -6,7 +6,7 @@ import { ModalWrapper } from '../../components/modalWrapper';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { addMonitoringPoints, Asset, AssetRow, MonitoringPointBatch } from '../../asset-common';
 import { useMonitoringPointParents } from '../../asset-variant';
-import { monitoringPointTypes, resolveAttrs, useSelectPoints } from './common';
+import { monitoringPointTypes, useSelectPoints } from './common';
 import { PointItemList } from './pointItemList';
 
 export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
@@ -43,7 +43,7 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
                   return {
                     name,
                     type: values.type,
-                    attributes: resolveAttrs(attributes),
+                    attributes,
                     device_binding,
                     asset_id: values.asset_id
                   };

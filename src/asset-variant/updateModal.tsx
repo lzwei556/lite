@@ -5,7 +5,6 @@ import { ModalWrapper } from '../components/modalWrapper';
 import { ModalFormProps } from '../types/common';
 import { generateColProps } from '../utils/grid';
 import { AssetModel, AssetRow, updateAsset } from '../asset-common';
-import { getByType } from './utils';
 import { BasisFormItems } from './basisFormItems';
 import { SettingFormItems } from './settingFormItems';
 import { useAssetCategories } from '../features/asset-area';
@@ -42,12 +41,10 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
         form={form}
         layout='vertical'
         initialValues={{
+          ...asset,
           name,
           parent_id: parentId,
-          type,
-          ...(asset.attributes
-            ? { attributes: asset.attributes }
-            : getByType(type)?.settings?.default)
+          type
         }}
       >
         <Card size='small' style={{ marginBottom: 16 }} title={intl.get('BASIC_INFORMATION')}>

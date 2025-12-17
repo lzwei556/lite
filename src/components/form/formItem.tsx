@@ -6,24 +6,31 @@ import { NumberFormItem } from './numberFormItem';
 import { RadioFormItem } from './radioFormItem';
 import { SelectFormItem } from './selectFormItem';
 import { TextFormItem } from './textFormItem';
+import {
+  NumberFormItemWithSwitcher,
+  NumberFormItemWithSwitcherProps
+} from './numberFormItemWithSwitcher';
 
-export const FormItem = (
-  props: FormItemProps & {
-    checkboxGroupProps?: CheckboxGroupProps;
-    inputNumberProps?: InputNumberProps;
-    inputProps?: InputProps;
-    radioGroupProps?: RadioGroupProps;
-    selectProps?: SelectProps;
-  }
-) => {
+export type UniversalFormItemProps = FormItemProps & {
+  checkboxGroupProps?: CheckboxGroupProps;
+  inputNumberProps?: InputNumberProps;
+  inputProps?: InputProps;
+  radioGroupProps?: RadioGroupProps;
+  selectProps?: SelectProps;
+  numberFormItemWithSwitcherProps?: NumberFormItemWithSwitcherProps;
+};
+
+export const FormItem = (props: UniversalFormItemProps) => {
   const {
     checkboxGroupProps,
     inputNumberProps,
     inputProps,
     radioGroupProps,
     selectProps,
+    numberFormItemWithSwitcherProps,
     ...rest
   } = props;
+
   if (checkboxGroupProps) {
     return <CheckboxFormItem checkboxGroupProps={checkboxGroupProps} {...rest} />;
   } else if (inputNumberProps) {
@@ -32,6 +39,8 @@ export const FormItem = (
     return <RadioFormItem radioGroupProps={radioGroupProps} {...rest} />;
   } else if (selectProps) {
     return <SelectFormItem selectProps={selectProps} {...rest} />;
+  } else if (numberFormItemWithSwitcherProps) {
+    return <NumberFormItemWithSwitcher {...numberFormItemWithSwitcherProps} />;
   } else {
     return <TextFormItem inputProps={inputProps} {...rest} />;
   }

@@ -118,9 +118,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                       key: 'name',
                       title: intl.get('NAME'),
                       width: 120,
-                      render: (_, row: FormListFieldData) => (
-                        <NameFormItem disabled={true} nameIndex={row.name} />
-                      )
+                      render: (_, row: FormListFieldData) => <NameFormItem nameIndex={row.name} />
                     },
                     {
                       key: 'property',

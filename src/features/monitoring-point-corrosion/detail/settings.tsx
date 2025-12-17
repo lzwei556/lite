@@ -9,7 +9,7 @@ import {
 } from '../../../asset-common';
 import { Card, Grid, SaveIconButton } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
-import { handleSubmit, parseAttrs } from '../common';
+import { handleSubmit } from '../common';
 import { BasisFormItems } from '../basisFormItems';
 import { Others } from '../others';
 
@@ -21,7 +21,6 @@ export const Settings = ({
   onSuccess: () => void;
 }) => {
   const [form] = Form.useForm<MonitoringPoint & { device_id: number }>();
-
   return (
     <Grid>
       <Col span={24}>
@@ -37,28 +36,21 @@ export const Settings = ({
           }
           title={intl.get('BASIC_INFORMATION')}
         >
-          <Form
-            form={form}
-            layout='vertical'
-            initialValues={{ ...Point.convert(point, parseAttrs) }}
-          >
+          <Form form={form} layout='vertical' initialValues={{ ...Point.convert(point) }}>
             <BasisFormItems
               monitoringPoint={point}
               formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
             />
             <Card size='small' title={intl.get('monitoring.point.attr')} type='inner'>
               <Grid>
-                <Others
-                  monitoringPoint={point}
-                  formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
-                />
+                <Others formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
               </Grid>
             </Card>
           </Form>
         </Card>
       </Col>
       <Col span={24}>
-        <AlarmRuleSetting point={point} />
+        <AlarmRuleSetting point={point} key={point.id} />
       </Col>
     </Grid>
   );

@@ -138,7 +138,8 @@ const MajorCommunicationPeriod = () => (
       name: 'communicationPeriod',
       label: 'major.communication.period',
       description: 'major.communication.period.desc',
-      options: getCommunicationPeriodOptions(ProvisioningMode.TimeDivision)
+      options: getCommunicationPeriodOptions(ProvisioningMode.TimeDivision),
+      type: 'enum'
     }}
   />
 );
@@ -149,7 +150,8 @@ const SecondaryCommunicationPeriod = () => (
       name: 'communicationPeriod2',
       label: 'communication.period.2',
       description: 'communication.period.2.desc',
-      options: SecondaryCommunicationPeriodOptions
+      options: SecondaryCommunicationPeriodOptions,
+      type: 'enum'
     }}
   />
 );
@@ -160,7 +162,8 @@ const CommunicationPeriod = () => (
       name: 'communicationPeriod',
       label: 'communication.period',
       description: 'communication.period.desc',
-      options: getCommunicationPeriodOptions()
+      options: getCommunicationPeriodOptions(),
+      type: 'enum'
     }}
   />
 );

@@ -81,67 +81,10 @@ export function handleSubmit(
     } else {
       bindDevice(id, values.device_id, undefined, processId);
     }
-    updateMeasurement(id, {
-      ...values,
-      attributes: resolveAttrs(values.attributes)
-    }).then(() => {
+    updateMeasurement(id, values).then(() => {
       onSuccess();
     });
   } catch (error) {
     console.log(error);
   }
 }
-
-// convert 'initial_thickness: { enabled: true; value: 5 }' to 'initial_thickness_enabled: true' and 'initial_thickness: 5'
-export const resolveAttrs = (attributes: any) => {
-  if (attributes) {
-    const { critical_thickness, initial_thickness, ...rest } = attributes;
-    let attr = { ...rest };
-    if (critical_thickness) {
-      attr = {
-        ...attr,
-        critical_thickness_enabled: critical_thickness.enabled
-      };
-      if (critical_thickness.value) {
-        attr = { ...attr, critical_thickness: critical_thickness.value };
-      }
-    }
-    if (initial_thickness) {
-      attr = {
-        ...attr,
-        initial_thickness_enabled: initial_thickness.enabled
-      };
-      if (initial_thickness.value) {
-        attr = { ...attr, initial_thickness: initial_thickness.value };
-      }
-    }
-    return attr;
-  }
-  return attributes;
-};
-
-export const parseAttrs = (attributes: MonitoringPointRow['attributes']) => {
-  let attr = null;
-  if (attributes) {
-    const {
-      critical_thickness,
-      critical_thickness_enabled,
-      initial_thickness,
-      initial_thickness_enabled,
-      ...rest
-    } = attributes;
-    attr = {
-      ...rest,
-      critical_thickness: {
-        enabled: critical_thickness_enabled,
-        value: critical_thickness
-      },
-      initial_thickness: {
-        enabled: initial_thickness_enabled,
-        value: initial_thickness
-      }
-    };
-  }
-
-  return attr ?? attributes;
-};

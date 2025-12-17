@@ -33,7 +33,7 @@ export const Overview = (props: { asset: AssetRow; onSuccess?: () => void }) => 
         <Grid>
           <Col span={24}>
             <MutedCard title={intl.get('BASIC_INFORMATION')}>
-              <SettingsDetail settings={asset.attributes} type={asset.type} />
+              <SettingsDetail attributes={asset.attributes} type={asset.type} />
             </MutedCard>
           </Col>
           <Col span={24}>

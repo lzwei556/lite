@@ -7,7 +7,7 @@ import { Card, Grid, SelectFormItem, TextFormItem } from '../components';
 import { generateColProps } from '../utils/grid';
 import { addAsset, AssetCategory, AssetModel } from '../asset-common';
 import { SettingFormItems } from './settingFormItems';
-import { getByType, useParents } from './utils';
+import { useParents } from './utils';
 import { TypeFormItem } from './typeFormItem';
 
 export const Create = (props: ModalFormProps & { parentId?: number; types: AssetCategory[] }) => {
@@ -67,13 +67,7 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
             </Col>
             {renderParent()}
             <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-              <TypeFormItem
-                onChange={(type) => {
-                  setType(type);
-                  form.setFieldsValue(getByType(type)?.settings?.default as any);
-                }}
-                types={types}
-              />
+              <TypeFormItem onChange={setType} types={types} />
             </Col>
           </Grid>
         </Card>

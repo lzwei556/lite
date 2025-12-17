@@ -1,7 +1,7 @@
 import { mapTree } from '../utils/tree';
 import { AssetRow, useContext } from '../asset-common';
-import { area, device, motor, pipe, tank } from './constants';
-import { defaultSettings as MotorDefaultSettings } from './motor/settings';
+import { area, device, pipe, tank } from './constants';
+import { AssetCategory } from '../asset-category';
 
 export function isArea(type: number) {
   return type === area.type;
@@ -65,7 +65,7 @@ export function useMonitoringPointParents(
 }
 
 export function isVibrationRelated(type: number) {
-  return type === motor.type;
+  return AssetCategory.vibrationAssetOptions.map((opt) => opt.type).includes(type);
 }
 
 export function isCorrosionRelated(type: number) {
@@ -74,27 +74,4 @@ export function isCorrosionRelated(type: number) {
 
 export function isDeviceRelated(type: number) {
   return type === device.type;
-}
-
-type TypeMeta = { label: string; settings?: { default: object }; labelPlural?: string } | undefined;
-
-export function getByType(type: number): TypeMeta {
-  let typeInfo: TypeMeta;
-  switch (type) {
-    case motor.type:
-      return {
-        label: motor.label,
-        labelPlural: motor.labelPlural,
-        settings: { default: MotorDefaultSettings }
-      };
-    case pipe.type:
-      return { label: pipe.label, labelPlural: pipe.labelPlural };
-    case tank.type:
-      return { label: tank.label, labelPlural: tank.labelPlural };
-    case device.type:
-      return { label: device.label, labelPlural: device.labelPlural };
-    default:
-      break;
-  }
-  return typeInfo;
 }
