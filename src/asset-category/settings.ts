@@ -119,11 +119,12 @@ type FieldWithSource<Src extends string, Entity extends object> = Field<Entity> 
 };
 
 export type SettingsField =
+  | FieldWithSource<'', MotorSettings>
   | FieldWithSource<'motor', MotorSettings>
-  | FieldWithSource<'non-motor', CommonSettings>;
+  | FieldWithSource<'', CommonSettings>;
 
 const rotationSpeed: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: 'rotation.speed',
   name: 'rotation_speed',
   description: 'rotation.speed.desc',
@@ -131,7 +132,7 @@ const rotationSpeed: SettingsField = {
 };
 
 const driveType: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.drive.type`,
   name: 'drive_type',
   description: 'drive.type.desc',
@@ -140,7 +141,7 @@ const driveType: SettingsField = {
 };
 
 const inputBearing: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.input.bearing`,
   name: 'input_bearing',
   description: 'input.bearing.desc',
@@ -148,7 +149,7 @@ const inputBearing: SettingsField = {
 };
 
 const outputBearing: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.output.bearing`,
   name: 'output_bearing',
   description: 'output.bearing.desc',
@@ -156,7 +157,7 @@ const outputBearing: SettingsField = {
 };
 
 const shaftOrientation: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.shaft.orientation`,
   name: 'shaft_orientation',
   description: 'shaft.orientation.desc',
@@ -165,7 +166,7 @@ const shaftOrientation: SettingsField = {
 };
 
 const supportType: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.support.type`,
   name: 'support_type',
   description: 'support.type.desc',
@@ -174,7 +175,7 @@ const supportType: SettingsField = {
 };
 
 const setType: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.set.type`,
   name: 'set_type',
   description: 'set.type.desc',
@@ -184,7 +185,7 @@ const setType: SettingsField = {
 };
 
 const compressorType: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.compressor.type`,
   name: 'compressor_type',
   description: 'compressor.type.desc',
@@ -194,7 +195,7 @@ const compressorType: SettingsField = {
 };
 
 const fanType: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.fan.type`,
   name: 'fan_type',
   description: 'fan.type.desc',
@@ -204,7 +205,7 @@ const fanType: SettingsField = {
 };
 
 const blowerType: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.blower.type`,
   name: 'blower_type',
   description: 'blower.type.desc',
@@ -214,7 +215,7 @@ const blowerType: SettingsField = {
 };
 
 const pumpType: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.pump.type`,
   name: 'pump_type',
   description: 'pump.type.desc',
@@ -224,7 +225,7 @@ const pumpType: SettingsField = {
 };
 
 const bladeCount: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.blade.count`,
   name: 'blade_count',
   description: 'blade.count.desc',
@@ -253,7 +254,7 @@ const bladeCount: SettingsField = {
 };
 
 const vaneCount: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.vane.count`,
   name: 'vane_count',
   description: 'vane.count.desc',
@@ -262,7 +263,7 @@ const vaneCount: SettingsField = {
 };
 
 const toothCount: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.tooth.count`,
   name: 'tooth_count',
   description: 'tooth.count.desc',
@@ -281,7 +282,7 @@ const toothCount: SettingsField = {
 };
 
 const lobeCount: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.lobe.count`,
   name: 'lobe_count',
   description: 'lobe.count.desc',
@@ -290,7 +291,7 @@ const lobeCount: SettingsField = {
 };
 
 const pistonCount: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.piston.count`,
   name: 'piston_count',
   description: 'piston.count.desc',
@@ -364,7 +365,7 @@ enum DirectionCoolingTower {
   Vertical = Direction.Vertical
 }
 const shaftOrientationCoolingTower: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.shaft.orientation`,
   name: 'shaft_orientation',
   description: 'shaft.orientation.desc',
@@ -377,7 +378,7 @@ enum FanTypeCoolingTower {
   MixedFlow = FanTypeValue.MixedFlow
 }
 const fanTypeCoolingTower: SettingsField = {
-  source: 'non-motor',
+  source: '',
   label: `${PREFIX}.fan.type`,
   name: 'fan_type',
   description: 'fan.type.desc',

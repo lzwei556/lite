@@ -120,7 +120,12 @@ const configs: Config[] = [
     label: Value[Value.Motor],
     labelPlural: `${PREFIX}motors`,
     children: [],
-    settings: [{ label: motorParametersKey, fields: motorSettings }],
+    settings: [
+      {
+        label: motorParametersKey,
+        fields: motorSettings.map((s) => ({ ...s, source: '' } as SettingsField))
+      }
+    ],
     iconPath: '',
     image: MotorImage
   },
@@ -168,6 +173,10 @@ export const Key = {
   getlabelPlural: (key: Value) => get(key)?.labelPlural,
   getSettings: (key: Value) => get(key)?.settings ?? [],
   getImage: (key: Value) => get(key)?.image
+};
+
+export const getNamePath = (source: SettingsField['source']) => {
+  return source.length > 0 ? ['attributes', source] : ['attributes'];
 };
 
 export const vibrationAssetOptions = [

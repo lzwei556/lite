@@ -27,7 +27,7 @@ export const SettingFormItems = ({
             <Col {...formItemColProps} key={field.name}>
               <FormItem
                 {...toUniversalFormItemProps(field, {
-                  name: field.source === 'motor' ? ['attributes', 'motor'] : ['attributes']
+                  name: AssetCategory.getNamePath(field.source)
                 })}
               />
             </Col>

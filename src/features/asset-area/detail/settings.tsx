@@ -90,7 +90,7 @@ export const Settings = (props: {
       if (settings.length > 0) {
         const settingsColumns = settings[0].fields.map(({ label, name, options, source, unit }) => {
           const common = {
-            dataIndex: source === 'motor' ? [`attributes`, 'motor', name] : [`attributes`, name],
+            dataIndex: AssetCategory.getNamePath(source).concat(name),
             key: name,
             title: () => getDisplayName({ name: intl.get(label), lang, suffix: unit })
           };
