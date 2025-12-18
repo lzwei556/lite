@@ -95,7 +95,10 @@ export const getRelatedDeviceTypes = (type: number) => {
       MonitoringPointTypeValue.BoltPreload,
       [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8, DeviceType.SAS120D, DeviceType.SAS120Q]
     ],
-    [MonitoringPointTypeValue.AnchorPreload, [DeviceType.SAS]],
+    [
+      MonitoringPointTypeValue.AnchorPreload,
+      [DeviceType.SAS, DeviceType.SAS120D, DeviceType.SAS120Q]
+    ],
     [MonitoringPointTypeValue.TopInclination, [DeviceType.SQ100, DeviceType.SQ110C]],
     [MonitoringPointTypeValue.BaseInclination, [DeviceType.SQ100, DeviceType.SQ110C]],
     [

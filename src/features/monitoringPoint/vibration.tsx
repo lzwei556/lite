@@ -36,19 +36,22 @@ export const FormItems = ({
     label: 'direction.axial',
     name: 'direction_axial',
     description: 'direction.axial.desc',
-    options
+    options,
+    type: 'enum'
   };
   const vertical: Field<VibrationEntity> = {
     label: 'direction.vertical',
     name: 'direction_vertical',
     description: 'direction.vertical.desc',
-    options
+    options,
+    type: 'enum'
   };
   const horizontal: Field<VibrationEntity> = {
     label: 'direction.horizontal',
     name: 'direction_horizontal',
     description: 'direction.horizontal.desc',
-    options
+    options,
+    type: 'enum'
   };
   return (
     <>

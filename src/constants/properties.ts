@@ -436,24 +436,26 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
   DS: SAS.slice(0, SAS.length - 1),
   DC_NORMAL: [
     THICKNESS,
-    { ...DC_TEMPERATURE, defaultFirstFieldKey: 'temperature', onlyShowFirstField: true },
-    TOF,
     CORROSION_RATE,
+    TOF,
+    { ...DC_TEMPERATURE, defaultFirstFieldKey: 'temperature', onlyShowFirstField: true },
     CORROSION_LOSS,
     SIGNAL_STRENGTH,
     SIGNAL_QUALITY
   ],
   DC_HIGH: [
     THICKNESS,
-    { ...DC_TEMPERATURE, defaultFirstFieldKey: 'temperature', onlyShowFirstField: true },
-    TOF,
     CORROSION_RATE,
+    TOF,
+    { ...DC_TEMPERATURE, defaultFirstFieldKey: 'temperature', onlyShowFirstField: true },
     CORROSION_LOSS,
     SIGNAL_STRENGTH,
     SIGNAL_QUALITY
   ],
   DC_Ultra_HIGH: [
     THICKNESS,
+    CORROSION_RATE,
+    TOF,
     {
       ...DC_TEMPERATURE,
       fields: [
@@ -471,8 +473,6 @@ export const PROPERTY_CATEGORIES: DisplayPropertyCategories = {
         }
       ]
     },
-    TOF,
-    CORROSION_RATE,
     CORROSION_LOSS,
     SIGNAL_STRENGTH,
     SIGNAL_QUALITY

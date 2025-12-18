@@ -151,7 +151,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     },
                     {
                       key: 'duration',
-                      title: intl.get('DURATION'),
+                      title: intl.get('alarm_group.consecutive_count'),
                       width: 60,
                       render: (_, row: FormListFieldData) => (
                         <DurationFormItem nameIndex={row.name} />

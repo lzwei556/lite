@@ -42,7 +42,7 @@ export const AlarmRecordsSection = ({ alarmRecords }: { alarmRecords: any }) => 
             render: (createdAt: number) => Dayjs.format(createdAt)
           },
           {
-            title: intl.get('ALARM_DURATION'),
+            title: intl.get('alarm_group.consecutive_count'),
             dataIndex: 'duration',
             key: 'duration',
             render: (_: any, record: any) => {
