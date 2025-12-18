@@ -1,7 +1,6 @@
 import React from 'react';
 import { Layer, Stage, Image, Line, Circle } from 'react-konva';
 import { useSize } from 'ahooks';
-import useImage from 'use-image';
 import { PalceCardItem, PlaceCard, PlaceCardProps } from './placeCard';
 import { Card, CardProps } from '../../components';
 import { useGlobalStyles } from '../../styles';
@@ -17,7 +16,7 @@ export const Canvas = ({
   editable,
   legacyToolbar
 }: {
-  background: string;
+  background: HTMLImageElement;
   selectedItem?: Omit<PalceCardItem, 'title' | 'children'>;
   placeCardProps: PlaceCardProps[];
   initials?: Point[];
@@ -27,9 +26,8 @@ export const Canvas = ({
 }) => {
   const ref = React.useRef(null);
   const size = useContainerSize(useSize(ref));
-  const [img] = useImage(background);
   const [cursor, setCursor] = React.useState('default');
-  const stageProps = useStageProps(size, img);
+  const stageProps = useStageProps(size, background);
   const scaleProps = { x: stageProps.x, y: stageProps.y, scale: stageProps.scaleX };
   const places = usePlaces(scaleProps, size, placeCardProps.length);
   const startingPoints = places.map((p) => ({ x: p.x, y: p.y }));
@@ -49,10 +47,10 @@ export const Canvas = ({
         style={{ height: '100%' }}
         styles={{ body: { position: 'relative', padding: 0 } }}
       >
-        {img && (
+        {background && (
           <>
             <Stage {...stageProps} style={{ cursor }}>
-              <ImageLayer img={img} />
+              <ImageLayer img={background} />
               <Marks startingPoints={startingPoints} setCursor={setCursor} />
             </Stage>
             {legacyToolbar}

@@ -6,6 +6,7 @@ import { Canvas } from './canvas';
 import { Toolbar } from './toolbar';
 import { ToolbarLegacy } from './toolbar-legacy';
 import { ENV } from '../../utils';
+import useImage from 'use-image';
 
 export const AssetAnnotationImage = ({
   asset,
@@ -23,23 +24,21 @@ export const AssetAnnotationImage = ({
   const { selectedMonitoringPoint } = useAssetModelContext();
   const selected = !editable;
   const placeCardProps = usePlaceCards(selected);
-  const [uploadingImg, setUploadingImg] = React.useState<string>();
-
   const getBackgroundImage = () => {
     if (asset.image) {
       return `/images/${asset.image}`;
-    } else if (uploadingImg) {
-      return uploadingImg;
     } else {
       return getDefaultImage(asset);
     }
   };
-
+  const [uploadingImg, setUploadingImg] = React.useState<string>();
   const isLegacy = ENV.legacyEnabled === 'true';
+  const [background] = useImage(uploadingImg ?? getBackgroundImage());
+  const [fallback] = useImage(getDefaultImage(asset));
 
   return (
     <Canvas
-      background={getBackgroundImage()}
+      background={background ?? fallback!}
       selectedItem={
         selectedMonitoringPoint
           ? { ...selectedMonitoringPoint, index: selectedMonitoringPoint?.self?.id }
