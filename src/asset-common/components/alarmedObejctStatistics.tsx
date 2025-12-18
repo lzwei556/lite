@@ -1,8 +1,15 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Chart, MutedCard, usePieOptions, PieOptionsProps } from '../../components';
+import {
+  Chart,
+  MutedCard,
+  usePieOptions,
+  PieOptionsProps,
+  usePieOptionsLegacy
+} from '../../components';
 import { useLocaleContext } from '../../localeProvider';
 import { Asset } from '..';
+import { ENV } from '../../utils';
 
 export const AlarmsObjectStatistics = ({
   total,
@@ -26,11 +33,13 @@ export const AlarmsObjectStatistics = ({
       itemStyle: { color: s.color }
     }));
   }
+  const options = usePieOptions({ total, data, language, subtext });
+  const optionsLegacy = usePieOptionsLegacy({ total, data, language, subtext });
 
   return (
     <MutedCard title={title} titleCenter={true}>
       <Chart
-        options={usePieOptions({ total, data, language, subtext })}
+        options={ENV.legacyEnabled === 'true' ? optionsLegacy : options}
         style={{ height: chartHeight }}
       />
     </MutedCard>

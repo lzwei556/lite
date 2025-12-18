@@ -4,17 +4,21 @@ import { getDefaultImage, useAssetModelContext, usePlaceCards } from '../../asse
 import { base64toBlob } from '../../utils/image';
 import { Canvas } from './canvas';
 import { Toolbar } from './toolbar';
+import { ToolbarLegacy } from './toolbar-legacy';
+import { ENV } from '../../utils';
 
 export const AssetAnnotationImage = ({
   asset,
   editable,
   title,
-  onSuccess
+  onSuccess,
+  viewIcon
 }: {
   asset: AssetRow;
   editable?: boolean;
   title?: React.ReactNode;
   onSuccess?: () => void;
+  viewIcon?: React.ReactNode;
 }) => {
   const { selectedMonitoringPoint } = useAssetModelContext();
   const selected = !editable;
@@ -30,6 +34,8 @@ export const AssetAnnotationImage = ({
       return getDefaultImage(asset);
     }
   };
+
+  const isLegacy = ENV.legacyEnabled === 'true';
 
   return (
     <Canvas
@@ -67,7 +73,34 @@ export const AssetAnnotationImage = ({
           />
         )
       }}
-      editable={editable}
+      editable={isLegacy ? !!uploadingImg : editable}
+      legacyToolbar={
+        isLegacy && (
+          <ToolbarLegacy
+            {...{
+              onSave: (snapshot) => {
+                updateAsset(asset.id, {
+                  id: asset.id,
+                  name: asset.name,
+                  parent_id: asset.parentId,
+                  type: asset.type,
+                  //@ts-ignore
+                  attributes: { ...asset.attributes, ...snapshot }
+                }).then(() => onSuccess?.());
+              },
+              onUpload: (image) => {
+                base64toBlob(image).then((blob) => {
+                  uploadAssetImage(asset.id, blob);
+                });
+              },
+              onCancel: () => setUploadingImg(undefined),
+              beforeUpload: setUploadingImg,
+              uploadedImageStr: uploadingImg,
+              viewIcon
+            }}
+          />
+        )
+      }
     />
   );
 };

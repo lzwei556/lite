@@ -14,7 +14,8 @@ export const Canvas = ({
   placeCardProps,
   initials = [],
   cardProps,
-  editable
+  editable,
+  legacyToolbar
 }: {
   background: string;
   selectedItem?: Omit<PalceCardItem, 'title' | 'children'>;
@@ -22,6 +23,7 @@ export const Canvas = ({
   initials?: Point[];
   cardProps?: CardProps;
   editable?: boolean;
+  legacyToolbar?: React.ReactNode;
 }) => {
   const ref = React.useRef(null);
   const size = useContainerSize(useSize(ref));
@@ -53,6 +55,7 @@ export const Canvas = ({
               <ImageLayer img={img} />
               <Marks startingPoints={startingPoints} setCursor={setCursor} />
             </Stage>
+            {legacyToolbar}
             {placeCardProps
               .filter((_, i) => i < places.length)
               .map((props, i) => (

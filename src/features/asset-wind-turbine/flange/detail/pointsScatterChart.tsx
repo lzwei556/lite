@@ -16,6 +16,7 @@ import {
 } from '../../../../asset-common';
 import { useGlobalStyles } from '../../../../styles';
 import { AlarmLevel, getColorByValue } from '../../../alarm';
+import { ENV } from '../../../../utils';
 
 export const PointsScatterChart = ({
   asset,
@@ -203,7 +204,14 @@ function getMax(max: number, attributes: AssetRow['attributes'], type: number) {
 }
 
 function generateOuter(measurements: MonitoringPointRow[], color: string, isBig: boolean = false) {
-  let radius = { radius: isBig ? '80%' : '75%' };
+  let radius: any = { radius: isBig ? '80%' : '75%' };
+  if (ENV.legacyEnabled === 'true') {
+    radius = { radius: isBig ? 180 : 150 };
+    if (isMobile) {
+      radius = { radius: isBig ? '90%' : '85%' };
+    }
+  }
+
   const angleAxis = {
     startAngle: 0,
     clockwise: false,
@@ -265,7 +273,13 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
 }
 
 function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = false) {
-  let radius = { radius: isBig ? '75%' : '70%' };
+  let radius: any = { radius: isBig ? '75%' : '70%' };
+  if (ENV.legacyEnabled === 'true') {
+    radius = { radius: isBig ? 150 : 120 };
+    if (isMobile) {
+      radius = { radius: isBig ? '85%' : '80%' };
+    }
+  }
   const seriesData: any = [];
   let field = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
     (p) => p.first

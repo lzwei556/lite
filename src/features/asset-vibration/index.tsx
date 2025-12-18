@@ -16,6 +16,8 @@ import { Update } from './update';
 import { PointsTable } from './pointsTable';
 import { AssetAnnotationImage } from '../imageAnnotation';
 import { Permission, useCan } from '../../providers/access-control';
+import { ENV } from '../../utils';
+import { OverviewLegacy } from './overview-legacy';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
   const [open, setOpen] = React.useState(false);
@@ -35,6 +37,8 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
     setMonitoringPoint(undefined);
   };
 
+  const isLegacy = ENV.legacyEnabled === 'true';
+
   return (
     <Spin spinning={loading}>
       <AssetModelProvider asset={asset}>
@@ -43,7 +47,11 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
             {
               key: 'overview',
               label: intl.get('OVERVIEW'),
-              content: <Overview asset={asset} onSuccess={refresh} key={asset.id} />
+              content: isLegacy ? (
+                <OverviewLegacy asset={asset} onSuccess={refresh} key={asset.id} />
+              ) : (
+                <Overview asset={asset} onSuccess={refresh} key={asset.id} />
+              )
             },
             {
               key: 'monitoringPointList',
@@ -67,15 +75,17 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                   <Col span={24}>
                     <PointsTable {...props} />
                   </Col>
-                  <Col span={24}>
-                    <AssetAnnotationImage
-                      asset={asset}
-                      key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
-                      editable={canEditMonitoringPoint}
-                      title={intl.get('OVERVIEW')}
-                      onSuccess={refresh}
-                    />
-                  </Col>
+                  {!isLegacy && (
+                    <Col span={24}>
+                      <AssetAnnotationImage
+                        asset={asset}
+                        key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
+                        editable={canEditMonitoringPoint}
+                        title={intl.get('OVERVIEW')}
+                        onSuccess={refresh}
+                      />
+                    </Col>
+                  )}
                 </Grid>
               )
             }

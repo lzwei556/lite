@@ -44,6 +44,40 @@ export const usePieOptions = ({ total, data, language, subtext }: PieOptionsProp
   });
 };
 
+export const usePieOptionsLegacy = ({ total, data, language, subtext }: PieOptionsProps) => {
+  const { colorTextStyle } = useGlobalStyles();
+  const commonOptions = useBarPieOptions();
+  const legend = useVerticalLegends(data ?? [], language);
+  if (!total || !data || data.length === 0) {
+    return undefined;
+  }
+  return getOptions(commonOptions, {
+    title: {
+      text: `${total}`,
+      subtext,
+      left: 'center',
+      top: 90,
+      textStyle: {
+        fontSize: 20,
+        fontWeight: 400,
+        ...colorTextStyle
+      }
+    },
+    legend,
+    series: [
+      {
+        type: 'pie',
+        name: '',
+        radius: ['50%', '60%'],
+        center: ['50%', '42%'],
+        label: { show: false, formatter: '{b} {c}' },
+        data
+      }
+    ],
+    tooltip: {}
+  });
+};
+
 const useVerticalLegends = (
   data: { name: string; value: number; itemStyle: { color: string } }[],
   language: Language

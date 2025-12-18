@@ -3,7 +3,9 @@ import { Spin } from 'antd';
 import { Asset, AssetRow, ContextProps } from '../../asset-common';
 import { UpdateAssetModal } from '../../asset-variant';
 import * as Detail from './detail';
+import { IndexLegacy } from './detail/index-legacy';
 import { UpdateModal } from './updateModal';
+import { ENV } from '../../utils';
 
 export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
   const [open, setOpen] = React.useState(false);
@@ -30,16 +32,26 @@ export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
   let ele: React.ReactNode = null;
   if (selectedNode) {
     if (Asset.Assert.isArea(selectedNode.type)) {
-      ele = (
-        <Detail.Index
-          asset={selectedNode as AssetRow}
-          onSuccess={refresh}
-          onUpdateAsset={(asset) => {
-            setOpen(true);
-            setAsset(asset);
-          }}
-        />
-      );
+      ele =
+        ENV.legacyEnabled === 'true' ? (
+          <IndexLegacy
+            asset={selectedNode as AssetRow}
+            onSuccess={refresh}
+            onUpdateAsset={(asset) => {
+              setOpen(true);
+              setAsset(asset);
+            }}
+          />
+        ) : (
+          <Detail.Index
+            asset={selectedNode as AssetRow}
+            onSuccess={refresh}
+            onUpdateAsset={(asset) => {
+              setOpen(true);
+              setAsset(asset);
+            }}
+          />
+        );
     }
   }
 

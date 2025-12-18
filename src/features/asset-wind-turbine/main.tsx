@@ -2,10 +2,13 @@ import React from 'react';
 import { Spin } from 'antd';
 import { AssetRow, ContextProps, MonitoringPointRow } from '../../asset-common';
 import * as Wind from './detail/index';
+import { WindIndexLegacy } from './detail/index-legacy';
 import * as Flange from './flange';
 import * as Tower from './tower';
 import * as Point from '../monitoring-point-wind-turbine';
 import { wind, flange, tower } from './constants';
+import { ENV } from '../../utils';
+import { FlangeIndexLegacy } from './flange/detail/index-legacy';
 
 export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
   const [open, setOpen] = React.useState(false);
@@ -27,10 +30,11 @@ export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
   };
   let ele = null;
   if (selectedNode) {
+    const isLegacy = ENV.legacyEnabled === 'true';
     if (selectedNode.type === wind.type) {
-      ele = <Wind.Index {...props} />;
+      ele = isLegacy ? <WindIndexLegacy {...props} /> : <Wind.Index {...props} />;
     } else if (selectedNode.type === flange.type) {
-      ele = <Flange.Index {...props} />;
+      ele = isLegacy ? <FlangeIndexLegacy {...props} /> : <Flange.Index {...props} />;
     } else if (selectedNode.type === tower.type) {
       ele = <Tower.Index {...props} />;
     } else {

@@ -1,10 +1,11 @@
 import { Space } from '../../common';
+import { ENV } from '../../utils';
 
 export type Size = { width: number; height: number };
 export type Point = { x: number; y: number };
 type StageProps = { x: number; y: number; scale: number };
 
-const Margin = Space;
+export const Margin = Space;
 const PlaceTextCardStyle = {
   width: 220,
   height: 210
@@ -60,7 +61,7 @@ export function usePlaces(stage: StageProps, size?: Size, lengthLimit = 4) {
     y: (popoverYLen - y) / scale,
     style: { top: Margin, left: Margin }
   };
-  const rightTop = {
+  let rightTop = {
     x: (size.width - popoverXLen - x) / scale,
     y: (popoverYLen - y) / scale,
     style: { top: Margin, right: Margin }
@@ -70,11 +71,23 @@ export function usePlaces(stage: StageProps, size?: Size, lengthLimit = 4) {
     y: (size.height - popoverYLen - y) / scale,
     style: { bottom: Margin, left: Margin }
   };
-  const rightBottom = {
+  let rightBottom = {
     x: (size.width - popoverXLen - x) / scale,
     y: (size.height - popoverYLen - y) / scale,
     style: { bottom: Margin, right: Margin }
   };
+  if (ENV.legacyEnabled === 'true') {
+    rightTop = {
+      x: (size.width - popoverXLen - x - Margin * 3) / scale,
+      y: (popoverYLen - y) / scale,
+      style: { top: Margin, right: Margin * 4 }
+    };
+    rightBottom = {
+      x: (size.width - popoverXLen - x - Margin * 3) / scale,
+      y: (size.height - popoverYLen - y) / scale,
+      style: { bottom: Margin, right: Margin * 4 }
+    };
+  }
   return [leftTop, rightTop, leftBottom, rightBottom].filter((_, i) => i < lengthLimit);
 }
 
