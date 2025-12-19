@@ -63,7 +63,37 @@ export const Main = () => {
               }
         }
       >
-        <ConfigProvider locale={language === 'zh-CN' ? zhCN : enUS}>
+        <ConfigProvider
+          locale={
+            language === 'zh-CN'
+              ? {
+                  ...zhCN,
+                  Form: {
+                    ...zhCN.Form,
+                    defaultValidateMessages: {
+                      ...zhCN.Form?.defaultValidateMessages,
+                      types: {
+                        ...zhCN.Form?.defaultValidateMessages.types,
+                        integer: '请输入整数'
+                      }
+                    }
+                  }
+                }
+              : {
+                  ...enUS,
+                  Form: {
+                    ...enUS.Form,
+                    defaultValidateMessages: {
+                      ...enUS.Form?.defaultValidateMessages,
+                      types: {
+                        ...enUS.Form?.defaultValidateMessages.types,
+                        integer: 'Please enter an integer'
+                      }
+                    }
+                  }
+                }
+          }
+        >
           <AuthProvider>
             <AccessControlProvider>
               <AppRouter />

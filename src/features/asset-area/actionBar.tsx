@@ -16,7 +16,7 @@ export const ActionBar = ({
   short = false
 }: {
   asset?: AssetRow;
-  onSuccess: () => void;
+  onSuccess: (values?: any) => void;
   short?: boolean;
 }) => {
   const [open, setOpen] = React.useState(false);
@@ -27,8 +27,8 @@ export const ActionBar = ({
   const assetCategories = useAssetCategories();
 
   const commonProps: ModalFormProps = {
-    onSuccess: () => {
-      onSuccess();
+    onSuccess: (type?: number) => {
+      onSuccess(type);
       reset();
     },
     open,

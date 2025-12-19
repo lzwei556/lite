@@ -13,7 +13,7 @@ export const NumberFormItem = (props: NumberFromItemProps) => {
   const { style = { width: '100%' }, ...inputNumberRestProps } = inputNumberProps || {};
 
   return (
-    <TextFormItem {...{ ...rest, rules }}>
+    <TextFormItem {...{ ...rest, rules, validateFirst: true }}>
       <InputNumber {...{ style, ...inputNumberRestProps }} />
     </TextFormItem>
   );

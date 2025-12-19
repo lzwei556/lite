@@ -128,7 +128,14 @@ const rotationSpeed: SettingsField = {
   label: 'rotation.speed',
   name: 'rotation_speed',
   description: 'rotation.speed.desc',
-  type: 'number'
+  type: 'number',
+  rules: [
+    {
+      type: 'number',
+      min: 0
+    },
+    { type: 'integer' }
+  ]
 };
 
 const driveType: SettingsField = {
@@ -184,7 +191,7 @@ const setType: SettingsField = {
   defaultValue: SetTypeValue.DcMotorDcGenerator
 };
 
-const compressorType: SettingsField = {
+export const compressorType: SettingsField = {
   source: '',
   label: `${PREFIX}.compressor.type`,
   name: 'compressor_type',
@@ -204,7 +211,7 @@ const fanType: SettingsField = {
   defaultValue: FanTypeValue.Centrifugal
 };
 
-const blowerType: SettingsField = {
+export const blowerType: SettingsField = {
   source: '',
   label: `${PREFIX}.blower.type`,
   name: 'blower_type',
@@ -214,7 +221,7 @@ const blowerType: SettingsField = {
   defaultValue: BlowerTypeValue.Centrifugal
 };
 
-const pumpType: SettingsField = {
+export const pumpType: SettingsField = {
   source: '',
   label: `${PREFIX}.pump.type`,
   name: 'pump_type',
@@ -230,6 +237,13 @@ const bladeCount: SettingsField = {
   name: 'blade_count',
   description: 'blade.count.desc',
   type: 'number',
+  rules: [
+    {
+      type: 'number',
+      min: 2
+    },
+    { type: 'integer' }
+  ],
   visibleWhen: (values) => {
     if (!values) {
       return false;
@@ -259,6 +273,13 @@ const vaneCount: SettingsField = {
   name: 'vane_count',
   description: 'vane.count.desc',
   type: 'number',
+  rules: [
+    {
+      type: 'number',
+      min: 2
+    },
+    { type: 'integer' }
+  ],
   visibleWhen: (values) => values?.pump_type === PumpTypeValue.SlidingVane
 };
 
@@ -268,6 +289,13 @@ const toothCount: SettingsField = {
   name: 'tooth_count',
   description: 'tooth.count.desc',
   type: 'number',
+  rules: [
+    {
+      type: 'number',
+      min: 1
+    },
+    { type: 'integer' }
+  ],
   visibleWhen: (values) => {
     if (!values) {
       return false;
@@ -287,6 +315,13 @@ const lobeCount: SettingsField = {
   name: 'lobe_count',
   description: 'lobe.count.desc',
   type: 'number',
+  rules: [
+    {
+      type: 'number',
+      min: 2
+    },
+    { type: 'integer' }
+  ],
   visibleWhen: (values) => values?.pump_type === PumpTypeValue.Lobe
 };
 
@@ -296,6 +331,13 @@ const pistonCount: SettingsField = {
   name: 'piston_count',
   description: 'piston.count.desc',
   type: 'number',
+  rules: [
+    {
+      type: 'number',
+      min: 1
+    },
+    { type: 'integer' }
+  ],
   visibleWhen: (values) => {
     if (!values) {
       return false;
@@ -383,7 +425,8 @@ const fanTypeCoolingTower: SettingsField = {
   name: 'fan_type',
   description: 'fan.type.desc',
   options: pickOptionsFromNumericEnum(FanTypeCoolingTower, `${PREFIX}.fan.type`),
-  type: 'enum'
+  type: 'enum',
+  defaultValue: FanTypeCoolingTower.Centrifugal
 };
 export const coolingTowerSettings: SettingsField[] = [
   fanTypeCoolingTower,

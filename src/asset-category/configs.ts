@@ -2,13 +2,16 @@ import { toSnake } from 'ts-case-convert';
 import { transformSnake2Dot } from '../utils';
 import {
   blowerSettings,
+  blowerType,
   chillerSettings,
   compressorSettings,
+  compressorType,
   coolingTowerSettings,
   fanSettings,
   motorSetSettings,
   motorSettings,
   pumpSettings,
+  pumpType,
   SettingsField
 } from './settings';
 import MotorSetImage from './assets/motor-set.png';
@@ -91,6 +94,7 @@ const configs: Config[] = [
       { label: `${PREFIX}blower.parameters`, fields: blowerSettings },
       { label: motorParametersKey, fields: motorSettings }
     ],
+    filter: blowerType,
     image: BlowerImage
   },
   {
@@ -102,6 +106,7 @@ const configs: Config[] = [
       { label: `${PREFIX}compressor.parameters`, fields: compressorSettings },
       { label: motorParametersKey, fields: motorSettings }
     ],
+    filter: compressorType,
     image: CompressorImage
   },
   {
@@ -138,6 +143,7 @@ const configs: Config[] = [
       { label: `${PREFIX}pump.parameters`, fields: pumpSettings },
       { label: motorParametersKey, fields: motorSettings }
     ],
+    filter: pumpType,
     image: PumpImage
   },
   {
@@ -160,12 +166,14 @@ const configs: Config[] = [
       { label: `${PREFIX}chiller.parameters`, fields: chillerSettings },
       { label: motorParametersKey, fields: motorSettings }
     ],
+    filter: compressorType,
     image: CompressorImage
   }
 ];
 // constants end
 
 export const Key = {
+  get,
   getLabel: (key: Value) => {
     const type = get(key);
     return type ? `${PREFIX}${transformSnake2Dot(toSnake(type.label))}` : `${key}`;
@@ -202,6 +210,7 @@ type Config = {
   children: number[];
   isRoot?: boolean;
   settings?: { label: string; fields: SettingsField[] }[];
+  filter?: SettingsField;
   iconPath?: string;
   image?: string;
 };

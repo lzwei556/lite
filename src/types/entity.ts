@@ -24,13 +24,14 @@ export type Field<Entity extends Object> = {
   unit?: string;
   translatingUnit?: string;
   nameMode?: NameMode;
+  rules?: FormItemProps['rules'];
 };
 
 export const toUniversalFormItemProps = <Entity extends Object>(
   field: Field<Entity>,
   formItemProps?: FormItemProps
 ): UniversalFormItemProps => {
-  const { type, optionType, label, defaultValue, unit, translatingUnit } = field;
+  const { type, optionType, label, defaultValue, unit, translatingUnit, rules } = field;
   const options = field.options?.map((opt) => ({
     ...opt,
     label: intl.get(opt.label).d(opt.label)
@@ -39,6 +40,7 @@ export const toUniversalFormItemProps = <Entity extends Object>(
     label,
     initialValue: defaultValue,
     ...formItemProps,
+    rules,
     name: getName(field.name, formItemProps)
   };
   switch (type) {

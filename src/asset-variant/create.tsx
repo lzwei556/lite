@@ -10,7 +10,13 @@ import { SettingFormItems } from './settingFormItems';
 import { useParents } from './utils';
 import { TypeFormItem } from './typeFormItem';
 
-export const Create = (props: ModalFormProps & { parentId?: number; types: AssetCategory[] }) => {
+export const Create = (
+  props: Omit<ModalFormProps, 'onSuccess'> & {
+    parentId?: number;
+    types: AssetCategory[];
+    onSuccess: (type?: number) => void;
+  }
+) => {
   const { onSuccess, parentId, types } = props;
   const [form] = Form.useForm<AssetModel>();
   const [type, setType] = React.useState<number | undefined>();
@@ -45,7 +51,7 @@ export const Create = (props: ModalFormProps & { parentId?: number; types: Asset
           form.validateFields().then((values) => {
             try {
               addAsset(values).then(() => {
-                onSuccess();
+                onSuccess(values.type);
               });
             } catch (error) {
               console.log(error);
