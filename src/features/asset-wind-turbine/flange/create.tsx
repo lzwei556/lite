@@ -208,7 +208,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
               </Col>
               <Col {...formItemColProps}>
                 <NumberFormItem
-                  label='INITIAL_PRESSURE'
+                  label='INITIAL_STRESS'
                   name={['attributes', 'initial_pressure']}
                   rules={[{ required: true }]}
                   inputNumberProps={{ addonAfter: 'MPa' }}

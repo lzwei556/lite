@@ -73,7 +73,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                     <Update asset={asset} onSuccess={refresh} key={asset.id} />
                   </Col>
                   <Col span={24}>
-                    <PointsTable {...props} />
+                    <PointsTable {...props} key={asset.id} />
                   </Col>
                   {!isLegacy && (
                     <Col span={24}>

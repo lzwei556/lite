@@ -193,7 +193,7 @@ function AlarmRecordTable<T>({
               case 2:
                 return intl.get('ALARM_STATUS_AUTO_PROCESSED');
               default:
-                return intl.get('alarm.record.un.processd');
+                return intl.get('alarm.record.un.processed');
             }
           }
         }

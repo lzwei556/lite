@@ -21,8 +21,8 @@ import { alarmLevelOptions, AlarmLevelTag } from '..';
 import { CanAccess, Permission } from '../../../providers/access-control';
 
 enum Status {
-  UnProcessd = 0,
-  AutoProcessd = 2
+  UnProcessed = 0,
+  AutoProcessed = 2
 }
 
 export const FilterableAlarmRecordTable: React.FC<{
@@ -153,7 +153,7 @@ export const FilterableAlarmRecordTable: React.FC<{
       filters: statusOptions,
       render: (status: Status) => {
         const text = statusOptions.find((option) => option.value === status)?.text;
-        return <Tag color={status === Status.AutoProcessd ? 'success' : undefined}>{text}</Tag>;
+        return <Tag color={status === Status.AutoProcessed ? 'success' : undefined}>{text}</Tag>;
       }
     },
     {

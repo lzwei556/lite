@@ -559,7 +559,7 @@
   "INDEX": "指标",
   "INDEX_NUMBER": "序号",
   "INITIAL_PRELOAD": "初始预紧力",
-  "INITIAL_PRESSURE": "初始应力",
+  "INITIAL_STRESS": "初始应力",
   "initial.thickness": "初始厚度",
   "INITIAL_VALUE": "初始值",
   "INPUT_EMPTY_PROMPT": "输入不能为空。",

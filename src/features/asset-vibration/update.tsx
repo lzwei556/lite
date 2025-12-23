@@ -31,6 +31,7 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
           />
         </CanAccess>
       }
+      styles={{ body: { overflowY: 'auto', maxHeight: 500 } }}
       title={intl.get('BASIC_INFORMATION')}
     >
       <Form

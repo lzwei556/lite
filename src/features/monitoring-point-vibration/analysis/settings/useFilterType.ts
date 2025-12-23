@@ -5,6 +5,7 @@ export type FilterTypeRelatedFields = {
   cutoff_range_high?: number;
   filter_type?: number;
   filter_order?: number;
+  frequency_band?: number; // only used in front-end
 };
 
 const filter_order: Item = {
@@ -113,6 +114,7 @@ const useFrequencyBand = (
   initial: CutoffRange
 ) => {
   return {
+    name: 'frequency_band',
     label: 'frequency.band',
     options: [
       { label: 'frequency.band.5-100Hz', value: 1 },
@@ -137,7 +139,7 @@ const useFrequencyBand = (
       }
     },
     defaultValue: mapRangeToOptionValue(initial)
-  };
+  } as Item;
 };
 
 const mapRangeToOptionValue = (cutoffRange: CutoffRange) => {
