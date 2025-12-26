@@ -7,7 +7,7 @@ import {
   Table
 } from '../../components';
 import { useModalBindingsProps } from '../../hooks';
-import { CommonProps, sourceId, type } from './common';
+import { CommonProps, sourceIdField, typeField } from './common';
 import { BindModal } from './bind-modal';
 import intl from 'react-intl-universal';
 import { Process, ProcessDTO, transform2Process, unbindAction, useDevices } from './use-services';
@@ -28,7 +28,11 @@ export const ProcessList = (props: CommonProps) => {
       <OperationCell
         {...{
           editButtonProps: trigger.getEditIconButtonProps(process),
-          deleteButtonProps: getDeleteIconButtonProps(props.id, process, props.onSuccess)
+          deleteButtonProps: getDeleteIconButtonProps(
+            props.monitoringPoint.assetId,
+            process,
+            props.onSuccess
+          )
         }}
       />
     )
@@ -114,8 +118,8 @@ const useTableProps = (
 ) => {
   const { language } = useLocaleContext();
   const columns: TableProps<Process>['columns'] = [
-    { key: 'typeLabel', dataIndex: 'typeLabel', title: intl.get(type.label) },
-    { key: 'sourceIdName', dataIndex: 'sourceIdName', title: intl.get(sourceId.label) }
+    { key: 'typeLabel', dataIndex: 'typeLabel', title: intl.get(typeField.label) },
+    { key: 'sourceIdName', dataIndex: 'sourceIdName', title: intl.get(sourceIdField.label) }
   ];
   columns.push({
     key: autoFillParameter.targetDeviceId.name.join(),

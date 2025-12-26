@@ -3,6 +3,7 @@ import request from '../../utils/request';
 import { autoFillParameter, ProcessType } from '../../process-type';
 import intl from 'react-intl-universal';
 import { Device } from '../../types/device';
+import { PageResult } from 'types/page';
 
 type AutoFillParameter = { [Key in keyof typeof autoFillParameter]: number };
 
@@ -11,12 +12,14 @@ export type ProcessDTO = {
   type: number;
   assetId: number;
   sourceId: number;
+  monitoringPointId: number;
   parameters: Partial<AutoFillParameter>;
 };
 
 export type ProcessFormDataDTO = {
   type: number;
   source_id: number;
+  monitoring_point_id: number;
   parameters: Partial<AutoFillParameter>;
 };
 
@@ -24,6 +27,7 @@ export const transform = (dto: ProcessDTO): ProcessFormDataDTO => {
   return {
     type: dto.type,
     source_id: dto.sourceId,
+    monitoring_point_id: dto.monitoringPointId,
     parameters: dto.parameters
   };
 };
@@ -66,4 +70,60 @@ export const useDevices = () => useRequest(getDevices);
 const getDevices = async () => {
   const res = await request.get<Device[]>('/devices', {});
   return res.data.data;
+};
+
+export type FillRecord = {
+  assetId: number;
+  monitoringPointId: number;
+  timestamp: number;
+  result: Result;
+  dataType: DataType;
+  deviceId: number;
+  dataSourceId: number;
+  capacity: number;
+  soundPressureLevel: number;
+  energyRatio: number;
+  stationarity: number;
+  velocityX: number;
+  velocityY: number;
+  velocityZ: number;
+  temperature: number;
+  diagnosisResults: { items: number[] };
+  reasons: Reason[];
+};
+
+enum DataType {
+  Characteristic,
+  Diagnosis
+}
+
+enum Result {
+  Success = 0x00,
+  Offline = 0x01,
+  CommandFailure = 0x02
+}
+
+enum Reason {
+  Temperatue = 0x01,
+  soundPressureLevel = 0x02,
+  energyRatio = 0x03,
+  stationarity = 0x04,
+  velocityX = 0x05,
+  velocityY = 0x06,
+  velocityZ = 0x07,
+  Diagnosis = 0x08
+}
+
+export const useFillRecords = (params: Parameters<typeof getFillRecords>) =>
+  useRequest(getFillRecords, { defaultParams: params });
+
+const getFillRecords = async (
+  id: number,
+  params: { from: number; to: number; type: DataType; page: number; size: number }
+) => {
+  const { data } = await request.get<PageResult<FillRecord[]>>(
+    `/monitoringPoints/${id}/fillRecords`,
+    params
+  );
+  return data.data;
 };

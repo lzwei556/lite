@@ -10,8 +10,8 @@ export type ProcessType = {
     label: string;
     type: 'string' | 'number';
     options?: Option[];
-
     rules?: object[];
     unit?: string;
+    disabled?:boolean
   }[];
 };

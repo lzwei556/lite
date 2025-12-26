@@ -58,7 +58,11 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   ];
 
   if (monitoringPoint.type === MonitoringPointType.Value.OilFiller) {
-    items.push({ key: 'fillRecords', label: intl.get('fill.records'), content: <FillRecords /> });
+    items.push({
+      key: 'fillRecords',
+      label: intl.get('fill.records'),
+      content: <FillRecords {...monitoringPoint} key={id} />
+    });
   } else {
     if (vibrationEnabled) {
       items.push({

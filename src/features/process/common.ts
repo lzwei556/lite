@@ -1,22 +1,23 @@
-import { MonitoringPointRow } from '../../monitoring-point';
+import { MonitoringPointRow } from 'monitoring-point';
 import { Device } from '../../types/device';
 import { ProcessDTO } from './use-services';
 
-export const type = {
+export const typeField = {
   label: 'process.type',
   name: 'type'
 } as const;
 
-export const sourceId = {
+export const sourceIdField = {
   label: 'source.id',
   name: 'source_id'
 } as const;
 
 export type CommonProps = {
-  id: number;
+  monitoringPoint: MonitoringPointRow;
   processList: ProcessDTO[];
   process?: ProcessDTO;
   monitoringPoints: MonitoringPointRow[];
   devices?: Device[];
+  initialProcess?: { type: number; oilFillerId?: number };
   onSuccess: () => void;
 };

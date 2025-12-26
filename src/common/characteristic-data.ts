@@ -566,7 +566,7 @@ export const CATEGORIES: DisplayPropertyCategories = {
       name: 'FIELD_REMAINING_OIL',
       first: true,
       precision: 1,
-      unit: '％'
+      unit: '%'
     }
   ]
 } as const;

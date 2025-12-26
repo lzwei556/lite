@@ -16,7 +16,6 @@ import { Update } from './update';
 import { PointsTable } from './pointsTable';
 import { AssetAnnotationImage } from '../imageAnnotation';
 import { Permission, useCan } from '../../providers/access-control';
-import { ProcessList } from '../process';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
   const [open, setOpen] = React.useState(false);
@@ -76,16 +75,6 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                       editable={canEditMonitoringPoint}
                       title={intl.get('OVERVIEW')}
                       onSuccess={refresh}
-                    />
-                  </Col>
-                  <Col span={24}>
-                    <ProcessList
-                      {...{
-                        id: asset.id,
-                        processList: asset.actions ?? [],
-                        monitoringPoints,
-                        onSuccess: refresh
-                      }}
                     />
                   </Col>
                 </Grid>

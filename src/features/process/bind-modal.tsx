@@ -3,19 +3,18 @@ import React from 'react';
 import { useFormBindingsProps, useFormItemBindingsProps, useModalBindingsProps } from '../../hooks';
 import { ModalFormProps } from '../../types/common';
 import intl from 'react-intl-universal';
-import { ProcessDTO, ProcessFormDataDTO, transform, useBindProcess } from './use-services';
+import { ProcessFormDataDTO, transform, useBindProcess } from './use-services';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ParameterFormItem, ProcessType } from '../../process-type';
-import { SelectFormItem } from '../../components';
+import { SelectFormItem, TextFormItem } from '../../components';
 import { MonitoringPointRow } from '../../monitoring-point';
-import { Device } from '../../types/device';
 import { Option } from '../../common';
-import { CommonProps, sourceId, type } from './common';
+import { CommonProps, sourceIdField, typeField } from './common';
 
 type Props = ModalFormProps & CommonProps;
 
 export const BindModal = (props: Props) => {
-  const formProps = useFormProps(props.process);
+  const formProps = useFormProps(props);
   const modalProps = useModalProps({ form: formProps.form, ...props });
   const { typesSelectFromItemProps, sourceIdSelectFromItemProps, parametersFormItemProps } =
     useSelectedType(props);
@@ -27,23 +26,42 @@ export const BindModal = (props: Props) => {
         {parametersFormItemProps.map((item, i) => (
           <ParameterFormItem {...item} key={i} />
         ))}
+        <TextFormItem
+          {...useFormItemBindingsProps({ name: 'monitoring_point_id', hidden: true })}
+        />
       </Form>
     </ModalWrapper>
   );
 };
 
-const useFormProps = (process?: ProcessDTO) => {
+const useFormProps = (params: Props) => {
   const [form] = Form.useForm();
   return useFormBindingsProps({
     form,
     layout: 'vertical',
-    initialValues: process ? transform(process) : undefined
+    initialValues: useInitialValues(params)
   });
+};
+
+const useInitialValues = ({
+  process,
+  initialProcess,
+  monitoringPoint
+}: Props): Partial<ProcessFormDataDTO> | undefined => {
+  if (process) {
+    return { ...transform(process), monitoring_point_id: monitoringPoint.id };
+  } else if (initialProcess) {
+    return {
+      type: initialProcess.type,
+      parameters: { targetDeviceId: initialProcess.oilFillerId },
+      monitoring_point_id: monitoringPoint.id
+    };
+  }
 };
 
 const useModalProps = ({
   form,
-  id,
+  monitoringPoint,
   onSuccess,
   ...rest
 }: Props & { form: FormInstance<ProcessFormDataDTO> }) => {
@@ -55,7 +73,7 @@ const useModalProps = ({
     okButtonProps: { loading },
     onOk: () => {
       form.validateFields().then((values) => {
-        runAsync(id, values).then(onSuccess);
+        runAsync(monitoringPoint.assetId, values).then(onSuccess);
       });
     },
     title: intl.get('bind.process')
@@ -63,19 +81,28 @@ const useModalProps = ({
 };
 
 const useSelectedType = (params: Props) => {
-  const [type, setType] = React.useState<number | undefined>(params.process?.type);
+  const [type, setType] = React.useState<number | undefined>(
+    params.process?.type || params.initialProcess?.type
+  );
   const disabled = !!params.process;
+  const hidden = !!params.initialProcess?.type;
   return {
-    typesSelectFromItemProps: useTypesSelectFormItemProps(disabled, setType),
+    typesSelectFromItemProps: useTypesSelectFormItemProps(disabled, setType, type, hidden),
     sourceIdSelectFromItemProps: useSourceIdSelectFormItemProps({ ...params, disabled, type }),
     parametersFormItemProps: useParametersFormItemsProps({ type, ...params })
   };
 };
 
-const useTypesSelectFormItemProps = (disabled: boolean, onChange: (type: number) => void) => {
+const useTypesSelectFormItemProps = (
+  disabled: boolean,
+  onChange: (type: number) => void,
+  type?: number,
+  hidden?: boolean
+) => {
   return {
-    ...useFormItemBindingsProps({ ...type, rules: [{ required: true }] }),
+    ...useFormItemBindingsProps({ ...typeField, rules: [{ required: true }], hidden }),
     selectProps: {
+      defaultValue: type,
       options: ProcessType.getOptions().map((opt) => ({ ...opt, label: intl.get(opt.label) })),
       disabled,
       onChange
@@ -93,7 +120,7 @@ const useSourceIdSelectFormItemProps = ({
   monitoringPoints: MonitoringPointRow[];
 }) => {
   return {
-    ...useFormItemBindingsProps({ ...sourceId, rules: [{ required: true }] }),
+    ...useFormItemBindingsProps({ ...sourceIdField, rules: [{ required: true }] }),
     selectProps: {
       options: monitoringPoints
         .filter((m) => (type ? ProcessType.Key.getSourceType(type) === m.type : () => true))
@@ -105,11 +132,11 @@ const useSourceIdSelectFormItemProps = ({
 
 const useParametersFormItemsProps = ({
   type,
-  devices = []
+  devices = [],
+  initialProcess
 }: {
   type?: number;
-  devices?: Device[];
-}) => {
+} & Props) => {
   if (!type) {
     return [];
   }
@@ -122,6 +149,6 @@ const useParametersFormItemsProps = ({
         .filter((d) => d.typeId === deviceType)
         .map((d) => ({ label: d.name, value: d.id }));
     }
-    return { ...rest, options };
+    return { ...rest, options, disabled: !!initialProcess?.oilFillerId };
   });
 };
