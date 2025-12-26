@@ -29,7 +29,7 @@ export const useProps = (props: CustomizableIntervalProps) => {
     },
     range,
     canOperateData: data.length > 0,
-    hasSelectedProperty: !!property,
+    property,
     cardProps: {
       title: name,
       extra: {

@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import { AXIS_ALIAS } from 'monitoring-point/constants';
-import { MonitoringPointRow } from 'monitoring-point/types';
+import { MonitoringPoint } from './monitoring-point';
+import { VibrationDirectionAttributes } from './monitoring-point-attributes';
+import { VibrationDirection } from 'common';
 
 type DisplayPropertyGroup = `property.group.${
   | 'core'
@@ -577,23 +578,19 @@ export function getGroupedProperties(properties: readonly DisplayProperty[]) {
   return Object.entries(_.groupBy(properties, (p) => p.group));
 }
 
-export function appendAxisAliasAbbrToField(
-  property: DisplayProperty,
-  attrs?: MonitoringPointRow['attributes']
+export function appendVibrationDirectionAbbrToField(
+  origin: DisplayProperty['fields'],
+  attrs?: MonitoringPoint['attributes']
 ) {
   const fields: DisplayProperty['fields'] = [];
-  const origin = property.fields ?? [];
-  if (origin.length > 1) {
-    Object.values(AXIS_ALIAS).forEach(({ key, abbr }) => {
-      const axisKey = attrs?.[key];
-      const field = origin.find((field) => axisKey === field.key.replace(`${property.key}_`, ''));
+  if (origin && origin.length > 1) {
+    Object.values(VibrationDirection.direction).forEach(({ key, abbr }) => {
+      const axisKey = (attrs as VibrationDirectionAttributes)?.[key];
+      const field = origin.find(({ key }) => key.split('_').includes(axisKey));
       if (field) {
         fields.push({ ...field, alias: abbr });
       }
     });
   }
-  return {
-    ...property,
-    fields: fields.length === origin.length && fields.length > 1 ? fields : origin
-  } as DisplayProperty;
+  return origin && fields.length === origin.length && fields.length > 1 ? fields : origin;
 }

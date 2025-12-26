@@ -3,24 +3,20 @@ import { FetchData, WaveformLayout } from './layout';
 import { Ultrasound } from './ultrasound';
 import { Inclination } from './inclination';
 import { Vibration } from './vibration';
-import { Axis, MonitoringPointType } from 'common';
+import {
+  Axis,
+  MonitoringPoint,
+  MonitoringPointType,
+  useAxisWithVibrationDirection,
+  VibrationDirectionAttributes
+} from 'common';
 import { monitoringPointTypeWaveformMap, WaveformMonitoringPointKey } from './common';
 import { VibrationPropertyKey } from '../types';
 import intl from 'react-intl-universal';
 import { PropertyLightSelectFilter } from 'asset-common';
 import { Select } from 'antd';
-import {
-  getVibrationDirectionByAxisKey,
-  VibrationDirectionAttributes
-} from 'common/monitoring-point-attributes';
 
-type Props = {
-  id: number;
-  type: WaveformMonitoringPointKey;
-  vibrationDirectionAttrs: VibrationDirectionAttributes;
-};
-
-export const MonitoringPointWaveform = (props: Props) => {
+export const MonitoringPointWaveform = (props: MonitoringPoint) => {
   const { getAxisSelectProps, getPropertiesSelectProps, vibrationFilters, ...rest } =
     useVibrationProps(props);
   const isTypeVibration = MonitoringPointType.Categories.getKeys(['vibration']).includes(
@@ -53,13 +49,11 @@ export const MonitoringPointWaveform = (props: Props) => {
   );
 };
 
-const useVibrationProps = ({ vibrationDirectionAttrs, type }: Props) => {
-  const options = Axis.options.map((opt) => {
-    const direction = getVibrationDirectionByAxisKey(opt.key, vibrationDirectionAttrs);
-    return { ...opt, label: direction ? direction.label : opt.label } as Axis.Option;
-  });
-  const [axis, setAxis] = React.useState(options[0]);
-  const { properties } = monitoringPointTypeWaveformMap[type];
+const useVibrationProps = ({ attributes, type }: MonitoringPoint) => {
+  const { axis, setAxis, options } = useAxisWithVibrationDirection(
+    attributes as VibrationDirectionAttributes
+  );
+  const { properties } = monitoringPointTypeWaveformMap[type as WaveformMonitoringPointKey];
   const [property, setProperty] = React.useState(properties[0]);
   return {
     axis,

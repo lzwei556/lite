@@ -42,7 +42,13 @@ export const SelectedPointPropertyHistory = () => {
             data={historyData}
             property={
               Point.Assert.isVibrationRelated(self.type)
-                ? CharacteristicData.appendAxisAliasAbbrToField(property, self.attributes)
+                ? {
+                    ...property,
+                    fields: CharacteristicData.appendVibrationDirectionAbbrToField(
+                      property.fields,
+                      self.attributes
+                    )
+                  }
                 : property
             }
             axisKey={axisKey ?? fieldKey}

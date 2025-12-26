@@ -31,8 +31,11 @@ export const History = (point: MonitoringPointRow) => {
   const [loading, setLoading] = React.useState(true);
   const [historyData, setHistoryData] = React.useState<HistoryData>();
   const { range, numberedRange, setRange } = useRange();
-  const displayProperties = MonitoringPointType.Key.getProperties(type, properties).map((p) =>
-    CharacteristicData.appendAxisAliasAbbrToField(p, attributes)
+  const displayProperties = MonitoringPointType.Key.getProperties(type, properties).map(
+    (property) => ({
+      ...property,
+      fields: CharacteristicData.appendVibrationDirectionAbbrToField(property.fields, attributes)
+    })
   );
   const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
     displayProperties ? displayProperties[0] : undefined

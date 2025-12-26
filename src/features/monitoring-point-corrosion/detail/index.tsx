@@ -11,7 +11,7 @@ import {
   MonitoringPointRow,
   RelatedDeviceCard
 } from '../../../asset-common';
-import { Analysis } from '../analysis';
+// import { Analysis } from '../../monitoring-point-analysis-corrosion';
 import { Monitor } from './monitor';
 import { History } from './history';
 import { Settings } from './settings';
@@ -67,11 +67,11 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     )
   });
 
-  items.push({
-    key: 'analysis',
-    label: intl.get('intelligent.analysis'),
-    content: <Analysis {...monitoringPoint} key={id} />
-  });
+  // items.push({
+  //   key: 'analysis',
+  //   label: intl.get('intelligent.analysis'),
+  //   content: <Analysis {...monitoringPoint} key={id} />
+  // });
 
   items.push({
     key: 'alerts',

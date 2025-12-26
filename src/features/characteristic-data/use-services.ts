@@ -3,8 +3,8 @@ import { CharacteristicDataDTO, VibrationWaveformFilters, WaveformData } from '.
 import { useRequest } from 'ahooks';
 import { Dayjs } from 'utils';
 
-const CUSTOM_RANGE = Dayjs.CommonRange.PastHalfYear;
-const RECENT_RANGE = Dayjs.CommonRange.PastHalfYear;
+const CUSTOM_RANGE = Dayjs.CommonRange.PastWeek;
+const RECENT_RANGE = Dayjs.CommonRange.PastWeek;
 
 export const useBatchWaveformDataDownload = () =>
   useRequest(batchDownloadWaveformData, { manual: true });

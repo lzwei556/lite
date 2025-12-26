@@ -4,11 +4,11 @@ import { Card, LineChart, SeriesOption } from 'components';
 import { PROPERTIES_WITH_ENVELOPE } from './common';
 import { Checkbox, CheckboxChangeEvent, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { Axis } from 'common';
+import { AxisWithVibrationDirectionLabel } from 'common';
 import { useGlobalStyles } from 'styles';
 
 type Props = {
-  axis: Axis.Option;
+  axis: AxisWithVibrationDirectionLabel;
   data: WaveformData;
   filters: JSX.Element[];
   property: WaveformProperty;

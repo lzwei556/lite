@@ -38,6 +38,13 @@ export const MonitoringPointProvider = ({
 
 export const useMonitoringPointContext = () => React.useContext(MonitorPointContext);
 
+export const useGetSeriesAlarm = () => {
+  const { ruleGroups } = useMonitoringPointContext();
+  return {
+    getAlarm: (property: CharacteristicData.DisplayProperty) => getSeriesAlarm(ruleGroups, property)
+  };
+};
+
 export const getSeriesAlarm = (
   ruleGroups: AlarmRule[],
   property: CharacteristicData.DisplayProperty

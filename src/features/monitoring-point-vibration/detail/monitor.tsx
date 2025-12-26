@@ -70,7 +70,7 @@ export const Monitor = (point: MonitoringPointRow) => {
           children: (
             <Grid>
               {properties
-                .map((p) => CharacteristicData.appendAxisAliasAbbrToField(p, attributes))
+                // .map((p) => CharacteristicData.appendAxisAliasAbbrToField(p, attributes))
                 .map((p: CharacteristicData.DisplayProperty, index: number) => {
                   return (
                     <Col {...colProps} key={index}>

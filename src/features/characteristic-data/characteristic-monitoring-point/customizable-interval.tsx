@@ -1,8 +1,7 @@
 import React from 'react';
 import { CustomizableInterval } from '../characteristic/customizable-interval';
-import { MonitoringPointRow } from 'monitoring-point';
 import { useCustomizableInterval } from '../use-services';
-import { CharacteristicData, MonitoringPointType } from 'common';
+import { CharacteristicData, MonitoringPoint, MonitoringPointType } from 'common';
 
 export const CustomizableIntervalMonitoringPointData = ({
   id,
@@ -10,16 +9,20 @@ export const CustomizableIntervalMonitoringPointData = ({
   type,
   properties,
   attributes
-}: MonitoringPointRow) => {
+}: MonitoringPoint & { getAlarm: (property: CharacteristicData.DisplayProperty) => void }) => {
   return (
     <CustomizableInterval
       {...{
         ...useCustomizableInterval(id, 'monitoringPoints'),
         id,
         name,
-        properties: MonitoringPointType.Key.getProperties(type, properties).map((p) =>
-          CharacteristicData.appendAxisAliasAbbrToField(p, attributes)
-        ),
+        properties: MonitoringPointType.Key.getProperties(type, properties).map((property) => ({
+          ...property,
+          fields: CharacteristicData.appendVibrationDirectionAbbrToField(
+            property.fields,
+            attributes
+          )
+        })),
         urlPathname: 'monitoringPoints'
       }}
     />

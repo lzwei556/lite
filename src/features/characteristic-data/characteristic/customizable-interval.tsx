@@ -1,4 +1,4 @@
-import { Col, Space } from 'antd';
+import { Space } from 'antd';
 import { Card, DeleteIconButton, DownloadIconButton } from 'components';
 import { CanAccess, Permission } from 'providers/access-control';
 import React from 'react';
@@ -16,7 +16,7 @@ export const CustomizableInterval = (props: CustomizableIntervalProps) => {
   const {
     canOperateData,
     dateRangePickerProps,
-    hasSelectedProperty,
+    property,
     cardProps,
     chartProps,
     range,
@@ -27,20 +27,18 @@ export const CustomizableInterval = (props: CustomizableIntervalProps) => {
   return (
     <CustmizableIntervalLayout
       content={
-        hasSelectedProperty && (
-          <Col span={24}>
-            <Card
-              extra={
-                <Space>
-                  <PropertyLightSelectFilter {...cardProps.extra.propertySelectProps} />
-                  {canOperateData && <DeleteIconButton {...deleteButtonProps} />}
-                </Space>
-              }
-              title={cardProps.title}
-            >
-              <HistoryDataFea.PropertyChart {...chartProps} />
-            </Card>
-          </Col>
+        property && (
+          <Card
+            extra={
+              <Space>
+                <PropertyLightSelectFilter {...cardProps.extra.propertySelectProps} />
+                {canOperateData && <DeleteIconButton {...deleteButtonProps} />}
+              </Space>
+            }
+            title={cardProps.title}
+          >
+            <HistoryDataFea.PropertyChart {...chartProps} key={property.key} />
+          </Card>
         )
       }
       dateRangePickerProps={dateRangePickerProps}

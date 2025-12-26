@@ -1,18 +1,38 @@
 import * as VibrationDirection from './vibration-direction';
 import * as Axis from './axis';
 import { Field } from 'types';
+import React from 'react';
+import _ from 'lodash';
 
 export type VibrationDirectionAttributes = { [Key in VibrationDirection.Key]: Axis.Key };
 
-export const getVibrationDirectionByAxisKey = (
+export type AxisWithVibrationDirectionLabel = Omit<Axis.Option, 'label'> & {
+  label: Axis.Option['label'] | VibrationDirection.Option['label'];
+};
+
+export const useAxisWithVibrationDirection = (attrs?: VibrationDirectionAttributes) => {
+  const options: AxisWithVibrationDirectionLabel[] = _.orderBy(
+    Axis.options.map((opt) => {
+      const direction = getVibrationDirectionByAxisKey(opt.key, attrs);
+      return { ...opt, direction };
+    }),
+    (option) => option.direction?.sort
+  ).map(({ direction, ...rest }) => ({ ...rest, label: direction ? direction.label : rest.label }));
+  const [axis, setAxis] = React.useState(options[0]);
+  return { axis, setAxis, options };
+};
+
+const getVibrationDirectionByAxisKey = (
   axisKey: Axis.Key,
-  attrs: VibrationDirectionAttributes
+  attrs?: VibrationDirectionAttributes
 ): VibrationDirection.Option | undefined => {
   let key: VibrationDirection.Key;
-  for (key in attrs) {
-    const _axisKey = attrs[key];
-    if (_axisKey === axisKey) {
-      return VibrationDirection.getByKey(key);
+  if (attrs) {
+    for (key in attrs) {
+      const _axisKey = attrs[key];
+      if (_axisKey === axisKey) {
+        return VibrationDirection.getByKey(key);
+      }
     }
   }
 };
@@ -29,7 +49,7 @@ type BaseInclinationAttributes = InclinationAttributes & {
   tower_base_radius: number;
 };
 
-type CorrosionAttributes = NumericPosition & {
+export type CorrosionAttributes = NumericPosition & {
   initial_thickness_enabled: boolean;
   initial_thickness: number;
   critical_thickness_enabled: boolean;
