@@ -1,5 +1,4 @@
-import { CharacteristicData } from "common";
-
+import { CharacteristicData } from 'common';
 
 export enum DeviceType {
   Gateway = 0x1,
@@ -412,6 +411,7 @@ export const SENSOR_DISPLAY_PROPERTIES = {
   [DeviceType.ST100]: CharacteristicData.CATEGORIES.ST,
   [DeviceType.ST101S]: CharacteristicData.CATEGORIES.ST,
   [DeviceType.ST101L]: CharacteristicData.CATEGORIES.ST,
+  [DeviceType.OilFiller]: CharacteristicData.CATEGORIES.OilFiller,
   [DeviceType.SPT510]: CharacteristicData.CATEGORIES.SPT,
   [DeviceType.SQ100]: CharacteristicData.CATEGORIES.SQ,
   [DeviceType.SQ110C]: CharacteristicData.CATEGORIES.SQ

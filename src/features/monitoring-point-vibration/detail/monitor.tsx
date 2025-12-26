@@ -41,34 +41,53 @@ export const Monitor = (point: MonitoringPointRow) => {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
   const groups = getGroupedProperties(MonitoringPointType.Key.getProperties(type, properties));
 
-  return (
-    <Collapse
-      bordered={false}
-      defaultActiveKey={groups[0][0]}
-      expandIconPosition='end'
-      items={groups.map(([g, properties]) => ({
-        key: g,
-        label: intl.get(g),
-        children: (
-          <Grid>
-            {properties
-              .map((p) => CharacteristicData.appendAxisAliasAbbrToField(p, attributes))
-              .map((p: CharacteristicData.DisplayProperty, index: number) => {
-                return (
-                  <Col {...colProps} key={index}>
-                    <HistoryDataFea.PropertyChartCard
-                      alarm={getSeriesAlarm(ruleGroups, p)}
-                      cardProps={propertyHistoryCardStyle}
-                      data={historyData}
-                      property={p}
-                    />
-                  </Col>
-                );
-              })}
-          </Grid>
-        )
-      }))}
-      style={{ borderRadius: 0, backgroundColor: colorBgContainerStyle.backgroundColor }}
-    />
-  );
+  if (groups.length === 1) {
+    return (
+      <Grid>
+        {groups[0][1].map((p: CharacteristicData.DisplayProperty, index: number) => {
+          return (
+            <Col {...generateColProps({})} key={index}>
+              <HistoryDataFea.PropertyChartCard
+                alarm={getSeriesAlarm(ruleGroups, p)}
+                cardProps={propertyHistoryCardStyle}
+                data={historyData}
+                property={p}
+              />
+            </Col>
+          );
+        })}
+      </Grid>
+    );
+  } else {
+    return (
+      <Collapse
+        bordered={false}
+        defaultActiveKey={groups[0][0]}
+        expandIconPosition='end'
+        items={groups.map(([g, properties]) => ({
+          key: g,
+          label: intl.get(g),
+          children: (
+            <Grid>
+              {properties
+                .map((p) => CharacteristicData.appendAxisAliasAbbrToField(p, attributes))
+                .map((p: CharacteristicData.DisplayProperty, index: number) => {
+                  return (
+                    <Col {...colProps} key={index}>
+                      <HistoryDataFea.PropertyChartCard
+                        alarm={getSeriesAlarm(ruleGroups, p)}
+                        cardProps={propertyHistoryCardStyle}
+                        data={historyData}
+                        property={p}
+                      />
+                    </Col>
+                  );
+                })}
+            </Grid>
+          )
+        }))}
+        style={{ borderRadius: 0, backgroundColor: colorBgContainerStyle.backgroundColor }}
+      />
+    );
+  }
 };

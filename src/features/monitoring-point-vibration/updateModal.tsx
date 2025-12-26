@@ -9,6 +9,7 @@ import { MONITORING_POINT, MonitoringPoint, MonitoringPointRow, Point } from '..
 import { handleSubmit } from './common';
 import { Others } from './others';
 import { BasisFormItems } from './basisFormItems';
+import { MonitoringPointType } from 'common';
 
 export const UpdateModal = (props: ModalFormProps & { monitoringPoint: MonitoringPointRow }) => {
   const { monitoringPoint, onSuccess, ...rest } = props;
@@ -35,11 +36,13 @@ export const UpdateModal = (props: ModalFormProps & { monitoringPoint: Monitorin
             formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
           />
         </Card>
-        <Card size='small' style={{ marginBlock: 16 }} title={intl.get('monitoring.point.attr')}>
-          <Grid>
-            <Others formItemColProps={generateColProps({ xl: 12, xxl: 12 })} />
-          </Grid>
-        </Card>
+        {monitoringPoint.type !== MonitoringPointType.Value.OilFiller && (
+          <Card size='small' style={{ marginBlock: 16 }} title={intl.get('monitoring.point.attr')}>
+            <Grid>
+              <Others formItemColProps={generateColProps({ xl: 12, xxl: 12 })} />
+            </Grid>
+          </Card>
+        )}
       </Form>
     </ModalWrapper>
   );

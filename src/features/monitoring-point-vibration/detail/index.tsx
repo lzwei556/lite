@@ -17,6 +17,8 @@ import { History } from './history';
 import { Settings } from './settings';
 import { WaveformData } from './waveformData';
 import { Permission, useCan } from '../../../providers/access-control';
+import { MonitoringPointType } from 'common';
+import { FillRecords } from 'features/process';
 
 export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
@@ -55,18 +57,22 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     }
   ];
 
-  if (vibrationEnabled) {
-    items.push({
-      key: 'analysis',
-      label: intl.get('intelligent.analysis'),
-      content: <Analysis id={id} key={id} attributes={attributes} assetId={assetId} />
-    });
+  if (monitoringPoint.type === MonitoringPointType.Value.OilFiller) {
+    items.push({ key: 'fillRecords', label: intl.get('fill.records'), content: <FillRecords /> });
   } else {
-    items.push({
-      key: 'waveformData',
-      label: intl.get('WAVEFORM_DATA'),
-      content: <WaveformData id={id} key={id} />
-    });
+    if (vibrationEnabled) {
+      items.push({
+        key: 'analysis',
+        label: intl.get('intelligent.analysis'),
+        content: <Analysis id={id} key={id} attributes={attributes} assetId={assetId} />
+      });
+    } else {
+      items.push({
+        key: 'waveformData',
+        label: intl.get('WAVEFORM_DATA'),
+        content: <WaveformData id={id} key={id} />
+      });
+    }
   }
 
   items.push({

@@ -12,6 +12,8 @@ import { Card, Grid, SaveIconButton } from '../../../components';
 import { BasisFormItems } from '../basisFormItems';
 import { Others } from '../others';
 import { handleSubmit } from '../common';
+import { MonitoringPointType } from 'common';
+import { ProcessList } from 'features/process';
 
 export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
@@ -37,17 +39,31 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
               monitoringPoint={monitoringPoint}
               formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
             />
-            <Card size='small' title={intl.get('monitoring.point.attr')} type='inner'>
-              <Grid>
-                <Others formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
-              </Grid>
-            </Card>
+            {monitoringPoint.type !== MonitoringPointType.Value.OilFiller && (
+              <Card size='small' title={intl.get('monitoring.point.attr')} type='inner'>
+                <Grid>
+                  <Others formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
+                </Grid>
+              </Card>
+            )}
           </Form>
         </Card>
       </Col>
       <Col span={24}>
         <AlarmRuleSetting point={monitoringPoint} />
       </Col>
+      {monitoringPoint.type === MonitoringPointType.Value.OilFiller && (
+        <Col span={24}>
+          <ProcessList
+            {...{
+              id: asset.id,
+              processList: asset.actions ?? [],
+              monitoringPoints,
+              onSuccess: refresh
+            }}
+          />
+        </Col>
+      )}
     </Grid>
   );
 };

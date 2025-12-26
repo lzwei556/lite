@@ -30,7 +30,8 @@ export enum Value {
   TopInclination = 10511,
   BaseInclination = 10512,
   Pressure = 10602,
-  Temperature = 10801
+  Temperature = 10801,
+  OilFiller = 11101
 }
 
 const configs: Config[] = [
@@ -160,6 +161,14 @@ const configs: Config[] = [
     deviceTypes: [DeviceType.SVT210SU],
     properties: CATEGORIES.SVT210SU,
     attributes: vibrationFields
+  },
+  {
+    key: Value.OilFiller,
+    label: Value[Value.OilFiller],
+    category: 'vibration',
+    deviceTypes: [DeviceType.OilFiller],
+    properties: CATEGORIES.OilFiller,
+    attributes: []
   },
   // {
   //   key: Value.Inclination,

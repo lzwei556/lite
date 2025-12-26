@@ -65,7 +65,11 @@ export const PointItemList = ({
                 }}
               />
               <Grid>
-                <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+                <Col
+                  {...generateColProps(
+                    type !== MonitoringPointType.Value.OilFiller ? { xl: 12, xxl: 12 } : {}
+                  )}
+                >
                   <TextFormItem
                     {...restFields}
                     label='NAME'
@@ -73,11 +77,13 @@ export const PointItemList = ({
                     rules={[{ required: true }, { min: 4, max: 50 }]}
                   />
                 </Col>
-                <Others
-                  formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
-                  nameIndex={name}
-                  restFields={restFields}
-                />
+                {type !== MonitoringPointType.Value.OilFiller && (
+                  <Others
+                    formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
+                    nameIndex={name}
+                    restFields={restFields}
+                  />
+                )}
               </Grid>
             </div>
           ))}
@@ -91,14 +97,20 @@ export const PointItemList = ({
                     onSelect={(selecteds) => {
                       setVisible(false);
                       onSelect(
-                        selecteds.map((m) => ({
-                          ...m,
-                          attributes: {
-                            [AXIS_ALIAS.Axial.key]: AXIS.Z.key,
-                            [AXIS_ALIAS.Horizontal.key]: AXIS.X.key,
-                            [AXIS_ALIAS.Vertical.key]: AXIS.Y.key
+                        selecteds.map((m) => {
+                          if (type !== MonitoringPointType.Value.OilFiller) {
+                            return {
+                              ...m,
+                              attributes: {
+                                [AXIS_ALIAS.Axial.key]: AXIS.Z.key,
+                                [AXIS_ALIAS.Horizontal.key]: AXIS.X.key,
+                                [AXIS_ALIAS.Vertical.key]: AXIS.Y.key
+                              }
+                            };
+                          } else {
+                            return m;
                           }
-                        }))
+                        })
                       );
                     }}
                     initialSelected={initialSelected}

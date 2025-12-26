@@ -1251,6 +1251,7 @@
   "monitoring.point.type.base.inclination": "Base Inclination",
   "monitoring.point.type.pressure": "Pressure",
   "monitoring.point.type.temperature": "Temperature",
+  "monitoring.point.type.oil.filler": "Automatic Lubrication Dispenser",
   "apply.settings.to.the.same.types": "Apply to All Same Types",
   "project.type": "Project Type",
   "TREND_CHART": "Trend Chart",
@@ -1441,5 +1442,6 @@
   "component.health.status": "Components Status",
   "low.envelope": "Low",
   "high.envelope": "High",
-  "monitoirng.point.position": "Position"
+  "monitoirng.point.position": "Position",
+  "fill.records": "Filling Records"
 }
