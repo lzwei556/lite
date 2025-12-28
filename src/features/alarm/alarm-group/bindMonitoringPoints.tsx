@@ -7,8 +7,8 @@ import { area } from '../../../asset-variant';
 import { wind } from '../../asset-wind-turbine/constants';
 import { bindMeasurementsToAlarmRule2 } from './services';
 import { AlarmRule } from './types';
-import { MonitoringPointTypeValue } from '../../../config';
 import { CheckboxFormItem, Grid, TextFormItem } from '../../../components';
+import { MonitoringPointType } from 'common';
 
 type MixinAssetRow = AssetRow & {
   pointIds: number[];
@@ -56,11 +56,11 @@ export const BindMonitoringPoints: React.FC<
       const assets = data
         .filter((asset) => {
           if (
-            props.selectedRow.type === MonitoringPointTypeValue.BoltLoosening ||
-            props.selectedRow.type === MonitoringPointTypeValue.BoltPreload ||
-            props.selectedRow.type === MonitoringPointTypeValue.AnchorPreload ||
-            props.selectedRow.type === MonitoringPointTypeValue.BaseInclination ||
-            props.selectedRow.type === MonitoringPointTypeValue.TopInclination
+            MonitoringPointType.Categories.getKeys([
+              'loosening',
+              'preload',
+              'inclination'
+            ]).includes(props.selectedRow.type)
           ) {
             return asset.type === wind.type;
           } else {

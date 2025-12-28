@@ -36,6 +36,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
     setOpen(false);
     setMonitoringPoint(undefined);
   };
+  const monitoringPoints = asset.monitoringPoints ?? [];
 
   const isLegacy = ENV.legacyEnabled === 'true';
 
@@ -58,7 +59,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
               label: intl.get('MONITORING_POINT_LIST'),
               content: (
                 <MonitoringPointsTable
-                  key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
+                  key={`${monitoringPoints.map(({ id }) => id).join()}`}
                   asset={asset}
                   enableSettingColumnsCount={true}
                 />

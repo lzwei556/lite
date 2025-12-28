@@ -25,9 +25,9 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
     if (asset) {
       const types = getMonitoringPointTypes(asset);
       const type = form.getFieldValue('type') as number | undefined;
-      if (type && !types.map(({ id }) => id).includes(type) && types.length > 0) {
-        form.setFieldValue('type', types[0].id);
-        handleTypeChange(types[0].id);
+      if (type && !types.map(({ value }) => value).includes(type) && types.length > 0) {
+        form.setFieldValue('type', types[0].value);
+        handleTypeChange(types[0].value);
       }
     }
   };
@@ -136,9 +136,9 @@ function TypeSelection({ parent, onChange }: { parent: AssetRow; onChange: (id: 
       rules={[{ required: true }]}
       selectProps={{
         onChange,
-        options: getMonitoringPointTypes(parent).map(({ id, label }) => ({
+        options: getMonitoringPointTypes(parent).map(({ value, label }) => ({
           label: intl.get(label),
-          value: id
+          value
         }))
       }}
     />

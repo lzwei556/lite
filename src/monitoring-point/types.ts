@@ -1,3 +1,4 @@
+import { ProcessDTO } from 'features/process/use-services';
 import { Device } from '../types/device';
 
 export type MonitoringPoint = {
@@ -40,6 +41,7 @@ export type MonitoringPointRow = {
   };
   alertLevel?: number;
   parentId: number;
+  actions?:ProcessDTO[]
 };
 
 export type Property = {

@@ -7,7 +7,8 @@ import DeviceSelect from '../../components/select/deviceSelect';
 import { DeviceType } from '../../types/device_type';
 import { MonitoringPointRow, Point } from '../../asset-common';
 import * as Tower from './tower';
-import { getRelatedDeviceTypes, useParents } from './common';
+import { useParents } from './common';
+import { MonitoringPointType } from 'common';
 
 export const UpdateFormItems = ({
   monitoringPoint,
@@ -18,8 +19,8 @@ export const UpdateFormItems = ({
 }) => {
   const { type } = monitoringPoint;
   const parents = useParents(undefined, monitoringPoint.type);
-  const types = [{ id: type, label: Point.getTypeLabel(type) as string }];
-  const deviceTypes = getRelatedDeviceTypes(type);
+  const types = [{ id: type, label: MonitoringPointType.Key.getLabel(type) }];
+  const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
   const deviceTypeId =
     monitoringPoint?.bindingDevices && monitoringPoint?.bindingDevices.length > 0
       ? monitoringPoint?.bindingDevices[0].typeId

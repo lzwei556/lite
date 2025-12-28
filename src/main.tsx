@@ -13,6 +13,7 @@ import { App, useAppType } from './config';
 import AppRouter from './views/router';
 import { AuthProvider } from './providers/auth';
 import { AccessControlProvider } from './providers/access-control';
+import { NotificationProvider } from 'providers/notification';
 
 export const Main = () => {
   const config = useAppType();
@@ -94,11 +95,13 @@ export const Main = () => {
                 }
           }
         >
-          <AuthProvider>
-            <AccessControlProvider>
-              <AppRouter />
-            </AccessControlProvider>
-          </AuthProvider>
+          <NotificationProvider>
+            <AuthProvider>
+              <AccessControlProvider>
+                <AppRouter />
+              </AccessControlProvider>
+            </AuthProvider>
+          </NotificationProvider>
         </ConfigProvider>
       </ThemeProvider>
     )

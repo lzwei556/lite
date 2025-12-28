@@ -1,4 +1,4 @@
-import { PROPERTY_CATEGORIES } from '../constants/properties';
+import { CharacteristicData } from 'common';
 
 export enum DeviceType {
   Gateway = 0x1,
@@ -35,6 +35,7 @@ export enum DeviceType {
   SVT220S1 = 0x50203,
   SVT220S3 = 0x50204,
   SVT510L = 0x5010e,
+  SVT210SU = 0x50210,
   ST100 = 0x60001,
   ST101S = 0x60101,
   ST101L = 0x60201,
@@ -44,6 +45,7 @@ export enum DeviceType {
   PressureGuoDa = 0x1000001,
   PressureWoErKe = 0x1000002,
   OilFiller = 0x08100001,
+  SASLoraWAN = 0x40030001,
   DC210LoraWAN = 0x40040106,
   DC110HLoraWAN = 0x40040107,
   DC110LoraWAN = 0x40040201,
@@ -122,6 +124,8 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_SVT220S3';
       case DeviceType.SVT510L:
         return 'DEVICE_TYPE_SVT510L';
+      case DeviceType.SVT210SU:
+        return 'DEVICE_TYPE_SVT210SU';
       case DeviceType.ST100:
         return 'DEVICE_TYPE_ST100';
       case DeviceType.ST101S:
@@ -140,6 +144,8 @@ export namespace DeviceType {
         return 'DEVICE_TYPE_WOERKE_PRESSURE';
       case DeviceType.OilFiller:
         return 'DEVICE_TYPE_Oil_Filler';
+      case DeviceType.SASLoraWAN:
+        return 'DEVICE_TYPE_SASLoraWAN';
       case DeviceType.DC210LoraWAN:
         return 'DEVICE_TYPE_DC210LoraWAN';
       case DeviceType.DC110HLoraWAN:
@@ -200,6 +206,7 @@ export namespace DeviceType {
       DeviceType.SA,
       DeviceType.SA_S,
       DeviceType.SAS,
+      DeviceType.SASLoraWAN,
       DeviceType.DS4,
       DeviceType.DS8,
       DeviceType.SAS120D,
@@ -216,6 +223,7 @@ export namespace DeviceType {
       DeviceType.SVT210S,
       DeviceType.SVT220S1,
       DeviceType.SVT220S3,
+      DeviceType.SVT210SU,
       DeviceType.ST100,
       DeviceType.ST101L,
       DeviceType.STLoraWAN,
@@ -259,7 +267,8 @@ export namespace DeviceType {
       type === DeviceType.SVT210S ||
       type === DeviceType.SVT220S1 ||
       type === DeviceType.SVT220S3 ||
-      type === DeviceType.ST101S
+      type === DeviceType.ST101S ||
+      type === DeviceType.SVT210SU
     );
   }
 
@@ -301,6 +310,7 @@ export namespace DeviceType {
   export function canSupportingCalibrate(type: number) {
     return (
       type === DeviceType.SAS ||
+      type === DeviceType.SASLoraWAN ||
       DeviceType.isSASMultiChannel(type) ||
       DeviceType.isMultiChannel(type) ||
       getDCSensors().includes(type) ||
@@ -312,13 +322,8 @@ export namespace DeviceType {
   }
 
   export function canSupportingCompensation(type: number) {
-    return getDCSensors().includes(type) || type === DeviceType.SAS;
-  }
-
-  export function hasGroupedSettings(type: number) {
     return (
-      (type === DeviceType.SAS || isSASMultiChannel(type) || isMultiChannel(type)) &&
-      !isVibration(type)
+      getDCSensors().includes(type) || type === DeviceType.SAS || type === DeviceType.SASLoraWAN
     );
   }
 
@@ -335,6 +340,7 @@ export namespace DeviceType {
       case DeviceType.SVT220S3:
       case DeviceType.SVT510L:
       case DeviceType.SVT510LoraWAN:
+      case DeviceType.SVT210SU:
         return true;
     }
     return false;
@@ -352,7 +358,8 @@ export namespace DeviceType {
       DeviceType.SVT220S1,
       DeviceType.SVT220S3,
       DeviceType.SVT510L,
-      DeviceType.SVT510LoraWAN
+      DeviceType.SVT510LoraWAN,
+      DeviceType.SVT210SU
     ];
   }
 
@@ -362,6 +369,7 @@ export namespace DeviceType {
 
   export function isLoraWAN(type: number) {
     return (
+      type === DeviceType.SASLoraWAN ||
       type === DeviceType.DC110LoraWAN ||
       type === DeviceType.DC210LoraWAN ||
       type === DeviceType.DC110HLoraWAN ||
@@ -372,38 +380,41 @@ export namespace DeviceType {
 }
 
 export const SENSOR_DISPLAY_PROPERTIES = {
-  [DeviceType.SA]: PROPERTY_CATEGORIES.SA,
-  [DeviceType.SA_S]: PROPERTY_CATEGORIES.SA,
-  [DeviceType.SAS]: PROPERTY_CATEGORIES.SAS,
-  [DeviceType.SAS120D]: PROPERTY_CATEGORIES.SAS,
-  [DeviceType.SAS120Q]: PROPERTY_CATEGORIES.SAS,
-  [DeviceType.DS4]: PROPERTY_CATEGORIES.DS,
-  [DeviceType.DS8]: PROPERTY_CATEGORIES.DS,
-  [DeviceType.DC110]: PROPERTY_CATEGORIES.DC_NORMAL,
-  [DeviceType.DC110C]: PROPERTY_CATEGORIES.DC_NORMAL,
-  [DeviceType.DC110L]: PROPERTY_CATEGORIES.DC_NORMAL,
-  [DeviceType.DC110H]: PROPERTY_CATEGORIES.DC_HIGH,
-  [DeviceType.DC110HC]: PROPERTY_CATEGORIES.DC_HIGH,
-  [DeviceType.DC110HL]: PROPERTY_CATEGORIES.DC_HIGH,
-  [DeviceType.DC210L]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
-  [DeviceType.DC210]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
-  [DeviceType.DC210C]: PROPERTY_CATEGORIES.DC_Ultra_HIGH,
-  [DeviceType.SVT220520P]: PROPERTY_CATEGORIES.SVT220520P,
-  [DeviceType.SVT520C]: PROPERTY_CATEGORIES.SVT220520P,
-  [DeviceType.SVT210510P]: PROPERTY_CATEGORIES.SVT210510P,
-  [DeviceType.SVT510C]: PROPERTY_CATEGORIES.SVT210510P,
-  [DeviceType.SVT210K]: PROPERTY_CATEGORIES.SVT210K,
-  [DeviceType.SVT210A]: PROPERTY_CATEGORIES.SVT210A,
-  [DeviceType.SVT210S]: PROPERTY_CATEGORIES.SVT220S1S3,
-  [DeviceType.SVT220S1]: PROPERTY_CATEGORIES.SVT220S1S3,
-  [DeviceType.SVT220S3]: PROPERTY_CATEGORIES.SVT220S1S3,
-  [DeviceType.SVT510L]: PROPERTY_CATEGORIES.SVT220S1S3,
-  [DeviceType.ST100]: PROPERTY_CATEGORIES.ST,
-  [DeviceType.ST101S]: PROPERTY_CATEGORIES.ST,
-  [DeviceType.ST101L]: PROPERTY_CATEGORIES.ST,
-  [DeviceType.SPT510]: PROPERTY_CATEGORIES.SPT,
-  [DeviceType.SQ100]: PROPERTY_CATEGORIES.SQ,
-  [DeviceType.SQ110C]: PROPERTY_CATEGORIES.SQ
+  [DeviceType.SA]: CharacteristicData.CATEGORIES.SA,
+  [DeviceType.SA_S]: CharacteristicData.CATEGORIES.SA,
+  [DeviceType.SAS]: CharacteristicData.CATEGORIES.SAS,
+  [DeviceType.SASLoraWAN]: CharacteristicData.CATEGORIES.SAS,
+  [DeviceType.SAS120D]: CharacteristicData.CATEGORIES.SAS,
+  [DeviceType.SAS120Q]: CharacteristicData.CATEGORIES.SAS,
+  [DeviceType.DS4]: CharacteristicData.CATEGORIES.DS,
+  [DeviceType.DS8]: CharacteristicData.CATEGORIES.DS,
+  [DeviceType.DC110]: CharacteristicData.CATEGORIES.DC_NORMAL,
+  [DeviceType.DC110C]: CharacteristicData.CATEGORIES.DC_NORMAL,
+  [DeviceType.DC110L]: CharacteristicData.CATEGORIES.DC_NORMAL,
+  [DeviceType.DC110H]: CharacteristicData.CATEGORIES.DC_HIGH,
+  [DeviceType.DC110HC]: CharacteristicData.CATEGORIES.DC_HIGH,
+  [DeviceType.DC110HL]: CharacteristicData.CATEGORIES.DC_HIGH,
+  [DeviceType.DC210L]: CharacteristicData.CATEGORIES.DC_Ultra_HIGH,
+  [DeviceType.DC210]: CharacteristicData.CATEGORIES.DC_Ultra_HIGH,
+  [DeviceType.DC210C]: CharacteristicData.CATEGORIES.DC_Ultra_HIGH,
+  [DeviceType.SVT220520P]: CharacteristicData.CATEGORIES.SVT220520P,
+  [DeviceType.SVT520C]: CharacteristicData.CATEGORIES.SVT220520P,
+  [DeviceType.SVT210510P]: CharacteristicData.CATEGORIES.SVT210510P,
+  [DeviceType.SVT510C]: CharacteristicData.CATEGORIES.SVT210510P,
+  [DeviceType.SVT210K]: CharacteristicData.CATEGORIES.SVT210K,
+  [DeviceType.SVT210A]: CharacteristicData.CATEGORIES.SVT210A,
+  [DeviceType.SVT210S]: CharacteristicData.CATEGORIES.SVT220S1S3,
+  [DeviceType.SVT220S1]: CharacteristicData.CATEGORIES.SVT220S1S3,
+  [DeviceType.SVT220S3]: CharacteristicData.CATEGORIES.SVT220S1S3,
+  [DeviceType.SVT510L]: CharacteristicData.CATEGORIES.SVT220S1S3,
+  [DeviceType.SVT210SU]: CharacteristicData.CATEGORIES.SVT210SU,
+  [DeviceType.ST100]: CharacteristicData.CATEGORIES.ST,
+  [DeviceType.ST101S]: CharacteristicData.CATEGORIES.ST,
+  [DeviceType.ST101L]: CharacteristicData.CATEGORIES.ST,
+  [DeviceType.OilFiller]: CharacteristicData.CATEGORIES.OilFiller,
+  [DeviceType.SPT510]: CharacteristicData.CATEGORIES.SPT,
+  [DeviceType.SQ100]: CharacteristicData.CATEGORIES.SQ,
+  [DeviceType.SQ110C]: CharacteristicData.CATEGORIES.SQ
 };
 
 const SVT_SENSOR_TYPES = [16842753, 16842758, 16842759];
@@ -418,5 +429,6 @@ export const SVT_DEVICE_TYPE_SENSOR_TYPE_MAPPING = {
   [DeviceType.SVT210S]: SVT_SENSOR_TYPES[0],
   [DeviceType.SVT220S1]: SVT_SENSOR_TYPES[2],
   [DeviceType.SVT220S3]: SVT_SENSOR_TYPES[1],
-  [DeviceType.SVT510L]: SVT_SENSOR_TYPES[1]
+  [DeviceType.SVT510L]: SVT_SENSOR_TYPES[1],
+  [DeviceType.SVT210SU]: SVT_SENSOR_TYPES[0]
 };

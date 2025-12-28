@@ -8,11 +8,12 @@ import {
   getAlarmRules,
   unbindMeasurementsToAlarmRule
 } from '../features/alarm/alarm-group/services';
-import { MonitoringPointRow, Point, useMonitoringPointContext } from '../asset-common';
 import { Table } from '../components';
 import { AlarmLevelTag } from '../features/alarm';
+import { MonitoringPoint, MonitoringPointType } from 'common';
+import { useMonitoringPointContext } from './provider';
 
-export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
+export const AlarmRuleSetting = ({ point }: { point: MonitoringPoint }) => {
   const [rules, setRules] = React.useState<AlarmRule[]>();
   const [loading, setLoading] = React.useState(true);
   const { ruleGroups, refresh } = useMonitoringPointContext();
@@ -68,7 +69,7 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
       dataIndex: 'type',
       key: 'type',
       render: (typeId: number) => {
-        const label = Point.getTypeLabel(typeId);
+        const label = MonitoringPointType.Key.getLabel(typeId);
         return label ? intl.get(label) : '-';
       }
     },

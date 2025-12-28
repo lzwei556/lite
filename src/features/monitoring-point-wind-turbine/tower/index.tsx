@@ -1,9 +1,9 @@
 import React from 'react';
 import { Col, ColProps } from 'antd';
-import { MonitoringPointTypeValue } from '../../../config';
 import { InstallAngletItem } from './installAngleItem';
 import { RadiusItem } from './tower-base-settlement/radiusItem';
 import { InstallHeightItem } from './tower-inclination/installHeightItem';
+import { MonitoringPointType } from 'common';
 
 export const Index = (props: {
   type: number;
@@ -19,7 +19,7 @@ export const Index = (props: {
         <InstallAngletItem {...rest} />
       </Col>
       <Col {...formItemColProps}>
-        {type === MonitoringPointTypeValue.TopInclination ? (
+        {type === MonitoringPointType.Value.TopInclination ? (
           <InstallHeightItem {...rest} />
         ) : (
           <RadiusItem {...rest} />

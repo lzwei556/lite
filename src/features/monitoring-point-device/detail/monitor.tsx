@@ -1,7 +1,6 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import { Grid } from '../../../components';
-import { DisplayProperty } from '../../../constants/properties';
 import { generateColProps } from '../../../utils/grid';
 import { Dayjs } from '../../../utils';
 import {
@@ -9,11 +8,11 @@ import {
   getSeriesAlarm,
   HistoryData,
   MonitoringPointRow,
-  Point,
   useMonitoringPointContext
 } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties } = point;
@@ -53,18 +52,20 @@ export const Monitor = (point: MonitoringPointRow) => {
 
   return (
     <Grid>
-      {Point.getPropertiesByType(type, properties).map((p: DisplayProperty, index: number) => {
-        return (
-          <Col {...getCols(properties.length)} key={index}>
-            <HistoryDataFea.PropertyChartCard
-              alarm={getSeriesAlarm(ruleGroups, p)}
-              cardProps={propertyHistoryCardStyle}
-              data={historyData}
-              property={p}
-            />
-          </Col>
-        );
-      })}
+      {MonitoringPointType.Key.getProperties(type, properties).map(
+        (p: CharacteristicData.DisplayProperty, index: number) => {
+          return (
+            <Col {...getCols(properties.length)} key={index}>
+              <HistoryDataFea.PropertyChartCard
+                alarm={getSeriesAlarm(ruleGroups, p)}
+                cardProps={propertyHistoryCardStyle}
+                data={historyData}
+                property={p}
+              />
+            </Col>
+          );
+        }
+      )}
     </Grid>
   );
 };

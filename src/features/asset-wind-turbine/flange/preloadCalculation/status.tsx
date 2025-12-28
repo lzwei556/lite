@@ -3,8 +3,9 @@ import { Col, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../../../utils';
 import { Card, Flex, Grid, Table, useRange, RangeDatePicker } from '../../../../components';
-import { AssetRow, getDataOfAsset, getFlangeData, Point } from '../../../../asset-common';
+import { AssetRow, getDataOfAsset, getFlangeData } from '../../../../asset-common';
 import { SingleStatus, StatusData } from './single';
+import { MonitoringPointType } from 'common';
 
 export const Status: React.FC<AssetRow> = (props) => {
   const { numberedRange, setRange } = useRange();
@@ -106,7 +107,7 @@ export const Status: React.FC<AssetRow> = (props) => {
       <SingleStatus
         properties={
           props.monitoringPoints && props.monitoringPoints.length > 0
-            ? Point.getPropertiesByType(
+            ? MonitoringPointType.Key.getProperties(
                 props.monitoringPoints[0].type,
                 props.monitoringPoints[0].properties
               )

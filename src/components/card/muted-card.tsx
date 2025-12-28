@@ -26,7 +26,7 @@ export const MutedCard = ({
 
   return (
     <Card style={style}>
-      <Flex justify={justify} style={{ marginBottom: Space }}>
+      <Flex align='center' justify={justify} style={{ marginBottom: Space }}>
         <span style={{ fontSize: 16 }}>{title}</span>
         {extra}
       </Flex>

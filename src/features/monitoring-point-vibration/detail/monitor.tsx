@@ -3,19 +3,18 @@ import { Col, Collapse, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../../utils';
 import { Grid } from '../../../components';
-import { DisplayProperty, displayPropertyGroup } from '../../../constants/properties';
 import { generateColProps } from '../../../utils/grid';
 import {
   getDataOfMonitoringPoint,
   getSeriesAlarm,
   HistoryData,
   MonitoringPointRow,
-  Point,
   useMonitoringPointContext
 } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
 import { HistoryDataFea } from '../..';
-import { appendAxisAliasAbbrToField } from '../common';
+import { CharacteristicData, MonitoringPointType } from 'common';
+import { getGroupedProperties } from 'common/characteristic-data';
 
 export const Monitor = (point: MonitoringPointRow) => {
   const { id, type, properties, attributes } = point;
@@ -40,36 +39,61 @@ export const Monitor = (point: MonitoringPointRow) => {
   if (loading) return <Spin />;
   if (!historyData || historyData.length === 0)
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
+  const groups = getGroupedProperties(MonitoringPointType.Key.getProperties(type, properties));
 
-  return (
-    <Collapse
-      bordered={false}
-      defaultActiveKey={displayPropertyGroup[0]}
-      expandIconPosition='end'
-      items={displayPropertyGroup.map((g) => ({
-        key: g,
-        label: intl.get(g),
-        children: (
-          <Grid>
-            {Point.getPropertiesByType(type, properties)
-              .map((p) => appendAxisAliasAbbrToField(p, attributes))
-              .filter((p) => p.group === g)
-              .map((p: DisplayProperty, index: number) => {
-                return (
-                  <Col {...colProps} key={index}>
-                    <HistoryDataFea.PropertyChartCard
-                      alarm={getSeriesAlarm(ruleGroups, p)}
-                      cardProps={propertyHistoryCardStyle}
-                      data={historyData}
-                      property={p}
-                    />
-                  </Col>
-                );
-              })}
-          </Grid>
-        )
-      }))}
-      style={{ borderRadius: 0, backgroundColor: colorBgContainerStyle.backgroundColor }}
-    />
-  );
+  if (groups.length === 1) {
+    return (
+      <Grid>
+        {groups[0][1].map((p: CharacteristicData.DisplayProperty, index: number) => {
+          return (
+            <Col {...generateColProps({})} key={index}>
+              <HistoryDataFea.PropertyChartCard
+                alarm={getSeriesAlarm(ruleGroups, p)}
+                cardProps={propertyHistoryCardStyle}
+                data={historyData}
+                property={p}
+              />
+            </Col>
+          );
+        })}
+      </Grid>
+    );
+  } else {
+    return (
+      <Collapse
+        bordered={false}
+        defaultActiveKey={groups[0][0]}
+        expandIconPosition='end'
+        items={groups.map(([g, properties]) => ({
+          key: g,
+          label: intl.get(g),
+          children: (
+            <Grid>
+              {properties
+                .map((p) => ({
+                  ...p,
+                  fields: CharacteristicData.appendVibrationDirectionAbbrToField(
+                    p.fields,
+                    attributes
+                  )
+                }))
+                .map((p: CharacteristicData.DisplayProperty, index: number) => {
+                  return (
+                    <Col {...colProps} key={index}>
+                      <HistoryDataFea.PropertyChartCard
+                        alarm={getSeriesAlarm(ruleGroups, p)}
+                        cardProps={propertyHistoryCardStyle}
+                        data={historyData}
+                        property={p}
+                      />
+                    </Col>
+                  );
+                })}
+            </Grid>
+          )
+        }))}
+        style={{ borderRadius: 0, backgroundColor: colorBgContainerStyle.backgroundColor }}
+      />
+    );
+  }
 };

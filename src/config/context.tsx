@@ -1,13 +1,13 @@
 import React from 'react';
 import { Spin } from 'antd';
 import request from '../utils/request';
-import * as Corrosion from './corrosion';
-import * as CorrosionWirelessHart from './corrosion-wireless-hart';
-import * as Hydro from './hydro';
-import * as Wind from './wind';
-import * as WindPro from './windpro';
-import * as Vibration from './vibration';
-import * as General from './general';
+import Corrosion from './corrosion';
+import CorrosionWirelessHart from './corrosion-wireless-hart';
+import Hydro from './hydro';
+import Wind from './wind';
+import WindPro from './windpro';
+import Vibration from './vibration';
+import General from './general';
 import { ProjectType } from '../project';
 import { useSelectedProject } from '../providers/user-profile';
 
@@ -111,45 +111,45 @@ function get(type: AppType) {
   switch (type) {
     case 'corrosion':
       return {
-        siteName: Corrosion.SITE_NAME,
-        monitoringPointTypes: Corrosion.MONITORING_POINTS,
-        deviceTypes: Corrosion.SENSORS
+        siteName: Corrosion.SiteName,
+        monitoringPointTypes: Corrosion.MonitoringPointTypeOptions,
+        deviceTypes: Corrosion.DeviceTypes
       };
     case 'corrosionWirelessHART':
       return {
-        siteName: CorrosionWirelessHart.SITE_NAME,
-        monitoringPointTypes: CorrosionWirelessHart.MONITORING_POINTS,
-        deviceTypes: CorrosionWirelessHart.SENSORS
+        siteName: CorrosionWirelessHart.SiteName,
+        monitoringPointTypes: CorrosionWirelessHart.MonitoringPointTypeOptions,
+        deviceTypes: CorrosionWirelessHart.DeviceTypes
       };
     case 'hydroTurbine':
       return {
-        siteName: Hydro.SITE_NAME,
-        monitoringPointTypes: Hydro.MONITORING_POINTS,
-        deviceTypes: Hydro.SENSORS
+        siteName: Hydro.SiteName,
+        monitoringPointTypes: Hydro.MonitoringPointTypeOptions,
+        deviceTypes: Hydro.DeviceTypes
       };
     case 'windTurbine':
       return {
-        siteName: Wind.SITE_NAME,
-        monitoringPointTypes: Wind.MONITORING_POINTS,
-        deviceTypes: Wind.SENSORS
+        siteName: Wind.SiteName,
+        monitoringPointTypes: Wind.MonitoringPointTypeOptions,
+        deviceTypes: Wind.DeviceTypes
       };
     case 'windTurbinePro':
       return {
-        siteName: WindPro.SITE_NAME,
-        monitoringPointTypes: WindPro.MONITORING_POINTS,
-        deviceTypes: WindPro.SENSORS
+        siteName: WindPro.SiteName,
+        monitoringPointTypes: WindPro.MonitoringPointTypeOptions,
+        deviceTypes: WindPro.DeviceTypes
       };
     case 'vibration':
       return {
-        siteName: Vibration.SITE_NAME,
-        monitoringPointTypes: Vibration.MONITORING_POINTS,
-        deviceTypes: Vibration.SENSORS
+        siteName: Vibration.SiteName,
+        monitoringPointTypes: Vibration.MonitoringPointTypeOptions,
+        deviceTypes: Vibration.DeviceTypes
       };
     default:
       return {
-        siteName: General.SITE_NAME,
-        monitoringPointTypes: General.MONITORING_POINTS,
-        deviceTypes: General.SENSORS
+        siteName: General.SiteName,
+        monitoringPointTypes: General.MonitoringPointTypeOptions,
+        deviceTypes: General.DeviceTypes
       };
   }
 }

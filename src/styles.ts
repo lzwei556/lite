@@ -35,3 +35,5 @@ export const useGlobalStyles = () => {
     colorWhiteStyle: { color: '#fff' }
   };
 };
+
+export type GlobalStyles = ReturnType<typeof useGlobalStyles>

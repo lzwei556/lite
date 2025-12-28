@@ -11,18 +11,10 @@ const PlaceTextCardStyle = {
   height: 210
 };
 
-export const useContainerSize = (size?: Size) => {
-  const heightRange = { min: 600, max: 800 };
-  if (size) {
-    let height = size.height;
-    if (size.height < heightRange.min) {
-      height = heightRange.min;
-    } else if (size.height > heightRange.max) {
-      height = heightRange.max;
-    }
-
-    return { ...size, height };
-  }
+export const useStageSize = (size?: Size) => {
+  if (!size) return undefined;
+  const height = size.height;
+  return { ...size, height: height === 0 ? 600 : Math.max(height, 540) };
 };
 
 export const useStageProps = (size?: Size, image?: HTMLImageElement) => {

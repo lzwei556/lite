@@ -24,6 +24,7 @@ const EditCalibrateParas = ({
   const [form] = Form.useForm();
   const typeParaMapping = new Map();
   typeParaMapping.set(DeviceType.SAS, 'preload');
+    typeParaMapping.set(DeviceType.SASLoraWAN, 'preload');
   typeParaMapping.set(DeviceType.SAS120D, 'preload');
   typeParaMapping.set(DeviceType.SAS120Q, 'preload');
   typeParaMapping.set(DeviceType.DS4, 'preload');

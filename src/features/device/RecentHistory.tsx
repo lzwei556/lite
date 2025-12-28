@@ -6,12 +6,13 @@ import { FindDeviceDataRequest } from '../../apis/device';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
 import { Card, Grid, LightSelectFilter } from '../../components';
-import { DisplayProperty, displayPropertyGroup } from '../../constants/properties';
 import { generateColProps } from '../../utils/grid';
 import { useGlobalStyles } from '../../styles';
 import { HistoryData } from '../../asset-common';
 import { HistoryDataFea } from '..';
 import { getDisplayProperties } from './util';
+import { CharacteristicData } from 'common';
+import { getGroupedProperties } from 'common/characteristic-data';
 
 export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   const channels = DeviceType.getChannels(device.typeId);
@@ -56,29 +57,28 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
       </Card>
     );
   } else if (DeviceType.isVibration(device.typeId)) {
+    const groups = getGroupedProperties(getDisplayProperties(device.properties, device.typeId));
     return (
       <Collapse
         bordered={false}
-        defaultActiveKey={displayPropertyGroup[0]}
+        defaultActiveKey={groups[0][0]}
         expandIconPosition='end'
-        items={displayPropertyGroup.map((g) => ({
+        items={groups.map(([g, properties]) => ({
           key: g,
           label: intl.get(g),
           children: (
             <Grid>
-              {getDisplayProperties(device.properties, device.typeId)
-                .filter((p) => p.group === g)
-                .map((p: DisplayProperty, index: number) => {
-                  return (
-                    <Col {...generateColProps({ lg: 12, xl: 12, xxl: 12 })} key={index}>
-                      <HistoryDataFea.PropertyChartCard
-                        data={historyData}
-                        property={p}
-                        cardProps={propertyHistoryCardStyle}
-                      />
-                    </Col>
-                  );
-                })}
+              {properties.map((p: CharacteristicData.DisplayProperty, index: number) => {
+                return (
+                  <Col {...generateColProps({ lg: 12, xl: 12, xxl: 12 })} key={index}>
+                    <HistoryDataFea.PropertyChartCard
+                      data={historyData}
+                      property={p}
+                      cardProps={propertyHistoryCardStyle}
+                    />
+                  </Col>
+                );
+              })}
             </Grid>
           )
         }))}
@@ -90,7 +90,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
     const chartGrid = (
       <Grid>
         {getDisplayProperties(device.properties, device.typeId).map(
-          (p: DisplayProperty, index: number) => {
+          (p: CharacteristicData.DisplayProperty, index: number) => {
             return (
               <Col {...getCols(device.properties.length)} key={index}>
                 <HistoryDataFea.PropertyChartCard

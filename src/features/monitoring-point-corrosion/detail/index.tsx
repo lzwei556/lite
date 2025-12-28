@@ -11,12 +11,12 @@ import {
   MonitoringPointRow,
   RelatedDeviceCard
 } from '../../../asset-common';
-import { Analysis } from '../analysis';
 import { Monitor } from './monitor';
 import { History } from './history';
 import { Settings } from './settings';
 import { ThicknessWaveData, WaveformData } from './waveformData';
 import { Permission, useCan } from '../../../providers/access-control';
+import { CorrosionAnalysis } from 'features/monitoring-point-analysis-corrosion';
 
 export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
@@ -70,7 +70,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   items.push({
     key: 'analysis',
     label: intl.get('intelligent.analysis'),
-    content: <Analysis {...monitoringPoint} key={id} />
+    content: <CorrosionAnalysis {...monitoringPoint} key={id} />
   });
 
   items.push({

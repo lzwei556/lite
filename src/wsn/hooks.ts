@@ -275,7 +275,7 @@ const IntervalCnt: Field<WSN> = {
   name: 'intervalCnt',
   label: 'interval.cnt',
   description: 'interval.cnt.desc',
-  type: 'enum'
+  type: 'number'
 };
 
 export const useIntervalCnt = () => {

@@ -13,6 +13,7 @@ import { useContext } from '..';
 import { CommandDropdown } from '../commandDropdown';
 import DownloadModal from './downloadModal';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { downloadFile } from 'utils';
 
 export const HeadRight = ({ device, network }: { device: Device; network?: Network }) => {
   const navigate = useNavigate();
@@ -29,12 +30,10 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
               icon={<ExportOutlined />}
               onClick={() => {
                 ExportNetworkRequest(network.id).then((res) => {
-                  const url = window.URL.createObjectURL(new Blob([res.data]));
-                  const link = document.createElement('a');
-                  link.href = url;
-                  link.setAttribute('download', `${network.name}.json`);
-                  document.body.appendChild(link);
-                  link.click();
+                  downloadFile(
+                    window.URL.createObjectURL(new Blob([res.data])),
+                    `${network.name}.json`
+                  );
                 });
               }}
               tooltipProps={{ title: intl.get('EXPORT_NETWORK') }}

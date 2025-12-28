@@ -1,19 +1,21 @@
 import React from 'react';
 import { Card } from '../components';
 import { HistoryDataFea } from '../features';
-import { appendAxisAliasAbbrToField } from '../features/monitoring-point-vibration/common';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { MonitoringPointRow, Point } from '../monitoring-point';
-import { DisplayProperty } from '../constants/properties';
+import { CharacteristicData, MonitoringPointType } from 'common';
 
 export const SelectedPointPropertyHistory = () => {
   const { selectedMonitoringPoint, loading, historyData } = useAssetModelContext();
   if (selectedMonitoringPoint) {
     const { self, property, axisKey, fieldKey } = selectedMonitoringPoint;
 
-    const getTitle = (m: MonitoringPointRow, property: DisplayProperty) => {
+    const getTitle = (m: MonitoringPointRow, property: CharacteristicData.DisplayProperty) => {
       const key = property.key;
-      const items = getPropertyItems(m, Point.getPropertiesByType(m.type, m.properties));
+      const items = getPropertyItems(
+        m,
+        MonitoringPointType.Key.getProperties(m.type, m.properties)
+      );
       let title = items.find((item) => item.property?.key === key)?.title;
       if (axisKey) {
         title = items.find((item) => item.property?.key === key && item.axisKey === axisKey)?.title;
@@ -40,7 +42,13 @@ export const SelectedPointPropertyHistory = () => {
             data={historyData}
             property={
               Point.Assert.isVibrationRelated(self.type)
-                ? appendAxisAliasAbbrToField(property, self.attributes)
+                ? {
+                    ...property,
+                    fields: CharacteristicData.appendVibrationDirectionAbbrToField(
+                      property.fields,
+                      self.attributes
+                    )
+                  }
                 : property
             }
             axisKey={axisKey ?? fieldKey}

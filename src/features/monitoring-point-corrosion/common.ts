@@ -9,26 +9,6 @@ import {
   unbindDevice,
   updateMeasurement
 } from '../../asset-common';
-import { DeviceType } from '../../types/device_type';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
-
-export const monitoringPointTypes = [
-  { id: MonitoringPointTypeValue.Corrosion, label: MonitoringPointTypeText.Corrosion },
-  {
-    id: MonitoringPointTypeValue.HighTemperatureCorrosion,
-    label: MonitoringPointTypeText.HighTemperatureCorrosion
-  },
-  {
-    id: MonitoringPointTypeValue.UltraHighTemperatureCorrosion,
-    label: MonitoringPointTypeText.UltraHighTemperatureCorrosion
-  }
-];
-
-export const relatedDeviceTypes = new Map([
-  [MonitoringPointTypeValue.Corrosion, DeviceType.getDCSensors()],
-  [MonitoringPointTypeValue.HighTemperatureCorrosion, DeviceType.getHighDCSensors()],
-  [MonitoringPointTypeValue.UltraHighTemperatureCorrosion, DeviceType.getUltraHighDCSensors()]
-]);
 
 export function useSelectPoints(form: FormInstance<MonitoringPointBatch>) {
   const [selectedPoints, setSelectPoints] = React.useState<MonitoringPointInfo[]>([]);

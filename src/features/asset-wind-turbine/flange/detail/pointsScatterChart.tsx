@@ -5,18 +5,17 @@ import { buildCustomTooltip, Chart, chartColors } from '../../../../components';
 import { isMobile } from '../../../../utils/deviceDetection';
 import { ColorHealth } from '../../../../constants/color';
 import { getValue, roundValue } from '../../../../utils/format';
-import { MonitoringPointTypeValue } from '../../../../config';
 import {
   Asset,
   ASSET_PATHNAME,
   AssetRow,
   MonitoringPointRow,
-  Point,
   Points
 } from '../../../../asset-common';
 import { useGlobalStyles } from '../../../../styles';
 import { AlarmLevel, getColorByValue } from '../../../alarm';
 import { ENV } from '../../../../utils';
+import { MonitoringPointType } from 'common';
 
 export const PointsScatterChart = ({
   asset,
@@ -78,7 +77,7 @@ function buildCirclePointsChartOfFlange(
   angleAxis.push(actuals.angleAxis);
   let max = getMax(actuals.max, attributes, measurements[0].type);
   let min = actuals.min || -1;
-  if (measurements[0].type === MonitoringPointTypeValue.BoltLoosening) {
+  if (measurements[0].type === MonitoringPointType.Value.BoltLoosening) {
     if (max < 5) {
       max = 10;
     }
@@ -88,11 +87,12 @@ function buildCirclePointsChartOfFlange(
   series.push(actuals.series);
 
   const legends = [];
-  const unit = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
-    (p) => p.first
-  )?.[0]?.unit;
+  const unit = MonitoringPointType.Key.getProperties(
+    measurements[0].type,
+    measurements[0].properties
+  ).filter((p) => p.first)?.[0]?.unit;
   if (
-    measurements[0].type === MonitoringPointTypeValue.BoltPreload &&
+    MonitoringPointType.Key.getFlangeAttributesKey(measurements[0].type) === 'normal' &&
     checkValidAttr(attributes, 'normal', min)
   ) {
     const seriesName = `${intl.get('RATING')} ${attributes?.normal?.value}${unit}`;
@@ -102,7 +102,7 @@ function buildCirclePointsChartOfFlange(
   }
 
   if (
-    measurements[0].type === MonitoringPointTypeValue.BoltLoosening &&
+    MonitoringPointType.Key.getFlangeAttributesKey(measurements[0].type) === 'initial' &&
     checkValidAttr(attributes, 'initial', min)
   ) {
     const seriesName = `${intl.get('INITIAL_VALUE')} ${attributes?.initial?.value}${unit}`;
@@ -180,13 +180,13 @@ function checkValidAttr(
 function getMax(max: number, attributes: AssetRow['attributes'], type: number) {
   let final = max;
   if (
-    type === MonitoringPointTypeValue.BoltPreload &&
+    MonitoringPointType.Key.getFlangeAttributesKey(type) === 'normal' &&
     checkValidAttr(attributes, 'normal', final, true)
   ) {
     final = Math.abs(attributes?.normal?.value as number);
   }
   if (
-    type === MonitoringPointTypeValue.BoltLoosening &&
+    MonitoringPointType.Key.getFlangeAttributesKey(type) === 'initial' &&
     checkValidAttr(attributes, 'initial', final, true)
   ) {
     final = Math.abs(attributes?.initial?.value as number);
@@ -231,9 +231,10 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
     splitLine: { show: false }
   };
   const seriesData = measurements.map(({ name, attributes, data, alertLevel }, index) => {
-    let field = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
-      (p) => p.first
-    )?.[0];
+    let field = MonitoringPointType.Key.getProperties(
+      measurements[0].type,
+      measurements[0].properties
+    ).filter((p) => p.first)?.[0];
     let value = NaN;
     if (field && data) {
       value = data.values[field.key] as number;
@@ -281,9 +282,10 @@ function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = fa
     }
   }
   const seriesData: any = [];
-  let field = Point.getPropertiesByType(measurements[0].type, measurements[0].properties).filter(
-    (p) => p.first
-  )?.[0];
+ let field = MonitoringPointType.Key.getProperties(
+    measurements[0].type,
+    measurements[0].properties
+  ).filter((p) => p.first)?.[0];
   let max = 0;
   let min = 0;
   measurements.forEach(({ data, name }, index) => {

@@ -7,10 +7,10 @@ import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { useLocaleContext } from '../../localeProvider';
 import { mapTree, tree2List } from '../../utils/tree';
-import { AssetRow, downloadHistory, MONITORING_POINT_DISPLAY_PROPERTIES } from '../../asset-common';
+import { AssetRow, downloadHistory } from '../../asset-common';
 import { combine } from './tree';
-import { MonitoringPointTypeValue } from '../../config';
-import { DisplayProperty, displayPropertyGroup } from '../../constants/properties';
+import { MonitoringPointType } from 'common';
+import { downloadFile } from 'utils';
 
 export const BatchDownlaodHistoryDataModal = ({
   assets,
@@ -38,32 +38,18 @@ export const BatchDownlaodHistoryDataModal = ({
 
   const handleDownload = (ids: [number, number][]) => {
     const [from, to] = numberedRange;
-
     const fetchs = ids.map(([id, type]) => {
-      const properties =
-        MONITORING_POINT_DISPLAY_PROPERTIES[
-          type as keyof typeof MONITORING_POINT_DISPLAY_PROPERTIES
-        ];
-      let propertyKeys = properties.map(({ key }) => key);
-      if (
-        type === MonitoringPointTypeValue.Vibration ||
-        type === MonitoringPointTypeValue.VibrationRotationSingleAxis ||
-        type === MonitoringPointTypeValue.VibrationRotation
-      ) {
-        propertyKeys = getVibrationDisplayPropertiesOrderByGroup(properties);
-      }
-      return downloadHistory(id, from, to, JSON.stringify(propertyKeys), language);
+      const properties = MonitoringPointType.Key.getProperties(type);
+      return downloadHistory(id, from, to, JSON.stringify(properties.map((p) => p.key)), language);
     });
     Promise.all(fetchs)
       .then((datas) => {
         if (ids.length === 1) {
           datas.forEach((res, i) => {
-            const url = window.URL.createObjectURL(new Blob([res.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', getFilename(res, ids[i][0]));
-            document.body.appendChild(link);
-            link.click();
+            downloadFile(
+              window.URL.createObjectURL(new Blob([res.data])),
+              getFilename(res, ids[i][0])
+            );
           });
         } else if (ids.length >= 1) {
           const zip = new JSZip();
@@ -73,12 +59,7 @@ export const BatchDownlaodHistoryDataModal = ({
             }
           });
           zip.generateAsync({ type: 'blob' }).then((content) => {
-            const url = window.URL.createObjectURL(content);
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${intl.get('DATA')}.zip`);
-            document.body.appendChild(link);
-            link.click();
+            downloadFile(window.URL.createObjectURL(content), `${intl.get('DATA')}.zip`);
           });
         }
       })
@@ -88,14 +69,6 @@ export const BatchDownlaodHistoryDataModal = ({
         setLoading2(false);
       });
   };
-
-  function getVibrationDisplayPropertiesOrderByGroup(properties: readonly DisplayProperty[]) {
-    const propertyKeys: string[] = [];
-    displayPropertyGroup.forEach((g) => {
-      properties.filter((p) => p.group === g).forEach((p) => propertyKeys.push(p.key));
-    });
-    return propertyKeys;
-  }
 
   return (
     <ModalWrapper

@@ -5,8 +5,8 @@ import { Field } from '../../types';
 import { SelectFormItem, TextFormItem } from '../../components';
 import React from 'react';
 import { Device } from '../../types/device';
-import { relatedDeviceTypes } from '../monitoring-point-vibration/common';
 import { GetDevicesRequest } from '../../apis/device';
+import { MonitoringPointType } from 'common';
 
 type VibrationEntity = {
   position: string;
@@ -26,7 +26,7 @@ export const FormItems = ({
   const { name, type, key } = monitoringPoint;
 
   React.useEffect(() => {
-    const deviceTypes = relatedDeviceTypes.get(type);
+    const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
     if (deviceTypes) GetDevicesRequest({ types: deviceTypes.join(',') }).then(setDevices);
   }, [type]);
 

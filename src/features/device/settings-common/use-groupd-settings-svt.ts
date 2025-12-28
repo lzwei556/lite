@@ -166,6 +166,7 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
   const waveFields: DeviceSetting[] = [];
   const waveFields2 = useWaveRealtedFields2(enabled, 3, settings) ?? [];
   const waveFields3 = useWaveRealtedFields2(enabled, 4, settings) ?? [];
+  const audioFields = useAudioRelatedFields(enabled, settings);
   if (is_enabled_2 && is_enabled_2.children && is_enabled_2.children.length > 0) {
     const group = GROUPS.dwp;
     enabledField = { ...is_enabled_2, onChange: setEnabled, group };
@@ -220,7 +221,9 @@ function useWaveRealtedFields(mode: number, triggerAction: number, settings?: De
       .filter((s) => s.key !== 'sample_period_2' && s.key !== 'sample_offset_2')
       .concat([...waveFields2, ...waveFields3]);
   } else if (enabledField) {
-    return enabled ? [enabledField, ...waveFields, ...waveFields2, ...waveFields3] : [enabledField];
+    return enabled
+      ? [enabledField, ...waveFields, ...waveFields2, ...waveFields3, ...audioFields]
+      : [enabledField];
   } else {
     return [];
   }
@@ -269,3 +272,23 @@ function useWaveRealtedFields2(enabled1: boolean, suffix: number, settings?: Dev
     return enabled ? [enabledField, ...waveFields] : [enabledField];
   }
 }
+
+const useAudioRelatedFields = (enabled1: boolean, settings?: DeviceSetting[]) => {
+  const audio_wave_enable = settings?.find((s) => s.key === 'audio_wave_enable');
+  let enabledField: DeviceSetting | undefined;
+  const [enabled, setEnabled] = React.useState(
+    audio_wave_enable ? enabled1 && audio_wave_enable.value : false
+  );
+  const fields: DeviceSetting[] = [];
+  if (audio_wave_enable) {
+    enabledField = { ...audio_wave_enable, onChange: setEnabled, group: GROUPS.dat };
+    const audio_duration = audio_wave_enable.children?.find((s) => s.key === 'audio_duration');
+    if (audio_duration) {
+      fields.push({ ...audio_duration, group: GROUPS.dat });
+    }
+  }
+  if (!enabledField) {
+    return [];
+  }
+  return enabled ? [enabledField, ...fields] : [enabledField];
+};

@@ -2,10 +2,10 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { uniq } from 'lodash';
 import { RadioFormItem, Table } from '../../components';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
 import { useLocaleContext } from '../../localeProvider';
 import { AssetRow, MonitoringPointRow, Points } from '../../asset-common';
 import { getColumns, OperateCellProps } from './columns';
+import { MonitoringPointType } from 'common';
 
 export type MonitoringPointsTableProps = {
   asset: AssetRow;
@@ -92,11 +92,7 @@ const TypeSwitcher = ({
         onChange: (e) => onChange(e.target.value),
         options: types.map((t) => ({
           value: t,
-          label: intl.get(
-            MonitoringPointTypeText[
-              MonitoringPointTypeValue[t] as keyof typeof MonitoringPointTypeText
-            ]
-          )
+          label: intl.get(MonitoringPointType.Key.getLabel(t))
         }))
       }}
     />

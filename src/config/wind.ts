@@ -1,22 +1,8 @@
-import { DeviceType } from '../types/device_type';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from './common';
+import { MonitoringPointType } from 'common';
 
-export const SITE_NAME = 'WIND_TURBINE_BOLT_MONITORING_SYSTEM';
-
-export const SENSORS = [
-  DeviceType.SA,
-  DeviceType.SA_S,
-  DeviceType.SAS,
-  DeviceType.DS4,
-  DeviceType.DS8,
-  DeviceType.SAS120D,
-  DeviceType.SAS120Q
-];
-export const MONITORING_POINTS = [
-  {
-    id: MonitoringPointTypeValue.BoltLoosening,
-    label: MonitoringPointTypeText.BoltLoosening
-  },
-  { id: MonitoringPointTypeValue.BoltPreload, label: MonitoringPointTypeText.BoltPreload },
-  { id: MonitoringPointTypeValue.AnchorPreload, label: MonitoringPointTypeText.AnchorPreload }
-];
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  SiteName: 'WIND_TURBINE_BOLT_MONITORING_SYSTEM',
+  MonitoringPointTypeOptions: MonitoringPointType.Categories.getOptions(['loosening', 'preload']),
+  DeviceTypes: MonitoringPointType.Categories.getDeviceTypes(['loosening', 'preload'])
+};

@@ -4,8 +4,8 @@ import intl from 'react-intl-universal';
 import { Language, useLocaleContext } from '../../../../localeProvider';
 import { Card, CardProps, Chart, getOptions } from '../../../../components';
 import { getValue, roundValue } from '../../../../utils/format';
-import { MonitoringPointTypeValue } from '../../../../config';
 import { HistoryData } from '../../../../asset-common';
+import { MonitoringPointType } from 'common';
 
 type Data = {
   name: string;
@@ -29,7 +29,7 @@ export const PointsScatterChart = ({
     radius?: number;
   }[];
   style?: React.CSSProperties;
-  type: MonitoringPointTypeValue;
+  type: MonitoringPointType.Value;
   dynamicData?: Data[];
   showTitle?: boolean;
   cardProps?: CardProps;
@@ -42,7 +42,7 @@ export const PointsScatterChart = ({
     transformedData.push(...dynamicData);
   }
   const dispalyPrefix = `${intl.get(
-    `FIELD_DISPLACEMENT_${type === MonitoringPointTypeValue.BaseInclination ? 'AXIAL' : 'RADIAL'}`
+    `FIELD_DISPLACEMENT_${type === MonitoringPointType.Value.BaseInclination ? 'AXIAL' : 'RADIAL'}`
   )}${language === 'en-US' ? ' ' : ''}${intl.get('FIELD_DISPLACEMENT')}`;
   const options = buildCirclePointsChartOfTower({
     datas: transformedData,
@@ -202,7 +202,7 @@ export function getDataOfCircleChart(
     height?: number;
     radius?: number;
   }[],
-  type: MonitoringPointTypeValue
+  type: MonitoringPointType.Value
 ) {
   const ret: {
     name: string;
@@ -220,7 +220,7 @@ export function getDataOfCircleChart(
           directions.push(roundValue(data['FIELD_DIRECTION'], 2));
         }
         const key = `FIELD_DISPLACEMENT_${
-          type === MonitoringPointTypeValue.BaseInclination ? 'AXIAL' : 'RADIAL'
+          type === MonitoringPointType.Value.BaseInclination ? 'AXIAL' : 'RADIAL'
         }`;
         if (data[key] !== undefined) {
           displacements.push(roundValue(data[key], 2));

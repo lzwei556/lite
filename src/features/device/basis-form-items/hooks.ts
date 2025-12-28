@@ -15,7 +15,7 @@ import * as Basis from '.';
 export type CommonProps = Pick<FormCommonProps, 'form'>;
 
 export const useFilterParentDeviceTypes = (deviceType?: DeviceType) => {
-  if (deviceType === DeviceType.OilFiller) {
+  if (deviceType === DeviceType.OilFiller || deviceType === DeviceType.SVT210SU) {
     return [DeviceType.GatewayGS280];
   }
   return [];

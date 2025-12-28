@@ -3,7 +3,7 @@ import { Form, FormItemProps, Space, Switch } from 'antd';
 import { TextFormItem } from './textFormItem';
 import { NumberFormItem } from './numberFormItem';
 import { getRequiredMessage, useFormItemIntlProps } from './use-form-item-props';
-import { NameMode } from '../../types';
+import { NameMode } from 'types';
 
 export type NumberFormItemWithSwitcherProps = FormItemProps & {
   nameMode?: NameMode;

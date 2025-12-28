@@ -1,7 +1,5 @@
 import React from 'react';
 import { FormInstance } from 'antd';
-import { DeviceType } from '../../types/device_type';
-import { MonitoringPointTypeText, MonitoringPointTypeValue } from '../../config';
 import {
   AssetRow,
   bindDevice,
@@ -16,42 +14,19 @@ import {
 } from '../../asset-common';
 import { flange, tower, wind } from '../asset-wind-turbine/constants';
 import { isFlangePreloadCalculation } from '../asset-wind-turbine/flange';
+import { MonitoringPointType } from 'common';
 
 export function getMonitoringPointTypes(asset: AssetRow) {
   const { type } = asset;
   if (type === flange.type) {
+    const preloads = MonitoringPointType.Categories.getOptions(['preload']);
     if (isFlangePreloadCalculation(asset)) {
-      return [
-        { id: MonitoringPointTypeValue.BoltPreload, label: MonitoringPointTypeText.BoltPreload },
-        {
-          id: MonitoringPointTypeValue.AnchorPreload,
-          label: MonitoringPointTypeText.AnchorPreload
-        }
-      ];
+      return preloads;
     } else {
-      return [
-        {
-          id: MonitoringPointTypeValue.BoltLoosening,
-          label: MonitoringPointTypeText.BoltLoosening
-        },
-        { id: MonitoringPointTypeValue.BoltPreload, label: MonitoringPointTypeText.BoltPreload },
-        {
-          id: MonitoringPointTypeValue.AnchorPreload,
-          label: MonitoringPointTypeText.AnchorPreload
-        }
-      ];
+      return MonitoringPointType.Categories.getOptions(['loosening']).concat(preloads);
     }
   } else if (type === tower.type) {
-    return [
-      {
-        id: MonitoringPointTypeValue.TopInclination,
-        label: MonitoringPointTypeText.TopInclination
-      },
-      {
-        id: MonitoringPointTypeValue.BaseInclination,
-        label: MonitoringPointTypeText.BaseInclination
-      }
-    ];
+    return MonitoringPointType.Categories.getOptions(['inclination']);
   } else {
     return [];
   }
@@ -77,7 +52,7 @@ export function useParents(asset?: AssetRow, monitoringPointType?: number) {
             ...children.filter((a) =>
               monitoringPointType
                 ? getMonitoringPointTypes(a)
-                    .map(({ id }) => id)
+                    .map(({ value }) => value)
                     .includes(monitoringPointType)
                 : true
             )
@@ -87,31 +62,6 @@ export function useParents(asset?: AssetRow, monitoringPointType?: number) {
     return parents;
   }
 }
-
-export const getRelatedDeviceTypes = (type: number) => {
-  const relatedDeviceTypes = new Map([
-    [MonitoringPointTypeValue.BoltLoosening, [DeviceType.SA, DeviceType.SA_S]],
-    [
-      MonitoringPointTypeValue.BoltPreload,
-      [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8, DeviceType.SAS120D, DeviceType.SAS120Q]
-    ],
-    [
-      MonitoringPointTypeValue.AnchorPreload,
-      [DeviceType.SAS, DeviceType.SAS120D, DeviceType.SAS120Q]
-    ],
-    [MonitoringPointTypeValue.TopInclination, [DeviceType.SQ100, DeviceType.SQ110C]],
-    [MonitoringPointTypeValue.BaseInclination, [DeviceType.SQ100, DeviceType.SQ110C]],
-    [
-      MonitoringPointTypeValue.FlangeBoltPreload,
-      [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8, DeviceType.SAS120D, DeviceType.SAS120Q]
-    ],
-    [
-      MonitoringPointTypeValue.FlangeAnchorPreload,
-      [DeviceType.SAS, DeviceType.DS4, DeviceType.DS8, DeviceType.SAS120D, DeviceType.SAS120Q]
-    ]
-  ]);
-  return relatedDeviceTypes.get(type);
-};
 
 export function useSelectPoints(form: FormInstance<MonitoringPointBatch>, channelName?: string) {
   const [selectedPoints, setSelectPoints] = React.useState<MonitoringPointInfo[]>([]);

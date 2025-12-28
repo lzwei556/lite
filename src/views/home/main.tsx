@@ -5,7 +5,7 @@ import * as Device from '../../features/asset-device';
 import * as Vibration from '../../features/asset-vibration';
 import * as Corrosion from '../../features/asset-corrosion';
 import * as Wind from '../../features/asset-wind-turbine';
-import { MonitoringPoint } from '../monitoring-point';
+import { MonitoringPoint } from 'views/monitoring-point';
 
 export default function Main() {
   const contextProps = useContext();
@@ -24,12 +24,10 @@ export default function Main() {
     } else if (Asset.Assert.isWindRelated(type)) {
       return <Wind.Main {...contextProps} />;
     } else {
-      return (
-        <MonitoringPoint
+       <MonitoringPoint
           monitoringPoint={selectedNode as MonitoringPointRow}
           onSuccess={contextProps.refresh}
         />
-      );
     }
   } else {
     return null;

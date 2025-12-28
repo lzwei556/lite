@@ -1,4 +1,5 @@
 export * as Dayjs from './dayjsUtils';
+export * from './download';
 export * from './format';
 export * from './global-store';
 export * from './enum';

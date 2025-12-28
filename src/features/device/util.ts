@@ -1,8 +1,8 @@
 import { Device } from '../../types/device';
 import { Property } from '../../types/property';
 import { DeviceType, SENSOR_DISPLAY_PROPERTIES } from '../../types/device_type';
-import { DisplayProperty } from '../../constants/properties';
 import { getValue } from '../../utils/format';
+import { CharacteristicData } from 'common';
 
 export const getValueOfFirstClassProperty = (device: Device) => {
   const properties = getDisplayProperties(device.properties, device.typeId).filter((p) => p.first);
@@ -11,7 +11,7 @@ export const getValueOfFirstClassProperty = (device: Device) => {
 };
 
 export function pickDataOfFirstProperties(
-  properties: DisplayProperty[],
+  properties: CharacteristicData.DisplayProperty[],
   data?: {
     timestamp: number;
     values: {
@@ -87,26 +87,26 @@ export function getDisplayProperties(properties: Property[], deviceType: DeviceT
   const dispalyPropertiesSettings =
     SENSOR_DISPLAY_PROPERTIES[deviceType as keyof typeof SENSOR_DISPLAY_PROPERTIES];
   if (!dispalyPropertiesSettings || dispalyPropertiesSettings.length === 0) {
-    return remotes.sort((prev, crt) => prev.sort - crt.sort) as DisplayProperty[];
+    return remotes.sort(
+      (prev, crt) => prev.sort - crt.sort
+    ) as CharacteristicData.DisplayProperty[];
   } else {
     return dispalyPropertiesSettings
       .map((p) => {
-        const remote = remotes.find((r) => (p.parentKey ? r.key === p.parentKey : r.key === p.key));
+        const fields = remotes.find((r) => r.key === p.key)?.fields ?? [];
         return {
           ...p,
           fields:
             p.fields ??
-            remote?.fields
-              ?.filter((f) => (p.parentKey ? f.key === p.key : true))
-              .map((f, i) => ({
-                ...f,
-                first: p.defaultFirstFieldKey
-                  ? f.key === p.defaultFirstFieldKey
-                  : i === remote?.fields.length - 1
-              }))
+            fields.map((f, i) => ({
+              ...f,
+              first: p.defaultFirstFieldKey
+                ? f.key === p.defaultFirstFieldKey
+                : i === fields.length - 1
+            }))
         };
       })
-      .filter((p) => !!p.fields) as DisplayProperty[];
+      .filter((p) => !!p.fields) as CharacteristicData.DisplayProperty[];
   }
 }
 

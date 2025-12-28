@@ -10,7 +10,7 @@ import {
   RangeDatePicker,
   DownloadIconButton
 } from '../components';
-import { Dayjs } from '../utils';
+import { Dayjs, downloadFile } from '../utils';
 import { getFilename } from '../utils/format';
 import { useLocaleContext } from '../localeProvider';
 import { BatchDownlaodWaveDataModal } from './batchDownlaodWaveDataModal';
@@ -97,12 +97,7 @@ function Timestamps<T>(props: DynamicDataProps<T> & { timestamps: TimestampObj[]
               dataType,
               filters
             ).then((res) => {
-              const url = window.URL.createObjectURL(new Blob([res.data]));
-              const link = document.createElement('a');
-              link.href = url;
-              link.setAttribute('download', getFilename(res));
-              document.body.appendChild(link);
-              link.click();
+              downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
             });
           }}
           timestamp={timestamp}

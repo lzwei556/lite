@@ -1,49 +1,40 @@
 import React from 'react';
-import { Button, ButtonProps, Checkbox, Col, Form } from 'antd';
+import { Button, ButtonProps, Checkbox, CheckboxChangeEvent, Col } from 'antd';
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
-import { CheckboxFormItem, Grid } from '../../../components';
+import { Grid } from '../../../components';
 import { useModalBindingsProps } from '../../../hooks';
 import { UpdateDeviceSettingRequest } from '../../../apis/device';
 import { DeviceType } from '../../../types/device_type';
 import { FormCommonProps, transformSettings } from '../settings-common';
 import { useContext } from '..';
+import { useSelectAll } from 'hooks/select-all';
 
 type Props = Omit<ButtonProps, 'form'> & FormCommonProps;
 
 export const CanCopySettings = (props: Props) => {
   const { device, form, ...rest } = props;
-  const { can, formProps, handleClick, modalProps, checkGroupProps, checkAllProps, devices } =
+  const { can, handleClick, modalProps, checkAllInputProps, getNonCheckAllInputProps, devices } =
     useProps(form, device);
   return (
     can && (
       <>
         <Button {...rest} onClick={handleClick} />
         <ModalWrapper {...modalProps}>
-          <Form {...formProps}>
-            <CheckboxFormItem
-              name='ids'
-              checkboxGroupProps={{
-                ...checkGroupProps,
-                children: (
-                  <Grid>
-                    <Col span={24}>
-                      <Checkbox {...checkAllProps} />
-                    </Col>
-                    <Col span={24}>
-                      <Grid gutter={[10, 10]}>
-                        {devices.map((dev) => (
-                          <Col key={dev.id} span={12}>
-                            <Checkbox value={dev.id}>{dev.name}</Checkbox>
-                          </Col>
-                        ))}
-                      </Grid>
-                    </Col>
-                  </Grid>
-                )
-              }}
-            />
-          </Form>
+          <Grid>
+            <Col span={24}>
+              <Checkbox {...checkAllInputProps} />
+            </Col>
+            <Col span={24}>
+              <Grid gutter={[10, 10]}>
+                {devices.map((dev) => (
+                  <Col key={dev.id} span={12}>
+                    <Checkbox {...getNonCheckAllInputProps(dev)} />
+                  </Col>
+                ))}
+              </Grid>
+            </Col>
+          </Grid>
         </ModalWrapper>
       </>
     )
@@ -51,39 +42,45 @@ export const CanCopySettings = (props: Props) => {
 };
 
 const useProps = (settingsForm: FormCommonProps['form'], device: Props['device']) => {
-  const [form] = Form.useForm();
   const { handleClick, ...rest } = useTrigger(settingsForm);
   const devices = useDevicesWithSameTypes(device);
-  const { indeterminate, ...checkGroupProps } = useGroupProps(
-    form,
-    devices.map(({ id }) => id)
-  );
+  const { selected, setSelected, isAllSelected, isIndeterminate, toggleSelectAll, toggleOne } =
+    useSelectAll(devices.map(({ id }) => id));
   return {
     can:
       devices.length > 0 &&
       DeviceType.isSensor(device.typeId) &&
       !DeviceType.isMultiChannel(device.typeId),
-    formProps: { form, style: { marginTop: 16 } },
     handleClick,
-    modalProps: useModalProps({ form, ...rest, device }),
-    checkGroupProps,
-    checkAllProps: { children: intl.get('SELECT_ALL'), indeterminate, value: 0 },
+    modalProps: useModalProps({ ...rest, device, selected, setSelected }),
+    checkAllInputProps: {
+      checked: isAllSelected,
+      children: intl.get('SELECT_ALL'),
+      indeterminate: isIndeterminate,
+      onChange: toggleSelectAll
+    },
+    getNonCheckAllInputProps: (device: Props['device']) => ({
+      checked: selected.includes(device.id),
+      children: device.name,
+      onChange: (e: CheckboxChangeEvent) => toggleOne(e.target.value),
+      value: device.id
+    }),
     devices
   };
 };
 
 const useTrigger = (form: FormCommonProps['form']) => {
   const [open, setOpen] = React.useState(false);
-  const [submitedValues, setSubmitedValues] = React.useState<any>();
+  const [settings, setSettings] = React.useState<any>();
   return {
     open,
     setOpen,
-    submitedValues,
-    setSubmitedValues,
+    settings,
+    setSettings,
     handleClick: () => {
       form?.validateFields().then((settings) => {
         setOpen(true);
-        setSubmitedValues(settings);
+        setSettings(settings);
       });
     }
   };
@@ -97,25 +94,27 @@ const useDevicesWithSameTypes = (device: FormCommonProps['device']) => {
 const useModalProps = ({
   open,
   setOpen,
-  submitedValues,
-  setSubmitedValues,
+  settings,
+  setSettings,
   device,
-  form
+  selected,
+  setSelected
 }: FormCommonProps & TriggerProps) => {
   const { handleSubmit, loading } = useCopy({
     id: device.id,
-    settings: submitedValues,
+    settings,
     onSuccess: () => {
       setOpen(false);
-      setSubmitedValues(undefined);
+      setSettings(undefined);
+      setSelected([]);
     }
   });
   return useModalBindingsProps({
-    afterClose: () => form?.resetFields(),
+    afterClose: () => setSelected([]),
     okButtonProps: { loading },
     okText: intl.get('SAVE'),
     onCancel: () => setOpen(false),
-    onOk: () => form?.validateFields().then(handleSubmit),
+    onOk: () => handleSubmit(selected),
     open
   });
 };
@@ -131,8 +130,8 @@ const useCopy = ({
 }) => {
   const [loading, setLoading] = React.useState(false);
 
-  const handleSubmit = (values: { ids: number[] }) => {
-    if (values.ids.length > 0 && settings) {
+  const handleSubmit = (ids: number[]) => {
+    if (ids.length > 0 && settings) {
       setLoading(true);
       UpdateDeviceSettingRequest(
         id,
@@ -140,7 +139,7 @@ const useCopy = ({
           ...settings,
           sensors: transformSettings(settings.sensors)
         },
-        values.ids.filter((id) => id !== 0)
+        ids.filter((id) => id !== 0)
       )
         .then(() => {
           onSuccess?.();
@@ -155,32 +154,8 @@ const useCopy = ({
 type TriggerProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  submitedValues: any;
-  setSubmitedValues: React.Dispatch<any>;
-};
-
-const useGroupProps = (form: FormCommonProps['form'], deviceIds: number[]) => {
-  const [prevIds, setPrevIds] = React.useState<number[]>([]);
-  const indeterminate =
-    prevIds.filter((id) => id !== 0).length > 0 &&
-    prevIds.filter((id) => id !== 0).length < deviceIds.length;
-  const onChange = (e: number[]) => {
-    let ids: number[] = [];
-    if (prevIds.includes(0)) {
-      if (!e.includes(0) || (e.length === 1 && e[0] === 0)) {
-        ids = [];
-      } else {
-        ids = e;
-      }
-    } else {
-      if (e.includes(0) || e.length === deviceIds.length) {
-        ids = [0, ...deviceIds];
-      } else {
-        ids = e;
-      }
-    }
-    form?.setFieldsValue({ ids });
-    setPrevIds(ids);
-  };
-  return { onChange, style: { width: '100%' }, indeterminate };
+  selected: number[];
+  setSelected: React.Dispatch<React.SetStateAction<number[]>>;
+  settings: any;
+  setSettings: React.Dispatch<React.SetStateAction<any>>;
 };
