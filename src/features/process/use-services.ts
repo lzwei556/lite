@@ -4,6 +4,7 @@ import { autoFillParameter, ProcessType } from '../../process-type';
 import intl from 'react-intl-universal';
 import { Device } from '../../types/device';
 import { PageResult } from 'types/page';
+import { pickOptionsFromNumericEnum } from 'utils';
 
 type AutoFillParameter = { [Key in keyof typeof autoFillParameter]: number };
 
@@ -88,20 +89,24 @@ export type FillRecord = {
   velocityY: number;
   velocityZ: number;
   temperature: number;
-  diagnosisResults: { items: number[] };
+  diagnosisResults: { items: { diagnosis: DiagnosisResult; confidence: DiagnosisConfidence }[] };
   reasons: Reason[];
 };
 
-enum DataType {
+export enum DataType {
   Characteristic,
   Diagnosis
 }
+
+export const dataTypeOptions = pickOptionsFromNumericEnum(DataType, 'fill.record');
 
 enum Result {
   Success = 0x00,
   Offline = 0x01,
   CommandFailure = 0x02
 }
+
+export const fillResultOptions = pickOptionsFromNumericEnum(Result, 'fill.result');
 
 enum Reason {
   Temperatue = 0x01,
@@ -114,12 +119,39 @@ enum Reason {
   Diagnosis = 0x08
 }
 
+export const fillReasonOptions = pickOptionsFromNumericEnum(Reason, 'fill.reason');
+
+enum DiagnosisResult {
+  Wear = 1001,
+  Loose = 1002,
+  NonCenter = 1003,
+  Mounting = 1004
+}
+
+export const diagnosisResultOptions = pickOptionsFromNumericEnum(
+  DiagnosisResult,
+  'diagnosis.result'
+);
+
+enum DiagnosisConfidence {
+  Normal = 1,
+  Info = 2,
+  Warning = 3,
+  Danger = 4
+}
+
+export const diagnosisConfidenceOptions = pickOptionsFromNumericEnum(
+  DiagnosisConfidence,
+  'diagnosis.confidence'
+);
+
 export const useFillRecords = (params: Parameters<typeof getFillRecords>) =>
-  useRequest(getFillRecords, { defaultParams: params });
+  useRequest(getFillRecords, { defaultParams: params, manual: true });
 
 const getFillRecords = async (
   id: number,
-  params: { from: number; to: number; type: DataType; page: number; size: number }
+  // params: { from: number; to: number; type: DataType; page: number; size: number }
+  params: { from: number; to: number; page: number; size: number }
 ) => {
   const { data } = await request.get<PageResult<FillRecord[]>>(
     `/monitoringPoints/${id}/fillRecords`,

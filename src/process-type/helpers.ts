@@ -1,6 +1,8 @@
 import { toSnake } from 'ts-case-convert';
 import { ProcessTypeKey, processTypes } from './constants';
 import { transformSnake2Dot } from '../utils';
+import { AssetRow, useContext } from 'asset-common';
+import { foreachTree } from 'utils/tree';
 
 export const getOptions = () =>
   processTypes.map(({ key }) => ({ value: key, label: Key.getLabel(key) }));
@@ -25,4 +27,15 @@ export const Key = {
 
 const get = (key: ProcessTypeKey) => {
   return processTypes.find((type) => type.key === key) || null;
+};
+
+export const useDataSources = (assetId: number, key: ProcessTypeKey) => {
+  const { assets } = useContext();
+  let asset: AssetRow | undefined;
+  foreachTree(assets, (node) => {
+    if (node.id === assetId) {
+      asset = node;
+    }
+  });
+  return asset ? (asset.monitoringPoints ?? []).filter((m) => m.type === get(key)?.sourceType) : [];
 };

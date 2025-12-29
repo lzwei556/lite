@@ -4,11 +4,9 @@ import intl from 'react-intl-universal';
 import { generateColProps } from '../../../utils/grid';
 import {
   AlarmRuleSetting,
-  AssetRow,
   MonitoringPoint,
   MonitoringPointRow,
-  Point,
-  useContext
+  Point
 } from '../../../asset-common';
 import { Card, Grid, SaveIconButton } from '../../../components';
 import { BasisFormItems } from '../basisFormItems';
@@ -16,13 +14,15 @@ import { Others } from '../others';
 import { handleSubmit } from '../common';
 import { MonitoringPointType } from 'common';
 import { ProcessList } from 'features/process';
-import { ProcessTypeKey } from 'process-type';
-import { foreachTree } from 'utils/tree';
+import { ProcessType, ProcessTypeKey } from 'process-type';
 
 export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
   const [form] = Form.useForm<MonitoringPoint & { device_id: number }>();
-  const monitoringPoints = useMonitoringPoints(monitoringPoint.assetId);
+  const monitoringPoints = ProcessType.useDataSources(
+    monitoringPoint.assetId,
+    ProcessTypeKey.AutoFill
+  );
 
   return (
     <Grid>
@@ -75,19 +75,4 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
       )}
     </Grid>
   );
-};
-
-const useMonitoringPoints = (assetId: number) => {
-  const { assets } = useContext();
-  let asset: AssetRow | undefined;
-  foreachTree(assets, (node) => {
-    if (node.id === assetId) {
-      asset = node;
-    }
-  });
-  return asset
-    ? (asset.monitoringPoints ?? []).filter(
-        (m) => m.type === MonitoringPointType.Value.VibrationAudio
-      )
-    : [];
 };
