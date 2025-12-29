@@ -10,7 +10,7 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
-import { MonitoringPoint, MonitoringPointPostDTO, tranform2PostDTO } from 'common';
+import { MonitoringPoint, MonitoringPointPostDTO, transform2PostDTO } from 'common';
 
 export const UpdateFormCard = ({
   loading,
@@ -34,7 +34,7 @@ export const UpdateFormCard = ({
       styles={{ body: { overflowY: 'auto', maxHeight: 725 } }}
       title={intl.get('BASIC_INFORMATION')}
     >
-      <Form form={form} layout='vertical' initialValues={tranform2PostDTO(monitoringPoint)}>
+      <Form form={form} layout='vertical' initialValues={transform2PostDTO(monitoringPoint)}>
         <Grid>
           <FormItemsBasic
             {...{

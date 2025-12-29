@@ -25,7 +25,7 @@ export const Overview = ({ monitoringPoint }: { monitoringPoint: MonitoringPoint
             <BasicCard monitoringPoint={monitoringPoint} />
           </Col>
           <Col span={24}>
-            <RelatedDeviceCard {...monitoringPoint} />
+            <RelatedDeviceCard monitoringPoint={monitoringPoint} />
           </Col>
         </Grid>
       </Col>

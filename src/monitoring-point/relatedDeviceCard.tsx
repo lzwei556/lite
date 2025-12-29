@@ -4,9 +4,11 @@ import intl from 'react-intl-universal';
 import { Descriptions, Link, MutedCard } from '../components';
 import { SingleDeviceStatus } from '../device/SingleDeviceStatus';
 import { toMac } from '../utils/format';
-import { MonitoringPoint } from 'common';
+import { transform } from 'common';
+import { MonitoringPointRow } from 'asset-common';
 
-export const RelatedDeviceCard = ({ device }: MonitoringPoint) => {
+export const RelatedDeviceCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
+  const { device } = transform(monitoringPoint);
   return (
     device && (
       <MutedCard title={intl.get('SENSOR')}>

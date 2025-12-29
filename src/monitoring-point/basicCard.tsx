@@ -32,7 +32,7 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
       } else if (type === 'enum' && options && options.length > 0) {
         items.push({
           label: intl.get(label),
-          children: getOptionLabelByValue(options, children)
+          children: intl.get(getOptionLabelByValue(options, children))
         });
       } else {
         items.push({

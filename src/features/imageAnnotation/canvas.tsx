@@ -43,6 +43,7 @@ export const Canvas = ({
     <CanvasProvider {...providerProps} key={providerProps?._key}>
       <Card
         {...cardProps}
+        ref={ref}
         style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
         styles={{ body: { flex: 1, position: 'relative', padding: 0 } }}
       >

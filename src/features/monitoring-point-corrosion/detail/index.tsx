@@ -40,7 +40,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
                 <BasicCard monitoringPoint={monitoringPoint} />
               </Col>
               <Col span={24}>
-                <RelatedDeviceCard {...monitoringPoint} />
+                <RelatedDeviceCard monitoringPoint={monitoringPoint} />
               </Col>
             </Grid>
           </Col>

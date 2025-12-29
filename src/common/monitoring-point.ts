@@ -37,10 +37,10 @@ export type MonitoringPointPostDTO = {
   typeLabel?: string;
 };
 
-export const tranform = (dto: MonitoringPointDTO): MonitoringPoint => {
-  return { ...dto, device: dto.bindingDevices?.[0] };
+export const transform = (dto: MonitoringPointDTO): MonitoringPoint => {
+  return { ...dto, device: dto?.bindingDevices?.[0] };
 };
 
-export const tranform2PostDTO = (point: MonitoringPoint): MonitoringPointPostDTO => {
+export const transform2PostDTO = (point: MonitoringPoint): MonitoringPointPostDTO => {
   return { ...point, asset_id: point.assetId, device_id: point.device?.id };
 };

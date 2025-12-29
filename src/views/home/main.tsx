@@ -24,10 +24,12 @@ export default function Main() {
     } else if (Asset.Assert.isWindRelated(type)) {
       return <Wind.Main {...contextProps} />;
     } else {
-       <MonitoringPoint
+      return (
+        <MonitoringPoint
           monitoringPoint={selectedNode as MonitoringPointRow}
           onSuccess={contextProps.refresh}
         />
+      );
     }
   } else {
     return null;
