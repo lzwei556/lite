@@ -1,26 +1,44 @@
-import { ToSnake } from 'ts-case-convert';
 import { Option } from '../common';
 import { FormItemProps } from 'antd';
 import intl from 'react-intl-universal';
 import { UniversalFormItemProps } from '../components/form/formItem';
+import { ToSnake } from 'ts-case-convert';
 
-type ToLabel<P> = P extends `${infer First}_${infer Rest}` ? `${First}.${ToLabel<Rest>}` : P;
+type ToLabel<P extends string> = P extends `${infer First}_${infer Rest}`
+  ? `${First}.${ToLabel<Rest>}`
+  : P;
+type LabelFromName<S extends string> = ToLabel<ToSnake<Lowercase<S>>>;
+type Label<Entity extends object, P extends DeepPath<Entity> = DeepPath<Entity>> = LabelFromName<P>;
 
-type Name<Entity extends Object> = keyof Entity;
-type Label<Entity extends Object> = ToLabel<Lowercase<ToSnake<Name<Entity>>>>;
 // eg.
 // mixed  initial_thickness: { enabled:true, value:2 }
 // separated initial_thickness: 2  initial_thickness_enabled: true
 export type NameMode = 'mixed' | 'separated';
 
+type Primitive = string | number | boolean | null | undefined | symbol | bigint;
+
+type DeepPath<T> = T extends object
+  ? {
+      [K in keyof T & (string | number)]: T[K] extends Function
+        ? never
+        : T[K] extends Primitive
+        ? `${K & string}`
+        : T[K] extends readonly any[]
+        ? `${K & string}` // arrays stop recursion
+        : T[K] extends object
+        ? `${K & string}` | `${K & string}.${DeepPath<T[K]>}`
+        : never;
+    }[keyof T & (string | number)]
+  : never;
+
 export type Field<Entity extends Object> = {
-  name: Name<Entity>;
+  name: DeepPath<Entity>;
   label: Label<Entity> | string;
-  description: `${Label<Entity>}.desc`;
-  type: 'string' | 'number' | 'boolean' | 'enum' | 'number-switcher';
+  description: `${Label<Entity>}.desc` | string;
+  type: 'string' | 'number' | 'boolean' | 'enum' | 'number-switcher' | 'number-array';
   options?: Option[];
   optionType?: 'checkbox' | 'select';
-  defaultValue?: any;
+  defaultValue?: unknown;
   unit?: string;
   translatingUnit?: string;
   nameMode?: NameMode;
@@ -56,6 +74,8 @@ export const toUniversalFormItemProps = <Entity extends Object>(
       }
     case 'number-switcher':
       return { numberFormItemWithSwitcherProps: { ...props, nameMode: field.nameMode } };
+    case 'number-array':
+      return { numbersProps: { ...props, defaultValue: field.defaultValue } };
     case 'string':
       return props;
     default:
@@ -67,12 +87,13 @@ const getName = <Entity extends Object>(
   name: Field<Entity>['name'],
   formItemProps?: FormItemProps
 ) => {
+  const names = FieldHelper.getNamePath(name);
   if (formItemProps) {
     if (formItemProps.name && Array.isArray(formItemProps.name)) {
-      return formItemProps.name.concat(name);
+      return formItemProps.name.concat(names);
     }
   }
-  return name;
+  return names;
 };
 
 const getUnit = (unit?: string, translatingUnit?: string) => {
@@ -80,5 +101,15 @@ const getUnit = (unit?: string, translatingUnit?: string) => {
     return unit;
   } else if (translatingUnit) {
     return intl.get(translatingUnit);
+  }
+};
+
+export const FieldHelper = {
+  getNamePath: (name: string) => name.split('.'),
+  getValue: <T, P extends string>(obj: T, path: P): unknown => {
+    return path.split('.').reduce<any>((acc, key) => {
+      if (acc == null) return undefined;
+      return acc[key];
+    }, obj);
   }
 };

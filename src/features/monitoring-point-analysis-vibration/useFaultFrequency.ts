@@ -1,14 +1,14 @@
-import { MotorAttrsDTO } from 'asset-variant';
+import { MotorSettings } from 'asset-category';
 import React from 'react';
 import request from 'utils/request';
 
 export type FaultFrequency = { bpfo: number; bpfi: number; bsf: number; ftf: number };
 
-export const useFaultFrequency = (attrs: MotorAttrsDTO) => {
+export const useFaultFrequency = (attrs: MotorSettings) => {
   const [loading, setLoading] = React.useState(false);
   const [faultFrequency, setFaultFrequency] = React.useState<FaultFrequency | undefined>();
   React.useEffect(() => {
-    const fetchFaultFrequency = async (attrs: MotorAttrsDTO) => {
+    const fetchFaultFrequency = async (attrs: MotorSettings) => {
       setLoading(true);
       try {
         const res = await request.put<FaultFrequency>('algo/bearingFaultFrequency', {

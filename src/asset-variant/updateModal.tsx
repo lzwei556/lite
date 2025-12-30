@@ -58,6 +58,7 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
             key={type}
             type={type}
             formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
+            specialFormItemColProps={{ 'vel_base.vel_base_1_10X': generateColProps({}) }}
           />
         )}
       </Form>

@@ -8,6 +8,7 @@ import { useLocaleContext } from '../../../localeProvider';
 import { AssetRow } from '../../../asset-common';
 import { SelectProps, Space } from 'antd';
 import { SettingsField } from '../../../asset-category/settings';
+import { FieldHelper } from 'types';
 
 export const PrimaryAssetTable = ({
   assets,
@@ -27,18 +28,25 @@ export const PrimaryAssetTable = ({
   if (settings.length > 0) {
     const settingsColumns = settings[0].fields
       .filter((field) => (filterField && field.visibleWhen ? field.visibleWhen(values) : true))
-      .map(({ label, name, options, source, unit }) => {
+      .map(({ label, name, options, source, unit, type }) => {
         const common = {
-          dataIndex: AssetCategory.getNamePath(source).concat(name),
+          dataIndex: AssetCategory.getNamePath(source).concat(FieldHelper.getNamePath(name)),
           key: name,
           title: () => getDisplayName({ name: intl.get(label), lang: language, suffix: unit })
         };
-        return options
-          ? {
-              ...common,
-              render: (value: string) => intl.get(getOptionLabelByValue(options, value)).d(value)
-            }
-          : common;
+        if (options) {
+          return {
+            ...common,
+            render: (value: string) => intl.get(getOptionLabelByValue(options, value)).d(value)
+          };
+        } else if (type === 'number-array') {
+          return {
+            ...common,
+            render: (value: number[]) => value.join()
+          };
+        } else {
+          return common;
+        }
       });
     cols.push(...settingsColumns);
   }

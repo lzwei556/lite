@@ -77,7 +77,13 @@ export const Create = (
             </Col>
           </Grid>
         </Card>
-        {type && <SettingFormItems key={type} type={type} />}
+        {type && (
+          <SettingFormItems
+            key={type}
+            type={type}
+            specialFormItemColProps={{ 'vel_base.vel_base_1_10X': generateColProps({}) }}
+          />
+        )}
       </Form>
     </ModalWrapper>
   );

@@ -1,7 +1,8 @@
 import { AssetCategory } from '../asset-category';
 import intl from 'react-intl-universal';
-import { getOptionLabelByValue, getValue } from '../utils';
+import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { Descriptions, DescriptionsProps } from '../components';
+import { FieldHelper } from 'types';
 
 export const SettingsDetail = ({ attributes, type }: { attributes: any; type: number }) => {
   const items: DescriptionsProps['items'] = [];
@@ -10,18 +11,24 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
     if (settings.length > 0) {
       settings[0].fields
         .filter((field) => (field.visibleWhen ? field.visibleWhen(attributes) : true))
+        .filter((_, i) => i < 10)
         .forEach(({ label, name, translatingUnit, type, options, unit }) => {
-          const children = attributes[name];
+          const children = FieldHelper.getValue(attributes, name) as string | number | number[];
           if (type === 'string') {
             items.push({
               label: intl.get(label),
               children
             });
           } else if (options && options.length > 0) {
-            const value = getOptionLabelByValue(options, children);
+            const value = getOptionLabelByValue(options, children as string | number);
             items.push({
               label: intl.get(label),
               children: intl.get(value).d(value)
+            });
+          } else if (type === 'number-array') {
+            items.push({
+              label: intl.get(label),
+              children: truncate((children as number[]).join(), 20)
             });
           } else {
             items.push({
@@ -35,5 +42,5 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
         });
     }
   }
-  return <Descriptions items={items} />;
+  return <Descriptions items={items} style={{ overflowY: 'auto', maxHeight: 400 }} />;
 };

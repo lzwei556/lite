@@ -5,15 +5,11 @@ import { generateColProps } from '../utils/grid';
 import { AssetCategory } from '../asset-common';
 import { TypeFormItem } from './typeFormItem';
 import { useParents } from './utils';
-import { motor } from './constants';
-import { MotorBasicSettings } from './motor/settings';
 
 export const BasisFormItems = ({
-  type,
   types,
   formItemColProps = generateColProps({ xl: 12, xxl: 12 })
 }: {
-  type?: number;
   types: AssetCategory[];
   formItemColProps?: ColProps;
 }) => {
@@ -35,7 +31,6 @@ export const BasisFormItems = ({
       <Col {...formItemColProps}>
         <TypeFormItem disabled={true} types={types} />
       </Col>
-      {type === motor.type && <MotorBasicSettings formItemColProps={formItemColProps} />}
     </Grid>
   );
 };

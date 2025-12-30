@@ -1,58 +1,55 @@
 import { Field } from '../types';
-import { pickOptionsFromNumericEnum } from '../utils';
 
 export type MotorSettings = {
-  bearing_type: BearingType;
+  bearing: { n_balls: number; d: number; big_d: number; theta: number };
   contact_angle: number;
-  drive_end_bearing_model: string;
-  grid_frequency: number;
-  pairs_of_motor_poles: number;
+  env_band: [min: number, max: number];
+  gear_teeth: number;
+  motor: {
+    poles: number;
+    slip: number;
+  };
   pitch_circle_diameter: number;
-  motor_type: MotorTypeValue;
-  mounting: Mounting;
-  nominal_power: number;
-  non_drive_end_bearing_model: string;
+  power_freq: number;
+  rpm: number;
   rolling_elements_num: number;
   rolling_elements_diameter: number;
   rotation_mode: RotationMode;
-  rotor_count: number;
-  variable_frequency_drive: boolean;
+  vel_base: {
+    vel_base_1_10X: [
+      base1: number,
+      base2: number,
+      base3: number,
+      base4: number,
+      base5: number,
+      base6: number,
+      base7: number,
+      base8: number,
+      base9: number,
+      base10: number
+    ];
+    vel_non_int_base_0_10X: number;
+    vel_base_10_40X: number;
+    vel_base_40_99X: number;
+    vel_base_bearing: number;
+    vel_base_100Hz: number;
+    vel_base_mfb: number;
+  };
 } & RotationSpeed;
-
-enum MotorTypeValue {
-  AC = 'AC',
-  DC = 'DC'
-}
-const motorTypeOptions = [
-  { label: MotorTypeValue['AC'], value: MotorTypeValue.AC },
-  { label: MotorTypeValue['DC'], value: MotorTypeValue.DC }
-];
-
-enum BearingType {
-  Roller = 1,
-  Journal
-}
-const bearingTypeOptions = pickOptionsFromNumericEnum(BearingType, 'motor.bearing.type');
-
-enum Mounting {
-  Horizontal = 1,
-  Vertical
-}
-const mountingTypeOptions = pickOptionsFromNumericEnum(Mounting, 'motor.mounting');
 
 enum RotationMode {
   Inner = 'inner',
   Outer = 'outer'
 }
-const rotationModeOptions = [
-  { label: RotationMode['Inner'], value: RotationMode.Inner },
-  { label: RotationMode['Outer'], value: RotationMode.Outer }
-];
+// const rotationModeOptions = [
+//   { label: RotationMode['Inner'], value: RotationMode.Inner },
+//   { label: RotationMode['Outer'], value: RotationMode.Outer }
+// ];
 
 export type RotationSpeed = { rotation_speed: number };
 export const rotationSpeed: Field<MotorSettings> = {
   label: 'rotation.speed',
-  name: 'rotation_speed',
+  name: 'rpm',
   description: 'rotation.speed.desc',
   type: 'number',
   unit: 'rpm',
@@ -60,101 +57,167 @@ export const rotationSpeed: Field<MotorSettings> = {
 };
 
 export const motorFields: Field<MotorSettings>[] = [
-  {
-    label: 'motor.type',
-    name: 'motor_type',
-    description: 'motor.type.desc',
-    options: motorTypeOptions,
-    type: 'enum',
-    defaultValue: MotorTypeValue.AC
-  },
   rotationSpeed,
   {
-    label: 'motor.variable.frequency.drive',
-    name: 'variable_frequency_drive',
-    description: 'variable.frequency.drive.desc',
-    type: 'boolean',
-    options: [
-      // @ts-ignore
-      { label: 'yes', value: true },
-      // @ts-ignore
-      { label: 'no', value: false }
-    ],
-    defaultValue: true
+    label: 'motor.env.band',
+    name: 'env_band',
+    description: 'env.band.desc',
+    type: 'number-array',
+    unit: 'Hz',
+    defaultValue: [100, 1000]
   },
   {
-    label: 'motor.nominal.power',
-    name: 'nominal_power',
-    description: 'nominal.power.desc',
+    label: 'motor.power.freq',
+    name: 'power_freq',
+    description: 'power.freq.desc',
     type: 'number',
-    unit: 'kW',
-    defaultValue: 380
+    unit: 'Hz',
+    defaultValue: 50
   },
   {
-    label: 'motor.mounting',
-    name: 'mounting',
-    description: 'mounting.desc',
-    options: mountingTypeOptions,
-    type: 'enum',
-    defaultValue: Mounting.Horizontal
-  },
-  {
-    label: 'motor.bearing.type',
-    name: 'bearing_type',
-    description: 'bearing.type.desc',
-    options: bearingTypeOptions,
-    type: 'enum',
-    defaultValue: BearingType.Roller
-  },
-  {
-    label: 'motor.drive.end.bearing.model',
-    name: 'drive_end_bearing_model',
-    description: 'drive.end.bearing.model.desc',
-    type: 'string'
-  },
-  {
-    label: 'motor.non.drive.end.bearing.model',
-    name: 'non_drive_end_bearing_model',
-    description: 'non.drive.end.bearing.model.desc',
-    type: 'string'
-  },
-  {
-    label: 'motor.rolling.elements.num',
-    name: 'rolling_elements_num',
-    description: 'rolling.elements.num.desc',
+    label: 'motor.gear.teeth',
+    name: 'gear_teeth',
+    description: 'gear.teeth.desc',
     type: 'number',
-    defaultValue: 10
+    defaultValue: 30
   },
   {
-    label: 'motor.rolling.elements.diameter',
-    name: 'rolling_elements_diameter',
-    description: 'rolling.elements.diameter.desc',
+    label: 'motor.bearing.n.balls',
+    name: 'bearing.n_balls',
+    description: 'bearing.n.balls.desc',
     type: 'number',
-    unit: 'mm',
-    defaultValue: 100
+    defaultValue: 8
   },
   {
-    label: 'motor.pitch.circle.diameter',
-    name: 'pitch_circle_diameter',
-    description: 'pitch.circle.diameter.desc',
+    label: 'motor.bearing.d',
+    name: 'bearing.d',
+    description: 'bearing.d.desc',
     type: 'number',
-    unit: 'mm',
-    defaultValue: 100
+    unit: 'm',
+    defaultValue: 0.01
   },
   {
-    label: 'motor.contact.angle',
-    name: 'contact_angle',
-    description: 'contact.angle.desc',
+    label: 'motor.bearing.big.d',
+    name: 'bearing.big_d',
+    description: 'bearing.big.d.desc',
     type: 'number',
-    unit: '°',
-    defaultValue: 2
+    unit: 'm',
+    defaultValue: 0.05
   },
   {
-    label: 'motor.rotation.mode',
-    name: 'rotation_mode',
-    description: 'rotation.mode.desc',
-    options: rotationModeOptions,
-    type: 'enum',
-    defaultValue: RotationMode.Inner
+    label: 'motor.bearing.theta',
+    name: 'bearing.theta',
+    description: 'bearing.theta.desc',
+    type: 'number',
+    unit: 'rad',
+    defaultValue: 0.5236
+  },
+  {
+    label: 'motor.motor.poles',
+    name: 'motor.poles',
+    description: 'motor.poles.desc',
+    type: 'number',
+    defaultValue: 4
+  },
+  {
+    label: 'motor.motor.slip',
+    name: 'motor.slip',
+    description: 'motor.slip.desc',
+    type: 'number',
+    defaultValue: 0.02
+  },
+  // {
+  //   label: 'motor.rolling.elements.num',
+  //   name: 'rolling_elements_num',
+  //   description: 'rolling.elements.num.desc',
+  //   type: 'number',
+  //   defaultValue: 10
+  // },
+  // {
+  //   label: 'motor.rolling.elements.diameter',
+  //   name: 'rolling_elements_diameter',
+  //   description: 'rolling.elements.diameter.desc',
+  //   type: 'number',
+  //   unit: 'mm',
+  //   defaultValue: 100
+  // },
+  // {
+  //   label: 'motor.pitch.circle.diameter',
+  //   name: 'pitch_circle_diameter',
+  //   description: 'pitch.circle.diameter.desc',
+  //   type: 'number',
+  //   unit: 'mm',
+  //   defaultValue: 100
+  // },
+  // {
+  //   label: 'motor.contact.angle',
+  //   name: 'contact_angle',
+  //   description: 'contact.angle.desc',
+  //   type: 'number',
+  //   unit: '°',
+  //   defaultValue: 2
+  // },
+  // {
+  //   label: 'motor.rotation.mode',
+  //   name: 'rotation_mode',
+  //   description: 'rotation.mode.desc',
+  //   options: rotationModeOptions,
+  //   type: 'enum',
+  //   defaultValue: RotationMode.Inner
+  // },
+  {
+    label: 'motor.vel.base.vel.base.1.10x',
+    name: 'vel_base.vel_base_1_10X',
+    description: 'vel.base.vel.base.1.10x.desc',
+    type: 'number-array',
+    defaultValue: [20, 25, 30, 35, 40, 45, 50, 55, 60, 65]
+  },
+  {
+    label: 'motor.vel.base.vel.non.int.base.0.10x',
+    name: 'vel_base.vel_non_int_base_0_10X',
+    description: 'vel.base.vel.non.int.base.0.10x.desc',
+    type: 'number',
+    unit: 'dB',
+    defaultValue: 25
+  },
+  {
+    label: 'motor.vel.base.vel.base.10.40x',
+    name: 'vel_base.vel_base_10_40X',
+    description: 'vel.base.vel.base.10.40x.desc',
+    type: 'number',
+    unit: 'dB',
+    defaultValue: 30
+  },
+  {
+    label: 'motor.vel.base.vel.base.40.99x',
+    name: 'vel_base.vel_base_40_99X',
+    description: 'vel.base.vel.base.40.99x.desc',
+    type: 'number',
+    unit: 'dB',
+    defaultValue: 35
+  },
+  {
+    label: 'motor.vel.base.vel.base.bearing',
+    name: 'vel_base.vel_base_bearing',
+    description: 'vel.base.vel.base.bearing.desc',
+    type: 'number',
+    unit: 'dB',
+    defaultValue: 40
+  },
+  {
+    label: 'motor.vel.base.vel.base.100.hz',
+    name: 'vel_base.vel_base_100Hz',
+    description: 'vel.base.vel.base.100hz.desc',
+    type: 'number',
+    unit: 'dB',
+    defaultValue: 45
+  },
+  {
+    label: 'motor.vel.base.vel.base.mfb',
+    name: 'vel_base.vel_base_mfb',
+    description: 'vel.base.vel.base.mfb.desc',
+    type: 'number',
+    unit: 'dB',
+    defaultValue: 50
   }
 ];

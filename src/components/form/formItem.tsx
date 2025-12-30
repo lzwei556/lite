@@ -1,5 +1,12 @@
 import React from 'react';
-import { FormItemProps, InputNumberProps, InputProps, RadioGroupProps, SelectProps } from 'antd';
+import {
+  FormItemProps,
+  InputNumberProps,
+  InputProps,
+  RadioGroupProps,
+  SelectProps,
+  Space
+} from 'antd';
 import { CheckboxGroupProps } from 'antd/es/checkbox';
 import { CheckboxFormItem } from './checkboxFormItem';
 import { NumberFormItem } from './numberFormItem';
@@ -18,6 +25,7 @@ export type UniversalFormItemProps = FormItemProps & {
   radioGroupProps?: RadioGroupProps;
   selectProps?: SelectProps;
   numberFormItemWithSwitcherProps?: NumberFormItemWithSwitcherProps;
+  numbersProps?: FormItemProps & { defaultValue?: unknown };
 };
 
 export const FormItem = (props: UniversalFormItemProps) => {
@@ -28,6 +36,7 @@ export const FormItem = (props: UniversalFormItemProps) => {
     radioGroupProps,
     selectProps,
     numberFormItemWithSwitcherProps,
+    numbersProps,
     ...rest
   } = props;
 
@@ -41,6 +50,25 @@ export const FormItem = (props: UniversalFormItemProps) => {
     return <SelectFormItem selectProps={selectProps} {...rest} />;
   } else if (numberFormItemWithSwitcherProps) {
     return <NumberFormItemWithSwitcher {...numberFormItemWithSwitcherProps} />;
+  } else if (
+    numbersProps &&
+    numbersProps.defaultValue &&
+    Array.isArray(numbersProps.defaultValue)
+  ) {
+    return (
+      <TextFormItem label={numbersProps.label}>
+        <Space.Compact>
+          {numbersProps.defaultValue.map((n, i) => (
+            <NumberFormItem
+              initialValue={n}
+              name={[...numbersProps.name, i]}
+              noStyle
+              inputNumberProps={{ controls: false }}
+            />
+          ))}
+        </Space.Compact>
+      </TextFormItem>
+    );
   } else {
     return <TextFormItem inputProps={inputProps} {...rest} />;
   }
