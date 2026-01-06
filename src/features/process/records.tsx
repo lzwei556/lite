@@ -1,6 +1,7 @@
-import { Col } from 'antd';
+import { Button, Col, Popover, Space } from 'antd';
 import {
   Card,
+  Descriptions,
   Flex,
   Grid,
   RangeDatePicker,
@@ -12,15 +13,17 @@ import React from 'react';
 import {
   DataType,
   dataTypeOptions,
+  DiagnosisResult,
   diagnosisResultOptions,
   fillReasonOptions,
   FillRecord,
   fillResultOptions,
+  Reason,
   useFillRecords
 } from './use-services';
 import { MonitoringPointRow } from 'monitoring-point';
 import intl from 'react-intl-universal';
-import { Dayjs, getDisplayName, getOptionLabelByValue } from 'utils';
+import { Dayjs, getDisplayName, getOptionLabelByValue, getValue } from 'utils';
 import { autoFillParameter, ProcessType, ProcessTypeKey } from 'process-type';
 import { Language, useLocaleContext } from 'localeProvider';
 import { sourceIdField } from './common';
@@ -56,23 +59,26 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
       })
     };
     const reason = {
-      key: 'reason',
-      dataIndex: 'reason',
+      key: 'reasons',
+      dataIndex: 'reasons',
       title: intl.get('fill.reason'),
       render: (reasons: number[], row: FillRecord) => {
         const { dataType, diagnosisResults } = row;
         if (dataType === 0) {
-          return reasons.length > 2
-            ? reasons
-                .filter((_, index) => index < 2)
-                .map((r) => intl.get(getOptionLabelByValue(fillReasonOptions, r)))
-                .join()
-            : intl.get(getOptionLabelByValue(fillReasonOptions, reasons[0]));
+          return (
+            <ReasonsCell
+              reasons={reasons.map((r) => intl.get(getOptionLabelByValue(fillReasonOptions, r)))}
+              row={row}
+            />
+          );
         } else if (diagnosisResults && diagnosisResults.items.length > 0) {
-          return diagnosisResults.items
-            .filter((_, index) => index < 2)
-            .map((r) => intl.get(getOptionLabelByValue(diagnosisResultOptions, r.diagnosis)))
-            .join();
+          return (
+            <ReasonsCell
+              reasons={diagnosisResults.items.map((r) =>
+                intl.get(getOptionLabelByValue(diagnosisResultOptions, r.diagnosis))
+              )}
+            />
+          );
         }
       }
     };
@@ -126,4 +132,64 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
       </Col>
     </Grid>
   );
+};
+
+const ReasonsCell = ({ reasons, row }: { reasons: string[]; row?: FillRecord }) => {
+  if (reasons.length > 2) {
+    return (
+      <Space>
+        <span>{reasons.filter((_, i) => i < 2)}...</span>
+        <Button style={{ paddingInline: 0 }} type='link'>
+          <Popover
+            content={
+              row && (
+                <Descriptions
+                  items={row.reasons.map((reason) => getReasonOption(reason, row))}
+                  labelStyle={{ width: '10em' }}
+                />
+              )
+            }
+            styles={{ body: { width: '25em' } }}
+            title={intl.get('fill.reason')}
+            trigger={['click']}
+          >
+            {intl.get('CLICK_TO_VIEW')}
+          </Popover>
+        </Button>
+      </Space>
+    );
+  } else {
+    return reasons.join();
+  }
+};
+
+const getReasonOption = (reason: number, row: FillRecord) => {
+  const {
+    soundPressureLevel,
+    energyRatio,
+    stationarity,
+    velocityX,
+    velocityY,
+    velocityZ,
+    temperature
+  } = row;
+  const label = intl.get(getOptionLabelByValue(fillReasonOptions, reason));
+  switch (reason) {
+    case Reason.Temperatue:
+      return { label, children: getValue({ value: temperature, unit: '℃' }) };
+    case Reason.soundPressureLevel:
+      return { label, children: soundPressureLevel };
+    case Reason.energyRatio:
+      return { label, children: energyRatio };
+    case Reason.stationarity:
+      return { label, children: stationarity };
+    case Reason.velocityX:
+      return { label, children: getValue({ value: velocityX, unit: 'mm/s' }) };
+    case Reason.velocityY:
+      return { label, children: getValue({ value: velocityY, unit: 'mm/s' }) };
+    case Reason.velocityZ:
+      return { label, children: getValue({ value: velocityZ, unit: 'mm/s' }) };
+    default:
+      return { label: intl.get('DEVICE_TYPE_UNKNOWN'), children: -1 };
+  }
 };

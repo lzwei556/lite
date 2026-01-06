@@ -108,7 +108,7 @@ enum Result {
 
 export const fillResultOptions = pickOptionsFromNumericEnum(Result, 'fill.result');
 
-enum Reason {
+export enum Reason {
   Temperatue = 0x01,
   soundPressureLevel = 0x02,
   energyRatio = 0x03,
@@ -121,7 +121,7 @@ enum Reason {
 
 export const fillReasonOptions = pickOptionsFromNumericEnum(Reason, 'fill.reason');
 
-enum DiagnosisResult {
+export enum DiagnosisResult {
   Wear = 1001,
   Loose = 1002,
   NonCenter = 1003,

@@ -28,7 +28,7 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
           } else if (type === 'number-array') {
             items.push({
               label: intl.get(label),
-              children: truncate((children as number[]).join(), 20)
+              children: truncate(((children ?? []) as number[]).join(), 20)
             });
           } else {
             items.push({

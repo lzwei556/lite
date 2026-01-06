@@ -369,6 +369,8 @@
   "EVENT_TYPE_COMPENSATION": "Compensation",
   "EVENT_SENSOR_COMPENSATION_SUCCESSFUL": "Temperature compensation completed successfully",
   "EVENT_SENSOR_COMPENSATION_ERROR": "Failed to compensate for temperature",
+  "EVENT_TYPE_CUSTOM_ACTION": "Custom Action",
+  "EVENT_CUSTOM_ACTION_FILL": "Fill",
   "EXPORT": "Export",
   "EXPORT_ALL": "Export All",
   "EXPORT_NETWORK": "Export Network",

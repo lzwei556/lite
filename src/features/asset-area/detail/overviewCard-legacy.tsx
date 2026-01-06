@@ -3,14 +3,17 @@ import { Pagination, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Flex, Link } from '../../../components';
 import { getValue } from '../../../utils';
-import { ASSET_PATHNAME, AssetRow, Point } from '../../../asset-common';
+import { ASSET_PATHNAME, AssetRow } from '../../../asset-common';
 import { Icon } from '../../../views/home/icon';
 import { useGlobalStyles } from '../../../styles';
+import { MonitoringPointType } from 'common';
 
 export const OverviewCardLegacy = ({ asset }: { asset: AssetRow }) => {
   const { id, monitoringPoints = [], name, type } = asset;
   const items = monitoringPoints.map(({ id, name, data, properties, type }) => {
-    const property = Point.getPropertiesByType(type, properties).filter((p) => p.first)?.[0];
+    const property = MonitoringPointType.Key.getProperties(type, properties).filter(
+      (p) => p.first
+    )?.[0];
     let value = NaN;
     if (property) {
       const key =
