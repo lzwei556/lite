@@ -10,13 +10,13 @@ import { getDisplayProperties } from '../util';
 import { DeviceType } from '../../../types/device_type';
 import { DownloadDeviceDataRequest } from '../../../apis/device';
 import { useContext } from '..';
-import { CharacteristicData } from 'common';
+import { FeatureData } from 'common';
 import { downloadFile } from 'utils';
 
 export interface DownloadModalProps extends ModalProps {
   device: Device;
   property?: any;
-  properties: CharacteristicData.DisplayProperty[];
+  properties: FeatureData.DisplayProperty[];
   onSuccess: () => void;
   channel?: string;
 }

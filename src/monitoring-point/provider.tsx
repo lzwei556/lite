@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 import { AlarmRule } from '../features/alarm/alarm-group/types';
 import { SeriesAlarm } from '../components';
 import { getAlarmRules } from '../features/alarm/alarm-group/services';
-import { CharacteristicData } from 'common';
+import { FeatureData } from 'common';
 
 const MonitorPointContext = React.createContext<{
   ruleGroups: AlarmRule[];
@@ -41,13 +41,13 @@ export const useMonitoringPointContext = () => React.useContext(MonitorPointCont
 export const useGetSeriesAlarm = () => {
   const { ruleGroups } = useMonitoringPointContext();
   return {
-    getAlarm: (property: CharacteristicData.DisplayProperty) => getSeriesAlarm(ruleGroups, property)
+    getAlarm: (property: FeatureData.DisplayProperty) => getSeriesAlarm(ruleGroups, property)
   };
 };
 
 export const getSeriesAlarm = (
   ruleGroups: AlarmRule[],
-  property: CharacteristicData.DisplayProperty
+  property: FeatureData.DisplayProperty
 ): (Pick<SeriesAlarm, 'rules'> & { propertyKey: string }) | undefined => {
   const rules: SeriesAlarm['rules'] = [];
   ruleGroups.forEach((group) => {

@@ -31,11 +31,13 @@ type DeepPath<T> = T extends object
     }[keyof T & (string | number)]
   : never;
 
+type FieldType = 'string' | 'number' | 'boolean' | 'enum' | 'number-switcher' | 'number-array';
+
 export type Field<Entity extends Object> = {
   name: DeepPath<Entity>;
   label: Label<Entity> | string;
   description: `${Label<Entity>}.desc` | string;
-  type: 'string' | 'number' | 'boolean' | 'enum' | 'number-switcher' | 'number-array';
+  type: FieldType;
   options?: Option[];
   optionType?: 'checkbox' | 'select';
   defaultValue?: unknown;
@@ -63,7 +65,7 @@ export const toUniversalFormItemProps = <Entity extends Object>(
   };
   switch (type) {
     case 'boolean':
-      return { ...props, radioGroupProps: { options, optionType: 'default' } };
+      return { ...props, radioGroupProps: { options } };
     case 'number':
       return { ...props, inputNumberProps: { addonAfter: getUnit(unit, translatingUnit) } };
     case 'enum':

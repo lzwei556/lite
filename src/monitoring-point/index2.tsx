@@ -7,18 +7,16 @@ import { Overview } from './overview';
 import {
   CustomizableIntervalMonitoringPointData,
   MonitoringPointWaveform
-} from 'features/characteristic-data';
+} from 'features/feature-data';
 import { MonitoringPointProvider, useGetSeriesAlarm } from './provider';
 import { AlarmRuleSetting, AssetNavigator } from 'asset-common';
 import { useAppVibrationEnabled } from 'config';
-import { VibrationAnalysis } from 'features/monitoring-point-analysis-vibration';
-import { CorrosionAnalysis } from 'features/monitoring-point-analysis-corrosion';
+import { VibrationAnalysis } from 'features/vibration-analysis';
+import { CorrosionAnalysis } from 'features/corrosion-analysis';
 import { FilterableAlarmRecordTable } from 'features/alarm';
 import { Col } from 'antd';
 import { generateColProps } from 'utils/grid';
-import { UpdateFormCard } from 'features/monitoring-point-settings';
-import { useUpdateMonitoringPoint } from './use-services';
-import { useNotificationContext } from 'providers/notification';
+import { UpdateFormCard, useUpdateFormProps } from 'features/monitoring-point-settings';
 
 export const Index2 = ({
   monitoringPoint,
@@ -31,7 +29,7 @@ export const Index2 = ({
     <MonitoringPointProvider id={monitoringPoint.id}>
       <TabsDetail
         items={useFeatures(monitoringPoint)}
-        title={<AssetNavigator asset={monitoringPoint} />}
+        title={<AssetNavigator asset={monitoringPoint as any} />}
       />
     </MonitoringPointProvider>
   );
@@ -70,8 +68,7 @@ const useFeatures = (monitoringPoint: MonitoringPoint) => {
     )
   });
 
-  const { error, ...rest } = useUpdateMonitoringPoint(monitoringPoint);
-  const { messageInstance } = useNotificationContext();
+  const updateFormProps = useUpdateFormProps(monitoringPoint);
 
   if (canEditMeasurement) {
     items.push({
@@ -80,26 +77,10 @@ const useFeatures = (monitoringPoint: MonitoringPoint) => {
       content: (
         <Grid>
           <Col {...generateColProps({ xl: 8, xxl: 8 })}>
-            <UpdateFormCard
-              {...{
-                monitoringPoint,
-                ...rest,
-                handleSubmit: (values) => {
-                  rest.handleSubmit(values);
-                  if (error) {
-                    messageInstance.success(
-                      `${intl.get('FAILED_TO_UPDATE')}${intl.get(error).d(error)}`
-                    );
-                  } else {
-                    messageInstance.success(intl.get('UPDATED_SUCCESSFUL'));
-                  }
-                }
-              }}
-              key={id}
-            />
+            <UpdateFormCard {...updateFormProps} key={id} />
           </Col>
           <Col {...generateColProps({ xl: 16, xxl: 16 })}>
-            <AlarmRuleSetting point={monitoringPoint} key={id} />
+            <AlarmRuleSetting point={monitoringPoint as any} key={id} />
           </Col>
         </Grid>
       )
@@ -122,7 +103,7 @@ const useDynamicFeatures = (point: MonitoringPoint) => {
       {
         key: 'analysis',
         label: intl.get('intelligent.analysis'),
-        content: <CorrosionAnalysis {...point} key={id} />
+        content: <CorrosionAnalysis {...(point as any)} key={id} />
       }
     ];
   } else if (MonitoringPointType.Categories.getKeys(['vibration']).includes(type)) {

@@ -13,7 +13,7 @@ import {
 } from '../../../../asset-common';
 import { isFlangePreloadCalculation } from '../common';
 import { CanAccess, Permission } from '../../../../providers/access-control';
-import { CharacteristicData, MonitoringPointType } from 'common';
+import { FeatureData, MonitoringPointType } from 'common';
 
 export const PointsLineChart = ({
   flange,
@@ -31,7 +31,7 @@ export const PointsLineChart = ({
     return MonitoringPointType.Key.getProperties(firstPoint.type, firstPoint.properties);
   };
   const properties = getProperties();
-  const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
+  const [property, setProperty] = React.useState<FeatureData.DisplayProperty | undefined>(
     properties?.[0]
   );
   const getTitle = () => {

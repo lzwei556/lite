@@ -7,7 +7,7 @@ import { ASSET_PATHNAME, AssetRow, deleteAsset } from '../../../asset-common';
 import { ActionBar } from '../actionBar';
 import { CanAccess, Permission } from '../../../providers/access-control';
 import { PrimaryAssetTable } from './primary-asset-table';
-import { AssetCategory } from '../../../asset-category';
+import { AssetCategory } from 'common/asset-category';
 
 export type Column = NonNullable<TableProps<AssetRow>['columns']>[0];
 type Props = {

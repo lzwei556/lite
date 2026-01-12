@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { AssetRow } from '../types';
 import { getAsset, getAssets } from '../services';
-import { getMeasurement } from '../../monitoring-point';
+import { getMeasurement, MonitoringPointRow } from '../../monitoring-point';
 import { useVirturalAsset } from '../constants';
 import { MonitoringPointDTO } from 'common';
 
@@ -11,7 +11,7 @@ export type ContextProps = {
   assetsLoading: boolean;
   loading: boolean;
   refresh: (flag?: boolean) => void;
-  selectedNode: AssetRow | MonitoringPointDTO | undefined;
+  selectedNode: AssetRow | MonitoringPointRow | undefined;
 };
 
 const Context = React.createContext<ContextProps>({

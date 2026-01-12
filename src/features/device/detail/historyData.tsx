@@ -24,15 +24,15 @@ import { HistoryData } from '../../../asset-common';
 import { getDisplayProperties } from '../util';
 import { useContext } from '..';
 import { CanAccess, Permission } from '../../../providers/access-control';
-import { CharacteristicData } from 'common';
+import { FeatureData } from 'common';
 
-const batteryVoltage: CharacteristicData.DisplayProperty = {
+const batteryVoltage: FeatureData.DisplayProperty = {
   key: 'batteryVoltage',
   name: 'BATTERY_VOLTAGE',
   precision: 0,
   unit: 'mV'
 };
-const signalStrength: CharacteristicData.DisplayProperty = {
+const signalStrength: FeatureData.DisplayProperty = {
   key: 'signalStrength',
   name: 'SIGNAL_STRENGTH',
   precision: 0,
@@ -45,7 +45,7 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
     properties.push(batteryVoltage);
   }
   properties.push(signalStrength);
-  const [property, setProperty] = useState<CharacteristicData.DisplayProperty | undefined>(
+  const [property, setProperty] = useState<FeatureData.DisplayProperty | undefined>(
     properties.length > 0 ? properties[0] : undefined
   );
   const { range, numberedRange, onChange } = useContext();

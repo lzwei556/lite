@@ -9,14 +9,14 @@ import {
 } from '../monitoring-point';
 import { AssetRow } from '../asset-common';
 import { Dayjs, getValue } from '../utils';
-import { CharacteristicData, MonitoringPointType } from 'common';
+import { FeatureData, MonitoringPointType } from 'common';
 
 export type PropertyItem = {
   selected: boolean;
   title: string;
   children: string;
   self: MonitoringPointRow;
-  property?: CharacteristicData.DisplayProperty;
+  property?: FeatureData.DisplayProperty;
   visibleKeys: string[];
   axisKey?: string;
   fieldKey?: string;
@@ -114,10 +114,7 @@ const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
     });
 };
 
-export function getPropertyItems(
-  m: MonitoringPointRow,
-  properties: CharacteristicData.DisplayProperty[]
-) {
+export function getPropertyItems(m: MonitoringPointRow, properties: FeatureData.DisplayProperty[]) {
   const items: PropertyItem[] = [];
   properties.forEach((p) => items.push(...getPropertyItem(m, p)));
   return items;
@@ -125,7 +122,7 @@ export function getPropertyItems(
 
 const getPropertyItem = (
   m: MonitoringPointRow,
-  property: CharacteristicData.DisplayProperty
+  property: FeatureData.DisplayProperty
 ): PropertyItem[] => {
   const { fields = [], key, name, precision, unit } = property;
   const self = m;

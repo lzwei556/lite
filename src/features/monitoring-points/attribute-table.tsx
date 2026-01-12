@@ -24,7 +24,7 @@ export const AttributeTable = ({
   const canDelete = useCan(Permission.MeasurementDelete);
 
   const getColumns = (canEdit: boolean) => {
-    const attributeColumns = MonitoringPointType.Key.getAttributes(monitoringPoints[0].type).map(
+    const attributeColumns = MonitoringPointType.Key.getAttributes(monitoringPoints?.[0]?.type).map(
       (attr) => {
         const { options } = attr;
         const common = {
@@ -50,34 +50,37 @@ export const AttributeTable = ({
   };
 
   return (
-    <Table
-      rowKey={(record) => record.id}
-      columns={getColumns(canEdit || canDelete)}
-      cardProps={{
-        extra: canAddMonitoringPoint && (
-          <>
-            <IconButton
-              icon={<PlusOutlined />}
-              onClick={rest.openCreate}
-              color='primary'
-              variant='outlined'
-            />
-            {rest.createFormModal}
-          </>
-        ),
-        title: intl.get('monitoring.points')
-      }}
-      dataSource={monitoringPoints}
-      pagination={false}
-    />
+    <>
+      <Table
+        rowKey={(record) => record.id}
+        columns={getColumns(canEdit || canDelete)}
+        cardProps={{
+          extra: canAddMonitoringPoint && (
+            <>
+              <IconButton
+                icon={<PlusOutlined />}
+                onClick={rest.openCreate}
+                color='primary'
+                size='small'
+                variant='outlined'
+              />
+              {rest.createFormModal}
+            </>
+          ),
+          title: intl.get('monitoring.points')
+        }}
+        dataSource={monitoringPoints}
+        pagination={false}
+      />
+      {canEdit && rest.updateFormModal}
+    </>
   );
 };
 
 const OperateCell = ({
   point,
   onDeleteSuccess,
-  openUpdate,
-  updateFormModal
+  openUpdate
 }: {
   point: MonitoringPoint;
 } & Omit<Parameters<typeof AttributeTable>[0], 'monitoringPoints'>) => {
@@ -85,7 +88,6 @@ const OperateCell = ({
     <Space>
       <CanAccess {...Permission.MeasurementEdit}>
         <EditIconButton onClick={() => openUpdate(point)} />
-        {updateFormModal}
       </CanAccess>
       <CanAccess {...Permission.MeasurementDelete}>
         <DeleteIconButton

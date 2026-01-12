@@ -8,7 +8,7 @@ import { transform } from 'common';
 import { MonitoringPointRow } from 'asset-common';
 
 export const RelatedDeviceCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
-  const { device } = transform(monitoringPoint);
+  const { device } = transform(monitoringPoint as any);
   return (
     device && (
       <MutedCard title={intl.get('SENSOR')}>

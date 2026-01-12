@@ -5,7 +5,6 @@ import * as Wind from './detail/index';
 import { WindIndexLegacy } from './detail/index-legacy';
 import * as Flange from './flange';
 import * as Tower from './tower';
-import * as Point from '../monitoring-point-wind-turbine';
 import { wind, flange, tower } from './constants';
 import { ENV } from '../../utils';
 import { FlangeIndexLegacy } from './flange/detail/index-legacy';
@@ -37,12 +36,6 @@ export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
       ele = isLegacy ? <FlangeIndexLegacy {...props} /> : <Flange.Index {...props} />;
     } else if (selectedNode.type === tower.type) {
       ele = <Tower.Index {...props} />;
-    } else {
-      ele = (
-        <Point.Index
-          {...{ monitoringPoint: selectedNode as MonitoringPointRow, onSuccess: refresh }}
-        />
-      );
     }
   }
   return (
@@ -80,7 +73,7 @@ export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
           }}
         />
       )}
-      {mointoringPoint && (
+      {/* {mointoringPoint && (
         <Point.UpdateModal
           key={mointoringPoint.id}
           monitoringPoint={mointoringPoint}
@@ -95,7 +88,7 @@ export const Main = ({ loading, selectedNode, refresh }: ContextProps) => {
             setMonitoringPoint(undefined);
           }}
         />
-      )}
+      )} */}
     </Spin>
   );
 };

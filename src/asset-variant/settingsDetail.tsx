@@ -1,4 +1,4 @@
-import { AssetCategory } from '../asset-category';
+import { AssetCategory } from 'common/asset-category';
 import intl from 'react-intl-universal';
 import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { Descriptions, DescriptionsProps } from '../components';

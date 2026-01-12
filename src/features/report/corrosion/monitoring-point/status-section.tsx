@@ -10,7 +10,7 @@ import { ReportTable } from '../../components/table';
 import { Report, ReportMonitoringPoint } from '../../types';
 import { getValue } from '../../../../utils';
 import { getReportType } from '../../utils';
-import { getDurationByDays } from '../../../monitoring-point-analysis-corrosion/useAnalysis';
+import { getDurationByDays } from '../../../corrosion-analysis/useAnalysis';
 import intl from 'react-intl-universal';
 import { ReportSection } from '../../components/section';
 

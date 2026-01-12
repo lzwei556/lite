@@ -3,7 +3,6 @@ import { PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
 import { AssetRow } from '../../../asset-common';
-import * as MonitoringPoint from '../../monitoring-point-wind-turbine';
 import { IconButton } from '../../../components';
 import { useDescendentTypes } from '../utils';
 import { wind, flange, tower } from '../constants';
@@ -72,7 +71,7 @@ export const ActionBar = ({
       {type === wind.type && <Wind.Create {...commonProps} />}
       {type === flange.type && <Flange.Create {...commonProps} windId={asset?.id} />}
       {type === tower.type && <Tower.Create {...commonProps} windId={asset?.id} />}
-      {type === 99999 && <MonitoringPoint.Create {...commonProps} asset={asset} />}
+      {/* {type === 99999 && <MonitoringPoint.Create {...commonProps} asset={asset} />} */}
     </>
   );
 };

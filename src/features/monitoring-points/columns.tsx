@@ -1,5 +1,5 @@
 import { ASSET_PATHNAME, AssetStatusTag } from 'asset-common';
-import { MonitoringPoint, MonitoringPointType, CharacteristicData } from 'common';
+import { MonitoringPoint, MonitoringPointType, FeatureData } from 'common';
 import { Link } from 'components';
 import { useLocaleContext } from 'localeProvider';
 import intl from 'react-intl-universal';
@@ -52,10 +52,7 @@ export const usePropertyColumns = (point: MonitoringPoint) => {
   return MonitoringPointType.Key.getProperties(point.type, point.properties)
     .map((property) => ({
       ...property,
-      fields: CharacteristicData.appendVibrationDirectionAbbrToField(
-        property.fields,
-        point.attributes
-      )
+      fields: FeatureData.appendVibrationDirectionAbbrToField(property.fields, point.attributes)
     }))
     .map(({ fields = [], first, key, name, precision, unit }) => {
       const children = fields.map(({ alias, key, name }) => ({

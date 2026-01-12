@@ -1,7 +1,7 @@
 import { transformSnake2Dot } from 'utils';
 import { DeviceType } from '../types/device_type';
 import { toSnake } from 'ts-case-convert';
-import { DisplayProperty, CATEGORIES } from './characteristic-data';
+import { DisplayProperty, CATEGORIES } from './feature-data';
 import {
   AttributesField,
   baseInclinationFields,
@@ -10,7 +10,7 @@ import {
   topInclinationFields,
   vibrationFields
 } from './monitoring-point-attributes';
-import * as AssetType from './asset-type';
+import { AssetCategory } from './asset-category';
 import { Property } from './monitoring-point';
 
 // constants begin
@@ -44,7 +44,7 @@ const configs: Config[] = [
     properties: CATEGORIES.SA,
     flangeAttributesKey: 'initial',
     attributes: [positionField],
-    assetTypes: [AssetType.Value.Flange]
+    assetCategories: [AssetCategory.Value.Flange]
   },
   {
     key: Value.Corrosion,
@@ -53,7 +53,7 @@ const configs: Config[] = [
     deviceTypes: DeviceType.getDCSensors(),
     properties: CATEGORIES.DC_NORMAL,
     attributes: corrosionFields,
-    assetTypes: [AssetType.Value.Pipe, AssetType.Value.Tank],
+    assetCategories: [AssetCategory.Value.Pipe, AssetCategory.Value.Tank],
     processIdForBindingSensor: 11
   },
   {
@@ -63,7 +63,7 @@ const configs: Config[] = [
     deviceTypes: DeviceType.getHighDCSensors(),
     properties: CATEGORIES.DC_HIGH,
     attributes: corrosionFields,
-    assetTypes: [AssetType.Value.Pipe, AssetType.Value.Tank],
+    assetCategories: [AssetCategory.Value.Pipe, AssetCategory.Value.Tank],
     processIdForBindingSensor: 11
   },
   {
@@ -73,7 +73,7 @@ const configs: Config[] = [
     deviceTypes: DeviceType.getUltraHighDCSensors(),
     properties: CATEGORIES.DC_Ultra_HIGH,
     attributes: corrosionFields,
-    assetTypes: [AssetType.Value.Pipe, AssetType.Value.Tank],
+    assetCategories: [AssetCategory.Value.Pipe, AssetCategory.Value.Tank],
     processIdForBindingSensor: 11
   },
   {
@@ -91,7 +91,7 @@ const configs: Config[] = [
     properties: CATEGORIES.SAS,
     flangeAttributesKey: 'normal',
     attributes: [positionField],
-    assetTypes: [AssetType.Value.Flange]
+    assetCategories: [AssetCategory.Value.Flange]
   },
   {
     key: Value.AnchorPreload,
@@ -101,7 +101,7 @@ const configs: Config[] = [
     properties: CATEGORIES.SAS,
     flangeAttributesKey: 'normal',
     attributes: [positionField],
-    assetTypes: [AssetType.Value.Flange]
+    assetCategories: [AssetCategory.Value.Flange]
   },
   {
     key: Value.FlangeBoltPreload,
@@ -117,7 +117,7 @@ const configs: Config[] = [
     ],
     properties: CATEGORIES.SAS,
     attributes: [positionField],
-    assetTypes: [AssetType.Value.Flange]
+    assetCategories: [AssetCategory.Value.Flange]
   },
   {
     key: Value.FlangeAnchorPreload,
@@ -133,7 +133,7 @@ const configs: Config[] = [
     ],
     properties: CATEGORIES.SAS,
     attributes: [positionField],
-    assetTypes: [AssetType.Value.Flange]
+    assetCategories: [AssetCategory.Value.Flange]
   },
   {
     key: Value.Vibration,
@@ -149,7 +149,7 @@ const configs: Config[] = [
     ],
     properties: CATEGORIES.SVT210510P,
     attributes: vibrationFields,
-    assetTypes: [AssetType.Value.Motor]
+    assetCategories: [AssetCategory.Value.Motor]
   },
   {
     key: Value.VibrationRotationSingleAxis,
@@ -158,7 +158,7 @@ const configs: Config[] = [
     deviceTypes: [DeviceType.SVT220S1],
     properties: CATEGORIES.SVT220S1S3,
     attributes: vibrationFields,
-    assetTypes: [AssetType.Value.Motor]
+    assetCategories: [AssetCategory.Value.Motor]
   },
   {
     key: Value.VibrationRotation,
@@ -167,7 +167,7 @@ const configs: Config[] = [
     deviceTypes: [DeviceType.SVT210S, DeviceType.SVT220S3, DeviceType.SVT510L, DeviceType.SVT210SU],
     properties: CATEGORIES.SVT220S1S3,
     attributes: vibrationFields,
-    assetTypes: [AssetType.Value.Motor]
+    assetCategories: [AssetCategory.Value.Motor]
   },
   {
     key: Value.VibrationAudio,
@@ -176,7 +176,7 @@ const configs: Config[] = [
     deviceTypes: [DeviceType.SVT210SU],
     properties: CATEGORIES.SVT210SU,
     attributes: vibrationFields,
-    assetTypes: [AssetType.Value.Motor]
+    assetCategories: [AssetCategory.Value.Motor]
   },
   {
     key: Value.OilFiller,
@@ -185,7 +185,7 @@ const configs: Config[] = [
     deviceTypes: [DeviceType.OilFiller],
     properties: CATEGORIES.OilFiller,
     attributes: [],
-    assetTypes: [AssetType.Value.Motor]
+    assetCategories: [AssetCategory.Value.Motor]
   },
   // {
   //   key: Value.Inclination,
@@ -202,7 +202,7 @@ const configs: Config[] = [
     properties: CATEGORIES.TopInclination,
     inclinationDisplacement: 'RADIAL',
     attributes: topInclinationFields,
-    assetTypes: [AssetType.Value.Tower],
+    assetCategories: [AssetCategory.Value.Tower],
     processIdForBindingSensor: 21
   },
   {
@@ -213,7 +213,7 @@ const configs: Config[] = [
     properties: CATEGORIES.BaseInclination,
     inclinationDisplacement: 'AXIAL',
     attributes: baseInclinationFields,
-    assetTypes: [AssetType.Value.Tower],
+    assetCategories: [AssetCategory.Value.Tower],
     processIdForBindingSensor: 21
   },
   {
@@ -223,7 +223,7 @@ const configs: Config[] = [
     deviceTypes: [DeviceType.SPT510],
     properties: CATEGORIES.SPT,
     attributes: [positionField],
-    assetTypes: [AssetType.Value.Device]
+    assetCategories: [AssetCategory.Value.Device]
   },
   {
     key: Value.Temperature,
@@ -232,7 +232,7 @@ const configs: Config[] = [
     deviceTypes: [DeviceType.ST100, DeviceType.ST101L, DeviceType.ST101S],
     properties: CATEGORIES.ST,
     attributes: [positionField],
-    assetTypes: [AssetType.Value.Device]
+    assetCategories: [AssetCategory.Value.Device]
   }
 ];
 // constants end
@@ -320,7 +320,7 @@ export const Key = {
   getFlangeAttributesKey: (key: Value) => get(key)?.flangeAttributesKey,
   getInclinationDisplacement: (key: Value) => get(key)?.inclinationDisplacement ?? 'RADIAL',
   getAttributes: (key: Value) => get(key)?.attributes ?? [],
-  getAssetTypes: (key: Value) => get(key)?.assetTypes ?? [],
+  getAssetCategories: (key: Value) => get(key)?.assetCategories ?? [],
   getProcessId: (key: Value) => get(key)?.processIdForBindingSensor
 };
 
@@ -348,7 +348,7 @@ type Config = {
   flangeAttributesKey?: string;
   inclinationDisplacement?: 'AXIAL' | 'RADIAL';
   attributes: AttributesField[];
-  assetTypes: AssetType.Value[];
+  assetCategories: AssetCategory.Value[];
   processIdForBindingSensor?: number;
 };
 // types end

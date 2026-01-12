@@ -1,11 +1,9 @@
 import React from 'react';
-import { Asset, AssetRow, MonitoringPointRow, useContext } from '../../asset-common';
-import * as Area from '../../features/asset-area';
-import * as Device from '../../features/asset-device';
-import * as Vibration from '../../features/asset-vibration';
-import * as Corrosion from '../../features/asset-corrosion';
-import * as Wind from '../../features/asset-wind-turbine';
-import { MonitoringPoint } from 'views/monitoring-point';
+import { AssetRow, MonitoringPointRow, useContext } from '../../asset-common';
+import { Index as AssetFolder } from 'asset-folder';
+import { Index as AssetPrimary } from 'asset-primary';
+import { Index2 } from 'monitoring-point/index2';
+import { AssetCategory } from 'common/asset-category';
 
 export default function Main() {
   const contextProps = useContext();
@@ -13,19 +11,16 @@ export default function Main() {
 
   if (selectedNode) {
     const { type } = selectedNode;
-    if (Asset.Assert.isArea(type)) {
-      return <Area.Main {...contextProps} />;
-    } else if (Asset.Assert.isDeviceRelated(type)) {
-      return <Device.Index {...{ ...contextProps, asset: selectedNode as AssetRow }} />;
-    } else if (Asset.Assert.isVibrationRelated(type)) {
-      return <Vibration.Index {...{ ...contextProps, asset: selectedNode as AssetRow }} />;
-    } else if (Asset.Assert.isCorrosionRelated(type)) {
-      return <Corrosion.Index {...{ ...contextProps, asset: selectedNode as AssetRow }} />;
-    } else if (Asset.Assert.isWindRelated(type)) {
-      return <Wind.Main {...contextProps} />;
+    if (AssetCategory.Categories.getKeys(['folder']).includes(type)) {
+      return <AssetFolder asset={selectedNode as AssetRow} />;
+    }
+    // else if()  === Asset.WindTurbine
+    // else if()  === Asset.primary
+    else if (type < 10000) {
+      return <AssetPrimary asset={selectedNode as AssetRow} />;
     } else {
       return (
-        <MonitoringPoint
+        <Index2
           monitoringPoint={selectedNode as MonitoringPointRow}
           onSuccess={contextProps.refresh}
         />

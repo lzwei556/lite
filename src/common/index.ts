@@ -1,6 +1,6 @@
-export * as AssetType from './asset-type';
+export * from './area-treenode';
 export * as Axis from './axis';
-export * as CharacteristicData from './characteristic-data';
+export * as FeatureData from './feature-data';
 export * from './constants';
 export type {
   CorrosionAttributes,

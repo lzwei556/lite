@@ -1,4 +1,4 @@
-import { MotorSettings } from 'asset-category';
+import { MotorSettings } from 'common/asset-category';
 import { ProcessDTO } from '../features/process/use-services';
 import { MonitoringPointRow } from '../monitoring-point';
 import { AssetChildrenStatistics } from './utils/statistics';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { roundValue } from '../../../../utils/format';
 import { FakeVSRealChart } from './fakeVSRealChart';
-import { CharacteristicData } from 'common';
+import { FeatureData } from 'common';
 
 export type StatusData = {
   timestamp: number;
@@ -23,7 +23,7 @@ export function SingleStatus({
   properties,
   flangeData
 }: {
-  properties: CharacteristicData.DisplayProperty[];
+  properties: FeatureData.DisplayProperty[];
   flangeData?: StatusData;
 }) {
   const [property, setProperty] = React.useState(properties.length > 0 ? properties[0] : undefined);

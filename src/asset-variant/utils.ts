@@ -1,7 +1,7 @@
 import { mapTree } from '../utils/tree';
 import { AssetRow, useContext } from '../asset-common';
 import { area, device, pipe, tank } from './constants';
-import { AssetCategory } from '../asset-category';
+import { AssetCategory } from 'common/asset-category';
 
 export function isArea(type: number) {
   return type === area.type;
@@ -65,7 +65,9 @@ export function useMonitoringPointParents(
 }
 
 export function isVibrationRelated(type: number) {
-  return AssetCategory.vibrationAssetOptions.map((opt) => opt.type).includes(type);
+  return AssetCategory.Categories.getOptions(['vibration'])
+    .map((opt) => opt.value)
+    .includes(type);
 }
 
 export function isCorrosionRelated(type: number) {

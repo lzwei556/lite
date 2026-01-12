@@ -12,8 +12,9 @@ import { Table } from '../components';
 import { AlarmLevelTag } from '../features/alarm';
 import { MonitoringPoint, MonitoringPointType } from 'common';
 import { useMonitoringPointContext } from './provider';
+import { MonitoringPointRow } from 'asset-common';
 
-export const AlarmRuleSetting = ({ point }: { point: MonitoringPoint }) => {
+export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
   const [rules, setRules] = React.useState<AlarmRule[]>();
   const [loading, setLoading] = React.useState(true);
   const { ruleGroups, refresh } = useMonitoringPointContext();

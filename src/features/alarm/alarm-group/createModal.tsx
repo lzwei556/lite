@@ -17,12 +17,12 @@ import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
 import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
-import { CharacteristicData, MonitoringPointType } from 'common';
+import { FeatureData, MonitoringPointType } from 'common';
 
 export function CreateModal(props: ModalFormProps) {
   const appType = useAppType();
   const [form] = Form.useForm();
-  const [properties, setProperties] = React.useState<CharacteristicData.DisplayProperty[]>([]);
+  const [properties, setProperties] = React.useState<FeatureData.DisplayProperty[]>([]);
   const [metric, setMetric] = React.useState<{ key: string; name: string; unit?: string }[]>([]);
 
   const defaultValues = { duration: 1, operation: '>=', level: AlarmLevel.Critical };
@@ -216,7 +216,7 @@ export function CreateModal(props: ModalFormProps) {
   );
 }
 
-function removeDulpicateProperties(properties: CharacteristicData.DisplayProperty[]) {
+function removeDulpicateProperties(properties: FeatureData.DisplayProperty[]) {
   const final = cloneDeep(properties);
   return final.map((property) => {
     const fields = property.fields;
@@ -228,7 +228,7 @@ function removeDulpicateProperties(properties: CharacteristicData.DisplayPropert
   });
 }
 
-function NormalizeAttitudeIndexProperty(property: CharacteristicData.DisplayProperty) {
+function NormalizeAttitudeIndexProperty(property: FeatureData.DisplayProperty) {
   const p = { ...property };
   return p.key === 'attitude' ? { ...p, key: p.fields?.[0]?.key ?? p.key } : p;
 }

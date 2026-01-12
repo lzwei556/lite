@@ -1,7 +1,7 @@
 import { Asset, AssetRow } from '../asset-common';
 import Tank from './default-image/tank.png';
 import General from './default-image/general.png';
-import { AssetCategory } from '../asset-category';
+import { AssetCategory } from 'common/asset-category';
 
 export const getAssetImage = (asset: AssetRow) => {
   if (asset.image) {

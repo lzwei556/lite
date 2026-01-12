@@ -14,16 +14,24 @@ import {
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
 
+export type CreateFormProps = {
+  loading: boolean;
+  handleSubmit: (values: MonitoringPointPostDTO[]) => void;
+};
+
 export const CreateFormModal = ({
   assetId,
   onSuccess,
   point,
+  loading,
+  handleSubmit,
   ...rest
-}: Omit<ModalFormProps, 'onSuccess'> & {
-  assetId: number;
-  onSuccess: (values: MonitoringPointPostDTO) => void;
-  point?: MonitoringPointPostDTO;
-}) => {
+}: Omit<ModalFormProps, 'onSuccess'> &
+  CreateFormProps & {
+    assetId: number;
+    onSuccess: (values: MonitoringPointPostDTO) => void;
+    point?: MonitoringPointPostDTO;
+  }) => {
   const [form] = Form.useForm();
   const { selectedType: type, ...typeRest } = useType(point?.type);
 
@@ -31,8 +39,12 @@ export const CreateFormModal = ({
     <ModalWrapper
       {...{
         ...rest,
-        afterClose: () => form.resetFields(),
-        onOk: () => form.validateFields().then(onSuccess),
+        afterClose: () => {
+          rest?.afterClose?.();
+          form.resetFields();
+        },
+        onOk: () => form.validateFields().then((values) => handleSubmit([values])),
+        okButtonProps: { loading },
         title: intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') })
       }}
     >

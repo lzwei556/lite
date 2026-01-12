@@ -2,7 +2,7 @@ import React from 'react';
 import { roundValue } from '../../../../utils/format';
 import { AssetRow, Points } from '../../../../asset-common';
 import { FakeVSRealChart } from './fakeVSRealChart';
-import { MonitoringPointType, CharacteristicData } from 'common';
+import { MonitoringPointType, FeatureData } from 'common';
 
 export const RightConentInMonitorTab = ({ asset }: { asset: AssetRow }) => {
   const points = asset.monitoringPoints ?? [];
@@ -10,7 +10,7 @@ export const RightConentInMonitorTab = ({ asset }: { asset: AssetRow }) => {
   const fakes = points
     .filter((point) => MonitoringPointType.Key.filterNonVirtualTypes(point.type))
     .filter((point) => !!point.data);
-  let properties: CharacteristicData.DisplayProperty[] = [];
+  let properties: FeatureData.DisplayProperty[] = [];
   if (actuals.length > 0) {
     properties = MonitoringPointType.Key.getProperties(actuals[0].type, actuals[0].properties);
   }

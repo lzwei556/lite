@@ -12,15 +12,13 @@ import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
 import { MonitoringPoint, MonitoringPointPostDTO, transform2PostDTO } from 'common';
 
-export const UpdateFormCard = ({
-  loading,
-  monitoringPoint,
-  handleSubmit
-}: {
+export type UpdateFormProps = {
   loading: boolean;
   monitoringPoint: MonitoringPoint;
   handleSubmit: (values: MonitoringPointPostDTO) => void;
-}) => {
+};
+
+export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: UpdateFormProps) => {
   const [form] = Form.useForm<MonitoringPointPostDTO>();
   const { selectedType: type, ...typeRest } = useType(monitoringPoint.type);
   return (

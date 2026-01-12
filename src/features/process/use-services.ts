@@ -94,7 +94,7 @@ export type FillRecord = {
 };
 
 export enum DataType {
-  Characteristic,
+  Feature,
   Diagnosis
 }
 

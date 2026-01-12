@@ -16,7 +16,7 @@ export const useAssets = ({ assetId, type }: { assetId?: number; type?: number }
   const { assets } = useContext();
   const parents: AssetRow[] = [];
   mapTree(assets, (asset) => {
-    if (type && MonitoringPointType.Key.getAssetTypes(type).includes(asset.type)) {
+    if (type && MonitoringPointType.Key.getAssetCategories(type).includes(asset.type)) {
       parents.push(asset);
     }
   });

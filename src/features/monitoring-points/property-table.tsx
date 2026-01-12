@@ -26,7 +26,7 @@ export const PropertyTable = ({
 
   if (actualPoints.length > 0) {
     const types = uniq(actualPoints.map((m) => m.type));
-    return <TypedTable actualPoints={actualPoints} types={types} tableProps={tableProps} />;
+    return <TypedTable actualPoints={actualPoints as any} types={types} tableProps={tableProps} />;
   } else {
     return <Table {...{ ...tableProps, columns: basicFieldColumns }} />;
   }

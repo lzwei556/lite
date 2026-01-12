@@ -29,7 +29,7 @@ import { Language, useLocaleContext } from 'localeProvider';
 import { sourceIdField } from './common';
 
 export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
-  const [type, setType] = React.useState(`${DataType.Characteristic}`);
+  const [type, setType] = React.useState(`${DataType.Feature}`);
   const { numberedRange, setRange } = useRange();
   const [from, to] = numberedRange;
   const [page, setPage] = React.useState<{ size: number; page: number }>({ page: 1, size: 10 });

@@ -1,6 +1,6 @@
 import { useAppType } from '../../config';
 import { device, pipe, tank } from '../../asset-variant';
-import { AssetCategory } from '../../asset-category';
+import { AssetCategory } from 'common/asset-category';
 
 export function useAssetCategories() {
   const appType = useAppType();
@@ -9,8 +9,19 @@ export function useAssetCategories() {
     case 'corrosionWirelessHART':
       return [pipe, tank];
     case 'vibration':
-      return AssetCategory.vibrationAssetOptions;
+      return AssetCategory.Categories.getOptions(['vibration']).map((opt) => ({
+        ...opt,
+        type: opt.value
+      }));
     default:
-      return [device, pipe, tank, ...AssetCategory.vibrationAssetOptions];
+      return [
+        device,
+        pipe,
+        tank,
+        ...AssetCategory.Categories.getOptions(['vibration']).map((opt) => ({
+          ...opt,
+          type: opt.value
+        }))
+      ];
   }
 }

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Column } from './settings';
-import { AssetCategory } from '../../../asset-category';
+import { AssetCategory } from 'common/asset-category';
 import { getDisplayName, getOptionLabelByValue } from '../../../utils';
 import intl from 'react-intl-universal';
 import { LightSelectFilter, Table } from '../../../components';
 import { useLocaleContext } from '../../../localeProvider';
 import { AssetRow } from '../../../asset-common';
 import { SelectProps, Space } from 'antd';
-import { SettingsField } from '../../../asset-category/settings';
 import { FieldHelper } from 'types';
+import { SettingsField } from 'common/asset-category/settings';
 
 export const PrimaryAssetTable = ({
   assets,

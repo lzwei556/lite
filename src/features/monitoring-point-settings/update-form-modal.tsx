@@ -1,5 +1,4 @@
 import { Form } from 'antd';
-import { MonitoringPointPostDTO } from 'common/monitoring-point';
 import React from 'react';
 import { ModalFormProps } from 'types/common';
 import { useType } from './use-basic-form-items';
@@ -13,27 +12,32 @@ import {
   TypeSelectFormItem
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
+import { UpdateFormProps } from './update-form';
 
 export const UpdateFormModal = ({
   onSuccess,
-  point,
+  monitoringPoint,
+  loading,
+  handleSubmit,
   ...rest
-}: ModalFormProps & {
-  point: MonitoringPointPostDTO;
-}) => {
+}: ModalFormProps & UpdateFormProps) => {
   const [form] = Form.useForm();
-  const { selectedType: type, ...typeRest } = useType(point.type);
+  const { selectedType: type, ...typeRest } = useType(monitoringPoint.type);
 
   return (
     <ModalWrapper
       {...{
         ...rest,
-        afterClose: () => form.resetFields(),
-        onOk: () => form.validateFields().then(onSuccess),
+        afterClose: () => {
+          rest?.afterClose?.();
+          form.resetFields();
+        },
+        onOk: () => form.validateFields().then(handleSubmit),
+        okButtonProps: { loading },
         title: intl.get('EDIT_SOMETHING', { something: intl.get('monitoring.points') })
       }}
     >
-      <Form form={form} layout='vertical' initialValues={point}>
+      <Form form={form} layout='vertical' initialValues={monitoringPoint}>
         <Grid>
           <FormItemsBasic
             {...{

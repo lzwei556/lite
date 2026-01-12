@@ -2,7 +2,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { Card, LineChart } from '../../../../components';
 import { MONITORING_POINT, PropertyLightSelectFilter } from '../../../../asset-common';
-import { CharacteristicData } from 'common';
+import { FeatureData } from 'common';
 
 export const FakeVSRealChart = ({
   bolts,
@@ -19,8 +19,8 @@ export const FakeVSRealChart = ({
     indexs: number[];
     data: number[];
   };
-  property?: CharacteristicData.DisplayProperty;
-  properties?: CharacteristicData.DisplayProperty[];
+  property?: FeatureData.DisplayProperty;
+  properties?: FeatureData.DisplayProperty[];
 }) => {
   return (
     <Card

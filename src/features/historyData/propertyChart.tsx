@@ -9,12 +9,12 @@ import {
   getOptions,
   SeriesAlarm
 } from '../../components';
-import { CharacteristicData } from 'common';
+import { FeatureData } from 'common';
 
 export const PropertyChart = (
   props: {
     data?: HistoryData;
-    property: CharacteristicData.DisplayProperty;
+    property: FeatureData.DisplayProperty;
     axisKey?: string;
     config?: { opts?: ChartProps['options']; switchs?: { noDataZoom?: boolean; noArea?: boolean } };
     alarm?: Pick<SeriesAlarm, 'rules'> & { propertyKey: string };
@@ -43,7 +43,7 @@ export const PropertyChart = (
 
 export function transform(
   origin: HistoryData | undefined | null,
-  property: CharacteristicData.DisplayProperty,
+  property: FeatureData.DisplayProperty,
   naming?: { replace?: string; prefix?: string },
   axisKey?: string
 ) {
@@ -97,7 +97,7 @@ export function transform(
   };
 }
 
-function getIndex(key?: string, fields?: CharacteristicData.DisplayProperty['fields']) {
+function getIndex(key?: string, fields?: FeatureData.DisplayProperty['fields']) {
   if (!key || !fields || fields.length === 0) {
     return 0;
   }

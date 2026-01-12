@@ -9,7 +9,7 @@ import {
   Points,
   PropertyLightSelectFilter
 } from '../../../../asset-common';
-import { MonitoringPointType, CharacteristicData } from 'common';
+import { MonitoringPointType, FeatureData } from 'common';
 
 export const PointsLineChart = ({
   asset,
@@ -24,7 +24,7 @@ export const PointsLineChart = ({
     return MonitoringPointType.Key.getProperties(firstPoint.type, firstPoint.properties);
   };
   const properties = getProperties();
-  const [property, setProperty] = React.useState<CharacteristicData.DisplayProperty | undefined>(
+  const [property, setProperty] = React.useState<FeatureData.DisplayProperty | undefined>(
     properties?.[0]
   );
   const getTitle = () => {
