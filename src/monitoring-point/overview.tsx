@@ -22,10 +22,10 @@ export const Overview = ({ monitoringPoint }: { monitoringPoint: MonitoringPoint
       <Col flex='300px'>
         <Grid>
           <Col span={24}>
-            <BasicCard monitoringPoint={monitoringPoint} />
+            <BasicCard monitoringPoint={monitoringPoint as any} />
           </Col>
           <Col span={24}>
-            <RelatedDeviceCard monitoringPoint={monitoringPoint} />
+            <RelatedDeviceCard monitoringPoint={monitoringPoint as any} />
           </Col>
         </Grid>
       </Col>

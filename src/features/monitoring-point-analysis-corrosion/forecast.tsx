@@ -7,12 +7,13 @@ import { getValue } from '../../utils/format';
 import { useLocaleContext } from '../../localeProvider';
 import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
 import { MonitoringPoint } from 'common';
+import { MonitoringPointRow } from 'monitoring-point';
 
 export const Forecast = ({
   point,
   range: initialRange
 }: {
-  point: MonitoringPoint;
+  point: MonitoringPointRow;
   range: Range;
 }) => {
   const { id } = point;

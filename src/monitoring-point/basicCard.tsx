@@ -6,8 +6,9 @@ import { useLocaleContext } from '../localeProvider';
 import { MonitoringPoint, MonitoringPointType } from 'common';
 import { MonitoringPointAttributes } from 'common/monitoring-point-attributes';
 import { useAssets } from 'features/monitoring-point-settings/use-basic-form-items';
+import { MonitoringPointRow } from 'asset-common';
 
-export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoint }) => {
+export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
   const { language } = useLocaleContext();
   const { assetId, attributes, type } = monitoringPoint;
   const parent = useAssets({ type }).find((asset) => asset.id === assetId);

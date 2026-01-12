@@ -31,7 +31,7 @@ export const Index2 = ({
     <MonitoringPointProvider id={monitoringPoint.id}>
       <TabsDetail
         items={useFeatures(monitoringPoint)}
-        title={<AssetNavigator asset={monitoringPoint} />}
+        title={<AssetNavigator asset={monitoringPoint as any} />}
       />
     </MonitoringPointProvider>
   );
@@ -99,7 +99,7 @@ const useFeatures = (monitoringPoint: MonitoringPoint) => {
             />
           </Col>
           <Col {...generateColProps({ xl: 16, xxl: 16 })}>
-            <AlarmRuleSetting point={monitoringPoint} key={id} />
+            <AlarmRuleSetting point={monitoringPoint as any} key={id} />
           </Col>
         </Grid>
       )
@@ -122,7 +122,7 @@ const useDynamicFeatures = (point: MonitoringPoint) => {
       {
         key: 'analysis',
         label: intl.get('intelligent.analysis'),
-        content: <CorrosionAnalysis {...point} key={id} />
+        content: <CorrosionAnalysis {...point as any} key={id} />
       }
     ];
   } else if (MonitoringPointType.Categories.getKeys(['vibration']).includes(type)) {

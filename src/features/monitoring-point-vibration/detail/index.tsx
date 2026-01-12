@@ -68,7 +68,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
       items.push({
         key: 'analysis',
         label: intl.get('intelligent.analysis'),
-        content: <VibrationAnalysis id={id} key={id} attributes={attributes} assetId={assetId} />
+        content: <VibrationAnalysis id={id} key={id} attributes={attributes as any} assetId={assetId} />
       });
     } else {
       items.push({

@@ -3,11 +3,11 @@ import { Col, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Grid } from '../../components';
 import { getValue } from '../../utils/format';
-import { CriticalThickness, HistoryData, InitialThickness } from '../../asset-common';
+import { CriticalThickness, HistoryData, InitialThickness, MonitoringPointRow } from '../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
 import { CorrosionAttributes, MonitoringPoint } from 'common';
 
-export const Overview = (props: { point: MonitoringPoint; history: HistoryData | undefined }) => {
+export const Overview = (props: { point: MonitoringPointRow; history: HistoryData | undefined }) => {
   const { history, point } = props;
   const attributes = point.attributes as CorrosionAttributes;
 

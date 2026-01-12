@@ -4,14 +4,14 @@ import { useLocaleContext } from '../../localeProvider';
 import { Dayjs } from '../../utils';
 import { roundValue } from '../../utils/format';
 import { ChartMark } from '../../components';
-import { getThicknessAnalysis, HistoryData } from '../../asset-common';
+import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
 import { HistoryDataFea } from '..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
 import { CharacteristicData, CorrosionAttributes, MonitoringPoint } from 'common';
 
 export const ThicknessChart = (
-  props: MonitoringPoint & {
+  props: MonitoringPointRow & {
     history?: HistoryData;
     property: CharacteristicData.DisplayProperty;
     onDispatchMark?: () => void;
