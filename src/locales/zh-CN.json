@@ -1522,8 +1522,6 @@
   "high.envelope": "高",
   "monitoirng.point.position": "位置",
   "fill.records": "加注记录",
-  "fill.record.characteristic": "特征值",
-  "fill.record.diagnosis": "诊断",
   "fill.result": "结果",
   "fill.result.success": "成功",
   "fill.result.offline": "加注失败，加注器离线",
@@ -1537,9 +1535,13 @@
   "fill.reason.velocity.y": "y轴速度超过阈值",
   "fill.reason.velocity.z": "z轴速度超过阈值",
   "fill.reason.diagnosis": "诊断结果包含故障",
-  "diagnosis.result": "诊断结果",
-  "diagnosis.result.wear": "电动机滚动轴磨损",
-  "diagnosis.result.loose": "电动机滚动轴承松动",
-  "diagnosis.result.non.center": "电机轴承不对中",
-  "diagnosis.result.mounting": "电动机滚动轴承装配问题"
+  "fault.type": "故障类型",
+  "fault.type.wear": "电动机滚动轴磨损",
+  "fault.type.wear.suggestion": "维修建议",
+  "fault.type.loose": "电动机滚动轴承松动",
+  "fault.type.loose.suggestion": "维修建议",
+  "fault.type.non.center": "电机轴承不对中",
+  "fault.type.non.center.suggestion": "维修建议",
+  "fault.type.mounting": "电动机滚动轴承装配问题",
+  "fault.type.mounting.suggestion": "维修建议"
 }
