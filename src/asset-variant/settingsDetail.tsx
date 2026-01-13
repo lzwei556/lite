@@ -9,9 +9,12 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
   if (attributes) {
     const settings = AssetCategory.Key.getSettings(type);
     if (settings.length > 0) {
-      settings[0].fields
+      settings
         .filter((field) => (field.visibleWhen ? field.visibleWhen(attributes) : true))
-        .filter((_, i) => i < 10)
+        .filter(
+          (field) =>
+            field.group === `asset.category.${AssetCategory.Value[type].toLowerCase()}.parameters`
+        )
         .forEach(({ label, name, translatingUnit, type, options, unit }) => {
           const children = FieldHelper.getValue(attributes, name) as string | number | number[];
           if (type === 'string') {
