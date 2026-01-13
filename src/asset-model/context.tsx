@@ -66,12 +66,14 @@ export const AssetModelProvider = ({
   };
 
   React.useEffect(() => {
-    const isSelectedPointValid = monitoringPoints.every((m) => m.self.assetId === asset.id);
-    const selectedMonitoringPoint = monitoringPoints.find((m) => !!m.selected);
-    if (selectedMonitoringPoint?.self.id && isSelectedPointValid) {
-      fetchData(selectedMonitoringPoint.self.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
-    } else {
-      setMonitoringPoints(getInitial(asset));
+    if (monitoringPoints.length > 0) {
+      const isSelectedPointValid = monitoringPoints.every((m) => m.self.assetId === asset.id);
+      const selectedMonitoringPoint = monitoringPoints.find((m) => !!m.selected);
+      if (selectedMonitoringPoint?.self.id && isSelectedPointValid) {
+        fetchData(selectedMonitoringPoint.self.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
+      } else {
+        setMonitoringPoints(getInitial(asset));
+      }
     }
   }, [monitoringPoints, asset]);
 
