@@ -22,6 +22,7 @@ import PumpImage from './assets/pump.png';
 import CompressorImage from './assets/compressor.png';
 import _ from 'lodash';
 import { motorFields } from './motor';
+import * as Component from '../common/components';
 
 // constants begin
 export enum Value {
@@ -132,7 +133,8 @@ const configs: Config[] = [
     children: [],
     settings: motorSettings.map((s) => ({ ...s, source: '' } as SettingsField)),
     iconPath: '',
-    image: MotorImage
+    image: MotorImage,
+    componentIds: [Component.Value.MotorDriveEnd, Component.Value.MotorNonDriveEnd]
   },
   {
     key: Value.Pump,
@@ -182,7 +184,8 @@ export const Key = {
   getSettings: (key: Value) => get(key)?.settings ?? [],
   getGroupedSettings: (key: Value) =>
     Object.entries(_.groupBy(Key.getSettings(key), (field) => field.group ?? '')),
-  getImage: (key: Value) => get(key)?.image
+  getImage: (key: Value) => get(key)?.image,
+  getComponentIds: (key: Value) => get(key)?.componentIds ?? []
 };
 
 export const getNamePath = (source: SettingsField['source']) => {
@@ -210,6 +213,7 @@ type Config = {
   label: string;
   labelPlural?: string;
   children: number[];
+  componentIds?: Component.Value[];
   isRoot?: boolean;
   settings?: SettingsField[];
   filter?: SettingsField;

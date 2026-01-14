@@ -10,7 +10,7 @@ export type Property = {
   precision: number;
 };
 
-const SVT_OPTIONS: Property[] = [
+export const SVT_OPTIONS: Property[] = [
   {
     label: 'FIELD_ACCELERATION',
     value: 'acceleration',

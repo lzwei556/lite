@@ -1,20 +1,22 @@
 import React from 'react';
 import { Space } from '../../common';
 import { Flex } from '../flex';
-import { Card } from './card';
+import { Card, CardProps } from './card';
 
 export const MutedCard = ({
   children,
   title,
   titleCenter = false,
   extra,
-  style
+  style,
+  styles
 }: {
   children: React.ReactNode;
   title: React.ReactNode;
   titleCenter?: boolean;
   extra?: React.ReactNode;
   style?: React.CSSProperties;
+  styles?: CardProps['styles'];
 }) => {
   let justify: React.CSSProperties['justifyContent'] = 'flex-start';
   if (titleCenter) {
@@ -25,7 +27,7 @@ export const MutedCard = ({
   }
 
   return (
-    <Card style={style}>
+    <Card style={style} styles={styles}>
       <Flex align='center' justify={justify} style={{ marginBottom: Space }}>
         <span style={{ fontSize: 16 }}>{title}</span>
         {extra}

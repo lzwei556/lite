@@ -9,6 +9,8 @@ import {
   unbindDevice,
   updateMeasurement
 } from '../../asset-common';
+import { AssetCategory } from 'asset-category';
+import { Component, MonitoringPointType } from 'common';
 
 export function useSelectPoints(form: FormInstance<MonitoringPointBatch>) {
   const [selectedPoints, setSelectPoints] = React.useState<MonitoringPointInfo[]>([]);
@@ -68,3 +70,12 @@ export function handleSubmit(
     console.log(error);
   }
 }
+
+export const useComponents = (type: number) => {
+  const assetTypes = MonitoringPointType.Key.getAssetTypes(type);
+  const componentIds: number[] = [];
+  assetTypes.forEach((type) => {
+    componentIds.push(...AssetCategory.Key.getComponentIds(type));
+  });
+  return Array.from(new Set(componentIds)).map((id) => Component.Key.get(id));
+};

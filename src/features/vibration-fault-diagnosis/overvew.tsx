@@ -1,65 +1,49 @@
 import React from 'react';
-import { FaultDiagnosis } from './common';
+import { FaultDiagnosis, useHealthStatus } from './common';
 import { Avatar, Col, Space } from 'antd';
-import { getHealthStatusByValue, HealthStatus, healthStatusTable } from './health-status';
+import { HealthStatus, getOptions } from './health-status';
 import { Descriptions, Grid, MutedCard } from '../../components';
 import intl from 'react-intl-universal';
-import { useLocaleContext } from '../../localeProvider';
 import { Dayjs } from '../../utils';
-import { getFaultByCategory } from './fault';
 
-export const FaultDiagnosisOverview = ({
-  name
-}: // diagnosis
-// }: { name: string } & { diagnosis: FaultDiagnosis }) => {
-{
-  name: string;
-}) => {
-  const diagnosis: FaultDiagnosis = {
-    healthIndex: 48,
-    timestamp: 1762486214,
-    status: getHealthStatusByValue(3),
-    faults: [1].map(getFaultByCategory)
-  };
-
+export const FaultDiagnosisOverview = (props: FaultDiagnosis) => {
   return (
-    <MutedCard title={intl.get('diagnosis.asset.health')} extra={Dayjs.format(diagnosis.timestamp)}>
+    <MutedCard title={intl.get('diagnosis.asset.health')} extra={Dayjs.format(props.timestamp)}>
       <Grid wrap={false} align='middle'>
         <Col flex='auto'>
-          <DiagnosisDescription {...{ name, ...diagnosis }} />
+          <DiagnosisDescription {...props} />
         </Col>
         <Col
           flex='280px'
           style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         >
-          <HealthyCard {...diagnosis} />
+          <HealthyCard {...props} />
         </Col>
       </Grid>
     </MutedCard>
   );
 };
 
-const DiagnosisDescription = ({ faults, name, status }: { name: string } & FaultDiagnosis) => {
-  const { language } = useLocaleContext();
-  const separator = language === 'en-US' ? '; ' : '；';
+const DiagnosisDescription = ({ conclusion, components, status }: FaultDiagnosis) => {
+  const { healthy, description, suggestion } = useHealthStatus({
+    status,
+    faultTypes: components.reduce((prev, crt) => [...prev, ...crt.faultTypes], [] as number[])
+  });
+
   return (
     <Descriptions
       items={[
-        { label: intl.get('ASSET'), children: name },
         {
-          label: intl.get('diagnosis.health'),
+          label: healthy.label,
           children: (
-            <span style={{ color: `rgba(${status.color.join()})` }}>{intl.get(status.label)}</span>
+            <span style={{ color: `rgba(${healthy.status.color.join()})` }}>
+              {intl.get(healthy.status.label)}
+            </span>
           )
         },
-        {
-          label: intl.get('diagnosis.description'),
-          children: faults.map(({ description }) => intl.get(description)).join(separator)
-        },
-        {
-          label: intl.get('diagnosis.suggestion'),
-          children: faults.map(({ suggestion }) => intl.get(suggestion)).join(separator)
-        }
+        { label: intl.get('diagnosis.conclusion'), children: '' },
+        description,
+        suggestion
       ]}
       labelStyle={{ width: '6em' }}
       contentStyle={{ justifyContent: 'flex-start' }}
@@ -72,7 +56,7 @@ const HealthyCard = (diagnosis: FaultDiagnosis) => {
     <Space direction='vertical' align='center'>
       <HealthIndex {...diagnosis} />
       <div>
-        {Object.values(healthStatusTable).map((status) => (
+        {getOptions().map((status) => (
           <HealthStatusTag {...status} key={status.label} />
         ))}
       </div>
@@ -97,7 +81,7 @@ const HealthIndex = ({ healthIndex, status }: FaultDiagnosis) => {
   );
 };
 
-const HealthStatusTag = ({ color, label, range }: Omit<HealthStatus, 'value'>) => {
+const HealthStatusTag = ({ color, label, range }: Omit<HealthStatus, 'key'>) => {
   return (
     <Space
       direction='vertical'

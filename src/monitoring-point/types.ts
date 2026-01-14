@@ -10,6 +10,7 @@ export type MonitoringPoint = {
   attributes?: { index?: number };
   channel?: number;
   device_type?: number;
+  component_id?: number;
 };
 
 export type MonitoringPointRow = {
@@ -17,6 +18,7 @@ export type MonitoringPointRow = {
   name: string;
   type: number;
   assetId: number;
+  componentId?: number;
   bindingDevices?: (Device & { channel?: number })[];
   attributes?: {
     index: number;
@@ -41,7 +43,7 @@ export type MonitoringPointRow = {
   };
   alertLevel?: number;
   parentId: number;
-  actions?:ProcessDTO[]
+  actions?: ProcessDTO[];
 };
 
 export type Property = {
@@ -92,6 +94,7 @@ export type MonitoringPointBatch = {
 };
 export type MonitoringPointInfo = {
   name: string;
+  componentId?: number;
   dev_id: number;
   dev_name: string;
   dev_type: number;

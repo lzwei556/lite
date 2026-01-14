@@ -12,7 +12,12 @@ export type TimeDomainData = {
   xAxisUnit?: string;
 };
 
-export function useTimeDomain({ id, timestamp, axis, property }: AnalysisCommonProps) {
+export function useTimeDomain({
+  id,
+  timestamp,
+  axis,
+  property
+}: Omit<AnalysisCommonProps, 'timestamps' | 'parent'>) {
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<TimeDomainData>();
   React.useEffect(() => {

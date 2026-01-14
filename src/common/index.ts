@@ -1,6 +1,7 @@
 export * as AssetType from './asset-type';
 export * as Axis from './axis';
 export * as CharacteristicData from './characteristic-data';
+export * as Component from './components';
 export * from './constants';
 export * as FaultType from './fault-types';
 export type {

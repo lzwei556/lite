@@ -55,6 +55,8 @@ export type AssetRow = {
     canvasSnapshot?: { id: number; x: number; y: number }[];
   } & Partial<MotorSettings>;
   actions?: ProcessDTO[];
+  diagnosisIsEnabled: boolean;
+  diagnosisPeriod: number;
 };
 
 export type AssetCategory = { type: number; label: string; labelPlural?: string };

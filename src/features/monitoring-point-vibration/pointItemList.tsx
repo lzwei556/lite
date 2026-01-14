@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Col, Form, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { Grid, TextFormItem } from '../../components';
+import { Grid, SelectFormItem, TextFormItem } from '../../components';
 import { Device } from '../../types/device';
 import { isMobile } from '../../utils/deviceDetection';
 import { generateColProps } from '../../utils/grid';
@@ -11,6 +11,7 @@ import { AXIS, AXIS_ALIAS, DeviceSelection, MonitoringPointInfo } from '../../as
 import { useGlobalStyles } from '../../styles';
 import { Others } from './others';
 import { MonitoringPointType } from 'common';
+import { useComponents } from './common';
 
 export const PointItemList = ({
   onSelect,
@@ -31,6 +32,8 @@ export const PointItemList = ({
     const deviceTypes = MonitoringPointType.Key.getDeviceTypes(type);
     if (deviceTypes) GetDevicesRequest({ types: deviceTypes.join(',') }).then(setDevices);
   }, [type]);
+
+  const components = useComponents(type);
 
   return (
     <Form.List
@@ -78,11 +81,28 @@ export const PointItemList = ({
                   />
                 </Col>
                 {type !== MonitoringPointType.Value.OilFiller && (
-                  <Others
-                    formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
-                    nameIndex={name}
-                    restFields={restFields}
-                  />
+                  <>
+                    <Col {...generateColProps({ xl: 12, xxl: 12 })}>
+                      <SelectFormItem
+                        {...restFields}
+                        label='common.component'
+                        name={[name, 'component_id']}
+                        selectProps={{
+                          options: components.map((opt) => ({
+                            ...opt,
+                            value: opt.key,
+                            label: intl.get(opt.label)
+                          }))
+                        }}
+                        rules={[{ required: true }]}
+                      />
+                    </Col>
+                    <Others
+                      formItemColProps={generateColProps({ xl: 12, xxl: 12 })}
+                      nameIndex={name}
+                      restFields={restFields}
+                    />
+                  </>
                 )}
               </Grid>
             </div>

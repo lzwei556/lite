@@ -45,6 +45,7 @@ export const Point = {
         : undefined;
     return {
       id: values.id,
+      component_id: values.componentId ? values.componentId : undefined,
       name: values.name,
       type: values.type,
       asset_id: values.assetId,

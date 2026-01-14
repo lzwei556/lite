@@ -6,18 +6,35 @@ import { AssetRow, AlarmsObjectStatistics, AlarmTrend } from '../../asset-common
 import { SelectedPointPropertyHistory } from '../../asset-model';
 import { SettingsDetail } from '../../asset-variant';
 import { AssetAnnotationImage } from '../imageAnnotation';
+import {
+  ComponentsHealthyList,
+  FaultDiagnosis,
+  FaultDiagnosisOverview
+} from 'features/vibration-fault-diagnosis';
+import { shouldDisplayDiagnosis } from '.';
 
-export const Overview = (props: { asset: AssetRow; onSuccess?: () => void }) => {
-  const { asset, onSuccess } = props;
+export const Overview = (props: {
+  asset: AssetRow;
+  onSuccess?: () => void;
+  diagnosis?: FaultDiagnosis;
+}) => {
+  const { asset, onSuccess, diagnosis } = props;
   const number = asset.monitoringPoints?.length ?? 0;
+  const should = shouldDisplayDiagnosis(asset) && !!diagnosis;
 
   return (
-    <Grid wrap={false} align='stretch'>
+    <Grid wrap={false}>
       <Col flex='auto'>
-        <Grid style={{ height: '100%' }}>
+        <Grid>
+          {should && (
+            <Col span={24}>
+              <FaultDiagnosisOverview {...diagnosis} />
+            </Col>
+          )}
           <Col span={24}>
             <AssetAnnotationImage
               asset={asset}
+              title={intl.get('monitoring.points')}
               key={`${asset.id}_${number}_${asset.image}`}
               onSuccess={onSuccess}
             />
@@ -31,6 +48,14 @@ export const Overview = (props: { asset: AssetRow; onSuccess?: () => void }) => 
       </Col>
       <Col flex='300px'>
         <Grid>
+          {should && (
+            <Col span={24}>
+              <ComponentsHealthyList
+                {...diagnosis}
+                cardProps={{ styles: { body: { overflow: 'auto', maxHeight: 300 } } }}
+              />
+            </Col>
+          )}
           <Col span={24}>
             <MutedCard title={intl.get('BASIC_INFORMATION')}>
               <SettingsDetail attributes={asset.attributes} type={asset.type} />

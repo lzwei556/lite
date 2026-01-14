@@ -38,17 +38,20 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
           form.validateFields().then((values) => {
             try {
               addMonitoringPoints({
-                monitoring_points: values.monitoring_points.map(({ dev_id, name, attributes }) => {
-                  const process_id = 1;
-                  const device_binding = { device_id: dev_id, process_id };
-                  return {
-                    name,
-                    type: values.type,
-                    attributes,
-                    device_binding,
-                    asset_id: values.asset_id
-                  };
-                })
+                monitoring_points: values.monitoring_points.map(
+                  ({ componentId, dev_id, name, attributes }) => {
+                    const process_id = 1;
+                    const device_binding = { device_id: dev_id, process_id };
+                    return {
+                      name,
+                      componentId,
+                      type: values.type,
+                      attributes,
+                      device_binding,
+                      asset_id: values.asset_id
+                    };
+                  }
+                )
               }).then(() => {
                 onSuccess();
               });

@@ -8,10 +8,12 @@ import { useParents } from './utils';
 
 export const BasisFormItems = ({
   types,
-  formItemColProps = generateColProps({ xl: 12, xxl: 12 })
+  formItemColProps = generateColProps({ xl: 12, xxl: 12 }),
+  vibrationDiagnosis
 }: {
   types: AssetCategory[];
   formItemColProps?: ColProps;
+  vibrationDiagnosis?: React.ReactNode;
 }) => {
   const parents = useParents();
 
@@ -31,6 +33,7 @@ export const BasisFormItems = ({
       <Col {...formItemColProps}>
         <TypeFormItem disabled={true} types={types} />
       </Col>
+      {vibrationDiagnosis}
     </Grid>
   );
 };

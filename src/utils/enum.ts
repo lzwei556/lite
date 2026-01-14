@@ -24,3 +24,7 @@ export const getKeyByValue = (em: NumericEnum, value: number, labelPrefix?: stri
   }
   return `${labelPrefix}.${transformSnake2Dot(toSnake(_key))}`;
 };
+
+export const iterate = (em: NumericEnum) => {
+  return Object.values(em).filter((key) => typeof key === 'number');
+};
