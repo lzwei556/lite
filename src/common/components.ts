@@ -5,7 +5,9 @@ export enum Value {
   MotorDriveEnd = 10011,
   MotorNonDriveEnd = 10021,
   FanDriveEnd = 20011,
-  FanNonDriveEnd = 20021
+  FanNonDriveEnd = 20021,
+  BearingHorizontal = 30011,
+  BearingVertical = 30021
 }
 
 type Component = {

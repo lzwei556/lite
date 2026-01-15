@@ -134,7 +134,12 @@ const configs: Config[] = [
     settings: motorSettings.map((s) => ({ ...s, source: '' } as SettingsField)),
     iconPath: '',
     image: MotorImage,
-    componentIds: [Component.Value.MotorDriveEnd, Component.Value.MotorNonDriveEnd]
+    componentIds: [
+      Component.Value.MotorDriveEnd,
+      Component.Value.MotorNonDriveEnd,
+      Component.Value.BearingHorizontal,
+      Component.Value.BearingVertical
+    ]
   },
   {
     key: Value.Pump,

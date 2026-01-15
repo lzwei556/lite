@@ -1538,6 +1538,8 @@
   "diagnosis.conclusion": "Conclusion",
   "component.motor.drive.end": "Motor drive end",
   "component.motor.non.drive.end": "Motor non drive end",
+  "component.bearing.horizontal": "Bearing Horizontal Direction",
+  "component.bearing.vertical": "Bearing Vertical Direction",
   "common.component": "Component",
   "feature.data": "Feature Data",
   "diagnosis.enabled": "Diagnosis Enabled",

@@ -1538,6 +1538,8 @@
   "diagnosis.conclusion": "诊断结论",
   "component.motor.drive.end": "电机驱动端",
   "component.motor.non.drive.end": "电机非驱动端",
+  "component.bearing.horizontal": "轴承水平",
+  "component.bearing.vertical": "轴承垂直",
   "common.component": "组件",
   "feature.data": "特征值",
   "diagnosis.enabled": "诊断是否启用",

@@ -77,5 +77,7 @@ export const useComponents = (type: number) => {
   assetTypes.forEach((type) => {
     componentIds.push(...AssetCategory.Key.getComponentIds(type));
   });
-  return Array.from(new Set(componentIds)).map((id) => Component.Key.get(id));
+  return [{ key: 0, label: 'NONE' }].concat(
+    Array.from(new Set(componentIds)).map((id) => Component.Key.get(id))
+  );
 };
