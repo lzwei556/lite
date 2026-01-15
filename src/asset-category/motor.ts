@@ -53,7 +53,7 @@ export const rotationSpeed: Field<MotorSettings> = {
   description: 'rotation.speed.desc',
   type: 'number',
   unit: 'rpm',
-  defaultValue: 1000
+  defaultValue: 745
 };
 
 export const motorFields: Field<MotorSettings>[] = [
@@ -95,7 +95,7 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'bearing.d.desc',
     type: 'number',
     unit: 'm',
-    defaultValue: 0.01,
+    defaultValue: 0.00675,
     group: 'bearing.parameters'
   },
   {
@@ -104,7 +104,7 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'bearing.big.d.desc',
     type: 'number',
     unit: 'm',
-    defaultValue: 0.05,
+    defaultValue: 0.02905,
     group: 'bearing.parameters'
   },
   {
@@ -113,7 +113,7 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'bearing.theta.desc',
     type: 'number',
     unit: 'rad',
-    defaultValue: 0.5236,
+    defaultValue: 0,
     group: 'bearing.parameters'
   },
   {
@@ -169,66 +169,66 @@ export const motorFields: Field<MotorSettings>[] = [
   //   type: 'enum',
   //   defaultValue: RotationMode.Inner
   // },
-  {
-    label: 'motor.vel.base.vel.base.1.10x',
-    name: 'vel_base.vel_base_1_10X',
-    description: 'vel.base.vel.base.1.10x.desc',
-    type: 'number-array',
-    defaultValue: [20, 25, 30, 35, 40, 45, 50, 55, 60, 65],
-    group: 'velocity.parameters'
-  },
-  {
-    label: 'motor.vel.base.vel.non.int.base.0.10x',
-    name: 'vel_base.vel_non_int_base_0_10X',
-    description: 'vel.base.vel.non.int.base.0.10x.desc',
-    type: 'number',
-    unit: 'dB',
-    defaultValue: 25,
-    group: 'velocity.parameters'
-  },
-  {
-    label: 'motor.vel.base.vel.base.10.40x',
-    name: 'vel_base.vel_base_10_40X',
-    description: 'vel.base.vel.base.10.40x.desc',
-    type: 'number',
-    unit: 'dB',
-    defaultValue: 30,
-    group: 'velocity.parameters'
-  },
-  {
-    label: 'motor.vel.base.vel.base.40.99x',
-    name: 'vel_base.vel_base_40_99X',
-    description: 'vel.base.vel.base.40.99x.desc',
-    type: 'number',
-    unit: 'dB',
-    defaultValue: 35,
-    group: 'velocity.parameters'
-  },
-  {
-    label: 'motor.vel.base.vel.base.bearing',
-    name: 'vel_base.vel_base_bearing',
-    description: 'vel.base.vel.base.bearing.desc',
-    type: 'number',
-    unit: 'dB',
-    defaultValue: 40,
-    group: 'velocity.parameters'
-  },
-  {
-    label: 'motor.vel.base.vel.base.100.hz',
-    name: 'vel_base.vel_base_100Hz',
-    description: 'vel.base.vel.base.100hz.desc',
-    type: 'number',
-    unit: 'dB',
-    defaultValue: 45,
-    group: 'velocity.parameters'
-  },
-  {
-    label: 'motor.vel.base.vel.base.mfb',
-    name: 'vel_base.vel_base_mfb',
-    description: 'vel.base.vel.base.mfb.desc',
-    type: 'number',
-    unit: 'dB',
-    defaultValue: 50,
-    group: 'velocity.parameters'
-  }
+  // {
+  //   label: 'motor.vel.base.vel.base.1.10x',
+  //   name: 'vel_base.vel_base_1_10X',
+  //   description: 'vel.base.vel.base.1.10x.desc',
+  //   type: 'number-array',
+  //   defaultValue: [105, 90, 85, 85, 85, 85, 80, 80, 80, 80],
+  //   group: 'velocity.parameters'
+  // },
+  // {
+  //   label: 'motor.vel.base.vel.non.int.base.0.10x',
+  //   name: 'vel_base.vel_non_int_base_0_10X',
+  //   description: 'vel.base.vel.non.int.base.0.10x.desc',
+  //   type: 'number',
+  //   unit: 'dB',
+  //   defaultValue: 80,
+  //   group: 'velocity.parameters'
+  // },
+  // {
+  //   label: 'motor.vel.base.vel.base.10.40x',
+  //   name: 'vel_base.vel_base_10_40X',
+  //   description: 'vel.base.vel.base.10.40x.desc',
+  //   type: 'number',
+  //   unit: 'dB',
+  //   defaultValue: 75,
+  //   group: 'velocity.parameters'
+  // },
+  // {
+  //   label: 'motor.vel.base.vel.base.40.99x',
+  //   name: 'vel_base.vel_base_40_99X',
+  //   description: 'vel.base.vel.base.40.99x.desc',
+  //   type: 'number',
+  //   unit: 'dB',
+  //   defaultValue: 70,
+  //   group: 'velocity.parameters'
+  // },
+  // {
+  //   label: 'motor.vel.base.vel.base.bearing',
+  //   name: 'vel_base.vel_base_bearing',
+  //   description: 'vel.base.vel.base.bearing.desc',
+  //   type: 'number',
+  //   unit: 'dB',
+  //   defaultValue: 80,
+  //   group: 'velocity.parameters'
+  // },
+  // {
+  //   label: 'motor.vel.base.vel.base.100.hz',
+  //   name: 'vel_base.vel_base_100Hz',
+  //   description: 'vel.base.vel.base.100hz.desc',
+  //   type: 'number',
+  //   unit: 'dB',
+  //   defaultValue: 80,
+  //   group: 'velocity.parameters'
+  // },
+  // {
+  //   label: 'motor.vel.base.vel.base.mfb',
+  //   name: 'vel_base.vel_base_mfb',
+  //   description: 'vel.base.vel.base.mfb.desc',
+  //   type: 'number',
+  //   unit: 'dB',
+  //   defaultValue: 80,
+  //   group: 'velocity.parameters'
+  // }
 ];
