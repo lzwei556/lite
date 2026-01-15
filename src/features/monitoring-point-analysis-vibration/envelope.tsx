@@ -19,7 +19,9 @@ export const Envelope = ({
   property,
   timeDomain,
   originalDomain,
-  parent
+  parent,
+  id,
+  timestamp
 }: AnalysisCommonProps) => {
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
@@ -29,8 +31,7 @@ export const Envelope = ({
   const { filter_type_related, setFilter_type_related } = useFilterTypeRelated();
   const { marks, handleClick, isTypeSideband, handleRefresh, markType } = useMarkChartProps();
   const rotation_speed = parent.attributes?.rotation_speed;
-  //@ts-ignore
-  const { faultFrequency } = useFaultFrequency(parent.attributes);
+  const { faultFrequency } = useFaultFrequency(id, timestamp);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {

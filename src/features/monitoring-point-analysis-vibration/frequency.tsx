@@ -35,7 +35,7 @@ export const Frequency = ({
   );
   const rotation_speed = parent.attributes?.rotation_speed;
   //@ts-ignore
-  const { faultFrequency } = useFaultFrequency(parent.attributes);
+  const { faultFrequency } = useFaultFrequency(id, timestamp);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
