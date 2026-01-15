@@ -125,11 +125,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
           {
             key: 'time-envelope',
             label: 'time.envelope',
-            children: (
-              <ChartMark.Context>
-                <TimeEnvelope {...{ ...props, axis, property, originalDomain }} />
-              </ChartMark.Context>
-            )
+            children: <TimeEnvelope {...{ ...props, axis, property, originalDomain }} />
           },
           {
             key: 'envelope',
@@ -143,55 +139,37 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
           {
             key: 'power',
             label: 'power.spectrum',
-            children: (
-              <MarkContext>
-                <Power {...{ ...props, axis, property, originalDomain }} />
-              </MarkContext>
-            )
+            children: <Power {...{ ...props, axis, property, originalDomain }} />
           },
           {
             key: 'cross',
             label: 'cross.spectrum',
             children: (
-              <ChartMark.Context>
-                <Cross
-                  {...{
-                    ...props,
-                    axis,
-                    property,
-                    originalDomain,
-                    currentFilters: <Space>{renderAxisSelect()}</Space>
-                  }}
-                />
-              </ChartMark.Context>
+              <Cross
+                {...{
+                  ...props,
+                  axis,
+                  property,
+                  originalDomain,
+                  currentFilters: <Space>{renderAxisSelect()}</Space>
+                }}
+              />
             )
           },
           {
             key: 'zoom',
             label: 'zoom.fft',
-            children: (
-              <MarkContext>
-                <Zoom {...{ ...props, axis, property, originalDomain }} />
-              </MarkContext>
-            )
+            children: <Zoom {...{ ...props, axis, property, originalDomain }} />
           },
           {
             key: 'cepstrum',
             label: 'cepstrum',
-            children: (
-              <MarkContext>
-                <Cepstrum {...{ ...props, axis, property, originalDomain }} />
-              </MarkContext>
-            )
+            children: <Cepstrum {...{ ...props, axis, property, originalDomain }} />
           },
           {
             key: 'time-frequency',
             label: 'stft',
-            children: (
-              <ChartMark.Context>
-                <TimeFrequency {...{ ...props, axis, property, originalDomain }} />
-              </ChartMark.Context>
-            )
+            children: <TimeFrequency {...{ ...props, axis, property, originalDomain }} />
           }
           // {
           //   key: 'water-fall',

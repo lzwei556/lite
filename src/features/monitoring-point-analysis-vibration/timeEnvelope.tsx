@@ -1,9 +1,10 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { ChartMark } from 'components';
 import { timeEnvelope } from 'asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
+import { CardChart, useLinedSeriesOptions } from 'components';
+import { Space } from 'antd';
 
 export const TimeEnvelope = ({ property, originalDomain }: AnalysisCommonProps) => {
   const [loading, setLoading] = React.useState(true);
@@ -32,42 +33,46 @@ export const TimeEnvelope = ({ property, originalDomain }: AnalysisCommonProps) 
   }, [originalDomain, property.value, window, filter_type_related]);
 
   return (
-    <ChartMark.Chart
-      config={{
-        opts: {
-          xAxis: { axisLabel: { interval: Math.floor(x.length / 20) } },
-          yAxis: { name: property.unit },
-          dataZoom: [{ start: 0, end: 100 }],
-          grid: { top: 30, bottom: 60, right: 30 }
-        }
+    <CardChart
+      cardProps={{
+        extra: (
+          <Space size={4}>
+            <Window onOk={setWindow} key='window' />
+            <FilterTypeRelated
+              onOk={setFilter_type_related}
+              initial={[
+                filter_type_related.cutoff_range_low!,
+                filter_type_related.cutoff_range_high!
+              ]}
+              key='filter_type'
+            />
+          </Space>
+        )
       }}
       loading={loading}
-      series={[
-        {
-          data: { [intl.get('time.envelope')]: y },
-          xAxisValues: x.map((n, i) => `${i}`)
+      options={useLinedSeriesOptions({
+        config: {
+          opts: {
+            xAxis: { axisLabel: { interval: Math.floor(x.length / 20) } },
+            yAxis: { name: property.unit },
+            dataZoom: [{ start: 0, end: 100 }],
+            grid: { top: 30, bottom: 60, right: 30 }
+          },
+          switchs: { noArea: true }
         },
-        {
-          data: { [intl.get('signal')]: x },
-          xAxisValues: x.map((n, i) => `${i}`)
-        }
-      ]}
+        series: [
+          {
+            data: { [intl.get('time.envelope')]: y },
+            xAxisValues: x.map((n, i) => `${i}`)
+          },
+          {
+            data: { [intl.get('signal')]: x },
+            xAxisValues: x.map((n, i) => `${i}`)
+          }
+        ],
+        yAxisMeta: { ...property, unit: property.unit }
+      })}
       style={{ height: 450 }}
-      toolbar={{
-        visibles: ['save_image'],
-        extra: [
-          <Window onOk={setWindow} key='window' />,
-          <FilterTypeRelated
-            onOk={setFilter_type_related}
-            initial={[
-              filter_type_related.cutoff_range_low!,
-              filter_type_related.cutoff_range_high!
-            ]}
-            key='filter_type'
-          />
-        ]
-      }}
-      yAxisMeta={{ ...property, unit: property.unit }}
     />
   );
 };
