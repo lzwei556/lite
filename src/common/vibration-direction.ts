@@ -1,9 +1,9 @@
 import { toPascal } from 'ts-case-convert';
 
 export const direction = {
-  Axial: { key: 'axial', label: 'axis.axial', abbr: 'axis.axial.abbr', sort: 0 },
+  Axial: { key: 'axial', label: 'axis.axial', abbr: 'axis.axial.abbr', sort: 2 },
   Vertical: { key: 'vertical', label: 'axis.vertical', abbr: 'axis.vertical.abbr', sort: 1 },
-  Horizontal: { key: 'horizontal', label: 'axis.horizontal', abbr: 'axis.horizontal.abbr', sort: 2 }
+  Horizontal: { key: 'horizontal', label: 'axis.horizontal', abbr: 'axis.horizontal.abbr', sort: 0 }
 } as const;
 
 export const options = [direction.Axial, direction.Vertical, direction.Horizontal];

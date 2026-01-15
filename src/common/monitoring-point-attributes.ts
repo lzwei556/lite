@@ -16,7 +16,8 @@ export const useAxisWithVibrationDirection = (attrs?: VibrationDirectionAttribut
       const direction = getVibrationDirectionByAxisKey(opt.key, attrs);
       return { ...opt, direction };
     }),
-    (option) => option.direction?.sort
+    (option) => option.direction?.sort ?? option.value,
+    'desc'
   ).map(({ direction, ...rest }) => ({ ...rest, label: direction ? direction.label : rest.label }));
   const [axis, setAxis] = React.useState(options[0]);
   return { axis, setAxis, options };
