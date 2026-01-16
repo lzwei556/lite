@@ -1,7 +1,7 @@
 import React from 'react';
 import { Space, Tabs } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, ChartMark, LightSelectFilter } from 'components';
+import { Card, LightSelectFilter } from 'components';
 import { AssetRow } from 'asset-common';
 import { Property, useProperties } from './useTrend';
 import { TimeDomain } from './timeDomain';
