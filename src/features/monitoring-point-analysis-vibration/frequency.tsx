@@ -1,18 +1,16 @@
 import React from 'react';
-import { Col } from 'antd';
+import { Col, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { ChartMark, Descriptions, Grid } from 'components';
+import { ChartMark, Grid } from 'components';
 import { frequency, FrequencyAnalysis } from 'asset-common';
 import { AnalysisCommonProps } from './analysisContent';
 import Sideband from './sideband';
-import { MarkList, Toolbar, useMarkChartProps, ConfigurableNumsOfCursor } from './mark';
+import { Toolbar, useMarkChartProps, useDatazoom } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { useFaultFrequency } from './useFaultFrequency';
-import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
-import { Sidebar } from './mark/sidebar';
-import { rotationSpeed } from 'asset-category';
 import { getValue, roundValue } from 'utils';
-import { AnalysisSidebarCollapse } from '..';
+import { SidebarMarkList } from './sidebar-mark-list';
+import { SettingsForm } from './mark/settings-form';
 
 export const Frequency = ({
   axis,
@@ -27,14 +25,23 @@ export const Frequency = ({
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<FrequencyAnalysis>();
   const { x = [], y = [] } = data || {};
-  const { marks, handleClick, isTypeSideband, handleRefresh, markType } = useMarkChartProps();
+  const {
+    marks,
+    handleClick,
+    isTypeSideband,
+    handleRefreshHarmonic,
+    handleRefreshSideband,
+    handleToggleMarks,
+    handleRestore,
+    markType
+  } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
     timestamp,
     `${property.value}FrequencyDomain`
   );
-  const rotation_speed = parent.attributes?.rotation_speed;
-  //@ts-ignore
+  const rotation_speed = parent.attributes?.rpm;
+  const dataZoom = useDatazoom();
   const { faultFrequency } = useFaultFrequency(id, timestamp);
   const [open, setOpen] = React.useState(false);
 
@@ -65,14 +72,42 @@ export const Frequency = ({
           value
         }))
       : [];
-    handleRefresh(x, y, { harmonic: data, faultFrequencies });
-  }, [handleRefresh, x, y, data, faultFrequency]);
+    handleToggleMarks(x, y, faultFrequencies);
+  }, [handleToggleMarks, x, y, faultFrequency]);
+
+  React.useEffect(() => {
+    handleRefreshHarmonic(x, y, data);
+  }, [handleRefreshHarmonic, x, y, data]);
+
+  React.useEffect(() => {
+    handleRefreshSideband(x, y);
+  }, [handleRefreshSideband, x, y]);
 
   return (
     <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
-          cardProps={{ extra: <Toolbar /> }}
+          cardProps={{
+            title: (
+              <Space>
+                {[
+                  {
+                    label: intl.get('SETTING_RANGE'),
+                    children: getValue({ value: range, unit: 'g' })
+                  },
+                  {
+                    label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                    children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
+                  },
+                  { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                ].map((item) => (
+                  <span style={{ fontSize: 14, fontWeight: 400 }}>
+                    <Typography.Text type='secondary'>{item.label}</Typography.Text> {item.children}
+                  </span>
+                ))}
+              </Space>
+            )
+          }}
           config={{
             opts: {
               xAxis: {
@@ -83,9 +118,31 @@ export const Frequency = ({
                 }
               },
               yAxis: { name: property.unit },
-              dataZoom: [{ start: 0, end: 100 }],
+              dataZoom: dataZoom ?? [{ start: 0, end: 40 }],
               grid: { top: 60, bottom: 60, right: 30 }
             }
+          }}
+          features={{
+            download: {
+              onClick() {
+                downlaodRawDataHandler();
+              },
+              tooltipProps: { title: intl.get('DOWNLOAD_DATA') }
+            },
+            setup: {
+              onClick() {
+                setOpen(true);
+              },
+              tooltipProps: { title: intl.get('nums.of.cursors.settings') }
+            },
+            restore: {
+              onClick() {
+                handleRestore();
+                handleRefreshHarmonic(x, y, data);
+                handleRefreshSideband(x, y);
+              }
+            },
+            saveAsImage: {}
           }}
           loading={loading}
           onEvents={{
@@ -101,37 +158,15 @@ export const Frequency = ({
                 raw: { animation: false }
               }
             ],
-            marks
+            marks,
+            lineStyle: { symbol: 'none' }
           })}
           style={{ height: 450 }}
-          toolbar={{
-            visibles: ['download', 'save_image', 'refresh', 'set'],
-            download: {
-              onClick() {
-                downlaodRawDataHandler();
-              },
-              tooltip: 'DOWNLOAD_DATA'
-            },
-            set: {
-              onClick() {
-                setOpen(true);
-              },
-              tooltip: 'nums.of.cursors.settings'
-            },
-            onRefresh: () => {
-              const faultFrequencies = faultFrequency
-                ? Object.entries(faultFrequency).map(([key, value]) => ({
-                    label: intl.get(`fault.frequency.${key}`),
-                    value
-                  }))
-                : [];
-              handleRefresh(x, y, { harmonic: data, faultFrequencies });
-            }
-          }}
+          toolbars={[<Toolbar />]}
           yAxisMeta={{ ...property, unit: property.unit }}
         >
           {isTypeSideband && <Sideband.Switcher />}
-          <ConfigurableNumsOfCursor
+          <SettingsForm
             open={open}
             onSuccess={() => {
               setOpen(false);
@@ -140,46 +175,7 @@ export const Frequency = ({
           />
         </ChartMark.Chart>
       </Col>
-      <Sidebar>
-        <AnalysisSidebarCollapse
-          defaultActiveKey={['overview', 'marklist']}
-          items={[
-            {
-              key: 'overview',
-              label: intl.get('BASIC_INFORMATION'),
-              children: (
-                <Descriptions
-                  items={[
-                    {
-                      label: intl.get('SETTING_RANGE'),
-                      children: getValue({ value: range, unit: 'g' })
-                    },
-                    {
-                      label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                      children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
-                    },
-                    { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
-                    {
-                      label: intl.get(rotationSpeed.label),
-                      children: getValue({ value: rotation_speed, unit: rotationSpeed.unit })
-                    }
-                  ]}
-                />
-              )
-            },
-            {
-              key: 'marklist',
-              label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
-              children:
-                markType === 'Faultfrequency' ? (
-                  <FaultFrequencyMarkList faultFrequency={faultFrequency} />
-                ) : (
-                  <MarkList />
-                )
-            }
-          ]}
-        />
-      </Sidebar>
+      <SidebarMarkList asset={parent} markType={markType} faultFrequency={faultFrequency} />
     </Grid>
   );
 };

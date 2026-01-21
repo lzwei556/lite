@@ -4,16 +4,29 @@ import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { Descriptions, DescriptionsProps } from '../components';
 import { FieldHelper } from 'types';
 
-export const SettingsDetail = ({ attributes, type }: { attributes: any; type: number }) => {
+export const SettingsDetail = ({
+  attributes,
+  type,
+  groups = [],
+  maxHeight = 400,
+  ...rest
+}: DescriptionsProps & {
+  attributes: any;
+  type: number;
+  groups?: string[];
+  maxHeight?: number;
+}) => {
   const items: DescriptionsProps['items'] = [];
   if (attributes) {
     const settings = AssetCategory.Key.getSettings(type);
     if (settings.length > 0) {
       settings
         .filter((field) => (field.visibleWhen ? field.visibleWhen(attributes) : true))
-        .filter(
-          (field) =>
-            field.group === `asset.category.${AssetCategory.Value[type].toLowerCase()}.parameters`
+        .filter((field) =>
+          [
+            `asset.category.${AssetCategory.Value[type].toLowerCase()}.parameters`,
+            ...groups
+          ].includes(field.group ?? '')
         )
         .forEach(({ label, name, translatingUnit, type, options, unit }) => {
           const children = FieldHelper.getValue(attributes, name) as string | number | number[];
@@ -45,5 +58,5 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
         });
     }
   }
-  return <Descriptions items={items} style={{ overflowY: 'auto', maxHeight: 400 }} />;
+  return <Descriptions {...rest} items={items} style={{ overflowY: 'auto', maxHeight }} />;
 };

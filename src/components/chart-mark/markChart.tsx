@@ -1,7 +1,5 @@
 import React from 'react';
 import { Divider, Space } from 'antd';
-import { EChartsType } from 'echarts/core';
-import intl from 'react-intl-universal';
 import { useGlobalStyles } from '../../styles';
 import {
   Chart,
@@ -14,59 +12,25 @@ import {
 import { Card, CardProps } from '../card/card';
 import { useChartContext } from '../charts';
 import { SaveImageIconButton } from '../charts/saveImageIconButton';
-import { DownloadIconButton } from '../icon-button';
-import { useContext } from './context';
-import {
-  AreaMarkSwitcherIconButton,
-  PointMarkSwitcherIconButton,
-  RestoreIconButton,
-  SettingsIconButton
-} from './components/icons';
-
-export type Visible =
-  | 'enable_point'
-  | 'enable_area'
-  | 'refresh'
-  | 'save_image'
-  | 'download'
-  | 'set';
-
-export const Visibles: Visible[] = [
-  'enable_point',
-  'enable_area',
-  'refresh',
-  'save_image',
-  'download',
-  'set'
-];
-
-type PresetToolbarProps = {
-  visibles?: Visible[];
-  onDisableAreaSelection?: (ins: EChartsType | undefined) => void;
-  onEnableAreaSelection?: (ins: EChartsType | undefined) => void;
-  onRestore?: (ins: EChartsType | undefined) => void;
-  imageFilename?: string;
-  extra?: React.ReactNode;
-  onRefresh?: () => void;
-  download?: {
-    onClick: () => void;
-    tooltip: string;
-  };
-  set?: {
-    onClick: () => void;
-    tooltip: string;
-  };
-};
+import { DownloadIconButton, IconButtonProps } from '../icon-button';
+import { RestoreIconButton, SettingsIconButton } from './components/icons';
 
 export const MarkChart = (
-  props: LineChartProps & { toolbar?: PresetToolbarProps } & { cardProps?: CardProps } & {
+  props: LineChartProps & {
+    cardProps?: CardProps;
     children?: React.ReactNode;
+    features?: {
+      others?: React.ReactNode;
+      restore?: IconButtonProps;
+      saveAsImage?: IconButtonProps;
+      download?: IconButtonProps;
+      setup?: IconButtonProps;
+    };
+    toolbars?: React.ReactNode[];
   }
 ) => {
   const ref = useChartContext();
-  const { cursor, setCursor, dispatchMarks } = useContext();
-  const { cardProps, series, yAxisMeta, config, onEvents, toolbar, ...rest } = props;
-  const visibles = toolbar?.visibles ?? Visibles;
+  const { cardProps, features, series, yAxisMeta, config, onEvents, toolbars, ...rest } = props;
   const options = getOptions(
     useLinedSeriesOptions({
       series,
@@ -78,36 +42,11 @@ export const MarkChart = (
       }
     })
   );
+  console.log('options', options)
   const { colorBorderStyle } = useGlobalStyles();
+  const hasFeature = features && Object.keys(features).length > 0;
 
   useClick(props, ref);
-
-  const reset = () => {
-    setCursor('point');
-    ref.current.getInstance()?.dispatchAction(ChartBrush.ActionPayload.clear_areas);
-    ref.current.getInstance()?.dispatchAction(ChartBrush.ActionPayload.disable);
-  };
-
-  const enablePointMark = () => {
-    reset();
-    toolbar?.onDisableAreaSelection?.(ref.current.getInstance());
-  };
-
-  const enableAreaMark = () => {
-    setCursor('line');
-    ref.current.getInstance()?.dispatchAction(ChartBrush.ActionPayload.enable);
-    toolbar?.onEnableAreaSelection?.(ref.current.getInstance());
-  };
-
-  const restoreHandle = () => {
-    if (toolbar?.onRefresh) {
-      toolbar?.onRefresh();
-    } else {
-      reset();
-      dispatchMarks({ type: 'clear' });
-      toolbar?.onRestore?.(ref.current.getInstance());
-    }
-  };
 
   return (
     <Card
@@ -123,39 +62,24 @@ export const MarkChart = (
             />
           }
         >
-          {toolbar?.extra && <Space size={4}>{toolbar?.extra}</Space>}
-          {cardProps?.extra && <Space size={4}>{cardProps?.extra}</Space>}
-          <Space size={4}>
-            {visibles?.includes('enable_point') && (
-              <PointMarkSwitcherIconButton
-                onClick={enablePointMark}
-                variant={cursor === 'point' ? 'solid' : 'outlined'}
-              />
-            )}
-            {visibles?.includes('enable_area') && (
-              <AreaMarkSwitcherIconButton
-                onClick={enableAreaMark}
-                variant={cursor === 'line' ? 'solid' : 'outlined'}
-              />
-            )}
-            {visibles?.includes('refresh') && <RestoreIconButton onClick={restoreHandle} />}
-            {visibles?.includes('download') && (
-              <DownloadIconButton
-                onClick={toolbar?.download?.onClick}
-                size='small'
-                tooltipProps={{
-                  title: toolbar?.download?.tooltip
-                    ? intl.get(toolbar?.download?.tooltip)
-                    : undefined
-                }}
-                variant='outlined'
-              />
-            )}
-            {visibles?.includes('save_image') && <SaveImageIconButton chartHandler={ref.current} />}
-            {visibles?.includes('set') && (
-              <SettingsIconButton onClick={toolbar?.set?.onClick} tooltip={toolbar?.set?.tooltip} />
-            )}
-          </Space>
+          {toolbars?.map((bar) => (
+            <Space size={4}>{bar}</Space>
+          ))}
+          {hasFeature && (
+            <Space size={4}>
+              {features.others}
+              {features.restore && (
+                <RestoreIconButton {...getDefaultIconButonProps(features.restore)} />
+              )}
+              {features.download && (
+                <DownloadIconButton {...getDefaultIconButonProps(features.download)} />
+              )}
+              {features.saveAsImage && <SaveImageIconButton chartHandler={ref.current} />}
+              {features.setup && (
+                <SettingsIconButton {...getDefaultIconButonProps(features.setup)} />
+              )}
+            </Space>
+          )}
         </Space>
       }
     >
@@ -197,6 +121,10 @@ function useClick(props: LineChartProps, ref: React.MutableRefObject<ChartHandle
     };
   }, [series, onEvents, ref]);
 }
+
+const getDefaultIconButonProps = (params?: IconButtonProps): IconButtonProps => {
+  return { size: 'small', variant: 'outlined', ...params };
+};
 
 function excludeClickEvent(events: LineChartProps['onEvents']) {
   if (!events) return events;

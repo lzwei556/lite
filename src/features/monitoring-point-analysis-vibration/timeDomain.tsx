@@ -1,14 +1,12 @@
 import React from 'react';
-import { Col } from 'antd';
+import { Col, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { ChartMark, Descriptions, Grid } from 'components';
+import { ChartMark, Grid } from 'components';
 import { getValue } from 'utils';
-import { AnalysisSidebarCollapse } from '..';
 import { AnalysisCommonProps } from './analysisContent';
-import { MarkList, Toolbar, useMarkChartProps } from './mark';
+import { MarkType, Toolbar, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
-import { Sidebar } from './mark/sidebar';
-import { rotationSpeed } from 'asset-category';
+import { SidebarMarkList } from './sidebar-mark-list';
 
 export const TimeDomain = ({
   axis,
@@ -20,25 +18,37 @@ export const TimeDomain = ({
 }: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
-  const { marks, handleClick, handleRefresh, markType } = useMarkChartProps();
+  const { marks, handleClick, handleRestore, markType } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
     timestamp,
     `${property.value}TimeDomain`
   );
-  const rotation_speed = parent.attributes?.rotation_speed;
-
-  React.useEffect(() => {
-    handleRefresh(x, y);
-  }, [handleRefresh, x, y]);
+  const hiddens: MarkType[] = ['Harmonic', 'Sideband', 'Faultfrequency', 'Top10'];
 
   return (
     <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
           cardProps={{
-            extra: (
-              <Toolbar hiddens={['Multiple', 'Harmonic', 'Sideband', 'Faultfrequency', 'Top10']} />
+            title: (
+              <Space>
+                {[
+                  {
+                    label: intl.get('SETTING_RANGE'),
+                    children: getValue({ value: range, unit: 'g' })
+                  },
+                  {
+                    label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                    children: getValue({ value: frequency, unit: 'Hz' })
+                  },
+                  { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                ].map((item) => (
+                  <span style={{ fontSize: 14, fontWeight: 400 }}>
+                    <Typography.Text type='secondary'>{item.label}</Typography.Text> {item.children}
+                  </span>
+                ))}
+              </Space>
             )
           }}
           config={{
@@ -55,6 +65,20 @@ export const TimeDomain = ({
               grid: { top: 60, bottom: 60, right: 40 }
             }
           }}
+          features={{
+            download: {
+              onClick() {
+                downlaodRawDataHandler();
+              },
+              tooltipProps: { title: intl.get('DOWNLOAD_DATA') }
+            },
+            restore: {
+              onClick() {
+                handleRestore();
+              }
+            },
+            saveAsImage: {}
+          }}
           loading={loading}
           onEvents={{
             click: (coord: [string, number], xIndex?: number) => {
@@ -69,57 +93,15 @@ export const TimeDomain = ({
                 raw: { animation: false }
               }
             ],
-            marks
+            marks,
+            lineStyle: { symbol: 'none' }
           })}
           style={{ height: 450 }}
-          toolbar={{
-            visibles: ['download', 'save_image', 'refresh'],
-            download: {
-              onClick() {
-                downlaodRawDataHandler();
-              },
-              tooltip: 'DOWNLOAD_DATA'
-            },
-            onRefresh: () => handleRefresh(x, y)
-          }}
+          toolbars={[<Toolbar hiddens={hiddens} />]}
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>
-      <Sidebar>
-        <AnalysisSidebarCollapse
-          defaultActiveKey={['overview', 'forecast', 'marklist']}
-          items={[
-            {
-              key: 'overview',
-              label: intl.get('BASIC_INFORMATION'),
-              children: (
-                <Descriptions
-                  items={[
-                    {
-                      label: intl.get('SETTING_RANGE'),
-                      children: getValue({ value: range, unit: 'g' })
-                    },
-                    {
-                      label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                      children: getValue({ value: frequency, unit: 'Hz' })
-                    },
-                    { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
-                    {
-                      label: intl.get(rotationSpeed.label),
-                      children: getValue({ value: rotation_speed, unit: rotationSpeed.unit })
-                    }
-                  ]}
-                />
-              )
-            },
-            {
-              key: 'marklist',
-              label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
-              children: <MarkList />
-            }
-          ]}
-        />
-      </Sidebar>
+      <SidebarMarkList asset={parent} markType={markType} markTypes={hiddens} />
     </Grid>
   );
 };

@@ -1,14 +1,15 @@
 export type Coord = [x: string | number, y: number | string];
 export type Mark = {
   name: string;
+  type: string;
   label?: string | number;
   value?: string | number;
   data: Coord | [Coord, Coord] | string;
+  coord?: [string | number, number];
   description?: string;
-  type?: string;
   chartProps?: {
     label?: any;
-    symbol?: string;
+    symbol?: string | string[];
     lineStyle?: any;
     itemStyle?: any;
     default?: boolean;

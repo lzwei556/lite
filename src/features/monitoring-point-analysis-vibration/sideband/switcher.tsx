@@ -5,8 +5,8 @@ import { cursors, useContext } from './context';
 
 export const Switcher = () => {
   const { cursor, setCursor, reset } = useContext();
-  const { visibledMarks } = ChartMark.useContext();
-  const centeredMark = visibledMarks.find((mark) => mark.name.indexOf('center') > -1);
+  const { marks } = ChartMark.useContext();
+  const centeredMark = marks.find((mark) => mark.name.indexOf('center') > -1);
 
   return (
     <RadioFormItem

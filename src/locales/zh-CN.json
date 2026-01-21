@@ -1372,8 +1372,7 @@
   "cursor.double.diff": "差值",
   "out.of.range": "超出范围",
   "nums.of.cursors.settings": "属性设置",
-  "harmonic.cursor.nums": "倍频游标数",
-  "sideband.cursor.nums": "边频游标数",
+  "cursor.nums": "游标数",
   "sideband.center": "中心线",
   "sideband.side": "边",
   "sideband.left.1": "左 1",
@@ -1545,5 +1544,7 @@
   "diagnosis.enabled": "诊断是否启用",
   "diagnosis.period": "诊断周期",
   "diagnosis.period.real": "实时",
-  "diagnosis.no.errors": "暂无异常"
+  "diagnosis.no.errors": "暂无异常",
+  "harmonic.base": "一倍频",
+  "sideband.distance": "间距"
 }

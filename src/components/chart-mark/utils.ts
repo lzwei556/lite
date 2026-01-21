@@ -14,8 +14,8 @@ export function useMergeMarkDatas({
   lineStyle?: any;
   pointStyle?: any;
 }) {
-  const { colorErrorHighLightStyle } = useGlobalStyles();
-  const { lines, points } = buildMarkDatas(marks, colorErrorHighLightStyle.color);
+  const { colorTextStyle } = useGlobalStyles();
+  const { lines, points } = buildMarkDatas(marks, colorTextStyle.color);
   return series.map((s) => {
     const { markLine: prevLine, markPoint: prevPoint, ...rest } = s.raw || {};
     const lineData = prevLine?.data ?? [];
@@ -60,13 +60,13 @@ function buildPointData(mark: PointMark, color: string): PointDataItem {
     ...label
   };
   const symbolProps =
-    symbol ??
+    (symbol as string) ??
     'path://M392.448255 0h238.494873v635.98633h-238.494873zM495.00105 1016.783145L155.543347 677.325441A23.849487 23.849487 0 0 1 172.237988 635.98633h678.915407a23.849487 23.849487 0 0 1 16.694641 41.339111l-338.662721 339.457704a23.849487 23.849487 0 0 1-34.184265 0zM392.448255 0h238.494873v635.98633h-238.494873zM495.00105 1016.783145L155.543347 677.325441A23.849487 23.849487 0 0 1 172.237988 635.98633h678.915407a23.849487 23.849487 0 0 1 16.694641 41.339111l-338.662721 339.457704a23.849487 23.849487 0 0 1-34.184265 0z';
   const itemStyleProps = { color, ...itemStyle };
   return {
     label: labelProps,
     symbol: symbolProps,
-    symbolSize: [8, 32],
+    symbolSize: [6, 150],
     symbolOffset: [0, -20],
     itemStyle: itemStyleProps,
     name,

@@ -1372,8 +1372,7 @@
   "cursor.double.diff": "Difference",
   "out.of.range": "Out Of Range",
   "nums.of.cursors.settings": "Settings",
-  "harmonic.cursor.nums": "Number of Harmonics",
-  "sideband.cursor.nums": "Number of Sidebands",
+  "cursor.nums": "Cursors",
   "sideband.center": "Center",
   "sideband.side": "Side",
   "sideband.left.1": "Left 1",
@@ -1545,5 +1544,7 @@
   "diagnosis.enabled": "Diagnosis Enabled",
   "diagnosis.period": "Diagnosis Period",
   "diagnosis.period.real": "Real-time",
-  "diagnosis.no.errors": "No errors"
+  "diagnosis.no.errors": "No errors",
+  "harmonic.base": "First Harmonic",
+  "sideband.distance": "Space"
 }

@@ -9,14 +9,22 @@ import {
 } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
 import { CharacteristicData } from 'common';
+import { MarkType } from '.';
 
-export const MarkList = ({ property }: { property: CharacteristicData.DisplayProperty }) => {
+export const MarkList = ({
+  property,
+  markType
+}: {
+  property: CharacteristicData.DisplayProperty;
+  markType: MarkType;
+}) => {
   const ref = useChartContext();
-  const { cursor, visibledMarks, dispatchMarks } = ChartMark.useContext();
+  const { marks, dispatchMarks } = ChartMark.useContext();
   let propertyTitle = `${intl.get(property.name)} (${property.unit})`;
-  if (cursor === 'line') {
+  if (markType === 'area') {
     propertyTitle = `${intl.get('FIELD_CORROSION_RATE')} (mm/a)`;
   }
+  const visibledMarks = marks.filter((mark) => mark.type === markType);
   return (
     <List
       style={{ overflowY: 'auto', maxHeight: 500 }}

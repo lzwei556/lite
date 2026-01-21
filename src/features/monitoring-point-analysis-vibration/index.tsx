@@ -3,7 +3,7 @@ import { Col, Empty, Spin } from 'antd';
 import { ChartMark, Card, Flex, Grid, useRange, RangeDatePicker } from 'components';
 import { Dayjs } from 'utils';
 import { useMonitoringPointParents } from 'asset-variant';
-import { Asset,  TrendData } from 'asset-common';
+import { Asset, TrendData } from 'asset-common';
 import { useTrendData } from './useTrend';
 import { AnalysisContent } from './analysisContent';
 import { Trend } from './trend';
@@ -77,14 +77,12 @@ function Content({
       <Grid>
         <Col span={24}>
           <ChartMark.Context
-            initial={{
-              cursor: 'line',
-              marks: lines.map((line) => ({
-                name: line,
-                data: line,
-                chartProps
-              }))
-            }}
+            initial={lines.map((line) => ({
+              name: line,
+              type: 'Peak',
+              data: line,
+              chartProps
+            }))}
           >
             <Trend id={id} attributes={attributes} data={data} onClick={setSelected} />
           </ChartMark.Context>

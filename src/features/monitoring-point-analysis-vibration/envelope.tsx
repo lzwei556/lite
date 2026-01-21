@@ -1,18 +1,15 @@
 import React from 'react';
-import { Col } from 'antd';
+import { Col, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { getValue, roundValue } from 'utils/format';
-import { ChartMark, Descriptions, Grid } from 'components';
+import { ChartMark, Grid } from 'components';
 import { envelope, EnvelopeAnalysis } from 'asset-common';
-import { AnalysisSidebarCollapse } from '..';
 import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
 import Sideband from './sideband';
-import { useMarkChartProps, MarkList, Toolbar, ConfigurableNumsOfCursor } from './mark';
+import { useMarkChartProps, Toolbar, ConfigurableNumsOfCursor, useDatazoom } from './mark';
 import { useFaultFrequency } from './useFaultFrequency';
-import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
-import { Sidebar } from './mark/sidebar';
-import { rotationSpeed } from 'asset-category';
+import { SidebarMarkList } from './sidebar-mark-list';
 
 export const Envelope = ({
   axis,
@@ -29,8 +26,17 @@ export const Envelope = ({
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { filter_type_related, setFilter_type_related } = useFilterTypeRelated();
-  const { marks, handleClick, isTypeSideband, handleRefresh, markType } = useMarkChartProps();
-  const rotation_speed = parent.attributes?.rotation_speed;
+  const {
+    marks,
+    handleClick,
+    isTypeSideband,
+    handleRefreshHarmonic,
+    handleToggleMarks,
+    handleRestore,
+    markType
+  } = useMarkChartProps();
+  const rotation_speed = parent.attributes?.rpm;
+  const dataZoom = useDatazoom();
   const { faultFrequency } = useFaultFrequency(id, timestamp);
   const [open, setOpen] = React.useState(false);
 
@@ -56,14 +62,45 @@ export const Envelope = ({
   }, [originalDomain, property.value, window, filter_type_related, rotation_speed]);
 
   React.useEffect(() => {
-    handleRefresh(x, y, { harmonic: data });
-  }, [handleRefresh, x, y, data]);
+    const faultFrequencies = faultFrequency
+      ? Object.entries(faultFrequency).map(([key, value]) => ({
+          label: intl.get(`fault.frequency.${key}`),
+          value
+        }))
+      : [];
+    handleToggleMarks(x, y, faultFrequencies);
+  }, [handleToggleMarks, x, y, faultFrequency]);
+
+  React.useEffect(() => {
+    handleRefreshHarmonic(x, y, data);
+  }, [handleRefreshHarmonic, x, y, data]);
 
   return (
     <Grid wrap={false}>
       <Col flex='auto'>
         <ChartMark.Chart
-          cardProps={{ extra: <Toolbar /> }}
+          cardProps={{
+            extra: <Toolbar />,
+            title: (
+              <Space>
+                {[
+                  {
+                    label: intl.get('SETTING_RANGE'),
+                    children: getValue({ value: range, unit: 'g' })
+                  },
+                  {
+                    label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                    children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
+                  },
+                  { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                ].map((item) => (
+                  <span style={{ fontSize: 14, fontWeight: 400 }}>
+                    <Typography.Text type='secondary'>{item.label}</Typography.Text> {item.children}
+                  </span>
+                ))}
+              </Space>
+            )
+          }}
           config={{
             opts: {
               xAxis: {
@@ -74,9 +111,24 @@ export const Envelope = ({
                 }
               },
               yAxis: { name: property.unit },
-              dataZoom: [{ start: 0, end: 100 }],
+              dataZoom: dataZoom ?? [{ start: 0, end: 20 }],
               grid: { top: 60, bottom: 60, right: 30 }
             }
+          }}
+          features={{
+            setup: {
+              onClick() {
+                setOpen(true);
+              },
+              tooltipProps: { title: intl.get('nums.of.cursors.settings') }
+            },
+            restore: {
+              onClick() {
+                handleRestore();
+                handleRefreshHarmonic(x, y, data);
+              }
+            },
+            saveAsImage: {}
           }}
           loading={loading}
           onEvents={{
@@ -91,20 +143,13 @@ export const Envelope = ({
                 xAxisValues: x.map((n) => `${n}`)
               }
             ],
-            marks
+            marks,
+            lineStyle: { symbol: 'none' }
           })}
           style={{ height: 450 }}
-          toolbar={{
-            visibles: ['save_image', 'refresh', 'set'],
-            onRefresh: () => handleRefresh(x, y, { harmonic: data }),
-            set: {
-              onClick() {
-                setOpen(true);
-              },
-              tooltip: 'nums.of.cursors.settings'
-            },
-            extra: [
-              <Window onOk={setWindow} key='window' />,
+          toolbars={[
+            <Space size={4}>
+              <Window onOk={setWindow} key='window' />
               <FilterTypeRelated
                 onOk={setFilter_type_related}
                 initial={[
@@ -113,8 +158,9 @@ export const Envelope = ({
                 ]}
                 key='filter_type'
               />
-            ]
-          }}
+            </Space>,
+            <Toolbar />
+          ]}
           yAxisMeta={{ ...property, unit: property.unit }}
         >
           {isTypeSideband && <Sideband.Switcher />}
@@ -127,46 +173,7 @@ export const Envelope = ({
           />
         </ChartMark.Chart>
       </Col>
-      <Sidebar>
-        <AnalysisSidebarCollapse
-          defaultActiveKey={['overview', 'marklist']}
-          items={[
-            {
-              key: 'overview',
-              label: intl.get('BASIC_INFORMATION'),
-              children: (
-                <Descriptions
-                  items={[
-                    {
-                      label: intl.get('SETTING_RANGE'),
-                      children: getValue({ value: range, unit: 'g' })
-                    },
-                    {
-                      label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                      children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
-                    },
-                    { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number },
-                    {
-                      label: intl.get(rotationSpeed.label),
-                      children: getValue({ value: rotation_speed, unit: rotationSpeed.unit })
-                    }
-                  ]}
-                />
-              )
-            },
-            {
-              key: 'marklist',
-              label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
-              children:
-                markType === 'Faultfrequency' ? (
-                  <FaultFrequencyMarkList faultFrequency={faultFrequency} />
-                ) : (
-                  <MarkList />
-                )
-            }
-          ]}
-        />
-      </Sidebar>
+      <SidebarMarkList asset={parent} markType={markType} faultFrequency={faultFrequency} />
     </Grid>
   );
 };

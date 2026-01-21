@@ -1,22 +1,20 @@
 import { ChartMark } from 'components';
 import { HarmonicData } from 'asset-common';
-import { MarkType } from './context';
-import { getNumsOfCursor } from './configurableNumsOfCursor';
+import { getMarkTypeColor } from './mark-types';
 
 export const trigger = ({
   x,
   y,
   indexs,
-  dispatchMarks,
-  markType
+  dispatchMarks
 }: {
   x: number[];
   y: number[];
   indexs: number[];
   dispatchMarks: ChartMark.DispathMark;
-  markType: MarkType;
 }) => {
-  dispatchMarks({ type: 'clear' });
+  const markType = 'Harmonic';
+  dispatchMarks({ type: 'remove_by_type', removeTypes: [markType] });
   indexs.forEach((index, i) => {
     const xValue = x[index] ?? 'out.of.range';
     const yValue = y[index] ?? 'out.of.range';
@@ -26,20 +24,24 @@ export const trigger = ({
         name: `${xValue}${yValue}${i}`,
         data: [`${xValue}`, yValue],
         type: markType,
-        chartProps: { label: { formatter: i === 0 ? `${xValue}` : undefined } }
+        chartProps: {
+          label: { formatter: i === 0 ? `${xValue}` : undefined },
+          itemStyle: { color: getMarkTypeColor(markType) }
+        }
       }
     });
   });
 };
 
 export const getIndexs = ({
+  cursor,
   harmonic,
   baseFrequencyIndex
 }: {
+  cursor: number;
   harmonic?: HarmonicData;
   baseFrequencyIndex?: number;
 }) => {
-  const nums = getNumsOfCursor();
   if (harmonic) {
     return [
       harmonic.harmonic1XIndex,
@@ -52,10 +54,10 @@ export const getIndexs = ({
       harmonic.harmonic8XIndex,
       harmonic.harmonic9XIndex,
       harmonic.harmonic10XIndex
-    ].filter((n, index) => index < nums.harmonic);
+    ].filter((n, index) => index < cursor);
   }
   if (baseFrequencyIndex) {
-    return Array(nums.harmonic)
+    return Array(cursor)
       .fill(-1)
       .map((n, index) => {
         return baseFrequencyIndex * (index + 1);
