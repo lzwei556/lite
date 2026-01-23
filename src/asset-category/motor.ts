@@ -94,8 +94,8 @@ export const motorFields: Field<MotorSettings>[] = [
     name: 'bearing.d',
     description: 'bearing.d.desc',
     type: 'number',
-    unit: 'm',
-    defaultValue: 0.00675,
+    unit: 'mm',
+    defaultValue: 6.75,
     group: 'bearing.parameters'
   },
   {
@@ -103,8 +103,8 @@ export const motorFields: Field<MotorSettings>[] = [
     name: 'bearing.big_d',
     description: 'bearing.big.d.desc',
     type: 'number',
-    unit: 'm',
-    defaultValue: 0.02905,
+    unit: 'mm',
+    defaultValue: 29.05,
     group: 'bearing.parameters'
   },
   {

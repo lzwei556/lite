@@ -137,8 +137,8 @@ const configs: Config[] = [
     componentIds: [
       Component.Value.MotorDriveEnd,
       Component.Value.MotorNonDriveEnd,
-      Component.Value.BearingHorizontal,
-      Component.Value.BearingVertical
+      Component.Value.GearboxInput,
+      Component.Value.GearboxOutput
     ]
   },
   {

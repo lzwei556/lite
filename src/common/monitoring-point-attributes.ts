@@ -7,7 +7,7 @@ import _ from 'lodash';
 export type VibrationDirectionAttributes = { [Key in VibrationDirection.Key]: Axis.Key };
 
 export type AxisWithVibrationDirectionLabel = Omit<Axis.Option, 'label'> & {
-  label: Axis.Option['label'] | VibrationDirection.Option['label'];
+  label: Axis.Option['label'] | VibrationDirection.Option['abbr'];
 };
 
 export const useAxisWithVibrationDirection = (attrs?: VibrationDirectionAttributes) => {
@@ -18,7 +18,7 @@ export const useAxisWithVibrationDirection = (attrs?: VibrationDirectionAttribut
     }),
     (option) => option.direction?.sort ?? option.value,
     'desc'
-  ).map(({ direction, ...rest }) => ({ ...rest, label: direction ? direction.label : rest.label }));
+  ).map(({ direction, ...rest }) => ({ ...rest, label: direction ? direction.abbr : rest.label }));
   const [axis, setAxis] = React.useState(options[0]);
   return { axis, setAxis, options };
 };

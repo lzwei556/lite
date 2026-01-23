@@ -6,11 +6,7 @@ import { AssetRow, AlarmsObjectStatistics, AlarmTrend } from '../../asset-common
 import { SelectedPointPropertyHistory } from '../../asset-model';
 import { SettingsDetail } from '../../asset-variant';
 import { AssetAnnotationImage } from '../imageAnnotation';
-import {
-  ComponentsHealthyList,
-  FaultDiagnosis,
-  FaultDiagnosisOverview
-} from 'features/vibration-fault-diagnosis';
+import { FaultDiagnosis, FaultDiagnosisOverview } from 'features/vibration-fault-diagnosis';
 import { shouldDisplayDiagnosis } from '.';
 
 export const Overview = (props: {
@@ -28,7 +24,7 @@ export const Overview = (props: {
         <Grid>
           {should && (
             <Col span={24}>
-              <FaultDiagnosisOverview {...diagnosis} />
+              <FaultDiagnosisOverview {...diagnosis} withComponentsList={true} />
             </Col>
           )}
           <Col span={24}>
@@ -48,14 +44,6 @@ export const Overview = (props: {
       </Col>
       <Col flex='300px'>
         <Grid>
-          {should && (
-            <Col span={24}>
-              <ComponentsHealthyList
-                {...diagnosis}
-                cardProps={{ styles: { body: { overflow: 'auto', maxHeight: 300 } } }}
-              />
-            </Col>
-          )}
           <Col span={24}>
             <MutedCard title={intl.get('BASIC_INFORMATION')}>
               <SettingsDetail attributes={asset.attributes} type={asset.type} />

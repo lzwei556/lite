@@ -1,15 +1,18 @@
 import React from 'react';
-import { FaultDiagnosis, useHealthStatus } from './common';
+import { Fault, FaultDiagnosis, useHealthStatus } from './common';
 import { Avatar, Col, Space } from 'antd';
 import { HealthStatus, getOptions } from './health-status';
 import { Descriptions, Grid, MutedCard } from '../../components';
 import intl from 'react-intl-universal';
 import { Dayjs } from '../../utils';
+import { ComponentsHealthyList } from './list';
 
-export const FaultDiagnosisOverview = (props: FaultDiagnosis) => {
+export const FaultDiagnosisOverview = (
+  props: FaultDiagnosis & { withComponentsList?: boolean }
+) => {
   return (
     <MutedCard title={intl.get('diagnosis.asset.health')} extra={Dayjs.format(props.timestamp)}>
-      <Grid wrap={false} align='middle'>
+      <Grid wrap={false}>
         <Col flex='auto'>
           <DiagnosisDescription {...props} />
         </Col>
@@ -19,15 +22,23 @@ export const FaultDiagnosisOverview = (props: FaultDiagnosis) => {
         >
           <HealthyCard {...props} />
         </Col>
+        {props.withComponentsList && (
+          <Col flex='280px' style={{ marginLeft: 60 }}>
+            <ComponentsHealthyList
+              {...props}
+              cardProps={{ styles: { body: { overflow: 'auto', maxHeight: 300 } } }}
+            />
+          </Col>
+        )}
       </Grid>
     </MutedCard>
   );
 };
 
 const DiagnosisDescription = ({ conclusion, components, status }: FaultDiagnosis) => {
-  const { healthy, description, suggestion } = useHealthStatus({
+  const { healthy, description } = useHealthStatus({
     status,
-    faultTypes: components.reduce((prev, crt) => [...prev, ...crt.faultTypes], [] as number[])
+    faults: components.reduce((prev, crt) => [...prev, ...crt.faults], [] as Fault[])
   });
 
   return (
@@ -41,9 +52,9 @@ const DiagnosisDescription = ({ conclusion, components, status }: FaultDiagnosis
             </span>
           )
         },
-        { label: intl.get('diagnosis.conclusion'), children: '' },
-        description,
-        suggestion
+        { label: intl.get('diagnosis.conclusion'), children: intl.get(conclusion) },
+        description
+        // suggestion
       ]}
       labelStyle={{ width: '6em' }}
       contentStyle={{ justifyContent: 'flex-start' }}

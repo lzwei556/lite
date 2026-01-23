@@ -43,7 +43,11 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
     const monitoringPoints = asset.monitoringPoints ?? [];
     const isLegacy = ENV.legacyEnabled === 'true';
 
-    const { data: diagnosisResult } = useAssetDiagnosis(asset.id, !!asset.diagnosisIsEnabled);
+    const { data: diagnosisResult } = useAssetDiagnosis(
+      asset.id,
+      !!asset.diagnosisIsEnabled,
+      asset.diagnosisPeriod === 0
+    );
 
     const items: TabsDetailsItems = [
       {

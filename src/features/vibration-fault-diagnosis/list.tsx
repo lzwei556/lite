@@ -5,6 +5,7 @@ import { Col, Progress, Space } from 'antd';
 import { Component } from 'common';
 import { generateColProps } from 'utils/grid';
 import BoxSvg from './box.svg';
+import React from 'react';
 
 export const ComponentsHealthyList = ({
   cardProps,
@@ -14,30 +15,29 @@ export const ComponentsHealthyList = ({
   cardProps?: CardProps;
   type?: 'bar' | 'card';
 }) => {
-  return (
-    <MutedCard title={intl.get('component.health.status')} {...cardProps}>
-      {components.length === 0 ? (
-        intl.get('diagnosis.no.errors')
-      ) : (
+  if (type === 'bar') {
+    return components.length === 0 ? null : (
+      <Grid>
+        {components.map((component) => (
+          <Col key={component.componentId} {...generateColProps({})}>
+            <FaultDiagnosisBar {...component} />
+          </Col>
+        ))}
+      </Grid>
+    );
+  } else {
+    return (
+      <MutedCard title={intl.get('component.health.status')} {...cardProps}>
         <Grid>
           {components.map((component) => (
-            <Col
-              key={component.componentId}
-              {...(type !== 'bar'
-                ? generateColProps({ lg: 12, xl: 12, xxl: 12 })
-                : generateColProps({}))}
-            >
-              {type === 'bar' ? (
-                <FaultDiagnosisBar {...component} />
-              ) : (
-                <FaultDiagnosisCard {...component} />
-              )}
+            <Col key={component.componentId} {...generateColProps({ lg: 12, xl: 12, xxl: 12 })}>
+              <FaultDiagnosisCard {...component} />
             </Col>
           ))}
         </Grid>
-      )}
-    </MutedCard>
-  );
+      </MutedCard>
+    );
+  }
 };
 
 const FaultDiagnosisBar = ({
@@ -66,18 +66,18 @@ const FaultDiagnosisBar = ({
 const FaultDiagnosisCard = ({
   componentId,
   status,
-  faultTypes
+  faults,
+  iso
 }: FaultDiagnosis['components'][0]) => {
-  const { healthy, description, suggestion } = useHealthStatus({
-    status,
-    faultTypes
-  });
+  const { healthy, descriptionWithConfidence } = useHealthStatus({ status, faults });
+  const color = healthy.status.key === 1 ? `rgba(0,0,0,.88)` : '#fff';
 
   return (
     <MutedCard
       style={{
-        color: '#fff',
-        background: `no-repeat center right 10% / 50px url(${BoxSvg}) rgba(${healthy.status.color.join()}, .85)`
+        height: '100%',
+        color,
+        background: `no-repeat center right 15% / 80px url(${BoxSvg}) rgba(${healthy.status.color.join()}, .85)`
       }}
       title={intl.get(Component.Key.get(componentId).label)}
     >
@@ -87,11 +87,24 @@ const FaultDiagnosisCard = ({
             label: healthy.label,
             children: intl.get(healthy.status.label)
           },
-          description,
-          suggestion
+          {
+            ...descriptionWithConfidence,
+            children: Array.isArray(descriptionWithConfidence.children)
+              ? descriptionWithConfidence.children.map((desc) => (
+                  <React.Fragment key={desc}>
+                    {desc}
+                    <br />
+                  </React.Fragment>
+                ))
+              : descriptionWithConfidence.children
+          },
+          {
+            label: intl.get('iso.diagnosis.status'),
+            children: iso ? `${iso.zone} ${intl.get(iso.recommendation)}` : intl.get('NONE')
+          }
         ]}
-        labelStyle={{ width: '6em', color: '#fff' }}
-        contentStyle={{ justifyContent: 'flex-start', color: '#fff' }}
+        labelStyle={{ width: '6em', color }}
+        contentStyle={{ justifyContent: 'flex-start', color }}
       />
     </MutedCard>
   );

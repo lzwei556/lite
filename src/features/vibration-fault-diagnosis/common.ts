@@ -6,14 +6,31 @@ import request from 'utils/request';
 import { GetResponse } from 'utils/response';
 import { useRequest } from 'ahooks';
 
+enum Confidence {
+  Slight = 1,
+  Minor,
+  Major,
+  Critical
+}
+
+export type Fault = { type: number; confidence: Confidence };
+
+type Zone = 'A' | 'B' | 'C' | 'D';
+
 export type FaultDiagnosis = {
   assetId: number;
-  conclusion: number;
+  conclusion: string;
   components: {
     componentId: number;
     healthIndex: number;
     status: HealthStatus;
-    faultTypes: number[];
+    faults: Fault[];
+    iso?: {
+      zone: Zone;
+      recommendation: string;
+      zoneBoundaries: [number, number, number];
+      data: [number, number, number];
+    };
   }[];
   healthIndex: number;
   status: HealthStatus;
@@ -26,10 +43,17 @@ type FaultDiagnosisDTO = {
     componentId: number;
     monitoringPointId: number;
     diagnosisResults: {
-      items?: { diagnosis: number; confidence: 1 | 2 | 3 | 4 }[];
+      items?: (Fault & { diagnosis: number })[];
     };
     score: number;
     status: number;
+    vibrationISOResult?: {
+      zone: Zone;
+      zoneBoundaries: [number, number, number];
+      recommendation: string;
+      status: 0 | 1 | 2;
+      data: [number, number, number];
+    };
   }[];
   conclusion: string;
   score: number;
@@ -37,8 +61,12 @@ type FaultDiagnosisDTO = {
   timestamp: number;
 };
 
-export const useAssetDiagnosis = (id: number, enabled: boolean) => {
-  const { loading, data } = useRequest(getAssetDiagnosis, { defaultParams: [id], ready: enabled });
+export const useAssetDiagnosis = (id: number, enabled: boolean, living: boolean) => {
+  const { loading, data } = useRequest(getAssetDiagnosis, {
+    defaultParams: [id],
+    ready: enabled,
+    pollingInterval: living ? 10000 : 0
+  });
   return { loading, data: data ? transform(data) : data };
 };
 
@@ -47,17 +75,19 @@ const transform = (dto: FaultDiagnosisDTO): FaultDiagnosis => {
   return {
     assetId,
     components: components.map((c) => {
+      const { componentId, score, status, diagnosisResults, vibrationISOResult } = c;
       return {
-        componentId: c.componentId,
-        healthIndex: c.score,
-        status: Key.get(c.status),
-        faultTypes: (c.diagnosisResults?.items ?? []).reduce(
-          (prev, crt) => [...prev, crt.diagnosis],
-          [] as number[]
-        )
+        componentId,
+        healthIndex: score,
+        status: Key.get(status),
+        faults: (diagnosisResults?.items ?? []).reduce(
+          (prev, crt) => [...prev, { type: crt.diagnosis, confidence: crt.confidence }],
+          [] as Fault[]
+        ),
+        iso: vibrationISOResult
       };
     }),
-    conclusion: 1,
+    conclusion: dto.conclusion,
     healthIndex: score,
     status: Key.get(status),
     timestamp
@@ -72,14 +102,14 @@ const getAssetDiagnosis = async (id: number) => {
 
 export const useHealthStatus = ({
   status,
-  faultTypes = []
+  faults = []
 }: {
   status: HealthStatus;
-  faultTypes?: number[];
+  faults?: Fault[];
 }) => {
   const { language } = useLocaleContext();
   const separator = language === 'en-US' ? '; ' : '；';
-  const types = flattenFaultTypes(faultTypes);
+  const types = flattenFaultTypes(faults.map((f) => f.type));
 
   return {
     healthy: {
@@ -89,18 +119,26 @@ export const useHealthStatus = ({
     description: {
       label: intl.get('diagnosis.description'),
       children:
-        status.key === 0
+        status.key === 0 && types.length === 0
           ? intl.get('NONE')
           : types.map((type) => intl.get(FaultType.Key.get(type.key).label)).join(separator)
     },
-    suggestion: {
-      label: intl.get('diagnosis.suggestion'),
+    descriptionWithConfidence: {
+      label: intl.get('diagnosis.description'),
       children:
-        status.key === 0
+        status.key === 0 && types.length === 0
           ? intl.get('NONE')
-          : // : types.map((type) => intl.get(type.suggestion)).join(separator)
-            ''
+          : faults.map(
+              ({ type, confidence }) =>
+                `${intl.get(FaultType.Key.get(type).label)} [${intl.get(
+                  `fault.confidence.${Confidence[confidence].toLowerCase()}`
+                )}]`
+            )
     }
+    // suggestion: {
+    //   label: intl.get('diagnosis.suggestion'),
+    //   children: status.key === 0 ? intl.get('NONE') : intl.get(conclusion)
+    // }
   };
 };
 

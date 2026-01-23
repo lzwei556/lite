@@ -90,15 +90,21 @@ export const MoniotoringPointData = ({
           const { name, precision, unit } = p;
           const values = transform(historyData, p);
           return (
-            <Space direction='vertical' styles={{ item: { marginRight: '2em' } }}>
+            <Space direction='vertical' styles={{ item: { marginRight: '2em' } }} key={p.name}>
               <Typography.Text type='secondary'>
                 {getDisplayName({ name: intl.get(name).d(name), suffix: unit, lang: language })}
               </Typography.Text>
-              <Space>
-                {values.map(
-                  ({ name, last }) =>
-                    `${values.length > 1 ? name : ''} ${getValue({ value: last, precision })}`
-                )}
+              <Space direction='vertical' size={2}>
+                {values.map(({ name, last }) => (
+                  <Space key={name} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    {values.length > 1 ? (
+                      <Typography.Text type='secondary'>{name}</Typography.Text>
+                    ) : (
+                      ''
+                    )}
+                    {getValue({ value: last, precision })}
+                  </Space>
+                ))}
               </Space>
             </Space>
           );
@@ -162,38 +168,10 @@ const Charts = (props: Props) => {
 
   return (
     <>
-      <Waveform {...{ ...props, originalDomain }} />
+      {/* <Waveform {...{ ...props, originalDomain }} /> */}
       <TimeDomain {...props} />
       <Frequency {...{ ...props, originalDomain }} />
     </>
-  );
-};
-
-const Waveform = ({
-  axis,
-  originalDomain,
-  timestamp
-}: Props & {
-  originalDomain: any;
-}) => {
-  const { colorLayoutBgStyle } = useGlobalStyles();
-
-  return (
-    <MutedCard
-      extra={Dayjs.format(timestamp)}
-      style={{ marginTop: 8, ...colorLayoutBgStyle }}
-      title={intl.get('WAVEFORM_DATA')}
-    >
-      <LineChart
-        series={[
-          {
-            data: { [intl.get(axis.label)]: originalDomain?.values ?? [] },
-            xAxisValues: (originalDomain?.xAxis ?? []).map((n: number) => roundValue(n))
-          }
-        ]}
-        style={{ flex: 1, height: 160 }}
-      />
-    </MutedCard>
   );
 };
 
@@ -201,10 +179,11 @@ const TimeDomain = ({ id, timestamp, axis, property }: Props) => {
   const { language } = useLocaleContext();
   const timeDomain = useTimeDomain({ id, timestamp, axis, property });
   const { x = [], y = [], xAxisUnit } = timeDomain.data || {};
+  const { colorLayoutBgStyle } = useGlobalStyles();
   return (
     <MutedCard
       extra={Dayjs.format(timestamp)}
-      style={{ marginTop: 8, background: '#f2f3f5' }}
+      style={{ marginTop: 8, ...colorLayoutBgStyle }}
       title={
         <Space>
           {`${intl.get(property.label)}${language === 'en-US' ? ' ' : ''}${intl.get(
@@ -228,7 +207,14 @@ const TimeDomain = ({ id, timestamp, axis, property }: Props) => {
             grid: { top: 30, bottom: 0, right: 40 }
           }
         }}
-        series={[{ data: { [intl.get(axis.label)]: y }, xAxisValues: x.map((n) => `${n}`) }]}
+        loading={timeDomain.loading}
+        series={[
+          {
+            data: { [intl.get(axis.label)]: y },
+            xAxisValues: x.map((n) => `${n}`),
+            raw: { sampling: 'lttb' }
+          }
+        ]}
         style={{ flex: 1, height: 160 }}
         yAxisMeta={{ ...property, unit: property.unit }}
       />
@@ -245,12 +231,13 @@ const Frequency = ({
 }: Props & {
   originalDomain: any;
 }) => {
-  const { x, y } = useFrequency(originalDomain, property, rotationSpeed) || {};
+  const { x, y, loading } = useFrequency(originalDomain, property, rotationSpeed) || {};
   const { language } = useLocaleContext();
+  const { colorLayoutBgStyle } = useGlobalStyles();
   return (
     <MutedCard
       extra={Dayjs.format(timestamp)}
-      style={{ marginTop: 8, background: '#f2f3f5' }}
+      style={{ marginTop: 8, ...colorLayoutBgStyle }}
       title={
         <Space>
           {`${intl.get(property.label)}${language === 'en-US' ? ' ' : ''}${intl.get('spectrum')}`}
@@ -272,10 +259,12 @@ const Frequency = ({
             grid: { top: 30, bottom: 0, right: 40 }
           }
         }}
+        loading={loading}
         series={[
           {
             data: { [intl.get(axis.label)]: y },
-            xAxisValues: x.map((n: number) => `${n}`)
+            xAxisValues: x.map((n: number) => `${n}`),
+            raw: { sampling: 'lttb' }
           }
         ]}
         style={{ flex: 1, height: 160 }}
@@ -313,5 +302,5 @@ const useFrequency = (originalDomain: any, property: any, rotation_speed: any) =
       console.log(error);
     }
   }, [property.value, originalDomain, rotation_speed]);
-  return { x, y };
+  return { x, y, loading };
 };
