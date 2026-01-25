@@ -2,6 +2,7 @@ import React from 'react';
 import { ChartMark } from 'components';
 import Sideband from '../sideband';
 import { MarkType } from './mark-types';
+import { getAnalysisSettings } from './settings-form';
 
 export type MarkSettings = {
   harmonic: { enabled: boolean; cursor: number; base?: number };
@@ -10,8 +11,8 @@ export type MarkSettings = {
   top10: boolean;
 };
 
-const settingsDefaultValue = {
-  harmonic: { enabled: false, cursor: 5 },
+export const settingsDefaultValue = {
+  harmonic: { enabled: true, cursor: 5 },
   sideband: { enabled: false, cursor: 5 },
   faultFrequency: false,
   top10: false
@@ -31,7 +32,9 @@ const AnalysisContext = React.createContext<{
 
 export const MarkContext = ({ children }: { children: React.ReactNode }) => {
   const [markType, setMarkType] = React.useState<MarkType>('Peak');
-  const [settings, setSettings] = React.useState<MarkSettings>(settingsDefaultValue);
+  const [settings, setSettings] = React.useState<MarkSettings>(
+    getAnalysisSettings() ?? settingsDefaultValue
+  );
 
   return (
     <ChartMark.Context>

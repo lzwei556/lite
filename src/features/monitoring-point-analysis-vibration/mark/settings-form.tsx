@@ -5,7 +5,7 @@ import { ModalFormProps } from 'types/common';
 import { ModalWrapper } from 'components/modalWrapper';
 import { Grid, MutedCard, NumberFormItem, RadioFormItem, SelectFormItem } from 'components';
 import { iterate } from 'utils';
-import { MarkSettings, useMarkContext } from './context';
+import { MarkSettings, settingsDefaultValue, useMarkContext } from './context';
 
 enum CursorAmount {
   One = 1,
@@ -28,29 +28,46 @@ enum SidebandCursor {
 const harmonicCursorAmount = iterate(CursorAmount);
 const sidebandCursorAmount = iterate(SidebandCursor);
 
-export const SettingsForm = (props: ModalFormProps) => {
+export const SettingsForm = (props: ModalFormProps & { base?: number }) => {
   const [form] = Form.useForm<MarkSettings>();
   const { settings, setSettings } = useMarkContext();
   const [enabledHarmonic, setEnabledHarmonic] = React.useState(settings.harmonic.enabled);
   const [enabledSideband, setEnabledSideband] = React.useState(settings.sideband.enabled);
+
+  const updateAndSave = (values: MarkSettings) => {
+    localStorage.setItem(
+      'vibration-analysis-settings',
+      JSON.stringify(removeHarmonicFromSettings(values))
+    );
+    setSettings(values);
+  };
 
   return (
     <ModalWrapper
       {...props}
       onOk={() =>
         form.validateFields().then((values) => {
-          // localStorage.setItem(
-          //   'nums-cursors-vibration',
-          //   JSON.stringify({ harmonic: values.harmonic.cursor, sideband: values.sideband.cursor })
-          // );
-          setSettings(values);
+          updateAndSave(values);
           props.onSuccess();
         })
       }
+      cancelButtonProps={{
+        onClick: () => {
+          form.resetFields(['harmonic', 'sideband', 'faultFrequency', 'top10']);
+          updateAndSave(mergeHarmonicWithSettings(settingsDefaultValue));
+          form.setFieldsValue(settingsDefaultValue);
+          form.setFieldValue(['sideband', 'center'], undefined);
+        }
+      }}
+      cancelText={intl.get('RESET')}
       title={intl.get('nums.of.cursors.settings')}
       width={500}
     >
-      <Form form={form} layout='vertical' initialValues={settings}>
+      <Form
+        form={form}
+        layout='vertical'
+        initialValues={mergeHarmonicWithSettings(settings, props.base)}
+      >
         <MutedCard
           extra={
             <Form.Item name={['harmonic', 'enabled']} noStyle>
@@ -61,6 +78,13 @@ export const SettingsForm = (props: ModalFormProps) => {
         >
           <Grid>
             <Col span={12}>
+              <NumberFormItem
+                label='harmonic.1x'
+                name={['harmonic', 'base']}
+                inputNumberProps={{ disabled: !enabledHarmonic, addonAfter: 'Hz' }}
+              />
+            </Col>
+            <Col span={12}>
               <SelectFormItem
                 label='cursor.nums'
                 name={['harmonic', 'cursor']}
@@ -68,13 +92,6 @@ export const SettingsForm = (props: ModalFormProps) => {
                   disabled: !enabledHarmonic,
                   options: harmonicCursorAmount.map((n) => ({ label: `${n}`, value: n }))
                 }}
-              />
-            </Col>
-            <Col span={12}>
-              <NumberFormItem
-                label='harmonic.base'
-                name={['harmonic', 'base']}
-                inputNumberProps={{ disabled: !enabledHarmonic, addonAfter: 'Hz' }}
               />
             </Col>
           </Grid>
@@ -90,16 +107,6 @@ export const SettingsForm = (props: ModalFormProps) => {
         >
           <Grid>
             <Col span={12}>
-              <SelectFormItem
-                label='cursor.nums'
-                name={['sideband', 'cursor']}
-                selectProps={{
-                  disabled: !enabledSideband,
-                  options: sidebandCursorAmount.map((n) => ({ label: `${n}`, value: n }))
-                }}
-              />
-            </Col>
-            <Col span={12}>
               <NumberFormItem
                 label='sideband.center'
                 name={['sideband', 'center']}
@@ -110,7 +117,17 @@ export const SettingsForm = (props: ModalFormProps) => {
               <NumberFormItem
                 label='sideband.distance'
                 name={['sideband', 'distance']}
-                inputNumberProps={{ disabled: !enabledSideband }}
+                inputNumberProps={{ disabled: !enabledSideband, addonAfter: 'Hz' }}
+              />
+            </Col>
+            <Col span={12}>
+              <SelectFormItem
+                label='cursor.nums'
+                name={['sideband', 'cursor']}
+                selectProps={{
+                  disabled: !enabledSideband,
+                  options: sidebandCursorAmount.map((n) => ({ label: `${n}`, value: n }))
+                }}
               />
             </Col>
           </Grid>
@@ -122,11 +139,29 @@ export const SettingsForm = (props: ModalFormProps) => {
   );
 };
 
-export const getNumsOfCursor = () => {
-  let nums = { harmonic: CursorAmount.Five, sideband: SidebandCursor.Five };
-  const store = localStorage.getItem('nums-cursors-vibration');
+export const getAnalysisSettings = () => {
+  const store = localStorage.getItem('vibration-analysis-settings');
   if (store) {
-    nums = JSON.parse(store);
+    return JSON.parse(store) as MarkSettings;
   }
-  return nums;
+};
+
+export const mergeHarmonicWithSettings = (settings: MarkSettings, harmonic?: number) => {
+  return {
+    ...settings,
+    harmonic: { ...settings.harmonic, base: harmonic },
+    sideband: { ...settings.sideband, distance: harmonic }
+  };
+};
+
+const removeHarmonicFromSettings = (settings: MarkSettings) => {
+  return {
+    ...settings,
+    harmonic: { cursor: settings.harmonic.cursor, enabled: settings.harmonic.enabled },
+    sideband: {
+      cursor: settings.sideband.cursor,
+      enabled: settings.sideband.enabled,
+      center: settings.sideband.center
+    }
+  };
 };

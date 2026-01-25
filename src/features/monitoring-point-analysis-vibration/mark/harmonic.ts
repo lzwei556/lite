@@ -1,17 +1,20 @@
 import { ChartMark } from 'components';
 import { HarmonicData } from 'asset-common';
-import { getMarkTypeColor } from './mark-types';
+import { getLineStyles, MarkParams } from './hooks';
+import { getValue } from 'utils';
+import intl from 'react-intl-universal';
 
 export const trigger = ({
   x,
   y,
   indexs,
-  dispatchMarks
-}: {
-  x: number[];
-  y: number[];
+  dispatchMarks,
+  topY,
+  property
+}: MarkParams & {
   indexs: number[];
   dispatchMarks: ChartMark.DispathMark;
+  topY: number;
 }) => {
   const markType = 'Harmonic';
   dispatchMarks({ type: 'remove_by_type', removeTypes: [markType] });
@@ -22,12 +25,18 @@ export const trigger = ({
       type: 'append_multiple',
       mark: {
         name: `${xValue}${yValue}${i}`,
-        data: [`${xValue}`, yValue],
+        data: [
+          [`${xValue}`, yValue],
+          [`${xValue}`, topY]
+        ],
         type: markType,
-        chartProps: {
-          label: { formatter: i === 0 ? `${xValue}` : undefined },
-          itemStyle: { color: getMarkTypeColor(markType) }
-        }
+        chartProps: getLineStyles(
+          markType,
+          `${intl.get(`harmonic.${i + 1}x`)}\r\n${xValue} Hz\r\n${getValue({
+            value: yValue,
+            unit: property?.unit
+          })}`
+        )
       }
     });
   });
@@ -62,6 +71,28 @@ export const getIndexs = ({
       .map((n, index) => {
         return baseFrequencyIndex * (index + 1);
       });
+  }
+  return [];
+};
+
+export const getHarmonic = ({ harmonic, x, y }: MarkParams) => {
+  if (harmonic) {
+    return [
+      harmonic.harmonic1XIndex,
+      harmonic.harmonic2XIndex,
+      harmonic.harmonic3XIndex,
+      harmonic.harmonic4XIndex,
+      harmonic.harmonic5XIndex,
+      harmonic.harmonic6XIndex,
+      harmonic.harmonic7XIndex,
+      harmonic.harmonic8XIndex,
+      harmonic.harmonic9XIndex,
+      harmonic.harmonic10XIndex
+    ].map((index) => {
+      const xValue = x[index] ?? -1;
+      const yValue = y[index] ?? -1;
+      return [xValue, yValue];
+    });
   }
   return [];
 };

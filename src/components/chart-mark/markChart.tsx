@@ -42,7 +42,7 @@ export const MarkChart = (
       }
     })
   );
-  console.log('options', options)
+  // console.log('options', options)
   const { colorBorderStyle } = useGlobalStyles();
   const hasFeature = features && Object.keys(features).length > 0;
 
@@ -62,8 +62,10 @@ export const MarkChart = (
             />
           }
         >
-          {toolbars?.map((bar) => (
-            <Space size={4}>{bar}</Space>
+          {toolbars?.map((bar, i) => (
+            <Space size={4} key={i}>
+              {bar}
+            </Space>
           ))}
           {hasFeature && (
             <Space size={4}>

@@ -11,6 +11,7 @@ import { useFaultFrequency } from './useFaultFrequency';
 import { getValue, roundValue } from 'utils';
 import { SidebarMarkList } from './sidebar-mark-list';
 import { SettingsForm } from './mark/settings-form';
+import { StatisticsTable } from './mark/statistics-table';
 
 export const Frequency = ({
   axis,
@@ -28,12 +29,14 @@ export const Frequency = ({
   const {
     marks,
     handleClick,
+    handleSidebandClick,
     isTypeSideband,
     handleRefreshHarmonic,
     handleRefreshSideband,
     handleToggleMarks,
     handleRestore,
-    markType
+    markType,
+    dispatchMarks
   } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
@@ -59,11 +62,14 @@ export const Frequency = ({
       };
       frequency(rotation_speed ? { ...data, rpm: rotation_speed } : data)
         .then(({ x, y, ...rest }) => setData({ x: x.map((n) => roundValue(n)), y, ...rest }))
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          dispatchMarks({ type: 'remove_by_type', removeTypes: ['Peak', 'Double', 'Multiple'] });
+        });
     } else {
       setData(undefined);
     }
-  }, [property.value, originalDomain, rotation_speed]);
+  }, [property.value, originalDomain, rotation_speed, dispatchMarks]);
 
   React.useEffect(() => {
     const faultFrequencies = faultFrequency
@@ -72,108 +78,118 @@ export const Frequency = ({
           value
         }))
       : [];
-    handleToggleMarks(x, y, faultFrequencies);
-  }, [handleToggleMarks, x, y, faultFrequency]);
+    handleToggleMarks({ x, y, faultFrequencies, property });
+  }, [handleToggleMarks, x, y, faultFrequency, property]);
 
   React.useEffect(() => {
-    handleRefreshHarmonic(x, y, data);
-  }, [handleRefreshHarmonic, x, y, data]);
+    handleRefreshHarmonic({ x, y, harmonic: data, property });
+  }, [handleRefreshHarmonic, x, y, data, property]);
 
   React.useEffect(() => {
-    handleRefreshSideband(x, y);
-  }, [handleRefreshSideband, x, y]);
+    handleRefreshSideband({ x, y, property });
+  }, [handleRefreshSideband, x, y, property]);
 
   return (
     <Grid wrap={false}>
       <Col flex='auto'>
-        <ChartMark.Chart
-          cardProps={{
-            title: (
-              <Space>
-                {[
-                  {
-                    label: intl.get('SETTING_RANGE'),
-                    children: getValue({ value: range, unit: 'g' })
+        <Grid>
+          <Col span={24}>
+            <ChartMark.Chart
+              cardProps={{
+                title: (
+                  <Space>
+                    {[
+                      {
+                        label: intl.get('SETTING_RANGE'),
+                        children: getValue({ value: range, unit: 'g' })
+                      },
+                      {
+                        label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                        children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
+                      },
+                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                    ].map((item) => (
+                      <span style={{ fontSize: 14, fontWeight: 400 }} key={item.label}>
+                        <Typography.Text type='secondary'>{item.label}</Typography.Text>{' '}
+                        {item.children}
+                      </span>
+                    ))}
+                  </Space>
+                )
+              }}
+              config={{
+                opts: {
+                  xAxis: {
+                    name: 'Hz',
+                    axisLabel: {
+                      formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                      interval: Math.floor(x.length / 20)
+                    }
                   },
-                  {
-                    label: intl.get('SETTING_SAMPLING_FREQUNECY'),
-                    children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
-                  },
-                  { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
-                ].map((item) => (
-                  <span style={{ fontSize: 14, fontWeight: 400 }}>
-                    <Typography.Text type='secondary'>{item.label}</Typography.Text> {item.children}
-                  </span>
-                ))}
-              </Space>
-            )
-          }}
-          config={{
-            opts: {
-              xAxis: {
-                name: 'Hz',
-                axisLabel: {
-                  formatter: (value: string) => `${Number(value).toFixed(0)}`,
-                  interval: Math.floor(x.length / 20)
+                  yAxis: { name: property.unit, nameLocation: 'middle', nameGap: 40 },
+                  dataZoom: dataZoom ?? [{ start: 0, end: 40 }],
+                  grid: { top: 60, bottom: 60, right: 30 }
                 }
-              },
-              yAxis: { name: property.unit },
-              dataZoom: dataZoom ?? [{ start: 0, end: 40 }],
-              grid: { top: 60, bottom: 60, right: 30 }
-            }
-          }}
-          features={{
-            download: {
-              onClick() {
-                downlaodRawDataHandler();
-              },
-              tooltipProps: { title: intl.get('DOWNLOAD_DATA') }
-            },
-            setup: {
-              onClick() {
-                setOpen(true);
-              },
-              tooltipProps: { title: intl.get('nums.of.cursors.settings') }
-            },
-            restore: {
-              onClick() {
-                handleRestore();
-                handleRefreshHarmonic(x, y, data);
-                handleRefreshSideband(x, y);
-              }
-            },
-            saveAsImage: {}
-          }}
-          loading={loading}
-          onEvents={{
-            click: (coord: [string, number], xIndex?: number) => {
-              handleClick(coord, x, y, xIndex);
-            }
-          }}
-          series={ChartMark.useMergeMarkDatas({
-            series: [
-              {
-                data: { [intl.get(axis.label)]: y ?? [] },
-                xAxisValues: x.map((n) => `${n}`),
-                raw: { animation: false }
-              }
-            ],
-            marks,
-            lineStyle: { symbol: 'none' }
-          })}
-          style={{ height: 450 }}
-          toolbars={[<Toolbar />]}
-          yAxisMeta={{ ...property, unit: property.unit }}
-        >
-          {isTypeSideband && <Sideband.Switcher />}
-          <SettingsForm
-            open={open}
-            onSuccess={() => {
-              setOpen(false);
-            }}
-            onCancel={() => setOpen(false)}
-          />
-        </ChartMark.Chart>
+              }}
+              features={{
+                download: {
+                  onClick() {
+                    downlaodRawDataHandler();
+                  },
+                  tooltipProps: { title: intl.get('DOWNLOAD_DATA') }
+                },
+                setup: {
+                  onClick() {
+                    setOpen(true);
+                  },
+                  tooltipProps: { title: intl.get('nums.of.cursors.settings') }
+                },
+                restore: {
+                  onClick() {
+                    handleRestore();
+                    handleRefreshHarmonic({ x, y, harmonic: data, property });
+                    handleRefreshSideband({ x, y, property });
+                  }
+                },
+                saveAsImage: {}
+              }}
+              loading={loading}
+              onEvents={{
+                click: (coord: [string, number], xIndex?: number) => {
+                  handleClick({ coord, x, y, xIndex, property, xUnit: 'Hz' });
+                  handleSidebandClick({ coord, x, y, xIndex, property });
+                }
+              }}
+              series={ChartMark.useMergeMarkDatas({
+                series: [
+                  {
+                    data: { [intl.get(axis.label)]: y ?? [] },
+                    xAxisValues: x.map((n) => `${n}`),
+                    raw: { animation: false }
+                  }
+                ],
+                marks,
+                lineStyle: { symbol: 'none' }
+              })}
+              style={{ height: 450 }}
+              toolbars={[<Toolbar />]}
+              yAxisMeta={{ ...property, unit: property.unit }}
+            >
+              {isTypeSideband && <Sideband.Switcher />}
+              <SettingsForm
+                open={open}
+                onSuccess={() => {
+                  setOpen(false);
+                }}
+                onCancel={() => setOpen(false)}
+                base={data?.harmonic1XIndex && x[data.harmonic1XIndex]}
+              />
+            </ChartMark.Chart>
+          </Col>
+          <Col span={24}>
+            <StatisticsTable {...{ x, y, faultFrequency, property, harmonic: data }} />
+          </Col>
+        </Grid>
       </Col>
       <SidebarMarkList asset={parent} markType={markType} faultFrequency={faultFrequency} />
     </Grid>

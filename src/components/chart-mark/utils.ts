@@ -14,8 +14,8 @@ export function useMergeMarkDatas({
   lineStyle?: any;
   pointStyle?: any;
 }) {
-  const { colorTextStyle } = useGlobalStyles();
-  const { lines, points } = buildMarkDatas(marks, colorTextStyle.color);
+  const { colorErrorHighLightStyle } = useGlobalStyles();
+  const { lines, points } = buildMarkDatas(marks, colorErrorHighLightStyle.color);
   return series.map((s) => {
     const { markLine: prevLine, markPoint: prevPoint, ...rest } = s.raw || {};
     const lineData = prevLine?.data ?? [];
@@ -66,7 +66,7 @@ function buildPointData(mark: PointMark, color: string): PointDataItem {
   return {
     label: labelProps,
     symbol: symbolProps,
-    symbolSize: [6, 150],
+    symbolSize: [8, 32],
     symbolOffset: [0, -20],
     itemStyle: itemStyleProps,
     name,
@@ -91,11 +91,11 @@ function buildLineData(mark: LineMark): LineDataItem {
           label: {
             ...chartProps?.label,
             formatter:
-              label && value
+              label && value && chartProps?.label?.formatterFn
                 ? `${label}\n${
                     chartProps?.label?.formatterFn ? chartProps?.label?.formatterFn(value) : value
                   }`
-                : undefined
+                : chartProps?.label.formatter
           }
         };
       } else {

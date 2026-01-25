@@ -4,9 +4,10 @@ import { Mark } from './types';
 
 type AppendingMode = `append_${'single' | 'double' | 'multiple'}`;
 type Action = {
-  type: AppendingMode | 'remove' | 'remove_by_type' | 'change_label' | 'clear';
+  type: AppendingMode | 'remove' | 'remove_by_type' | 'remove_by_name' | 'change_label' | 'clear';
   mark?: Mark;
   removeTypes?: string[];
+  removeNames?: string[];
 };
 type ContextProps = {
   marks: Mark[];
@@ -24,7 +25,7 @@ export const Context = ({
   initial?: Mark[];
 }) => {
   const [marks, dispatchMarks] = React.useReducer(marksReducer, initial);
-  console.log('marks', marks);
+  // console.log('marks', marks);
 
   return (
     <ChartContext>
@@ -60,9 +61,12 @@ function marksReducer(marks: Mark[], action: Action) {
             .map((mark, i) => ({ ...mark, label: moveToPrev(i, mark.label) }))
         );
     case 'remove_by_type':
-      return marks
-        .filter((mark) => !action.removeTypes?.includes(mark.type))
-        // .map((mark, i) => ({ ...mark, label: moveToPrev(i, mark.label) }));
+      return marks.filter((mark) => !action.removeTypes?.includes(mark.type));
+    // .map((mark, i) => ({ ...mark, label: moveToPrev(i, mark.label) }));
+    case 'remove_by_name':
+      return marks.filter(
+        (mark) => !action.removeNames?.some((name) => mark.name.indexOf(name) > -1)
+      );
     case 'change_label':
       return marks.map((m) => {
         if (mark && mark.name === m.name) {

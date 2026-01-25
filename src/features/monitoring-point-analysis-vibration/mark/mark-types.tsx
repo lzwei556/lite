@@ -6,7 +6,7 @@ import { ReactComponent as BookmarkSVG } from './bookmark.svg';
 import { ReactComponent as SidebandSVG } from './sideband.svg';
 import { ReactComponent as Top10SVG } from './top10.svg';
 import { ReactComponent as FaultFrequencySVG } from './faultFrequency.svg';
-import { ColorDanger, ColorWarn } from 'constants/color';
+import { ColorDanger, ColorHealth, ColorWarn } from 'constants/color';
 import intl from 'react-intl-universal';
 
 export const editableMarkTypes = ['Peak', 'Double', 'Multiple', 'Harmonic', 'Sideband'] as const;
@@ -19,8 +19,8 @@ export const markTypes: MarkType[] = [...editableMarkTypes, ...readonlyMarkTypes
 const markTypeTable: Record<MarkType, { color: string; icon: React.ComponentType }> = {
   Peak: { color: chartColors[1], icon: () => <BookmarkSVG /> },
   Double: { color: chartColors[3], icon: () => <BookmarksSVG /> },
-  Multiple: { color: chartColors[4], icon: () => <ChecklistSVG /> },
-  Harmonic: { color: chartColors[2], icon: () => <HarmonicSVG /> },
+  Multiple: { color: ColorHealth, icon: () => <ChecklistSVG /> },
+  Harmonic: { color: '#592c1c', icon: () => <HarmonicSVG /> },
   Sideband: { color: ColorWarn, icon: () => <SidebandSVG /> },
   Faultfrequency: { color: ColorDanger, icon: () => <FaultFrequencySVG /> },
   Top10: { color: chartColors[0], icon: () => <Top10SVG /> }

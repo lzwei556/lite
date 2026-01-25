@@ -4,17 +4,31 @@ import { HarmonicData } from 'asset-common';
 import Sideband from '../sideband';
 import { useMarkContext } from './context';
 import * as Harmonic from './harmonic';
-import { findClosest, formatNumericData, roundValue } from 'utils';
-import { getMarkTypeColor, MarkType } from './mark-types';
+import { findClosest, formatNumericData, getValue, roundValue } from 'utils';
+import { getMarkTypeColor, getMarkTypeLabel, MarkType } from './mark-types';
+import { Property } from '../useTrend';
+
+export type MarkParams = {
+  x: number[];
+  y: number[];
+  xIndex?: number;
+  property?: Property;
+  xUnit?: string;
+  harmonic?: HarmonicData;
+  faultFrequencies?: { label: string; value: number }[];
+};
 
 export const useMarkChartProps = () => {
   const { marks, dispatchMarks } = ChartMark.useContext();
   const { markType, settings } = useMarkContext();
-  const { centeredIndex, setCenteredIndex, triggerCenter, triggerSide, reset } =
-    Sideband.useContext();
+  const { centeredIndex, triggerCenter, triggerSide, reset, cursor } = Sideband.useContext();
+  const topY = useTopY();
 
   const handleClick = React.useCallback(
-    (coord: [string, number], x: number[], y: number[], xIndex?: number) => {
+    ({ coord, x, y, xIndex, property, xUnit }: MarkParams & { coord: [string, number] }) => {
+      if (!topY) {
+        return;
+      }
       const { harmonic } = settings;
       const [xValue, yValue] = coord.map(formatNumericData);
       if (markType === 'Peak' || markType === 'Double' || markType === 'Multiple') {
@@ -27,105 +41,116 @@ export const useMarkChartProps = () => {
               : 'append_multiple',
           mark: {
             name: coord.join(),
-            data: coord,
+            data: [coord, [coord[0], topY]],
             type: markType,
             value: `${xValue} ${yValue}`,
-            chartProps: getLineStyles(markType, `${xValue} ${yValue}`)
+            chartProps: getLineStyles(
+              markType,
+              `${getMarkTypeLabel(markType)}\r\n${getValue({
+                value: xValue as number,
+                unit: xUnit
+              })}\r\n${getValue({
+                value: coord[1],
+                unit: property?.unit
+              })}`
+            )
           }
         });
-      } else if (markType === 'Sideband' && xIndex) {
-        if (centeredIndex) {
-          triggerSide(Sideband.getIndexs({ centeredIndex, sideIndex: xIndex }), x, y);
-        } else {
-          triggerCenter(coord);
-          setCenteredIndex(xIndex);
-        }
       } else if (markType === 'Harmonic') {
         Harmonic.trigger({
           x,
           y,
           indexs: Harmonic.getIndexs({ baseFrequencyIndex: xIndex, cursor: harmonic.cursor }),
-          dispatchMarks
+          dispatchMarks,
+          topY,
+          property
         });
       }
     },
-    [markType, dispatchMarks, centeredIndex, setCenteredIndex, triggerCenter, triggerSide, settings]
+    [markType, dispatchMarks, settings, topY]
+  );
+
+  const handleSidebandClick = React.useCallback(
+    ({ xIndex, x, y, coord, property }: MarkParams & { coord: [string, number] }) => {
+      if (!topY) {
+        return;
+      }
+      if (markType === 'Sideband' && xIndex) {
+        const { sideband } = settings;
+        if (centeredIndex && cursor === 'side') {
+          triggerSide(
+            Sideband.getIndexs({ centeredIndex, sideIndex: xIndex, cursor: sideband.cursor }),
+            x,
+            y,
+            topY
+          );
+        } else if (cursor === 'center') {
+          triggerCenter(coord, topY, xIndex, property);
+        }
+      }
+    },
+    [centeredIndex, cursor, markType, settings, topY, triggerCenter, triggerSide]
   );
 
   const handleRefreshHarmonic = React.useCallback(
-    (x: number[], y: number[], harmonic?: HarmonicData) => {
+    ({ x, y, harmonic, property }: MarkParams) => {
       const {
         harmonic: { enabled, base, cursor }
       } = settings;
       const closest = base ? findClosest(x, base) : null;
       const baseFrequencyIndex = closest ? x.indexOf(closest) : -1;
-
-      if (enabled) {
+      if (enabled && topY) {
         Harmonic.trigger({
           x,
           y,
           indexs: Harmonic.getIndexs(
             baseFrequencyIndex !== -1 ? { cursor, baseFrequencyIndex } : { cursor, harmonic }
           ),
-          dispatchMarks
+          dispatchMarks,
+          topY,
+          property
         });
       } else {
         dispatchMarks({ type: 'remove_by_type', removeTypes: ['Harmonic'] });
       }
     },
-    [dispatchMarks, settings]
+    [dispatchMarks, settings, topY]
   );
 
   const handleRefreshSideband = React.useCallback(
-    (x: number[], y: number[]) => {
-      const markType = 'Sideband'
+    ({ x, y, property }: MarkParams) => {
       const {
-        sideband: { enabled, center, distance }
+        sideband: { enabled, cursor, center, distance }
       } = settings;
-      const closest = center ? findClosest(x, center) : null;
-      const centeredIndex = closest ? x.indexOf(closest) : -1;
-      const sideIndex = centeredIndex !== -1 && distance ? centeredIndex + distance : null;
-      if (enabled && centeredIndex !== -1 && sideIndex) {
-        const coord = [`${x[centeredIndex]}`, y[centeredIndex]] as [string, number];
-        dispatchMarks({
-          type: 'append_multiple',
-          mark: {
-            name: `${'center'}${coord.join()}`,
-            label: 'sideband.center',
-            data: coord,
-            type: markType,
-            chartProps: {
-              itemStyle: { color: getMarkTypeColor(markType) }
-            }
-          }
-        });
-        Sideband.getIndexs({ centeredIndex, sideIndex }).forEach(({ index, label }, i) => {
-          const xValue = x[index] ?? 'out.of.range';
-          const yValue = y[index] ?? 'out.of.range';
-          dispatchMarks({
-            type: 'append_multiple',
-            mark: {
-              name: `${'side'}${[`${xValue}`, yValue].join()}${i}`,
-              label,
-              data: [`${xValue}`, yValue],
-              type: markType,
-              chartProps: {
-                itemStyle: { color: getMarkTypeColor(markType) }
+
+      if (enabled) {
+        const closest = center ? findClosest(x, center) : null;
+        if (closest) {
+          const centeredIndex = x.indexOf(closest);
+          if (distance) {
+            const closestSide = findClosest(x, closest + distance);
+            if (closestSide) {
+              const sideIndex = x.indexOf(closestSide);
+              if (centeredIndex !== -1 && sideIndex !== -1 && topY) {
+                const coord = [`${x[centeredIndex]}`, y[centeredIndex]] as [string, number];
+                triggerCenter(coord, topY, centeredIndex, property);
+                triggerSide(Sideband.getIndexs({ centeredIndex, sideIndex, cursor }), x, y, topY);
               }
             }
-          });
-        });
+          }
+        }
       } else {
-        dispatchMarks({ type: 'remove_by_type', removeTypes: ['Sideband'] });
+        reset();
       }
     },
-    [dispatchMarks, settings]
+    [settings, triggerCenter, triggerSide, topY, reset]
   );
 
   const handleToggleMarks = React.useCallback(
-    (x: number[], y: number[], faultFrequencies?: { label: string; value: number }[]) => {
+    ({ faultFrequencies, x, y, property }: MarkParams) => {
+      dispatchMarks({ type: 'remove_by_type', removeTypes: ['Faultfrequency', 'Top10'] });
       const { faultFrequency, top10 } = settings;
-      if (faultFrequency) {
+      if (faultFrequency && topY) {
         (faultFrequencies ?? []).forEach(({ label, value }) => {
           const closest = findClosest(x, value);
           const index = x.indexOf(closest ?? value);
@@ -135,12 +160,18 @@ export const useMarkChartProps = () => {
               type: 'append_multiple',
               mark: {
                 name: `${xValue}${value}`,
-                data: [xValue, y?.[index] ?? -1],
+                data: [
+                  [xValue, y?.[index] ?? -1],
+                  [xValue, topY]
+                ],
                 type: 'Faultfrequency',
-                chartProps: {
-                  label: { formatter: `${label} ${roundValue(value)}` },
-                  itemStyle: { color: getMarkTypeColor('Faultfrequency') }
-                }
+                chartProps: getLineStyles(
+                  'Faultfrequency',
+                  `${label}\r\n${roundValue(value)} Hz\r\n${getValue({
+                    value: y?.[index],
+                    unit: property?.unit
+                  })}`
+                )
               }
             });
           }
@@ -151,10 +182,10 @@ export const useMarkChartProps = () => {
 
       if (top10) {
         if (y.length >= 10) {
-          const top10 = [...y].sort((a, b) => b - a).slice(0, 10);
+          const top10 = getTop10({ x, y });
           top10.forEach((n, index) => {
-            const xValue = `${x[y.indexOf(n)]}`;
-            const yValue = n;
+            const xValue = `${x[y.indexOf(n.value)]}`;
+            const yValue = n.value;
             dispatchMarks({
               type: 'append_multiple',
               mark: {
@@ -170,7 +201,7 @@ export const useMarkChartProps = () => {
         dispatchMarks({ type: 'remove_by_type', removeTypes: ['Top10'] });
       }
     },
-    [dispatchMarks, settings]
+    [dispatchMarks, settings, topY]
   );
 
   const handleRestore = () => {
@@ -181,14 +212,53 @@ export const useMarkChartProps = () => {
 
   return {
     handleClick,
+    handleSidebandClick,
     handleRefreshHarmonic,
     handleRefreshSideband,
     handleToggleMarks,
     handleRestore,
     marks,
     isTypeSideband: markType === 'Sideband',
-    markType
+    markType,
+    dispatchMarks
   };
+};
+
+const useTopY = () => {
+  const [topY, setTopY] = React.useState<number>();
+  const ref = useChartContext();
+
+  React.useEffect(() => {
+    const chart = ref.current?.getInstance() as any;
+    if (!chart) return;
+
+    const updateTopY = () => {
+      const model = chart.getModel();
+      const grid = model?.getComponent('grid');
+      const rect = grid?.coordinateSystem?.getRect();
+      if (!rect) return;
+
+      const yValue = chart.convertFromPixel({ yAxisIndex: 0 }, rect.y);
+
+      setTopY(yValue);
+    };
+
+    // Initial calculation
+    updateTopY();
+
+    // React to zoom / render / resize
+    chart.on('dataZoom', updateTopY);
+    chart.on('finished', updateTopY);
+    chart.on('resize', updateTopY);
+
+    return () => {
+      chart.off('dataZoom', updateTopY);
+      chart.off('finished', updateTopY);
+      chart.off('resize', updateTopY);
+    };
+  }, [ref]);
+
+  return topY;
 };
 
 export const useDatazoom = () => {
@@ -198,11 +268,81 @@ export const useDatazoom = () => {
 };
 
 export const getLineStyles = (markType: MarkType, formatter?: string) => {
+  const color = getMarkTypeColor(markType);
+
   return {
-    label: formatter ? { formatter } : { show: false },
-    // symbol: ['arrow'],
-    // symbolOffset: [0, 50],
-    // symbolOffset: ref.current.getInstance()?.convertToPixel({ seriesIndex: 0 }, coord),
-    itemStyle: { color: getMarkTypeColor(markType) }
+    label: formatter
+      ? {
+          formatter,
+          color: markType === 'Peak' ? '#333' : '#fff',
+          borderWidth: 1,
+          borderType: 'solid',
+          borderRadius: 4,
+          padding: [4, 3],
+          backgroundColor: color,
+          fontSize: 10,
+          lineHeight: 13,
+          opacity: 0.88,
+          distance: markType === 'Faultfrequency' ? [0, -47] : 0
+        }
+      : { show: false },
+    itemStyle: { color: getMarkTypeColor(markType) },
+    lineStyle: { type: 'solid' },
+    symbol: 'arrow'
   };
+};
+
+export const getTop10 = ({ x, y, harmonic }: MarkParams) => {
+  const harmonic1 = harmonic?.harmonic1XIndex ? x[harmonic?.harmonic1XIndex] : null;
+  return findPeakElementsWithIndex(y)
+    .map(({ index, value }) => {
+      const frequency = x[index];
+      return {
+        value,
+        frequency: x[index],
+        order: frequency / (harmonic1 == null || harmonic1 === 0 ? 1 : harmonic1)
+      };
+    })
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 10);
+};
+
+function findPeakElementsWithIndex(nums: number[]): { index: number; value: number }[] {
+  const peaks: { index: number; value: number }[] = [];
+  const n = nums.length;
+
+  if (n === 0) return peaks;
+  if (n === 1) return [{ index: 0, value: nums[0] }];
+
+  if (n > 1 && nums[0] > nums[1]) {
+    peaks.push({ index: 0, value: nums[0] });
+  }
+
+  for (let i = 1; i < n - 1; i++) {
+    if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
+      peaks.push({ index: i, value: nums[i] });
+    }
+  }
+
+  if (n > 1 && nums[n - 1] > nums[n - 2]) {
+    peaks.push({ index: n - 1, value: nums[n - 1] });
+  }
+
+  return peaks;
+}
+
+export const getFaultFrequency = ({ faultFrequencies, x, y }: MarkParams) => {
+  return (faultFrequencies ?? []).map(({ label, value }) => {
+    const closest = findClosest(x, value);
+    const index = x.indexOf(closest ?? value);
+    const closest2 = findClosest(x, value * 2);
+    const index2 = x.indexOf(closest2 ?? value * 2);
+    const closest3 = findClosest(x, value * 3);
+    const index3 = x.indexOf(closest3 ?? value * 3);
+    return {
+      label,
+      value,
+      data: [y?.[index] ?? -1, y?.[index2] ?? -1, y?.[index3] ?? -1]
+    };
+  });
 };

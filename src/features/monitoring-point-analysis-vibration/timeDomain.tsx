@@ -18,13 +18,17 @@ export const TimeDomain = ({
 }: AnalysisCommonProps) => {
   const { loading, data } = timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
-  const { marks, handleClick, handleRestore, markType } = useMarkChartProps();
+  const { marks, handleClick, handleRestore, markType, dispatchMarks } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
     timestamp,
     `${property.value}TimeDomain`
   );
   const hiddens: MarkType[] = ['Harmonic', 'Sideband', 'Faultfrequency', 'Top10'];
+
+  React.useEffect(() => {
+    dispatchMarks({ type: 'remove_by_type', removeTypes: ['Peak', 'Double', 'Multiple'] });
+  }, [dispatchMarks, data]);
 
   return (
     <Grid wrap={false}>
@@ -44,7 +48,7 @@ export const TimeDomain = ({
                   },
                   { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
                 ].map((item) => (
-                  <span style={{ fontSize: 14, fontWeight: 400 }}>
+                  <span style={{ fontSize: 14, fontWeight: 400 }} key={item.label}>
                     <Typography.Text type='secondary'>{item.label}</Typography.Text> {item.children}
                   </span>
                 ))}
@@ -82,7 +86,7 @@ export const TimeDomain = ({
           loading={loading}
           onEvents={{
             click: (coord: [string, number], xIndex?: number) => {
-              handleClick(coord, x, y, xIndex);
+              handleClick({ coord, x, y, xIndex, property, xUnit: xAxisUnit });
             }
           }}
           series={ChartMark.useMergeMarkDatas({

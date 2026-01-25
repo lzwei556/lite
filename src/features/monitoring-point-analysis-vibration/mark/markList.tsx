@@ -4,7 +4,7 @@ import { ChartMark, Table } from 'components';
 import { formatNumericData, roundValue } from 'utils';
 import Sideband from '../sideband';
 import { useMarkChartProps } from './hooks';
-import { MarkType } from './mark-types';
+import { MarkType, markTypes } from './mark-types';
 
 export const MarkList = ({ markType }: { markType: MarkType }) => {
   const { marks: allTypeMarks } = useMarkChartProps();
@@ -68,7 +68,8 @@ export const MarkList = ({ markType }: { markType: MarkType }) => {
         dataSource={marks.concat(getDiff()).map(transformMarkData)}
         noScroll={true}
         pagination={false}
-        style={{ overflowY: 'auto', maxHeight: 350 }}
+        rowKey={(mark) => mark.name}
+        style={{ overflowY: 'auto', maxHeight: 550 }}
       />
     );
   }
@@ -90,12 +91,19 @@ export function transformMarkData(mark: ChartMark.Mark): ChartMark.Mark {
   const { data, coord } = format;
   if (Array.isArray(data) && data.length > 0) {
     if (Array.isArray(data[0])) {
-      format = {
-        ...mark,
-        data: (data as [[string, number], [string, number]]).map((coord) =>
-          coord.map(formatNumericData)
-        )
-      } as ChartMark.Mark;
+      if (markTypes.includes(mark.type as MarkType)) {
+        format = {
+          ...mark,
+          data: data[0].map((coord) => formatNumericData(coord))
+        } as ChartMark.Mark;
+      } else {
+        format = {
+          ...mark,
+          data: (data as [[string, number], [string, number]]).map((coord) =>
+            coord.map(formatNumericData)
+          )
+        } as ChartMark.Mark;
+      }
     } else {
       format = {
         ...mark,

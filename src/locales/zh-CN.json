@@ -1545,7 +1545,6 @@
   "diagnosis.period": "诊断周期",
   "diagnosis.period.real": "实时",
   "diagnosis.no.errors": "暂无异常",
-  "harmonic.base": "一倍频",
   "sideband.distance": "间距",
   "DEVICE_STATUS_NORMAL": "设备运行正常，继续监控",
   "DEVICE_STATUS_MINOR": "设备状态一般，建议加强监控",
@@ -1561,5 +1560,16 @@
   "ISO_VIB_ZONE_C_RECOMMENDATION": "不适宜长期连续运行，需安排维修",
   "ISO_VIB_ZONE_D_RECOMMENDATION": "振动剧烈，立即停机检查",
   "iso.standard.zone": "ISO区域",
-  "waveform.analysis": "波形分析"
+  "waveform.analysis": "波形分析",
+  "harmonic.1x": "一倍频",
+  "harmonic.2x": "二倍频",
+  "harmonic.3x": "三倍频",
+  "harmonic.4x": "四倍频",
+  "harmonic.5x": "五倍频",
+  "harmonic.6x": "六倍频",
+  "harmonic.7x": "七倍频",
+  "harmonic.8x": "八倍频",
+  "harmonic.9x": "九倍频",
+  "harmonic.10x": "十倍频",
+  "top10.order": "系数"
 }

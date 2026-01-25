@@ -1,6 +1,9 @@
 import React from 'react';
 import { ChartMark } from 'components';
-import { getMarkTypeColor, getNumsOfCursor } from '../mark';
+import { getLineStyles, getMarkTypeLabel } from '../mark';
+import { Property } from '../useTrend';
+import intl from 'react-intl-universal';
+import { getValue } from 'utils';
 
 export const cursors = ['center', 'side'] as const;
 export type Cursor = (typeof cursors)[number];
@@ -10,8 +13,18 @@ const SidebandContext = React.createContext<{
   setCursor: React.Dispatch<React.SetStateAction<Cursor>>;
   centeredIndex?: number;
   setCenteredIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
-  triggerCenter: (coord: [string, number]) => void;
-  triggerSide: (indexs: { index: number; label: string }[], x: number[], y: number[]) => void;
+  triggerCenter: (
+    coord: [string, number],
+    topY: number,
+    centeredIndex: number,
+    property?: Property
+  ) => void;
+  triggerSide: (
+    indexs: { index: number; label: string }[],
+    x: number[],
+    y: number[],
+    topY: number
+  ) => void;
   reset: () => void;
 }>({
   cursor: 'center',
@@ -26,66 +39,63 @@ const SidebandContext = React.createContext<{
 export const Context = ({ children }: { children: React.ReactNode }) => {
   const [cursor, setCursor] = React.useState<Cursor>('center');
   const [centeredIndex, setCenteredIndex] = React.useState<number>();
-  const { marks, dispatchMarks } = ChartMark.useContext();
+  const { dispatchMarks } = ChartMark.useContext();
   const markType = 'Sideband';
 
   const clearMarks = React.useCallback(
     (cursor: Cursor) => {
-      const sidedMarks = marks.filter((mark) => mark.name.indexOf(cursor) > -1);
-      if (sidedMarks.length > 0) {
-        //remove existed sides
-        sidedMarks.forEach((mark) => dispatchMarks({ type: 'remove', mark }));
-      }
+      dispatchMarks({ type: 'remove_by_name', removeNames: [cursor] });
     },
-    [dispatchMarks, marks]
+    [dispatchMarks]
   );
 
   const triggerCenter = React.useCallback(
-    (coord: [string, number]) => {
-      if (cursor === 'center') {
-        dispatchMarks({ type: 'remove_by_type', removeTypes: ['Sideband'] });
-        dispatchMarks({
-          type: 'append_multiple',
-          mark: {
-            name: `${cursor}${coord.join()}`,
-            label: 'sideband.center',
-            data: coord,
-            type: markType,
-            chartProps: {
-              itemStyle: { color: getMarkTypeColor(markType) }
-            }
-          }
-        });
-        setCursor('side');
-      }
+    (coord: [string, number], topY: number, centeredIndex: number, property?: Property) => {
+      dispatchMarks({ type: 'remove_by_type', removeTypes: ['Sideband'] });
+      dispatchMarks({
+        type: 'append_multiple',
+        mark: {
+          name: `center${coord.join()}`,
+          label: 'sideband.center',
+          data: [coord, [coord[0], topY]],
+          type: markType,
+          chartProps: getLineStyles(
+            markType,
+            `${getMarkTypeLabel('Sideband')}\r\n${coord[0]} Hz\r\n${getValue({
+              value: coord[1],
+              unit: property?.unit
+            })}`
+          )
+        }
+      });
+      setCenteredIndex(centeredIndex);
+      setCursor('side');
     },
-    [cursor, dispatchMarks, markType]
+    [dispatchMarks, markType]
   );
 
   const triggerSide = React.useCallback(
-    (indexs: { index: number; label: string }[], x: number[], y: number[]) => {
-      if (cursor === 'side') {
-        clearMarks(cursor);
-        indexs.forEach(({ index, label }, i) => {
-          const xValue = x[index] ?? 'out.of.range';
-          const yValue = y[index] ?? 'out.of.range';
-          dispatchMarks({
-            type: 'append_multiple',
-            mark: {
-              name: `${'side'}${[`${xValue}`, yValue].join()}${i}`,
-              label,
-              data: [`${xValue}`, yValue],
-              type: markType,
-              chartProps: {
-                itemStyle: { color: getMarkTypeColor(markType) }
-              }
-            }
-          });
+    (indexs: { index: number; label: string }[], x: number[], y: number[], topY: number) => {
+      clearMarks('side');
+      indexs.forEach(({ index, label }, i) => {
+        const xValue = x[index] ?? 'out.of.range';
+        const yValue = y[index] ?? 'out.of.range';
+        dispatchMarks({
+          type: 'append_multiple',
+          mark: {
+            name: `side${[`${xValue}`, yValue].join()}${i}`,
+            label,
+            data: [
+              [`${xValue}`, yValue],
+              [`${xValue}`, topY]
+            ],
+            type: markType,
+            chartProps: getLineStyles(markType)
+          }
         });
-        setCenteredIndex(undefined);
-      }
+      });
     },
-    [dispatchMarks, markType, clearMarks, cursor]
+    [dispatchMarks, markType, clearMarks]
   );
 
   const reset = React.useCallback(() => {
@@ -114,16 +124,17 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
 export const useContext = () => React.useContext(SidebandContext);
 
 export const getIndexs = ({
+  cursor,
   centeredIndex,
   sideIndex
 }: {
+  cursor: number;
   centeredIndex: number;
   sideIndex: number;
 }) => {
   const isLeft = sideIndex < centeredIndex;
   const offset = Math.abs(sideIndex - centeredIndex);
-  const nums = getNumsOfCursor();
-  const halfNum = (nums.sideband - 1) / 2;
+  const halfNum = (cursor - 1) / 2;
   const lefts: { index: number; label: string }[] = [];
   const rights: { index: number; label: string }[] = [];
   const left = 'sideband.left';

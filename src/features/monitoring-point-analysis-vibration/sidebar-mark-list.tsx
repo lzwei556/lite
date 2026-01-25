@@ -48,7 +48,7 @@ export const SidebarMarkList = ({
                 attributes={asset.attributes}
                 type={asset.type}
                 groups={['bearing.parameters']}
-                maxHeight={200}
+                maxHeight={400}
                 labelStyle={{ minWidth: '5em' }}
                 contentStyle={{ justifyContent: 'flex-start' }}
               />
