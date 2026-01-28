@@ -31,7 +31,7 @@ export function useLinedSeriesOptions({
   config?: { opts?: ECOptions; switchs?: { noDataZoom?: boolean; noArea?: boolean } };
   alarm?: SeriesAlarm;
 }): ECOptions {
-  const options = config?.opts;
+  const options = mergeInsideDataZoom(config?.opts);
   const dataZoom = config?.switchs?.noDataZoom
     ? undefined
     : [
@@ -73,6 +73,17 @@ export function useLinedSeriesOptions({
   const defaultOpts: ECOptions = visualMap ? { ...opts, visualMap } : opts;
   return _.merge(defaultOpts, options);
 }
+
+const mergeInsideDataZoom = (opts?: ECOptions) => {
+  if (
+    opts?.dataZoom &&
+    Array.isArray(opts.dataZoom) &&
+    !opts.dataZoom.find((dz) => dz.type === 'inside')
+  ) {
+    return { ...opts, dataZoom: [...opts.dataZoom, { type: 'inside' }] };
+  }
+  return opts;
+};
 
 const useLegend = (series: SeriesOption[]) => {
   const styles = useLegendStyles();
