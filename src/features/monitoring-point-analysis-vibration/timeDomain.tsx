@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { ChartMark, Grid } from 'components';
 import { getValue } from 'utils';
 import { AnalysisCommonProps } from './analysisContent';
-import { MarkType, Toolbar, useMarkChartProps } from './mark';
+import { MarkType, Toolbar, useDatazoom, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { SidebarMarkList } from './sidebar-mark-list';
 
@@ -25,6 +25,7 @@ export const TimeDomain = ({
     `${property.value}TimeDomain`
   );
   const hiddens: MarkType[] = ['Harmonic', 'Sideband', 'Faultfrequency', 'Top10'];
+  const dataZoom = useDatazoom();
 
   React.useEffect(() => {
     dispatchMarks({ type: 'remove_by_type', removeTypes: ['Peak', 'Double', 'Multiple'] });
@@ -65,8 +66,9 @@ export const TimeDomain = ({
                 }
               },
               yAxis: { name: property.unit },
-              dataZoom: [{ start: 0, end: 100 }],
-              grid: { top: 60, bottom: 60, right: 40 }
+              dataZoom: dataZoom ?? [{ start: 0, end: 10 }],
+              grid: { top: 60, bottom: 60, right: 40 },
+              animation: false
             }
           }}
           features={{

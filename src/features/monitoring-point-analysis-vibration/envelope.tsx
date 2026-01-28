@@ -126,8 +126,9 @@ export const Envelope = ({
                     }
                   },
                   yAxis: { name: property.unit, nameLocation: 'middle', nameGap: 60 },
-                  dataZoom: dataZoom ?? [{ start: 0, end: 20 }],
-                  grid: { top: 60, bottom: 60, right: 30 }
+                  dataZoom: dataZoom ?? [{ start: 0, end: getDataZoomMax(x, y), throttle: 500 }],
+                  grid: { top: 60, bottom: 60, right: 30 },
+                  animation: false
                 }
               }}
               features={{
@@ -187,6 +188,7 @@ export const Envelope = ({
                   setOpen(false);
                 }}
                 onCancel={() => setOpen(false)}
+                type='envelope'
                 base={data?.harmonic1XIndex && x[data.harmonic1XIndex]}
               />
             </ChartMark.Chart>
@@ -199,4 +201,17 @@ export const Envelope = ({
       <SidebarMarkList asset={parent} markType={markType} faultFrequency={faultFrequency} />
     </Grid>
   );
+};
+
+const getDataZoomMax = (x: number[] = [], y: number[] = []) => {
+  let maxinum = 100;
+  if (x.length > 0 && y.length > 0) {
+    const maxValue = Math.max(...y);
+    const index = y.indexOf(maxValue);
+    const validIndex = index * 4;
+    if (validIndex <= x.length) {
+      maxinum = Math.ceil((validIndex / x.length) * 100);
+    }
+  }
+  return maxinum;
 };

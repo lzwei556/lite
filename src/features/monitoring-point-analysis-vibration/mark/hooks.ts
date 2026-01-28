@@ -152,8 +152,8 @@ export const useMarkChartProps = () => {
       const { faultFrequency, top10 } = settings;
       if (faultFrequency && topY) {
         (faultFrequencies ?? []).forEach(({ label, value }) => {
-          const closest = findClosest(x, value);
-          const index = x.indexOf(closest ?? value);
+          const closest = getMaxAmplitudeInRange(x, y, value);
+          const index = closest ? y.indexOf(closest) : -1;
           if (index !== -1) {
             const xValue = `${x[index]}`;
             dispatchMarks({
@@ -240,7 +240,7 @@ const useTopY = () => {
 
       const yValue = chart.convertFromPixel({ yAxisIndex: 0 }, rect.y);
 
-      setTopY(yValue);
+      setTopY(roundValue(yValue, 5));
     };
 
     // Initial calculation
@@ -263,8 +263,29 @@ const useTopY = () => {
 
 export const useDatazoom = () => {
   const ref = useChartContext();
-  const datazoom = ref.current.getInstance()?.getOption()?.dataZoom;
-  return datazoom;
+  const [dataZoom, setDataZoom] = React.useState<any>();
+
+  React.useEffect(() => {
+    const chart = ref.current?.getInstance() as any;
+    if (!chart) return;
+
+    const updateDataZoom = () => {
+      const dataZoom = ref.current.getInstance()?.getOption()?.dataZoom;
+
+      setDataZoom(dataZoom);
+    };
+
+    // Initial calculation
+    updateDataZoom();
+
+    // React to zoom
+    chart.on('dataZoom', updateDataZoom);
+
+    return () => {
+      chart.off('dataZoom', updateDataZoom);
+    };
+  }, [ref]);
+  return dataZoom;
 };
 
 export const getLineStyles = (markType: MarkType, formatter?: string) => {
@@ -333,12 +354,12 @@ function findPeakElementsWithIndex(nums: number[]): { index: number; value: numb
 
 export const getFaultFrequency = ({ faultFrequencies, x, y }: MarkParams) => {
   return (faultFrequencies ?? []).map(({ label, value }) => {
-    const closest = findClosest(x, value);
-    const index = x.indexOf(closest ?? value);
-    const closest2 = findClosest(x, value * 2);
-    const index2 = x.indexOf(closest2 ?? value * 2);
-    const closest3 = findClosest(x, value * 3);
-    const index3 = x.indexOf(closest3 ?? value * 3);
+    const closest = getMaxAmplitudeInRange(x, y, value);
+    const index = closest ? y.indexOf(closest) : -1;
+    const closest2 = getMaxAmplitudeInRange(x, y, value * 2);
+    const index2 = closest2 ? y.indexOf(closest2) : -1;
+    const closest3 = getMaxAmplitudeInRange(x, y, value * 3);
+    const index3 = closest3 ? y.indexOf(closest3) : -1;
     return {
       label,
       value,
@@ -346,3 +367,27 @@ export const getFaultFrequency = ({ faultFrequencies, x, y }: MarkParams) => {
     };
   });
 };
+
+function getMaxAmplitudeInRange(
+  frequencies: number[],
+  accelerations: number[],
+  targetFreq: number
+): number | undefined {
+  const lower = targetFreq * 0.98;
+  const upper = targetFreq * 1.02;
+
+  let maxAcc: number | undefined;
+
+  for (let i = 0; i < frequencies.length; i++) {
+    const freq = frequencies[i];
+
+    if (freq >= lower && freq <= upper) {
+      const acc = accelerations[i];
+      if (maxAcc === undefined || acc > maxAcc) {
+        maxAcc = acc;
+      }
+    }
+  }
+
+  return maxAcc;
+}

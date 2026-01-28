@@ -117,7 +117,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
             key: 'frequency',
             label: 'spectrum',
             children: (
-              <MarkContext>
+              <MarkContext type='frequency'>
                 <Frequency {...{ ...props, axis, property, timeDomain, originalDomain }} />
               </MarkContext>
             )
@@ -131,7 +131,7 @@ export const AnalysisContent = (props: Omit<AnalysisCommonProps, 'axis' | 'prope
             key: 'envelope',
             label: 'envelope.spectrum',
             children: (
-              <MarkContext>
+              <MarkContext type='envelope'>
                 <Envelope {...{ ...props, axis, property, timeDomain, originalDomain }} />
               </MarkContext>
             )

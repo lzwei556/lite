@@ -1,5 +1,5 @@
 import { Col, Space, Typography } from 'antd';
-import { Descriptions, Grid, MutedCard, Table } from 'components';
+import { Grid, Table } from 'components';
 import React from 'react';
 import { getMarkTypeLabel } from './mark-types';
 import intl from 'react-intl-universal';
@@ -30,7 +30,7 @@ export const StatisticsTable = ({
     <Grid>
       <Col span={24}>
         <Grid wrap={false}>
-          <Col flex='300px'>
+          <Col span={12}>
             <Table
               cardProps={{ title: getMarkTypeLabel('Harmonic') }}
               columns={[
@@ -62,9 +62,10 @@ export const StatisticsTable = ({
               dataSource={getHarmonic({ x, y, harmonic })}
               noScroll={true}
               pagination={false}
+              rowKey={(row) => row?.[0]}
             />
           </Col>
-          <Col flex='auto'>
+          <Col span={12}>
             <Table
               cardProps={{ title: getMarkTypeLabel('Top10') }}
               columns={[
@@ -102,6 +103,7 @@ export const StatisticsTable = ({
               dataSource={getTop10({ x, y, harmonic })}
               noScroll={true}
               pagination={false}
+              rowKey={(row) => row.value}
             />
           </Col>
         </Grid>
@@ -155,6 +157,7 @@ export const StatisticsTable = ({
           })}
           noScroll={true}
           pagination={false}
+          rowKey={(row) => row.value}
         />
       </Col>
     </Grid>

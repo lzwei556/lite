@@ -46,7 +46,7 @@ export const PrimaryAssetTable = ({
         } else if (type === 'number-array') {
           return {
             ...common,
-            render: (value: number[]) => (value ?? []).join()
+            render: (value: number[]) => (value ?? []).join('-')
           };
         } else {
           return common;

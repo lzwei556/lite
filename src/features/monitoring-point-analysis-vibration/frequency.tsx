@@ -127,8 +127,9 @@ export const Frequency = ({
                     }
                   },
                   yAxis: { name: property.unit, nameLocation: 'middle', nameGap: 40 },
-                  dataZoom: dataZoom ?? [{ start: 0, end: 40 }],
-                  grid: { top: 60, bottom: 60, right: 30 }
+                  dataZoom: dataZoom ?? [{ start: 0, end: 10 }],
+                  grid: { top: 60, bottom: 60, right: 30 },
+                  animation: false
                 }
               }}
               features={{
@@ -182,6 +183,7 @@ export const Frequency = ({
                   setOpen(false);
                 }}
                 onCancel={() => setOpen(false)}
+                type='frequency'
                 base={data?.harmonic1XIndex && x[data.harmonic1XIndex]}
               />
             </ChartMark.Chart>

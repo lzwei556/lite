@@ -56,8 +56,9 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
                   }
                 },
                 yAxis: { name: property.unit },
-                dataZoom: [{ start: 0, end: 100 }],
-                grid: { top: 60, bottom: 60, right: 40 }
+                dataZoom: [{ start: 0, end: 10 }],
+                grid: { top: 60, bottom: 60, right: 40 },
+                animation: false
               },
               switchs: { noArea: true }
             },

@@ -59,8 +59,9 @@ export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) =>
                   }
                 },
                 yAxis: { name: property.unit },
-                dataZoom: [{ start: 0, end: 100 }],
-                grid: { top: 60, bottom: 60, right: 30 }
+                dataZoom: [{ start: 0, end: 10 }],
+                grid: { top: 60, bottom: 60, right: 30 },
+                animation: false
               },
               switchs: { noArea: true }
             },

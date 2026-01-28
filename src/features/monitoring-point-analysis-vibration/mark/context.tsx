@@ -30,10 +30,16 @@ const AnalysisContext = React.createContext<{
   setSettings: () => {}
 });
 
-export const MarkContext = ({ children }: { children: React.ReactNode }) => {
+export const MarkContext = ({
+  children,
+  type
+}: {
+  children: React.ReactNode;
+  type?: 'frequency' | 'envelope';
+}) => {
   const [markType, setMarkType] = React.useState<MarkType>('Peak');
   const [settings, setSettings] = React.useState<MarkSettings>(
-    getAnalysisSettings() ?? settingsDefaultValue
+    getAnalysisSettings(type) ?? settingsDefaultValue
   );
 
   return (

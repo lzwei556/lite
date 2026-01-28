@@ -28,7 +28,9 @@ enum SidebandCursor {
 const harmonicCursorAmount = iterate(CursorAmount);
 const sidebandCursorAmount = iterate(SidebandCursor);
 
-export const SettingsForm = (props: ModalFormProps & { base?: number }) => {
+export const SettingsForm = (
+  props: ModalFormProps & { type: 'frequency' | 'envelope'; base?: number }
+) => {
   const [form] = Form.useForm<MarkSettings>();
   const { settings, setSettings } = useMarkContext();
   const [enabledHarmonic, setEnabledHarmonic] = React.useState(settings.harmonic.enabled);
@@ -36,7 +38,7 @@ export const SettingsForm = (props: ModalFormProps & { base?: number }) => {
 
   const updateAndSave = (values: MarkSettings) => {
     localStorage.setItem(
-      'vibration-analysis-settings',
+      `${props.type}-settings`,
       JSON.stringify(removeHarmonicFromSettings(values))
     );
     setSettings(values);
@@ -139,8 +141,8 @@ export const SettingsForm = (props: ModalFormProps & { base?: number }) => {
   );
 };
 
-export const getAnalysisSettings = () => {
-  const store = localStorage.getItem('vibration-analysis-settings');
+export const getAnalysisSettings = ( type?: 'frequency' | 'envelope') => {
+  const store = localStorage.getItem(`${type}-settings`);
   if (store) {
     return JSON.parse(store) as MarkSettings;
   }
