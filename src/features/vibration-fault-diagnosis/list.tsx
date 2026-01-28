@@ -17,7 +17,7 @@ export const ComponentsHealthyList = ({
 }) => {
   if (type === 'bar') {
     return components.length === 0 ? null : (
-      <Grid>
+      <Grid style={{ maxHeight: 165, overflowY: 'auto' }}>
         {components.map((component) => (
           <Col key={component.componentId} {...generateColProps({})}>
             <FaultDiagnosisBar {...component} />

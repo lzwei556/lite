@@ -1571,5 +1571,6 @@
   "harmonic.8x": "八倍频",
   "harmonic.9x": "九倍频",
   "harmonic.10x": "十倍频",
-  "top10.order": "系数"
+  "top10.order": "系数",
+  "common.unit": "单位"
 }

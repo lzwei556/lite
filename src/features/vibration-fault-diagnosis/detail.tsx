@@ -11,13 +11,15 @@ import { MonitoringPointRow } from 'asset-common';
 import { ZoneScoreTable } from './iso-zone-table';
 import intl from 'react-intl-universal';
 import { Component } from 'common';
-import { roundValue } from 'utils';
+import { getDisplayName, roundValue } from 'utils';
+import { useLocaleContext } from 'localeProvider';
 
 export const FaultDiagnosisDetail = (
   props: FaultDiagnosis & { monitoringPoints: MonitoringPointRow[]; rotationSpeed?: number }
 ) => {
   const { colorBgContainerStyle } = useGlobalStyles();
   const monitoringPoints = props.monitoringPoints.filter((m) => !!m.componentId);
+  const { language } = useLocaleContext();
 
   return (
     <Grid>
@@ -35,7 +37,14 @@ export const FaultDiagnosisDetail = (
           </Col>
           {props.components.length > 0 && (
             <Col span={24}>
-              <MutedCard title={intl.get('iso.standard.zone')}>
+              <MutedCard
+                extra={getDisplayName({
+                  name: intl.get('common.unit'),
+                  lang: language,
+                  suffix: 'mm/s'
+                })}
+                title={intl.get('iso.standard.zone')}
+              >
                 <ZoneScoreTable
                   zones={['A', 'B', 'C', 'D']}
                   boundaries={props.components[0].iso?.zoneBoundaries ?? []}
@@ -43,6 +52,7 @@ export const FaultDiagnosisDetail = (
                     title: intl.get(Component.Key.get(c.componentId).label),
                     score: roundValue(Math.max(...(c.iso?.data ?? [0])))
                   }))}
+                  max={15}
                 />
               </MutedCard>
             </Col>
