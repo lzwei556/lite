@@ -8,16 +8,22 @@ import { BasisFormItems, SettingFormItems } from '../../asset-variant';
 import { CanAccess, Permission } from '../../providers/access-control';
 import { AssetCategory } from '../../asset-category';
 import { useFormItemBindingsProps } from 'hooks';
+import { ENV } from 'utils';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const { name, parentId, type } = asset;
   const [form] = Form.useForm<AssetModel>();
   const [enabled, setEnabled] = React.useState(asset.diagnosisIsEnabled);
+  const diagnosisEnabledFormItemProps = useFormItemBindingsProps({
+    name: 'diagnosis_is_enabled',
+    label: 'diagnosis.enabled'
+  });
   const diagnosisFormItemProps = useFormItemBindingsProps({
     name: 'diagnosis_period',
     label: 'diagnosis.period',
     initialValue: 0
   });
+  const isLegacy = ENV.legacyEnabled === 'true';
 
   return (
     <Card
@@ -57,35 +63,34 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
           types={AssetCategory.vibrationAssetOptions}
           formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
           vibrationDiagnosis={
-            <>
-              <Col {...generateColProps({ xl: 12, xxl: 8 })}>
-                <RadioFormItem
-                  {...useFormItemBindingsProps({
-                    name: 'diagnosis_is_enabled',
-                    label: 'diagnosis.enabled'
-                  })}
-                  radioGroupProps={{ onChange: (e) => setEnabled(e.target.value) }}
-                />
-              </Col>
-              {enabled && (
+            !isLegacy && (
+              <>
                 <Col {...generateColProps({ xl: 12, xxl: 8 })}>
-                  <SelectFormItem
-                    {...diagnosisFormItemProps}
-                    selectProps={{
-                      options: [
-                        { label: intl.get('diagnosis.period.real'), value: 0 },
-                        { label: intl.get('OPTION_1_HOUR'), value: 60 * 60 },
-                        { label: intl.get('OPTION_2_HOURS'), value: 2 * 60 * 60 },
-                        { label: intl.get('OPTION_4_HOURS'), value: 4 * 60 * 60 },
-                        { label: intl.get('OPTION_8_HOURS'), value: 8 * 60 * 60 },
-                        { label: intl.get('OPTION_12_HOURS'), value: 12 * 60 * 60 },
-                        { label: intl.get('OPTION_24_HOURS'), value: 24 * 60 * 60 }
-                      ]
-                    }}
+                  <RadioFormItem
+                    {...diagnosisEnabledFormItemProps}
+                    radioGroupProps={{ onChange: (e) => setEnabled(e.target.value) }}
                   />
                 </Col>
-              )}
-            </>
+                {enabled && (
+                  <Col {...generateColProps({ xl: 12, xxl: 8 })}>
+                    <SelectFormItem
+                      {...diagnosisFormItemProps}
+                      selectProps={{
+                        options: [
+                          { label: intl.get('diagnosis.period.real'), value: 0 },
+                          { label: intl.get('OPTION_1_HOUR'), value: 60 * 60 },
+                          { label: intl.get('OPTION_2_HOURS'), value: 2 * 60 * 60 },
+                          { label: intl.get('OPTION_4_HOURS'), value: 4 * 60 * 60 },
+                          { label: intl.get('OPTION_8_HOURS'), value: 8 * 60 * 60 },
+                          { label: intl.get('OPTION_12_HOURS'), value: 12 * 60 * 60 },
+                          { label: intl.get('OPTION_24_HOURS'), value: 24 * 60 * 60 }
+                        ]
+                      }}
+                    />
+                  </Col>
+                )}
+              </>
+            )
           }
         />
         {type && (
