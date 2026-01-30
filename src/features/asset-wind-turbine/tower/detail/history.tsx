@@ -15,7 +15,7 @@ export const History = ({
 }) => {
   const realPoints = Points.filter(asset.monitoringPoints);
   const { numberedRange, setRange } = useRange();
-  const internalHistorys = useHistoryDatas(asset, numberedRange) ?? historyDatas;
+  const { historyDatas: internalHistorys } = useHistoryDatas(asset, numberedRange) ?? historyDatas;
   const firstPoint = realPoints[0];
 
   return (

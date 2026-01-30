@@ -31,7 +31,7 @@ export const Index = (props: {
   const { language } = useLocaleContext();
   const { asset, onSuccess } = props;
   const { monitoringPoints } = asset;
-  const historyDatas = useHistoryDatas(asset);
+  const { historyDatas } = useHistoryDatas(asset);
   const canAddMonitoringPoint = useCan(Permission.MeasurementAdd);
 
   return (

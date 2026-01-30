@@ -11,7 +11,7 @@ import { Icon } from '../icon';
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, name, statistics: flangeStatistics, type } = asset;
   const realPoints = Points.filter(asset.monitoringPoints);
-  const historyData = useHistoryDatas(asset);
+  const { historyDatas } = useHistoryDatas(asset);
 
   const statistics = Asset.Statistics.resolveDescendant(flangeStatistics);
   const style = { left: '-24px', height: 450 };
@@ -36,7 +36,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
             ) : (
               <Tower.PointsScatterChart
                 data={
-                  historyData?.map((h) => {
+                  historyDatas?.map((h) => {
                     return {
                       name: h.name,
                       history: h.data,

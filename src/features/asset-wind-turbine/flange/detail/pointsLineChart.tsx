@@ -1,8 +1,7 @@
 import React from 'react';
 import { Space } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, DownloadIconButton } from '../../../../components';
-import { HistoryDataFea } from '../../..';
+import { ChartMark, DownloadIconButton, SeriesOption } from '../../../../components';
 import {
   AssetRow,
   DownloadData,
@@ -14,17 +13,22 @@ import {
 import { isFlangePreloadCalculation } from '../common';
 import { CanAccess, Permission } from '../../../../providers/access-control';
 import { CharacteristicData, MonitoringPointType } from 'common';
+import { Dayjs } from 'utils';
+import { transform } from 'features/historyData';
+
+type Data = { name: string; data: HistoryData }[] | undefined;
 
 export const PointsLineChart = ({
   flange,
   historyDatas,
-  onlyFirstProperty
+  handleClick
 }: {
   flange: AssetRow;
-  historyDatas: { name: string; data: HistoryData }[] | undefined;
-  onlyFirstProperty?: boolean;
+  historyDatas: Data;
+  handleClick?: (timestamp: number) => void;
 }) => {
   const [open, setOpen] = React.useState(false);
+  const { marks, dispatchMarks } = ChartMark.useContext();
   const getProperties = () => {
     const points = Points.filter(flange.monitoringPoints);
     const firstPoint = points[0];
@@ -41,11 +45,30 @@ export const PointsLineChart = ({
         })
       : intl.get('TREND_CHART');
   };
+  const { series, xAxis } = getOptions(historyDatas, property);
+  const chartProps = ChartMark.useAxisMarkLineStyleProps();
 
   return (
-    <Card
-      extra={
-        !onlyFirstProperty &&
+    <ChartMark.Chart
+      cardProps={{ title: getTitle() }}
+      config={{ opts: { xAxis } }}
+      onEvents={{
+        click: (coord: [string, number]) => {
+          const timestamp = Dayjs.toTimestamp(Dayjs.dayjs(coord[0]));
+          const data = Dayjs.format(timestamp);
+          dispatchMarks({
+            type: 'append_single',
+            mark: { name: data, data, chartProps, type: 'Peak' }
+          });
+          handleClick?.(timestamp);
+        }
+      }}
+      series={ChartMark.useMergeMarkDatas({
+        series,
+        marks,
+        lineStyle: { symbol: 'none' }
+      })}
+      toolbars={[
         hasData(historyDatas) && (
           <Space>
             <PropertyLightSelectFilter
@@ -73,16 +96,34 @@ export const PointsLineChart = ({
             )}
           </Space>
         )
-      }
-      title={getTitle()}
-    >
-      {property && (
-        <HistoryDataFea.PropertyChartList
-          data={historyDatas}
-          property={property}
-          style={{ height: 600 }}
-        />
-      )}
-    </Card>
+      ]}
+      style={{ height: 600 }}
+    />
   );
+};
+
+const getOptions = (data: Data, property?: CharacteristicData.DisplayProperty) => {
+  const series: SeriesOption[] = [];
+  const xAxisValues: number[] = [];
+  if (hasData(data) && property) {
+    data!.forEach(({ name, data }) => {
+      xAxisValues.push(...data.map(({ timestamp }) => timestamp));
+      const transformed = transform(
+        data,
+        { ...property, onlyShowFirstField: true },
+        { replace: name }
+      );
+      if (transformed?.series) {
+        series.push(...transformed.series);
+      }
+    });
+  }
+  return {
+    series,
+    xAxis: {
+      data: Array.from(new Set(xAxisValues))
+        .sort((prev, crt) => prev - crt)
+        .map((t) => Dayjs.format(t))
+    }
+  };
 };

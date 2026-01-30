@@ -35,7 +35,7 @@ export const FlangeIndexLegacy = (props: {
   const { language } = useLocaleContext();
   const { asset, onSuccess } = props;
   const { monitoringPoints } = asset;
-  const historyDatas = useHistoryDatas(asset);
+  const { historyDatas } = useHistoryDatas(asset);
   const canAddMonitoringPoint = useCan(Permission.MeasurementAdd);
   const items: TabsDetailsItems = [
     {

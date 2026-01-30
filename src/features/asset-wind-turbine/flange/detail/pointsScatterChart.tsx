@@ -20,11 +20,13 @@ import { MonitoringPointType } from 'common';
 export const PointsScatterChart = ({
   asset,
   big,
-  style
+  style,
+  loading
 }: {
   asset: AssetRow;
   big?: boolean;
   style?: React.CSSProperties;
+  loading?: boolean;
 }) => {
   const { monitoringPoints, attributes } = asset;
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ export const PointsScatterChart = ({
 
   return (
     <Chart
+      loading={loading}
       options={options}
       onEvents={{
         click: (paras: any) => {
@@ -282,7 +285,7 @@ function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = fa
     }
   }
   const seriesData: any = [];
- let field = MonitoringPointType.Key.getProperties(
+  let field = MonitoringPointType.Key.getProperties(
     measurements[0].type,
     measurements[0].properties
   ).filter((p) => p.first)?.[0];
