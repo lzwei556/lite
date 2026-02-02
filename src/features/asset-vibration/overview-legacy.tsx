@@ -43,13 +43,14 @@ export const OverviewLegacy = (props: { asset: AssetRow; onSuccess?: () => void 
                   </ModalWrapper>
                 </React.Fragment>
               }
+              title={intl.get('monitoring.points')}
             />
           </Col>
           <Col flex='350px'>
             <Grid>
               <Col span={24}>
                 <AlarmsObjectStatistics
-                  chartHeight={280}
+                  chartHeight={262}
                   total={asset.statistics.monitoringPointNum}
                   alarms={asset.statistics.alarmNum}
                   title={intl.get('monitoring.points.statistics')}
@@ -60,7 +61,7 @@ export const OverviewLegacy = (props: { asset: AssetRow; onSuccess?: () => void 
                 <AlarmTrend
                   id={asset.id}
                   title={intl.get('ALARM_TREND')}
-                  chartStyle={{ height: 265 }}
+                  chartStyle={{ height: 262 }}
                 />
               </Col>
             </Grid>

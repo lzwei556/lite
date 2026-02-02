@@ -47,7 +47,7 @@ export function usePlaces(stage: StageProps, size?: Size, lengthLimit = 4) {
   if (!size || lengthLimit === 0) return [];
   const { x, y, scale } = stage;
   const popoverXLen = PlaceTextCardStyle.width / 2 + Margin;
-  const popoverYLen = PlaceTextCardStyle.height + Margin;
+  const popoverYLen = PlaceTextCardStyle.height;
   const leftTop = {
     x: (popoverXLen - x) / scale,
     y: (popoverYLen - y) / scale,

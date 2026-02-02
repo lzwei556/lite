@@ -41,12 +41,7 @@ export const Canvas = ({
 
   return (
     <CanvasProvider {...providerProps} key={providerProps?._key}>
-      <Card
-        {...cardProps}
-        ref={ref}
-        style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-        styles={{ body: { flex: 1, position: 'relative', padding: 0 } }}
-      >
+      <Card {...cardProps} ref={ref} styles={{ body: { position: 'relative' } }}>
         {background && (
           <>
             <Stage {...stageProps} style={{ cursor }}>
