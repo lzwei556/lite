@@ -7,6 +7,9 @@ import * as Harmonic from './harmonic';
 import { findClosest, formatNumericData, getValue, roundValue } from 'utils';
 import { getMarkTypeColor, getMarkTypeLabel, MarkType } from './mark-types';
 import { Property } from '../useTrend';
+import { FaultFrequency } from '../useFaultFrequency';
+import intl from 'react-intl-universal';
+import { FaultType } from 'common';
 
 export type MarkParams = {
   x: number[];
@@ -15,7 +18,7 @@ export type MarkParams = {
   property?: Property;
   xUnit?: string;
   harmonic?: HarmonicData;
-  faultFrequencies?: { label: string; value: number }[];
+  faultFrequencies?: FaultFrequency;
 };
 
 export const useMarkChartProps = () => {
@@ -151,7 +154,7 @@ export const useMarkChartProps = () => {
       dispatchMarks({ type: 'remove_by_type', removeTypes: ['Faultfrequency', 'Top10'] });
       const { faultFrequency, top10 } = settings;
       if (faultFrequency && topY) {
-        (faultFrequencies ?? []).forEach(({ label, value }) => {
+        getFaultFrequencyOptions(faultFrequencies).forEach(({ label, value }) => {
           const closest = getMaxAmplitudeInRange(x, y, value);
           const index = closest ? y.indexOf(closest) : -1;
           if (index !== -1) {
@@ -353,7 +356,7 @@ function findPeakElementsWithIndex(nums: number[]): { index: number; value: numb
 }
 
 export const getFaultFrequency = ({ faultFrequencies, x, y }: MarkParams) => {
-  return (faultFrequencies ?? []).map(({ label, value }) => {
+  return getFaultFrequencyOptions(faultFrequencies).map(({ label, value }) => {
     const closest = getMaxAmplitudeInRange(x, y, value);
     const index = closest ? y.indexOf(closest) : -1;
     const closest2 = getMaxAmplitudeInRange(x, y, value * 2);
@@ -366,6 +369,15 @@ export const getFaultFrequency = ({ faultFrequencies, x, y }: MarkParams) => {
       data: [y?.[index] ?? -1, y?.[index2] ?? -1, y?.[index3] ?? -1]
     };
   });
+};
+
+const getFaultFrequencyOptions = (faultFrequency?: FaultFrequency) => {
+  return faultFrequency
+    ? Object.entries(faultFrequency).map(([key, value]) => ({
+        label: intl.get(FaultType.getLabel(key)),
+        value
+      }))
+    : [];
 };
 
 function getMaxAmplitudeInRange(

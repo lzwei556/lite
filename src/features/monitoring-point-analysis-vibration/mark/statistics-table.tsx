@@ -15,13 +15,13 @@ export const StatisticsTable = ({
   x,
   y,
   harmonic,
-  faultFrequency,
+  faultFrequencies,
   property
 }: {
   x: number[];
   y: number[];
   harmonic?: HarmonicData;
-  faultFrequency?: FaultFrequency;
+  faultFrequencies?: FaultFrequency;
   property?: Property;
 }) => {
   const { language } = useLocaleContext();
@@ -145,16 +145,7 @@ export const StatisticsTable = ({
               width: 120
             }
           ]}
-          dataSource={getFaultFrequency({
-            x,
-            y,
-            faultFrequencies: faultFrequency
-              ? Object.entries(faultFrequency).map(([key, value]) => ({
-                  label: intl.get(`fault.frequency.${key}`),
-                  value
-                }))
-              : []
-          })}
+          dataSource={getFaultFrequency({ x, y, faultFrequencies })}
           noScroll={true}
           pagination={false}
           rowKey={(row) => row.value}

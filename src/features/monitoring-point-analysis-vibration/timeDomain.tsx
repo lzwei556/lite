@@ -107,7 +107,7 @@ export const TimeDomain = ({
           yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>
-      <SidebarMarkList asset={parent} markType={markType} markTypes={hiddens} />
+      <SidebarMarkList asset={parent} markType={markType} />
     </Grid>
   );
 };

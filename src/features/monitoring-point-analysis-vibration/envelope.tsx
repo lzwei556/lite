@@ -42,7 +42,7 @@ export const Envelope = ({
   } = useMarkChartProps();
   const rotation_speed = parent.attributes?.rpm;
   const dataZoom = useDatazoom();
-  const { faultFrequency } = useFaultFrequency(id, timestamp);
+  const { faultFrequencies } = useFaultFrequency(id, timestamp);
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -70,14 +70,8 @@ export const Envelope = ({
   }, [originalDomain, property.value, window, filter_type_related, rotation_speed, dispatchMarks]);
 
   React.useEffect(() => {
-    const faultFrequencies = faultFrequency
-      ? Object.entries(faultFrequency).map(([key, value]) => ({
-          label: intl.get(`fault.frequency.${key}`),
-          value
-        }))
-      : [];
     handleToggleMarks({ x, y, faultFrequencies, property });
-  }, [handleToggleMarks, x, y, faultFrequency, property]);
+  }, [handleToggleMarks, x, y, faultFrequencies, property]);
 
   React.useEffect(() => {
     handleRefreshHarmonic({ x, y, harmonic: data, property });
@@ -194,11 +188,11 @@ export const Envelope = ({
             </ChartMark.Chart>
           </Col>
           <Col span={24}>
-            <StatisticsTable {...{ x, y, faultFrequency, property, harmonic: data }} />
+            <StatisticsTable {...{ x, y, faultFrequencies, property, harmonic: data }} />
           </Col>
         </Grid>
       </Col>
-      <SidebarMarkList asset={parent} markType={markType} faultFrequency={faultFrequency} />
+      <SidebarMarkList asset={parent} markType={markType} />
     </Grid>
   );
 };

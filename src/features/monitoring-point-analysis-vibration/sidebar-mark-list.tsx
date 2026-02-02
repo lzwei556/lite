@@ -2,23 +2,11 @@ import React from 'react';
 import { Sidebar } from './mark/sidebar';
 import { AnalysisSidebarCollapse } from 'features/monitoringPoint';
 import intl from 'react-intl-universal';
-import { MarkList, MarksTabs, MarkType } from './mark';
-import { FaultFrequencyMarkList } from './faultFrequencyMarkList';
+import { MarkList, MarkType } from './mark';
 import { SettingsDetail } from 'asset-variant';
 import { AssetRow } from 'asset-common';
-import { FaultFrequency } from './useFaultFrequency';
 
-export const SidebarMarkList = ({
-  asset,
-  markType,
-  markTypes,
-  faultFrequency
-}: {
-  asset: AssetRow;
-  markType: MarkType;
-  markTypes?: MarkType[];
-  faultFrequency?: FaultFrequency;
-}) => {
+export const SidebarMarkList = ({ asset, markType }: { asset: AssetRow; markType: MarkType }) => {
   return (
     <Sidebar>
       <AnalysisSidebarCollapse
@@ -27,18 +15,7 @@ export const SidebarMarkList = ({
           {
             key: 'marklist',
             label: intl.get(`analysis.vibration.cursor.${markType.toLowerCase()}`),
-            children:
-              // <MarksTabs
-              //   hiddens={markTypes}
-              //   markType={markType}
-              //   key={markType}
-              //   faultMarkList={<FaultFrequencyMarkList faultFrequency={faultFrequency} />}
-              // />
-              markType === 'Faultfrequency' ? (
-                <FaultFrequencyMarkList faultFrequency={faultFrequency} />
-              ) : (
-                <MarkList markType={markType} />
-              )
+            children: <MarkList markType={markType} />
           },
           {
             key: 'overview',

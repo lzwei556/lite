@@ -5,7 +5,7 @@ export type FaultFrequency = { bpfo: number; bpfi: number; bsf: number; ftf: num
 
 export const useFaultFrequency = (id: number, timestamp: number) => {
   const [loading, setLoading] = React.useState(false);
-  const [faultFrequency, setFaultFrequency] = React.useState<FaultFrequency | undefined>();
+  const [faultFrequencies, setFaultFrequencies] = React.useState<FaultFrequency | undefined>();
   React.useEffect(() => {
     const fetchFaultFrequency = async () => {
       setLoading(true);
@@ -14,7 +14,7 @@ export const useFaultFrequency = (id: number, timestamp: number) => {
           `monitoringPoints/${id}/diagnosis/${timestamp}`
         );
         const frequency = data.data?.features;
-        setFaultFrequency(
+        setFaultFrequencies(
           frequency
             ? {
                 bpfo: frequency.bpfo,
@@ -32,5 +32,5 @@ export const useFaultFrequency = (id: number, timestamp: number) => {
     fetchFaultFrequency();
   }, [id, timestamp]);
 
-  return { faultFrequency, loading };
+  return { faultFrequencies, loading };
 };
