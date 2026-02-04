@@ -13,7 +13,17 @@ enum Confidence {
   Critical
 }
 
-export type Fault = { type: number; confidence: Confidence };
+enum Axis {
+  None,
+  Axial,
+  Horizontal,
+  Vertical
+}
+
+const getAxisLabel = (axis: Axis) =>
+  axis === Axis.None ? '' : intl.get(`axis.${Axis[axis].toLowerCase()}.abbr`);
+
+export type Fault = { type: number; confidence: Confidence; axis: Axis };
 
 type Zone = 'A' | 'B' | 'C' | 'D';
 
@@ -81,7 +91,10 @@ const transform = (dto: FaultDiagnosisDTO): FaultDiagnosis => {
         healthIndex: score,
         status: Key.get(status),
         faults: (diagnosisResults?.items ?? []).reduce(
-          (prev, crt) => [...prev, { type: crt.diagnosis, confidence: crt.confidence }],
+          (prev, crt) => [
+            ...prev,
+            { type: crt.diagnosis, confidence: crt.confidence, axis: crt.axis }
+          ],
           [] as Fault[]
         ),
         iso: vibrationISOResult
@@ -128,12 +141,18 @@ export const useHealthStatus = ({
       children:
         status.key === 0 && types.length === 0
           ? intl.get('NONE')
-          : faults.map(
-              ({ type, confidence }) =>
-                `${intl.get(FaultType.Key.get(type).label)} [${intl.get(
-                  `fault.confidence.${Confidence[confidence].toLowerCase()}`
-                )}]`
-            )
+          : faults.map(({ type, confidence, axis }) => {
+              const typeLabel = intl.get(FaultType.Key.get(type).label);
+              const axisLabel = getAxisLabel(axis);
+              const confidenceLabel = intl.get(
+                `fault.confidence.${Confidence[confidence].toLowerCase()}`
+              );
+              return (
+                axisLabel.length > 0
+                  ? [typeLabel, axisLabel, confidenceLabel]
+                  : [typeLabel, confidenceLabel]
+              ).join(' / ');
+            })
     }
     // suggestion: {
     //   label: intl.get('diagnosis.suggestion'),
