@@ -5,9 +5,9 @@ import { ModalFormProps } from '../../types/common';
 import { Project } from '../../types/project';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { SelectFormItem, TextFormItem } from '../../components';
-import { ProjectType, useProjectTypeOptions } from '../../project';
 import { CreateProjectRequest, UpdateProjectRequest } from '../../apis/project';
 import { useAppConfig } from '../../config';
+import { ProjectType, useProjectTypeOptions } from 'common/project-type';
 
 export const EditProjectModal = ({
   project,

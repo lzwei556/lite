@@ -1,12 +1,12 @@
-import { Col, ColProps, Form } from "antd";
-import { AssetCategory } from "common/asset-category";
-import { Card, FormItem, Grid } from "components";
-import React from "react";
-import intl from "react-intl-universal";
-import { generateColProps } from "utils/grid";
+import { Col, ColProps, Form } from 'antd';
+import { AssetCategory } from 'common/asset-category';
+import { Card, FormItem, Grid } from 'components';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { generateColProps } from 'utils/grid';
 import { toUniversalFormItemProps } from 'types';
 
-export const FormItemsSettings =({
+export const FormItemsSettings = ({
   type,
   formItemColProps = generateColProps({ xl: 12, xxl: 12 }),
   specialFormItemColProps
@@ -25,8 +25,12 @@ export const FormItemsSettings =({
     return colProps;
   };
 
-  return AssetCategory.Key.getSettings(type).map(({ label, fields }) => (
-    <Card style={{ marginBottom: 16 }} title={intl.get(label).d(label)} key={label}>
+  return AssetCategory.Key.getSettings(type).map(({ label, fields }, i) => (
+    <Card
+      style={{ marginTop: i === 0 ? 16 : 0, marginBottom: 16 }}
+      title={intl.get(label).d(label)}
+      key={label}
+    >
       <Grid>
         {fields.map((field) => {
           const visible = field.visibleWhen ? field.visibleWhen(formValues) : true;

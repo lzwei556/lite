@@ -14,18 +14,18 @@ import {
 } from 'features/monitoring-point-settings';
 import { ModalFormProps } from 'types/common';
 
-export const Settings = ({ asset }: { asset: AssetRow }) => {
-  const settings = AssetCategory.Key.getSettings(asset.type);
-  const updateFormProps = useUpdateFormProps(asset);
+export const Settings = ({ editingAsset }: { editingAsset: AssetRow }) => {
+  const settings = AssetCategory.Key.getSettings(editingAsset.type);
+  const updateFormProps = useUpdateFormProps(editingAsset.id);
 
   if (settings.length > 0) {
     return (
       <Grid>
         <Col {...generateColProps({ xl: 8, xxl: 8 })}>
-          <UpdateFormCard {...updateFormProps} />
+          <UpdateFormCard {...{ ...updateFormProps, editingAsset }} />
         </Col>
         <Col {...generateColProps({ xl: 16, xxl: 16 })}>
-          <MonitoringPointsManagement asset={asset} />
+          <MonitoringPointsManagement asset={editingAsset} />
         </Col>
       </Grid>
     );
@@ -34,12 +34,12 @@ export const Settings = ({ asset }: { asset: AssetRow }) => {
       <Grid>
         <Col span={24}>
           <UpdateFormCard
-            {...updateFormProps}
+            {...{ ...updateFormProps, editingAsset }}
             formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
           />
         </Col>
         <Col span={24}>
-          <MonitoringPointsManagement asset={asset} />
+          <MonitoringPointsManagement asset={editingAsset} />
         </Col>
       </Grid>
     );
@@ -65,9 +65,7 @@ const MonitoringPointsManagement = ({ asset }: { asset: AssetRow }) => {
       createFormModal={
         !point && <CreateFormModal {...{ ...commonModalProps, ...createFormProps }} />
       }
-      updateFormModal={
-        point && <UpdateFormModalWrapper {...{ ...commonModalProps, point }} />
-      }
+      updateFormModal={point && <UpdateFormModalWrapper {...{ ...commonModalProps, point }} />}
       openCreate={() => setOpen(true)}
       openUpdate={(point) => {
         setOpen(true);

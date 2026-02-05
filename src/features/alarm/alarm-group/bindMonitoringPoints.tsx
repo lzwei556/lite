@@ -3,8 +3,6 @@ import { Checkbox, Col, Empty, Form, Input, ModalProps, Row, Select, Spin } from
 import intl from 'react-intl-universal';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { AssetRow, getAssets, MONITORING_POINT } from '../../../asset-common';
-import { area } from '../../../asset-variant';
-import { wind } from '../../asset-wind-turbine/constants';
 import { bindMeasurementsToAlarmRule2 } from './services';
 import { AlarmRule } from './types';
 import { CheckboxFormItem, Grid, TextFormItem } from '../../../components';
@@ -54,19 +52,9 @@ export const BindMonitoringPoints: React.FC<
     getAssets({ parent_id: 0 }).then((data) => {
       setLoading(false);
       const assets = data
-        .filter((asset) => {
-          if (
-            MonitoringPointType.Categories.getKeys([
-              'loosening',
-              'preload',
-              'inclination'
-            ]).includes(props.selectedRow.type)
-          ) {
-            return asset.type === wind.type;
-          } else {
-            return asset.type === area.type;
-          }
-        })
+        .filter((asset) =>
+          MonitoringPointType.Key.getAssetCategories(props.selectedRow.type).includes(asset.type)
+        )
         .map((asset, i) => {
           const pointIds = getPointIds(asset);
           const initialIds = (props.selectedRow.monitoringPoints || [])

@@ -6,7 +6,6 @@ import { ModalFormProps } from '../../types/common';
 import { area, isAssetAreaParent } from '../../asset-variant';
 import { addAsset, AssetModel, useContext } from '../../asset-common';
 import { SelectFormItem, TextFormItem } from '../../components';
-import { wind } from '../../features/asset-wind-turbine/constants';
 
 export const CreateAsset = (props: ModalFormProps) => {
   const { onSuccess, ...rest } = props;
@@ -44,7 +43,7 @@ export const CreateAsset = (props: ModalFormProps) => {
           selectProps={{
             onChange: setType,
             options: [
-              { label: intl.get(wind.label), value: wind.type },
+              // { label: intl.get(wind.label), value: wind.type },
               { label: intl.get(area.label), value: area.type }
             ]
           }}

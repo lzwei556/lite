@@ -1,1 +1,2 @@
-export * from './settings-table';
+export * from './folders-table';
+export * from './settings-table-tabs';

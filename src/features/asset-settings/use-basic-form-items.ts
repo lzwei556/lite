@@ -12,17 +12,11 @@ export const useType = (type?: number) => {
   };
 };
 
-export const useParents = ({
-  assetId,
-  kind
-}: {
-  assetId?: number;
-  kind?: AssetCategory.Value.Area | AssetCategory.Value.WindTurbine;
-}) => {
+export const useParents = ({ assetId, type }: { assetId?: number; type?: number }) => {
   const { assets } = useContext();
   const parents: AssetRow[] = [];
   mapTree(assets, (asset) => {
-    if (kind ? asset.type === kind : true) {
+    if (type && AssetCategory.Key.getParents(type).includes(asset.type)) {
       parents.push(asset);
     }
   });

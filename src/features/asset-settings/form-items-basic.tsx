@@ -21,41 +21,53 @@ export const FormItemsBasic = ({
       <Col {...formItemColProps}>
         <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
       </Col>
-      <Col {...formItemColProps}>{parentSelectFormItem}</Col>
+      {parentSelectFormItem}
       <Col {...formItemColProps}>{typeSelectFormItem}</Col>
     </>
   );
 };
 
-export const ParentSelectFormItem = (props: Parameters<typeof useParents>[0]) => {
-  const parents = useParents(props);
+export const ParentSelectFormItem = ({
+  assetId,
+  formItemColProps = generateColProps({}),
+  type
+}: Parameters<typeof useParents>[0] & { formItemColProps?: ColProps }) => {
+  const parents = useParents({ assetId, type });
   const formItemProps = useFormItemBindingsProps({ label: 'ASSET', name: 'parent_id' });
-  return props?.assetId ? (
-    <TextFormItem {...{ ...formItemProps, hidden: true, initialValue: props.assetId }} />
+  return assetId ? (
+    <TextFormItem {...{ ...formItemProps, hidden: true, initialValue: assetId }} />
   ) : (
-    <SelectFormItem
-      {...{
-        ...formItemProps,
-        rules: [{ required: true }],
-        selectProps: { options: parents.map(({ id, name }) => ({ label: name, value: id })) }
-      }}
-    />
+    <Col {...formItemColProps}>
+      <SelectFormItem
+        {...{
+          ...formItemProps,
+          rules: [{ required: true }],
+          selectProps: { options: parents.map(({ id, name }) => ({ label: name, value: id })) }
+        }}
+      />
+    </Col>
   );
 };
 
-export const TypeSelectFormItem = (props: Omit<ReturnType<typeof useType>, 'selectedType'>) => {
+export const TypeSelectFormItem = ({
+  parentType,
+  ...rest
+}: Omit<ReturnType<typeof useType>, 'selectedType'> & { parentType?: number }) => {
+  const options = (
+    parentType
+      ? AssetCategory.Key.getChildren(parentType)
+      : AssetCategory.Categories.getOptions(['bolt', 'corrosion', 'device', 'vibration'])
+  ).map((t) => ({
+    ...t,
+    label: intl.get(t.label)
+  }));
   return (
     <SelectFormItem
       {...{
         ...useFormItemBindingsProps({ label: 'TYPE', name: 'type', rules: [{ required: true }] }),
         selectProps: {
-          ...props,
-          options: AssetCategory.Categories.getOptions([
-            'bolt',
-            'corrosion',
-            'device',
-            'vibration'
-          ]).map((t) => ({ ...t, label: intl.get(t.label) }))
+          ...rest,
+          options
         }
       }}
     />

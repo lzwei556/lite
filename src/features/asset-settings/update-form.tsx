@@ -10,20 +10,19 @@ import { generateColProps } from 'utils/grid';
 
 export type UpdateFormProps = {
   loading: boolean;
-  asset: AssetRow;
+  editingAsset: AssetRow;
   handleSubmit: (values: AssetModel) => void;
+  formItemColProps?: ColProps;
 };
 
 export const UpdateFormCard = ({
   loading,
-  asset,
+  editingAsset,
   handleSubmit,
   formItemColProps = generateColProps({})
-}: UpdateFormProps & {
-  formItemColProps?: ColProps;
-}) => {
+}: UpdateFormProps) => {
   const [form] = Form.useForm<AssetModel>();
-  const { selectedType: type, ...typeRest } = useType(asset.type);
+  const { selectedType: type, ...typeRest } = useType(editingAsset.type);
   return (
     <Card
       extra={
@@ -40,8 +39,8 @@ export const UpdateFormCard = ({
         form={form}
         layout='vertical'
         initialValues={{
-          ...asset,
-          parent_id: asset.parentId,
+          ...editingAsset,
+          parent_id: editingAsset.parentId,
           type
         }}
       >
@@ -49,12 +48,12 @@ export const UpdateFormCard = ({
           <FormItemsBasic
             {...{
               formItemColProps,
-              parentSelectFormItem: <ParentSelectFormItem />,
-              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />
+              parentSelectFormItem: <ParentSelectFormItem {...{ formItemColProps, type }} />,
+              typeSelectFormItem: <TypeSelectFormItem {...typeRest} />
             }}
           />
-          {type && <FormItemsSettings {...{ type, formItemColProps }} />}
         </Grid>
+        {type && <FormItemsSettings {...{ type, formItemColProps }} />}
       </Form>
     </Card>
   );

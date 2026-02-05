@@ -3,14 +3,34 @@ import { AssetNavigator, AssetRow } from 'asset-common';
 import { Grid, TabsDetail } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { FolderAssetUpdateFormCard, useUpdateFormProps } from 'features/asset-settings';
+import {
+  useCreateFormProps,
+  CreateFormModal,
+  UpdateFolderAssetFormCard,
+  UpdateFormModal,
+  useUpdateFormProps
+} from 'features/asset-settings';
 import { AssetCategory } from 'common/asset-category';
 import { AssetsArea } from './area/assets';
 import { AssetsWindTurbine } from './wind-turbine/assets';
-import { PrimaryAssetSettingsTable } from 'features/asset-list';
+import { SettingsTableTabs } from 'features/asset-list';
+import { Permission, useCan } from 'providers/access-control';
 
 export const Index = ({ asset }: { asset: AssetRow }) => {
-  const updateFormProps = useUpdateFormProps(asset);
+  const updateFolderFormProps = useUpdateFormProps(asset.id);
+  const [open, setOpen] = React.useState(false);
+  const [editingAsset, setEditingAsset] = React.useState<AssetRow>();
+  const commonModalProps = {
+    parent: asset,
+    editingAsset,
+    afterClose: () => setEditingAsset(undefined),
+    open,
+    onCancel: () => setOpen(false),
+    onSuccess: () => console.log('onSuccess')
+  };
+  const createFormProps = useCreateFormProps();
+  const updatePrimaryAssetFormProps = useUpdateFormProps(editingAsset?.id);
+
   return (
     <TabsDetail
       items={[
@@ -30,10 +50,31 @@ export const Index = ({ asset }: { asset: AssetRow }) => {
           content: (
             <Grid>
               <Col span={24}>
-                <FolderAssetUpdateFormCard {...updateFormProps} />
+                <UpdateFolderAssetFormCard {...{ ...updateFolderFormProps, asset }} />
               </Col>
               <Col span={24}>
-                <PrimaryAssetSettingsTable />
+                <SettingsTableTabs
+                  asset={asset}
+                  createFormModal={
+                    !editingAsset && (
+                      <CreateFormModal {...{ ...commonModalProps, ...createFormProps }} />
+                    )
+                  }
+                  canEdit={useCan(Permission.AssetEdit)}
+                  updateFormModal={
+                    editingAsset && (
+                      <UpdateFormModal
+                        {...{ ...commonModalProps, ...updatePrimaryAssetFormProps, editingAsset }}
+                      />
+                    )
+                  }
+                  openCreate={() => setOpen(true)}
+                  openUpdate={(asset) => {
+                    setOpen(true);
+                    setEditingAsset(asset);
+                  }}
+                  onDeleteSuccess={(id) => console.log(id)}
+                />
               </Col>
             </Grid>
           )

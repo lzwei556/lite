@@ -20,11 +20,11 @@ import {
 } from '../../apis/project';
 import { Project } from '../../types/project';
 import { Store, useStore } from '../../hooks/store';
-import { useProjectTypeOptions } from '../../project';
 import { EditProjectModal } from './editProjectModal';
 import { AllocUserDrawer } from './allocUserDrawer';
 import { ProfileContext, useDeleteProject } from '../../providers/user-profile';
 import { CanAccess, Permission } from '../../providers/access-control';
+import { useProjectTypeOptions } from 'common/project-type';
 
 type ModalType = 'update' | 'assign' | undefined;
 

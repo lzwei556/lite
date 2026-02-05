@@ -39,7 +39,7 @@ const useFeatures = (asset: AssetRow) => {
       {
         key: 'settings',
         label: intl.get('SETTINGS'),
-        content: <Settings asset={asset} key={asset.id} />
+        content: <Settings editingAsset={asset} key={asset.id} />
       }
     ]);
   return items;

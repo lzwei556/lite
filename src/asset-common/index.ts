@@ -1,5 +1,4 @@
 import { AssetModel, AssetRow } from './types';
-import { isWindRelated } from '../features/asset-wind-turbine';
 import { isArea, isCorrosionRelated, isDeviceRelated, isVibrationRelated } from '../asset-variant';
 import { isMonitoringPoint } from '../monitoring-point';
 import { getColorByValue, getLabelByValue } from './assetStatus';
@@ -15,7 +14,6 @@ export * from './types';
 export const Asset = {
   Assert: {
     isArea,
-    isWindRelated,
     isMonitoringPoint,
     isVibrationRelated,
     isCorrosionRelated,

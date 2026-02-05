@@ -29,6 +29,7 @@ export enum Value {
   WindTurbine = 101,
   Flange = 102,
   Tower = 103,
+  WindTurbinePro = 104,
   Area = 201,
   Pipe = 221,
   Tank = 222,
@@ -49,31 +50,30 @@ const configs: Config[] = [
   {
     key: Value.Device,
     label: Value[Value.Device],
-    category: 'device',
-    labelPlural: 'asset.devices',
-    children: []
+    category: 'device'
   },
   {
     key: Value.WindTurbine,
     label: Value[Value.WindTurbine],
     category: 'folder',
-    children: [Value.Flange, Value.Tower],
-    isRoot: true
+    children: [Value.Flange, Value.Tower]
   },
   {
     key: Value.Flange,
     label: Value[Value.Flange],
     category: 'bolt',
-    children: [],
     settings: [{ label: `common.parameters`, fields: flangeSettings }]
   },
-  { key: Value.Tower, label: Value[Value.Tower], category: 'bolt', children: [] },
+  {
+    key: Value.Tower,
+    label: Value[Value.Tower],
+    category: 'bolt'
+  },
   {
     key: Value.Area,
     label: Value[Value.Area],
     category: 'folder',
     children: [
-      Value.Area,
       Value.Pipe,
       Value.Tank,
       Value.Fan,
@@ -84,29 +84,22 @@ const configs: Config[] = [
       Value.Pump,
       Value.CoolingTower,
       Value.Chiller
-    ],
-    isRoot: true
+    ]
   },
   {
     key: Value.Pipe,
     label: Value[Value.Pipe],
-    category: 'corrosion',
-    labelPlural: 'pipes',
-    children: []
+    category: 'corrosion'
   },
   {
     key: Value.Tank,
     label: Value[Value.Tank],
-    category: 'corrosion',
-    labelPlural: 'tanks',
-    children: []
+    category: 'corrosion'
   },
   {
     key: Value.Fan,
     label: Value[Value.Fan],
     category: 'vibration',
-    labelPlural: `${PREFIX}fans`,
-    children: [],
     settings: [
       { label: `${PREFIX}fan.parameters`, fields: fanSettings },
       { label: motorParametersKey, fields: motorSettings }
@@ -117,8 +110,6 @@ const configs: Config[] = [
     key: Value.Blower,
     label: Value[Value.Blower],
     category: 'vibration',
-    labelPlural: `${PREFIX}blowers`,
-    children: [],
     settings: [
       { label: `${PREFIX}blower.parameters`, fields: blowerSettings },
       { label: motorParametersKey, fields: motorSettings }
@@ -130,8 +121,6 @@ const configs: Config[] = [
     key: Value.Compressor,
     label: Value[Value.Compressor],
     category: 'vibration',
-    labelPlural: `${PREFIX}compressors`,
-    children: [],
     settings: [
       { label: `${PREFIX}compressor.parameters`, fields: compressorSettings },
       { label: motorParametersKey, fields: motorSettings }
@@ -143,8 +132,6 @@ const configs: Config[] = [
     key: Value.MotorGeneratorSet,
     label: Value[Value.MotorGeneratorSet],
     category: 'vibration',
-    labelPlural: `${PREFIX}motor.generator.sets`,
-    children: [],
     settings: [
       { label: `${PREFIX}motor.generator.set.parameters`, fields: motorSetSettings },
       { label: motorParametersKey, fields: motorSettings }
@@ -155,8 +142,6 @@ const configs: Config[] = [
     key: Value.Motor,
     label: Value[Value.Motor],
     category: 'vibration',
-    labelPlural: `${PREFIX}motors`,
-    children: [],
     settings: [
       {
         label: motorParametersKey,
@@ -170,8 +155,6 @@ const configs: Config[] = [
     key: Value.Pump,
     label: Value[Value.Pump],
     category: 'vibration',
-    labelPlural: `${PREFIX}pumps`,
-    children: [],
     settings: [
       { label: `${PREFIX}pump.parameters`, fields: pumpSettings },
       { label: motorParametersKey, fields: motorSettings }
@@ -183,8 +166,6 @@ const configs: Config[] = [
     key: Value.CoolingTower,
     label: Value[Value.CoolingTower],
     category: 'vibration',
-    labelPlural: `${PREFIX}cooling.towers`,
-    children: [],
     settings: [
       { label: `${PREFIX}cooling.tower.parameters`, fields: coolingTowerSettings },
       { label: motorParametersKey, fields: motorSettings }
@@ -195,8 +176,6 @@ const configs: Config[] = [
     key: Value.Chiller,
     label: Value[Value.Chiller],
     category: 'vibration',
-    labelPlural: `${PREFIX}chillers`,
-    children: [],
     settings: [
       { label: `${PREFIX}chiller.parameters`, fields: chillerSettings },
       { label: motorParametersKey, fields: motorSettings }
@@ -223,11 +202,15 @@ const toOption = (type: Config) => ({
 
 export const Key = {
   get,
-  getLabel: (key: Value) => {
-    const type = get(key);
-    return type ? `${PREFIX}${transformSnake2Dot(toSnake(type.label))}` : `${key}`;
-  },
-  getlabelPlural: (key: Value) => get(key)?.labelPlural,
+  getLabel,
+  getlabelPlural: (key: Value) => `${getLabel(key)}s`,
+  getChildren: (key: Value) =>
+    (get(key)?.children ?? [])
+      .map(get)
+      .filter((c) => !!c)
+      .map(toOption),
+  getParents: (key: Value) =>
+    configs.filter((type) => type.children && type.children.includes(key)).map((c) => c.key),
   getSettings: (key: Value) => get(key)?.settings ?? [],
   getImage: (key: Value) => get(key)?.image
 };
@@ -237,7 +220,12 @@ export const getNamePath = (source: SettingsField['source']) => {
 };
 
 function get(key: Value) {
-  return configs.find((type) => type.key === key) || null;
+  return configs.find((type) => type.key === key);
+}
+
+function getLabel(key: Value) {
+  const type = get(key);
+  return type ? `${PREFIX}${transformSnake2Dot(toSnake(type.label))}` : `${key}`;
 }
 
 // types begin
@@ -245,9 +233,7 @@ export type Config = {
   key: number;
   label: string;
   category: 'bolt' | 'vibration' | 'corrosion' | 'device' | 'folder';
-  labelPlural?: string;
-  children: number[];
-  isRoot?: boolean;
+  children?: number[];
   settings?: { label: string; fields: SettingsField[] }[];
   filter?: SettingsField;
   iconPath?: string;

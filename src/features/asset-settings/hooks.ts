@@ -1,19 +1,19 @@
-import { AssetModel, AssetRow } from 'asset-common';
+import { AssetModel } from 'asset-common';
 import { UpdateFormProps } from './update-form';
 import request from 'utils/request';
 import { useRequest } from 'ahooks';
 import { useNotificationContext } from 'providers/notification';
 import intl from 'react-intl-universal';
 
-export const useUpdateFormProps = (asset: AssetRow): UpdateFormProps => {
-  const { loading, runAsync } = useUpdate();
+export const useCreateFormProps = () => {
+  const { loading, runAsync } = useAdd();
 
   const { messageInstance } = useNotificationContext();
   const handleSubmit = async (values: AssetModel) => {
     try {
-      const data = await runAsync(asset.id, values);
+      const data = await runAsync(values);
       if (data.code === 200) {
-        messageInstance.success(intl.get('UPDATED_SUCCESSFUL'));
+        messageInstance.success(intl.get('CREATED_SUCCESSFUL'));
       } else {
         messageInstance.error(intl.get(data.msg).d(data.msg));
       }
@@ -22,7 +22,36 @@ export const useUpdateFormProps = (asset: AssetRow): UpdateFormProps => {
       messageInstance.error(intl.get('server.error'));
     }
   };
-  return { loading, handleSubmit, asset };
+  return { loading, handleSubmit };
+};
+
+const useAdd = () => useRequest(addAsset, { manual: true });
+
+const addAsset = async (asset: AssetModel) => {
+  const { data } = await request.post(`/assets`, asset);
+  return data;
+};
+
+export const useUpdateFormProps = (id?: number): Omit<UpdateFormProps, 'editingAsset'> => {
+  const { loading, runAsync } = useUpdate();
+
+  const { messageInstance } = useNotificationContext();
+  const handleSubmit = async (values: AssetModel) => {
+    try {
+      if (id) {
+        const data = await runAsync(id, values);
+        if (data.code === 200) {
+          messageInstance.success(intl.get('UPDATED_SUCCESSFUL'));
+        } else {
+          messageInstance.error(intl.get(data.msg).d(data.msg));
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      messageInstance.error(intl.get('server.error'));
+    }
+  };
+  return { loading, handleSubmit };
 };
 
 const useUpdate = () => useRequest(updateAsset, { manual: true });

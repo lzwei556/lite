@@ -3,7 +3,6 @@ import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon'
 import { Asset, AssetRow, MonitoringPointRow } from '../../asset-common';
 import * as Area from '../../features/asset-area';
 import * as Variant from '../../asset-variant';
-import * as Wind from '../../features/asset-wind-turbine';
 import * as MonitoringPoint from '../../monitoring-point';
 
 export const Icon = (
@@ -22,9 +21,7 @@ export const Icon = (
       Asset.Assert.isDeviceRelated(node.type)
     ) {
       return <Variant.Icon asset={node as AssetRow} {...rest} {...sizeProps} />;
-    } else if (Asset.Assert.isWindRelated(node.type)) {
-      return <Wind.Icon asset={node as AssetRow} {...rest} {...sizeProps} />;
-    } else if (Asset.Assert.isMonitoringPoint(node.type)) {
+    }  else if (Asset.Assert.isMonitoringPoint(node.type)) {
       return (
         <MonitoringPoint.Icon
           monitoringPoint={node as MonitoringPointRow}

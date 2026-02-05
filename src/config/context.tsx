@@ -8,8 +8,8 @@ import Wind from './wind';
 import WindPro from './windpro';
 import Vibration from './vibration';
 import General from './general';
-import { ProjectType } from '../project';
 import { useSelectedProject } from '../providers/user-profile';
+import { ProjectType } from 'common/project-type';
 
 type AppType =
   | 'windTurbine'

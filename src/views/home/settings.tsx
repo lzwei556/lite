@@ -7,7 +7,6 @@ import { Table, JsonImporter, Link, DownloadIconButton, IconButton } from '../..
 import { App, useAppType } from '../../config';
 import { ASSET_PATHNAME, AssetRow, importAssets, useContext } from '../../asset-common';
 import * as Area from '../../features/asset-area';
-import * as Wind from '../../features/asset-wind-turbine';
 import { BatchDownlaodHistoryDataModal } from './batchDownlaodHistoryDataModal';
 import { SelectAssets } from './selectAssets';
 import { OperateCell } from './_operateCell';
@@ -35,7 +34,7 @@ export const Settings = () => {
   const renderActionBar = () => {
     const props = { onSuccess: refresh, short: true };
     if (App.isWindLike(appType)) {
-      return <Wind.ActionBar {...props} />;
+      // return <Wind.ActionBar {...props} />;
     } else if (
       appType === 'corrosion' ||
       appType === 'corrosionWirelessHART' ||

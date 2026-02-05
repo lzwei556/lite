@@ -15,6 +15,7 @@ export const FormItemsBasic = ({
   formItemColProps?: ColProps;
 }) => {
   const parents = useParents();
+  console.log('parents', parents);
 
   return (
     <>
@@ -24,7 +25,7 @@ export const FormItemsBasic = ({
       {(parentId || parents.length > 0) && (
         <Col {...formItemColProps}>
           <SelectFormItem
-            label={intl.get(AssetCategory.Key.get(AssetCategory.Value.Area)?.labelPlural!)}
+            label={AssetCategory.Key.getlabelPlural(AssetCategory.Value.Area)}
             name='parent_id'
             selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
           />
@@ -38,7 +39,7 @@ const useParents = () => {
   const { assets } = useContext();
   const parents: AssetRow[] = [];
   assets.forEach((asset) => {
-    if (canAddAreaChild(asset, 1)) {
+    if (AssetCategory.Value.Area === asset.type && canAddAreaChild(asset, 1)) {
       parents.push(asset);
     }
   });

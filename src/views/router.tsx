@@ -5,16 +5,11 @@ import { ASSET_PATHNAME } from '../asset-common';
 import { PrimaryLayout } from './layout/primaryLayout';
 import { Authenticated } from '../features/auth';
 import { ProfileProvider, ProjectVerification } from '../providers/user-profile';
-import { ENV } from '../utils';
 
 const AlarmRuleGroups = lazy(() => import('../features/alarm/alarm-group/index'));
 const Login = lazy(() => import('./login'));
 const Assets = lazy(() => import('../views/home'));
-const VirtualAssetDetail = lazy(() =>
-  ENV.legacyEnabled === 'true'
-    ? import('../views/home/virtualAssetDetail-legacy')
-    : import('../views/home/virtualAssetDetail')
-);
+const VirtualAssetDetail = lazy(() => import('../asset-root'));
 const Asset = lazy(() => import('../views/home/main'));
 const Device = lazy(() => import('../features/device'));
 const DeviceVirtual = lazy(() => import('../features/device/virtual'));

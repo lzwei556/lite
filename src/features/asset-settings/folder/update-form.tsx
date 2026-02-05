@@ -12,7 +12,7 @@ type UpdateFormProps = {
   handleSubmit: (values: AssetModel) => void;
 };
 
-export const FolderAssetUpdateFormCard = ({
+export const UpdateFolderAssetFormCard = ({
   loading,
   asset,
   handleSubmit,
