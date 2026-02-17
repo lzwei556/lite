@@ -1,12 +1,14 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { timeEnvelope } from 'asset-common';
-import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
 import { CardChart, useLinedSeriesOptions } from 'components';
 import { Space } from 'antd';
+import { AnalysisProps } from './useProps';
 
-export const TimeEnvelope = ({ property, originalDomain }: AnalysisCommonProps) => {
+export const TimeEnvelope = ({ filters, intermediateData }: AnalysisProps) => {
+  const { property } = filters;
+  const { originalDomain } = intermediateData;
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};

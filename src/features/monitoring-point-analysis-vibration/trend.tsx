@@ -3,13 +3,14 @@ import intl from 'react-intl-universal';
 import { LightSelectFilter, SeriesOption, ChartMark } from 'components';
 import { Dayjs } from 'utils';
 import { ValuesPropertyName } from 'asset-common';
-import { TrendDataProps, useProperties } from './useTrend';
+import { TrendDataProps } from './useTrend';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import {
   MonitoringPoint,
   useAxisWithVibrationDirection,
   VibrationDirectionAttributes
 } from 'common';
+import { PropertiesSelect, usePropertiesFilters } from './filters';
 
 export const Trend = ({
   id,
@@ -22,7 +23,8 @@ export const Trend = ({
   data: TrendDataProps['data'];
   onClick: (t: number) => void;
 }) => {
-  const { property, properties, setProperties } = useProperties();
+  const propertyFilters = usePropertiesFilters();
+  const property = propertyFilters.property;
   const { marks, dispatchMarks } = ChartMark.useContext();
   const timestamps = data.map(({ timestamp }) => timestamp);
   const [timestamp, setTimestamp] = React.useState<number | undefined>(
@@ -98,21 +100,16 @@ export const Trend = ({
       style={{ height: 130 }}
       toolbars={[
         <>
-          <LightSelectFilter
-            allowClear={false}
-            options={properties.map((p) => ({ ...p, label: intl.get(p.label) }))}
-            onChange={(value) =>
-              setProperties((prev) => prev.map((p) => ({ ...p, selected: p.value === value })))
-            }
-            value={property.value}
-          />
+          <PropertiesSelect {...propertyFilters} />
           {timestamps.length > 0 && (
             <LightSelectFilter
               allowClear={false}
-              options={timestamps.map((t) => ({
-                label: Dayjs.format(t),
-                value: t
-              }))}
+              options={timestamps
+                .sort((prev, crt) => crt - prev)
+                .map((t) => ({
+                  label: Dayjs.format(t),
+                  value: t
+                }))}
               onChange={(t) => handleClick(t)}
               value={timestamp}
             />

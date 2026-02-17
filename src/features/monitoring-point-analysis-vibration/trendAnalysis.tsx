@@ -1,6 +1,6 @@
 import React from 'react';
-import { AnalysisCommonProps } from './analysisContent';
+import { AnalysisProps } from './useProps';
 
-export const TrendAnalysis = (props: AnalysisCommonProps) => {
+export const TrendAnalysis = (props: AnalysisProps) => {
   return <div>TrendAnalysis</div>;
 };

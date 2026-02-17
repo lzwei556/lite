@@ -1,9 +1,9 @@
 import React from 'react';
 import { CardChart } from 'components';
 import { useGlobalStyles } from 'styles';
-import { AnalysisCommonProps } from './analysisContent';
+import { AnalysisProps } from './useProps';
 
-export const OrbitPlot = (props: AnalysisCommonProps) => {
+export const OrbitPlot = (props: AnalysisProps) => {
   const data: [number, number][] = [];
   const centerX = 0; // 圆心X坐标
   const centerY = 0; // 圆心Y坐标

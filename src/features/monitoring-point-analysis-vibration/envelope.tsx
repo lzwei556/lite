@@ -4,7 +4,6 @@ import intl from 'react-intl-universal';
 import { getValue, roundValue } from 'utils/format';
 import { ChartMark, Grid } from 'components';
 import { envelope, EnvelopeAnalysis } from 'asset-common';
-import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
 import Sideband from './sideband';
 import { useMarkChartProps, Toolbar, useDatazoom } from './mark';
@@ -12,16 +11,13 @@ import { useFaultFrequency } from './useFaultFrequency';
 import { SidebarMarkList } from './sidebar-mark-list';
 import { SettingsForm } from './mark/settings-form';
 import { StatisticsTable } from './mark/statistics-table';
+import { AnalysisProps } from './useProps';
 
-export const Envelope = ({
-  axis,
-  property,
-  timeDomain,
-  originalDomain,
-  parent,
-  id,
-  timestamp
-}: AnalysisCommonProps) => {
+export const Envelope = ({ monitoringPoint, filters, trend, intermediateData }: AnalysisProps) => {
+  const { id, parent } = monitoringPoint;
+  const { axis, property } = filters;
+  const { timestamp } = trend;
+  const { timeDomain, originalDomain } = intermediateData;
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<EnvelopeAnalysis>();
@@ -119,9 +115,9 @@ export const Envelope = ({
                       interval: Math.floor(x.length / 20)
                     }
                   },
-                  yAxis: { name: property.unit, nameLocation: 'middle', nameGap: 60 },
+                  yAxis: { name: property.unit, nameLocation: 'middle', nameGap: 40 },
                   dataZoom: dataZoom ?? [{ start: 0, end: getDataZoomMax(x, y), throttle: 500 }],
-                  grid: { top: 60, bottom: 60, right: 30 },
+                  grid: { top: 60, bottom: 60, left: 40, right: 30 },
                   animation: false
                 }
               }}

@@ -3,21 +3,21 @@ import { Space } from 'antd';
 import { LineOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { buildCustomTooltip, CardChart, LightSelectFilter, useLegendStyles } from 'components';
-import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window } from './settings';
 import { useCrossTarget } from './useCrossTarget';
 import { useOriginalDomain } from './useOriginalDomain';
 import { cross } from 'monitoring-point/services';
 import { getValue } from 'utils';
 import { useAxisWithVibrationDirection, VibrationDirectionAttributes } from 'common';
+import { AnalysisProps } from './useProps';
 
 export const Cross = ({
-  id,
-  timestamp,
-  property,
-  originalDomain,
+  monitoringPoint: { id },
+  trend: { timestamp },
+  filters: { property },
+  intermediateData: { originalDomain },
   currentFilters
-}: AnalysisCommonProps & { currentFilters: React.ReactNode }) => {
+}: AnalysisProps & { currentFilters: React.ReactNode }) => {
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ density: number[]; phase: number[]; x: number[] }>();
   const { density = [], phase = [], x = [] } = data || {};

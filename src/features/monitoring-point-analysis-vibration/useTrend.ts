@@ -22,17 +22,10 @@ export const SVT_OPTIONS: Property[] = [
   { label: 'FIELD_DISPLACEMENT', value: 'displacement', unit: 'μm', precision: 3 }
 ];
 
-export function useProperties(value?: string) {
-  const [properties, setProperties] = React.useState<Property[]>(SVT_OPTIONS);
-  const _properties = properties.map((p) => ({
-    ...p,
-    disabled: value ? p.value !== value : false
-  }));
-  return {
-    property: _properties.find((p) => !!p.selected && !p.disabled) ?? properties[0],
-    properties: _properties,
-    setProperties
-  };
+export function useProperty(value?: string) {
+  const [property, setProperty] = React.useState<Property>(SVT_OPTIONS[0]);
+
+  return { property, setProperty, options: SVT_OPTIONS };
 }
 
 export type TrendDataProps = {

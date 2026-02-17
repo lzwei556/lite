@@ -2,12 +2,14 @@ import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
 import { CardChart, Grid, useLinedSeriesOptions } from 'components';
-import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window } from './settings';
 import { power } from 'monitoring-point/services';
 import { roundValue } from 'utils';
+import { AnalysisProps } from './useProps';
 
-export const Power = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
+export const Power = ({ filters, intermediateData }: AnalysisProps) => {
+  const { axis, property } = filters;
+  const { originalDomain } = intermediateData;
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};

@@ -5,11 +5,13 @@ import intl from 'react-intl-universal';
 import { buildCustomTooltip, CardChart, chartColors, TooltipItem } from 'components';
 import { timeFrequency } from 'asset-common';
 import { useGlobalStyles } from 'styles';
-import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, useWindowLength, WindowLengthPopup } from './settings';
 import { getValue } from 'utils';
+import { AnalysisProps } from './useProps';
 
-export const TimeFrequency = ({ property, originalDomain }: AnalysisCommonProps) => {
+export const TimeFrequency = ({ filters, intermediateData }: AnalysisProps) => {
+  const { property } = filters;
+  const { originalDomain } = intermediateData;
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: number[]; y: number[]; z: number[][] }>();
   const { x = [], y = [], z = [] } = data || {};

@@ -1,6 +1,15 @@
 import React from 'react';
 import { getDynamicData } from 'asset-common';
-import { OriginalDomainResponse } from './analysisContent';
+
+export type OriginalDomainResponse = {
+  frequency: number;
+  fullScale: number;
+  number: number;
+  range: number;
+  values: number[];
+  xAxis: number[];
+  xAxisUnit?: string;
+};
 
 export function useOriginalDomain(id: number | undefined, timestamp: number, axis: number) {
   const [data, setData] = React.useState<OriginalDomainResponse>();

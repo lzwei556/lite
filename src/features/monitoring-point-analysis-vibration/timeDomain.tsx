@@ -3,25 +3,25 @@ import { Col, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Grid } from 'components';
 import { getValue } from 'utils';
-import { AnalysisCommonProps } from './analysisContent';
 import { MarkType, Toolbar, useDatazoom, useMarkChartProps } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { SidebarMarkList } from './sidebar-mark-list';
+import { AnalysisProps } from './useProps';
 
 export const TimeDomain = ({
-  axis,
-  property,
-  timeDomain,
-  id,
-  timestamp,
-  parent
-}: AnalysisCommonProps) => {
-  const { loading, data } = timeDomain || {};
+  monitoringPoint,
+  filters,
+  trend,
+  intermediateData
+}: AnalysisProps) => {
+  const { id, parent } = monitoringPoint;
+  const { axis, property } = filters;
+  const { loading, data } = intermediateData.timeDomain || {};
   const { x = [], y = [], range, frequency, number, xAxisUnit } = data || {};
   const { marks, handleClick, handleRestore, markType, dispatchMarks } = useMarkChartProps();
   const downlaodRawDataHandler = useDownloadRawDataHandler(
     id,
-    timestamp,
+    trend.timestamp,
     `${property.value}TimeDomain`
   );
   const hiddens: MarkType[] = ['Harmonic', 'Sideband', 'Faultfrequency', 'Top10'];

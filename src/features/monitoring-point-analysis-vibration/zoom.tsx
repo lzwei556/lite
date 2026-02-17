@@ -1,13 +1,15 @@
 import React from 'react';
 import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
-import { AnalysisCommonProps } from './analysisContent';
 import { useWindow, Window, useZoomRange, ZoomRange } from './settings';
 import { roundValue } from 'utils';
 import { CardChart, Grid, useLinedSeriesOptions } from 'components';
 import { zoom } from 'monitoring-point/services';
+import { AnalysisProps } from './useProps';
 
-export const Zoom = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
+export const Zoom = ({ filters, intermediateData }: AnalysisProps) => {
+  const { axis, property } = filters;
+  const { originalDomain } = intermediateData;
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};

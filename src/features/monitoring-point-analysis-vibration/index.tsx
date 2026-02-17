@@ -1,26 +1,34 @@
 import React from 'react';
-import { Col, Empty, Spin } from 'antd';
+import { Col, Empty, Space, Spin } from 'antd';
 import { ChartMark, Card, Flex, Grid, useRange, RangeDatePicker } from 'components';
 import { Dayjs } from 'utils';
 import { useMonitoringPointParents } from 'asset-variant';
 import { Asset, TrendData } from 'asset-common';
 import { useTrendData } from './useTrend';
-import { AnalysisContent } from './analysisContent';
+import { AnalysisTabs } from './analysis-tabs';
 import { Trend } from './trend';
 import { SidebarProvider } from './mark/sidebar';
 import { MonitoringPoint } from 'common';
+import { AxisSelect, PropertiesSelect, useAxisFilters, usePropertiesFilters } from './filters';
+import { useAnalysisDataProps, useAnalysisTabsProps } from './useProps';
 
-export const VibrationAnalysis = ({
-  id,
-  attributes,
-  assetId
-}: {
-  id: number;
-  attributes: MonitoringPoint['attributes'];
-  assetId: number;
-}) => {
+type Props = { id: number; attributes: MonitoringPoint['attributes']; assetId: number };
+
+export const VibrationAnalysis = (props: Props) => {
   const { numberedRange, setRange } = useRange();
-  const { loading, data } = useTrendData(id, numberedRange);
+  const { loading, data } = useTrendData(props.id, numberedRange);
+
+  const renderSpinContent = () => {
+    if (!data || data.length === 0) {
+      return (
+        <Card>
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        </Card>
+      );
+    } else {
+      return <Content {...{ ...props, data }} />;
+    }
+  };
 
   return (
     <Grid>
@@ -32,75 +40,82 @@ export const VibrationAnalysis = ({
         </Card>
       </Col>
       <Col span={24}>
-        <Spin spinning={loading}>
-          <Content
-            assetId={assetId}
-            data={data}
-            id={id}
-            attributes={attributes}
-            key={JSON.stringify(data)}
-          />
-        </Spin>
+        <Spin spinning={loading}>{renderSpinContent()}</Spin>
       </Col>
     </Grid>
   );
 };
 
-function Content({
-  data,
+const Content = ({
+  assetId,
   id,
-  attributes,
-  assetId
-}: {
+  data,
+  attributes
+}: Props & {
   data: TrendData[];
-  id: number;
-  attributes: MonitoringPoint['attributes'];
-  assetId: number;
-}) {
+}) => {
   const [selected, setSelected] = React.useState<number | undefined>(
     data.find((d) => !!d.selected)?.timestamp
   );
-  const parents = useMonitoringPointParents((asset) => Asset.Assert.isVibrationRelated(asset.type));
-  const lines: string[] = [];
   const chartProps = ChartMark.useAxisMarkLineStyleProps();
-  if (selected) {
-    lines.push(Dayjs.format(selected));
-  }
-  if (lines.length === 0) {
-    return (
-      <Card>
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-      </Card>
-    );
-  } else {
-    return (
-      <Grid>
+  const parents = useMonitoringPointParents((asset) => Asset.Assert.isVibrationRelated(asset.type));
+  const { isAnalysisOnlyAcceleration, ...tabsProps } = useAnalysisTabsProps();
+  const propertyFilters = usePropertiesFilters(isAnalysisOnlyAcceleration);
+  const axisFilters = useAxisFilters(attributes);
+  const filters = { property: propertyFilters.property, axis: axisFilters.axis };
+  const analysisData = useAnalysisDataProps({ id, timestamp: selected!, ...filters });
+  const { replaceTimestamp } = analysisData.timeDomains;
+
+  return (
+    <Grid>
+      <Col span={24}>
+        <ChartMark.Context
+          initial={
+            selected
+              ? [Dayjs.format(selected)].map((line) => ({
+                  name: line,
+                  type: 'Peak',
+                  data: line,
+                  chartProps
+                }))
+              : []
+          }
+        >
+          <Trend
+            id={id}
+            attributes={attributes}
+            data={data}
+            onClick={(t) => {
+              setSelected(t);
+              replaceTimestamp(selected!, t);
+            }}
+          />
+        </ChartMark.Context>
+      </Col>
+      {selected && (
         <Col span={24}>
-          <ChartMark.Context
-            initial={lines.map((line) => ({
-              name: line,
-              type: 'Peak',
-              data: line,
-              chartProps
-            }))}
-          >
-            <Trend id={id} attributes={attributes} data={data} onClick={setSelected} />
-          </ChartMark.Context>
+          <SidebarProvider>
+            <AnalysisTabs
+              {...tabsProps}
+              extra={
+                <Space>
+                  {!isAnalysisOnlyAcceleration && <PropertiesSelect {...propertyFilters} />}
+                  {tabsProps.activeKey !== 'cross' && <AxisSelect {...axisFilters} />}
+                </Space>
+              }
+              axisSelect={<AxisSelect {...axisFilters} />}
+              monitoringPoint={{
+                id,
+                attributes,
+                parent: parents.find((asset) => asset.id === assetId)!
+              }}
+              trend={{ timestamp: selected, timestamps: data.map(({ timestamp }) => timestamp) }}
+              filters={filters}
+              intermediateData={analysisData}
+            />
+          </SidebarProvider>
         </Col>
-        {selected && (
-          <Col span={24}>
-            <SidebarProvider>
-              <AnalysisContent
-                id={id}
-                attributes={attributes}
-                timestamp={selected}
-                timestamps={data.map(({ timestamp }) => timestamp)}
-                parent={parents.find((asset) => asset.id === assetId)!}
-              />
-            </SidebarProvider>
-          </Col>
-        )}
-      </Grid>
-    );
-  }
-}
+      )}
+    </Grid>
+  );
+};

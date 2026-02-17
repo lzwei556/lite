@@ -3,7 +3,6 @@ import { Col, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { ChartMark, Grid } from 'components';
 import { frequency, FrequencyAnalysis } from 'asset-common';
-import { AnalysisCommonProps } from './analysisContent';
 import Sideband from './sideband';
 import { Toolbar, useMarkChartProps, useDatazoom } from './mark';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
@@ -12,16 +11,13 @@ import { getValue, roundValue } from 'utils';
 import { SidebarMarkList } from './sidebar-mark-list';
 import { SettingsForm } from './mark/settings-form';
 import { StatisticsTable } from './mark/statistics-table';
+import { AnalysisProps } from './useProps';
 
-export const Frequency = ({
-  axis,
-  property,
-  timeDomain,
-  originalDomain,
-  id,
-  timestamp,
-  parent
-}: AnalysisCommonProps) => {
+export const Frequency = ({ monitoringPoint, filters, trend, intermediateData }: AnalysisProps) => {
+  const { id, parent } = monitoringPoint;
+  const { axis, property } = filters;
+  const { timestamp } = trend;
+  const { timeDomain, originalDomain } = intermediateData;
   const { range, frequency: timeDomainFrequency, number } = timeDomain?.data || {};
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<FrequencyAnalysis>();
@@ -122,7 +118,7 @@ export const Frequency = ({
                   },
                   yAxis: { name: property.unit, nameLocation: 'middle', nameGap: 40 },
                   dataZoom: dataZoom ?? [{ start: 0, end: 10 }],
-                  grid: { top: 60, bottom: 60, right: 30 },
+                  grid: { top: 60, bottom: 60, left: 40, right: 30 },
                   animation: false
                 }
               }}
