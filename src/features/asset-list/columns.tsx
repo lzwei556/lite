@@ -63,7 +63,7 @@ export const useColumns = ({
   const { language } = useLocaleContext();
   const cols: Column[] = [nameColumn];
   if (settings.length > 0) {
-    const settingsColumns = settings[0].fields
+    const settingsColumns = settings
       .filter((field) =>
         filterField && field.visibleWhen && values ? field.visibleWhen(values) : true
       )

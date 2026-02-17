@@ -25,8 +25,8 @@ export const SettingFormItems = ({
     return colProps;
   };
 
-  return AssetCategory.Key.getSettings(type).map(({ label, fields }) => (
-    <Card style={{ marginBottom: 16 }} title={intl.get(label).d(label)} key={label}>
+  return AssetCategory.Key.getGroupedSettings(type).map(([group, fields]) => (
+    <Card style={{ marginBottom: 16 }} title={intl.get(group).d(group)} key={group}>
       <Grid>
         {fields.map((field) => {
           const visible = field.visibleWhen ? field.visibleWhen(formValues) : true;

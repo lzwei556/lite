@@ -9,7 +9,7 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
   if (attributes) {
     const settings = AssetCategory.Key.getSettings(type);
     if (settings.length > 0) {
-      settings[0].fields
+      settings
         .filter((field) => (field.visibleWhen ? field.visibleWhen(attributes) : true))
         .filter((_, i) => i < 10)
         .forEach(({ label, name, translatingUnit, type, options, unit }) => {

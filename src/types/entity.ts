@@ -45,6 +45,7 @@ export type Field<Entity extends Object> = {
   translatingUnit?: string;
   nameMode?: NameMode;
   rules?: FormItemProps['rules'];
+  group?: string;
 };
 
 export const toUniversalFormItemProps = <Entity extends Object>(

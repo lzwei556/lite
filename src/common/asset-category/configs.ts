@@ -10,7 +10,6 @@ import {
   fanSettings,
   flangeSettings,
   motorSetSettings,
-  motorSettings,
   pumpSettings,
   pumpType,
   SettingsField
@@ -22,6 +21,8 @@ import BlowerImage from './assets/blower.png';
 import CoolingTowerImage from './assets/cooling-tower.png';
 import PumpImage from './assets/pump.png';
 import CompressorImage from './assets/compressor.png';
+import { motorFields } from './motor';
+import _ from 'lodash';
 
 // constants begin
 export enum Value {
@@ -44,7 +45,11 @@ export enum Value {
 }
 
 const PREFIX = 'asset.category.';
-const motorParametersKey = `${PREFIX}motor.parameters`;
+const motorSettings: (SettingsField & { group: string })[] = motorFields.map((f) => ({
+  ...f,
+  source: 'motor',
+  group: f.group ?? `${PREFIX}${Value[Value.Motor].toLowerCase()}.parameters`
+}));
 
 const configs: Config[] = [
   {
@@ -62,7 +67,7 @@ const configs: Config[] = [
     key: Value.Flange,
     label: Value[Value.Flange],
     category: 'bolt',
-    settings: [{ label: `common.parameters`, fields: flangeSettings }]
+    settings: flangeSettings
   },
   {
     key: Value.Tower,
@@ -100,20 +105,18 @@ const configs: Config[] = [
     key: Value.Fan,
     label: Value[Value.Fan],
     category: 'vibration',
-    settings: [
-      { label: `${PREFIX}fan.parameters`, fields: fanSettings },
-      { label: motorParametersKey, fields: motorSettings }
-    ],
+    settings: fanSettings
+      .map((s) => ({ ...s, group: `${PREFIX}${Value[Value.Fan].toLowerCase()}.parameters` }))
+      .concat(motorSettings),
     image: FanImage
   },
   {
     key: Value.Blower,
     label: Value[Value.Blower],
     category: 'vibration',
-    settings: [
-      { label: `${PREFIX}blower.parameters`, fields: blowerSettings },
-      { label: motorParametersKey, fields: motorSettings }
-    ],
+    settings: blowerSettings
+      .map((s) => ({ ...s, group: `${PREFIX}${Value[Value.Blower].toLowerCase()}.parameters` }))
+      .concat(motorSettings),
     filter: blowerType,
     image: BlowerImage
   },
@@ -121,10 +124,9 @@ const configs: Config[] = [
     key: Value.Compressor,
     label: Value[Value.Compressor],
     category: 'vibration',
-    settings: [
-      { label: `${PREFIX}compressor.parameters`, fields: compressorSettings },
-      { label: motorParametersKey, fields: motorSettings }
-    ],
+    settings: compressorSettings
+      .map((s) => ({ ...s, group: `${PREFIX}${Value[Value.Compressor].toLowerCase()}.parameters` }))
+      .concat(motorSettings),
     filter: compressorType,
     image: CompressorImage
   },
@@ -132,22 +134,19 @@ const configs: Config[] = [
     key: Value.MotorGeneratorSet,
     label: Value[Value.MotorGeneratorSet],
     category: 'vibration',
-    settings: [
-      { label: `${PREFIX}motor.generator.set.parameters`, fields: motorSetSettings },
-      { label: motorParametersKey, fields: motorSettings }
-    ],
+    settings: motorSetSettings
+      .map((s) => ({
+        ...s,
+        group: `${PREFIX}${Value[Value.MotorGeneratorSet].toLowerCase()}.parameters`
+      }))
+      .concat(motorSettings),
     image: MotorSetImage
   },
   {
     key: Value.Motor,
     label: Value[Value.Motor],
     category: 'vibration',
-    settings: [
-      {
-        label: motorParametersKey,
-        fields: motorSettings.map((s) => ({ ...s, source: '' } as SettingsField))
-      }
-    ],
+    settings: motorSettings.map((s) => ({ ...s, source: '' } as SettingsField)),
     iconPath: '',
     image: MotorImage
   },
@@ -155,10 +154,9 @@ const configs: Config[] = [
     key: Value.Pump,
     label: Value[Value.Pump],
     category: 'vibration',
-    settings: [
-      { label: `${PREFIX}pump.parameters`, fields: pumpSettings },
-      { label: motorParametersKey, fields: motorSettings }
-    ],
+    settings: pumpSettings
+      .map((s) => ({ ...s, group: `${PREFIX}${Value[Value.Pump].toLowerCase()}.parameters` }))
+      .concat(motorSettings),
     filter: pumpType,
     image: PumpImage
   },
@@ -166,20 +164,21 @@ const configs: Config[] = [
     key: Value.CoolingTower,
     label: Value[Value.CoolingTower],
     category: 'vibration',
-    settings: [
-      { label: `${PREFIX}cooling.tower.parameters`, fields: coolingTowerSettings },
-      { label: motorParametersKey, fields: motorSettings }
-    ],
+    settings: coolingTowerSettings
+      .map((s) => ({
+        ...s,
+        group: `${PREFIX}${Value[Value.CoolingTower].toLowerCase()}.parameters`
+      }))
+      .concat(motorSettings),
     image: CoolingTowerImage
   },
   {
     key: Value.Chiller,
     label: Value[Value.Chiller],
     category: 'vibration',
-    settings: [
-      { label: `${PREFIX}chiller.parameters`, fields: chillerSettings },
-      { label: motorParametersKey, fields: motorSettings }
-    ],
+    settings: chillerSettings
+      .map((s) => ({ ...s, group: `${PREFIX}${Value[Value.Chiller].toLowerCase()}.parameters` }))
+      .concat(motorSettings),
     filter: compressorType,
     image: CompressorImage
   }
@@ -212,6 +211,8 @@ export const Key = {
   getParents: (key: Value) =>
     configs.filter((type) => type.children && type.children.includes(key)).map((c) => c.key),
   getSettings: (key: Value) => get(key)?.settings ?? [],
+  getGroupedSettings: (key: Value) =>
+    Object.entries(_.groupBy(Key.getSettings(key), (field) => field.group ?? '')),
   getImage: (key: Value) => get(key)?.image
 };
 
@@ -234,7 +235,7 @@ export type Config = {
   label: string;
   category: 'bolt' | 'vibration' | 'corrosion' | 'device' | 'folder';
   children?: number[];
-  settings?: { label: string; fields: SettingsField[] }[];
+  settings?: SettingsField[];
   filter?: SettingsField;
   iconPath?: string;
   image?: string;

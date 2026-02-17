@@ -1,6 +1,6 @@
 import { Field } from 'types';
 import { pickOptionsFromNumericEnum } from 'utils';
-import { MotorSettings, RotationSpeed, motorFields } from './motor';
+import { MotorSettings, RotationSpeed } from './motor';
 import { flangeFields, FlangeSettings } from './flange';
 
 const PREFIX = 'asset.parameter';
@@ -353,7 +353,6 @@ const pistonCount: SettingsField = {
   }
 };
 export const flangeSettings: SettingsField[] = flangeFields.map((f) => ({ ...f, source: '' }));
-export const motorSettings: SettingsField[] = motorFields.map((f) => ({ ...f, source: 'motor' }));
 
 export const pumpSettings: SettingsField[] = [
   pumpType,

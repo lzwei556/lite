@@ -26,7 +26,7 @@ export const PrimaryAssetTable = ({
   const filterField = category?.filter;
   const { dsFilter, selectProps, values } = useFilter(assets, filterField);
   if (settings.length > 0) {
-    const settingsColumns = settings[0].fields
+    const settingsColumns = settings
       .filter((field) => (filterField && field.visibleWhen ? field.visibleWhen(values) : true))
       .map(({ label, name, options, source, unit, type }) => {
         const common = {

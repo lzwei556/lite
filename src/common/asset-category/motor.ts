@@ -86,7 +86,8 @@ export const motorFields: Field<MotorSettings>[] = [
     name: 'bearing.n_balls',
     description: 'bearing.n.balls.desc',
     type: 'number',
-    defaultValue: 8
+    defaultValue: 8,
+    group: 'bearing.parameters'
   },
   {
     label: 'motor.bearing.d',
@@ -94,7 +95,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'bearing.d.desc',
     type: 'number',
     unit: 'mm',
-    defaultValue: 6.75
+    defaultValue: 6.75,
+    group: 'bearing.parameters'
   },
   {
     label: 'motor.bearing.big.d',
@@ -102,7 +104,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'bearing.big.d.desc',
     type: 'number',
     unit: 'mm',
-    defaultValue: 29.05
+    defaultValue: 29.05,
+    group: 'bearing.parameters'
   },
   {
     label: 'motor.bearing.theta',
@@ -110,7 +113,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'bearing.theta.desc',
     type: 'number',
     unit: 'rad',
-    defaultValue: 0
+    defaultValue: 0,
+    group: 'bearing.parameters'
   },
   {
     label: 'motor.motor.poles',
@@ -170,7 +174,8 @@ export const motorFields: Field<MotorSettings>[] = [
     name: 'vel_base.vel_base_1_10X',
     description: 'vel.base.vel.base.1.10x.desc',
     type: 'number-array',
-    defaultValue: [105, 90, 85, 85, 85, 85, 80, 80, 80, 80]
+    defaultValue: [105, 90, 85, 85, 85, 85, 80, 80, 80, 80],
+    group: 'velocity.parameters'
   },
   {
     label: 'motor.vel.base.vel.non.int.base.0.10x',
@@ -178,7 +183,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'vel.base.vel.non.int.base.0.10x.desc',
     type: 'number',
     unit: 'dB',
-    defaultValue: 80
+    defaultValue: 80,
+    group: 'velocity.parameters'
   },
   {
     label: 'motor.vel.base.vel.base.10.40x',
@@ -186,7 +192,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'vel.base.vel.base.10.40x.desc',
     type: 'number',
     unit: 'dB',
-    defaultValue: 75
+    defaultValue: 75,
+    group: 'velocity.parameters'
   },
   {
     label: 'motor.vel.base.vel.base.40.99x',
@@ -194,7 +201,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'vel.base.vel.base.40.99x.desc',
     type: 'number',
     unit: 'dB',
-    defaultValue: 70
+    defaultValue: 70,
+    group: 'velocity.parameters'
   },
   {
     label: 'motor.vel.base.vel.base.bearing',
@@ -202,7 +210,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'vel.base.vel.base.bearing.desc',
     type: 'number',
     unit: 'dB',
-    defaultValue: 80
+    defaultValue: 80,
+    group: 'velocity.parameters'
   },
   {
     label: 'motor.vel.base.vel.base.100.hz',
@@ -210,7 +219,8 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'vel.base.vel.base.100hz.desc',
     type: 'number',
     unit: 'dB',
-    defaultValue: 80
+    defaultValue: 80,
+    group: 'velocity.parameters'
   },
   {
     label: 'motor.vel.base.vel.base.mfb',
@@ -218,6 +228,7 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'vel.base.vel.base.mfb.desc',
     type: 'number',
     unit: 'dB',
-    defaultValue: 80
+    defaultValue: 80,
+    group: 'velocity.parameters'
   }
 ];

@@ -25,11 +25,11 @@ export const FormItemsSettings = ({
     return colProps;
   };
 
-  return AssetCategory.Key.getSettings(type).map(({ label, fields }, i) => (
+  return AssetCategory.Key.getGroupedSettings(type).map(([group, fields], i) => (
     <Card
       style={{ marginTop: i === 0 ? 16 : 0, marginBottom: 16 }}
-      title={intl.get(label).d(label)}
-      key={label}
+      title={intl.get(group).d(group)}
+      key={group}
     >
       <Grid>
         {fields.map((field) => {
