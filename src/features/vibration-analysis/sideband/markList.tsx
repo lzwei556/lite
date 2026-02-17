@@ -35,7 +35,8 @@ export const MarkList = () => {
       ]}
       noScroll={true}
       pagination={false}
-      dataSource={marks.map(transformMarkData)}
+      dataSource={marks.filter((mark) => mark.type === 'Sideband').map(transformMarkData)}
+      rowKey={(mark) => mark.name}
       style={{ overflowY: 'auto', maxHeight: 350 }}
     />
   );

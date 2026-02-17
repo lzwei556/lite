@@ -12,6 +12,7 @@ export type MotorSettings = {
   pitch_circle_diameter: number;
   power_freq: number;
   rpm: number;
+  rotation_speed: number;
   rolling_elements_num: number;
   rolling_elements_diameter: number;
   rotation_mode: RotationMode;

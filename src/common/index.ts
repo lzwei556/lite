@@ -1,7 +1,8 @@
 export * from './area-treenode';
 export * as Axis from './axis';
-export * as FeatureData from './feature-data';
 export * from './constants';
+export * as FaultType from './fault-types';
+export * as FeatureData from './feature-data';
 export type {
   CorrosionAttributes,
   VibrationDirectionAttributes,

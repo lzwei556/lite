@@ -1,17 +1,33 @@
-import { AssetCategory } from 'common/asset-category';
 import intl from 'react-intl-universal';
 import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { Descriptions, DescriptionsProps } from '../components';
 import { FieldHelper } from 'types';
+import { AssetCategory } from 'common/asset-category';
 
-export const SettingsDetail = ({ attributes, type }: { attributes: any; type: number }) => {
+export const SettingsDetail = ({
+  attributes,
+  type,
+  groups = [],
+  maxHeight = 400,
+  ...rest
+}: DescriptionsProps & {
+  attributes: any;
+  type: number;
+  groups?: string[];
+  maxHeight?: number;
+}) => {
   const items: DescriptionsProps['items'] = [];
   if (attributes) {
     const settings = AssetCategory.Key.getSettings(type);
     if (settings.length > 0) {
       settings
         .filter((field) => (field.visibleWhen ? field.visibleWhen(attributes) : true))
-        .filter((_, i) => i < 10)
+        .filter((field) =>
+          [
+            `asset.category.${AssetCategory.Value[type].toLowerCase()}.parameters`,
+            ...groups
+          ].includes(field.group ?? '')
+        )
         .forEach(({ label, name, translatingUnit, type, options, unit }) => {
           const children = FieldHelper.getValue(attributes, name) as string | number | number[];
           if (type === 'string') {
@@ -28,7 +44,7 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
           } else if (type === 'number-array') {
             items.push({
               label: intl.get(label),
-              children: truncate(((children ?? []) as number[]).join(), 20)
+              children: truncate(((children ?? []) as number[]).join('-'), 20)
             });
           } else {
             items.push({
@@ -42,5 +58,5 @@ export const SettingsDetail = ({ attributes, type }: { attributes: any; type: nu
         });
     }
   }
-  return <Descriptions items={items} style={{ overflowY: 'auto', maxHeight: 400 }} />;
+  return <Descriptions {...rest} items={items} style={{ overflowY: 'auto', maxHeight }} />;
 };

@@ -1,19 +1,19 @@
 import React from 'react';
 import { Col } from 'antd';
 import intl from 'react-intl-universal';
-import { ChartMark, Grid } from 'components';
-import { AnalysisCommonProps } from './analysisContent';
+import { CardChart, Grid, useLinedSeriesOptions } from 'components';
 import { useWindow, Window } from './settings';
-import { useMarkChartProps } from './mark';
 import { roundValue } from 'utils';
 import { cepstrum } from 'monitoring-point/services';
+import { AnalysisProps } from './useProps';
 
-export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps) => {
+export const Cepstrum = ({ filters, intermediateData }: AnalysisProps) => {
+  const { axis, property } = filters;
+  const { originalDomain } = intermediateData;
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
-  const { marks } = useMarkChartProps();
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -37,23 +37,10 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
   return (
     <Grid>
       <Col span={24}>
-        <ChartMark.Chart
-          config={{
-            opts: {
-              xAxis: {
-                name: 'ms',
-                axisLabel: {
-                  formatter: (value: string) => `${Number(value).toFixed(0)}`,
-                  interval: Math.floor(x.length / 20)
-                }
-              },
-              yAxis: { name: property.unit },
-              dataZoom: [{ start: 0, end: 100 }],
-              grid: { top: 60, bottom: 60, right: 40 }
-            }
-          }}
+        <CardChart
+          cardProps={{ extra: <Window onOk={setWindow} key='window' /> }}
           loading={loading}
-          series={ChartMark.useMergeMarkDatas({
+          options={useLinedSeriesOptions({
             series: [
               {
                 data: { [intl.get(axis.label)]: y },
@@ -61,14 +48,25 @@ export const Cepstrum = ({ axis, property, originalDomain }: AnalysisCommonProps
                 raw: { animation: false }
               }
             ],
-            marks
+            config: {
+              opts: {
+                xAxis: {
+                  name: 'ms',
+                  axisLabel: {
+                    formatter: (value: string) => `${Number(value).toFixed(0)}`,
+                    interval: Math.floor(x.length / 20)
+                  }
+                },
+                yAxis: { name: property.unit },
+                dataZoom: [{ start: 0, end: 10 }],
+                grid: { top: 60, bottom: 60, right: 40 },
+                animation: false
+              },
+              switchs: { noArea: true }
+            },
+            yAxisMeta: { ...property, unit: property.unit }
           })}
           style={{ height: 450 }}
-          toolbar={{
-            visibles: ['save_image'],
-            extra: <Window onOk={setWindow} key='window' />
-          }}
-          yAxisMeta={{ ...property, unit: property.unit }}
         />
       </Col>
     </Grid>

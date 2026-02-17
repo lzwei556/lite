@@ -9,7 +9,7 @@ export function GetResponse<T>(response: AxiosResponse<ResponseResult<T>>) {
       resolve(response.data.data);
     } else {
       message.error(
-        `${intl.get('FAILED_TO_GET_DATA')}${intl.get(response.data.msg).d(response.data.msg)}`
+        `${intl.get('FAILED_TO_GET_DATA')} ${intl.get(response.data.msg).d(response.data.msg)}`
       );
       reject(response.data.msg);
     }
@@ -37,7 +37,7 @@ export function PutResponse(response: AxiosResponse<ResponseResult<any>>) {
       resolve(response.data.data);
     } else {
       message.error(
-        `${intl.get('FAILED_TO_UPDATE')}${intl.get(response.data.msg).d(response.data.msg)}`
+        `${intl.get('FAILED_TO_UPDATE')} ${intl.get(response.data.msg).d(response.data.msg)}`
       );
       reject(response.data.msg);
     }
@@ -61,7 +61,7 @@ export function DeleteResponse(response: AxiosResponse<ResponseResult<any>>) {
       resolve(response.data.data);
     } else {
       message.error(
-        `${intl.get('FAILED_TO_DELETE')}${intl.get(response.data.msg).d(response.data.msg)}`
+        `${intl.get('FAILED_TO_DELETE')} ${intl.get(response.data.msg).d(response.data.msg)}`
       );
       reject(response.data.msg);
     }

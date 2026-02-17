@@ -1,34 +1,39 @@
 import React from 'react';
 import { Checkbox, Col, List } from 'antd';
-import { CardChart, chartColors, CheckboxFormItem, Grid } from 'components';
-import { AnalysisCommonProps } from './analysisContent';
+import { CardChart, chartColors, Grid } from 'components';
 import { Dayjs } from 'utils';
 import { useGlobalStyles } from 'styles';
+import { AnalysisProps } from './useProps';
 
-export const WaterFall = ({ timestamp, timestamps }: AnalysisCommonProps) => {
-  const [selected, setSelected] = React.useState<number[]>([timestamp]);
-  const formateds = selected.map((s) => Dayjs.format(s));
+export const WaterFall = ({
+  trend: { timestamps },
+  intermediateData: { timeDomains }
+}: AnalysisProps) => {
+  const { selected, toggleTimestamp, getDataList, loading } = timeDomains;
   const { colorBorderStyle, colorTextSecondaryStyle, colorTextDescriptionStyle } =
     useGlobalStyles();
 
   return (
     <Grid wrap={false}>
       <Col flex='200px' style={{ overflow: 'auto', maxHeight: 480 }}>
-        <CheckboxFormItem
-          noStyle
-          checkboxGroupProps={{
-            children: (
-              <List
-                dataSource={timestamps}
-                renderItem={(item) => (
-                  <List.Item>
-                    <Checkbox value={item}>{Dayjs.format(item)}</Checkbox>
-                  </List.Item>
-                )}
-              />
-            ),
-            onChange: setSelected,
-            value: selected
+        <List
+          dataSource={timestamps.sort((prev, crt) => crt - prev)}
+          renderItem={(item) => {
+            return (
+              <List.Item>
+                <Checkbox
+                  checked={selected.includes(item)}
+                  onChange={(e) => {
+                    toggleTimestamp(item);
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  value={item}
+                  disabled={selected.length >= 5 && !selected.includes(item)}
+                >
+                  {Dayjs.format(item)}
+                </Checkbox>
+              </List.Item>
+            );
           }}
         />
       </Col>
@@ -37,7 +42,7 @@ export const WaterFall = ({ timestamp, timestamps }: AnalysisCommonProps) => {
           cardProps={{
             style: { border: `solid 1px ${colorBorderStyle.color}` }
           }}
-          // loading={loading}
+          loading={loading}
           options={{
             color: chartColors[0],
             xAxis3D: {
@@ -63,13 +68,18 @@ export const WaterFall = ({ timestamp, timestamps }: AnalysisCommonProps) => {
               axisLabel: { textStyle: colorTextSecondaryStyle }
             },
             //@ts-ignore
-            series: formateds.map((y, i) => ({
-              type: 'line3D',
-              data: Array(20)
-                .fill(-1)
-                .map((n, j) => [Math.random() + j, y, Math.random() * j]),
-              name: y
-            }))
+            series: getDataList()
+              .filter((t) => selected.includes(t.timestamp))
+              .map((timeDomain) => {
+                const { x, y, timestamp } = timeDomain;
+                const name = Dayjs.format(timestamp);
+
+                return {
+                  type: 'line3D',
+                  data: x.map((n, i) => [n, name, y[i]]),
+                  name
+                };
+              })
           }}
           style={{ height: 400 }}
         />

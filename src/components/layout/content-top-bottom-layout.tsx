@@ -3,10 +3,10 @@ import { Flex } from '../flex';
 import React from 'react';
 import { createStyles } from 'antd-style';
 
-const useStyles = createStyles(({ css }, marginTop: number) => ({
+const useStyles = createStyles(({ css }) => ({
   contentWrapper: css`
     flex: 1;
-    margin-top: ${marginTop}px;
+    margin-top: 16px;
     .ant-spin-container {
       height: 100%;
       max-height: 100%;
@@ -20,10 +20,10 @@ export const ContentTopBottomLayout = ({
   loading
 }: {
   content: React.ReactNode;
-  header?: React.ReactNode;
+  header: React.ReactNode;
   loading?: boolean;
 }) => {
-  const { styles } = useStyles(header ? 16 : 0);
+  const { styles } = useStyles();
 
   return (
     <Flex vertical={true}>

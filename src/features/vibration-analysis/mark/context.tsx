@@ -1,28 +1,57 @@
 import React from 'react';
 import { ChartMark } from 'components';
 import Sideband from '../sideband';
+import { MarkType } from './mark-types';
+import { getAnalysisSettings } from './settings-form';
 
-export const markTypes = [
-  'Peak',
-  'Double',
-  'Multiple',
-  'Harmonic',
-  'Sideband',
-  'Faultfrequency',
-  'Top10'
-] as const;
-export type MarkType = typeof markTypes[number];
+export type MarkSettings = {
+  harmonic: { enabled: boolean; cursor: number; base?: number };
+  sideband: { enabled: boolean; cursor: number; center?: number; distance?: number };
+  faultFrequency: boolean;
+  top10: boolean;
+};
+
+export const settingsDefaultValue = {
+  harmonic: { enabled: true, cursor: 5 },
+  sideband: { enabled: false, cursor: 5 },
+  faultFrequency: false,
+  top10: false
+};
 
 const AnalysisContext = React.createContext<{
   markType: MarkType;
   setMarkType: React.Dispatch<React.SetStateAction<MarkType>>;
-}>({ markType: 'Peak', setMarkType: () => {} });
+  settings: MarkSettings;
+  setSettings: React.Dispatch<React.SetStateAction<MarkSettings>>;
+}>({
+  markType: 'Peak',
+  setMarkType: () => {},
+  settings: settingsDefaultValue,
+  setSettings: () => {}
+});
 
-export const MarkContext = ({ children }: { children: React.ReactNode }) => {
+export const MarkContext = ({
+  children,
+  type
+}: {
+  children: React.ReactNode;
+  type?: 'frequency' | 'envelope';
+}) => {
   const [markType, setMarkType] = React.useState<MarkType>('Peak');
+  const [settings, setSettings] = React.useState<MarkSettings>(
+    getAnalysisSettings(type) ?? settingsDefaultValue
+  );
+
   return (
     <ChartMark.Context>
-      <AnalysisContext.Provider value={{ markType, setMarkType }}>
+      <AnalysisContext.Provider
+        value={{
+          markType,
+          setMarkType,
+          settings,
+          setSettings
+        }}
+      >
         <Sideband.Context>{children}</Sideband.Context>
       </AnalysisContext.Provider>
     </ChartMark.Context>

@@ -1,12 +1,14 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { ChartMark, Table } from 'components';
-import { formatNumericData } from 'utils';
+import { formatNumericData, roundValue } from 'utils';
 import Sideband from '../sideband';
 import { useMarkChartProps } from './hooks';
+import { MarkType, markTypes } from './mark-types';
 
-export const MarkList = () => {
-  const { marks, markType } = useMarkChartProps();
+export const MarkList = ({ markType }: { markType: MarkType }) => {
+  const { marks: allTypeMarks } = useMarkChartProps();
+  const marks = allTypeMarks.filter((m) => m.type === markType);
 
   const getLabel = (index: number) => {
     switch (markType) {
@@ -28,10 +30,12 @@ export const MarkList = () => {
   const getDiff = () => {
     if (markType === 'Double' && marks.length === 2) {
       const [start, end] = marks;
-      const [startX, startY] = start.data as [string, number];
-      const [endX, endY] = end.data as [string, number];
-      const diff = [Number(endX) - Number(startX), endY - startY];
-      return [{ data: diff, type: 'diff' } as ChartMark.Mark];
+      if (start.coord && end.coord) {
+        const [startX, startY] = start.coord as [string, number];
+        const [endX, endY] = end.coord as [string, number];
+        const diff = [Number(endX) - Number(startX), endY - startY];
+        return [{ data: diff, type: 'diff' } as ChartMark.Mark];
+      }
     }
     return [];
   };
@@ -64,7 +68,8 @@ export const MarkList = () => {
         dataSource={marks.concat(getDiff()).map(transformMarkData)}
         noScroll={true}
         pagination={false}
-        style={{ overflowY: 'auto', maxHeight: 350 }}
+        rowKey={(mark) => mark.name}
+        style={{ overflowY: 'auto', maxHeight: 550 }}
       />
     );
   }
@@ -77,27 +82,39 @@ export function dispalyCoordValue(value: any) {
   if (value === undefined || value === null) {
     return '-';
   } else {
-    return value;
+    return roundValue(value);
   }
 }
 
 export function transformMarkData(mark: ChartMark.Mark): ChartMark.Mark {
   let format = { ...mark };
-  const { data } = format;
+  const { data, coord } = format;
   if (Array.isArray(data) && data.length > 0) {
     if (Array.isArray(data[0])) {
-      format = {
-        ...mark,
-        data: (data as [[string, number], [string, number]]).map((coord) =>
-          coord.map(formatNumericData)
-        )
-      } as ChartMark.Mark;
+      if (markTypes.includes(mark.type as MarkType)) {
+        format = {
+          ...mark,
+          data: data[0].map((coord) => formatNumericData(coord))
+        } as ChartMark.Mark;
+      } else {
+        format = {
+          ...mark,
+          data: (data as [[string, number], [string, number]]).map((coord) =>
+            coord.map(formatNumericData)
+          )
+        } as ChartMark.Mark;
+      }
     } else {
       format = {
         ...mark,
         data: (data as [string, number]).map((coord) => formatNumericData(coord))
       } as ChartMark.Mark;
     }
+  } else if (coord) {
+    format = {
+      ...mark,
+      data: (coord as [string, number]).map((coord) => formatNumericData(coord))
+    } as ChartMark.Mark;
   }
   return format;
 }

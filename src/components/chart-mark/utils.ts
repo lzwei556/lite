@@ -60,7 +60,7 @@ function buildPointData(mark: PointMark, color: string): PointDataItem {
     ...label
   };
   const symbolProps =
-    symbol ??
+    (symbol as string) ??
     'path://M392.448255 0h238.494873v635.98633h-238.494873zM495.00105 1016.783145L155.543347 677.325441A23.849487 23.849487 0 0 1 172.237988 635.98633h678.915407a23.849487 23.849487 0 0 1 16.694641 41.339111l-338.662721 339.457704a23.849487 23.849487 0 0 1-34.184265 0zM392.448255 0h238.494873v635.98633h-238.494873zM495.00105 1016.783145L155.543347 677.325441A23.849487 23.849487 0 0 1 172.237988 635.98633h678.915407a23.849487 23.849487 0 0 1 16.694641 41.339111l-338.662721 339.457704a23.849487 23.849487 0 0 1-34.184265 0z';
   const itemStyleProps = { color, ...itemStyle };
   return {
@@ -91,11 +91,11 @@ function buildLineData(mark: LineMark): LineDataItem {
           label: {
             ...chartProps?.label,
             formatter:
-              label && value
+              label && value && chartProps?.label?.formatterFn
                 ? `${label}\n${
                     chartProps?.label?.formatterFn ? chartProps?.label?.formatterFn(value) : value
                   }`
-                : undefined
+                : chartProps?.label.formatter
           }
         };
       } else {

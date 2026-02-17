@@ -1,20 +1,17 @@
 import React from 'react';
 import { ChartContext } from '../charts';
 import { Mark } from './types';
-import { isMarkLine } from './utils';
 
 type AppendingMode = `append_${'single' | 'double' | 'multiple'}`;
 type Action = {
-  type: AppendingMode | 'remove' | 'change_label' | 'clear';
+  type: AppendingMode | 'remove' | 'remove_by_type' | 'remove_by_name' | 'change_label' | 'clear';
   mark?: Mark;
+  removeTypes?: string[];
+  removeNames?: string[];
 };
-type Cursor = 'point' | 'line';
 type ContextProps = {
-  cursor: Cursor;
-  setCursor: React.Dispatch<React.SetStateAction<Cursor>>;
   marks: Mark[];
   dispatchMarks: React.Dispatch<Action>;
-  visibledMarks: Mark[];
 };
 export type DispathMark = React.Dispatch<Action>;
 
@@ -22,20 +19,17 @@ const MarkContext = React.createContext<ContextProps>({} as ContextProps);
 
 export const Context = ({
   children,
-  initial
+  initial = []
 }: {
   children: JSX.Element;
-  initial?: Pick<ContextProps, 'cursor' | 'marks'>;
+  initial?: Mark[];
 }) => {
-  const { cursor: initialCursor = 'point', marks: initialMarks = [] } = initial || {};
-  const [cursor, setCursor] = React.useState<Cursor>(initialCursor);
-  const [marks, dispatchMarks] = React.useReducer(marksReducer, initialMarks);
-  const visibledMarks = getVisibledMarks(cursor, marks);
+  const [marks, dispatchMarks] = React.useReducer(marksReducer, initial);
+  // console.log('marks', marks);
+
   return (
     <ChartContext>
-      <MarkContext.Provider value={{ cursor, setCursor, marks, dispatchMarks, visibledMarks }}>
-        {children}
-      </MarkContext.Provider>
+      <MarkContext.Provider value={{ marks, dispatchMarks }}>{children}</MarkContext.Provider>
     </ChartContext>
   );
 };
@@ -44,27 +38,41 @@ export const useContext = () => React.useContext(MarkContext);
 
 function marksReducer(marks: Mark[], action: Action) {
   const { type, mark } = setDefaultLabel(marks, action);
-  if (!mark) {
-    return action.type === 'clear' ? [] : marks;
-  }
-  const { name, label } = mark;
+  const isMarkInvalid = isMarkExisted(marks, mark) || !mark;
   switch (type) {
     case 'append_single':
-      return isMarkExisted(mark, marks) ? marks : [mark];
+      return isMarkInvalid ? marks : [...marks.filter((m) => m.type !== mark.type), mark];
     case 'append_double':
-      return isMarkExisted(mark, marks) ? marks : [...clipToSingle(marks), mark];
+      return isMarkInvalid
+        ? marks
+        : [
+            ...marks.filter((m) => m.type !== mark.type),
+            ...clipToSingle(marks.filter((m) => m.type === mark.type)),
+            mark
+          ];
     case 'append_multiple':
-      return isMarkExisted(mark, marks) ? marks : [...marks, mark];
+      return isMarkInvalid ? marks : [...marks, mark];
     case 'remove':
       return marks
-        .filter((mark) => mark.name !== name)
-        .map((mark, i) => ({ ...mark, label: moveToPrev(i, mark.label) }));
+        .filter((m) => m.type !== mark?.type)
+        .concat(
+          marks
+            .filter((m) => (mark ? mark.name !== m.name && mark.type === m.type : true))
+            .map((mark, i) => ({ ...mark, label: moveToPrev(i, mark.label) }))
+        );
+    case 'remove_by_type':
+      return marks.filter((mark) => !action.removeTypes?.includes(mark.type));
+    // .map((mark, i) => ({ ...mark, label: moveToPrev(i, mark.label) }));
+    case 'remove_by_name':
+      return marks.filter(
+        (mark) => !action.removeNames?.some((name) => mark.name.indexOf(name) > -1)
+      );
     case 'change_label':
-      return marks.map((mark) => {
-        if (mark.name === name) {
-          return { ...mark, label };
+      return marks.map((m) => {
+        if (mark && mark.name === m.name) {
+          return { ...m, label: mark.label };
         } else {
-          return mark;
+          return m;
         }
       });
     case 'clear':
@@ -79,11 +87,14 @@ function setDefaultLabel(marks: Mark[], action: Action): Action {
   if (!mark) {
     return action;
   }
-  return { ...action, mark: { ...mark, label: mark.label ?? marks.length + 1 } };
+  return {
+    ...action,
+    mark: { ...mark, label: mark.label ?? marks.filter((m) => m.type === mark.type).length + 1 }
+  };
 }
 
-function isMarkExisted(mark: Mark, marks: Mark[]) {
-  return marks.map(({ name }) => name).includes(mark.name);
+function isMarkExisted(marks: Mark[], mark?: Mark) {
+  return mark && marks.find((m) => m.name === mark.name && m.type === mark.type);
 }
 
 function clipToSingle(marks: Mark[]) {
@@ -97,10 +108,4 @@ function clipToSingle(marks: Mark[]) {
 
 function moveToPrev(index: number, label?: string | number) {
   return typeof label === 'number' ? index + 1 : label;
-}
-
-function getVisibledMarks(cursor: Cursor, marks: Mark[]) {
-  return marks
-    .filter((mark) => (cursor === 'line' ? isMarkLine(mark) : !isMarkLine(mark)))
-    .map((mark, i) => ({ ...mark, label: typeof mark.label === 'number' ? i + 1 : mark.label }));
 }
