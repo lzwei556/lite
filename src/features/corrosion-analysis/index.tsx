@@ -9,8 +9,10 @@ import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
 import { MarkList } from './markList';
-import { MonitoringPoint, MonitoringPointType } from 'common';
+import { MonitoringPointType } from 'common';
 import { MonitoringPointRow } from 'monitoring-point';
+
+export type MarkType = 'point' | 'area';
 
 export const CorrosionAnalysis = (props: MonitoringPointRow) => {
   const { numberedRange, setRange } = useRange(Dayjs.CommonRange.PastYear);
@@ -37,6 +39,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
   const { id, range, properties, type } = props;
   const { history, loading } = useAnalysisData(id, range);
   const [activeKey, setActiveKey] = React.useState('overview');
+  const [markType, setMarkType] = React.useState<MarkType>('point');
   if (loading) return <Spin />;
   if (!history || history.length === 0) {
     return (
@@ -58,6 +61,8 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
             history={history}
             property={{ ...property, interval: 0.01 }}
             onDispatchMark={() => setActiveKey('marklist')}
+            markType={markType}
+            setMarkType={setMarkType}
           />
         </Col>
       )}
@@ -79,7 +84,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
             {
               key: 'marklist',
               label: intl.get('mark'),
-              children: <MarkList property={property} />
+              children: <MarkList property={property} markType={markType} />
             }
           ]}
           onChange={(keys) => {

@@ -3,29 +3,36 @@ import intl from 'react-intl-universal';
 import { useLocaleContext } from '../../localeProvider';
 import { Dayjs } from '../../utils';
 import { roundValue } from '../../utils/format';
-import { ChartMark } from '../../components';
+import { ChartBrush, ChartMark, useChartContext } from '../../components';
 import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
 import { HistoryDataFea } from '..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
-import { FeatureData, CorrosionAttributes, MonitoringPoint } from 'common';
+import { CorrosionAttributes, FeatureData } from 'common';
+import { Toolbar } from './toolbar';
+import { MarkType } from '.';
 
 export const ThicknessChart = (
   props: MonitoringPointRow & {
     history?: HistoryData;
     property: FeatureData.DisplayProperty;
+    markType: MarkType;
+    setMarkType: React.Dispatch<React.SetStateAction<MarkType>>;
     onDispatchMark?: () => void;
   }
 ) => {
+  const ref = useChartContext();
   const { language } = useLocaleContext();
-  const { cursor, marks, visibledMarks, dispatchMarks } = ChartMark.useContext();
-  const { history, property, id, attributes, onDispatchMark } = props;
+  const { marks, dispatchMarks } = ChartMark.useContext();
+  const { history, property, id, attributes, markType, setMarkType, onDispatchMark } = props;
   const { series: initialSeries, min, max } = HistoryDataFea.transform(history, property);
   const { colorWarningStyle } = useGlobalStyles();
   const defaultSeries = initialSeries.map((s) => ({
     ...s,
     raw: { animation: false, markLine: getMarkLine() }
   }));
+  const visibledMarks = marks.filter((mark) => mark.type === markType);
+
   function getMarkLine() {
     const data = getDefaultLines(attributes as CorrosionAttributes)?.map((line) => ({
       ...line,
@@ -37,6 +44,23 @@ export const ThicknessChart = (
     return { symbol: 'none', data };
   }
 
+  const reset = () => {
+    setMarkType('point');
+    ref.current.getInstance()?.dispatchAction(ChartBrush.ActionPayload.clear_areas);
+    ref.current.getInstance()?.dispatchAction(ChartBrush.ActionPayload.disable);
+  };
+
+  const enableAreaMark = () => {
+    setMarkType('area');
+    ref.current.getInstance()?.dispatchAction(ChartBrush.ActionPayload.enable);
+    ChartMark.brushAreas(marks, ref.current.getInstance());
+  };
+
+  const restoreHandle = () => {
+    reset();
+    dispatchMarks({ type: 'clear' });
+  };
+
   return (
     <ChartMark.Chart
       cardProps={{
@@ -45,6 +69,10 @@ export const ThicknessChart = (
         })
       }}
       config={{ opts: { yAxis: { name: property.unit } } }}
+      features={{
+        restore: { onClick: restoreHandle },
+        saveAsImage: {}
+      }}
       series={ChartMark.useMergeMarkDatas({ series: defaultSeries, marks: visibledMarks })}
       onEvents={{
         brushEnd: (areaCoords: [number, number][]) => {
@@ -78,7 +106,7 @@ export const ThicknessChart = (
                       lineStyle: { ...colorWarningStyle, width: 3, type: 'solid' }
                     },
                     description: `${areaValues[i].map((t) => Dayjs.format(t)).join()}`,
-                    type: cursor
+                    type: 'area'
                   }
                 });
                 onDispatchMark?.();
@@ -94,19 +122,20 @@ export const ThicknessChart = (
               data: [x, y],
               value: roundValue(y),
               description: x,
-              type: cursor
+              type: 'point'
             }
           });
           onDispatchMark?.();
         }
       }}
       style={{ height: 600 }}
-      toolbar={{
-        visibles: ['enable_point', 'enable_area', 'refresh', 'save_image'],
-        onEnableAreaSelection: (ins) => {
-          ChartMark.brushAreas(marks, ins);
-        }
-      }}
+      toolbars={[
+        <Toolbar
+          point={{ onClick: reset }}
+          area={{ onClick: enableAreaMark }}
+          markType={markType}
+        />
+      ]}
       yAxisMeta={{ ...property, min, max }}
     />
   );
