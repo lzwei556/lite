@@ -1592,5 +1592,11 @@
   "harmonic.9x": "九倍频",
   "harmonic.10x": "十倍频",
   "top10.order": "系数",
-  "common.unit": "单位"
+  "common.unit": "单位",
+  "common.parameters": "参数",
+  "flange.type": "法兰类型",
+  "flange.type.tower": "塔筒",
+  "flange.type.blade": "叶根",
+  "flange.type.hub.and.nacelle": "轮毂-机舱连接",
+  "flange.type.pitch.bearing": "变桨轴承"
 }

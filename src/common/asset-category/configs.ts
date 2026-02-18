@@ -23,6 +23,7 @@ import PumpImage from './assets/pump.png';
 import CompressorImage from './assets/compressor.png';
 import { motorFields } from './motor';
 import _ from 'lodash';
+import * as Component from '../components';
 
 // constants begin
 export enum Value {
@@ -67,7 +68,7 @@ const configs: Config[] = [
     key: Value.Flange,
     label: Value[Value.Flange],
     category: 'bolt',
-    settings: flangeSettings
+    settings: flangeSettings.map((s) => ({ ...s, group: 'common.parameters' }))
   },
   {
     key: Value.Tower,
@@ -148,7 +149,13 @@ const configs: Config[] = [
     category: 'vibration',
     settings: motorSettings.map((s) => ({ ...s, source: '' } as SettingsField)),
     iconPath: '',
-    image: MotorImage
+    image: MotorImage,
+    componentIds: [
+      Component.Value.MotorDriveEnd,
+      Component.Value.MotorNonDriveEnd,
+      Component.Value.GearboxInput,
+      Component.Value.GearboxOutput
+    ]
   },
   {
     key: Value.Pump,
@@ -213,7 +220,8 @@ export const Key = {
   getSettings: (key: Value) => get(key)?.settings ?? [],
   getGroupedSettings: (key: Value) =>
     Object.entries(_.groupBy(Key.getSettings(key), (field) => field.group ?? '')),
-  getImage: (key: Value) => get(key)?.image
+  getImage: (key: Value) => get(key)?.image,
+  getComponentIds: (key: Value) => get(key)?.componentIds ?? []
 };
 
 export const getNamePath = (source: SettingsField['source']) => {
@@ -235,6 +243,7 @@ export type Config = {
   label: string;
   category: 'bolt' | 'vibration' | 'corrosion' | 'device' | 'folder';
   children?: number[];
+  componentIds?: Component.Value[];
   settings?: SettingsField[];
   filter?: SettingsField;
   iconPath?: string;

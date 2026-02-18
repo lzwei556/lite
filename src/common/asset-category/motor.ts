@@ -1,4 +1,5 @@
 import { Field } from 'types';
+import { pickOptionsFromNumericEnum } from 'utils/enum';
 
 export type MotorSettings = {
   bearing: { n_balls: number; d: number; big_d: number; theta: number };
@@ -36,6 +37,8 @@ export type MotorSettings = {
     vel_base_100Hz: number;
     vel_base_mfb: number;
   };
+  fault_sensitivity: number;
+  severity_sensitivity: number;
 } & RotationSpeed;
 
 enum RotationMode {
@@ -56,6 +59,18 @@ export const rotationSpeed: Field<MotorSettings> = {
   unit: 'rpm',
   defaultValue: 745
 };
+
+enum FaultSensitivity {
+  Low = 1,
+  Medium,
+  High
+}
+
+enum SeveritySensitivity {
+  Low = 1,
+  Medium,
+  High
+}
 
 export const motorFields: Field<MotorSettings>[] = [
   rotationSpeed,
@@ -130,6 +145,24 @@ export const motorFields: Field<MotorSettings>[] = [
     description: 'motor.slip.desc',
     type: 'number',
     defaultValue: 0.02
+  },
+   {
+    label: 'motor.fault.sensitivity',
+    name: 'fault_sensitivity',
+    description: 'motor.fault.sensitivity.desc',
+    type: 'enum',
+    options: pickOptionsFromNumericEnum(FaultSensitivity, 'fault.sensitivity'),
+    defaultValue: 2,
+    group: 'algorithm.parameters'
+  },
+  {
+    label: 'motor.severity.sensitivity',
+    name: 'severity_sensitivity',
+    description: 'motor.severity.sensitivity.desc',
+    type: 'enum',
+    options: pickOptionsFromNumericEnum(SeveritySensitivity, 'severity.sensitivity'),
+    defaultValue: 2,
+    group: 'algorithm.parameters'
   },
   // {
   //   label: 'motor.rolling.elements.num',

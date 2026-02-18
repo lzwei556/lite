@@ -1,101 +1,80 @@
 import React from 'react';
-import { Descriptions, MutedCard } from '../../components';
-import {
-  InfoCircleOutlined,
-  LineChartOutlined,
-  SafetyOutlined,
-  SunOutlined
-} from '@ant-design/icons';
-import { Divider, List, Space } from 'antd';
+import { Grid, MutedCard } from 'components';
+import { Col, Collapse } from 'antd';
 import { useGlobalStyles } from '../../styles';
-import { FaultDiagnosisOverview } from './overvew';
 import { FaultDiagnosis } from './common';
-import { getHealthStatusByValue } from './health-status';
-import { getFaultByCategory } from './fault';
+import { generateColProps } from 'utils/grid';
+import { FaultDiagnosisOverview } from './overvew';
+import { ComponentsHealthyList } from './list';
+import { MoniotoringPointData } from './monitoring-point-data';
+import { MonitoringPointRow } from 'asset-common';
+import { ZoneScoreTable } from './iso-zone-table';
+import intl from 'react-intl-universal';
+import { Component } from 'common';
+import { getDisplayName, roundValue } from 'utils';
+import { useLocaleContext } from 'localeProvider';
 
-export const FaultDiagnosisDetail = () => {
-  const diagnosis: FaultDiagnosis = {
-    healthIndex: 48,
-    timestamp: 1762486214,
-    status: getHealthStatusByValue(3),
-    faults: [1].map(getFaultByCategory)
-  };
-  return (
-    <MutedCard title=''>
-      <FaultDiagnosisOverview {...{ name: 'dfd', ...diagnosis }} />
-      <Divider />
-      <FaultDiagnosisDetailItem />
-    </MutedCard>
-  );
-};
+export const FaultDiagnosisDetail = (
+  props: FaultDiagnosis & { monitoringPoints: MonitoringPointRow[]; rotationSpeed?: number }
+) => {
+  const { colorBgContainerStyle } = useGlobalStyles();
+  const monitoringPoints = props.monitoringPoints.filter((m) => !!m.componentId);
+  const { language } = useLocaleContext();
 
-const FaultDiagnosisDetailItem = () => {
-  const { colorPrimaryStyle } = useGlobalStyles();
   return (
-    <Descriptions
-      bordered={true}
-      items={[
-        { label: '故障名称', children: '电机驱动端轴承故障' },
-        {
-          label: '频谱分析',
-          children: (
-            <List
-              dataSource={[
-                {
-                  avator: <SunOutlined />,
-                  title: '主要特征',
-                  content:
-                    '在约 91.26 Hz 处出现显著峰值，对应包络加速度幅值约 7.544 gE。该频率与电机驱动端轴承外圈故障特征频率接近，说明可能存在早期轴承损伤'
-                },
-                {
-                  avator: <InfoCircleOutlined />,
-                  title: '诊断结论',
-                  content:
-                    '检测结果显示电机驱动端轴承存在异常振动特征，可能由滚动体或滚道轻微损伤引起。建议进行进一步检测或更换润滑脂，如异常持续或加剧，则需更换轴承'
-                },
-                {
-                  avator: <SafetyOutlined />,
-                  title: '维护建议',
-                  content: (
-                    <List
-                      dataSource={[
-                        { title: '短期', content: '监控加速度包络趋势，确认是否持续上升' },
-                        { title: '中期', content: '进行轴承温度和润滑状态检查' },
-                        { title: '长期', content: '计划性更换轴承以防止二次损坏' }
-                      ]}
-                      renderItem={(item) => (
-                        <div style={{ marginBottom: 8 }}>
-                          <Space>
-                            {item.title}
-                            {item.content}
-                          </Space>
-                        </div>
-                      )}
-                      split={false}
-                    />
-                  )
-                },
-                {
-                  avator: <LineChartOutlined />,
-                  title: '频谱图',
-                  content: 'chart'
-                }
-              ]}
-              renderItem={(item) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<span style={colorPrimaryStyle}>{item.avator}</span>}
-                    title={<span style={{ fontWeight: 400 }}>{item.title}</span>}
-                    description={<span style={{ color: 'rgba(0,0,0,0.88)' }}>{item.content}</span>}
-                  />
-                </List.Item>
-              )}
+    <Grid>
+      <Col {...generateColProps({ xxl: 12 })}>
+        <Grid>
+          <Col span={24}>
+            <FaultDiagnosisOverview {...props} />
+          </Col>
+          <Col span={24}>
+            <ComponentsHealthyList
+              {...props}
+              type='card'
+              cardProps={{ styles: { body: { overflow: 'auto', maxHeight: 550 } } }}
             />
-          )
-        }
-      ]}
-      labelStyle={{ width: '6em' }}
-      contentStyle={{ justifyContent: 'flex-start' }}
-    />
+          </Col>
+          {props.components.length > 0 && (
+            <Col span={24}>
+              <MutedCard
+                extra={getDisplayName({
+                  name: intl.get('common.unit'),
+                  lang: language,
+                  suffix: 'mm/s'
+                })}
+                title={intl.get('iso.standard.zone')}
+              >
+                <ZoneScoreTable
+                  zones={['A', 'B', 'C', 'D']}
+                  boundaries={props.components[0].iso?.zoneBoundaries ?? []}
+                  rows={props.components.map((c) => ({
+                    title: intl.get(Component.Key.get(c.componentId).label),
+                    score: roundValue(Math.max(...(c.iso?.data ?? [0])))
+                  }))}
+                  max={15}
+                />
+              </MutedCard>
+            </Col>
+          )}
+        </Grid>
+      </Col>
+      <Col {...generateColProps({ xxl: 12 })} style={{ overflowY: 'auto', maxHeight: 780 }}>
+        <Collapse
+          accordion={true}
+          bordered={false}
+          defaultActiveKey={monitoringPoints?.[0].id}
+          expandIconPosition='end'
+          items={monitoringPoints.map((m) => ({
+            key: m.id,
+            label: m.name,
+            children: (
+              <MoniotoringPointData monitoringPoint={m} rotationSpeed={props.rotationSpeed} />
+            )
+          }))}
+          style={{ backgroundColor: colorBgContainerStyle.backgroundColor }}
+        />
+      </Col>
+    </Grid>
   );
 };

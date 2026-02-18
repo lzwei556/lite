@@ -7,12 +7,14 @@ import { MonitoringPointPostDTO } from 'common/monitoring-point';
 import { Grid } from 'components';
 import {
   AssetSelectFormItem,
+  ComponentSelectFormItem,
   FormItemsBasic,
   SensorSelectFormItem,
   TypeSelectFormItem
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
+import { MonitoringPointType } from 'common';
 
 export type CreateFormProps = {
   loading: boolean;
@@ -54,7 +56,11 @@ export const CreateFormModal = ({
             {...{
               assetSelectFormItem: <AssetSelectFormItem {...{ assetId, type }} />,
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
-              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest, disabled: false }} />
+              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest, disabled: false }} />,
+              componentSelectFormItem:
+                type &&
+                MonitoringPointType.Categories.getKeys(['vibration']).includes(type) &&
+                type !== MonitoringPointType.Value.OilFiller && <ComponentSelectFormItem type={type}/>
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

@@ -8,17 +8,20 @@ import intl from 'react-intl-universal';
 import { DeviceSelect } from './device-select';
 import { generateColProps } from 'utils/grid';
 import { useAssets, useType } from './use-basic-form-items';
+import { useComponents } from './hooks';
 
 export const FormItemsBasic = ({
   assetSelectFormItem,
   formItemColProps = generateColProps({}),
   sensorSelectFormItem,
-  typeSelectFormItem
+  typeSelectFormItem,
+  componentSelectFormItem
 }: {
   assetSelectFormItem?: React.ReactElement;
   formItemColProps?: ColProps;
   sensorSelectFormItem: React.ReactElement;
   typeSelectFormItem: React.ReactElement;
+  componentSelectFormItem?: React.ReactNode;
 }) => {
   return (
     <>
@@ -34,6 +37,7 @@ export const FormItemsBasic = ({
       <Col {...formItemColProps}>{typeSelectFormItem}</Col>
       <Col {...formItemColProps}>{sensorSelectFormItem}</Col>
       {assetSelectFormItem}
+      {componentSelectFormItem && <Col {...formItemColProps}>{componentSelectFormItem}</Col>}
     </>
   );
 };
@@ -116,4 +120,21 @@ export const AssetSelectFormItem = ({
     />
   );
   return rest.assetId ? formItem : <Col {...formItemColProps}>{formItem}</Col>;
+};
+
+export const ComponentSelectFormItem = ({ type }: { type: number }) => {
+  return (
+    <SelectFormItem
+      label='common.component'
+      name='component_id'
+      rules={[{ required: true }]}
+      selectProps={{
+        options: useComponents(type).map((opt) => ({
+          ...opt,
+          value: opt.key,
+          label: intl.get(opt.label)
+        }))
+      }}
+    />
+  );
 };

@@ -13,6 +13,11 @@ import { CustomizableIntervals } from 'features/feature-data';
 import { FlangeOverview } from './overview-flange';
 import { FlangeStatus } from 'features/feature-data';
 import { FlangeOverviewLegacy } from './overview-flange-legacy';
+import {
+  FaultDiagnosis,
+  FaultDiagnosisDetail,
+  useAssetDiagnosis
+} from 'features/vibration-fault-diagnosis';
 
 export const Index = ({ asset }: { asset: AssetRow }) => {
   return (
@@ -23,9 +28,16 @@ export const Index = ({ asset }: { asset: AssetRow }) => {
 };
 
 const useFeatures = (asset: AssetRow) => {
+  const { data: diagnosisResult } = useAssetDiagnosis(
+    asset.id,
+    !!asset.diagnosisIsEnabled,
+    asset.diagnosisPeriod === 0
+  );
+  const diagnosis = useDiagnosis(asset, diagnosisResult);
   const history = useHistory(asset);
   const flangeStatus = useFlangeStatus(asset);
-  const items: TabsDetailsItems = useOverview(asset)
+  const items: TabsDetailsItems = useOverview(asset, diagnosisResult)
+    .concat(diagnosis)
     .concat([
       {
         key: 'monitoring.points',
@@ -45,7 +57,7 @@ const useFeatures = (asset: AssetRow) => {
   return items;
 };
 
-const useOverview = (asset: AssetRow) => {
+const useOverview = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
   const isLegacy = ENV.legacyEnabled === 'true';
   let overview = null;
   if (AssetCategory.Categories.getKeys(['vibration']).includes(asset.type)) {
@@ -55,7 +67,7 @@ const useOverview = (asset: AssetRow) => {
       content: isLegacy ? (
         <OverviewLegacy asset={asset} key={asset.id} />
       ) : (
-        <Overview asset={asset} key={asset.id} />
+        <Overview asset={asset} key={asset.id} diagnosis={diagnosis} />
       )
     };
   } else if (AssetCategory.Categories.getKeys(['corrosion']).includes(asset.type)) {
@@ -78,6 +90,29 @@ const useOverview = (asset: AssetRow) => {
     };
   }
   return overview ? [overview] : [];
+};
+
+const useDiagnosis = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
+  if (shouldDisplayDiagnosis(asset)) {
+    return [
+      {
+        key: 'diagnosis',
+        label: intl.get('common.diagnosis'),
+        content: diagnosis ? (
+          <FaultDiagnosisDetail
+            {...diagnosis}
+            key={asset.id}
+            monitoringPoints={asset.monitoringPoints ?? []}
+            rotationSpeed={asset.attributes?.rotation_speed}
+          />
+        ) : (
+          <></>
+        )
+      }
+    ];
+  } else {
+    return [];
+  }
 };
 
 const useHistory = (asset: AssetRow) => {
@@ -108,4 +143,8 @@ const useFlangeStatus = (asset: AssetRow) => {
   } else {
     return [];
   }
+};
+
+export const shouldDisplayDiagnosis = (asset: AssetRow) => {
+  return asset.diagnosisIsEnabled && (asset.monitoringPoints ?? []).length !== 0;
 };

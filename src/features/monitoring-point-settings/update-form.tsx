@@ -4,13 +4,14 @@ import intl from 'react-intl-universal';
 import { Form } from 'antd';
 import {
   AssetSelectFormItem,
+  ComponentSelectFormItem,
   FormItemsBasic,
   SensorSelectFormItem,
   TypeSelectFormItem
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
-import { MonitoringPoint, MonitoringPointPostDTO, transform2PostDTO } from 'common';
+import { MonitoringPoint, MonitoringPointPostDTO, MonitoringPointType, transform2PostDTO } from 'common';
 
 export type UpdateFormProps = {
   loading: boolean;
@@ -38,7 +39,12 @@ export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: Updat
             {...{
               assetSelectFormItem: <AssetSelectFormItem {...{ type }} />,
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
-              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />
+              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />,
+              componentSelectFormItem: type &&
+                MonitoringPointType.Categories.getKeys(['vibration']).includes(type) &&
+                type !== MonitoringPointType.Value.OilFiller && (
+                  <ComponentSelectFormItem type={type} />
+                )
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

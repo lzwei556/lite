@@ -1,11 +1,23 @@
 import { useRequest } from 'ahooks';
-import { MonitoringPoint, MonitoringPointPostDTO, MonitoringPointType } from 'common';
+import { Component, MonitoringPoint, MonitoringPointPostDTO, MonitoringPointType } from 'common';
 import React from 'react';
 import request from 'utils/request';
 import { UpdateFormProps } from './update-form';
 import { useNotificationContext } from 'providers/notification';
 import intl from 'react-intl-universal';
 import { CreateFormProps } from './create-form-modal';
+import { AssetCategory } from 'common/asset-category';
+
+export const useComponents = (type: number) => {
+  const assetCategories = MonitoringPointType.Key.getAssetCategories(type);
+  const componentIds: number[] = [];
+  assetCategories.forEach((type) => {
+    componentIds.push(...AssetCategory.Key.getComponentIds(type));
+  });
+  return [{ key: 0, label: 'NONE' }].concat(
+    Array.from(new Set(componentIds)).map((id) => Component.Key.get(id))
+  );
+};
 
 type SensorBindingInput = Pick<MonitoringPointPostDTO, 'channel' | 'device_id'> & {
   process_id: number;

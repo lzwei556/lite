@@ -1,58 +1,42 @@
-import { color } from './common';
+import { toSnake } from 'ts-case-convert';
+import { iterate, transformSnake2Dot } from 'utils';
 
-enum HealthStatusValue {
+export enum Value {
   Healthy = 0,
   Warning = 1,
   Critical = 2,
   Fault = 3
 }
 
-enum HealthStatusLabel {
-  Healthy = 'health.status.healthy',
-  Warning = 'health.status.warning',
-  Critical = 'health.status.critical',
-  Fault = 'health.status.fault'
-}
+const color = {
+  [Value.Healthy]: [40, 167, 69],
+  [Value.Warning]: [255, 193, 7],
+  [Value.Critical]: [254, 109, 44],
+  [Value.Fault]: [255, 0, 0]
+} as const;
 
-enum HealthIndexRange {
-  Healthy = '>= 85',
-  Warning = '85 - 70',
-  Critical = '70 - 50',
-  Fault = '< 50'
-}
+const range = {
+  [Value.Healthy]: '>= 85',
+  [Value.Warning]: '85 - 70',
+  [Value.Critical]: '70 - 50',
+  [Value.Fault]: '< 50'
+} as const;
 
 export type HealthStatus = {
-  label: HealthStatusLabel;
-  value: HealthStatusValue;
+  key: Value;
+  label: string;
   color: (typeof color)[keyof typeof color];
-  range: HealthIndexRange;
+  range: string;
 };
 
-export const healthStatusTable: Record<HealthStatusValue, Omit<HealthStatus, 'value'>> = {
-  [HealthStatusValue.Healthy]: {
-    label: HealthStatusLabel.Healthy,
-    color: color.Healthy,
-    range: HealthIndexRange.Healthy
-  },
-  [HealthStatusValue.Warning]: {
-    label: HealthStatusLabel.Warning,
-    color: color.Warning,
-    range: HealthIndexRange.Warning
-  },
-  [HealthStatusValue.Critical]: {
-    label: HealthStatusLabel.Critical,
-    color: color.Critical,
-    range: HealthIndexRange.Critical
-  },
-  [HealthStatusValue.Fault]: {
-    label: HealthStatusLabel.Fault,
-    color: color.Fault,
-    range: HealthIndexRange.Fault
+export const Key = {
+  get: (key: Value): HealthStatus => {
+    const PREFIX = 'health.status.';
+    const label = `${PREFIX}${transformSnake2Dot(toSnake(Value[key]))}`;
+    return { key, label, color: color[key], range: range[key] };
   }
 };
 
-export const getHealthStatusByValue = (value: HealthStatusValue): HealthStatus => {
-  const entry = healthStatusTable[value];
-  return { value, ...entry };
+export const getOptions = (): HealthStatus[] => {
+  return iterate(Value).map(Key.get);
 };
-

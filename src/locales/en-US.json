@@ -1592,5 +1592,11 @@
   "harmonic.9x": "Ninth Harmonic",
   "harmonic.10x": "Tenth Harmonic",
   "top10.order": "Order",
-  "common.unit": "Unit"
+  "common.unit": "Unit",
+  "common.parameters": "Parameters",
+  "flange.type": "Flange Type",
+  "flange.type.tower": "Tower",
+  "flange.type.blade": "Blade",
+  "flange.type.hub.and.nacelle": "Hub And Nacelle",
+  "flange.type.pitch.bearing": "Pitch Bearing"
 }

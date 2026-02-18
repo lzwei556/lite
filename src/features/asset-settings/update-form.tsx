@@ -2,11 +2,17 @@ import { Card, Grid, SaveIconButton } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { ColProps, Form } from 'antd';
-import { FormItemsBasic, ParentSelectFormItem, TypeSelectFormItem } from './form-items-basic';
+import {
+  DiagnosisFormItems,
+  FormItemsBasic,
+  ParentSelectFormItem,
+  TypeSelectFormItem
+} from './form-items-basic';
 import { FormItemsSettings } from './form-items-settings';
 import { useType } from './use-basic-form-items';
 import { AssetModel, AssetRow } from 'asset-common';
 import { generateColProps } from 'utils/grid';
+import { AssetCategory } from 'common/asset-category';
 
 export type UpdateFormProps = {
   loading: boolean;
@@ -40,6 +46,8 @@ export const UpdateFormCard = ({
         layout='vertical'
         initialValues={{
           ...editingAsset,
+          diagnosis_is_enabled: editingAsset.diagnosisIsEnabled,
+          diagnosis_period: editingAsset.diagnosisPeriod,
           parent_id: editingAsset.parentId,
           type
         }}
@@ -49,7 +57,11 @@ export const UpdateFormCard = ({
             {...{
               formItemColProps,
               parentSelectFormItem: <ParentSelectFormItem {...{ formItemColProps, type }} />,
-              typeSelectFormItem: <TypeSelectFormItem {...typeRest} />
+              typeSelectFormItem: <TypeSelectFormItem {...typeRest} />,
+              diagnosisFormItems: type &&
+                AssetCategory.Categories.getKeys(['vibration']).includes(type) && (
+                  <DiagnosisFormItems asset={editingAsset} formItemColProps={formItemColProps} />
+                )
             }}
           />
         </Grid>

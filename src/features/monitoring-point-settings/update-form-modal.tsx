@@ -7,12 +7,14 @@ import intl from 'react-intl-universal';
 import { Grid } from 'components';
 import {
   AssetSelectFormItem,
+  ComponentSelectFormItem,
   FormItemsBasic,
   SensorSelectFormItem,
   TypeSelectFormItem
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { UpdateFormProps } from './update-form';
+import { MonitoringPointType } from 'common';
 
 export const UpdateFormModal = ({
   onSuccess,
@@ -43,7 +45,12 @@ export const UpdateFormModal = ({
             {...{
               assetSelectFormItem: <AssetSelectFormItem {...{ type }} />,
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
-              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />
+              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />,
+              componentSelectFormItem: type &&
+                MonitoringPointType.Categories.getKeys(['vibration']).includes(type) &&
+                type !== MonitoringPointType.Value.OilFiller && (
+                  <ComponentSelectFormItem type={type} />
+                )
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}
