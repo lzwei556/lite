@@ -12,24 +12,24 @@ import {
 import React from 'react';
 import {
   DataType,
-  dataTypeOptions,
-  DiagnosisResult,
-  diagnosisResultOptions,
+
   fillReasonOptions,
   FillRecord,
   fillResultOptions,
   Reason,
   useFillRecords
 } from './use-services';
-import { MonitoringPointRow } from 'monitoring-point';
 import intl from 'react-intl-universal';
-import { Dayjs, getDisplayName, getOptionLabelByValue, getValue } from 'utils';
+import { Dayjs, getDisplayName, getOptionLabelByValue, getValue, roundValue } from 'utils';
 import { autoFillParameter, ProcessType, ProcessTypeKey } from 'process-type';
 import { Language, useLocaleContext } from 'localeProvider';
 import { sourceIdField } from './common';
+import { FaultType, MonitoringPoint } from 'common';
 
-export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
-  const [type, setType] = React.useState(`${DataType.Feature}`);
+type ReasonDetail = { label: string; children: string | number };
+
+export const FillRecords = ({ id, assetId }: MonitoringPoint) => {
+  const [type, setType] = React.useState(`${DataType.Characteristic}`);
   const { numberedRange, setRange } = useRange();
   const [from, to] = numberedRange;
   const [page, setPage] = React.useState<{ size: number; page: number }>({ page: 1, size: 10 });
@@ -62,25 +62,7 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
       key: 'reasons',
       dataIndex: 'reasons',
       title: intl.get('fill.reason'),
-      render: (reasons: number[], row: FillRecord) => {
-        const { dataType, diagnosisResults } = row;
-        if (dataType === 0) {
-          return (
-            <ReasonsCell
-              reasons={reasons.map((r) => intl.get(getOptionLabelByValue(fillReasonOptions, r)))}
-              row={row}
-            />
-          );
-        } else if (diagnosisResults && diagnosisResults.items.length > 0) {
-          return (
-            <ReasonsCell
-              reasons={diagnosisResults.items.map((r) =>
-                intl.get(getOptionLabelByValue(diagnosisResultOptions, r.diagnosis))
-              )}
-            />
-          );
-        }
-      }
+      render: (_: string, row: FillRecord) => <ReasonsCell record={row} />
     };
     const result = {
       key: 'result',
@@ -134,21 +116,21 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
   );
 };
 
-const ReasonsCell = ({ reasons, row }: { reasons: string[]; row?: FillRecord }) => {
+const ReasonsCell = ({ record }: { record: FillRecord }) => {
+  const reasons = getReasons(record);
   if (reasons.length > 2) {
     return (
       <Space>
-        <span>{reasons.filter((_, i) => i < 2)}...</span>
+        <span>
+          {reasons
+            .filter((_, i) => i < 2)
+            .map((r) => `${r.label} ${r.children}`)
+            .join(', ')}
+          ...
+        </span>
         <Button style={{ paddingInline: 0 }} type='link'>
           <Popover
-            content={
-              row && (
-                <Descriptions
-                  items={row.reasons.map((reason) => getReasonOption(reason, row))}
-                  labelStyle={{ width: '10em' }}
-                />
-              )
-            }
+            content={<Descriptions items={reasons} />}
             styles={{ body: { width: '25em' } }}
             title={intl.get('fill.reason')}
             trigger={['click']}
@@ -159,11 +141,24 @@ const ReasonsCell = ({ reasons, row }: { reasons: string[]; row?: FillRecord }) 
       </Space>
     );
   } else {
-    return reasons.join();
+    return reasons.map((r) => `${r.label} ${r.children}`).join(', ');
   }
 };
 
-const getReasonOption = (reason: number, row: FillRecord) => {
+const getReasons = (record: FillRecord): ReasonDetail[] => {
+  const { diagnosisResults, dataType } = record;
+  const reasons: ReasonDetail[] = [];
+  if (dataType === 0) {
+    reasons.push(...record.reasons.map((reason) => getFailureReasonOfFeatureData(reason, record)));
+  } else if (dataType === 1 && diagnosisResults && diagnosisResults.items.length > 0) {
+    reasons.push(
+      ...diagnosisResults.items.map((item) => item.diagnosis).map(getFailureReasonOfFault)
+    );
+  }
+  return reasons;
+};
+
+const getFailureReasonOfFeatureData = (reason: number, row: FillRecord): ReasonDetail => {
   const {
     soundPressureLevel,
     energyRatio,
@@ -178,11 +173,11 @@ const getReasonOption = (reason: number, row: FillRecord) => {
     case Reason.Temperatue:
       return { label, children: getValue({ value: temperature, unit: '℃' }) };
     case Reason.soundPressureLevel:
-      return { label, children: soundPressureLevel };
+      return { label, children: roundValue(soundPressureLevel) };
     case Reason.energyRatio:
-      return { label, children: energyRatio };
+      return { label, children: roundValue(energyRatio) };
     case Reason.stationarity:
-      return { label, children: stationarity };
+      return { label, children: roundValue(stationarity) };
     case Reason.velocityX:
       return { label, children: getValue({ value: velocityX, unit: 'mm/s' }) };
     case Reason.velocityY:
@@ -192,4 +187,8 @@ const getReasonOption = (reason: number, row: FillRecord) => {
     default:
       return { label: intl.get('DEVICE_TYPE_UNKNOWN'), children: -1 };
   }
+};
+
+const getFailureReasonOfFault = (reason: number): ReasonDetail => {
+  return { label: intl.get(getOptionLabelByValue(FaultType.options, reason)), children: '' };
 };

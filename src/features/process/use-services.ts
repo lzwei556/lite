@@ -5,6 +5,7 @@ import intl from 'react-intl-universal';
 import { Device } from '../../types/device';
 import { PageResult } from 'types/page';
 import { pickOptionsFromNumericEnum } from 'utils';
+import { FaultType } from 'common';
 
 type AutoFillParameter = { [Key in keyof typeof autoFillParameter]: number };
 
@@ -89,12 +90,12 @@ export type FillRecord = {
   velocityY: number;
   velocityZ: number;
   temperature: number;
-  diagnosisResults: { items: { diagnosis: DiagnosisResult; confidence: DiagnosisConfidence }[] };
+  diagnosisResults: { items: { diagnosis: FaultType.Value; confidence: 1 | 2 | 3 | 4 }[] };
   reasons: Reason[];
 };
 
 export enum DataType {
-  Feature,
+  Characteristic,
   Diagnosis
 }
 
@@ -120,30 +121,6 @@ export enum Reason {
 }
 
 export const fillReasonOptions = pickOptionsFromNumericEnum(Reason, 'fill.reason');
-
-export enum DiagnosisResult {
-  Wear = 1001,
-  Loose = 1002,
-  NonCenter = 1003,
-  Mounting = 1004
-}
-
-export const diagnosisResultOptions = pickOptionsFromNumericEnum(
-  DiagnosisResult,
-  'diagnosis.result'
-);
-
-enum DiagnosisConfidence {
-  Normal = 1,
-  Info = 2,
-  Warning = 3,
-  Danger = 4
-}
-
-export const diagnosisConfidenceOptions = pickOptionsFromNumericEnum(
-  DiagnosisConfidence,
-  'diagnosis.confidence'
-);
 
 export const useFillRecords = (params: Parameters<typeof getFillRecords>) =>
   useRequest(getFillRecords, { defaultParams: params, manual: true });
