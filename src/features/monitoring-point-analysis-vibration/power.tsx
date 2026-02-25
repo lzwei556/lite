@@ -14,6 +14,7 @@ export const Power = ({ filters, intermediateData }: AnalysisProps) => {
   const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
+  const unit = 'dB'
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -50,7 +51,7 @@ export const Power = ({ filters, intermediateData }: AnalysisProps) => {
                     interval: Math.floor(x.length / 20)
                   }
                 },
-                yAxis: { name: property.unit },
+                yAxis: { name: unit },
                 dataZoom: [{ start: 0, end: 10 }],
                 grid: { top: 60, bottom: 60, right: 30 },
                 animation: false
@@ -63,7 +64,7 @@ export const Power = ({ filters, intermediateData }: AnalysisProps) => {
                 xAxisValues: x.map((n) => `${n}`)
               }
             ],
-            yAxisMeta: { ...property, unit: property.unit }
+            yAxisMeta: { ...property, unit }
           })}
           style={{ height: 450 }}
         />

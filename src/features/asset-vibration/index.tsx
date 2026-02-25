@@ -5,7 +5,8 @@ import {
   AssetRow,
   ContextProps,
   MonitoringPointRow,
-  MonitoringPointsTable
+  MonitoringPointsTable,
+  updateAsset
 } from '../../asset-common';
 import * as Point from '../monitoring-point-vibration';
 import { AssetModelProvider } from '../../asset-model';
@@ -18,7 +19,7 @@ import { AssetAnnotationImage } from '../imageAnnotation';
 import { Permission, useCan } from '../../providers/access-control';
 import { ENV } from '../../utils';
 import { OverviewLegacy } from './overview-legacy';
-import { FaultDiagnosisDetail } from 'features/vibration-fault-diagnosis';
+import { DiagnosisMarksFormAlert, FaultDiagnosisDetail } from 'features/vibration-fault-diagnosis';
 import { useAssetDiagnosis } from 'features/vibration-fault-diagnosis/common';
 
 export const Index = ({ loading, asset, refresh }: ContextProps & { asset: AssetRow }) => {
@@ -119,6 +120,20 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
 
   return (
     <Spin spinning={loading}>
+      {ENV.debug === 'true' && (
+        <DiagnosisMarksFormAlert
+          asset={asset}
+          onSubmit={(faults) =>
+            updateAsset(asset.id, {
+              id: asset.id,
+              name: asset.name,
+              type: asset.type,
+              parent_id: asset.parentId,
+              marks: { faults }
+            })
+          }
+        />
+      )}
       <AssetModelProvider asset={asset}>
         <TabsDetail items={useFeatures()} title={<AssetNavigator asset={asset} />} />
       </AssetModelProvider>

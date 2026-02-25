@@ -2,6 +2,7 @@ import { MotorSettings } from 'asset-category';
 import { ProcessDTO } from '../features/process/use-services';
 import { MonitoringPointRow } from '../monitoring-point';
 import { AssetChildrenStatistics } from './utils/statistics';
+import { FaultType } from 'common';
 
 export type AssetModel = {
   id: number;
@@ -23,6 +24,7 @@ export type AssetModel = {
     initial_preload: number;
     initial_pressure: number;
   };
+  marks?: { faults: FaultType.Value[] };
 };
 
 export type AssetRow = {
@@ -57,6 +59,7 @@ export type AssetRow = {
   actions?: ProcessDTO[];
   diagnosisIsEnabled: boolean;
   diagnosisPeriod: number;
+  marks?: { faults: FaultType.Value[] };
 };
 
 export type AssetCategory = { type: number; label: string; labelPlural?: string };
