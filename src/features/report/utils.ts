@@ -1,6 +1,6 @@
 import React from 'react';
 import { objectToCamel } from 'ts-case-convert';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { DeviceType } from '../../types/device_type';
 import { PageResult } from '../../types/page';
 import { transformPagedresult, useRange } from '../../components';
@@ -22,7 +22,7 @@ export const transform = (dto: ReportDTO): Report => {
     m.alarmRuleGroups.forEach((g) => {
       g.rules.forEach((rule) => {
         const { metric, operation, threshold } = rule;
-        const name = metric && metric.name ? intl.get(metric.name) : '';
+        const name = metric && metric.name ? Translation.get(metric.name) : '';
         conditions.push(
           `${name} ${operation ?? ''} ${threshold ?? ''} ${
             metric && metric.unit ? metric.unit : ''
@@ -49,7 +49,7 @@ const getTypeName = (d: NonNullable<Report['deviceFeatures']>[0]) => {
   } else if (DeviceType.getUltraHighDCSensors().includes(d.type)) {
     return 'DC210';
   } else if (DeviceType.isGateway(d.type)) {
-    return intl.get('GATEWAY');
+    return Translation.get('device.gateway');
   }
   return '';
 };

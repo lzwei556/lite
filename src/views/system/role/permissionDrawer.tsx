@@ -3,7 +3,7 @@ import { Role } from '../../../types/role';
 import { FC, useEffect, useState } from 'react';
 import { GetPermissionsWithGroupRequest } from '../../../apis/permission';
 import { AllocPermissionsRequest } from '../../../apis/role';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { CanAccess, Permission } from '../../../providers/access-control';
 
 export interface PermissionDrawerProps extends DrawerProps {
@@ -53,10 +53,10 @@ const PermissionDrawer: FC<PermissionDrawerProps> = (props) => {
   const renderExtra = () => {
     return (
       <Space>
-        <Button onClick={onCancel}>{intl.get('CANCEL')}</Button>
+        <Button onClick={onCancel}>{Translation.get('common.action.cancel')}</Button>
         <CanAccess {...Permission.RoleAllocPermissions}>
           <Button type={'primary'} onClick={onSave}>
-            {intl.get('SAVE')}
+            {Translation.get('common.action.save')}
           </Button>
         </CanAccess>
       </Space>
@@ -71,7 +71,7 @@ const PermissionDrawer: FC<PermissionDrawerProps> = (props) => {
     const treeData: any[] = [];
     Object.keys(permissions).forEach((key) => {
       treeData.push({
-        title: intl.get(key).d(key),
+        title: Translation.get(key),
         key: key,
         checkable: true,
         children: permissions[key].map((item: any) => {

@@ -1,5 +1,5 @@
 import { Menu as AntdMenu, MenuProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Menu } from '../../types/menu';
 import { FontIcon, Link } from '../../components';
 import { useRequest } from 'ahooks';
@@ -34,7 +34,7 @@ const transform: TransformFn = (props) => {
 
 const MenuItemLable = ({ menu }: { menu: Menu }) => {
   const { name, path, title } = menu;
-  const intlTitle = intl.get(title);
+  const intlTitle = Translation.get(title);
   return path ? <Link to={`${name}`}>{intlTitle}</Link> : intlTitle;
 };
 

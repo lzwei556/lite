@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { generateColProps } from '../../../utils/grid';
 import { Card, Grid, TabsDetail } from '../../../components';
 import {
@@ -34,7 +34,7 @@ export const Index = (props: {
     <TabsDetail
       items={[
         {
-          label: intl.get('assets'),
+          label: Translation.get('assets'),
           key: 'asset',
           content: (
             <Grid wrap={false} align='stretch'>
@@ -57,8 +57,8 @@ export const Index = (props: {
                     <AlarmsObjectStatistics
                       total={statistics.monitoringPointNum}
                       alarms={statistics.alarmNum}
-                      title={intl.get('monitoring.points')}
-                      subtext={intl.get('total')}
+                      title={Translation.get('monitoring.points')}
+                      subtext={Translation.get('common.total')}
                     />
                   </Col>
                   <Col span={24}>
@@ -73,7 +73,7 @@ export const Index = (props: {
           )
         },
         {
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           key: 'settings',
           content: (
             <Grid>

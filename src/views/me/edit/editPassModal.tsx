@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd';
 import { FC, useState } from 'react';
 import { UpdateMyPass } from '../../../apis/profile';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { TextFormItem } from '../../../components';
 
@@ -31,33 +31,36 @@ const EditPassModal: FC<EditPassProps> = ({ open, onSuccess, onCancel }) => {
     <ModalWrapper
       afterClose={() => form.resetFields()}
       open={open}
-      title={intl.get('MODIFY_PASSWORD')}
+      title={Translation.get('auth.password.modify')}
       onOk={onSave}
       onCancel={onCancel}
       confirmLoading={isLoading}
     >
       <Form form={form} layout='vertical'>
-        <TextFormItem label='OLD_PASSWORD' name='pwd' rules={[{ required: true }]}>
+        <TextFormItem label='auth.password.old' name='pwd' rules={[{ required: true }]}>
           <Input.Password />
         </TextFormItem>
         <TextFormItem
-          label='NEW_PASSWORD'
+          label='auth.password.new'
           name='newPwd'
           rules={[{ required: true }, { min: 6, max: 16 }]}
         >
           <Input.Password />
         </TextFormItem>
         <TextFormItem
-          label='CONFIRM_PASSWORD'
+          label='auth.password.confirmation'
           name='confirmPwd'
           rules={[
-            { required: true, message: intl.get('PLEASE_CONFIRM_PASSWORD') },
+            {
+              required: true,
+              message: Translation.pleaseDoSth('common.action.confirm', 'auth.password')
+            },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue('newPwd') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error(intl.get('PASSWORDS_ARE_INCONSISTENT')));
+                return Promise.reject(new Error(Translation.get('auth.password.inconsistent')));
               }
             })
           ]}

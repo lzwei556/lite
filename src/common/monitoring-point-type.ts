@@ -17,19 +17,19 @@ import { Property } from './monitoring-point';
 export enum Value {
   BoltLoosening = 10101,
   Corrosion = 10201,
-  HighTemperatureCorrosion = 10203,
-  UltraHighTemperatureCorrosion = 10202,
-  BoltPreload = 10301,
-  AnchorPreload = 10303,
-  FlangeBoltPreload = 10311,
-  FlangeAnchorPreload = 10312,
+  'High-Temperature' = 10203,
+  'Ultra-High-Temperature' = 10202,
+  PreloadBolt = 10301,
+  PreloadAnchor = 10303,
+  PreloadBoltFlange = 10311,
+  PreloadAnchorFlange = 10312,
   Vibration = 10401,
-  VibrationRotationSingleAxis = 10402,
+  'VibrationRotationSingle-Axis' = 10402,
   VibrationRotation = 10403,
   VibrationAudio = 10411,
   Inclination = 10501,
-  TopInclination = 10511,
-  BaseInclination = 10512,
+  InclinationTop = 10511,
+  InclinationBase = 10512,
   Pressure = 10602,
   Temperature = 10801,
   OilFiller = 11101
@@ -57,8 +57,8 @@ const configs: Config[] = [
     processIdForBindingSensor: 11
   },
   {
-    key: Value.HighTemperatureCorrosion,
-    label: Value[Value.HighTemperatureCorrosion],
+    key: Value['High-Temperature'],
+    label: Value[Value['High-Temperature']],
     category: 'corrosion',
     deviceTypes: DeviceType.getHighDCSensors(),
     properties: CATEGORIES.DC_HIGH,
@@ -67,8 +67,8 @@ const configs: Config[] = [
     processIdForBindingSensor: 11
   },
   {
-    key: Value.UltraHighTemperatureCorrosion,
-    label: Value[Value.UltraHighTemperatureCorrosion],
+    key: Value['Ultra-High-Temperature'],
+    label: Value[Value['Ultra-High-Temperature']],
     category: 'corrosion',
     deviceTypes: DeviceType.getUltraHighDCSensors(),
     properties: CATEGORIES.DC_Ultra_HIGH,
@@ -77,8 +77,8 @@ const configs: Config[] = [
     processIdForBindingSensor: 11
   },
   {
-    key: Value.BoltPreload,
-    label: Value[Value.BoltPreload],
+    key: Value.PreloadBolt,
+    label: Value[Value.PreloadBolt],
     category: 'preload',
     deviceTypes: [
       DeviceType.SAS,
@@ -94,8 +94,8 @@ const configs: Config[] = [
     assetTypes: [AssetType.Value.Flange]
   },
   {
-    key: Value.AnchorPreload,
-    label: Value[Value.AnchorPreload],
+    key: Value.PreloadAnchor,
+    label: Value[Value.PreloadAnchor],
     category: 'preload',
     deviceTypes: [DeviceType.SAS, DeviceType.SASLoraWAN],
     properties: CATEGORIES.SAS,
@@ -104,8 +104,8 @@ const configs: Config[] = [
     assetTypes: [AssetType.Value.Flange]
   },
   {
-    key: Value.FlangeBoltPreload,
-    label: Value[Value.FlangeBoltPreload],
+    key: Value.PreloadBoltFlange,
+    label: Value[Value.PreloadBoltFlange],
     category: 'flage-preload',
     deviceTypes: [
       DeviceType.SAS,
@@ -120,8 +120,8 @@ const configs: Config[] = [
     assetTypes: [AssetType.Value.Flange]
   },
   {
-    key: Value.FlangeAnchorPreload,
-    label: Value[Value.FlangeAnchorPreload],
+    key: Value.PreloadAnchorFlange,
+    label: Value[Value.PreloadAnchorFlange],
     category: 'flage-preload',
     deviceTypes: [
       DeviceType.SAS,
@@ -152,8 +152,8 @@ const configs: Config[] = [
     assetTypes: [AssetType.Value.Motor]
   },
   {
-    key: Value.VibrationRotationSingleAxis,
-    label: Value[Value.VibrationRotationSingleAxis],
+    key: Value['VibrationRotationSingle-Axis'],
+    label: Value[Value['VibrationRotationSingle-Axis']],
     category: 'vibration',
     deviceTypes: [DeviceType.SVT220S1],
     properties: CATEGORIES.SVT220S1S3,
@@ -195,8 +195,8 @@ const configs: Config[] = [
   //   properties: CATEGORIES.TopInclination
   // },
   {
-    key: Value.TopInclination,
-    label: Value[Value.TopInclination],
+    key: Value.InclinationTop,
+    label: Value[Value.InclinationTop],
     category: 'inclination',
     deviceTypes: [DeviceType.SQ100, DeviceType.SQ110C],
     properties: CATEGORIES.TopInclination,
@@ -206,8 +206,8 @@ const configs: Config[] = [
     processIdForBindingSensor: 21
   },
   {
-    key: Value.BaseInclination,
-    label: Value[Value.BaseInclination],
+    key: Value.InclinationBase,
+    label: Value[Value.InclinationBase],
     category: 'inclination',
     deviceTypes: [DeviceType.SQ100, DeviceType.SQ110C],
     properties: CATEGORIES.BaseInclination,
@@ -282,7 +282,7 @@ const getByCategory = (categories: Config['category'][]) => {
   return configs.filter((type) => categories.includes(type.category));
 };
 
-const PREFIX = 'monitoring.point.type.';
+const PREFIX = 'monitoring.point.';
 
 export const Key = {
   getLabel: (key: Value) => {
@@ -316,7 +316,7 @@ export const Key = {
     }
   },
   getDeviceTypes: (key: Value) => get(key)?.deviceTypes ?? [],
-  filterNonVirtualTypes: (key: Value) => key !== Value.FlangeBoltPreload,
+  filterNonVirtualTypes: (key: Value) => key !== Value.PreloadBoltFlange,
   getFlangeAttributesKey: (key: Value) => get(key)?.flangeAttributesKey,
   getInclinationDisplacement: (key: Value) => get(key)?.inclinationDisplacement ?? 'RADIAL',
   getAttributes: (key: Value) => get(key)?.attributes ?? [],

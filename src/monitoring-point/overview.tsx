@@ -3,7 +3,7 @@ import { Grid, MutedCard } from 'components';
 import React from 'react';
 import { BasicCard } from './basicCard';
 import { RelatedDeviceCard } from './relatedDeviceCard';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { RecentWeekMonitoringPointData } from 'features/characteristic-data';
 import { MonitoringPoint } from 'common';
 import { useGetSeriesAlarm } from './provider';
@@ -12,7 +12,7 @@ export const Overview = ({ monitoringPoint }: { monitoringPoint: MonitoringPoint
   return (
     <Grid wrap={false}>
       <Col flex='auto'>
-        <MutedCard title={intl.get('real.time.data')}>
+        <MutedCard title={Translation.get('feature.real-time')}>
           <RecentWeekMonitoringPointData
             {...{ ...monitoringPoint, ...useGetSeriesAlarm() }}
             key={monitoringPoint.id}

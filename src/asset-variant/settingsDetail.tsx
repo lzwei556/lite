@@ -1,8 +1,8 @@
 import { AssetCategory } from '../asset-category';
-import intl from 'react-intl-universal';
 import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { Descriptions, DescriptionsProps } from '../components';
 import { FieldHelper } from 'types';
+import { Translation } from 'locales/utils';
 
 export const SettingsDetail = ({
   attributes,
@@ -23,35 +23,34 @@ export const SettingsDetail = ({
       settings
         .filter((field) => (field.visibleWhen ? field.visibleWhen(attributes) : true))
         .filter((field) =>
-          [
-            `asset.category.${AssetCategory.Value[type].toLowerCase()}.parameters`,
-            ...groups
-          ].includes(field.group ?? '')
+          [`asset.${AssetCategory.Value[type].toLowerCase()}.parameters`, ...groups].includes(
+            field.group ?? ''
+          )
         )
         .forEach(({ label, name, translatingUnit, type, options, unit }) => {
           const children = FieldHelper.getValue(attributes, name) as string | number | number[];
           if (type === 'string') {
             items.push({
-              label: intl.get(label),
+              label: Translation.get(label),
               children
             });
           } else if (options && options.length > 0) {
             const value = getOptionLabelByValue(options, children as string | number);
             items.push({
-              label: intl.get(label),
-              children: intl.get(value).d(value)
+              label: Translation.get(label),
+              children: Translation.get(value)
             });
           } else if (type === 'number-array') {
             items.push({
-              label: intl.get(label),
+              label: Translation.get(label),
               children: truncate(((children ?? []) as number[]).join('-'), 20)
             });
           } else {
             items.push({
-              label: intl.get(label),
+              label: Translation.get(label),
               children: getValue({
                 value: children as number,
-                unit: translatingUnit ? intl.get(translatingUnit) : unit
+                unit: translatingUnit ? Translation.get(translatingUnit) : unit
               })
             });
           }

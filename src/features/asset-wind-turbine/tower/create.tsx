@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../../types/common';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { generateColProps } from '../../../utils/grid';
@@ -42,8 +42,8 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('CREATE_SOMETHING', { something: intl.get(tower.label) }),
-        okText: intl.get('CREATE'),
+        title: Translation.createSth(tower.label),
+        okText: Translation.get('common.action.create'),
         ...props,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -60,7 +60,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
         <Grid>
           <Col {...formItemColProps}>
             <TextFormItem
-              label='NAME'
+              label='common.name'
               name='name'
               rules={[{ required: true }, { min: 4, max: 50 }]}
             />
@@ -70,7 +70,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
         {renderParent()}
         <Col {...formItemColProps}>
           <SelectFormItem
-            label='INDEX_NUMBER'
+            label='common.index'
             name={['attributes', 'index']}
             selectProps={{ options: [1, 2, 3, 4, 5].map((value) => ({ label: value, value })) }}
           />

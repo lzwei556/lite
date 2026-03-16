@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { UpdateUserRequest } from '../../../apis/user';
 import { User } from '../../../types/user';
 import { ModalFormProps } from '../../../types/common';
@@ -30,30 +30,30 @@ export const EditUserModal = (props: ModalFormProps & { user: User }) => {
     <ModalWrapper
       {...rest}
       afterClose={() => form.resetFields()}
-      title={intl.get('EDIT_USER')}
-      okText={intl.get('SAVE')}
+      title={Translation.editSth('label.user')}
+      okText={Translation.get('common.action.save')}
       onOk={onSave}
       confirmLoading={isLoading}
     >
       <Form form={form} layout='vertical' initialValues={user}>
-        <TextFormItem label='USERNAME' name='username' inputProps={{ disabled: true }} />
+        <TextFormItem label='auth.username' name='username' inputProps={{ disabled: true }} />
         {user.id !== 1 && (
           <SelectFormItem
-            label='USER_ROLE'
+            label='auth.role'
             name='role'
             rules={[{ required: true }]}
             selectProps={roleSelectProps}
           />
         )}
         <TextFormItem
-          label='CELLPHONE'
+          label='common.mobile.phone'
           name='phone'
-          rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
+          rules={[{ pattern: /^1[3-9]\d{9}$/, message: 'feedback.invalid.phone' }]}
         />
         <TextFormItem
-          label='EMAIL'
+          label='common.email'
           name='email'
-          rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
+          rules={[{ type: 'email', message: 'feedback.invalid.email' }]}
         />
       </Form>
     </ModalWrapper>

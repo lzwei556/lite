@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Input, Space, Tag, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { PageResult } from '../../../types/page';
 import { Dayjs } from '../../../utils';
 import {
@@ -16,13 +16,12 @@ import { Store, useStore } from '../../../hooks/store';
 import { pickOptionsFromNumericEnum } from '../../../utils';
 import { App, useAppType } from '../../../config';
 import { getAlarmDetail } from '../alarm-group';
-import { MONITORING_POINT } from '../../../asset-common';
 import { alarmLevelOptions, AlarmLevelTag } from '..';
 import { CanAccess, Permission } from '../../../providers/access-control';
 
 enum Status {
-  UnProcessed = 0,
-  AutoProcessed = 2
+  Unprocessed = 0,
+  'Auto-Processed' = 2
 }
 
 export const FilterableAlarmRecordTable: React.FC<{
@@ -33,8 +32,8 @@ export const FilterableAlarmRecordTable: React.FC<{
   const [status, setStatus] = React.useState<Status[]>([]);
   const [store, setStore, gotoPage] = useStore(storeKey);
   const { numberedRange, setRange } = useRange();
-  const statusOptions = pickOptionsFromNumericEnum(Status, 'alarm.record').map(
-    ({ label, value }) => ({ text: intl.get(label), value })
+  const statusOptions = pickOptionsFromNumericEnum(Status, 'alarm.status').map(
+    ({ label, value }) => ({ text: Translation.get(label), value })
   );
   const [alarmName, setAlarmName] = React.useState<string | undefined>();
   const appType = useAppType();
@@ -95,7 +94,7 @@ export const FilterableAlarmRecordTable: React.FC<{
 
   const columns: any = [
     {
-      title: intl.get('ALARM_NAME'),
+      title: Translation.get('alarm.name'),
       dataIndex: 'alarmRuleGroupName',
       key: 'alarmRuleGroupName',
       render: (name: string, record: any) => {
@@ -103,37 +102,37 @@ export const FilterableAlarmRecordTable: React.FC<{
       }
     },
     {
-      title: intl.get('ALARM_LEVEL'),
+      title: Translation.get('alarm.level'),
       dataIndex: 'level',
       key: 'level',
-      filters: alarmLevelOptions.map((o) => ({ ...o, text: intl.get(o.label) })),
+      filters: alarmLevelOptions.map((o) => ({ ...o, text: Translation.get(o.label) })),
       render: (level: number) => <AlarmLevelTag level={level} />
     },
     {
-      title: intl.get('ALARM_SOURCE'),
+      title: Translation.get('alarm.source'),
       dataIndex: 'source',
       key: 'source',
       render: (source: any) => {
         if (source) {
           return source.name;
         }
-        return intl.get('UNKNOWN_SOURCE');
+        return Translation.get('common.unknown');
       }
     },
     {
-      title: intl.get('ALARM_DETAIL'),
+      title: Translation.get('alarm.detail'),
       dataIndex: 'metric',
       key: 'metric',
       render: (metric: any, record: any) => getAlarmDetail(record, metric)
     },
     {
-      title: intl.get('ALARM_TIMESTAMP'),
+      title: Translation.get('alarm.created-at'),
       dataIndex: 'createdAt',
       key: 'createdAt',
       render: (createdAt: number) => Dayjs.format(createdAt)
     },
     {
-      title: intl.get('alarm_group.consecutive_count'),
+      title: Translation.get('alarm.consecutive.count'),
       dataIndex: 'duration',
       key: 'duration',
       render: (_: any, record: any) => {
@@ -147,17 +146,19 @@ export const FilterableAlarmRecordTable: React.FC<{
       }
     },
     {
-      title: intl.get('ALARM_STATUS'),
+      title: Translation.get('alarm.status'),
       dataIndex: 'status',
       key: 'status',
       filters: statusOptions,
       render: (status: Status) => {
         const text = statusOptions.find((option) => option.value === status)?.text;
-        return <Tag color={status === Status.AutoProcessed ? 'success' : undefined}>{text}</Tag>;
+        return (
+          <Tag color={status === Status['Auto-Processed'] ? 'success' : undefined}>{text}</Tag>
+        );
       }
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: any, record: any) => {
         return (
@@ -165,7 +166,7 @@ export const FilterableAlarmRecordTable: React.FC<{
             <CanAccess {...Permission.AlarmRecordDelete}>
               <DeleteIconButton
                 confirmProps={{
-                  description: intl.get('DELETE_ALARM_RECORD_PROMPT'),
+                  description: Translation.get('feedback.prompt.delete'),
                   onConfirm: () => onDelete(record.id)
                 }}
               />
@@ -192,7 +193,9 @@ export const FilterableAlarmRecordTable: React.FC<{
           <>
             <Input
               onBlur={(e) => setAlarmName(e.target.value)}
-              prefix={<Typography.Text type='secondary'>{intl.get('ALARM_NAME')}</Typography.Text>}
+              prefix={
+                <Typography.Text type='secondary'>{Translation.get('alarm.name')}</Typography.Text>
+              }
             />
             {!sourceId && (
               <LightSelectFilter
@@ -200,10 +203,10 @@ export const FilterableAlarmRecordTable: React.FC<{
                 mode='multiple'
                 onChange={setMontoringPointType}
                 options={App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-                  label: intl.get(label),
+                  label: Translation.get(label),
                   value
                 }))}
-                prefix={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
+                prefix={Translation.get('monitoring.point.type')}
               />
             )}
             <RangeDatePicker onChange={setRange} />

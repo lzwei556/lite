@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { generateColProps } from '../../../utils/grid';
 import { Card, Grid, TabsDetail } from '../../../components';
 import { AssetNavigator, AssetRow, StatisticBar } from '../../../asset-common';
@@ -28,7 +28,7 @@ export const IndexLegacy = (props: {
     <TabsDetail
       items={[
         {
-          label: intl.get('assets'),
+          label: Translation.get('assets'),
           key: 'asset',
           content: (
             <Grid>
@@ -50,7 +50,7 @@ export const IndexLegacy = (props: {
           )
         },
         {
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           key: 'settings',
           content: (
             <Grid>

@@ -1,13 +1,13 @@
 import { Button, Result, Space } from 'antd';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 const UnauthorizedPage = () => {
   return (
     <Result
       status='403'
       title='403'
-      subTitle={intl.get('NO_PERMISSION_PROMPT')}
+      subTitle={Translation.get('feedback.403')}
       extra={
         <Space>
           <Button
@@ -16,7 +16,7 @@ const UnauthorizedPage = () => {
               window.location.hash = '/';
             }}
           >
-            {intl.get('RETURN_TO_HOME')}
+            {Translation.get('button.return-to-home')}
           </Button>
           <Button
             type='primary'
@@ -24,7 +24,7 @@ const UnauthorizedPage = () => {
               window.location.hash = '/login';
             }}
           >
-            {intl.get('LOGIN_AGAIN')}
+            {Translation.get('auth.login')}
           </Button>
         </Space>
       }

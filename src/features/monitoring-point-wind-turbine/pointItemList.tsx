@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, ColProps, Form, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Device } from '../../types/device';
 import { generateColProps } from '../../utils/grid';
 import { Grid, NumberFormItem, TextFormItem } from '../../components';
@@ -42,7 +42,7 @@ export const PointItemList = ({
         {
           validator: async (_, points) => {
             if (!points || points.length <= 0) {
-              return Promise.reject(new Error(intl.get('PLEASE_CREATE_MONITORING_POINT')));
+              return Promise.reject(new Error(Translation.get('feedback.empty.mp.creation')));
             }
           }
         }
@@ -70,7 +70,7 @@ export const PointItemList = ({
                 <Col {...formItemColProps}>
                   <TextFormItem
                     {...restFields}
-                    label='NAME'
+                    label='common.name'
                     name={[name, 'name']}
                     rules={[{ required: true }, { min: 4, max: 50 }]}
                   />
@@ -79,7 +79,7 @@ export const PointItemList = ({
                 <Col {...formItemColProps}>
                   <NumberFormItem
                     {...restFields}
-                    label='POSITION'
+                    label='monitoring.point.position'
                     name={[name, 'attributes', 'index']}
                     rules={[{ required: true }]}
                     inputNumberProps={{ min: 1 }}
@@ -98,7 +98,7 @@ export const PointItemList = ({
           ))}
           <TextFormItem>
             <Popover
-              title={intl.get('SELECT_SENSOR')}
+              title={Translation.doSth('common.action.select', 'device.sensors')}
               content={
                 open && (
                   <DeviceSelection
@@ -117,7 +117,9 @@ export const PointItemList = ({
               onOpenChange={(open) => setVisible(open)}
               overlayStyle={{ width: 400 }}
             >
-              <Button disabled={devices.length === 0}>{intl.get('SELECT_SENSOR')}</Button>
+              <Button disabled={devices.length === 0}>
+                {Translation.doSth('common.action.select', 'device.sensors')}
+              </Button>
               <Form.ErrorList errors={errors} />
             </Popover>
           </TextFormItem>

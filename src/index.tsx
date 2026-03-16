@@ -1,10 +1,11 @@
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { LocaleProvider } from './localeProvider';
 import { AppProvider } from './config';
 import { configResponsive } from 'ahooks';
 import { Main } from './main';
+import { ThemeProvider } from 'providers/theme';
+import { I18nProvider } from 'providers/i18n';
 
 configResponsive({
   xs: 0,
@@ -17,11 +18,13 @@ configResponsive({
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement);
 root.render(
-  <LocaleProvider>
-    <AppProvider>
-      <Main />
-    </AppProvider>
-  </LocaleProvider>
+  <AppProvider>
+    <I18nProvider>
+      <ThemeProvider>
+        <Main />
+      </ThemeProvider>
+    </I18nProvider>
+  </AppProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, Drawer, DrawerProps, Tree } from 'antd';
 import Search from 'antd/es/input/Search';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Project } from '../../types/project';
 import { AllocUsersRequest, GetAllocUsersRequest } from '../../apis/project';
 import { AllocUser } from '../../types/alloc_user';
@@ -35,7 +35,7 @@ export const AllocUserDrawer = ({
   function convertTreeData(users: AllocUser[]) {
     return [
       {
-        title: intl.get('USER_LIST'),
+        title: Translation.get('project.user-assignment.users'),
         key: 'users',
         checkable: false,
         children: users.map(({ user }) => {
@@ -68,14 +68,14 @@ export const AllocUserDrawer = ({
       placement={'right'}
       extra={
         <Button type={'primary'} onClick={onSave}>
-          {intl.get('SAVE')}
+          {Translation.get('common.action.save')}
         </Button>
       }
     >
       <Grid>
         <Col span={24}>
           <Search
-            placeholder={intl.get('PLEASE_ENTER_USERNAME_TO_SEARCH')}
+            placeholder={Translation.get('project.user-assignment.username-search')}
             onChange={(e) => setUsername(e.target.value)}
           />
         </Col>

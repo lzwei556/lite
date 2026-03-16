@@ -1,7 +1,7 @@
 import React from 'react';
 import { SelectProps } from 'antd';
-import intl from 'react-intl-universal';
 import { LightSelectFilter } from '../../components';
+import { Translation } from 'locales/utils';
 
 export const PropertyLightSelectFilter = (
   props: { properties: { name: string; key: string }[] } & Pick<SelectProps, 'onChange' | 'value'>
@@ -12,10 +12,10 @@ export const PropertyLightSelectFilter = (
       {...rest}
       allowClear={false}
       options={properties.map(({ name, key }) => ({
-        label: intl.get(name).d(name),
+        label: Translation.get(name),
         value: key
       }))}
-      prefix={intl.get('PROPERTY')}
+      prefix={Translation.get('feature.property')}
     />
   );
 };

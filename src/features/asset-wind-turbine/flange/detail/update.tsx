@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../../../types/common';
 import { Card, SaveIconButton } from '../../../../components';
 import { Asset, AssetModel, AssetRow, updateAsset } from '../../../../asset-common';
@@ -37,7 +37,7 @@ export const Update = (props: ModalFormProps & { asset: AssetRow }) => {
           />
         </CanAccess>
       }
-      title={intl.get('BASIC_INFORMATION')}
+      title={Translation.get('common.basic')}
     >
       <Form form={form} layout='vertical' initialValues={{ ...Asset.convert(asset) }}>
         <UpdateFormItems

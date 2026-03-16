@@ -95,10 +95,11 @@ export const GROUPS = {
   network: 'SETTING_GROUP_NETWORK',
   thickness: 'SETTING_GROUP_THICKNESS',
   inclinometer: 'SETTING_GROUP_INCLINOMETER',
-  basic: 'settings.group.basic',
-  dat: 'settings.group.data.acquisition.time',
-  dap: 'settings.group.data.acquisition.parameter',
-  dwp: 'settings.group.data.waveform.parameter.1',
-  dwp3: 'settings.group.data.waveform.parameter.2',
-  dwp4: 'settings.group.data.waveform.parameter.3'
+  basic: 'device.settings.group.basic',
+  dat: 'device.settings.group.acquisition.time',
+  dap: 'device.settings.group.acquisition.parameter',
+  dwp: 'device.settings.group.waveform.1',
+  dwp3: 'device.settings.group.waveform.2',
+  dwp4: 'device.settings.group.waveform.3',
+  dawp: 'device.settings.group.audio.waveform'
 };

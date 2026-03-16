@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, MenuProps, message } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { DeviceCommand } from '../../types/device_command';
 import { DeviceType } from '../../types/device_type';
 import { DeviceUpgradeRequest, SendDeviceCommandRequest } from '../../apis/device';
@@ -56,9 +56,11 @@ export const CommandDropdown = ({
       if (network) {
         NetworkSyncRequest(network.id).then((res) => {
           if (res.code === 200) {
-            message.success(intl.get('SENT_SUCCESSFUL'));
+            message.success(Translation.get('feedback.success.send'));
           } else {
-            message.error(`${intl.get('FAILED_TO_SEND')}${intl.get(res.msg).d(res.msg)}`);
+            message.error(
+              `${Translation.failureDo('common.action.send')}${Translation.get(res.msg)}`
+            );
           }
         });
       }
@@ -66,9 +68,11 @@ export const CommandDropdown = ({
       if (network) {
         NetworkProvisionRequest(network.id).then((res) => {
           if (res.code === 200) {
-            message.success(intl.get('SENT_SUCCESSFUL'));
+            message.success(Translation.get('feedback.success.send'));
           } else {
-            message.error(`${intl.get('FAILED_TO_SEND')}${intl.get(res.msg).d(res.msg)}`);
+            message.error(
+              `${Translation.failureDo('common.action.send')}${Translation.get(res.msg)}`
+            );
           }
         });
       }
@@ -89,9 +93,9 @@ export const CommandDropdown = ({
         case DeviceCommand.CancelUpgrade:
           DeviceUpgradeRequest(id, { type: DeviceCommand.CancelUpgrade }).then((res) => {
             if (res.code === 200) {
-              message.success(intl.get('CANCEL_UPGRADING_SUCCESSFUL'));
+              message.success(Translation.get('feedback.success.upgrade.cancel'));
             } else {
-              message.error(`${intl.get('FAILED_TO_CANCEL_UPGRADING')},${res.msg}`);
+              message.error(`${Translation.failureDo('common.action.cancel')},${res.msg}`);
             }
           });
           break;
@@ -107,9 +111,9 @@ export const CommandDropdown = ({
         default:
           SendDeviceCommandRequest(id, commandKey, channel ? { channel } : {}).then((res) => {
             if (res.code === 200) {
-              message.success(intl.get('SENT_SUCCESSFUL'));
+              message.success(Translation.get('feedback.success.send'));
             } else {
-              message.error(intl.get('FAILED_TO_SEND'));
+              message.error(Translation.failureDo('common.action.send'));
             }
           });
           break;
@@ -124,16 +128,19 @@ export const CommandDropdown = ({
   const canUpgrade = useCan(Permission.DeviceUpgrade);
 
   if (DeviceType.OilFiller === typeId) {
-    items.push({ key: DeviceCommand.Fill, label: intl.get('oil.filler.fill') });
+    items.push({ key: DeviceCommand.Fill, label: Translation.get('device.command.fill') });
   } else {
     if (!upgrading) {
       if (DeviceType.isGateway(typeId)) {
-        items.push({ key: 'sync', label: intl.get('SYNC_NETWORK') });
-        items.push({ key: 'provision', label: intl.get('PROVISION') });
+        items.push({ key: 'sync', label: Translation.get('device.command.network.sync') });
+        items.push({ key: 'provision', label: Translation.get('device.command.provision') });
       }
-      items.push({ key: DeviceCommand.Reboot, label: intl.get('RESTART') });
+      items.push({ key: DeviceCommand.Reboot, label: Translation.get('device.command.restart') });
       if (DeviceType.isSensor(typeId)) {
-        const resetItem: MenuItem = { key: DeviceCommand.ResetData, label: intl.get('RESET_DATA') };
+        const resetItem: MenuItem = {
+          key: DeviceCommand.ResetData,
+          label: Translation.get('device.command.data.reset')
+        };
         if (chanels.length > 0) {
           items.push({
             ...resetItem,
@@ -145,28 +152,37 @@ export const CommandDropdown = ({
         } else {
           items.push({
             key: DeviceCommand.AcquireSensorData,
-            label: intl.get('ACQUIRE_SENSOR_DATA')
+            label: Translation.get('device.command.acquisition')
           });
           items.push(resetItem);
         }
       }
-      items.push({ key: DeviceCommand.Reset, label: intl.get('RESTORE_FACTORY_SETTINGS') });
+      items.push({ key: DeviceCommand.Reset, label: Translation.get('device.command.restore') });
       if (DeviceType.canSupportingCalibrate(typeId)) {
-        items.push({ key: DeviceCommand.Calibrate, label: intl.get('CALIBRATE') });
+        items.push({
+          key: DeviceCommand.Calibrate,
+          label: Translation.get('device.command.calibration')
+        });
       }
       if (DeviceType.canSupportingCompensation(typeId)) {
-        items.push({ key: DeviceCommand.Compensation, label: intl.get('compensation') });
+        items.push({
+          key: DeviceCommand.Compensation,
+          label: Translation.get('device.command.compensation')
+        });
       }
     }
     if (canUpgrade) {
       if (!upgrading) {
         if (appType !== 'corrosionWirelessHART') {
-          items.push({ key: DeviceCommand.Upgrade, label: intl.get('UPGRADE_FIRMWARE') });
+          items.push({
+            key: DeviceCommand.Upgrade,
+            label: Translation.get('device.command.upgrade')
+          });
         }
       } else {
         items.push({
           key: DeviceCommand.CancelUpgrade,
-          label: intl.get('CANCEL_UPGRADING_FIRMWARE')
+          label: Translation.get('device.command.upgrade.cancel')
         });
       }
     }
@@ -181,7 +197,7 @@ export const CommandDropdown = ({
         {target ?? (
           <IconButton
             icon={<MoreOutlined />}
-            tooltipProps={{ title: intl.get('DEVICE_COMMANDS') }}
+            tooltipProps={{ title: Translation.get('device.commands') }}
             type='primary'
             variant='solid'
           />
@@ -209,9 +225,9 @@ export const CommandDropdown = ({
             setVisibleCalibrate(false);
             SendDeviceCommandRequest(id, DeviceCommand.Calibrate, paras).then((res) => {
               if (res.code === 200) {
-                message.success(intl.get('COMMAND_SENT_SUCCESSFUL')).then();
+                message.success(Translation.get('feedback.success.send')).then();
               } else {
-                message.error(intl.get(res.msg).d(res.msg)).then();
+                message.error(Translation.get(res.msg)).then();
               }
             });
           }}
@@ -224,9 +240,9 @@ export const CommandDropdown = ({
           onSuccess={(paras) => {
             SendDeviceCommandRequest(id, DeviceCommand.Compensation, paras).then((res) => {
               if (res.code === 200) {
-                message.success(intl.get('COMMAND_SENT_SUCCESSFUL'));
+                message.success(Translation.get('feedback.success.send'));
               } else {
-                message.error(intl.get(res.msg).d(res.msg));
+                message.error(Translation.get(res.msg));
               }
             });
             setCompensationOpen(false);
@@ -240,9 +256,9 @@ export const CommandDropdown = ({
           onSuccess={(params) => {
             SendDeviceCommandRequest(id, DeviceCommand.Fill, params).then((res) => {
               if (res.code === 200) {
-                message.success(intl.get('COMMAND_SENT_SUCCESSFUL'));
+                message.success(Translation.get('feedback.success.send'));
               } else {
-                message.error(intl.get(res.msg).d(res.msg));
+                message.error(Translation.get(res.msg));
               }
             });
             setFillOpen(false);

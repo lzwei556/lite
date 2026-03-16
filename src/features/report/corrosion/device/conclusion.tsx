@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReportDevice } from '../../types';
 import { DeviceEvalLevel, DeviceEvalReason } from './common';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { formatNames } from '../../utils';
 import { getKeyByValue } from '../../../../utils';
 
@@ -64,7 +64,8 @@ const getReasons = (errors: ReportDevice[]) => {
 const Description = ({ errors, reason }: { errors: ReportDevice[]; reason: DeviceEvalReason }) => {
   return (
     <>
-      <span className='value'>{errors.length}</span> {UNIT}{TOPIC}
+      <span className='value'>{errors.length}</span> {UNIT}
+      {TOPIC}
       {formatNames(errors.map((d) => d.name))}
       <ReasonLabel reason={reason} />，<Suggestion reason={reason} />
     </>
@@ -75,16 +76,16 @@ const ReasonLabel = ({ reason }: { reason: DeviceEvalReason }) => {
   let label = '';
   switch (reason) {
     case DeviceEvalReason.Offline:
-      label = getKeyByValue(DeviceEvalReason, reason, 'device.eval.reason');
+      label = getKeyByValue(DeviceEvalReason, reason, 'device.status');
       break;
     case DeviceEvalReason.LowBattery:
-      label = getKeyByValue(DeviceEvalReason, reason, 'device.eval.reason');
+      label = getKeyByValue(DeviceEvalReason, reason, 'device.status');
       break;
     default:
-      label = 'device.eval.reason.signal.bad';
+      label = 'device.status.signal.bad';
       break;
   }
-  return intl.get(label);
+  return Translation.get(label);
 };
 
 const Suggestion = ({ reason }: { reason: DeviceEvalReason }) => {

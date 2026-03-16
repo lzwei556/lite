@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, MutedCard } from '../../components';
 import { AssetRow, AlarmsObjectStatistics, AlarmTrend } from '../../asset-common';
 import { SelectedPointPropertyHistory } from '../../asset-model';
@@ -30,7 +30,7 @@ export const Overview = (props: {
           <Col span={24}>
             <AssetAnnotationImage
               asset={asset}
-              title={intl.get('monitoring.points')}
+              title={Translation.get('monitoring.points')}
               key={`${asset.id}_${number}_${asset.image}`}
               onSuccess={onSuccess}
             />
@@ -45,7 +45,7 @@ export const Overview = (props: {
       <Col flex='300px'>
         <Grid>
           <Col span={24}>
-            <MutedCard title={intl.get('BASIC_INFORMATION')}>
+            <MutedCard title={Translation.get('common.basic')}>
               <SettingsDetail attributes={asset.attributes} type={asset.type} />
             </MutedCard>
           </Col>
@@ -53,14 +53,14 @@ export const Overview = (props: {
             <AlarmsObjectStatistics
               total={asset.statistics.monitoringPointNum}
               alarms={asset.statistics.alarmNum}
-              title={intl.get('monitoring.points.statistics')}
-              subtext={intl.get('monitoring.points.total')}
+              title={Translation.get('monitoring.points')}
+              subtext={Translation.get('common.total')}
             />
           </Col>
           <Col span={24}>
             <AlarmTrend
               id={asset.id}
-              title={intl.get('ALARM_TREND')}
+              title={Translation.get('alarm.trend')}
               chartStyle={{ height: 210 }}
             />
           </Col>

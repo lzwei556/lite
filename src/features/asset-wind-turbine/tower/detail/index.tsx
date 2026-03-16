@@ -1,8 +1,7 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, Table, TabsDetail } from '../../../../components';
-import { useLocaleContext } from '../../../../localeProvider';
 import {
   AssetRow,
   getMonitoringPointColumns,
@@ -22,13 +21,14 @@ import { useHistoryDatas } from '../../utils';
 import { History } from './history';
 import { Update } from './update';
 import { Permission, useCan } from '../../../../providers/access-control';
+import { useI18n } from 'providers/i18n';
 
 export const Index = (props: {
   asset: AssetRow;
   onSuccess: () => void;
   onUpdate: (m: MonitoringPointRow) => void;
 }) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const { asset, onSuccess } = props;
   const { monitoringPoints } = asset;
   const { historyDatas } = useHistoryDatas(asset);
@@ -38,7 +38,7 @@ export const Index = (props: {
     <TabsDetail
       items={[
         {
-          label: intl.get('monitoring.points'),
+          label: Translation.get('monitoring.points'),
           key: 'monitoringPointList',
           content: (
             <MonitoringPointsTable
@@ -49,7 +49,7 @@ export const Index = (props: {
           )
         },
         {
-          label: intl.get('HISTORY_DATA'),
+          label: Translation.get('feature.history'),
           key: 'history',
           content: (
             <EmptyMonitoringPoints asset={asset} key={asset.id}>
@@ -58,7 +58,7 @@ export const Index = (props: {
           )
         },
         {
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           key: 'settings',
           content: (
             <Grid>
@@ -69,7 +69,7 @@ export const Index = (props: {
                 <Table
                   cardProps={{
                     extra: canAddMonitoringPoint && <ActionBar {...props} />,
-                    title: intl.get('monitoring.points')
+                    title: Translation.get('monitoring.points')
                   }}
                   columns={[
                     ...getMonitoringPointColumns({

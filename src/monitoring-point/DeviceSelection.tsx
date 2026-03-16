@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Checkbox, Col, Row, Space } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { DeviceType } from '../types/device_type';
 import { Device } from '../types/device';
 import { MonitoringPointInfo } from './types';
@@ -88,7 +88,7 @@ export const DeviceSelection: React.FC<{
                             defaultCheckedList={defaultCheckedList}
                             options={channels.map((c) => ({
                               ...c,
-                              label: `${intl.get('CHANNEL')}${c.value}`
+                              label: `${Translation.get('device.channel')}${c.value}`
                             }))}
                           />
                         </div>
@@ -124,7 +124,7 @@ export const DeviceSelection: React.FC<{
             props.onSelect(selectedPoints);
           }}
         >
-          {intl.get('OK')}
+          {Translation.get('common.ok')}
         </Button>
       </div>
     </>

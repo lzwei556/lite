@@ -16,7 +16,7 @@ import { DevicesConclusion } from './device/conclusion';
 import { ReportSection } from '../components/section';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const Index = ({ report }: { report: Report }) => {
   const duration = `${Dayjs.format(report.start, 'LL')} - ${Dayjs.format(report.end, 'LL')}`;
@@ -37,7 +37,7 @@ export const Index = ({ report }: { report: Report }) => {
           <IconButton
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate(-1)}
-            tooltipProps={{ title: intl.get('RETURN') }}
+            tooltipProps={{ title: Translation.get('common.action.return') }}
           />
           <DownloadIconButton
             onClick={() => {

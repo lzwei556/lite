@@ -2,7 +2,7 @@ import { ChartMark } from 'components';
 import { HarmonicData } from 'asset-common';
 import { getLineStyles, MarkParams } from './hooks';
 import { getValue } from 'utils';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const trigger = ({
   x,
@@ -19,8 +19,8 @@ export const trigger = ({
   const markType = 'Harmonic';
   dispatchMarks({ type: 'remove_by_type', removeTypes: [markType] });
   indexs.forEach((index, i) => {
-    const xValue = x[index] ?? 'out.of.range';
-    const yValue = y[index] ?? 'out.of.range';
+    const xValue = x[index] ?? 'out-of-range';
+    const yValue = y[index] ?? 'out-of-range';
     dispatchMarks({
       type: 'append_multiple',
       mark: {
@@ -32,7 +32,9 @@ export const trigger = ({
         type: markType,
         chartProps: getLineStyles(
           markType,
-          `${intl.get(`harmonic.${i + 1}x`)}\r\n${xValue} Hz\r\n${getValue({
+          `${Translation.get(
+            `vibration.analysis.harmonic.${i + 1}x`
+          )}\r\n${xValue} Hz\r\n${getValue({
             value: yValue,
             unit: property?.unit
           })}`

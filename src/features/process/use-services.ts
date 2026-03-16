@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
 import request from '../../utils/request';
 import { autoFillParameter, ProcessType } from '../../process-type';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Device } from '../../types/device';
 import { PageResult } from 'types/page';
 import { pickOptionsFromNumericEnum } from 'utils';
@@ -49,7 +49,7 @@ export const transform2Process = (
 ): Process => {
   return {
     ...dto,
-    typeLabel: intl.get(ProcessType.Key.getLabel(dto.type)),
+    typeLabel: Translation.get(ProcessType.Key.getLabel(dto.type)),
     sourceIdName: getSourceIdName(dto.sourceId),
     targetDeviceId: dto.parameters.targetDeviceId,
     deviceName: getDeviceName(dto.parameters.targetDeviceId),
@@ -104,15 +104,15 @@ export const dataTypeOptions = pickOptionsFromNumericEnum(DataType, 'fill.record
 enum Result {
   Success = 0x00,
   Offline = 0x01,
-  CommandFailure = 0x02
+  'Command-Failure' = 0x02
 }
 
-export const fillResultOptions = pickOptionsFromNumericEnum(Result, 'fill.result');
+export const fillResultOptions = pickOptionsFromNumericEnum(Result, 'process.auto-fill');
 
 export enum Reason {
   Temperatue = 0x01,
-  soundPressureLevel = 0x02,
-  energyRatio = 0x03,
+  'Sound-Pressure-Level' = 0x02,
+  'Energy-Ratio' = 0x03,
   stationarity = 0x04,
   velocityX = 0x05,
   velocityY = 0x06,
@@ -120,7 +120,7 @@ export enum Reason {
   Diagnosis = 0x08
 }
 
-export const fillReasonOptions = pickOptionsFromNumericEnum(Reason, 'fill.reason');
+export const fillReasonOptions = pickOptionsFromNumericEnum(Reason, 'process.auto-fill');
 
 export const useFillRecords = (params: Parameters<typeof getFillRecords>) =>
   useRequest(getFillRecords, { defaultParams: params, manual: true });

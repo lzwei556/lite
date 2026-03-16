@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { generateColProps } from '../../../utils/grid';
 import {
   AlarmRuleSetting,
@@ -21,7 +21,7 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
   const [form] = Form.useForm<MonitoringPoint & { device_id: number }>();
   const monitoringPoints = ProcessType.useDataSources(
     monitoringPoint.assetId,
-    ProcessTypeKey.AutoFill
+    ProcessTypeKey['Auto-Fill']
   );
 
   return (
@@ -37,7 +37,7 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
               }}
             />
           }
-          title={intl.get('BASIC_INFORMATION')}
+          title={Translation.get('common.basic')}
         >
           <Form form={form} layout='vertical' initialValues={{ ...Point.convert(monitoringPoint) }}>
             <BasisFormItems
@@ -45,7 +45,7 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
               formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
             />
             {monitoringPoint.type !== MonitoringPointType.Value.OilFiller && (
-              <Card size='small' title={intl.get('monitoring.point.attr')} type='inner'>
+              <Card size='small' title={Translation.get('monitoring.point.attr')} type='inner'>
                 <Grid>
                   <Others formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
                 </Grid>
@@ -65,7 +65,7 @@ export const Settings = (props: { monitoringPoint: MonitoringPointRow; onSuccess
               processList: monitoringPoint.actions ?? [],
               monitoringPoints,
               initialProcess: {
-                type: ProcessTypeKey.AutoFill,
+                type: ProcessTypeKey['Auto-Fill'],
                 oilFillerId: monitoringPoint.bindingDevices?.[0]?.id
               },
               onSuccess

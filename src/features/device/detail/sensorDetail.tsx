@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Empty, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Descriptions, Grid, Link, MutedCard } from '../../../components';
 import { Dayjs, toMac } from '../../../utils';
 import { Device } from '../../../types/device';
@@ -22,7 +22,7 @@ export const SensorDetail = ({ device }: { device: Device }) => {
   return (
     <Grid wrap={false}>
       <Col flex='auto'>
-        <MutedCard title={intl.get('real.time.data')}>
+        <MutedCard title={Translation.get('feature.real-time')}>
           <RecentHistory device={device} key={device.id} />
         </MutedCard>
       </Col>
@@ -30,7 +30,7 @@ export const SensorDetail = ({ device }: { device: Device }) => {
         <Grid>
           <DeviceStatus device={device} />
           <Col span={24}>
-            <MutedCard title={intl.get('BASIC_INFORMATION')}>
+            <MutedCard title={Translation.get('common.basic')}>
               <Descriptions
                 column={1}
                 contentStyle={{
@@ -53,7 +53,7 @@ export const useBasisFields = (device: Device) => {
   const productId = information?.product_id;
   const fields = [
     {
-      label: intl.get('MAC_ADDRESS'),
+      label: Translation.get('device.mac-address'),
       children: (
         <Typography.Text
           copyable={{
@@ -65,21 +65,21 @@ export const useBasisFields = (device: Device) => {
       )
     },
     {
-      label: intl.get('DEVICE_TYPE'),
-      children: intl.get(DeviceType.toString(typeId))
+      label: Translation.get('device.type'),
+      children: Translation.get(DeviceType.toString(typeId))
     }
   ];
   if (parentName) {
-    fields.push({ label: intl.get('PARENT'), children: parentName });
+    fields.push({ label: Translation.get('device.parent'), children: parentName });
   }
   fields.push({
-    label: intl.get('FIRMWARE_VERSION'),
+    label: Translation.get('firmware.version'),
     children: version && productId ? `${version}(${productId})` : '-'
   });
   const ipAddress = information?.ip_address;
   if (ipAddress) {
     fields.push({
-      label: intl.get('IP_ADDRESS'),
+      label: Translation.get('device.ip-address'),
       children: (
         <Link to={`http://${ipAddress}`} target={'_blank'}>
           {ipAddress}
@@ -89,13 +89,13 @@ export const useBasisFields = (device: Device) => {
   }
   const iccid = information?.iccid_4g;
   if (iccid) {
-    fields.push({ label: intl.get('4G_CARD_NO'), children: iccid });
+    fields.push({ label: Translation.get('device.iccid.4g'), children: iccid });
   }
   if (tag) {
-    fields.push({ label: intl.get('device.tag'), children: tag });
+    fields.push({ label: Translation.get('device.tag'), children: tag });
   }
   if (applicationId) {
-    fields.push({ label: intl.get('application.id'), children: applicationId });
+    fields.push({ label: Translation.get('device.application-id'), children: applicationId });
   }
   return fields;
 };
@@ -106,13 +106,13 @@ export const useTimeFileds = (device: Device) => {
   const timestamp = data?.timestamp;
   const fields = [
     {
-      label: intl.get('LAST_CONNECTION_TIME'),
+      label: Translation.get('device.status.connected-at'),
       children: connectedAt ? Dayjs.format(connectedAt) : '-'
     }
   ];
   if (timestamp) {
     fields.push({
-      label: intl.get('LAST_SAMPLING_TIME'),
+      label: Translation.get('device.data.timestamp'),
       children: timestamp ? Dayjs.format(timestamp) : '-'
     });
   }

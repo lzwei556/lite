@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, ColProps, FormInstance, InputNumber, Select } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, SelectFormItem, Term, TextFormItem } from '../components';
 import { Field } from '../types';
 import {
@@ -17,6 +17,7 @@ import {
   useProvisioningModeField,
   WSN
 } from './hooks';
+import { PeriodOptionLabel } from 'locales/utils';
 
 type Props = {
   formItemColProps: ColProps;
@@ -35,7 +36,7 @@ export const FormItems = ({ formItemColProps, initial, form }: Props) => {
   };
   if (mode === ProvisioningMode.Group) {
     return <GroupModeFormItems onChange={onChangeProps} formItemColProps={formItemColProps} />;
-  } else if (mode === ProvisioningMode.TimeDivision) {
+  } else if (mode === ProvisioningMode['Time-Division']) {
     return (
       <TimeDivisionModeFormItems onChange={onChangeProps} formItemColProps={formItemColProps} />
     );
@@ -118,14 +119,16 @@ const GeneralCommunicationPeriod = ({
   name,
   description,
   options
-}: Field<WSN> & {
-  options: { label: string; value: number }[];
+}: Omit<Field<WSN>, 'options'> & {
+  options: { label: PeriodOptionLabel; value: number }[];
 }) => {
   const formItemProps = useCommunicationPeriod(name, options);
   return (
     <SelectFormItem
       {...{
-        label: <Term {...{ name: intl.get(label), description: intl.get(description) }} />,
+        label: (
+          <Term {...{ name: Translation.get(label), description: Translation.get(description) }} />
+        ),
         ...formItemProps
       }}
     />
@@ -136,9 +139,9 @@ const MajorCommunicationPeriod = () => (
   <GeneralCommunicationPeriod
     {...{
       name: 'communicationPeriod',
-      label: 'major.communication.period',
-      description: 'major.communication.period.desc',
-      options: getCommunicationPeriodOptions(ProvisioningMode.TimeDivision),
+      label: 'wsn.communication.period.major',
+      description: 'wsn.communication.period.major.desc',
+      options: getCommunicationPeriodOptions(ProvisioningMode['Time-Division']),
       type: 'enum'
     }}
   />
@@ -148,8 +151,8 @@ const SecondaryCommunicationPeriod = () => (
   <GeneralCommunicationPeriod
     {...{
       name: 'communicationPeriod2',
-      label: 'communication.period.2',
-      description: 'communication.period.2.desc',
+      label: 'wsn.communication.period.minor',
+      description: 'wsn.communication.period.minor.desc',
       options: SecondaryCommunicationPeriodOptions,
       type: 'enum'
     }}
@@ -160,8 +163,8 @@ const CommunicationPeriod = () => (
   <GeneralCommunicationPeriod
     {...{
       name: 'communicationPeriod',
-      label: 'communication.period',
-      description: 'communication.period.desc',
+      label: 'wsn.communication.period',
+      description: 'wsn.communication.period.desc',
       options: getCommunicationPeriodOptions(),
       type: 'enum'
     }}

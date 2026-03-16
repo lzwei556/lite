@@ -12,7 +12,7 @@ import {
 } from 'common';
 import { monitoringPointTypeWaveformMap, WaveformMonitoringPointKey } from './common';
 import { VibrationPropertyKey } from '../types';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { PropertyLightSelectFilter } from 'asset-common';
 import { Select } from 'antd';
 
@@ -66,7 +66,7 @@ const useVibrationProps = ({ attributes, type }: MonitoringPoint) => {
             fetchData({ calculate: property.key as VibrationPropertyKey, dimension: axis.value });
           }
         },
-        options: options.map((o) => ({ label: intl.get(o.label), value: o.value })),
+        options: options.map((o) => ({ label: Translation.get(o.label), value: o.value })),
         popupMatchSelectWidth: false,
         value: axis.value
       };

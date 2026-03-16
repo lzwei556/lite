@@ -1,7 +1,7 @@
 import React from 'react';
-import intl from 'react-intl-universal';
 import { SelectFormItem } from '../components';
 import { AssetCategory } from '../asset-common';
+import { Translation } from 'locales/utils';
 
 export const TypeFormItem = ({
   types,
@@ -13,13 +13,14 @@ export const TypeFormItem = ({
 }) => {
   return (
     <SelectFormItem
-      label='TYPE'
+      label='common.type'
       name='type'
       rules={[{ required: true }]}
       selectProps={{
         ...rest,
-        options: types.map((t) => ({ label: intl.get(t.label), value: t.type }))
+        options: types.map((t) => ({ label: Translation.get(t.label), value: t.type }))
       }}
     />
   );
 };
+

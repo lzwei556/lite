@@ -281,10 +281,10 @@ const useAudioRelatedFields = (enabled1: boolean, settings?: DeviceSetting[]) =>
   );
   const fields: DeviceSetting[] = [];
   if (audio_wave_enable) {
-    enabledField = { ...audio_wave_enable, onChange: setEnabled, group: GROUPS.dat };
+    enabledField = { ...audio_wave_enable, onChange: setEnabled, group: GROUPS.dawp };
     const audio_duration = audio_wave_enable.children?.find((s) => s.key === 'audio_duration');
     if (audio_duration) {
-      fields.push({ ...audio_duration, group: GROUPS.dat });
+      fields.push({ ...audio_duration, group: GROUPS.dawp });
     }
   }
   if (!enabledField) {

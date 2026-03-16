@@ -1,6 +1,5 @@
 import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../../types/common';
 import { AssetRow } from '../../../asset-common';
 import * as MonitoringPoint from '../../monitoring-point-wind-turbine';
@@ -10,6 +9,7 @@ import { wind, flange, tower } from '../constants';
 import * as Wind from '../create';
 import * as Flange from '../flange';
 import * as Tower from '../tower';
+import { Translation } from 'locales/utils';
 
 export const ActionBar = ({
   asset,
@@ -55,7 +55,7 @@ export const ActionBar = ({
       {descendent
         .filter((_, i) => (short ? i === 0 : true))
         .map(({ type, label }) => {
-          const labelIntl = intl.get('CREATE_SOMETHING', { something: intl.get(label) });
+          const labelIntl = Translation.createSth(label);
           return (
             <IconButton
               key={type}

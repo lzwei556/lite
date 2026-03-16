@@ -1,6 +1,6 @@
 import React from 'react';
 import { Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ChartMark, DownloadIconButton, SeriesOption } from '../../../../components';
 import {
   AssetRow,
@@ -40,10 +40,10 @@ export const PointsLineChart = ({
   );
   const getTitle = () => {
     return property
-      ? intl.get('OBJECT_TREND_CHART', {
-          object: intl.get(property.name)
+      ? Translation.get('label.title.trend.sth', {
+          object: Translation.get(property.name)
         })
-      : intl.get('TREND_CHART');
+      : Translation.get('label.title.trend');
   };
   const { series, xAxis } = getOptions(historyDatas, property);
   const chartProps = ChartMark.useAxisMarkLineStyleProps();

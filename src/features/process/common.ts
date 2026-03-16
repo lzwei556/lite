@@ -8,7 +8,7 @@ export const typeField = {
 } as const;
 
 export const sourceIdField = {
-  label: 'source.id',
+  label: 'process.source',
   name: 'source_id'
 } as const;
 

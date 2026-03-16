@@ -1,8 +1,7 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Col } from 'antd';
 import { Device } from '../../../types/device';
-import { useLocaleContext } from '../../../localeProvider';
 import { Descriptions, Grid, MutedCard } from '../../../components';
 import { Topology } from '../../../network';
 import { DeviceStatus } from '../device-status';
@@ -10,7 +9,6 @@ import { useBasisFields } from './sensorDetail';
 
 export const RouterDetail = ({ device }: { device: Device }) => {
   const basisFields = useBasisFields(device);
-  const { language } = useLocaleContext();
 
   return (
     <Grid wrap={false}>
@@ -21,14 +19,12 @@ export const RouterDetail = ({ device }: { device: Device }) => {
         <Grid>
           <DeviceStatus device={device} />
           <Col span={24}>
-            <MutedCard title={intl.get('BASIC_INFORMATION')}>
+            <MutedCard title={Translation.get('common.basic')}>
               <Descriptions
                 column={1}
-                contentStyle={{
-                  justifyContent: language === 'en-US' ? 'flex-start' : 'flex-end'
-                }}
+                contentStyle={{ justifyContent: 'flex-start' }}
                 items={basisFields}
-                layout={language === 'en-US' ? 'vertical' : 'horizontal'}
+                layout='vertical'
               />
             </MutedCard>
           </Col>

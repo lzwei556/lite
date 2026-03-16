@@ -1,7 +1,7 @@
 export const axisObject = {
-  X: { key: 'x', value: 0, label: 'AXIS_X' },
-  Y: { key: 'y', value: 1, label: 'AXIS_Y' },
-  Z: { key: 'z', value: 2, label: 'AXIS_Z' }
+  X: { key: 'x', value: 0, label: 'label.axis.x' },
+  Y: { key: 'y', value: 1, label: 'label.axis.y' },
+  Z: { key: 'z', value: 2, label: 'label.axis.z' }
 } as const;
 
 export const options = [axisObject.X, axisObject.Y, axisObject.Z];

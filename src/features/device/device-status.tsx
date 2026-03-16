@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, Col, Divider, Space, Statistic } from 'antd';
 import Icon, { WifiOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { DeviceType } from '../../types/device_type';
 import { Device } from '../../types/device';
 import { MutedCard } from '../../components';
@@ -15,7 +15,7 @@ export const DeviceStatus = ({ device }: { device: Device }) => {
   return (
     fields.length > 0 && (
       <Col span={24}>
-        <MutedCard title={intl.get('DEVICE_STATUS')}>
+        <MutedCard title={Translation.get('device.status')}>
           <Space
             direction='vertical'
             split={<Divider style={{ marginBlock: 8 }} />}
@@ -49,7 +49,7 @@ const useStateFields = (device: Device) => {
   if (!DeviceType.isWiredDevice(typeId)) {
     const batteryVoltage = getValue({ value: state?.batteryVoltage });
     fields.push({
-      label: intl.get('BATTERY_VOLTAGE'),
+      label: Translation.get('device.status.battery.voltage'),
       value: batteryVoltage,
       icon: <Icon component={() => <BatterySVG width='1em' height='1em' fill='currentColor' />} />,
       unit: 'mV'
@@ -59,8 +59,8 @@ const useStateFields = (device: Device) => {
     const signalLevel = getValue({ value: state?.signalLevel });
     fields.push({
       label: DeviceType.isGateway(typeId)
-        ? intl.get('MOBILE_SIGNAL_STRENGTH')
-        : intl.get('SIGNAL_STRENGTH'),
+        ? Translation.get('device.status.signal.level.4g')
+        : Translation.get('device.status.signal.level'),
       value: signalLevel,
       icon: <WifiOutlined />,
       unit: 'dBm'

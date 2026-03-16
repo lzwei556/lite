@@ -3,7 +3,7 @@ import { Fault, FaultDiagnosis, useHealthStatus } from './common';
 import { Avatar, Col, Space } from 'antd';
 import { HealthStatus, getOptions } from './health-status';
 import { Descriptions, Grid, MutedCard } from '../../components';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Dayjs } from '../../utils';
 import { ComponentsHealthyList } from './list';
 
@@ -11,7 +11,7 @@ export const FaultDiagnosisOverview = (
   props: FaultDiagnosis & { withComponentsList?: boolean }
 ) => {
   return (
-    <MutedCard title={intl.get('diagnosis.asset.health')} extra={Dayjs.format(props.timestamp)}>
+    <MutedCard title={Translation.get('diagnosis.health')} extra={Dayjs.format(props.timestamp)}>
       <Grid wrap={false}>
         <Col flex='auto'>
           <DiagnosisDescription {...props} />
@@ -48,11 +48,11 @@ const DiagnosisDescription = ({ conclusion, components, status }: FaultDiagnosis
           label: healthy.label,
           children: (
             <span style={{ color: `rgba(${healthy.status.color.join()})` }}>
-              {intl.get(healthy.status.label)}
+              {Translation.get(healthy.status.label)}
             </span>
           )
         },
-        { label: intl.get('diagnosis.conclusion'), children: intl.get(conclusion) },
+        { label: Translation.get('diagnosis.conclusion'), children: Translation.get(conclusion) },
         description
         // suggestion
       ]}
@@ -87,7 +87,7 @@ const HealthIndex = ({ healthIndex, status }: FaultDiagnosis) => {
           color: `rgba(${status.color})`
         }}
       />
-      {intl.get('diagnosis.health.index')}
+      {Translation.get('diagnosis.health.index')}
     </Space>
   );
 };
@@ -112,7 +112,7 @@ const HealthStatusTag = ({ color, label, range }: Omit<HealthStatus, 'key'>) => 
       }}
     >
       <span style={{ color: `rgba(${color.join()})` }}>{range}</span>
-      {intl.get(label)}
+      {Translation.get(label)}
     </Space>
   );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { WaveformData, WaveformInclination, WaveformProperty } from '../types';
 import { Card, LineChart } from 'components';
 import { PropertyLightSelectFilter } from 'asset-common';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { monitoringPointTypeWaveformMap, WaveformMonitoringPointKey } from './common';
 
 export const Inclination = (props: { data: WaveformData; type: WaveformMonitoringPointKey }) => {
@@ -38,7 +38,7 @@ const useChartProps = ({ data, property }: { data: WaveformData; property: Wavef
     series: properties.map((p) => {
       const propertyData = (data.values as WaveformInclination)[p.key as keyof WaveformInclination];
       return {
-        data: { [intl.get(p.name)]: propertyData },
+        data: { [Translation.get(p.name)]: propertyData },
         xAxisValues: propertyData.map((_, i) => `${i}`)
       };
     }),

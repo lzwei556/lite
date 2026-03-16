@@ -3,7 +3,7 @@ import { AssetRow } from 'asset-common';
 import { FaultType } from 'common';
 import { CheckboxFormItem } from 'components';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const DiagnosisMarksFormAlert = ({
   asset,
@@ -24,7 +24,7 @@ export const DiagnosisMarksFormAlert = ({
             checkboxGroupProps={{
               children: FaultType.options.map(({ label, value }) => (
                 <Checkbox value={value} key={value}>
-                  {intl.get(label)}
+                  {Translation.get(label)}
                 </Checkbox>
               )),
               onChange: onSubmit

@@ -5,7 +5,7 @@ import { Col, Empty, Spin } from 'antd';
 import { Card, Descriptions, Grid, useRange } from 'components';
 import { Dayjs, getValue } from 'utils';
 import { VibrationWaveformFilters, WaveformData } from '../types';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { monitoringPointTypeWaveformMap, WaveformMonitoringPointKey } from './common';
 import { TimestampsList } from './timestamps-list';
 
@@ -137,7 +137,7 @@ const useMetaProps = ({ data, type }: { data: WaveformData; type: WaveformMonito
       bordered: true,
       column: { xxl: 3, xl: 2, lg: 2, md: 2, xs: 1 },
       items: monitoringPointTypeWaveformMap[type].meta?.map(({ key, name, unit, precision }) => ({
-        label: intl.get(name),
+        label: Translation.get(name),
         children: getValue({ value: data.values.metadata![key], unit, precision })
       }))
     }

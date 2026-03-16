@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Descriptions, Grid, LineChart } from '../../../components';
 import { getValue, roundValue } from '../../../utils/format';
 import { Metadata } from '../../../asset-common';
@@ -9,7 +9,9 @@ import { findClosest } from '../../../utils';
 
 export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T }) {
   const { values } = props;
-  const fields = [{ label: intl.get('amplitude'), value: 'mv', unit: 'mv', precision: 2 }];
+  const fields = [
+    { label: Translation.get('feature.amplitude'), value: 'mv', unit: 'mv', precision: 2 }
+  ];
   const metaData = [
     { label: 'FIELD_PRELOAD', value: 'preload', unit: 'kN', precision: 0 },
     { label: 'FIELD_PRESSURE', value: 'pressure', unit: 'MPa', precision: 0 },
@@ -25,7 +27,7 @@ export function PreloadWaveform<T extends PreloadWaveData>(props: { values: T })
         bordered={true}
         column={{ xxl: 3, xl: 2, lg: 2, md: 2, xs: 1 }}
         items={metaData.map(({ label, value, unit, precision }) => ({
-          label: intl.get(label),
+          label: Translation.get(label),
           children: getMetaProperty(values.metadata, value, unit, precision)
         }))}
       />

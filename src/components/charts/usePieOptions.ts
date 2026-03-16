@@ -1,19 +1,17 @@
 import { LegendComponentOption } from 'echarts/types/dist/shared';
-import { Language } from '../../localeProvider';
 import { useGlobalStyles } from '../../styles';
 import { getOptions, useBarPieOptions } from './utils';
 
 export type PieOptionsProps = {
   total?: number;
   data?: { name: string; value: number; itemStyle: { color: string } }[];
-  language: Language;
   subtext: string;
 };
 
-export const usePieOptions = ({ total, data, language, subtext }: PieOptionsProps) => {
+export const usePieOptions = ({ total, data, subtext }: PieOptionsProps) => {
   const { colorTextStyle } = useGlobalStyles();
   const commonOptions = useBarPieOptions();
-  const legend = useVerticalLegends(data ?? [], language);
+  const legend = useVerticalLegends(data ?? []);
   if (!total || !data || data.length === 0) {
     return undefined;
   }
@@ -44,10 +42,10 @@ export const usePieOptions = ({ total, data, language, subtext }: PieOptionsProp
   });
 };
 
-export const usePieOptionsLegacy = ({ total, data, language, subtext }: PieOptionsProps) => {
+export const usePieOptionsLegacy = ({ total, data, subtext }: PieOptionsProps) => {
   const { colorTextStyle } = useGlobalStyles();
   const commonOptions = useBarPieOptions();
-  const legend = useVerticalLegends(data ?? [], language);
+  const legend = useVerticalLegends(data ?? []);
   if (!total || !data || data.length === 0) {
     return undefined;
   }
@@ -79,11 +77,11 @@ export const usePieOptionsLegacy = ({ total, data, language, subtext }: PieOptio
 };
 
 const useVerticalLegends = (
-  data: { name: string; value: number; itemStyle: { color: string } }[],
-  language: Language
+  data: { name: string; value: number; itemStyle: { color: string } }[]
 ) => {
   const { colorTextDescriptionStyle } = useGlobalStyles();
   const barPieOpts = useBarPieOptions();
+  const names = data.map((d) => d.name);
   return data.length === 2
     ? {
         formatter: (itemName: string) => {
@@ -102,14 +100,31 @@ const useVerticalLegends = (
           formatter: `{name|{name}} ${value}`,
           textStyle: {
             ...colorTextDescriptionStyle,
-            rich: { name: { width: language === 'en-US' ? 45 : 25 } }
+            rich: { name: { width: getItemWith(names) } }
           }
         };
+
         if (top2) {
-          opts = { ...opts, left: '16%' };
+          opts = { ...opts, left: getMargin(names) };
         } else {
-          opts = { ...opts, right: '16%' };
+          opts = { ...opts, right: getMargin(names) };
         }
         return opts;
       });
+};
+
+const getItemWith = (names: string[]) => {
+  let width = 45;
+  if (names.some((name) => name.length > 10)) {
+    width = 80;
+  }
+  return width;
+};
+
+const getMargin = (names: string[]) => {
+  let margin = '12%';
+  if (names.some((name) => name.length > 10)) {
+    margin = '3%';
+  }
+  return margin;
 };

@@ -1,7 +1,7 @@
 import { Col, ColProps, Space, Typography } from 'antd';
 import { Data, Props, transform, useCardTitleProps, useChartProps } from './use-inclination-offset';
 import { Card, CardProps, Chart, ChartProps } from 'components';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useGlobalStyles } from 'styles';
 import { MonitoringPointType } from 'common';
 
@@ -54,14 +54,14 @@ const InclinationOffsetChartCardTitle = ({ datas }: { datas: Data[] }) => {
       return (
         value && (
           <Space key={i} style={style}>
-            <Typography.Text type='secondary'>{intl.get(label)}</Typography.Text>
+            <Typography.Text type='secondary'>{Translation.get(label)}</Typography.Text>
             {displayValue}
           </Space>
         )
       );
     });
   } else {
-    return intl.get(props);
+    return Translation.get(props);
   }
 };
 

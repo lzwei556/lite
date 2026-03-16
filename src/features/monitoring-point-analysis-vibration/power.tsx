@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { CardChart, Grid, useLinedSeriesOptions } from 'components';
 import { useWindow, Window } from './settings';
 import { power } from 'monitoring-point/services';
@@ -14,7 +14,7 @@ export const Power = ({ filters, intermediateData }: AnalysisProps) => {
   const [data, setData] = React.useState<{ x: number[]; y: number[] }>();
   const { x = [], y = [] } = data || {};
   const { window, setWindow } = useWindow();
-  const unit = 'dB'
+  const unit = 'dB';
 
   React.useEffect(() => {
     if (originalDomain) {
@@ -60,7 +60,7 @@ export const Power = ({ filters, intermediateData }: AnalysisProps) => {
             },
             series: [
               {
-                data: { [intl.get(axis.label)]: y },
+                data: { [Translation.get(axis.label)]: y },
                 xAxisValues: x.map((n) => `${n}`)
               }
             ],

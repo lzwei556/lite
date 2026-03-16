@@ -8,10 +8,9 @@ import {
 import { PieChart } from '../../components/pie-chart';
 import { ReportTable } from '../../components/table';
 import { Report, ReportMonitoringPoint } from '../../types';
-import { getValue } from '../../../../utils';
+import { formatDaysToPeriod, getValue } from '../../../../utils';
 import { getReportType } from '../../utils';
-import { getDurationByDays } from '../../../monitoring-point-analysis-corrosion/useAnalysis';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ReportSection } from '../../components/section';
 
 export const MonitoringPointsStatusSection = ({
@@ -78,8 +77,9 @@ export const MonitoringPointsStatusSection = ({
             title: '剩余寿命',
             width: 75,
             render: (value: number) => {
-              const duration = getDurationByDays(value);
-              return `${duration.duration} ${intl.get(duration.unit).d(duration.unit)}`;
+              return formatDaysToPeriod(value).map(
+                ({ value, unit }) => `${value} ${Translation.get(unit)}`
+              );
             }
           },
           {
@@ -89,7 +89,7 @@ export const MonitoringPointsStatusSection = ({
             width: 70,
             render: (level: number) => (
               <span style={{ color: getMonitoringPointEvalLevelColor(level) }}>
-                {intl.get(getMonitoringPointEvalLevel(level))}
+                {Translation.get(getMonitoringPointEvalLevel(level))}
               </span>
             )
           }

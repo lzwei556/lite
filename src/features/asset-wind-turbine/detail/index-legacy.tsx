@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Flex, Grid, TabsDetail } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import { AssetNavigator, AssetRow, StatisticBar } from '../../../asset-common';
@@ -20,7 +20,7 @@ export const WindIndexLegacy = (props: {
     return (asset.children?.length ?? 0) > 0 ? (
       <Grid>{content}</Grid>
     ) : (
-      <Card title={intl.get('assets')}>
+      <Card title={Translation.get('assets')}>
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       </Card>
     );
@@ -30,7 +30,7 @@ export const WindIndexLegacy = (props: {
     <TabsDetail
       items={[
         {
-          label: intl.get('assets'),
+          label: Translation.get('assets'),
           key: 'asset',
           content: (
             <Grid>
@@ -56,7 +56,7 @@ export const WindIndexLegacy = (props: {
           )
         },
         {
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           key: 'settings',
           content: (
             <Grid>

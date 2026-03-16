@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { notification, Space } from 'antd';
-import intl from 'react-intl-universal';
 import useSocket, { SocketTopic } from '../../socket';
 import { translateMetricName } from '../../features/alarm/alarm-group';
 import { useSelectedProject } from '../../providers/user-profile';
+import { Translation } from 'locales/utils';
+import { getLabelByValue } from 'features/alarm';
 
 const AlertMessageNotification = () => {
   const { PubSub } = useSocket();
@@ -30,7 +31,7 @@ const AlertMessageNotification = () => {
 
   useEffect(() => {
     const renderNotification = (record: any) => {
-      const message = intl.get(`leveled.alarm.${record.level}`);
+      const message = Translation.leveledAlarm(getLabelByValue(record.level));
       switch (record.level) {
         case 1:
           api.info({
@@ -56,7 +57,7 @@ const AlertMessageNotification = () => {
         default:
           api.success({
             key: `${record.monitoringPoint.id}-${record.level}`,
-            message: intl.get('RETURN_TO_NORMAL'),
+            message: Translation.get('alarm.return-to-normal'),
             description: <div>{renderDescription(record)}</div>
           });
           break;
@@ -66,12 +67,12 @@ const AlertMessageNotification = () => {
     const renderDescription = (record: any) => {
       return (
         <>
-          <p>{`${intl.get('ALARM_MONITORING_POINTS')}: ${record.monitoringPoint.name}`}</p>
-          <p>{`${intl.get('ALARM_PROPERTIES')}: ${translateMetricName(record.metric.name)}`}</p>
-          <p>{`${intl.get('ALARM_VALUE')}: ${record.value}${
-            record.metric.unit
-              ? intl.get(record.metric.unit).d(record.metric.unit)
-              : record.metric.unit
+          <p>{`${Translation.get('monitoring.point')}: ${record.monitoringPoint.name}`}</p>
+          <p>{`${Translation.get('alarm.properties')}: ${translateMetricName(
+            record.metric.name
+          )}`}</p>
+          <p>{`${Translation.get('alarm.value')}: ${record.value}${
+            record.metric.unit ? Translation.get(record.metric.unit) : record.metric.unit
           }`}</p>
         </>
       );

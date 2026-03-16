@@ -1,5 +1,4 @@
 import React from 'react';
-import { floor } from 'lodash';
 import { Dayjs } from '../../utils';
 import { ColorHealth } from '../../constants/color';
 import {
@@ -104,14 +103,4 @@ export function useAreas(id: number, ranges: string) {
     }
   }, [id, ranges]);
   return selecteds;
-}
-
-export function getDurationByDays(days: number): {
-  duration: number;
-  unit: 'UNIT_DAY' | 'UNIT_YEAR';
-} {
-  if (days < 365) {
-    return { duration: days, unit: 'UNIT_DAY' };
-  }
-  return { duration: floor(days / 365, 1), unit: 'UNIT_YEAR' };
 }

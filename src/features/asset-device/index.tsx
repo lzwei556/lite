@@ -1,11 +1,12 @@
 import React from 'react';
 import { Col, Spin } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, TabsDetail } from '../../components';
 import {
   AssetNavigator,
   AssetRow,
   ContextProps,
+  MONITORING_POINT_LIST,
   MonitoringPointRow,
   MonitoringPointsTable
 } from '../../asset-common';
@@ -37,7 +38,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
         items={[
           {
             key: 'monitoringPointList',
-            label: intl.get('MONITORING_POINT_LIST'),
+            label: Translation.get(MONITORING_POINT_LIST),
             content: (
               <MonitoringPointsTable
                 key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
@@ -48,7 +49,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
           },
           {
             key: 'settings',
-            label: intl.get('SETTINGS'),
+            label: Translation.get('common.settings'),
             content: (
               <Grid>
                 <Col span={24}>

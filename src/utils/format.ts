@@ -1,6 +1,5 @@
 import { round } from 'lodash';
 import { dayjs } from './dayjsUtils';
-import { Language } from '../localeProvider';
 
 export const getFilename = (res: any, identifier?: number) => {
   let filename = `${dayjs().format('YYYY-MM-DD HH:mm:ss')}.json`;
@@ -47,25 +46,6 @@ export function roundValue(value: number, precision?: number) {
   return round(value, precision ?? 3);
 }
 
-export function getDisplayName({
-  name,
-  lang,
-  suffix
-}: {
-  name: string;
-  lang: Language;
-  suffix?: string;
-}) {
-  const zh = lang === 'zh-CN';
-  const braceLeft = zh ? '（' : ' (';
-  const braceRight = zh ? '）' : ')';
-  if (suffix) {
-    return `${name}${braceLeft}${suffix}${braceRight}`;
-  } else {
-    return name;
-  }
-}
-
 export function truncate(text: string, max: number) {
   return text.length > max ? text.slice(0, max - 1) + '...' : text;
 }
@@ -78,5 +58,5 @@ export function formatNumericData(data: string | number) {
 }
 
 export const transformSnake2Dot = (term: string) => {
-  return term.replaceAll('_', '.');
+  return term.replaceAll('_', '.').replaceAll('-.', '-');
 };

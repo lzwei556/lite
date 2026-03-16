@@ -1,7 +1,7 @@
 import React from 'react';
 import { Space } from 'antd';
 import { LineOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { buildCustomTooltip, CardChart, LightSelectFilter, useLegendStyles } from 'components';
 import { useWindow, Window } from './settings';
 import { useCrossTarget } from './useCrossTarget';
@@ -50,8 +50,16 @@ export const Cross = ({
   }, [originalDomain, property.value, window, targetOriginalDomain]);
 
   const category = {
-    density: { label: intl.get('cross.power.spectral.density'), unit: 'dB/Hz', precision: 3 },
-    phase: { label: intl.get('cross.power.spectral.phase'), unit: 'xπ rad', precision: 0 }
+    density: {
+      label: Translation.get('vibration.analysis.cross.spectral.density'),
+      unit: 'dB/Hz',
+      precision: 3
+    },
+    phase: {
+      label: Translation.get('vibration.analysis.cross.spectral.phase'),
+      unit: 'xπ rad',
+      precision: 0
+    }
   };
 
   return (
@@ -73,7 +81,10 @@ export const Cross = ({
               {selectedPointId && (
                 <LightSelectFilter
                   allowClear={false}
-                  options={targetAxis.options.map((a) => ({ ...a, label: intl.get(a.label) }))}
+                  options={targetAxis.options.map((a) => ({
+                    ...a,
+                    label: Translation.get(a.label)
+                  }))}
                   onChange={(value) => {
                     const axis = targetAxis.options.find((opt) => opt.value === value);
                     if (axis) {

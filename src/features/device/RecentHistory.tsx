@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Collapse, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Dayjs } from '../../utils';
 import { FindDeviceDataRequest } from '../../apis/device';
 import { Device } from '../../types/device';
@@ -33,7 +33,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
       onChange={setChannel}
       options={channels}
       value={channel}
-      prefix={intl.get('CURRENT_CHANNEL')}
+      prefix={Translation.get('device.channel.current')}
     />
   );
 
@@ -65,7 +65,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
         expandIconPosition='end'
         items={groups.map(([g, properties]) => ({
           key: g,
-          label: intl.get(g),
+          label: Translation.get(g),
           children: (
             <Grid>
               {properties.map((p: CharacteristicData.DisplayProperty, index: number) => {

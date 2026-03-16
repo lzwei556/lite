@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   AlarmRuleSetting,
   MonitoringPoint,
@@ -34,14 +34,14 @@ export const Settings = ({
               }}
             />
           }
-          title={intl.get('BASIC_INFORMATION')}
+          title={Translation.get('common.basic')}
         >
           <Form form={form} layout='vertical' initialValues={{ ...Point.convert(point) }}>
             <BasisFormItems
               monitoringPoint={point}
               formItemColProps={generateColProps({ xl: 12, xxl: 8 })}
             />
-            <Card size='small' title={intl.get('monitoring.point.attr')} type='inner'>
+            <Card size='small' title={Translation.get('monitoring.point.attr')} type='inner'>
               <Grid>
                 <Others formItemColProps={generateColProps({ xl: 12, xxl: 8 })} />
               </Grid>

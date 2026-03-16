@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Spin } from 'antd';
-import intl from 'react-intl-universal';
 import { Dayjs } from '../../utils';
 import { GetAlertStatisticsRequest } from '../../apis/statistic';
 import { Chart, getOptions, MutedCard, useBarPieOptions } from '../../components';
 import { AlarmLevel, getColorByValue, getLabelByValue } from '../../features/alarm';
+import { Translation } from 'locales/utils';
 
 type Statistics = { timestamp: number; info: number; warn: number; critical: number };
 export const AlarmTrend = ({
@@ -46,19 +46,19 @@ export const AlarmTrend = ({
         series: [
           {
             type: 'bar',
-            name: intl.get(getLabelByValue(AlarmLevel.Minor)),
+            name: Translation.get(getLabelByValue(AlarmLevel.Minor)),
             data: getData(countAlarm).info,
             color: getColorByValue(AlarmLevel.Minor)
           },
           {
             type: 'bar',
-            name: intl.get(getLabelByValue(AlarmLevel.Major)),
+            name: Translation.get(getLabelByValue(AlarmLevel.Major)),
             data: getData(countAlarm).warn,
             color: getColorByValue(AlarmLevel.Major)
           },
           {
             type: 'bar',
-            name: intl.get(getLabelByValue(AlarmLevel.Critical)),
+            name: Translation.get(getLabelByValue(AlarmLevel.Critical)),
             data: getData(countAlarm).danger,
             color: getColorByValue(AlarmLevel.Critical)
           }

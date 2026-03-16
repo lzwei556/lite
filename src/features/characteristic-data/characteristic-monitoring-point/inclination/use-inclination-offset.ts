@@ -1,7 +1,6 @@
-import { useLocaleContext } from 'localeProvider/context';
 import { getValue, roundValue } from 'utils';
 import { ChartProps, getOptions } from 'components';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { MonitoringPointType } from 'common';
 import { DIRECTION, TopInclination_DISPLACEMENT_COMBINED } from 'common/characteristic-data';
 import { CharacteristicDataDTO } from '../../types';
@@ -74,7 +73,7 @@ export const useCardTitleProps = (datas: Data[]) => {
       };
     });
   } else {
-    return 'SCATTERGRAM';
+    return 'asset.tower.scattergram.title';
   }
 };
 
@@ -84,7 +83,6 @@ export const useChartProps = ({ datas, ...rest }: { datas: Data[] } & ChartProps
 };
 
 const usePolarScatterChartOptions = (datas: Data[], dataMetas: InclinationOffsetDataMeta[]) => {
-  const { language } = useLocaleContext();
   let max = undefined;
   const series: any = [];
   if (!datas || datas.length === 0) {
@@ -116,10 +114,12 @@ const usePolarScatterChartOptions = (datas: Data[], dataMetas: InclinationOffset
         data: Data['data'][0];
       }) => {
         const [displacementMeta, directionMeta] = dataMetas[seriesIndex];
-        const displacementStr = `${intl.get(displacementMeta.label)} ${displacement} ${
+        const displacementStr = `${Translation.get(displacementMeta.label)} ${displacement} ${
           displacementMeta.unit
         }`;
-        const directionStr = `${intl.get(directionMeta.label)} ${direction} ${directionMeta.unit}`;
+        const directionStr = `${Translation.get(directionMeta.label)} ${direction} ${
+          directionMeta.unit
+        }`;
         const rest = `${displacementStr}<br/>${directionStr}`;
         return onlyOneSeries ? rest : `${seriesName}<br/>${rest}`;
       },
@@ -140,13 +140,13 @@ const usePolarScatterChartOptions = (datas: Data[], dataMetas: InclinationOffset
         formatter: (value: number) => {
           switch (value) {
             case 0:
-              return `${value} {direction|${language === 'zh-CN' ? '东' : 'East'}}`;
+              return `${value} {direction|${Translation.get('common.east')}}`;
             case 90:
-              return ` {direction|${language === 'zh-CN' ? '北' : 'North'}}\r\n${value}`;
+              return ` {direction|${Translation.get('common.north')}}\r\n${value}`;
             case -180:
-              return `{direction|${language === 'zh-CN' ? '西' : 'West'}} ${value}`;
+              return `{direction|${Translation.get('common.west')}} ${value}`;
             case -90:
-              return `${value}\r\n{direction|${language === 'zh-CN' ? '南' : 'South'}}`;
+              return `${value}\r\n{direction|${Translation.get('common.south')}}`;
             default:
               return value;
           }

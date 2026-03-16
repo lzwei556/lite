@@ -1,7 +1,7 @@
 import React from 'react';
 import { message, Space, Upload } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { IconButton, SaveIconButton } from '../../components';
 import { Point } from './common';
 import { useCanvasContext } from './context';
@@ -22,7 +22,7 @@ export function Toolbar({ onSave, beforeUpload, onUpload, uploadedImageStr }: To
         beforeUpload={(file) => {
           const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
           if (!isJpgOrPng) {
-            message.error(intl.get('only.jpeg.or.png'));
+            message.error(Translation.get('feedback.prompt.upload.image'));
           } else {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -35,7 +35,10 @@ export function Toolbar({ onSave, beforeUpload, onUpload, uploadedImageStr }: To
         }}
         showUploadList={false}
       >
-        <IconButton icon={<PlusOutlined />} tooltipProps={{ title: intl.get('replace.image') }} />
+        <IconButton
+          icon={<PlusOutlined />}
+          tooltipProps={{ title: Translation.doSth('common.action.upload', 'common.image') }}
+        />
       </Upload>
       <SaveIconButton
         color='default'

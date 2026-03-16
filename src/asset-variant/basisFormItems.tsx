@@ -20,11 +20,15 @@ export const BasisFormItems = ({
   return (
     <Grid>
       <Col {...formItemColProps}>
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 50 }]}
+        />
       </Col>
       <Col {...formItemColProps}>
         <SelectFormItem
-          label='ASSET'
+          label='asset'
           name='parent_id'
           rules={[{ required: true }]}
           selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}

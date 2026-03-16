@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form, Switch } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from 'types/common';
 import { ModalWrapper } from 'components/modalWrapper';
 import { Grid, MutedCard, NumberFormItem, RadioFormItem, SelectFormItem } from 'components';
@@ -61,8 +61,8 @@ export const SettingsForm = (
           form.setFieldValue(['sideband', 'center'], undefined);
         }
       }}
-      cancelText={intl.get('RESET')}
-      title={intl.get('nums.of.cursors.settings')}
+      cancelText={Translation.get('common.action.reset')}
+      title={Translation.get('common.settings')}
       width={500}
     >
       <Form
@@ -76,19 +76,19 @@ export const SettingsForm = (
               <Switch size='small' onChange={setEnabledHarmonic} />
             </Form.Item>
           }
-          title={intl.get(`analysis.vibration.cursor.harmonic`)}
+          title={Translation.get(`vibration.analysis.cursor.harmonic`)}
         >
           <Grid>
             <Col span={12}>
               <NumberFormItem
-                label='harmonic.1x'
+                label='vibration.analysis.harmonic.1x'
                 name={['harmonic', 'base']}
                 inputNumberProps={{ disabled: !enabledHarmonic, addonAfter: 'Hz' }}
               />
             </Col>
             <Col span={12}>
               <SelectFormItem
-                label='cursor.nums'
+                label='vibration.analysis.cursor.amount'
                 name={['harmonic', 'cursor']}
                 selectProps={{
                   disabled: !enabledHarmonic,
@@ -105,26 +105,26 @@ export const SettingsForm = (
             </Form.Item>
           }
           style={{ marginBlock: 16 }}
-          title={intl.get(`analysis.vibration.cursor.sideband`)}
+          title={Translation.get(`vibration.analysis.cursor.sideband`)}
         >
           <Grid>
             <Col span={12}>
               <NumberFormItem
-                label='sideband.center'
+                label='vibration.analysis.sideband.center'
                 name={['sideband', 'center']}
                 inputNumberProps={{ disabled: !enabledSideband, addonAfter: 'Hz' }}
               />
             </Col>
             <Col span={12}>
               <NumberFormItem
-                label='sideband.distance'
+                label='vibration.analysis.sideband.distance'
                 name={['sideband', 'distance']}
                 inputNumberProps={{ disabled: !enabledSideband, addonAfter: 'Hz' }}
               />
             </Col>
             <Col span={12}>
               <SelectFormItem
-                label='cursor.nums'
+                label='vibration.analysis.cursor.amount'
                 name={['sideband', 'cursor']}
                 selectProps={{
                   disabled: !enabledSideband,
@@ -134,14 +134,14 @@ export const SettingsForm = (
             </Col>
           </Grid>
         </MutedCard>
-        <RadioFormItem label='analysis.vibration.cursor.faultfrequency' name='faultFrequency' />
-        <RadioFormItem label='analysis.vibration.cursor.top10' name='top10' />
+        <RadioFormItem label='vibration.analysis.cursor.faultfrequency' name='faultFrequency' />
+        <RadioFormItem label='vibration.analysis.cursor.top10' name='top10' />
       </Form>
     </ModalWrapper>
   );
 };
 
-export const getAnalysisSettings = ( type?: 'frequency' | 'envelope') => {
+export const getAnalysisSettings = (type?: 'frequency' | 'envelope') => {
   const store = localStorage.getItem(`${type}-settings`);
   if (store) {
     return JSON.parse(store) as MarkSettings;

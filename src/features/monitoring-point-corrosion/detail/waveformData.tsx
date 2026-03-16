@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Metadata } from '../../../asset-common';
 import { getValue, roundValue } from '../../../utils/format';
 import { Card, Descriptions, Grid, LineChart } from '../../../components';
@@ -14,12 +14,14 @@ export interface ThicknessWaveData {
 
 export function WaveformData<T extends ThicknessWaveData>(props: { values: T }) {
   const { values } = props;
-  const fields = [{ label: intl.get('amplitude'), value: 'mv', unit: 'mv', precision: 2 }];
+  const fields = [
+    { label: Translation.get('feature.amplitude'), value: 'mv', unit: 'mv', precision: 2 }
+  ];
   const metaData = [
     { label: 'FIELD_THICKNESS', value: 'thickness', unit: 'mm', precision: 3 },
     { label: 'FIELD_TEMPERATURE', value: 'temp', unit: '℃', precision: 1 },
     { label: 'FIELD_TOF', value: 'tof', unit: 'ns', precision: 0 },
-    { label: 'rod.top.temperature', value: 'envTemp', unit: '℃', precision: 1 },
+    { label: 'corrosion.rod-top.temperature', value: 'envTemp', unit: '℃', precision: 1 },
     { label: 'FIELD_SIGNAL_STRENGTH', value: 'sigStrength', unit: '', precision: 1 }
   ];
   const [field, setField] = React.useState(fields[0]);
@@ -31,7 +33,7 @@ export function WaveformData<T extends ThicknessWaveData>(props: { values: T }) 
           bordered={true}
           column={{ xxl: 3, xl: 2, lg: 2, md: 2, xs: 1 }}
           items={metaData.map(({ label, value, unit, precision }) => ({
-            label: intl.get(label),
+            label: Translation.get(label),
             children: getMetaProperty(values.metadata, value, unit, precision)
           }))}
         />

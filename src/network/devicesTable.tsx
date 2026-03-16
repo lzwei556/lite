@@ -1,16 +1,17 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Device } from '../types/device';
 import { useDeviceOnlineLiving, useDeviceTreeData } from '../features/device/deviceTree';
 import { tree2List } from '../utils/tree';
 import { SingleDeviceStatus } from '../device/SingleDeviceStatus';
 import { Link, Table } from '../components';
-import { Dayjs, getDisplayName, getValue, toMac } from '../utils';
-import { useLocaleContext } from '../localeProvider';
+import { Dayjs, getValue, toMac } from '../utils';
+import { useI18n } from 'providers/i18n';
+import { getDisplayName } from 'locales/utils';
 
 export const DevicesTable = ({ device }: { device: Device }) => {
   useDeviceOnlineLiving();
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
 
   const dataSource = tree2List(useDeviceTreeData(device)).filter(
     (d) => d.macAddress !== device.macAddress
@@ -20,39 +21,47 @@ export const DevicesTable = ({ device }: { device: Device }) => {
     {
       dataIndex: 'name',
       key: 'name',
-      title: intl.get('DEVICE_NAME'),
+      title: Translation.get('device.name'),
       render: (name: string, device: Device) => <Link to={`/devices/${device.id}`}>{name}</Link>
     },
     {
       dataIndex: 'macAddress',
       key: 'mac',
-      title: intl.get('MAC_ADDRESS'),
+      title: Translation.get('device.mac-address'),
       render: (mac: string) => toMac(mac.toUpperCase())
     },
     {
       key: 'state',
-      title: intl.get('STATUS'),
+      title: Translation.get('common.status'),
       render: (_: string, device: Device) => {
         return <SingleDeviceStatus device={device} />;
       }
     },
     {
       key: 'battery',
-      title: getDisplayName({ name: intl.get('BATTERY_VOLTAGE'), lang: language, suffix: 'mV' }),
+      title: getDisplayName({
+        name: Translation.get('device.status.battery.voltage'),
+        lang: language,
+        suffix: 'mV'
+      }),
       render: (_: string, device: Device) => {
         return getValue({ value: device.state?.batteryVoltage });
       }
     },
     {
       key: 'signal',
-      title: getDisplayName({ name: intl.get('SIGNAL_STRENGTH'), lang: language, suffix: 'dBm' }),
+      title: getDisplayName({
+        name: Translation.get('device.status.signal.level'),
+        lang: language,
+        suffix: 'dBm'
+      }),
       render: (_: string, device: Device) => {
         return getValue({ value: device.state?.signalLevel });
       }
     },
     {
       key: 'time',
-      title: intl.get('LAST_SAMPLING_TIME'),
+      title: Translation.get('device.data.timestamp'),
       render: (_: string, device: Device) => {
         return device.data?.timestamp ? Dayjs.format(device.data?.timestamp) : '-';
       }

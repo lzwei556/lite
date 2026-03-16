@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Empty, Spin } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   Card,
   Flex,
@@ -12,11 +12,11 @@ import {
 } from '../components';
 import { Dayjs, downloadFile } from '../utils';
 import { getFilename } from '../utils/format';
-import { useLocaleContext } from '../localeProvider';
 import { BatchDownlaodWaveDataModal } from './batchDownlaodWaveDataModal';
 import { downloadRawHistory, getDataOfMonitoringPoint, getDynamicData } from './services';
 import { DataType } from './types';
 import { Permission, useCan } from '../providers/access-control';
+import { useI18n } from 'providers/i18n';
 
 type DynamicDataProps<T> = {
   children: (values: T) => React.ReactElement;
@@ -79,7 +79,7 @@ function useFetchingTimestamps(id: number, range: [number, number], dataType: Da
 
 function Timestamps<T>(props: DynamicDataProps<T> & { timestamps: TimestampObj[] }) {
   const { timestamps, ...rest } = props;
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const [timestamp, setTimestamp] = React.useState(timestamps[0].timestamp);
 
   return (
@@ -90,13 +90,7 @@ function Timestamps<T>(props: DynamicDataProps<T> & { timestamps: TimestampObj[]
           onRowClick={setTimestamp}
           onDownload={(timestamp) => {
             const { id, dataType, filters } = rest;
-            downloadRawHistory(
-              id,
-              timestamp,
-              language === 'en-US' ? 'en' : 'zh',
-              dataType,
-              filters
-            ).then((res) => {
+            downloadRawHistory(id, timestamp, language, dataType, filters).then((res) => {
               downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
             });
           }}
@@ -130,7 +124,7 @@ function TimestampsTable<T>(
         header={{
           toolbar: (
             <Button onClick={() => setBatchDownloadModalVisible(true)}>
-              {intl.get('BATCH_DOWNLOAD')}
+              {Translation.get('common.action.download')}
             </Button>
           )
         }}
@@ -138,13 +132,13 @@ function TimestampsTable<T>(
         showHeader={false}
         columns={[
           {
-            title: intl.get('TIMESTAMP'),
+            title: Translation.get('common.timestamp'),
             dataIndex: 'timestamp',
             key: 'timestamp',
             render: (timestamp: number) => Dayjs.format(timestamp)
           },
           {
-            title: intl.get('OPERATION'),
+            title: Translation.get('common.operation'),
             key: 'action',
             render: (text: TimestampObj) => {
               if (canDownloadDeviceRawData) {

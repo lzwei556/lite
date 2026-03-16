@@ -3,7 +3,7 @@ import { Project } from '../types/project';
 import { Result, SelectProps, Spin } from 'antd';
 import { GlobalStore } from '../utils/global-store';
 import request from '../utils/request';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 const store = GlobalStore.getInstance(true);
 
@@ -12,7 +12,7 @@ export const ProjectVerification = ({ children }: { children: React.ReactNode })
   return selectedProject ? (
     <React.Fragment key={selectedProject.id}>{children}</React.Fragment>
   ) : (
-    <Result status='500' title={intl.get('no.available.project')} />
+    <Result status='500' title={Translation.get('feedback.empty.project')} />
   );
 };
 

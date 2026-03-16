@@ -1,7 +1,6 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Table } from '../../components';
-import { useLocaleContext } from '../../localeProvider';
 import {
   AssetRow,
   AXIS_ALIAS,
@@ -14,6 +13,7 @@ import {
 } from '../../asset-common';
 import { ActionBar } from './actionBar';
 import { Permission, useCan } from '../../providers/access-control';
+import { useI18n } from 'providers/i18n';
 
 export const PointsTable = (props: {
   asset: AssetRow;
@@ -21,7 +21,7 @@ export const PointsTable = (props: {
   onSuccess: () => void;
 }) => {
   const { asset, onUpdate, onSuccess } = props;
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const basicColumns = getMonitoringPointColumns({ language });
   const { monitoringPoints = [] } = asset;
   const actualPoints = Points.filter(monitoringPoints);
@@ -33,27 +33,27 @@ export const PointsTable = (props: {
       positionColumn,
       ...[
         {
-          title: intl.get(AXIS_ALIAS.Axial.abbr),
+          title: Translation.get(AXIS_ALIAS.Axial.abbr),
           key: AXIS_ALIAS.Axial.key,
           render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.axial);
-            return axis ? intl.get(axis.label) : '-';
+            return axis ? Translation.get(axis.label) : '-';
           }
         },
         {
-          title: intl.get(AXIS_ALIAS.Vertical.abbr),
+          title: Translation.get(AXIS_ALIAS.Vertical.abbr),
           key: AXIS_ALIAS.Vertical.key,
           render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.vertical);
-            return axis ? intl.get(axis.label) : '-';
+            return axis ? Translation.get(axis.label) : '-';
           }
         },
         {
-          title: intl.get(AXIS_ALIAS.Horizontal.abbr),
+          title: Translation.get(AXIS_ALIAS.Horizontal.abbr),
           key: AXIS_ALIAS.Horizontal.key,
           render: (_: string, row: MonitoringPointRow) => {
             let axis = Point.getAxis(row.attributes?.horizontal);
-            return axis ? intl.get(axis.label) : '-';
+            return axis ? Translation.get(axis.label) : '-';
           }
         }
       ]
@@ -70,7 +70,7 @@ export const PointsTable = (props: {
       columns={columns.map((c) => ({ ...c, width: 'auto' }))}
       cardProps={{
         extra: canAddMonitoringPoint && <ActionBar {...props} />,
-        title: intl.get('monitoring.points')
+        title: Translation.get('monitoring.points')
       }}
       dataSource={Points.sort(actualPoints)}
       pagination={false}

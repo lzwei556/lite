@@ -1,14 +1,8 @@
 import React from 'react';
 import { Button, Form, Popover, Space } from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
-import {
-  Flex,
-  IconButton,
-  NumberFormItem,
-  SelectFormItem,
-  TextFormItem
-} from 'components';
+import { Translation } from 'locales/utils';
+import { Flex, IconButton, NumberFormItem, SelectFormItem, TextFormItem } from 'components';
 import {
   CutoffRange,
   FilterTypeRelatedFields,
@@ -68,7 +62,7 @@ export const FilterTypeRelated = ({
                   label={label}
                   selectProps={{
                     ...item,
-                    options: options.map((o) => ({ ...o, label: intl.get(o.label) }))
+                    options: options.map((o) => ({ ...o, label: Translation.get(o.label) }))
                   }}
                 />
               ) : (
@@ -84,7 +78,7 @@ export const FilterTypeRelated = ({
                     setOpen(false);
                   }}
                 >
-                  {intl.get('CANCEL')}
+                  {Translation.get('common.action.cancel')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -95,7 +89,7 @@ export const FilterTypeRelated = ({
                   }}
                   type='primary'
                 >
-                  {intl.get('OK')}
+                  {Translation.get('common.ok')}
                 </Button>
               </Space>
             </Flex>
@@ -112,7 +106,7 @@ export const FilterTypeRelated = ({
         icon={<FilterOutlined />}
         onClick={() => setOpen(true)}
         size='small'
-        tooltipProps={{ title: intl.get('analysis.vibration.filter') }}
+        tooltipProps={{ title: Translation.get('vibration.analysis.filter') }}
         variant='outlined'
       />
     </Popover>

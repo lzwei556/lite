@@ -1,7 +1,6 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Table } from '../../components';
-import { useLocaleContext } from '../../localeProvider';
 import {
   AssetRow,
   getMonitoringPointColumns,
@@ -12,6 +11,7 @@ import {
 } from '../../asset-common';
 import { ActionBar } from './actionBar';
 import { Permission, useCan } from '../../providers/access-control';
+import { useI18n } from 'providers/i18n';
 
 export const PointsTable = (props: {
   asset: AssetRow;
@@ -19,7 +19,7 @@ export const PointsTable = (props: {
   onSuccess: () => void;
 }) => {
   const { asset, onUpdate, onSuccess } = props;
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const basicColumns = getMonitoringPointColumns({ language });
   const { monitoringPoints = [] } = asset;
   const actualPoints = Points.filter(monitoringPoints);
@@ -33,7 +33,7 @@ export const PointsTable = (props: {
     <Table
       cardProps={{
         extra: canAddMonitoringPoint && <ActionBar {...props} />,
-        title: intl.get('monitoring.points')
+        title: Translation.get('monitoring.points')
       }}
       columns={columns}
       dataSource={Points.sort(actualPoints)}

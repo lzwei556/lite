@@ -46,8 +46,8 @@ import type {
   XAXisComponentOption,
   YAXisComponentOption
 } from 'echarts';
-import { useLocaleContext } from '../../localeProvider';
 import { Flex } from '../flex';
+import { getLanguage, useI18n } from 'providers/i18n';
 
 export type ECOptions = ComposeOption<
   | DatasetComponentOption
@@ -109,12 +109,12 @@ const EChart = React.forwardRef(function EChart(
   const chartDomRef = React.useRef<HTMLDivElement | null>(null);
   const [chartIns, setChartIns] = React.useState<echarts.ECharts>();
   const chartDomSize = useSize(chartDomRef);
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   React.useEffect(() => {
     const chartDom = chartDomRef.current;
     const chart = echarts.init(chartDom, null, {
       renderer: 'canvas',
-      locale: language === 'zh-CN' ? 'ZH' : 'EN'
+      locale: getLanguage(language).localeCodeOfECharts
     });
     setChartIns(chart);
     return () => {

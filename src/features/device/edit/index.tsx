@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { DeviceType } from '../../../types/device_type';
 import { Card } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
@@ -54,7 +54,7 @@ const useBasisFormEditProps = ({ device, onUpdate }: Props) => {
     groupCardProps: useGroupCardProps({
       extra: <Toolbar {...{ form, ...useUpdate(device.id, onUpdate) }} />,
       style: { marginBottom: 0 },
-      title: intl.get('BASIC_INFORMATION')
+      title: Translation.get('common.basic')
     }),
     formItemsProps: { form, formItemColProps: generateColProps({ xl: 12, xxl: 8 }) }
   };
@@ -82,7 +82,7 @@ const useWSNFormEditProps = (network: NonNullable<Props['network']>) => {
     formProps,
     groupCardProps: useGroupCardProps({
       extra: <Toolbar {...{ form, ...useUpdateNetwork(network) }} />,
-      title: intl.get('wireless.network.settings')
+      title: Translation.get('wsn.settings')
     }),
     formItemsProps: {
       form,

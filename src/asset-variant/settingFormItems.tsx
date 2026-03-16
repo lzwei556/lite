@@ -4,7 +4,7 @@ import { Card, FormItem, Grid } from '../components';
 import { AssetCategory } from '../asset-category';
 import { toUniversalFormItemProps } from '../types';
 import { generateColProps } from '../utils/grid';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const SettingFormItems = ({
   type,
@@ -26,7 +26,7 @@ export const SettingFormItems = ({
   };
 
   return AssetCategory.Key.getGroupedSettings(type).map(([group, fields]) => (
-    <Card style={{ marginBottom: 16 }} title={intl.get(group).d(group)} key={group}>
+    <Card style={{ marginBottom: 16 }} title={Translation.get(group)} key={group}>
       <Grid>
         {fields.map((field) => {
           const visible = field.visibleWhen ? field.visibleWhen(formValues) : true;

@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ChartMark, RadioFormItem } from 'components';
 import { cursors, useContext } from './context';
 
@@ -20,7 +20,7 @@ export const Switcher = () => {
         },
         options: cursors.map((c) => {
           return {
-            label: intl.get(`sideband.${c}`),
+            label: Translation.get(`vibration.analysis.sideband.${c}`),
             value: c,
             disabled: c === 'side' && !centeredMark
           };

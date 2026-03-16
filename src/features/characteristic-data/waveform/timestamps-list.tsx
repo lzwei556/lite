@@ -5,9 +5,9 @@ import React from 'react';
 import { Dayjs, downloadFile, getFilename } from 'utils';
 import { DataType, useBatchWaveformDataDownload, useWaveformDataDownload } from '../use-services';
 import { VibrationWaveformFilters } from '../types';
-import { useLocaleContext } from 'localeProvider';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useSelectAll } from 'hooks/select-all';
+import { useI18n } from 'providers/i18n';
 
 const useStyles = createStyles(({ token, css }) => ({
   listItem: css`
@@ -34,7 +34,7 @@ export const TimestampsList = ({ onClick, timestamp, timestamps, ...rest }: Prop
   const { styles } = useStyles();
   const { selected, toggleOne } = useSelectAll(timestamps);
   const { runAsync: download, loading } = useBatchWaveformDataDownload();
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const paginated = timestamps.length > 100;
 
   return (
@@ -44,25 +44,21 @@ export const TimestampsList = ({ onClick, timestamp, timestamps, ...rest }: Prop
           <Button
             disabled={selected.length === 0}
             onClick={() =>
-              download(
-                rest.id,
-                rest.dataType,
-                selected,
-                language === 'en-US' ? 'en' : 'zh',
-                rest.vibrationFilters
-              ).then((res) => {
-                downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
-              })
+              download(rest.id, rest.dataType, selected, language, rest.vibrationFilters).then(
+                (res) => {
+                  downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
+                }
+              )
             }
             loading={loading}
             variant='outlined'
           >
-            {intl.get('BATCH_DOWNLOAD')}
+            {Translation.get('common.action.download')}
           </Button>
         )
       }
       style={{ height: '100%' }}
-      title={intl.get('TIMESTAMP')}
+      title={Translation.get('common.timestamp')}
     >
       <List
         dataSource={timestamps}
@@ -106,7 +102,7 @@ const DownloadIconButtonWrapper = ({
   vibrationFilters
 }: Pick<Props, 'id' | 'timestamp' | 'dataType' | 'vibrationFilters'>) => {
   const { runAsync: download, loading } = useWaveformDataDownload();
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
 
   return (
     <DownloadIconButton
@@ -117,7 +113,7 @@ const DownloadIconButtonWrapper = ({
           id,
           timestamp,
           dataType,
-          language === 'en-US' ? 'en' : 'zh',
+          language,
           vibrationFilters ? { calculate: vibrationFilters.calculate } : undefined
         ).then((res) => {
           downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));

@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { UpdateRoleRequest } from '../../../../apis/role';
 import RoleModal from './role';
 import { Role } from '../../../../types/role';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export interface EditRoleModalProps {
   role: Role;
@@ -41,7 +41,7 @@ const EditRoleModal: FC<EditRoleModalProps> = (props) => {
       form={form}
       width={420}
       open={open}
-      title={intl.get('EDIT_ROLE')}
+      title={Translation.editSth('auth.role')}
       onOk={onSave}
       onCancel={onCancel}
       confirmLoading={isLoading}

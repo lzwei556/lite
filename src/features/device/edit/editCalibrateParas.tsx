@@ -1,5 +1,5 @@
 import { Button, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { DeviceType } from '../../../types/device_type';
 import { Property } from '../../../types/property';
 import { ModalWrapper } from '../../../components/modalWrapper';
@@ -24,7 +24,7 @@ const EditCalibrateParas = ({
   const [form] = Form.useForm();
   const typeParaMapping = new Map();
   typeParaMapping.set(DeviceType.SAS, 'preload');
-    typeParaMapping.set(DeviceType.SASLoraWAN, 'preload');
+  typeParaMapping.set(DeviceType.SASLoraWAN, 'preload');
   typeParaMapping.set(DeviceType.SAS120D, 'preload');
   typeParaMapping.set(DeviceType.SAS120Q, 'preload');
   typeParaMapping.set(DeviceType.DS4, 'preload');
@@ -58,17 +58,17 @@ const EditCalibrateParas = ({
   return (
     <ModalWrapper
       afterClose={() => form.resetFields()}
-      width={420}
+      width={500}
       open={open}
-      title={intl.get('CALIBRATION_PARAMETERS')}
+      title={Translation.get('device.command.calibration.parameters')}
       onCancel={() => setVisible(false)}
       footer={[
         <Button key='cancel' onClick={() => setVisible(false)}>
-          {intl.get('CANCEL')}
+          {Translation.get('common.action.cancel')}
         </Button>,
         isSPT && (
           <Button key='submit_0' onClick={() => handleSubmit(0)}>
-            {intl.get('ZERO_CALIBRATE')}
+            {Translation.get('device.command.calibration.zero')}
           </Button>
         ),
         <Button
@@ -78,7 +78,9 @@ const EditCalibrateParas = ({
             handleSubmit();
           }}
         >
-          {isSPT ? intl.get('LINEAR_CALIBRATE') : intl.get('CALIBRATE')}
+          {isSPT
+            ? Translation.get('device.command.calibration.linear')
+            : Translation.get('device.command.calibration')}
         </Button>
       ]}
     >
@@ -99,7 +101,7 @@ const EditCalibrateParas = ({
             />
             {channels.length > 0 && (
               <SelectFormItem
-                label='CHANNEL'
+                label='device.channel'
                 name='channel'
                 rules={[{ required: true }]}
                 initialValue={1}

@@ -1,8 +1,8 @@
 import React from 'react';
 import { ButtonProps } from 'antd';
 import { ReloadOutlined, SettingOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { IconButton, IconButtonProps } from '../../icon-button';
+import { Translation } from 'locales/utils';
 
 const Common = ({
   color = 'primary',
@@ -15,7 +15,7 @@ export const RestoreIconButton = (props: ButtonProps) => {
   return (
     <Common
       icon={<ReloadOutlined />}
-      tooltipProps={{ title: intl.get('analysis.restore') }}
+      tooltipProps={{ title: Translation.get('button.chart.toolbar.restore') }}
       {...props}
     />
   );
@@ -25,7 +25,7 @@ export const SettingsIconButton = (props: ButtonProps & { tooltip?: string }) =>
   return (
     <Common
       icon={<SettingOutlined />}
-      tooltipProps={{ title: intl.get(props.tooltip ?? 'SETTINGS') }}
+      tooltipProps={{ title: Translation.get(props.tooltip ?? 'common.settings') }}
       {...props}
     />
   );

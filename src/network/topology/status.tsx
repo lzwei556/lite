@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Segmented, Spin, Tooltip } from 'antd';
 import { GatewayOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { mapTree } from '../../utils/tree';
 import { ColorHealth } from '../../constants/color';
 import {
@@ -22,12 +22,12 @@ export function Status({ device }: { device: Device }) {
   useDeviceOnlineLiving();
   const options = [
     {
-      label: intl.get('network.topology'),
+      label: Translation.get('device.network.topology'),
       value: 0,
       icon: <GatewayOutlined />
     },
     {
-      label: intl.get('devices'),
+      label: Translation.get('devices'),
       value: 1,
       icon: <UnorderedListOutlined />
     }

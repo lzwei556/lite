@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Descriptions, Link, TabsDetail, Grid } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { App, useAppType } from '../../config';
@@ -27,9 +27,9 @@ export default function VirtualAssetDetailLegacy() {
   const getTitle = () => {
     let title = 'assets';
     if (App.isWindLike(appType)) {
-      title = 'wind.turbines';
+      title = 'asset.wind-turbines';
     } else if (appType !== 'general') {
-      title = 'areas';
+      title = 'asset.areas';
     }
     return title;
   };
@@ -38,7 +38,7 @@ export default function VirtualAssetDetailLegacy() {
     <TabsDetail
       items={[
         {
-          label: intl.get('OVERVIEW'),
+          label: Translation.get('common.overview'),
           key: 'overview',
           content: (
             <Grid>
@@ -49,8 +49,8 @@ export default function VirtualAssetDetailLegacy() {
                       chartHeight={280}
                       total={projectStatistics?.rootAssetNum}
                       alarms={projectStatistics?.rootAssetAlarmNum}
-                      title={intl.get(getTitle())}
-                      subtext={intl.get('total')}
+                      title={Translation.get(getTitle())}
+                      subtext={Translation.get('common.total')}
                     />
                   </Col>
                   <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
@@ -58,8 +58,8 @@ export default function VirtualAssetDetailLegacy() {
                       chartHeight={280}
                       total={projectStatistics?.monitoringPointNum}
                       alarms={projectStatistics?.monitoringPointAlarmNum}
-                      title={intl.get('monitoring.points')}
-                      subtext={intl.get('total')}
+                      title={Translation.get('monitoring.points')}
+                      subtext={Translation.get('common.total')}
                     />
                   </Col>
                   <Col {...generateColProps({ lg: 8, xl: 8, xxl: 5 })}>
@@ -70,7 +70,10 @@ export default function VirtualAssetDetailLegacy() {
                     />
                   </Col>
                   <Col {...generateColProps({ xxl: 9 })}>
-                    <AlarmTrend chartStyle={{ height: 280 }} title={intl.get('ALARM_TREND')} />
+                    <AlarmTrend
+                      chartStyle={{ height: 280 }}
+                      title={Translation.get('alarm.trend')}
+                    />
                   </Col>
                 </Grid>
               </Col>
@@ -87,7 +90,10 @@ export default function VirtualAssetDetailLegacy() {
                               <Descriptions
                                 contentStyle={{ transform: 'translate(-40px)' }}
                                 items={statistics.map(({ name, value }) => ({
-                                  label: intl.get(name),
+                                  label:
+                                    name.indexOf('offline') > -1
+                                      ? Translation.between('device.status.offline', 'devices')
+                                      : Translation.get(name),
                                   children: value
                                 }))}
                               />
@@ -108,7 +114,7 @@ export default function VirtualAssetDetailLegacy() {
           )
         },
         {
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           key: 'settings',
           content: <Settings />
         }

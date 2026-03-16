@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { getValue, roundValue } from '../../../../utils/format';
 import { generateColProps } from '../../../../utils/grid';
 import { Metadata, MonitoringPointRow, PropertyLightSelectFilter } from '../../../../asset-common';
@@ -64,7 +64,7 @@ export function AngleBase<T extends AngleDynamicData>(props: {
         bordered={true}
         column={{ xxl: 2, xl: 2, lg: 1, md: 1, xs: 1 }}
         items={metaData.map(({ label, value, unit, precision }) => ({
-          label: intl.get(label),
+          label: Translation.get(label),
           children: getMetaProperty(values.metadata, value, unit, precision)
         }))}
       />
@@ -84,7 +84,7 @@ export function AngleBase<T extends AngleDynamicData>(props: {
       <LineChart
         series={[
           {
-            data: { [intl.get(field.label)]: data },
+            data: { [Translation.get(field.label)]: data },
             xAxisValues: data.map((n, i) => `${i}`)
           }
         ]}

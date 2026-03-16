@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, SaveIconButton } from '../../../components';
 import { AssetRow, updateAsset, AssetModel } from '../../../asset-common';
 import { UpdateFormItems } from '../updateFormItems';
@@ -31,7 +31,7 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
           </Space>
         </CanAccess>
       }
-      title={intl.get('BASIC_INFORMATION')}
+      title={Translation.get('common.basic')}
     >
       <Form
         form={form}

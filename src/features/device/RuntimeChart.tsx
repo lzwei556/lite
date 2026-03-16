@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Empty, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Dayjs } from '../../utils';
 import { GetDeviceRuntimeRequest, RemoveDeviceRuntimeRequest } from '../../apis/device';
 import {
@@ -25,7 +25,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
   >([]);
   const { numberedRange, setRange } = useRange();
   const [from, to] = numberedRange;
-  const { id, name } = device;
+  const { id } = device;
 
   React.useEffect(() => {
     GetDeviceRuntimeRequest(id, from, to).then(setRuntimes);
@@ -34,7 +34,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
   const renderChart = () => {
     if (runtimes.length === 0) {
       return (
-        <Card title={intl.get('SIGNAL_STRENGTH')}>
+        <Card title={Translation.get('device.status.signal.level')}>
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </Card>
       );
@@ -47,8 +47,7 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
           <CanAccess {...Permission.DeviceDataDelete}>
             <DeleteIconButton
               confirmProps={{
-                description: intl.get('DELETE_DEVICE_DATA_PROMPT', {
-                  device: name,
+                description: Translation.get('feature.history.delete.prompt', {
                   start: Dayjs.format(from, 'YYYY-MM-DD'),
                   end: Dayjs.format(to, 'YYYY-MM-DD')
                 }),
@@ -61,13 +60,13 @@ export const RuntimeChart: React.FC<{ device: Device }> = ({ device }) => {
             />
           </CanAccess>
         }
-        title={intl.get('SIGNAL_STRENGTH')}
+        title={Translation.get('device.status.signal.level')}
       >
         <LineChart
           series={[
             {
               data: {
-                [intl.formatMessage({ id: 'SIGNAL_STRENGTH' })]: runtimes.map(
+                [Translation.get('device.status.signal.level')]: runtimes.map(
                   (item) => item.signalStrength
                 )
               },

@@ -1,6 +1,6 @@
 import { Card, Grid, SaveIconButton } from 'components';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Form } from 'antd';
 import {
   AssetSelectFormItem,
@@ -32,7 +32,7 @@ export const UpdateFormCard = ({
         />
       }
       styles={{ body: { overflowY: 'auto', maxHeight: 725 } }}
-      title={intl.get('BASIC_INFORMATION')}
+      title={Translation.get('common.basic')}
     >
       <Form form={form} layout='vertical' initialValues={transform2PostDTO(monitoringPoint)}>
         <Grid>

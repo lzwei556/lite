@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { ButtonProps, message, Upload, UploadProps } from 'antd';
 import { ImportOutlined, InboxOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { IconButton } from './icon-button';
+import { Translation } from 'locales/utils';
 
 export function JsonImporter<JSONContent>({
   onUpload,
@@ -18,7 +18,7 @@ export function JsonImporter<JSONContent>({
   const handleBeforeUpload: UploadProps['beforeUpload'] = (file) => {
     const isJson = file.type === 'application/json';
     if (!isJson) {
-      message.error(intl.get('only.json.file'));
+      message.error(Translation.get('feedback.prompt.upload.json'));
     } else {
       try {
         const reader = new FileReader();
@@ -31,7 +31,7 @@ export function JsonImporter<JSONContent>({
           }
         };
       } catch (error) {
-        message.error(intl.get('FAILED_TO_IMPORT'));
+        message.error(Translation.failureDo('common.action.import'));
         setLoading(false);
       }
     }
@@ -46,8 +46,8 @@ export function JsonImporter<JSONContent>({
         <p className='ant-upload-drag-icon'>
           <InboxOutlined />
         </p>
-        <p className='ant-upload-text'>{intl.get('UPLOAD_NETWORK_PROMPT')}</p>
-        <p className='ant-upload-hint'>{intl.get('UPLOAD_NETWORK_HINT')}</p>
+        <p className='ant-upload-text'>{Translation.get('feedback.prompt.upload.drag')}</p>
+        <p className='ant-upload-hint'>{Translation.get('feedback.prompt.upload.json')}</p>
       </Upload.Dragger>
     );
   }
@@ -58,7 +58,7 @@ export function JsonImporter<JSONContent>({
         {...iconButtonProps}
         icon={<ImportOutlined />}
         loading={loading}
-        tooltipProps={{ title: intl.get('IMPORT_SETTINGS') }}
+        tooltipProps={{ title: Translation.doSth('common.action.import', 'common.settings') }}
         type='primary'
       />
     </Upload>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, MutedCard, TabsDetail, TabsDetailsItems } from '../../../components';
 import { FilterableAlarmRecordTable } from '../../alarm';
 import { useAppVibrationEnabled } from '../../../config';
@@ -18,7 +18,7 @@ import { WaveformData } from './waveformData';
 import { Permission, useCan } from '../../../providers/access-control';
 import { MonitoringPointType } from 'common';
 import { FillRecords } from 'features/process';
-import {VibrationAnalysis} from '../../monitoring-point-analysis-vibration'
+import { VibrationAnalysis } from '../../monitoring-point-analysis-vibration';
 
 export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: () => void }) => {
   const { monitoringPoint, onSuccess } = props;
@@ -29,11 +29,11 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   const items: TabsDetailsItems = [
     {
       key: 'overview',
-      label: intl.get('OVERVIEW'),
+      label: Translation.get('common.overview'),
       content: (
         <Grid wrap={false}>
           <Col flex='auto'>
-            <MutedCard title={intl.get('real.time.data')}>
+            <MutedCard title={Translation.get('feature.real-time')}>
               <Monitor {...monitoringPoint} key={id} />
             </MutedCard>
           </Col>
@@ -52,7 +52,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     },
     {
       key: 'history',
-      label: intl.get('HISTORY_DATA'),
+      label: Translation.get('feature.history'),
       content: <History {...monitoringPoint} key={id} />
     }
   ];
@@ -60,20 +60,22 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   if (monitoringPoint.type === MonitoringPointType.Value.OilFiller) {
     items.push({
       key: 'fillRecords',
-      label: intl.get('fill.records'),
+      label: Translation.get('process.auto-fill.records'),
       content: <FillRecords {...monitoringPoint} key={id} />
     });
   } else {
     if (vibrationEnabled) {
       items.push({
         key: 'analysis',
-        label: intl.get('waveform.analysis'),
-        content: <VibrationAnalysis id={id} key={id} attributes={attributes as any} assetId={assetId} />
+        label: Translation.get('vibration.analysis'),
+        content: (
+          <VibrationAnalysis id={id} key={id} attributes={attributes as any} assetId={assetId} />
+        )
       });
     } else {
       items.push({
         key: 'waveformData',
-        label: intl.get('WAVEFORM_DATA'),
+        label: Translation.get('feature.waveform'),
         content: <WaveformData id={id} key={id} />
       });
     }
@@ -81,7 +83,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
 
   items.push({
     key: 'alerts',
-    label: intl.get('ALARM_RECORDS'),
+    label: Translation.get('alarm.records'),
     content: (
       <FilterableAlarmRecordTable
         sourceId={id}
@@ -93,7 +95,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   if (canEditMeasurement) {
     items.push({
       key: 'settings',
-      label: intl.get('SETTINGS'),
+      label: Translation.get('common.settings'),
       content: <Settings monitoringPoint={monitoringPoint} onSuccess={onSuccess} key={id} />
     });
   }

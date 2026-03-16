@@ -1,10 +1,10 @@
-import { useLocaleContext } from 'localeProvider/context';
 import { FaultType } from 'common';
 import { Key, HealthStatus } from './health-status';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import request from 'utils/request';
 import { GetResponse } from 'utils/response';
 import { useRequest } from 'ahooks';
+import { isLanguageChinese, useI18n } from 'providers/i18n';
 
 enum Confidence {
   Slight = 1,
@@ -21,7 +21,7 @@ enum Axis {
 }
 
 const getAxisLabel = (axis: Axis) =>
-  axis === Axis.None ? '' : intl.get(`axis.${Axis[axis].toLowerCase()}.abbr`);
+  axis === Axis.None ? '' : Translation.get(`axis.${Axis[axis].toLowerCase()}.abbr`);
 
 export type Fault = { type: number; confidence: Confidence; axis: Axis };
 
@@ -120,31 +120,31 @@ export const useHealthStatus = ({
   status: HealthStatus;
   faults?: Fault[];
 }) => {
-  const { language } = useLocaleContext();
-  const separator = language === 'en-US' ? '; ' : '；';
+  const { language } = useI18n();
+  const separator = isLanguageChinese(language) ? '；' : '; ';
   const types = flattenFaultTypes(faults.map((f) => f.type));
 
   return {
     healthy: {
       status,
-      label: intl.get('diagnosis.health')
+      label: Translation.get('common.status')
     },
     description: {
-      label: intl.get('diagnosis.description'),
+      label: Translation.get('diagnosis.description'),
       children:
         status.key === 0 && types.length === 0
-          ? intl.get('NONE')
-          : types.map((type) => intl.get(FaultType.Key.get(type.key).label)).join(separator)
+          ? Translation.get('common.none')
+          : types.map((type) => Translation.get(FaultType.Key.get(type.key).label)).join(separator)
     },
     descriptionWithConfidence: {
-      label: intl.get('diagnosis.description'),
+      label: Translation.get('diagnosis.description'),
       children:
         status.key === 0 && types.length === 0
-          ? intl.get('NONE')
+          ? Translation.get('common.none')
           : faults.map(({ type, confidence, axis }) => {
-              const typeLabel = intl.get(FaultType.Key.get(type).label);
+              const typeLabel = Translation.get(FaultType.Key.get(type).label);
               const axisLabel = getAxisLabel(axis);
-              const confidenceLabel = intl.get(
+              const confidenceLabel = Translation.get(
                 `fault.confidence.${Confidence[confidence].toLowerCase()}`
               );
               return (
@@ -155,8 +155,8 @@ export const useHealthStatus = ({
             })
     }
     // suggestion: {
-    //   label: intl.get('diagnosis.suggestion'),
-    //   children: status.key === 0 ? intl.get('NONE') : intl.get(conclusion)
+    //   label: Translation.get('diagnosis.suggestion'),
+    //   children: status.key === 0 ? Translation.get('common.none') : Translation.get(conclusion)
     // }
   };
 };

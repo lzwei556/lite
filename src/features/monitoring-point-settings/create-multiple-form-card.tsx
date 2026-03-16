@@ -9,7 +9,7 @@ import {
   SaveIconButton
 } from 'components';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { truncate } from 'utils';
 import { CreateFormModal } from './create-form-modal';
 
@@ -58,7 +58,7 @@ export const CreateMultipleFormCard = ({ assetId }: { assetId: number }) => {
           )}
         </Space>
       }
-      title={intl.get('monitoring.points')}
+      title={Translation.get('monitoring.points')}
     >
       <List
         dataSource={items}

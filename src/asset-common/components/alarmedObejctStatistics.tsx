@@ -1,5 +1,4 @@
 import React from 'react';
-import intl from 'react-intl-universal';
 import {
   Chart,
   MutedCard,
@@ -7,9 +6,9 @@ import {
   PieOptionsProps,
   usePieOptionsLegacy
 } from '../../components';
-import { useLocaleContext } from '../../localeProvider';
 import { Asset } from '..';
 import { ENV } from '../../utils';
+import { Translation } from 'locales/utils';
 
 export const AlarmsObjectStatistics = ({
   total,
@@ -24,17 +23,16 @@ export const AlarmsObjectStatistics = ({
   subtext: string;
   chartHeight?: number;
 }) => {
-  const { language } = useLocaleContext();
   let data: PieOptionsProps['data'] = [];
   if (total) {
     data = Asset.Statistics.resolveStatus(total, alarms).map((s) => ({
       ...s,
-      name: intl.get(s.name),
+      name: Translation.get(s.name),
       itemStyle: { color: s.color }
     }));
   }
-  const options = usePieOptions({ total, data, language, subtext });
-  const optionsLegacy = usePieOptionsLegacy({ total, data, language, subtext });
+  const options = usePieOptions({ total, data, subtext });
+  const optionsLegacy = usePieOptionsLegacy({ total, data, subtext });
 
   return (
     <MutedCard title={title} titleCenter={true}>

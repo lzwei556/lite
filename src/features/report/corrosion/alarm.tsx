@@ -1,48 +1,47 @@
 import React from 'react';
 import { ReportTable } from '../components/table';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { AlarmLevelTag } from '../../alarm/alarmLevelTag';
 import { getAlarmDetail } from '../../alarm/alarm-group';
 import { Dayjs } from '../../../utils';
 import { ReportSection } from '../components/section';
 
 export const AlarmRecordsSection = ({ alarmRecords }: { alarmRecords: any }) => {
-
   return (
     <ReportSection title='未处理报警小结'>
       <ReportTable
         columns={[
           {
-            title: intl.get('ALARM_SOURCE'),
+            title: Translation.get('alarm.source'),
             dataIndex: 'source',
             key: 'source',
             render: (source: any) => {
               if (source) {
                 return source.name;
               }
-              return intl.get('UNKNOWN_SOURCE');
+              return Translation.get('common.unknown');
             }
           },
           {
-            title: intl.get('ALARM_LEVEL'),
+            title: Translation.get('alarm.level'),
             dataIndex: 'level',
             key: 'level',
             render: (level: number) => <AlarmLevelTag level={level} />
           },
           {
-            title: intl.get('ALARM_DETAIL'),
+            title: Translation.get('alarm.detail'),
             dataIndex: 'metric',
             key: 'metric',
             render: (metric: any, record: any) => getAlarmDetail(record, metric)
           },
           {
-            title: intl.get('ALARM_TIMESTAMP'),
+            title: Translation.get('alarm.created-at'),
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: (createdAt: number) => Dayjs.format(createdAt)
           },
           {
-            title: intl.get('alarm_group.consecutive_count'),
+            title: Translation.get('alarm.consecutive.count'),
             dataIndex: 'duration',
             key: 'duration',
             render: (_: any, record: any) => {

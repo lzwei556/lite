@@ -2,8 +2,8 @@ import { toSnake } from 'ts-case-convert';
 import { transformSnake2Dot } from 'utils';
 
 export enum Value {
-  MotorDriveEnd = 10011,
-  MotorNonDriveEnd = 10021,
+  'MotorDrive-End' = 10011,
+  'MotorNon-Drive-End' = 10021,
   FanDriveEnd = 20011,
   FanNonDriveEnd = 20021,
   GearboxInput = 30011,
@@ -17,7 +17,7 @@ type Component = {
 
 export const Key = {
   get: (key: Value): Component => {
-    const PREFIX = 'component.';
+    const PREFIX = 'asset.component.';
     const label = `${PREFIX}${transformSnake2Dot(toSnake(Value[key]))}`;
     return { key, label };
   }

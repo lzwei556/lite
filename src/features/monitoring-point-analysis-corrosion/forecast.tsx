@@ -1,13 +1,11 @@
 import React from 'react';
-import { Col, DatePicker, Descriptions, Empty, Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Col, DatePicker, Descriptions, Empty } from 'antd';
+import { Translation } from 'locales/utils';
 import { Grid } from '../../components';
-import { Dayjs, getPluralUnitInEnglish } from '../../utils';
-import { getValue } from '../../utils/format';
-import { useLocaleContext } from '../../localeProvider';
-import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
-import { MonitoringPoint } from 'common';
+import { Dayjs, formatDaysToPeriod } from '../../utils';
+import { Range, useAnalysisData } from './useAnalysis';
 import { MonitoringPointRow } from 'monitoring-point';
+import { PropertyValueCard } from './property-value-card';
 
 export const Forecast = ({
   point,
@@ -19,31 +17,26 @@ export const Forecast = ({
   const { id } = point;
   const [range, setRange] = React.useState(initialRange);
   const { analysisResult } = useAnalysisData(id, range);
-  const { language } = useLocaleContext();
 
   const render = () => {
     if (!analysisResult) {
       return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     } else {
       const { rate, life } = analysisResult;
-      const { duration, unit } = getDurationByDays(life);
+      const periods = formatDaysToPeriod(life);
 
       return (
         <Grid>
           <Col span={12}>
-            <PropertyCardedContent
-              label={intl.get('FIELD_CORROSION_RATE')}
-              unit='mm/a'
-              value={rate}
-              precision={3}
+            <PropertyValueCard
+              title={Translation.get('FIELD_CORROSION_RATE')}
+              values={[{ value: rate, unit: 'mm/a', precision: 3 }]}
             />
           </Col>
           <Col span={12}>
-            <PropertyCardedContent
-              label={intl.get('FIELD_RESIDUAL_LIFE')}
-              unit={getPluralUnitInEnglish(duration, intl.get(unit), language)}
-              value={duration}
-              precision={0}
+            <PropertyValueCard
+              title={Translation.get('FIELD_RESIDUAL_LIFE')}
+              values={periods.map((p) => ({ ...p, unit: Translation.get(p.unit) }))}
             />
           </Col>
         </Grid>
@@ -62,7 +55,7 @@ export const Forecast = ({
           bordered
           items={[
             {
-              label: intl.get('corrosion.analysis.begin'),
+              label: Translation.get('common.begin'),
               children: (
                 <DatePicker
                   allowClear={false}
@@ -75,7 +68,7 @@ export const Forecast = ({
               )
             },
             {
-              label: intl.get('corrosion.analysis.end'),
+              label: Translation.get('common.end'),
               children: (
                 <span style={{ paddingLeft: 11, lineHeight: '30px' }}>
                   {end.format('YYYY-MM-DD')}
@@ -90,29 +83,3 @@ export const Forecast = ({
     </Grid>
   );
 };
-
-function PropertyCardedContent({
-  label,
-  unit,
-  value,
-  precision
-}: {
-  label: string;
-  unit: string;
-  value?: number;
-  precision?: number;
-}) {
-  return (
-    <Space direction='vertical'>
-      <Typography.Text type='secondary'>{label}</Typography.Text>
-      <Typography.Text style={{ fontSize: 18 }}>
-        {getValue({ value, precision })}
-        {value !== undefined && (
-          <Typography.Text style={{ marginLeft: 4 }} type='secondary'>
-            {unit}
-          </Typography.Text>
-        )}
-      </Typography.Text>
-    </Space>
-  );
-}

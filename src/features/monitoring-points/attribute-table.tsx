@@ -4,7 +4,7 @@ import { MonitoringPoint, MonitoringPointType } from 'common';
 import { DeleteIconButton, EditIconButton, IconButton, Table } from 'components';
 import { CanAccess, Permission, useCan } from 'providers/access-control';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { getOptionLabelByValue } from 'utils';
 import { basicFieldColumns } from './columns';
 
@@ -30,10 +30,13 @@ export const AttributeTable = ({
         const common = {
           dataIndex: [`attributes`, attr.name],
           key: attr.name,
-          title: () => intl.get(attr.label)
+          title: () => Translation.get(attr.label)
         };
         return options
-          ? { ...common, render: (axis: string) => intl.get(getOptionLabelByValue(options, axis)) }
+          ? {
+              ...common,
+              render: (axis: string) => Translation.get(getOptionLabelByValue(options, axis))
+            }
           : common;
       }
     );
@@ -42,7 +45,7 @@ export const AttributeTable = ({
       columns.push({
         key: 'action',
         dataIndex: 'action',
-        title: () => intl.get('OPERATION'),
+        title: () => Translation.get('common.operation'),
         render: (_: string, point: MonitoringPoint) => <OperateCell {...{ ...rest, point }} />
       });
     }
@@ -65,7 +68,7 @@ export const AttributeTable = ({
             {rest.createFormModal}
           </>
         ),
-        title: intl.get('monitoring.points')
+        title: Translation.get('monitoring.points')
       }}
       dataSource={monitoringPoints}
       pagination={false}
@@ -90,7 +93,7 @@ const OperateCell = ({
       <CanAccess {...Permission.MeasurementDelete}>
         <DeleteIconButton
           confirmProps={{
-            description: intl.get('DELETE_SOMETHING_PROMPT', { something: point.name })
+            description: Translation.get('feedback.prompt.delete')
             // onConfirm: () => deleteMeasurement(point.id).then(() => onDeleteSuccess(point.id))
           }}
         />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, MenuProps, Space } from 'antd';
 import { CodeOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Device } from '../../../types/device';
 import { toMac } from '../../../utils/format';
 import { DeleteIconButton, EditIconButton, IconButton, Table, Link } from '../../../components';
@@ -32,10 +32,10 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
   const renderMenus = (device: Device) => {
     const items: MenuProps['items'] = [];
     if (canEditDevice) {
-      items.push({ key: 'edit', label: intl.get('EDIT_DEVICE_INFO') });
+      items.push({ key: 'edit', label: Translation.editSth('device') });
     }
     if (canEditDeviceSettings) {
-      items.push({ key: 'editSettings', label: intl.get('EDIT_DEVICE_SETTINGS') });
+      items.push({ key: 'editSettings', label: Translation.editSth('common.settings') });
     }
     return {
       items,
@@ -50,7 +50,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
   const columns = [
     {
       key: 'state',
-      title: intl.get('STATUS'),
+      title: Translation.get('common.status'),
       render: (_: string, device: Device) => {
         return <SingleDeviceStatus device={device} />;
       }
@@ -58,24 +58,24 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
     {
       dataIndex: 'name',
       key: 'name',
-      title: intl.get('DEVICE_NAME'),
+      title: Translation.get('device.name'),
       render: (name: string, device: Device) => <Link to={`/devices/${device.id}`}>{name}</Link>
     },
     {
       dataIndex: 'macAddress',
       key: 'mac',
-      title: intl.get('MAC_ADDRESS'),
+      title: Translation.get('device.mac-address'),
       render: (mac: string) => toMac(mac.toUpperCase())
     },
     {
       dataIndex: 'typeId',
       key: 'type',
-      title: intl.get('DEVICE_TYPE'),
-      render: (id: number) => intl.get(DeviceType.toString(id))
+      title: Translation.get('device.type'),
+      render: (id: number) => Translation.get(DeviceType.toString(id))
     },
     {
       key: 'action',
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       render: (_: any, device: Device) => {
         return (
           <Space>
@@ -103,7 +103,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
             <CanAccess {...Permission.DeviceDelete}>
               <DeleteIconButton
                 confirmProps={{
-                  description: intl.get('DELETE_DEVICE_PROMPT'),
+                  description: Translation.get('feedback.prompt.delete'),
                   onConfirm: () => DeleteDeviceRequest(device.id).then(() => refresh())
                 }}
               />
@@ -122,7 +122,7 @@ export const DevicesTable = ({ device, onUpdate }: { device: Device; onUpdate: (
   return (
     <>
       <Table
-        cardProps={{ title: intl.get('devices') }}
+        cardProps={{ title: Translation.get('devices') }}
         columns={columns}
         dataSource={dataSource}
         rowKey={(row) => row.id}

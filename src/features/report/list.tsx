@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Segmented, Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Table, RangeDatePicker } from '../../components';
 import request from '../../utils/request';
 import { Dayjs, pickOptionsFromNumericEnum } from '../../utils';
@@ -13,7 +13,7 @@ import { useReports } from './utils';
 export default function ReportList() {
   return (
     <>
-      <Typography.Title level={4}>{intl.get('MENU_REPORTS')}</Typography.Title>
+      <Typography.Title level={4}>{Translation.get('MENU_REPORTS')}</Typography.Title>
       <ReportsTable />
     </>
   );
@@ -22,18 +22,18 @@ export default function ReportList() {
 const ReportsTable = () => {
   const columns = [
     {
-      title: intl.get('NAME'),
+      title: Translation.get('common.name'),
       dataIndex: 'reportName',
       key: 'reportName'
     },
     {
-      title: intl.get('REPORT_DATE'),
+      title: Translation.get('report.date'),
       dataIndex: 'reportDate',
       key: 'reportDate',
       render: (text: number) => Dayjs.format(text)
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: string, report: Report) => {
         return (
@@ -54,14 +54,14 @@ const ReportsTable = () => {
         toolbar: (
           <Space>
             <Segmented
-              options={pickOptionsFromNumericEnum(ReportType, 'report.type').map((opt) => ({
+              options={pickOptionsFromNumericEnum(ReportType, 'report').map((opt) => ({
                 ...opt,
-                label: intl.get(opt.label)
+                label: Translation.get(opt.label)
               }))}
               onChange={(value) => setSearchParams({ type: `${value}` })}
               value={type}
             />
-            <RangeDatePicker onChange={setRange} defaultValue={Dayjs.CommonRange.PastHalfYear}/>
+            <RangeDatePicker onChange={setRange} defaultValue={Dayjs.CommonRange.PastHalfYear} />
           </Space>
         )
       }}

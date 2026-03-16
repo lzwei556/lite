@@ -2,12 +2,11 @@ import { Button, Form, Input, message } from 'antd';
 import React from 'react';
 import { TextFormItem } from '../../components';
 import { KeyOutlined, UserOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useLogin } from '../../providers/auth';
 import { useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {
-  const username = intl.get('USERNAME');
   const { login, loading } = useLoginClick();
 
   return (
@@ -18,29 +17,25 @@ export const LoginForm = () => {
           rules={[
             {
               required: true,
-              message: intl.get('PLEASE_ENTER_SOMETHING', {
-                something: username.toLowerCase()
-              })
+              message: Translation.pleaseEnterSth('auth.username')
             }
           ]}
-          inputProps={{ placeholder: username, prefix: <UserOutlined /> }}
+          inputProps={{ placeholder: Translation.get('auth.username'), prefix: <UserOutlined /> }}
         />
         <TextFormItem
           name='password'
           rules={[
             {
               required: true,
-              message: intl.get('PLEASE_ENTER_SOMETHING', {
-                something: intl.get('PASSWORD')
-              })
+              message: Translation.pleaseEnterSth('auth.password')
             }
           ]}
         >
-          <Input.Password prefix={<KeyOutlined />} placeholder={intl.get('PASSWORD')} />
+          <Input.Password prefix={<KeyOutlined />} placeholder={Translation.get('auth.password')} />
         </TextFormItem>
         <TextFormItem>
           <Button type='primary' htmlType='submit' loading={loading}>
-            {intl.get('LOGIN')}
+            {Translation.get('auth.login')}
           </Button>
         </TextFormItem>
       </Form>
@@ -53,9 +48,9 @@ const useLoginClick = () => {
   const { run, loading } = useLogin(
     () => {
       navigate('/');
-      message.success(intl.get('LOGIN_SUCCEEDED'));
+      message.success(Translation.get('feedback.success.login'));
     },
-    (e) => message.error(intl.get(e.message))
+    (e) => message.error(Translation.get(e.message))
   );
   return { login: run, loading };
 };

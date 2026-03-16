@@ -1,5 +1,5 @@
 import { Col, ColProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { AXIS, AXIS_OPTIONS } from '../../monitoring-point';
 import { Field } from '../../types';
 import { SelectFormItem, TextFormItem } from '../../components';
@@ -30,26 +30,26 @@ export const FormItems = ({
     if (deviceTypes) GetDevicesRequest({ types: deviceTypes.join(',') }).then(setDevices);
   }, [type]);
 
-  const options = AXIS_OPTIONS.map((o) => ({ label: intl.get(o.label), value: o.key }));
+  const options = AXIS_OPTIONS.map((o) => ({ label: Translation.get(o.label), value: o.key }));
 
   const axial: Field<VibrationEntity> = {
-    label: 'direction.axial',
+    label: 'monitoring.point.direction.axial',
     name: 'direction_axial',
-    description: 'direction.axial.desc',
+    description: 'monitoring.point.direction.axial.desc',
     options,
     type: 'enum'
   };
   const vertical: Field<VibrationEntity> = {
-    label: 'direction.vertical',
+    label: 'monitoring.point.direction.vertical',
     name: 'direction_vertical',
-    description: 'direction.vertical.desc',
+    description: 'monitoring.point.direction.vertical.desc',
     options,
     type: 'enum'
   };
   const horizontal: Field<VibrationEntity> = {
-    label: 'direction.horizontal',
+    label: 'monitoring.point.direction.horizontal',
     name: 'direction_horizontal',
-    description: 'direction.horizontal.desc',
+    description: 'monitoring.point.direction.horizontal.desc',
     options,
     type: 'enum'
   };
@@ -57,7 +57,7 @@ export const FormItems = ({
     <>
       <Col {...formItemColProps}>
         <SelectFormItem
-          label='SENSOR'
+          label='device.sensor'
           name={['monitoringPoints', key, 'sensor']}
           selectProps={{ options: devices.map(({ id, name }) => ({ label: name, value: id })) }}
         />

@@ -1,19 +1,19 @@
 import { Progress, Space, Spin, Typography } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { DeviceUpgradeStatus } from '../types/device_upgrade_status';
+import { Translation } from 'locales/utils';
 
 export const DeviceUpgradeSpin = ({ status }: { status: any }) => {
   const style = { fontSize: 12, fontWeight: 400 };
   const render = () => {
-    const DOWNLOAD_COMPLETE_TEXT = intl.get('FIRMWARE_DOWNLOADING_FINISHED_PROMPT');
+    const DOWNLOAD_COMPLETE_TEXT = Translation.get('firmware.upgrade.downloaded');
     switch (status.code) {
       case DeviceUpgradeStatus.Pending:
         return (
           <>
             <Spin size={'small'} indicator={<LoadingOutlined />} spinning={true} />
             <Typography.Text style={style} type='secondary'>
-              {intl.get('CONNECTING')}
+              {Translation.get('firmware.upgrade.connecting')}
             </Typography.Text>
           </>
         );
@@ -22,7 +22,7 @@ export const DeviceUpgradeSpin = ({ status }: { status: any }) => {
         const progressText =
           Number(progressValue) === 100
             ? DOWNLOAD_COMPLETE_TEXT
-            : intl.get('FIRMWARE_DOWNLOADING_WITH_PROGRESS', { progress: progressValue });
+            : Translation.get('firmware.upgrade.downloading', { progress: progressValue });
         return (
           <>
             <Progress
@@ -48,7 +48,7 @@ export const DeviceUpgradeSpin = ({ status }: { status: any }) => {
               width={16}
             />
             <Typography.Text style={style} type='secondary'>
-              {intl.get('UPGRADING_WITH_PROGRESS', { progress: status.progress.toFixed(0) })}
+              {Translation.get('firmware.upgrade.in-progress', { progress: status.progress.toFixed(0) })}
             </Typography.Text>
           </>
         );
@@ -63,7 +63,7 @@ export const DeviceUpgradeSpin = ({ status }: { status: any }) => {
               width={16}
             />
             <Typography.Text style={style} type='warning'>
-              {intl.get('UPGRADING_IS_CANCELLED')}
+              {Translation.get('firmware.upgrade.cancelled')}
             </Typography.Text>
           </>
         );
@@ -79,7 +79,7 @@ export const DeviceUpgradeSpin = ({ status }: { status: any }) => {
               status={'exception'}
             />
             <Typography.Text style={style} type='danger'>
-              {intl.get('FAILED_TO_UPGRADE_FIRMWARE')}
+              {Translation.failureDo('common.action.upgrade')}
             </Typography.Text>
           </>
         );
@@ -88,7 +88,7 @@ export const DeviceUpgradeSpin = ({ status }: { status: any }) => {
           <>
             <Progress type='circle' percent={status.progress} strokeWidth={12} width={16} />
             <Typography.Text style={style} type='success'>
-              {intl.get('UPGRADE_FIRMWARE_SUCCESSFUL')}
+              {Translation.get('feedback.success.upgrade')}
             </Typography.Text>
           </>
         );

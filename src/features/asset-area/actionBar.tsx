@@ -1,6 +1,5 @@
 import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../types/common';
 import { AssetRow } from '../../asset-common';
 import { area, CreateAsset, isAssetAreaParent, isAssetValidParent } from '../../asset-variant';
@@ -9,6 +8,7 @@ import { Create } from './create';
 import { IconButton } from '../../components';
 import { AddForm } from '../../asset-model2/addForm';
 import { generateColProps } from '../../utils/grid';
+import { Translation } from 'locales/utils';
 
 export const ActionBar = ({
   asset,
@@ -48,7 +48,7 @@ export const ActionBar = ({
 
   const AreaCreateBtn = () => {
     const { label } = area;
-    const labelIntl = intl.get('CREATE_SOMETHING', { something: intl.get(label) });
+    const labelIntl = Translation.createSth(label);
     return (
       <>
         <IconButton
@@ -69,7 +69,7 @@ export const ActionBar = ({
   };
 
   const AssetCreationBtn = () => {
-    const labelIntl = intl.get('CREATE_SOMETHING', { something: intl.get('ASSET') });
+    const labelIntl = Translation.createSth('asset');
     return (
       <>
         <IconButton
@@ -90,9 +90,7 @@ export const ActionBar = ({
   };
 
   const AssetModelCreationBtn = () => {
-    const labelIntl = intl.get('CREATE_SOMETHING', {
-      something: intl.get('single.stage.centrifugal.pump')
-    });
+    const labelIntl = Translation.createSth('single.stage.centrifugal.pump');
     return (
       <>
         <IconButton

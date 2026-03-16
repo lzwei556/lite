@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Checkbox, Form, ModalProps, Col, Button } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { Card, CheckboxFormItem, Grid } from '../../../components';
 import { getFilename } from '../../../utils/format';
@@ -32,10 +32,10 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
     <ModalWrapper
       {...props}
       afterClose={() => form.resetFields()}
-      title={intl.get('SELECT_ALARM_RULE')}
+      title={Translation.doSth('common.action.select', 'alarm.rules')}
       footer={[
         <Button key='back' onClick={(e) => props.onCancel && props.onCancel(e as any)}>
-          {intl.get('CANCEL')}
+          {Translation.get('common.action.cancel')}
         </Button>,
         <Button
           key='submitall'
@@ -47,7 +47,7 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
           color='primary'
           variant='outlined'
         >
-          {intl.get('EXPORT_ALL')}
+          {Translation.doSth('common.action.export', 'common.all')}
         </Button>,
         <Button
           key='submit'
@@ -55,7 +55,7 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
           disabled={selected.length === 0}
           onClick={() => handleUpload(selected as number[])}
         >
-          {intl.get('EXPORT')}
+          {Translation.get('common.action.export')}
         </Button>
       ]}
     >
@@ -69,7 +69,7 @@ export const SelectRules: React.FC<{ rules: AlarmRule[]; onSuccess: () => void }
                 <Grid>
                   {props.rules.map(({ id, name }) => (
                     <Col span={12} key={id}>
-                      <Checkbox value={id}>{intl.get(name).d(name)}</Checkbox>
+                      <Checkbox value={id}>{Translation.get(name)}</Checkbox>
                     </Col>
                   ))}
                 </Grid>

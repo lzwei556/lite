@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Col, Space as AntSpace, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Device } from '../../../types/device';
 import { Dayjs } from '../../../utils';
 import {
@@ -28,13 +28,13 @@ import { CharacteristicData } from 'common';
 
 const batteryVoltage: CharacteristicData.DisplayProperty = {
   key: 'batteryVoltage',
-  name: 'BATTERY_VOLTAGE',
+  name: 'device.status.battery.voltage',
   precision: 0,
   unit: 'mV'
 };
 const signalStrength: CharacteristicData.DisplayProperty = {
   key: 'signalStrength',
-  name: 'SIGNAL_STRENGTH',
+  name: 'device.status.signal.level',
   precision: 0,
   unit: 'dBm'
 };
@@ -78,12 +78,14 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
         if (runtimes.length > 0) {
           const xAxisValues = runtimes.map((item) => Dayjs.format(item.timestamp));
           const { key, name } = property;
+          console.log('name', name)
+          console.log('xxxxx', Translation.get(name))
           return (
             <LineChart
               series={[
                 {
                   data: {
-                    [intl.formatMessage({ id: name })]: runtimes.map(
+                    [Translation.get(name)]: runtimes.map(
                       (item) => item[key as 'batteryVoltage' | 'signalStrength']
                     )
                   },
@@ -130,7 +132,7 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
                   onChange={setChannel}
                   options={channels}
                   value={channel}
-                  prefix={intl.get('CURRENT_CHANNEL')}
+                  prefix={Translation.get('device.channel.current')}
                 />
               )}
               {dataSource && dataSource.length > 0 && (
@@ -142,18 +144,17 @@ export const HistoryDataPage = ({ device }: { device: Device }) => {
                         setProperty(properties.find((item: any) => item.key === value));
                       }}
                       options={properties.map(({ name, key }) => ({
-                        label: intl.get(name),
+                        label: Translation.get(name),
                         value: key
                       }))}
-                      prefix={intl.get('PROPERTY')}
+                      prefix={Translation.get('feature.property')}
                       value={property.key}
                     />
                   )}
                   <CanAccess {...Permission.DeviceDataDelete}>
                     <DeleteIconButton
                       confirmProps={{
-                        description: intl.get('DELETE_DEVICE_DATA_PROMPT', {
-                          device: device.name,
+                        description: Translation.get('feature.history.delete.prompt', {
                           start: Dayjs.format(from, 'YYYY-MM-DD'),
                           end: Dayjs.format(to, 'YYYY-MM-DD')
                         }),

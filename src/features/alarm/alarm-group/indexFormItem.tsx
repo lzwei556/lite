@@ -1,6 +1,6 @@
 import React from 'react';
 import { Cascader, CascaderProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { TextFormItem } from '../../../components';
 import { CharacteristicData } from 'common';
 
@@ -23,7 +23,7 @@ export const IndexFormItem = ({
         const metric = {
           key: selected.join('.'),
           name: selectOptions.map(({ name }) => name).join(':'),
-          unit: property.unit ? intl.get(property.unit).d(property.unit) : property.unit || ''
+          unit: property.unit ? Translation.get(property.unit) : property.unit || ''
         };
         onChange?.(metric);
       }
@@ -47,10 +47,10 @@ export const IndexFormItem = ({
         onChange={handleChange}
         options={properties.map((p) => ({
           ...p,
-          label: intl.get(p.name),
+          label: Translation.get(p.name),
           fields: p.fields?.map((field) => ({
             ...field,
-            label: intl.get(field.name)
+            label: Translation.get(field.name)
           }))
         }))}
         fieldNames={{ value: 'key', children: 'fields' }}

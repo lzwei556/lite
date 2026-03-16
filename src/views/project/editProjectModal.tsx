@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Input } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../types/common';
 import { Project } from '../../types/project';
 import { ModalWrapper } from '../../components/modalWrapper';
@@ -38,8 +38,8 @@ export const EditProjectModal = ({
     <ModalWrapper
       {...rest}
       afterClose={() => form.resetFields()}
-      title={project ? intl.get('EDIT_PROJECT') : intl.get('CREATE_PROJECT')}
-      okText={project ? intl.get('SAVE') : intl.get('CREATE')}
+      title={Translation.doSth(`common.action.${project ? 'edit' : 'create'}`, 'project')}
+      okText={Translation.get(`common.action.${project ? 'save' : 'create'}`)}
       onOk={handleOK}
       confirmLoading={isLoading}
     >
@@ -48,21 +48,25 @@ export const EditProjectModal = ({
         layout='vertical'
         initialValues={{
           ...project,
-          type: project?.type ?? ProjectType.ConditionMonitoring,
+          type: project?.type ?? ProjectType.Condition,
           description: project?.description ?? ''
         }}
       >
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 32 }]} />
-        <TextFormItem label='DESCRIPTION' name='description'>
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 32 }]}
+        />
+        <TextFormItem label='common.description' name='description'>
           <Input.TextArea />
         </TextFormItem>
         {appConfig === 'general' && (
           <SelectFormItem
-            label='TYPE'
+            label='common.type'
             name='type'
             selectProps={{
               disabled: !!project,
-              options: projectTypeOptions.map((o) => ({ ...o, label: intl.get(o.label) }))
+              options: projectTypeOptions.map((o) => ({ ...o, label: Translation.get(o.label) }))
             }}
           />
         )}

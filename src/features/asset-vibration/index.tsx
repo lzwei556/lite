@@ -4,6 +4,7 @@ import {
   AssetNavigator,
   AssetRow,
   ContextProps,
+  MONITORING_POINT_LIST,
   MonitoringPointRow,
   MonitoringPointsTable,
   updateAsset
@@ -11,7 +12,7 @@ import {
 import * as Point from '../monitoring-point-vibration';
 import { AssetModelProvider } from '../../asset-model';
 import { Grid, TabsDetail, TabsDetailsItems } from '../../components';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Overview } from './overview';
 import { Update } from './update';
 import { PointsTable } from './pointsTable';
@@ -53,7 +54,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
     const items: TabsDetailsItems = [
       {
         key: 'overview',
-        label: intl.get('OVERVIEW'),
+        label: Translation.get('common.overview'),
         content: isLegacy ? (
           <OverviewLegacy asset={asset} onSuccess={refresh} key={asset.id} />
         ) : (
@@ -64,7 +65,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
     if (shouldDisplayDiagnosis(asset)) {
       items.push({
         key: 'diagnosis',
-        label: intl.get('common.diagnosis'),
+        label: Translation.get('diagnosis'),
         content: diagnosisResult && (
           <FaultDiagnosisDetail
             {...diagnosisResult}
@@ -79,7 +80,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
       ...[
         {
           key: 'monitoringPointList',
-          label: intl.get('MONITORING_POINT_LIST'),
+          label: Translation.get(MONITORING_POINT_LIST),
           content: (
             <MonitoringPointsTable
               key={`${monitoringPoints.map(({ id }) => id).join()}`}
@@ -90,7 +91,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
         },
         {
           key: 'settings',
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           content: (
             <Grid>
               <Col span={24}>
@@ -105,7 +106,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                     asset={asset}
                     key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
                     editable={canEditMonitoringPoint}
-                    title={intl.get('OVERVIEW')}
+                    title={Translation.get('common.overview')}
                     onSuccess={refresh}
                   />
                 </Col>

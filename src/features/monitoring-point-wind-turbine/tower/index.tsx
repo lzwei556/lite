@@ -19,7 +19,7 @@ export const Index = (props: {
         <InstallAngletItem {...rest} />
       </Col>
       <Col {...formItemColProps}>
-        {type === MonitoringPointType.Value.TopInclination ? (
+        {type === MonitoringPointType.Value.InclinationTop ? (
           <InstallHeightItem {...rest} />
         ) : (
           <RadiusItem {...rest} />

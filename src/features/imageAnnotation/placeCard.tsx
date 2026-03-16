@@ -5,8 +5,6 @@ import { Card, Flex } from '../../components';
 import { Space } from '../../common';
 import { useGlobalStyles } from '../../styles';
 import { PropertyItem } from '../../asset-model';
-import { truncate } from '../../utils';
-import { useLocaleContext } from 'localeProvider';
 
 const cardStyles = { BorderWidth: 1, Padding: Space / 2, width: 220, height: 210 };
 
@@ -48,7 +46,6 @@ export const PlaceCard = ({
 } & PlaceCardProps) => {
   const { colorInfoBorderStyle } = useGlobalStyles();
   const { styles } = useStyles();
-  const { language } = useLocaleContext();
 
   return (
     <Card
@@ -96,8 +93,13 @@ export const PlaceCard = ({
                 style={{ border: 0 }}
               >
                 <Flex align='center' justify='space-between' style={{ width: '100%' }}>
-                  <Typography.Text type='secondary' style={{ fontSize: 12 }} title={title}>
-                    {truncate(title, language === 'en-US' ? 20 : 10)}
+                  <Typography.Text
+                    ellipsis
+                    type='secondary'
+                    style={{ fontSize: 12, maxWidth: 125 }}
+                    title={title}
+                  >
+                    {title}
                   </Typography.Text>
                   <span style={{ fontSize: 12 }}>{children}</span>
                 </Flex>

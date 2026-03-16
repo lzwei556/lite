@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Breadcrumb, Button, Col, Form, message, Result } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ImportNetworkRequest } from '../apis/network';
 import { DeviceType } from '../types/device_type';
 import { generateColProps } from '../utils/grid';
@@ -57,7 +57,7 @@ const ImportNetworkPage = () => {
 
   const onSave = () => {
     if (deviceList.length === 0) {
-      message.error(intl.get('PLEASE_UPLOAD_FILE'));
+      message.error(Translation.pleaseDoSth('common.action.upload', 'common.file'));
       return;
     }
     if (deviceList) {
@@ -81,7 +81,7 @@ const ImportNetworkPage = () => {
         });
       });
     } else {
-      message.error(intl.get('DO_NOT_IMPORT_EMPTY_NETWORK')).then();
+      message.error(Translation.get('feedback.empty.network.import')).then();
     }
   };
 
@@ -98,7 +98,7 @@ const ImportNetworkPage = () => {
             <Breadcrumb
               items={[
                 { title: <Link to='/devices'>{rootDevice.name}</Link> },
-                { title: intl.get('MENU_IMPORT_NETWORK') }
+                { title: Translation.doSth('common.action.import', 'device.network') }
               ]}
             />
           }
@@ -108,7 +108,7 @@ const ImportNetworkPage = () => {
                 color='primary'
                 onClick={onSave}
                 size='middle'
-                tooltipProps={{ title: intl.get('SAVE_NETWORK') }}
+                tooltipProps={{ title: Translation.get('common.action.save') }}
                 variant='solid'
               />
             )
@@ -125,10 +125,10 @@ const ImportNetworkPage = () => {
                   devices={deviceList as any}
                   extra={
                     <Button type='link' onClick={reset}>
-                      {intl.get('RESET')}
+                      {Translation.get('common.action.reset')}
                     </Button>
                   }
-                  title={intl.get('PREVIEW')}
+                  title={Translation.get('common.action.preview')}
                 />
               ) : (
                 <Card>
@@ -147,7 +147,7 @@ const ImportNetworkPage = () => {
             </Col>
             {verifyGatewayBLE() && (
               <Col flex='300px'>
-                <Card title={intl.get('EDIT')}>
+                <Card title={Translation.get('common.action.edit')}>
                   <Form form={form} layout='vertical' initialValues={initialValues}>
                     <WSN.FormItems
                       formItemColProps={generateColProps({})}
@@ -164,11 +164,10 @@ const ImportNetworkPage = () => {
           <Card>
             <Result
               status='success'
-              title={intl.get('NETWORK_IMPORTED_SUCCESSFUL')}
-              subTitle={intl.get('NETWORK_IMPORTED_NEXT_PROMPT')}
+              title={Translation.get('feedback.success.import.network')}
               extra={[
                 <Button type='primary' key='devices' onClick={() => navigate('/devices/0')}>
-                  {intl.get('RETURN')}
+                  {Translation.get('common.action.return')}
                 </Button>,
                 <Button
                   key='add'
@@ -177,7 +176,7 @@ const ImportNetworkPage = () => {
                     setSuccess(false);
                   }}
                 >
-                  {intl.get('CONTINUE_TO_IMPORT_NETWORK')}
+                  {Translation.get('common.action.continue')}
                 </Button>
               ]}
             />

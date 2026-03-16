@@ -2,17 +2,17 @@ import React from 'react';
 import { Button, Col, Empty } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ImportOutlined, PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { Card, Grid, IconButton, Link, MutedCard, Table, TitleExtraLayout } from '../../components';
-import { Dayjs, getDisplayName, getValue, toMac } from '../../utils';
+import { Dayjs, getValue, toMac } from '../../utils';
 import { Device } from '../../types/device';
 import { DeviceType } from '../../types/device_type';
 import { SingleDeviceStatus } from '../../device/SingleDeviceStatus';
-import { useLocaleContext } from '../../localeProvider';
 import { DeviceNS } from './util';
 import { useContext } from '.';
 import { useSelectedProject } from '../../providers/user-profile';
 import { CanAccess, Permission } from '../../providers/access-control';
+import { getDisplayName, Translation } from 'locales/utils';
+import { useI18n } from 'providers/i18n';
 
 export const useVirtualRootDevice = () => {
   const selectedProject = useSelectedProject();
@@ -22,7 +22,7 @@ export const useVirtualRootDevice = () => {
 export default function Virtual() {
   const { devices } = useContext();
   const navigate = useNavigate();
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const rootDevice = useVirtualRootDevice();
 
   const renderBody = () => {
@@ -39,7 +39,7 @@ export default function Virtual() {
         <Grid>
           {gateways.length > 0 && (
             <Col span={24}>
-              <MutedCard title={intl.get('gateways')}>
+              <MutedCard title={Translation.get('device.gateways')}>
                 <Table
                   bordered={true}
                   cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
@@ -47,7 +47,7 @@ export default function Virtual() {
                     {
                       dataIndex: 'name',
                       key: 'name',
-                      title: intl.get('DEVICE_NAME'),
+                      title: Translation.get('device.name'),
                       render: (name: string, device: Device) => (
                         <Link to={`/devices/${device.id}`}>{name}</Link>
                       )
@@ -55,30 +55,30 @@ export default function Virtual() {
                     {
                       dataIndex: 'macAddress',
                       key: 'mac',
-                      title: intl.get('MAC_ADDRESS'),
+                      title: Translation.get('device.mac-address'),
                       render: (mac: string) => toMac(mac.toUpperCase())
                     },
                     {
                       key: 'state',
-                      title: intl.get('STATUS'),
+                      title: Translation.get('common.status'),
                       render: (_: string, device: Device) => {
                         return <SingleDeviceStatus device={device} />;
                       }
                     },
                     {
                       key: 'sensors',
-                      title: intl.get('sensors'),
+                      title: Translation.get('device.sensors'),
                       children: [
                         {
                           key: 'online',
-                          title: intl.get('ONLINE'),
+                          title: Translation.get('device.status.online'),
                           render: (_: string, device: Device) => {
                             return DeviceNS.Children.getOnlineStatusCount(device, devices).online;
                           }
                         },
                         {
                           key: 'offline',
-                          title: intl.get('OFFLINE'),
+                          title: Translation.get('device.status.offline'),
                           render: (_: string, device: Device) => {
                             return DeviceNS.Children.getOnlineStatusCount(device, devices).offline;
                           }
@@ -87,7 +87,7 @@ export default function Virtual() {
                     },
                     {
                       key: 'time',
-                      title: intl.get('LAST_CONNECTION_TIME'),
+                      title: Translation.get('device.status.connected-at'),
                       render: (_: string, device: Device) => {
                         return device.state?.connectedAt
                           ? Dayjs.format(device.state?.connectedAt)
@@ -102,7 +102,7 @@ export default function Virtual() {
           )}
           {sensors.length > 0 && (
             <Col span={24}>
-              <MutedCard title={intl.get('sensors')}>
+              <MutedCard title={Translation.get('device.sensors')}>
                 <Table
                   bordered={true}
                   cardProps={{ bordered: false, styles: { body: { padding: 0 } } }}
@@ -110,7 +110,7 @@ export default function Virtual() {
                     {
                       dataIndex: 'name',
                       key: 'name',
-                      title: intl.get('DEVICE_NAME'),
+                      title: Translation.get('device.name'),
                       render: (name: string, device: Device) => (
                         <Link to={`/devices/${device.id}`}>{name}</Link>
                       )
@@ -118,12 +118,12 @@ export default function Virtual() {
                     {
                       dataIndex: 'macAddress',
                       key: 'mac',
-                      title: intl.get('MAC_ADDRESS'),
+                      title: Translation.get('device.mac-address'),
                       render: (mac: string) => toMac(mac.toUpperCase())
                     },
                     {
                       key: 'state',
-                      title: intl.get('STATUS'),
+                      title: Translation.get('common.status'),
                       render: (_: string, device: Device) => {
                         return <SingleDeviceStatus device={device} />;
                       }
@@ -131,7 +131,7 @@ export default function Virtual() {
                     {
                       key: 'battery',
                       title: getDisplayName({
-                        name: intl.get('BATTERY_VOLTAGE'),
+                        name: Translation.get('device.status.battery.voltage'),
                         lang: language,
                         suffix: 'mV'
                       }),
@@ -142,7 +142,7 @@ export default function Virtual() {
                     {
                       key: 'signal',
                       title: getDisplayName({
-                        name: intl.get('SIGNAL_STRENGTH'),
+                        name: Translation.get('device.status.signal.level'),
                         lang: language,
                         suffix: 'dBm'
                       }),
@@ -152,7 +152,7 @@ export default function Virtual() {
                     },
                     {
                       key: 'time',
-                      title: intl.get('LAST_SAMPLING_TIME'),
+                      title: Translation.get('device.data.timestamp'),
                       render: (_: string, device: Device) => {
                         return device.data?.timestamp ? Dayjs.format(device.data?.timestamp) : '-';
                       }
@@ -179,7 +179,9 @@ export default function Virtual() {
                 <IconButton
                   icon={<ImportOutlined />}
                   onClick={() => navigate('/devices/import')}
-                  tooltipProps={{ title: intl.get('MENU_IMPORT_NETWORK') }}
+                  tooltipProps={{
+                    title: Translation.doSth('common.action.import', 'device.network')
+                  }}
                   type='primary'
                   variant='solid'
                 />
@@ -189,7 +191,7 @@ export default function Virtual() {
                   icon={<PlusOutlined />}
                   onClick={() => navigate('/devices/0/create', { state: { from: '/devices/0' } })}
                   tooltipProps={{
-                    title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
+                    title: Translation.createSth('device')
                   }}
                   type='primary'
                   variant='solid'

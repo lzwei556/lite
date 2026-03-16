@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, ColProps, FormItemProps, InputNumberProps } from 'antd';
-import intl from 'react-intl-universal';
+
 import _ from 'lodash';
 import { toSnake } from 'ts-case-convert';
 import { VibrationMonitoringPoint } from '../features';
@@ -11,6 +11,7 @@ import {
   PrimaryAssetModelPropertyValue
 } from './common';
 import { transformSnake2Dot } from '../utils';
+import { Translation } from 'locales/utils';
 
 type GeneralFormItemProps = FormItemProps & { inputNumberProps?: InputNumberProps };
 
@@ -30,7 +31,7 @@ export const FormItems = <P extends object, M extends object>({
         <Card
           key={`${group}${index}`}
           style={{ marginTop: index !== 0 ? 16 : undefined }}
-          title={intl.get(group.length > 0 ? group : 'properties')}
+          title={Translation.get(group.length > 0 ? group : 'feature.properties')}
         >
           <Grid>
             {items.map((item) => (
@@ -42,11 +43,11 @@ export const FormItems = <P extends object, M extends object>({
         </Card>
       ))}
       {monitoringPoints.map((m) => (
-        <Card style={{ marginTop: 16 }} title={intl.get(m.name)} key={m.name}>
+        <Card style={{ marginTop: 16 }} title={Translation.get(m.name)} key={m.name}>
           <Grid>
             <TextFormItem name='type' hidden={true} />
             <VibrationMonitoringPoint.FormItems
-              monitoringPoint={{ ...m, name: intl.get(m.name) }}
+              monitoringPoint={{ ...m, name: Translation.get(m.name) }}
               formItemColProps={formItemColProps}
             />
           </Grid>

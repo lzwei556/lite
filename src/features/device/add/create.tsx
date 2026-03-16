@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Breadcrumb, Button, Col, Form, Result } from 'antd';
-import intl from 'react-intl-universal';
 import { Card, Grid, Link, SaveIconButton, TitleExtraLayout } from '../../../components';
 import * as WSN from '../../../wsn';
 import { useVirtualRootDevice } from '../virtual';
@@ -9,6 +8,7 @@ import { isBLEGateway, SettingsFormItems } from '../settings-common';
 import { useContext } from '..';
 import { DeviceNavigator } from '../navigator';
 import { useProps2 } from './hooks';
+import { Translation } from 'locales/utils';
 
 export default function Create() {
   return (
@@ -49,13 +49,13 @@ const CreateForm = () => {
             device && device.id === id ? (
               <DeviceNavigator
                 device={device}
-                suffix={{ title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') }) }}
+                suffix={{ title: Translation.createSth('device') }}
               />
             ) : (
               <Breadcrumb
                 items={[
                   { title: <Link to='/devices/0'>{rootDevice.name}</Link> },
-                  { title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') }) }
+                  { title: Translation.createSth('device') }
                 ]}
               />
             )

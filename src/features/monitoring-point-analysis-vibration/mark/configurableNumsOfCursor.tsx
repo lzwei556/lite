@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from 'types/common';
 import { ModalWrapper } from 'components/modalWrapper';
 import { SelectFormItem } from 'components';
@@ -44,7 +44,7 @@ export const ConfigurableNumsOfCursor = (props: ModalFormProps) => {
           props.onSuccess();
         })
       }
-      title={intl.get('nums.of.cursors.settings')}
+      title={Translation.get('common.settings')}
       width={400}
     >
       <Form
@@ -53,12 +53,12 @@ export const ConfigurableNumsOfCursor = (props: ModalFormProps) => {
         initialValues={nums ?? { harmonic: HarmonicCursor.Five, sideband: SidebandCursor.Five }}
       >
         <SelectFormItem
-          label='harmonic.cursor.nums'
+          label='vibration.analysis.cursor.amount'
           name='harmonic'
           selectProps={{ options: HARMONIC_CURSOR_NUMS.map((n) => ({ label: `${n}`, value: n })) }}
         />
         <SelectFormItem
-          label='sideband.cursor.nums'
+          label='vibration.analysis.cursor.amount'
           name='sideband'
           selectProps={{ options: SIDEBAND_CURSOR_NUMS.map((n) => ({ label: `${n}`, value: n })) }}
         />

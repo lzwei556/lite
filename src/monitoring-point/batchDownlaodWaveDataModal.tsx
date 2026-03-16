@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, ModalProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { getFilename } from '../utils/format';
 import { Table } from '../components';
 import { ModalWrapper } from '../components/modalWrapper';
@@ -34,12 +34,12 @@ export const BatchDownlaodWaveDataModal = ({
 
   return (
     <ModalWrapper
-      title={intl.get('BATCH_DOWNLOAD')}
+      title={Translation.get('common.action.download')}
       {...rest}
       okButtonProps={{ disabled: selectedBatchDownloadTimestamps.length === 0 }}
       footer={[
         <Button key='cancel' onClick={(e) => rest.onCancel && rest.onCancel(e as any)}>
-          {intl.get('CANCEL')}
+          {Translation.get('common.action.cancel')}
         </Button>,
         <Button
           key='all'
@@ -49,7 +49,7 @@ export const BatchDownlaodWaveDataModal = ({
           color='primary'
           variant='outlined'
         >
-          {intl.get('DOWNLOAD_ALL')}
+          {Translation.doSth('common.action.download', 'common.all')}
         </Button>,
         <Button
           key='ok'
@@ -59,7 +59,7 @@ export const BatchDownlaodWaveDataModal = ({
           }}
           disabled={selectedBatchDownloadTimestamps.length === 0}
         >
-          {intl.get('OK')}
+          {Translation.get('common.ok')}
         </Button>
       ]}
     >
@@ -68,7 +68,7 @@ export const BatchDownlaodWaveDataModal = ({
         showHeader={false}
         columns={[
           {
-            title: intl.get('TIMESTAMP'),
+            title: Translation.get('common.timestamp'),
             dataIndex: 'timestamp',
             key: 'timestamp',
             width: '80%',

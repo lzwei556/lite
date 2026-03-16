@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { SelectProps } from 'antd';
 import { useFormItemBindingsProps } from '../../../hooks';
 import { Normalizes } from '../../../constants/validator';
@@ -23,33 +23,33 @@ export const useFilterParentDeviceTypes = (deviceType?: DeviceType) => {
 
 export const useProps = (form: CommonProps['form']) => {
   const deviceName = useFormItemBindingsProps({
-    label: 'DEVICE_NAME',
+    label: 'device.name',
     name: 'name',
     rules: [{ required: true }, { min: 4, max: 20 }]
   });
   const mac = useFormItemBindingsProps({
-    label: 'MAC_ADDRESS',
+    label: 'device.mac-address',
     name: 'mac_address',
     normalize: Normalizes.macAddress,
     rules: [
       { required: true },
       {
         pattern: /^([0-9a-fA-F]{2})(([0-9a-fA-F]{2}){5})$/,
-        message: intl.get('MAC_ADDRESS_IS_INVALID')
+        message: 'feedback.invalid.mac-address'
       }
     ]
   });
   const deviceType = useFormItemBindingsProps({
-    label: 'DEVICE_TYPE',
+    label: 'device.type',
     name: 'type',
     rules: [{ required: true }]
   });
   const tag = useFormItemBindingsProps({ label: 'device.tag', name: 'tag' });
   const applicationId = useFormItemBindingsProps({
-    label: 'application.id',
+    label: 'device.application-id',
     name: 'application_id'
   });
-  const port = useFormItemBindingsProps({ label: 'PORT', name: 'port' });
+  const port = useFormItemBindingsProps({ label: 'device.port', name: 'port' });
   return {
     deviceName,
     mac,
@@ -80,24 +80,24 @@ const useGroupedDeviceTypeOptions = () => {
   const deviceTypes: SelectProps['options'] = [];
   if (appType !== 'corrosionWirelessHART') {
     deviceTypes.push({
-      label: intl.get('GATEWAY'),
+      label: Translation.get('device.gateway'),
       options: DeviceType.getGateways().map((t) => ({
-        label: intl.get(DeviceType.toString(t)),
+        label: Translation.get(DeviceType.toString(t)),
         value: t
       }))
     });
     deviceTypes.push({
-      label: intl.get('RELAY'),
+      label: Translation.get('device.relay'),
       options: DeviceType.getRouters().map((t) => ({
-        label: intl.get(DeviceType.toString(t)),
+        label: Translation.get(DeviceType.toString(t)),
         value: t
       }))
     });
   }
   deviceTypes.push({
-    label: intl.get('SENSOR'),
+    label: Translation.get('device.sensor'),
     options: App.getDeviceTypes(appType).map((t) => ({
-      label: intl.get(DeviceType.toString(t)),
+      label: Translation.get(DeviceType.toString(t)),
       value: t
     }))
   });
@@ -111,6 +111,7 @@ const setSettingsInitialValues = (
   if (settings && settings.length > 0) {
     settings.forEach((s) => {
       form?.setFieldValue?.([s.category, s.key], s.key === 'sensor_flags' ? [s.value] : s.value);
+      s.children?.forEach((cs) => form?.setFieldValue?.([cs.category, cs.key], cs.value));
     });
   }
 };
@@ -123,15 +124,17 @@ export enum WanProtocol {
 export const useProtocolProps = (disabledValue?: WanProtocol) => {
   return {
     ...useFormItemBindingsProps({
-      label: 'wan.interface.protocol',
+      label: 'device.settings.wan.protocol',
       name: 'protocol'
     }),
     selectProps: {
-      options: pickOptionsFromNumericEnum(WanProtocol, 'wan.interface.protocol').map((opts) => ({
-        ...opts,
-        label: intl.get(opts.label),
-        disabled: opts.value === disabledValue
-      }))
+      options: pickOptionsFromNumericEnum(WanProtocol, 'device.settings.wan.protocol').map(
+        (opts) => ({
+          ...opts,
+          label: Translation.get(opts.label),
+          disabled: opts.value === disabledValue
+        })
+      )
     }
   };
 };
@@ -144,7 +147,7 @@ export const useDisabledProtocal = (deviceType: DeviceType) => {
 
 export const useParentProps = (form: CommonProps['form'], filterTypes?: DeviceType[]) => {
   const parent = useFormItemBindingsProps({
-    label: 'PARENT',
+    label: 'device.parent',
     name: 'parent',
     rules: [{ required: true }]
   });

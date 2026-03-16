@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Divider, Drawer, Dropdown, Space } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { MenuOutlined, UserOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import '../../assets/iconfont.css';
 import './layout.css';
 import { Brand } from './brand';
@@ -27,7 +27,7 @@ const HeaderLayout = () => {
       <div className='mobile'>
         <MenuOutlined onClick={() => setVisible(true)} />
         <Brand className='logo' height={36} brandNameStyle={{ fontSize: 18 }} />
-        <Dropdown menu={{ items: [{ key: 'logout', label: intl.get('LOGOUT') }] }}>
+        <Dropdown menu={{ items: [{ key: 'logout', label: Translation.get('auth.logout') }] }}>
           <UserOutlined />
         </Dropdown>
         <Drawer

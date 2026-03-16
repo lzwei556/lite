@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Grid, IconButton } from '../../components';
 import { AssetRow, AlarmsObjectStatistics, AlarmTrend } from '../../asset-common';
 import { SelectedPointPropertyHistory } from '../../asset-model';
@@ -28,13 +28,13 @@ export const OverviewLegacy = (props: { asset: AssetRow; onSuccess?: () => void 
                   <IconButton
                     icon={<EyeOutlined />}
                     onClick={() => setOpen(true)}
-                    tooltipProps={{ title: intl.get('CLICK_TO_VIEW') }}
+                    tooltipProps={{ title: Translation.get('common.action.view') }}
                     variant='outlined'
                   />
                   <ModalWrapper
                     open={open}
                     onCancel={() => setOpen(false)}
-                    title={intl.get('BASIC_INFORMATION')}
+                    title={Translation.get('common.basic')}
                     footer={null}
                   >
                     <Card>
@@ -43,7 +43,7 @@ export const OverviewLegacy = (props: { asset: AssetRow; onSuccess?: () => void 
                   </ModalWrapper>
                 </React.Fragment>
               }
-              title={intl.get('monitoring.points')}
+              title={Translation.get('monitoring.points')}
             />
           </Col>
           <Col flex='350px'>
@@ -53,14 +53,14 @@ export const OverviewLegacy = (props: { asset: AssetRow; onSuccess?: () => void 
                   chartHeight={262}
                   total={asset.statistics.monitoringPointNum}
                   alarms={asset.statistics.alarmNum}
-                  title={intl.get('monitoring.points.statistics')}
-                  subtext={intl.get('monitoring.points.total')}
+                  title={Translation.get('monitoring.points')}
+                  subtext={Translation.get('common.total')}
                 />
               </Col>
               <Col span={24}>
                 <AlarmTrend
                   id={asset.id}
-                  title={intl.get('ALARM_TREND')}
+                  title={Translation.get('alarm.trend')}
                   chartStyle={{ height: 262 }}
                 />
               </Col>

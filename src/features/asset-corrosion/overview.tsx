@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid } from '../../components';
 import { AssetRow, AlarmsObjectStatistics, AlarmTrend } from '../../asset-common';
 import { SelectedPointPropertyHistory } from '../../asset-model';
@@ -34,14 +34,14 @@ export const Overview = (props: { asset: AssetRow; onSuccess?: () => void }) => 
             <AlarmsObjectStatistics
               total={asset.statistics.monitoringPointNum}
               alarms={asset.statistics.alarmNum}
-              title={intl.get('monitoring.points.statistics')}
-              subtext={intl.get('monitoring.points.total')}
+              title={Translation.get('monitoring.points')}
+              subtext={Translation.get('common.total')}
             />
           </Col>
           <Col span={24}>
             <AlarmTrend
               id={asset.id}
-              title={intl.get('ALARM_TREND')}
+              title={Translation.get('alarm.trend')}
               chartStyle={{ height: 210 }}
             />
           </Col>

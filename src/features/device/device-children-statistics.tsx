@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Statistic } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Device } from '../../types/device';
 import { Grid, MutedCard } from '../../components';
 
@@ -8,7 +8,7 @@ export const DeviceChildrenStatistics = ({ devices }: { devices: Device[] }) => 
   const fields = useStatisticsFields(devices);
   return (
     <Col span={24}>
-      <MutedCard title={intl.get('sensors.number')}>
+      <MutedCard title={Translation.get('device.network.nodes.total')}>
         <Grid>
           {fields.map(({ label, value }) => (
             <Col span={8} key={label}>
@@ -26,15 +26,15 @@ const useStatisticsFields = (devices: Device[]) => {
   const total = devices.length;
   const onlines = devices.filter((d) => !!d.state?.isOnline).length;
   fields.push({
-    label: intl.get('total'),
+    label: Translation.get('common.total'),
     value: devices.length
   });
   fields.push({
-    label: intl.get('ONLINE'),
+    label: Translation.get('device.status.online'),
     value: devices.filter((d) => !!d.state?.isOnline).length
   });
   fields.push({
-    label: intl.get('OFFLINE'),
+    label: Translation.get('device.status.offline'),
     value: total - onlines
   });
   return fields;

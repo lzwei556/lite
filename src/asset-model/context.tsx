@@ -1,5 +1,4 @@
 import React from 'react';
-import intl from 'react-intl-universal';
 import {
   AXIS_ALIAS,
   getDataOfMonitoringPoint,
@@ -10,6 +9,7 @@ import {
 import { AssetRow } from '../asset-common';
 import { Dayjs, getValue } from '../utils';
 import { CharacteristicData, MonitoringPointType } from 'common';
+import { Translation } from 'locales/utils';
 
 export type PropertyItem = {
   selected: boolean;
@@ -140,7 +140,7 @@ const getPropertyItem = (
       return Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
         const attrs = m.attributes;
         const axisKey = attrs?.[aliasKey];
-        const title = `${intl.get(name)} ${intl.get(abbr)}`;
+        const title = `${Translation.get(name)} ${Translation.get(abbr)}`;
         return {
           selected,
           self,
@@ -158,7 +158,7 @@ const getPropertyItem = (
       });
     } else {
       return fields.map(({ key, name }) => {
-        const title = `${intl.get(name)}`;
+        const title = `${Translation.get(name)}`;
         return {
           selected,
           self,
@@ -181,7 +181,7 @@ const getPropertyItem = (
         selected,
         self,
         visibleKeys,
-        title: intl.get(name),
+        title: Translation.get(name),
         children: getValue({
           value: m?.data?.values[key] as number,
           unit,

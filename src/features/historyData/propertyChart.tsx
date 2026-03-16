@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { HistoryData } from '../../asset-common';
 import { Dayjs } from '../../utils';
 import {
@@ -10,6 +10,7 @@ import {
   SeriesAlarm
 } from '../../components';
 import { CharacteristicData } from 'common';
+import { convertKeyFromServer } from 'locales/utils';
 
 export const PropertyChart = (
   props: {
@@ -60,8 +61,8 @@ export function transform(
       )
       .map((f) => {
         let seriesName = property.onlyShowFirstField
-          ? intl.get(property.name)
-          : intl.get(f.alias ?? f.name);
+          ? Translation.get(property.name)
+          : Translation.get(f.alias ?? (convertKeyFromServer(f.name) as string));
         if (naming) {
           const { replace, prefix } = naming;
           if (replace) {

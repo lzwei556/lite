@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
 import { DeleteIconButton, DownloadIconButton, IconButton } from '../../../components';
@@ -36,7 +36,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
                   );
                 });
               }}
-              tooltipProps={{ title: intl.get('EXPORT_NETWORK') }}
+              tooltipProps={{ title: Translation.doSth('common.action.export', 'device.network') }}
               type='primary'
               variant='solid'
             />
@@ -44,9 +44,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
           <CanAccess {...Permission.NetworkDelete}>
             <DeleteIconButton
               confirmProps={{
-                description: intl.get('DELETE_SOMETHING_PROMPT', {
-                  something: network.gateway.name
-                }),
+                description: Translation.get('feedback.prompt.delete'),
                 onConfirm: () => {
                   DeleteNetworkRequest(network.id).then(() => {
                     refresh();
@@ -61,7 +59,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
                 size: 'middle',
                 type: 'primary'
               }}
-              tooltipProps={{ placement: 'top' }}
+              tooltipProps={{ placement: 'top', title: Translation.get('common.action.delete') }}
             />
           </CanAccess>
           <CanAccess {...Permission.DeviceAdd}>
@@ -69,7 +67,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
               icon={<PlusOutlined />}
               onClick={() => navigate('create', { state: { from: location.pathname } })}
               tooltipProps={{
-                title: intl.get('CREATE_SOMETHING', { something: intl.get('DEVICE') })
+                title: Translation.createSth('device')
               }}
               type='primary'
               variant='solid'
@@ -81,9 +79,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
         <CanAccess {...Permission.DeviceDelete}>
           <DeleteIconButton
             confirmProps={{
-              description: intl.get('DELETE_SOMETHING_PROMPT', {
-                something: device.name
-              }),
+              description: Translation.get('feedback.prompt.delete'),
               onConfirm: () => {
                 DeleteDeviceRequest(device.id).then(() => {
                   refresh();
@@ -99,7 +95,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
               size: 'middle',
               type: 'primary'
             }}
-            tooltipProps={{ placement: 'top' }}
+            tooltipProps={{ placement: 'top', title: Translation.get('common.action.delete') }}
           />
         </CanAccess>
       )}
@@ -107,7 +103,7 @@ export const HeadRight = ({ device, network }: { device: Device; network?: Netwo
         <CanAccess {...Permission.DeviceData}>
           <DownloadIconButton
             onClick={() => setOpen(true)}
-            tooltipProps={{ title: intl.get('DOWNLOAD_DATA') }}
+            tooltipProps={{ title: Translation.get('common.action.download') }}
             type='primary'
             variant='solid'
           />

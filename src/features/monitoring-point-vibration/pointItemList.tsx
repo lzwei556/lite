@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, Form, Popover } from 'antd';
 import { MinusCircleOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, SelectFormItem, TextFormItem } from '../../components';
 import { Device } from '../../types/device';
 import { isMobile } from '../../utils/deviceDetection';
@@ -42,7 +42,7 @@ export const PointItemList = ({
         {
           validator: async (_, points) => {
             if (!points || points.length <= 0) {
-              return Promise.reject(new Error(intl.get('PLEASE_CREATE_MONITORING_POINT')));
+              return Promise.reject(new Error(Translation.get('feedback.empty.mp.creation')));
             }
           }
         }
@@ -75,7 +75,7 @@ export const PointItemList = ({
                 >
                   <TextFormItem
                     {...restFields}
-                    label='NAME'
+                    label='common.name'
                     name={[name, 'name']}
                     rules={[{ required: true }, { min: 4, max: 50 }]}
                   />
@@ -85,13 +85,13 @@ export const PointItemList = ({
                     <Col {...generateColProps({ xl: 12, xxl: 12 })}>
                       <SelectFormItem
                         {...restFields}
-                        label='common.component'
+                        label='asset.component'
                         name={[name, 'component_id']}
                         selectProps={{
                           options: components.map((opt) => ({
                             ...opt,
                             value: opt.key,
-                            label: intl.get(opt.label)
+                            label: Translation.get(opt.label)
                           }))
                         }}
                         rules={[{ required: true }]}
@@ -109,7 +109,7 @@ export const PointItemList = ({
           ))}
           <TextFormItem>
             <Popover
-              title={intl.get('SELECT_SENSOR')}
+              title={Translation.doSth('common.action.select', 'device.sensors')}
               content={
                 open && (
                   <DeviceSelection
@@ -143,7 +143,9 @@ export const PointItemList = ({
               onOpenChange={(open) => setVisible(open)}
               overlayStyle={{ width: 400 }}
             >
-              <Button disabled={devices.length === 0}>{intl.get('SELECT_SENSOR')}</Button>
+              <Button disabled={devices.length === 0}>
+                {Translation.doSth('common.action.select', 'device.sensors')}
+              </Button>
               <Form.ErrorList errors={errors} />
             </Popover>
           </TextFormItem>

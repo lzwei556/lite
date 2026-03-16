@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { getValue, roundValue } from 'utils/format';
 import { ChartMark, Grid } from 'components';
 import { envelope, EnvelopeAnalysis } from 'asset-common';
@@ -89,14 +89,14 @@ export const Envelope = ({ monitoringPoint, filters, trend, intermediateData }: 
                   <Space>
                     {[
                       {
-                        label: intl.get('SETTING_RANGE'),
+                        label: Translation.get('SETTING_RANGE'),
                         children: getValue({ value: range, unit: 'g' })
                       },
                       {
-                        label: intl.get('SETTING_SAMPLING_FREQUNECY'),
+                        label: Translation.get('SETTING_SAMPLING_FREQUNECY'),
                         children: getValue({ value: timeDomainFrequency, unit: 'Hz' })
                       },
-                      { label: intl.get('SETTING_SAMPLING_NUMBER'), children: number }
+                      { label: Translation.get('SETTING_SAMPLING_NUMBER'), children: number }
                     ].map((item) => (
                       <span style={{ fontSize: 14, fontWeight: 400 }} key={item.label}>
                         <Typography.Text type='secondary'>{item.label}</Typography.Text>{' '}
@@ -126,7 +126,7 @@ export const Envelope = ({ monitoringPoint, filters, trend, intermediateData }: 
                   onClick() {
                     setOpen(true);
                   },
-                  tooltipProps: { title: intl.get('nums.of.cursors.settings') }
+                  tooltipProps: { title: Translation.get('common.settings') }
                 },
                 restore: {
                   onClick() {
@@ -147,7 +147,7 @@ export const Envelope = ({ monitoringPoint, filters, trend, intermediateData }: 
               series={ChartMark.useMergeMarkDatas({
                 series: [
                   {
-                    data: { [intl.get(axis.label)]: y },
+                    data: { [Translation.get(axis.label)]: y },
                     xAxisValues: x.map((n) => `${n}`)
                   }
                 ],

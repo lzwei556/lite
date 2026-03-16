@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, message } from 'antd';
 import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import { cloneDeep } from 'lodash';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Table, JsonImporter, Link, DownloadIconButton, IconButton } from '../../components';
 import { App, useAppType } from '../../config';
 import { ASSET_PATHNAME, AssetRow, importAssets, useContext } from '../../asset-common';
@@ -50,7 +50,7 @@ export const Settings = () => {
             setOpen(true);
             setType('asset');
           }}
-          tooltipProps={{ title: intl.get('CREATE_SOMETHING', { something: intl.get('ASSET') }) }}
+          tooltipProps={{ title: Translation.createSth('asset') }}
           type='primary'
         />
       );
@@ -67,14 +67,14 @@ export const Settings = () => {
           {
             dataIndex: 'name',
             key: 'name',
-            title: intl.get('NAME'),
+            title: Translation.get('common.name'),
             render: (_, row: AssetRow) => (
               <Link to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}>{row.name}</Link>
             )
           },
           {
             key: 'action',
-            title: intl.get('OPERATION'),
+            title: Translation.get('common.operation'),
             render: (_: string, asset: AssetRow) => <OperateCell asset={asset} />
           }
         ]}
@@ -91,7 +91,7 @@ export const Settings = () => {
                   setOpen(true);
                   setType('download');
                 }}
-                tooltipProps={{ title: intl.get('BATCH_DOWNLOAD') }}
+                tooltipProps={{ title: Translation.get('common.action.download') }}
                 type='primary'
                 variant='solid'
               />
@@ -101,7 +101,9 @@ export const Settings = () => {
                   setOpen(true);
                   setType('export');
                 }}
-                tooltipProps={{ title: intl.get('EXPORT_SETTINGS') }}
+                tooltipProps={{
+                  title: Translation.doSth('common.action.export', 'common.settings')
+                }}
                 type='primary'
               />
               {selectedProject && (
@@ -117,10 +119,10 @@ export const Settings = () => {
                     onUpload={(data) => {
                       return importAssets(selectedProject.id, data).then((res) => {
                         if (res.data.code === 200) {
-                          message.success(intl.get('IMPORTED_SUCCESSFUL'));
+                          message.success(Translation.get('feedback.success.import'));
                           refresh();
                         } else {
-                          message.error(`${intl.get('FAILED_TO_IMPORT')}: ${res.data.msg}`);
+                          message.error(Translation.failureDo('common.action.import'));
                         }
                       });
                     }}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, ColProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, SelectFormItem, TextFormItem } from '../../components';
 import DeviceSelect from '../../components/select/deviceSelect';
 import { Asset, MonitoringPointRow } from '../../asset-common';
@@ -24,27 +24,31 @@ export const BasisFormItems = ({
   return (
     <Grid>
       <Col {...formItemColProps}>
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 50 }]}
+        />
       </Col>
       <Col {...formItemColProps}>
         <SelectFormItem
-          label='TYPE'
+          label='common.type'
           name='type'
           rules={[{ required: true }]}
           selectProps={{
             disabled: true,
-            options: types.map(({ id, label }) => ({ label: intl.get(label), value: id }))
+            options: types.map(({ id, label }) => ({ label: Translation.get(label), value: id }))
           }}
         />
       </Col>
       <Col {...formItemColProps}>
-        <TextFormItem label='SENSOR' name='device_id' rules={[{ required: true }]}>
+        <TextFormItem label='device.sensor' name='device_id' rules={[{ required: true }]}>
           <DeviceSelect filters={{ types: deviceTypes?.join(',') }} />
         </TextFormItem>
       </Col>
       <Col {...formItemColProps}>
         <SelectFormItem
-          label='ASSET'
+          label='asset'
           name='asset_id'
           rules={[{ required: true }]}
           selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
@@ -52,14 +56,14 @@ export const BasisFormItems = ({
       </Col>
       <Col {...formItemColProps}>
         <SelectFormItem
-          label='common.component'
+          label='asset.component'
           name='component_id'
           rules={[{ required: true }]}
           selectProps={{
             options: components.map((opt) => ({
               ...opt,
               value: opt.key,
-              label: intl.get(opt.label)
+              label: Translation.get(opt.label)
             }))
           }}
         />

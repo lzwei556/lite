@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { message, Typography, Upload } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { UploadOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   PagingFirmwaresRequest,
   RemoveFirmwareRequest,
@@ -43,14 +43,16 @@ const FirmwarePage = () => {
     UploadFirmwareRequest(formData).then((res) => {
       setIsUploading(false);
       if (res.code === 200) {
-        message.success(intl.get('FIRMWARE_UPLOADED_SUCCESSFUL')).then(() => {
+        message.success(Translation.get('feedback.success.upload.firmware')).then(() => {
           if (dataSource) {
             const { size, page, total } = dataSource;
             gotoPage({ size, total, index: page }, 'next');
           }
         });
       } else {
-        message.error(`${intl.get('FAILED_TO_UPLOAD')}${intl.get(res.msg).d(res.msg)}`).then();
+        message
+          .error(`${Translation.failureDo('common.action.upload')}${Translation.get(res.msg)}`)
+          .then();
       }
     });
   };
@@ -66,39 +68,39 @@ const FirmwarePage = () => {
 
   const columns = [
     {
-      title: intl.get('NAME'),
+      title: Translation.get('common.name'),
       dataIndex: 'name',
       key: 'name'
     },
     {
-      title: intl.get('SOFTWARE_VERSION'),
+      title: Translation.get('firmware.version.soft'),
       dataIndex: 'version',
       key: 'version'
     },
     {
-      title: intl.get('HARDWARE_VERSION'),
+      title: Translation.get('firmware.version.hard'),
       dataIndex: 'productId',
       key: 'productId'
     },
     {
-      title: 'CRC',
+      title: Translation.get('firmware.crc'),
       dataIndex: 'crc',
       key: 'crc'
     },
     {
-      title: intl.get('BUILD_DATE'),
+      title: Translation.get('firmware.build.time'),
       dataIndex: 'buildTime',
       key: 'buildTime',
       render: (text: number) => Dayjs.format(text)
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: string, record: any) => {
         return (
           <DeleteIconButton
             confirmProps={{
-              description: intl.get('DELETE_FIRMWARE_CONFIRM_WITH_NAME', { name: record.name }),
+              description: Translation.get('feedback.prompt.delete'),
               onConfirm: () => onDelete(record.id)
             }}
           />
@@ -111,7 +113,7 @@ const FirmwarePage = () => {
 
   return (
     <Content>
-      <Typography.Title level={4}>{intl.get('MENU_FIRMWARE_LIST')}</Typography.Title>
+      <Typography.Title level={4}>{Translation.get('MENU_FIRMWARE_LIST')}</Typography.Title>
       <Table
         columns={columns}
         dataSource={ds}
@@ -129,9 +131,7 @@ const FirmwarePage = () => {
                   icon={<UploadOutlined />}
                   loading={isUploading}
                   tooltipProps={{
-                    title: isUploading
-                      ? intl.get('FIRMWARE_IS_UPLOADING_PROMPT')
-                      : intl.get('UPLOAD_FIRMWARE')
+                    title: Translation.get('common.action.upload')
                   }}
                   type='primary'
                 />

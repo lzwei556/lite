@@ -1,11 +1,11 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { uniq } from 'lodash';
 import { RadioFormItem, Table } from '../../components';
-import { useLocaleContext } from '../../localeProvider';
 import { AssetRow, MonitoringPointRow, Points } from '../../asset-common';
 import { getColumns, OperateCellProps } from './columns';
 import { MonitoringPointType } from 'common';
+import { useI18n } from 'providers/i18n';
 
 export type MonitoringPointsTableProps = {
   asset: AssetRow;
@@ -21,7 +21,7 @@ export const MonitoringPointsTable = ({
 }: MonitoringPointsTableProps) => {
   const { monitoringPoints = [] } = asset;
   const actualPoints = Points.filter(monitoringPoints);
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
 
   const tableProps = {
     ...rest,
@@ -54,7 +54,7 @@ const TypedTable = ({
   types: number[];
   tableProps: any;
 }) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const [selectedType, setSelectedType] = React.useState(actualPoints[0].type);
   const columns = getColumns({
     language,
@@ -92,7 +92,7 @@ const TypeSwitcher = ({
         onChange: (e) => onChange(e.target.value),
         options: types.map((t) => ({
           value: t,
-          label: intl.get(MonitoringPointType.Key.getLabel(t))
+          label: Translation.get(MonitoringPointType.Key.getLabel(t))
         }))
       }}
     />

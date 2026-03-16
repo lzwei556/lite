@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Tabs } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card } from 'components';
 import { TimeDomain } from './timeDomain';
 import { Frequency } from './frequency';
@@ -37,7 +37,7 @@ export const AnalysisTabs = ({
         items={[
           {
             key: 'time-domain',
-            label: 'time.domain',
+            label: 'time-domain',
             children: (
               <MarkContext>
                 <TimeDomain {...props} />
@@ -55,12 +55,12 @@ export const AnalysisTabs = ({
           },
           {
             key: 'time-envelope',
-            label: 'time.envelope',
+            label: 'time-envelope',
             children: <TimeEnvelope {...props} />
           },
           {
             key: 'envelope',
-            label: 'envelope.spectrum',
+            label: 'envelope',
             children: (
               <MarkContext type='envelope'>
                 <Envelope {...props} />
@@ -69,17 +69,17 @@ export const AnalysisTabs = ({
           },
           {
             key: 'power',
-            label: 'power.spectrum',
+            label: 'power',
             children: <Power {...props} />
           },
           {
             key: 'cross',
-            label: 'cross.spectrum',
+            label: 'cross',
             children: <Cross {...{ ...props, currentFilters: axisSelect }} />
           },
           {
             key: 'zoom',
-            label: 'zoom.fft',
+            label: 'zoom-fft',
             children: <Zoom {...props} />
           },
           {
@@ -94,12 +94,12 @@ export const AnalysisTabs = ({
           },
           {
             key: 'water-fall',
-            label: 'water.fall',
+            label: 'water-fall',
             children: <WaterFall {...props} />
           }
           // {
           //   key: 'orbit-plot',
-          //   label: 'orbit.plot',
+          //   label: 'orbit-plot',
           //   children: (
           //     <ChartMark.Context>
           //       <OrbitPlot {...{ ...props, axis, property, originalDomain }} />
@@ -108,14 +108,14 @@ export const AnalysisTabs = ({
           // }
           // {
           //   key: 'trend-analysis',
-          //   label: 'trend.analysis',
+          //   label: 'vibration.trend',
           //   children: (
           //     <ChartMark.Context>
           //       <TrendAnalysis {...{ ...props, axis, property, originalDomain }} />
           //     </ChartMark.Context>
           //   )
           // }
-        ].map((item) => ({ ...item, label: intl.get(item.label) }))}
+        ].map((item) => ({ ...item, label: Translation.get(`vibration.analysis.${item.label}`) }))}
         size='large'
         tabBarExtraContent={extra}
         tabBarGutter={24}

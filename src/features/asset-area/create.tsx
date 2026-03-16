@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { ModalFormProps } from '../../types/common';
@@ -32,8 +32,8 @@ export const Create = (props: ModalFormProps & { parentId?: number }) => {
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('CREATE_SOMETHING', { something: intl.get(label) }),
-        okText: intl.get('CREATE'),
+        title: Translation.createSth(label),
+        okText: Translation.get('common.action.create'),
         ...rest,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -49,7 +49,11 @@ export const Create = (props: ModalFormProps & { parentId?: number }) => {
       }}
     >
       <Form form={form} layout='vertical'>
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 50 }]}
+        />
         {renderParent()}
       </Form>
     </ModalWrapper>

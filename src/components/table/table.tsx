@@ -10,7 +10,6 @@ import {
   TablePaginationConfig
 } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { Grid } from '../grid';
 import { Flex } from '../flex';
 import { Card, CardProps } from '../card/card';
@@ -18,6 +17,7 @@ import { Space } from '../../common';
 import { PageResult } from '../../types/page';
 import { IconButton } from '../icon-button';
 import { CheckboxFormItem } from '../form/checkboxFormItem';
+import { Translation } from 'locales/utils';
 
 type Header = {
   enableSettingColumnsCount?: boolean;
@@ -158,7 +158,7 @@ function SettingsButton<T>({
         color='primary'
         icon={<SettingOutlined />}
         size='small'
-        tooltipProps={{ title: intl.get('set.columns') }}
+        tooltipProps={{ title: Translation.get('button.table.columns.settings') }}
         variant='outlined'
       />
     </Popover>
@@ -175,3 +175,4 @@ export function transformPagedresult<T>(pageResult?: PageResult<T>): {
   const { page, size, total, result } = pageResult;
   return { paged: { current: page, pageSize: size, total }, ds: result };
 }
+

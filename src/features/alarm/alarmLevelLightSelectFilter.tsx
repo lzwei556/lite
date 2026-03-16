@@ -1,16 +1,17 @@
 import React from 'react';
 import { SelectProps } from 'antd';
-import intl from 'react-intl-universal';
 import { LightSelectFilter } from '../../components';
 import { alarmLevelOptions } from '.';
+import { Translation } from 'locales/utils';
 
 export const AlarmLevelLightSelectFilter = (props: Pick<SelectProps, 'onChange' | 'value'>) => {
   return (
     <LightSelectFilter
       {...props}
       mode='multiple'
-      options={alarmLevelOptions.map((o) => ({ ...o, label: intl.get(o.label) }))}
-      prefix={intl.get('ALARM_LEVEL')}
+      options={alarmLevelOptions.map((o) => ({ ...o, label: Translation.get(o.label) }))}
+      prefix={Translation.get('alarm.level')}
     />
   );
 };
+

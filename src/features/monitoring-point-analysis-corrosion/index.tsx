@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, ChartMark, Flex, Grid, RangeDatePicker, useRange } from '../../components';
 import { AnalysisSidebarCollapse } from '..';
 import { Dayjs } from '../../utils';
@@ -73,17 +73,17 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
           items={[
             {
               key: 'overview',
-              label: intl.get('OVERVIEW'),
+              label: Translation.get('common.overview'),
               children: <Overview point={props} history={history} />
             },
             {
               key: 'forecast',
-              label: intl.get('corrosion.analysis.forecast'),
+              label: Translation.get('corrosion.analysis.forecast'),
               children: <Forecast point={props} range={range} />
             },
             {
               key: 'marklist',
-              label: intl.get('mark'),
+              label: Translation.get('label.mark'),
               children: <MarkList property={property} markType={markType} />
             }
           ]}

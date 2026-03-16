@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Empty, Space, TableProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { uniq } from 'lodash';
 import { Card, DeleteIconButton, EditIconButton, Link } from '../../../components';
 import { ASSET_PATHNAME, AssetRow, deleteAsset } from '../../../asset-common';
@@ -22,7 +22,7 @@ export const Settings = (props: Props) => {
   const types = uniq(children?.map((a) => a.type));
 
   const nameColun: Column = {
-    title: intl.get('NAME'),
+    title: Translation.get('common.name'),
     dataIndex: 'name',
     render: (_, row: AssetRow) => (
       <Link
@@ -34,7 +34,7 @@ export const Settings = (props: Props) => {
     )
   };
   const operationColumn: Column = {
-    title: intl.get('OPERATION'),
+    title: Translation.get('common.operation'),
     key: 'action',
     render: (row: AssetRow) => (
       <Space>
@@ -44,7 +44,7 @@ export const Settings = (props: Props) => {
         <CanAccess {...Permission.AssetDelete}>
           <DeleteIconButton
             confirmProps={{
-              description: intl.get('DELETE_SOMETHING_PROMPT', { something: row.name }),
+              description: Translation.get('feedback.prompt.delete'),
               onConfirm: () => deleteAsset(row.id).then(rest.onSuccess)
             }}
           />
@@ -55,13 +55,13 @@ export const Settings = (props: Props) => {
 
   if (!children || children.length === 0) {
     return (
-      <Card extra={getExtra(props)} title={intl.get('ASSET')}>
+      <Card extra={getExtra(props)} title={Translation.get('asset')}>
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
       </Card>
     );
   } else if (types.length === 1) {
     return (
-      <Card extra={getExtra(props)} title={intl.get('ASSET')}>
+      <Card extra={getExtra(props)} title={Translation.get('asset')}>
         <PrimaryAssetTable
           assets={children.map(({ children, ...rest }) => rest)}
           column={{ name: nameColun, operation: operationColumn }}
@@ -120,7 +120,7 @@ const TabbedTable = ({
       tabList={types.map((t) => {
         const assets = children.filter((asset) => asset.type === t);
         const typeLabel = AssetCategory.Key.getlabelPlural(t);
-        const label = typeLabel ? intl.get(typeLabel) : intl.get('ASSET');
+        const label = typeLabel ? Translation.get(typeLabel) : Translation.get('asset');
         return {
           key: `${t}`,
           label,

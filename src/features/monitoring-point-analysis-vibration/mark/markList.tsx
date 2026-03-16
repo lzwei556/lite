@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ChartMark, Table } from 'components';
 import { formatNumericData, roundValue } from 'utils';
 import Sideband from '../sideband';
@@ -13,15 +13,15 @@ export const MarkList = ({ markType }: { markType: MarkType }) => {
   const getLabel = (index: number) => {
     switch (markType) {
       case 'Peak':
-        return intl.get('cursor.peak');
+        return Translation.get('vibration.analysis.peak');
       case 'Double':
-        const start = intl.get('cursor.double.start');
-        const end = intl.get('cursor.double.end');
-        const diff = intl.get('cursor.double.diff');
+        const start = Translation.get('vibration.analysis.cursor.start');
+        const end = Translation.get('vibration.analysis.cursor.end');
+        const diff = Translation.get('vibration.analysis.cursor.diff');
         return index === 0 ? start : index === 1 ? end : diff;
       case 'Multiple':
       case 'Top10':
-        return `${intl.get('cursor.peak')}${index + 1}`;
+        return `${Translation.get('vibration.analysis.peak')}${index + 1}`;
       case 'Harmonic':
         return `${index + 1}x`;
     }
@@ -30,9 +30,9 @@ export const MarkList = ({ markType }: { markType: MarkType }) => {
   const getDiff = () => {
     if (markType === 'Double' && marks.length === 2) {
       const [start, end] = marks;
-      if (start.coord && end.coord) {
-        const [startX, startY] = start.coord as [string, number];
-        const [endX, endY] = end.coord as [string, number];
+      if (start.data && end.data) {
+        const [startX, startY] = start.data[0] as [string, number];
+        const [endX, endY] = end.data[0] as [string, number];
         const diff = [Number(endX) - Number(startX), endY - startY];
         return [{ data: diff, type: 'diff' } as ChartMark.Mark];
       }
@@ -76,8 +76,8 @@ export const MarkList = ({ markType }: { markType: MarkType }) => {
 };
 
 export function dispalyCoordValue(value: any) {
-  if (value === 'out.of.range') {
-    return intl.get('out.of.range');
+  if (value === 'out-of-range') {
+    return Translation.get('vibration.analysis.out-of-range');
   }
   if (value === undefined || value === null) {
     return '-';

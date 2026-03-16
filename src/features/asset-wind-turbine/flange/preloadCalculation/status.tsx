@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Empty, Spin } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Dayjs } from '../../../../utils';
 import { Card, Flex, Grid, Table, useRange, RangeDatePicker } from '../../../../components';
 import { AssetRow, getDataOfAsset, getFlangeData } from '../../../../asset-common';
@@ -67,7 +67,7 @@ export const Status: React.FC<AssetRow> = (props) => {
         showHeader={false}
         columns={[
           {
-            title: intl.get('TIMESTAMP'),
+            title: Translation.get('common.timestamp'),
             dataIndex: 'timestamp',
             key: 'timestamp',
             width: '80%',
@@ -96,9 +96,7 @@ export const Status: React.FC<AssetRow> = (props) => {
     if (!timestamp)
       return (
         <Empty
-          description={intl.get('PLEASE_SELECT_SOMETHING', {
-            something: intl.get('TIMESTAMP').toLowerCase()
-          })}
+          description={Translation.pleaseDoSth('common.action.select', 'common.timestamp')}
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       );

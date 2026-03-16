@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form, Switch } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../../types/common';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { generateColProps } from '../../../utils/grid';
@@ -13,7 +13,7 @@ import {
 } from '../../../components';
 import { SAMPLING_OFFSET, SAMPLING_PERIOD_2 } from '../../../constants';
 import { addAsset, AssetModel, useContext } from '../../../asset-common';
-import { AlarmLevel } from '../../alarm';
+import { AlarmLevel, getLabelByValue } from '../../alarm';
 import { useParentTypes } from '../utils';
 import { wind, flange } from '../constants';
 import { categories } from './common';
@@ -52,8 +52,8 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('CREATE_SOMETHING', { something: intl.get(flange.label) }),
-        okText: intl.get('CREATE'),
+        title: Translation.createSth(flange.label),
+        okText: Translation.get('common.action.create'),
         ...props,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -94,7 +94,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
         <Grid>
           <Col {...formItemColProps}>
             <TextFormItem
-              label='NAME'
+              label='common.name'
               name='name'
               rules={[{ required: true }, { min: 4, max: 50 }]}
             />
@@ -103,59 +103,62 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
           {renderParent()}
           <Col {...formItemColProps}>
             <SelectFormItem
-              label='FLANGE_TYPE'
+              label='asset.flange.type'
               name={['attributes', 'type']}
               rules={[{ required: true }]}
               selectProps={{
-                options: categories.map(({ value, label }) => ({ label: intl.get(label), value }))
+                options: categories.map(({ value, label }) => ({
+                  label: Translation.get(label),
+                  value
+                }))
               }}
             />
           </Col>
           <Col {...formItemColProps}>
             <SelectFormItem
-              label='INDEX_NUMBER'
+              label='common.index'
               name={['attributes', 'index']}
               selectProps={{ options: [1, 2, 3, 4, 5].map((value) => ({ label: value, value })) }}
             />
           </Col>
           <Col {...formItemColProps}>
             <NumberFormItemWithSwitcher
-              label='RATING'
+              label='asset.flange.rating'
               name={['attributes', 'normal']}
               nameMode='mixed'
             />
           </Col>
           <Col {...formItemColProps}>
             <NumberFormItemWithSwitcher
-              label='INITIAL_VALUE'
+              label='asset.flange.initial'
               name={['attributes', 'initial']}
               nameMode='mixed'
             />
           </Col>
           <Col {...formItemColProps}>
             <NumberFormItemWithSwitcher
-              label={`leveled.alarm.${AlarmLevel.Minor}`}
+              label={Translation.leveledAlarm(getLabelByValue(AlarmLevel.Minor))}
               name={['attributes', 'info']}
               nameMode='mixed'
             />
           </Col>
           <Col {...formItemColProps}>
             <NumberFormItemWithSwitcher
-              label={`leveled.alarm.${AlarmLevel.Major}`}
+              label={Translation.leveledAlarm(getLabelByValue(AlarmLevel.Major))}
               name={['attributes', 'warn']}
               nameMode='mixed'
             />
           </Col>
           <Col {...formItemColProps}>
             <NumberFormItemWithSwitcher
-              label={`leveled.alarm.${AlarmLevel.Critical}`}
+              label={Translation.leveledAlarm(getLabelByValue(AlarmLevel.Critical))}
               name={['attributes', 'danger']}
               nameMode='mixed'
             />
           </Col>
           <Col {...formItemColProps}>
             <TextFormItem
-              label='CALCULATE_FLANGE_PRELOAD'
+              label='asset.flange.calculation.enabled'
               name={['attributes', 'sub_type']}
               valuePropName='checked'
             >
@@ -166,7 +169,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
             <>
               <Col {...formItemColProps}>
                 <NumberFormItem
-                  label='NUMBER_OF_BOLT'
+                  label='asset.flange.numbers.of.bolt'
                   name={['attributes', 'monitoring_points_num']}
                   rules={[{ required: true }]}
                   inputNumberProps={{ min: 1 }}
@@ -174,12 +177,12 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
               </Col>
               <Col {...formItemColProps}>
                 <SelectFormItem
-                  label='SAMPLING_PERIOD'
+                  label='asset.flange.sampling.period'
                   name={['attributes', 'sample_period']}
                   rules={[{ required: true }]}
                   selectProps={{
-                    options: SAMPLING_PERIOD_2.map(({ text, value }) => ({
-                      label: intl.get(text),
+                    options: SAMPLING_PERIOD_2.map(({ label, value }) => ({
+                      label: Translation.get(...label),
                       value
                     }))
                   }}
@@ -187,12 +190,12 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
               </Col>
               <Col {...formItemColProps}>
                 <SelectFormItem
-                  label='SAMPLING_OFFSET'
+                  label='asset.flange.sampling.offset'
                   name={['attributes', 'sample_time_offset']}
                   rules={[{ required: true }]}
                   selectProps={{
-                    options: SAMPLING_OFFSET.map(({ text, value }) => ({
-                      label: intl.get(text),
+                    options: SAMPLING_OFFSET.map(({ label, value }) => ({
+                      label: Translation.get(...label),
                       value
                     }))
                   }}
@@ -200,7 +203,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
               </Col>
               <Col {...formItemColProps}>
                 <NumberFormItem
-                  label='INITIAL_PRELOAD'
+                  label='asset.flange.initial.preload'
                   name={['attributes', 'initial_preload']}
                   rules={[{ required: true }]}
                   inputNumberProps={{ addonAfter: 'kN' }}
@@ -208,7 +211,7 @@ export const Create = (props: ModalFormProps & { windId?: number }) => {
               </Col>
               <Col {...formItemColProps}>
                 <NumberFormItem
-                  label='INITIAL_STRESS'
+                  label='asset.flange.initial.stress'
                   name={['attributes', 'initial_pressure']}
                   rules={[{ required: true }]}
                   inputNumberProps={{ addonAfter: 'MPa' }}

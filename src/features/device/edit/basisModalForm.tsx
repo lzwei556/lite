@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../../types/common';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { useFormBindingsProps, useModalBindingsProps } from '../../../hooks';
@@ -50,8 +50,8 @@ const useModalProps = (props: ModalFormProps & FormSubmitButtonProps) => {
     ...rest,
     afterClose: () => form?.resetFields(),
     okButtonProps: { loading },
-    okText: intl.get('SAVE'),
+    okText: Translation.get('common.action.save'),
     onOk: () => form?.validateFields().then(handleSubmit),
-    title: intl.get('EDIT_SOMETHING', { something: intl.get('DEVICE') })
+    title: Translation.editSth('device')
   });
 };

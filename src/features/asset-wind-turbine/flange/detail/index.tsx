@@ -1,8 +1,7 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, TabsDetail, Table, TabsDetailsItems, Card } from '../../../../components';
-import { useLocaleContext } from '../../../../localeProvider';
 import {
   AssetRow,
   MONITORING_POINT_LIST,
@@ -26,20 +25,21 @@ import { History } from './history';
 import { PointsScatterChart } from './pointsScatterChart';
 import { Update } from './update';
 import { Permission, useCan } from '../../../../providers/access-control';
+import { useI18n } from 'providers/i18n';
 
 export const Index = (props: {
   asset: AssetRow;
   onSuccess: () => void;
   onUpdate: (m: MonitoringPointRow) => void;
 }) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const { asset, onSuccess } = props;
   const { monitoringPoints, statistics } = asset;
   const { historyDatas } = useHistoryDatas(asset);
   const canAddMonitoringPoint = useCan(Permission.MeasurementAdd);
   const items: TabsDetailsItems = [
     {
-      label: intl.get('OVERVIEW'),
+      label: Translation.get('common.overview'),
       key: 'overview',
       content: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
@@ -47,7 +47,7 @@ export const Index = (props: {
             <Col flex='auto'>
               <Grid>
                 <Col span={24}>
-                  <Card title={intl.get('BOLT_DIAGRAM')}>
+                  <Card title={Translation.get('asset.flange.bolt.diagram')}>
                     <PointsScatterChart asset={asset} big={true} />
                   </Card>
                 </Col>
@@ -66,8 +66,8 @@ export const Index = (props: {
                   <AlarmsObjectStatistics
                     total={statistics.monitoringPointNum}
                     alarms={statistics.alarmNum}
-                    title={intl.get('monitoring.points')}
-                    subtext={intl.get('total')}
+                    title={Translation.get('monitoring.points')}
+                    subtext={Translation.get('common.total')}
                   />
                 </Col>
                 <Col span={24}>
@@ -83,7 +83,7 @@ export const Index = (props: {
       )
     },
     {
-      label: intl.get(MONITORING_POINT_LIST),
+      label: Translation.get(MONITORING_POINT_LIST),
       key: 'monitoringPointList',
       content: (
         <MonitoringPointsTable
@@ -94,7 +94,7 @@ export const Index = (props: {
       )
     },
     {
-      label: intl.get('HISTORY_DATA'),
+      label: Translation.get('feature.history'),
       key: 'history',
       content: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
@@ -105,7 +105,7 @@ export const Index = (props: {
   ];
   if (isFlangePreloadCalculation(asset)) {
     items.push({
-      label: intl.get('FLANGE_STATUS'),
+      label: Translation.get('asset.flange.status'),
       key: 'status',
       content: (
         <EmptyMonitoringPoints asset={asset} key={asset.id}>
@@ -115,7 +115,7 @@ export const Index = (props: {
     });
   }
   items.push({
-    label: intl.get('SETTINGS'),
+    label: Translation.get('common.settings'),
     key: 'settings',
     content: (
       <Grid>
@@ -126,7 +126,7 @@ export const Index = (props: {
           <Table
             cardProps={{
               extra: canAddMonitoringPoint && <ActionBar {...props} />,
-              title: intl.get('monitoring.points')
+              title: Translation.get('monitoring.points')
             }}
             columns={[
               ...getMonitoringPointColumns({

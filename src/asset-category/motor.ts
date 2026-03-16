@@ -51,9 +51,9 @@ enum RotationMode {
 
 export type RotationSpeed = { rotation_speed: number };
 export const rotationSpeed: Field<MotorSettings> = {
-  label: 'rotation.speed',
+  label: 'asset.rotation.speed',
   name: 'rpm',
-  description: 'rotation.speed.desc',
+  description: 'asset.rotation.speed.desc',
   type: 'number',
   unit: 'rpm',
   defaultValue: 745
@@ -74,7 +74,7 @@ enum SeveritySensitivity {
 export const motorFields: Field<MotorSettings>[] = [
   rotationSpeed,
   {
-    label: 'motor.env.band',
+    label: 'asset.motor.env.band',
     name: 'env_band',
     description: 'env.band.desc',
     type: 'number-array',
@@ -82,7 +82,7 @@ export const motorFields: Field<MotorSettings>[] = [
     defaultValue: [100, 1000]
   },
   {
-    label: 'motor.power.freq',
+    label: 'asset.motor.power.freq',
     name: 'power_freq',
     description: 'power.freq.desc',
     type: 'number',
@@ -90,178 +90,139 @@ export const motorFields: Field<MotorSettings>[] = [
     defaultValue: 50
   },
   {
-    label: 'motor.gear.teeth',
+    label: 'asset.motor.gear.teeth',
     name: 'gear_teeth',
     description: 'gear.teeth.desc',
     type: 'number',
     defaultValue: 30
   },
   {
-    label: 'motor.bearing.n.balls',
+    label: 'asset.motor.bearing.n-balls',
     name: 'bearing.n_balls',
     description: 'bearing.n.balls.desc',
     type: 'number',
     defaultValue: 8,
-    group: 'bearing.parameters'
+    group: 'diagnosis.bearing.parameters'
   },
   {
-    label: 'motor.bearing.d',
+    label: 'asset.motor.bearing.d',
     name: 'bearing.d',
     description: 'bearing.d.desc',
     type: 'number',
     unit: 'mm',
     defaultValue: 6.75,
-    group: 'bearing.parameters'
+    group: 'diagnosis.bearing.parameters'
   },
   {
-    label: 'motor.bearing.big.d',
+    label: 'asset.motor.bearing.big-d',
     name: 'bearing.big_d',
     description: 'bearing.big.d.desc',
     type: 'number',
     unit: 'mm',
     defaultValue: 29.05,
-    group: 'bearing.parameters'
+    group: 'diagnosis.bearing.parameters'
   },
   {
-    label: 'motor.bearing.theta',
+    label: 'asset.motor.bearing.theta',
     name: 'bearing.theta',
     description: 'bearing.theta.desc',
     type: 'number',
     unit: 'rad',
     defaultValue: 0,
-    group: 'bearing.parameters'
+    group: 'diagnosis.bearing.parameters'
   },
   {
-    label: 'motor.motor.poles',
+    label: 'asset.motor.motor-poles',
     name: 'motor.poles',
     description: 'motor.poles.desc',
     type: 'number',
     defaultValue: 4
   },
   {
-    label: 'motor.motor.slip',
+    label: 'asset.motor.motor-slip',
     name: 'motor.slip',
     description: 'motor.slip.desc',
     type: 'number',
     defaultValue: 0.02
   },
   {
-    label: 'motor.fault.sensitivity',
+    label: 'diagnosis.fault.sensitivity',
     name: 'fault_sensitivity',
-    description: 'motor.fault.sensitivity.desc',
+    description: 'diagnosis.fault.sensitivity.desc',
     type: 'enum',
     options: pickOptionsFromNumericEnum(FaultSensitivity, 'fault.sensitivity'),
     defaultValue: 2,
-    group: 'algorithm.parameters'
+    group: 'diagnosis.algorithm.parameters'
   },
   {
-    label: 'motor.severity.sensitivity',
+    label: 'diagnosis.severity.sensitivity',
     name: 'severity_sensitivity',
-    description: 'motor.severity.sensitivity.desc',
+    description: 'diagnosis.severity.sensitivity.desc',
     type: 'enum',
-    options: pickOptionsFromNumericEnum(SeveritySensitivity, 'severity.sensitivity'),
+    options: pickOptionsFromNumericEnum(SeveritySensitivity, 'diagnosis.severity.sensitivity'),
     defaultValue: 2,
-    group: 'algorithm.parameters'
+    group: 'diagnosis.algorithm.parameters'
   },
-  // {
-  //   label: 'motor.rolling.elements.num',
-  //   name: 'rolling_elements_num',
-  //   description: 'rolling.elements.num.desc',
-  //   type: 'number',
-  //   defaultValue: 10
-  // },
-  // {
-  //   label: 'motor.rolling.elements.diameter',
-  //   name: 'rolling_elements_diameter',
-  //   description: 'rolling.elements.diameter.desc',
-  //   type: 'number',
-  //   unit: 'mm',
-  //   defaultValue: 100
-  // },
-  // {
-  //   label: 'motor.pitch.circle.diameter',
-  //   name: 'pitch_circle_diameter',
-  //   description: 'pitch.circle.diameter.desc',
-  //   type: 'number',
-  //   unit: 'mm',
-  //   defaultValue: 100
-  // },
-  // {
-  //   label: 'motor.contact.angle',
-  //   name: 'contact_angle',
-  //   description: 'contact.angle.desc',
-  //   type: 'number',
-  //   unit: '°',
-  //   defaultValue: 2
-  // },
-  // {
-  //   label: 'motor.rotation.mode',
-  //   name: 'rotation_mode',
-  //   description: 'rotation.mode.desc',
-  //   options: rotationModeOptions,
-  //   type: 'enum',
-  //   defaultValue: RotationMode.Inner
-  // },
   {
-    label: 'motor.vel.base.vel.base.1.10x',
+    label: 'diagnosis.vel-base.vel-base-1-10x',
     name: 'vel_base.vel_base_1_10X',
-    description: 'vel.base.vel.base.1.10x.desc',
+    description: 'diagnosis.vel-base.vel-base-1-10x.desc',
     type: 'number-array',
     defaultValue: [105, 90, 85, 85, 85, 85, 80, 80, 80, 80],
-    group: 'velocity.parameters'
+    group: 'diagnosis.velocity.parameters'
   },
   {
-    label: 'motor.vel.base.vel.non.int.base.0.10x',
+    label: 'diagnosis.vel-base.non-int-base-0-10x',
     name: 'vel_base.vel_non_int_base_0_10X',
-    description: 'vel.base.vel.non.int.base.0.10x.desc',
+    description: 'diagnosis.vel-base.non-int-base-0-10x.desc',
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: 'velocity.parameters'
+    group: 'diagnosis.velocity.parameters'
   },
   {
-    label: 'motor.vel.base.vel.base.10.40x',
+    label: 'diagnosis.vel-base.vel-base-10-40x',
     name: 'vel_base.vel_base_10_40X',
-    description: 'vel.base.vel.base.10.40x.desc',
+    description: 'diagnosis.vel-base.vel-base-10-40x.desc',
     type: 'number',
     unit: 'dB',
     defaultValue: 75,
-    group: 'velocity.parameters'
+    group: 'diagnosis.velocity.parameters'
   },
   {
-    label: 'motor.vel.base.vel.base.40.99x',
+    label: 'diagnosis.vel-base.vel-base-40-99x',
     name: 'vel_base.vel_base_40_99X',
-    description: 'vel.base.vel.base.40.99x.desc',
+    description: 'diagnosis.vel-base.vel-base-40-99x.desc',
     type: 'number',
     unit: 'dB',
     defaultValue: 70,
-    group: 'velocity.parameters'
+    group: 'diagnosis.velocity.parameters'
   },
   {
-    label: 'motor.vel.base.vel.base.bearing',
+    label: 'diagnosis.vel-base.vel-base-bearing',
     name: 'vel_base.vel_base_bearing',
-    description: 'vel.base.vel.base.bearing.desc',
+    description: 'diagnosis.vel-base.vel-base-bearing.desc',
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: 'velocity.parameters'
+    group: 'diagnosis.velocity.parameters'
   },
   {
-    label: 'motor.vel.base.vel.base.100.hz',
+    label: 'diagnosis.vel-base.vel-base-100hz',
     name: 'vel_base.vel_base_100Hz',
-    description: 'vel.base.vel.base.100hz.desc',
+    description: 'diagnosis.vel-base.vel-base-100hz.desc',
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: 'velocity.parameters'
+    group: 'diagnosis.velocity.parameters'
   },
   {
-    label: 'motor.vel.base.vel.base.mfb',
+    label: 'diagnosis.vel-base.vel-base-mfb',
     name: 'vel_base.vel_base_mfb',
-    description: 'vel.base.vel.base.mfb.desc',
+    description: 'diagnosis.vel-base.vel-base-mfb.desc',
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: 'velocity.parameters'
+    group: 'diagnosis.velocity.parameters'
   }
 ];

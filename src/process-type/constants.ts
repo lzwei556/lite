@@ -3,22 +3,22 @@ import { DeviceType } from '../types/device_type';
 import { ProcessType } from './types';
 
 export enum ProcessTypeKey {
-  AutoFill = 101
+  'Auto-Fill' = 101
 }
 
 export const autoFillParameter = {
-  targetDeviceId: { name: ['parameters', 'targetDeviceId'], label: 'auto.fill.target.device.id' },
+  targetDeviceId: { name: ['parameters', 'targetDeviceId'], label: 'device.type.oil.filler' },
   fillingCapacity: {
     name: ['parameters', 'fillingCapacity'],
-    label: 'auto.fill.source.filling.capacity',
+    label: 'process.auto-fill.capacity',
     unit: 'ml'
   }
 };
 
 export const processTypes: ProcessType[] = [
   {
-    key: ProcessTypeKey.AutoFill,
-    label: ProcessTypeKey[ProcessTypeKey.AutoFill],
+    key: ProcessTypeKey['Auto-Fill'],
+    label: ProcessTypeKey[ProcessTypeKey['Auto-Fill']],
     sourceType: MonitoringPointType.Value.VibrationAudio,
     deviceType: DeviceType.OilFiller,
     parameters: [

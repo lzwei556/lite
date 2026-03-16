@@ -38,6 +38,6 @@ export function resolveDescendant(statis: AssetChildrenStatistics) {
     { name: 'monitoring.points', value: monitoringPointNum },
     { name: INVALID_MONITORING_POINT, value: anomalous },
     { name: 'devices', value: deviceNum },
-    { name: 'offline.devices', value: offlineDeviceNum }
+    { name: 'device.status.offline', value: offlineDeviceNum }
   ];
 }

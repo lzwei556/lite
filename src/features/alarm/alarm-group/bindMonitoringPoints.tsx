@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Checkbox, Col, Empty, Form, Input, ModalProps, Row, Select, Spin } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { AssetRow, getAssets, MONITORING_POINT } from '../../../asset-common';
 import { area } from '../../../asset-variant';
@@ -164,7 +164,7 @@ export const BindMonitoringPoints: React.FC<
                 checked={selectedAsset.checked}
                 indeterminate={selectedAsset.indeterminate}
               >
-                {intl.get('SELECT_ALL')}
+                {Translation.get('common.action.select.all')}
               </Checkbox>
             )}
             <Select
@@ -212,10 +212,10 @@ export const BindMonitoringPoints: React.FC<
     <ModalWrapper
       afterClose={() => form.resetFields()}
       width={800}
-      title={intl.get('EDIT_SOMETHING', { something: intl.get(MONITORING_POINT) })}
+      title={Translation.editSth(MONITORING_POINT)}
       {...props}
       okButtonProps={{ disabled: assets.length === 0 }}
-      okText={intl.get('SAVE')}
+      okText={Translation.get('common.action.save')}
       onOk={() => {
         form.validateFields().then((values) => {
           const monitoring_point_ids: number[] = [];

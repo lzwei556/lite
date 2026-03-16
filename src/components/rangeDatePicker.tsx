@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Button, DatePicker, Space } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
-import intl from 'react-intl-universal';
 import { Dayjs } from '../utils';
+import { Translation } from 'locales/utils';
 
 export const RangeDatePicker = ({
   defaultValue = Dayjs.CommonRange.PastWeek,
@@ -31,16 +31,16 @@ export const RangeDatePicker = ({
           showQuickRanges && (
             <Space>
               <Button type='text' onClick={() => handleChange(Dayjs.CommonRange.PastMonth)}>
-                {intl.get('OPTION_LAST_MONTH')}
+                {Translation.get('label.data.range.last-month-1')}
               </Button>
               <Button type='text' onClick={() => handleChange(Dayjs.CommonRange.PastThreeMonths)}>
-                {intl.get('OPTION_LAST_3_MONTHS')}
+                {Translation.get('label.data.range.last-month-3')}
               </Button>
               <Button type='text' onClick={() => handleChange(Dayjs.CommonRange.PastHalfYear)}>
-                {intl.get('OPTION_LAST_HALF_YEAR')}
+                {Translation.get('label.data.range.last-month-6')}
               </Button>
               <Button type='text' onClick={() => handleChange(Dayjs.CommonRange.PastYear)}>
-                {intl.get('OPTION_LAST_YEAR')}
+                {Translation.get('label.data.range.last-month-12')}
               </Button>
             </Space>
           )

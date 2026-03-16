@@ -1,10 +1,9 @@
 import React from 'react';
 import { Form, ModalProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../../types/common';
 import { Device } from '../../../types/device';
 import { RangeDatePicker, SelectFormItem, TextFormItem } from '../../../components';
-import { useLocaleContext } from '../../../localeProvider';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { getDisplayProperties } from '../util';
 import { DeviceType } from '../../../types/device_type';
@@ -12,6 +11,7 @@ import { DownloadDeviceDataRequest } from '../../../apis/device';
 import { useContext } from '..';
 import { CharacteristicData } from 'common';
 import { downloadFile } from 'utils';
+import { useI18n } from 'providers/i18n';
 
 export interface DownloadModalProps extends ModalProps {
   device: Device;
@@ -27,7 +27,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
   const channels = DeviceType.getChannels(device.typeId);
   const { range, numberedRange, onChange } = useContext();
   const [form] = Form.useForm();
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
 
   const onDownload = () => {
     form.validateFields(['properties']).then((values) => {
@@ -35,13 +35,7 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
       const filter = values.channel ? { pids, channel: values.channel } : { pids };
       if (numberedRange) {
         const [from, to] = numberedRange;
-        DownloadDeviceDataRequest(
-          device.id,
-          from,
-          to,
-          filter,
-          language === 'en-US' ? 'en' : 'zh'
-        ).then((res) => {
+        DownloadDeviceDataRequest(device.id, from, to, filter, language).then((res) => {
           if (res.status === 200) {
             downloadFile(window.URL.createObjectURL(new Blob([res.data])), `${device.name}.xlsx`);
             onSuccess();
@@ -56,30 +50,33 @@ export const DownloadModal = (props: ModalFormProps & { device: Device }) => {
       {...rest}
       afterClose={() => form.resetFields()}
       width={400}
-      title={intl.get('DWONLOAD_DATA')}
-      okText={intl.get('DOWNLOAD')}
+      title={Translation.get('feature.download')}
+      okText={Translation.get('common.action.download')}
       onOk={onDownload}
     >
       <Form form={form} layout='vertical'>
         <SelectFormItem
-          label='properties'
+          label='feature.properties'
           name='properties'
           rules={[{ required: true }]}
           selectProps={{
             mode: 'multiple',
             maxTagCount: 2,
-            options: properties.map(({ key, name }) => ({ label: intl.get(name), value: key }))
+            options: properties.map(({ key, name }) => ({
+              label: Translation.get(name),
+              value: key
+            }))
           }}
         />
         {channels.length > 0 && (
           <SelectFormItem
-            label='CURRENT_CHANNEL'
+            label='device.channel.current'
             name='channel'
             initialValue={1}
             selectProps={{ options: channels }}
           />
         )}
-        <TextFormItem label='DATE_RANGE'>
+        <TextFormItem label='label.data.range'>
           <RangeDatePicker onChange={onChange} value={range} style={{ width: '100%' }} />
         </TextFormItem>
       </Form>

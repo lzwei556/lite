@@ -1,8 +1,8 @@
 import React from 'react';
 import { ButtonProps, Popconfirm, PopconfirmProps, TooltipProps } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { IconButton, IconButtonProps } from './button';
+import { Translation } from 'locales/utils';
 
 export const DeleteIconButton = (props: {
   confirmProps: Omit<PopconfirmProps, 'title'> & { title?: PopconfirmProps['title'] };
@@ -10,17 +10,13 @@ export const DeleteIconButton = (props: {
   tooltipProps?: TooltipProps;
 }) => {
   const {
-    okText = intl.get('DELETE'),
+    okText = Translation.get('common.action.delete'),
     placement = 'bottom',
-    title: confirmTitle = intl.get('DELETE'),
+    title: confirmTitle = Translation.get('common.action.delete'),
     description,
     ...popRestProps
   } = props.confirmProps;
-  const {
-    // title = intl.get('DELETE'),
-    // placement: tooltipPlacement = 'right',
-    ...restTooltipProps
-  } = props.tooltipProps || {};
+  const { ...restTooltipProps } = props.tooltipProps || {};
   const {
     color = 'danger',
     variant = 'outlined',

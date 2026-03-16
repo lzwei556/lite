@@ -14,12 +14,12 @@ const RoleModal: FC<RoleModalProps> = (props) => {
     <ModalWrapper {...props}>
       <Form form={form} layout='vertical'>
         <TextFormItem
-          label='ROLE_NAME'
+          label='common.name'
           name='name'
           rules={[{ required: true }, { min: 4, max: 20 }]}
         />
         <TextFormItem
-          label='ROLE_DESCRIPTION'
+          label='common.description'
           name='description'
           rules={[{ required: true }, { min: 4, max: 50 }]}
         />

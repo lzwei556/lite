@@ -1,6 +1,6 @@
 import React from 'react';
 import { ButtonProps, ResultProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useFormBindingsProps, useModalBindingsProps } from '../../../hooks';
 import { ModalFormProps } from '../../../types/common';
 import { DeviceType } from '../../../types/device_type';
@@ -92,11 +92,10 @@ const useCreate = (form: FormCommonProps['form'], onSuccess?: () => void): Creat
     successProps: {
       result: {
         status: 'success',
-        subTitle: intl.get('DEVICE_CREATED_NEXT_PROMPT'),
-        title: intl.get('CREATED_SUCCESSFUL')
+        title: Translation.get('feedback.success.create')
       },
       continueButtonProps: {
-        children: intl.get('CONTINUE_TO_CREATE_DEVICE'),
+        children: Translation.get('common.action.continue'),
         type: 'primary',
         onClick: () => {
           form?.resetFields(['name', 'mac_address', 'parent', 'sensors']);
@@ -104,7 +103,7 @@ const useCreate = (form: FormCommonProps['form'], onSuccess?: () => void): Creat
           setSuccess(false);
         }
       },
-      closeButtonProps: { children: intl.get('RETURN'), onClick: onSuccess }
+      closeButtonProps: { children: Translation.get('common.action.return'), onClick: onSuccess }
     },
     handleSubmit
   };
@@ -120,9 +119,9 @@ const useModalProps = (
     ...rest,
     afterClose: () => form?.resetFields(),
     footer: success ? null : undefined,
-    okText: intl.get('CREATE'),
+    okText: Translation.get('common.action.create'),
     onOk: () => form?.validateFields().then(handleSubmit),
-    title: intl.get('CREATE_DEVICE'),
+    title: Translation.createSth('device'),
     width: 640
   });
 };
@@ -137,14 +136,14 @@ const useFormSectionProps = (
     basis: {
       cardProps: useGroupCardProps({
         style: { marginBottom: 16 },
-        title: intl.get('BASIC_INFORMATION')
+        title: Translation.get('common.basic')
       }),
       formItemsProps: { form, formItemColProps }
     },
     settings: { deviceType, settings, formItemColProps, groupCardProps: useGroupCardProps({}) },
     wsn: {
       cardProps: useGroupCardProps({
-        title: intl.get('wireless.network.settings')
+        title: Translation.get('wsn.settings')
       }),
       formItemsProps: { formItemColProps, form }
     }

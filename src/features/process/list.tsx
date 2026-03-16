@@ -9,13 +9,12 @@ import {
 import { useModalBindingsProps } from '../../hooks';
 import { CommonProps, sourceIdField, typeField } from './common';
 import { BindModal } from './bind-modal';
-import intl from 'react-intl-universal';
 import { Process, ProcessDTO, transform2Process, unbindAction, useDevices } from './use-services';
 import { Space, TableProps } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { autoFillParameter } from '../../process-type';
-import { getDisplayName } from '../../utils';
-import { useLocaleContext } from '../../localeProvider';
+import { getDisplayName, Translation } from 'locales/utils';
+import { useI18n } from 'providers/i18n';
 
 export const ProcessList = (props: CommonProps) => {
   const { data: devices = [] } = useDevices();
@@ -63,7 +62,7 @@ const OperationCell = ({
 const getDeleteIconButtonProps = (assetId: number, process: ProcessDTO, onSuccess: () => void) => {
   return {
     confirmProps: {
-      description: intl.get('delete.process.prompt'),
+      description: Translation.get('feedback.prompt.delete'),
       onConfirm: () => unbindAction(assetId, process.id).then(onSuccess)
     }
   };
@@ -83,7 +82,7 @@ const useBindProps = (props: Omit<CommonProps, 'process'>) => {
       open,
       bindIconButtonProps: {
         onClick: () => setOpen(true),
-        tooltipProps: { title: intl.get('ADD_SOMETHING', { something: intl.get('process') }) },
+        tooltipProps: { title: Translation.createSth('process') },
         type: 'primary'
       } as IconButtonProps,
       getEditIconButtonProps: (process: ProcessDTO) => {
@@ -116,33 +115,33 @@ const useTableProps = (
     operationCellRender: (_: string, process: Process) => JSX.Element;
   }
 ) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const columns: TableProps<Process>['columns'] = [
-    { key: 'typeLabel', dataIndex: 'typeLabel', title: intl.get(typeField.label) },
-    { key: 'sourceIdName', dataIndex: 'sourceIdName', title: intl.get(sourceIdField.label) }
+    { key: 'typeLabel', dataIndex: 'typeLabel', title: Translation.get(typeField.label) },
+    { key: 'sourceIdName', dataIndex: 'sourceIdName', title: Translation.get(sourceIdField.label) }
   ];
   columns.push({
     key: autoFillParameter.targetDeviceId.name.join(),
     dataIndex: 'deviceName',
-    title: intl.get(autoFillParameter.targetDeviceId.label)
+    title: Translation.get(autoFillParameter.targetDeviceId.label)
   });
   columns.push({
     key: autoFillParameter.fillingCapacity.name.join(),
     dataIndex: 'fillingCapacity',
     title: getDisplayName({
-      name: intl.get(autoFillParameter.fillingCapacity.label),
+      name: Translation.get(autoFillParameter.fillingCapacity.label),
       lang: language,
       suffix: autoFillParameter.fillingCapacity.unit
     })
   });
   columns.push({
     key: 'operation',
-    title: intl.get('OPERATION'),
+    title: Translation.get('common.operation'),
     render: props.operationCellRender
   });
   return {
     cardProps: {
-      title: intl.get('process'),
+      title: Translation.get('process'),
       extra: props.extra
     },
     columns,

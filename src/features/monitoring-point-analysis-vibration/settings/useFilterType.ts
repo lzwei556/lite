@@ -9,24 +9,24 @@ export type FilterTypeRelatedFields = {
 };
 
 const filter_order: Item = {
-  label: 'chart.filter.order',
+  label: 'vibration.analysis.filter.order',
   name: 'filter_order'
 };
 const filter_type: Item = {
-  label: 'chart.filter.type',
+  label: 'vibration.analysis.filter.type',
   name: 'filter_type',
   options: [
-    { label: 'chart.filter.type.high', value: 0 },
-    { label: 'chart.filter.type.low', value: 1 },
-    { label: 'chart.filter.type.band', value: 2 }
+    { label: 'vibration.analysis.filter.high', value: 0 },
+    { label: 'vibration.analysis.filter.low', value: 1 },
+    { label: 'vibration.analysis.filter.band', value: 2 }
   ]
 };
 const cutoff_range_low: Item = {
-  label: 'cutoff.range.low',
+  label: 'vibration.analysis.filter.low.cutoff',
   name: 'cutoff_range_low'
 };
 const cutoff_range_high: Item = {
-  label: 'cutoff.range.high',
+  label: 'vibration.analysis.filter.high.cutoff',
   name: 'cutoff_range_high'
 };
 
@@ -115,13 +115,13 @@ const useFrequencyBand = (
 ) => {
   return {
     name: 'frequency_band',
-    label: 'frequency.band',
+    label: 'vibration.analysis.filter.frequency',
     options: [
-      { label: 'frequency.band.5-100Hz', value: 1 },
-      { label: 'frequency.band.50-1000Hz', value: 2 },
-      { label: 'frequency.band.500-12820Hz', value: 3 },
-      { label: 'full.frequency.band', value: 4 },
-      { label: 'custom.frequency.band', value: 5 }
+      { label: 'vibration.analysis.filter.frequency.5-100Hz', value: 1 },
+      { label: 'vibration.analysis.filter.frequency.50-1000Hz', value: 2 },
+      { label: 'vibration.analysis.filter.frequency.500-12820Hz', value: 3 },
+      { label: 'vibration.analysis.filter.frequency.full', value: 4 },
+      { label: 'vibration.analysis.filter.frequency.custom', value: 5 }
     ],
     onChange: (val: number) => {
       SetCutoffRangeHidden([true, true]);

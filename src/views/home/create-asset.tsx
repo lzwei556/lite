@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ModalFormProps } from '../../types/common';
 import { area, isAssetAreaParent } from '../../asset-variant';
@@ -20,8 +20,8 @@ export const CreateAsset = (props: ModalFormProps) => {
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('CREATE_SOMETHING', { something: intl.get('ASSET') }),
-        okText: intl.get('CREATE'),
+        title: Translation.createSth('asset'),
+        okText: Translation.get('common.action.create'),
         ...rest,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -38,18 +38,22 @@ export const CreateAsset = (props: ModalFormProps) => {
     >
       <Form form={form} layout='vertical'>
         <SelectFormItem
-          label='TYPE'
+          label='common.type'
           name='type'
           rules={[{ required: true }]}
           selectProps={{
             onChange: setType,
             options: [
-              { label: intl.get(wind.label), value: wind.type },
-              { label: intl.get(area.label), value: area.type }
+              { label: Translation.get(wind.label), value: wind.type },
+              { label: Translation.get(area.label), value: area.type }
             ]
           }}
         />
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 50 }]}
+        />
         {type === area.type && (
           <SelectFormItem
             label={label}

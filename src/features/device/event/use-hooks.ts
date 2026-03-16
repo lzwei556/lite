@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { transformPagedresult } from '../../../components';
 import { PageResult } from '../../../types/page';
 import { BatchDeleteDeviceEventsRequest, PagingDeviceEventsRequest } from '../../../apis/device';
@@ -68,7 +68,7 @@ export const useEventTableProps = ({
         deleteProps: useButtonBindingsProps({
           disabled: selectedRowKeys.length === 0,
           onClick: onBatchDelete,
-          children: intl.get('BATCH_DELETE')
+          children: Translation.get('common.action.delete')
         })
       }
     }
@@ -79,38 +79,38 @@ const useColumns = () => {
   const identity = useGetIdentity();
   const columns: any = [
     {
-      title: intl.get('TYPE'),
+      title: Translation.get('common.type'),
       dataIndex: 'name',
       key: 'name',
       render: (_: string, record: Device) => {
         return React.createElement(
           'span',
           { style: { display: 'inline-block', minWidth: 160 } },
-          intl.get(record.name)
+          Translation.get(record.name)
         );
       }
     },
     {
-      title: intl.get('EVENT_CONTENT'),
+      title: Translation.get('device.event.content'),
       dataIndex: 'content',
       key: 'content',
       render: (_: string, record: any) => {
-        return record.content ? intl.get(record.content).d(record.content) : record.content;
+        return record.content ? Translation.get(record.content) : record.content;
       }
     }
   ];
   if (identity?.role === 0 || identity?.role === 1) {
     columns.push({
-      title: intl.get('DETAIL'),
+      title: Translation.get('common.detail'),
       dataIndex: 'message',
       key: 'message',
       render: (text: string, record: any) => {
-        return record.message ? intl.get(record.message).d(record.message) : record.message;
+        return record.message ? Translation.get(record.message) : record.message;
       }
     });
   }
   columns.push({
-    title: intl.get('TIMESTAMP'),
+    title: Translation.get('common.timestamp'),
     dataIndex: 'timestamp',
     key: 'timestamp',
     render: (timestamp: number) => Dayjs.format(timestamp)

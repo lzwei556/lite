@@ -1,7 +1,6 @@
 import { Form } from 'antd';
 import { ModalWrapper } from 'components/modalWrapper';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { ModalFormProps } from 'types/common';
 import { MonitoringPointPostDTO } from 'common/monitoring-point';
 import { Grid } from 'components';
@@ -13,6 +12,7 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
+import { Translation } from 'locales/utils';
 
 export const CreateFormModal = ({
   assetId,
@@ -33,7 +33,7 @@ export const CreateFormModal = ({
         ...rest,
         afterClose: () => form.resetFields(),
         onOk: () => form.validateFields().then(onSuccess),
-        title: intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') })
+        title: Translation.createSth('monitoring.points')
       }}
     >
       <Form form={form} layout='vertical' initialValues={point ? point : { asset_id: assetId }}>

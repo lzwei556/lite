@@ -2,7 +2,7 @@ import RoleModal from './role';
 import { Form } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { AddRoleRequest } from '../../../../apis/role';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export interface AddRoleModalProps {
   open: boolean;
@@ -37,7 +37,7 @@ const AddRoleModal: FC<AddRoleModalProps> = (props) => {
       form={form}
       width={420}
       open={open}
-      title={intl.get('ADD_ROLE')}
+      title={Translation.createSth('auth.role')}
       onOk={onAdd}
       onCancel={onCancel}
       confirmLoading={isLoading}

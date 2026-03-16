@@ -2,7 +2,7 @@ import { useRange } from 'components';
 import React from 'react';
 import { Dayjs } from 'utils';
 import { useModalBindingsProps } from 'hooks';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ButtonProps } from 'antd';
 import { clearData, URLPathname, useCustomizableInterval } from '../use-services';
 import { CharacteristicData } from 'common';
@@ -43,7 +43,7 @@ export const useProps = (props: CustomizableIntervalProps) => {
       }
     },
     chartProps: usePropertyChartProps({ ...props, property: property! }),
-    deleteButtonProps: useDeleteButtonProps(id, urlPathname, name, range, () =>
+    deleteButtonProps: useDeleteButtonProps(id, urlPathname, range, () =>
       fetchData(id, urlPathname, Dayjs.toRange(range))
     )
   };
@@ -72,15 +72,13 @@ const usePropertyChartProps = (
 const useDeleteButtonProps = (
   id: number,
   urlPathname: URLPathname,
-  name: string,
   range: Dayjs.RangeValue,
   onSuccess: () => void
 ) => {
   const [from, to] = Dayjs.toRange(range);
   return {
     confirmProps: {
-      description: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
-        property: name,
+      description: Translation.get('feature.history.delete.prompt', {
         start: Dayjs.format(from, 'YYYY-MM-DD'),
         end: Dayjs.format(to, 'YYYY-MM-DD')
       }),

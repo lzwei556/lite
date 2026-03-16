@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { GetRoleRequest, PagingRolesRequest } from '../../../apis/role';
 import { Role } from '../../../types/role';
 import { Link, Table, transformPagedresult } from '../../../components';
@@ -43,25 +43,25 @@ const RolePage = () => {
 
   const columns = [
     {
-      title: intl.get('ROLE_NAME'),
+      title: Translation.get('common.name'),
       dataIndex: 'name',
       key: 'name',
-      render: (name: string) => intl.get(name)
+      render: (name: string) => Translation.get(name)
     },
     {
-      title: intl.get('ROLE_DESCRIPTION'),
+      title: Translation.get('common.description'),
       dataIndex: 'description',
       key: 'description',
-      render: (description: string) => intl.get(description)
+      render: (description: string) => Translation.get(description)
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: string, record: any) => {
         return (
           canAssignMenus && (
             <Link onClick={() => onAllocMenus(record.id)} variant='button'>
-              {intl.get('ASSIGN_MENU')}
+              {Translation.get('button.role.list.menu-assignment')}
             </Link>
           )
         );
@@ -73,7 +73,7 @@ const RolePage = () => {
 
   return (
     <Content>
-      <Typography.Title level={4}>{intl.get('MENU_ROLE_MANAGEMENT')}</Typography.Title>
+      <Typography.Title level={4}>{Translation.get('MENU_ROLE_MANAGEMENT')}</Typography.Title>
       <Table
         columns={columns}
         dataSource={ds}

@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, LineChart } from '../../../../components';
 import { MONITORING_POINT, PropertyLightSelectFilter } from '../../../../asset-common';
 import { CharacteristicData } from 'common';
@@ -33,7 +33,7 @@ export const FakeVSRealChart = ({
           />
         )
       }
-      title={property && !hideTitle ? intl.get(property.name) : ' '}
+      title={property && !hideTitle ? Translation.get(property.name) : ' '}
     >
       <LineChart
         series={
@@ -41,14 +41,14 @@ export const FakeVSRealChart = ({
             ? [
                 {
                   data: {
-                    [intl.get(MONITORING_POINT)]: points.data
+                    [Translation.get(MONITORING_POINT)]: points.data
                   },
                   raw: { symbol: 'circle', type: 'scatter' },
                   xAxisValues: points.indexs.map((n) => `${n}`)
                 },
                 {
                   data: {
-                    [intl.get('BOLT')]: bolts
+                    [Translation.get('asset.flange.bolt')]: bolts
                   },
                   xAxisValues: bolts.map((n, i) => `${i + 1}`)
                 }

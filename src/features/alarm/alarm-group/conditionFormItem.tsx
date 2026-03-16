@@ -10,7 +10,7 @@ export const ConditionFormItem = ({
 }) => {
   return (
     <NumberFormItem
-      label='CONDITION'
+      label='alarm.trigger.condition'
       name={[nameIndex, 'threshold']}
       noStyle
       rules={[{ required: true }]}
@@ -34,3 +34,4 @@ export const ConditionFormItem = ({
     />
   );
 };
+

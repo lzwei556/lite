@@ -3,7 +3,7 @@ import { AssetRow, HistoryData, Points } from '../../../../asset-common';
 import { HistoryDataFea } from 'features';
 import { MonitoringPointType } from 'common';
 import { Card } from 'components';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const RightConentInMonitorTab = ({
   asset,
@@ -23,10 +23,10 @@ export const RightConentInMonitorTab = ({
       <Card
         title={
           property
-            ? intl.get('OBJECT_TREND_CHART', {
-                object: intl.get(property.name)
+            ? Translation.get('label.title.trend.sth', {
+                object: Translation.get(property.name)
               })
-            : intl.get('TREND_CHART')
+            : Translation.get('label.title.trend')
         }
       >
         <HistoryDataFea.PropertyChartList

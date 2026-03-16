@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { AssetModel, AssetRow, deleteAsset, updateAsset, useContext } from '../../asset-common';
 import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
@@ -19,7 +19,7 @@ export const OperateCell = ({ asset }: { asset: AssetRow }) => {
       <CanAccess {...Permission.MeasurementDelete}>
         <DeleteIconButton
           confirmProps={{
-            description: intl.get('DELETE_SOMETHING_PROMPT', { something: asset.name }),
+            description: Translation.get('feedback.prompt.delete'),
             onConfirm: () => {
               deleteAsset(asset.id).then(() => refresh(true));
             }
@@ -50,7 +50,7 @@ function UpdateAssetModal({ asset, onSuccess, ...rest }: ModalFormProps & { asse
     <ModalWrapper
       {...rest}
       afterClose={() => form.resetFields()}
-      okText={intl.get('SAVE')}
+      okText={Translation.get('common.action.save')}
       onOk={() => {
         form.validateFields().then((values) => {
           try {
@@ -62,7 +62,7 @@ function UpdateAssetModal({ asset, onSuccess, ...rest }: ModalFormProps & { asse
           }
         });
       }}
-      title={intl.get('EDIT_SOMETHING', { something: intl.get('ASSET') })}
+      title={Translation.editSth('asset')}
     >
       <Form
         form={form}
@@ -72,10 +72,14 @@ function UpdateAssetModal({ asset, onSuccess, ...rest }: ModalFormProps & { asse
           parent_id: asset.parentId > 0 ? asset.parentId : undefined
         }}
       >
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 50 }]}
+        />
         {asset.parentId > 0 && (
           <SelectFormItem
-            label='ASSET'
+            label='asset'
             name='parent_id'
             selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
           />

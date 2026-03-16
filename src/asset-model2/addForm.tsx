@@ -6,7 +6,7 @@ import { SingleStageCentrifugalPumpObj } from './common';
 import { TextFormItem } from '../components';
 import { ModalWrapper } from '../components/modalWrapper';
 import { ModalFormProps } from '../types/common';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const AddForm = ({
   formItemColProps,
@@ -14,15 +14,13 @@ export const AddForm = ({
 }: ModalFormProps & { formItemColProps: ColProps }) => {
   const formProps = useFormProps();
   const { form } = formProps;
-  const title = intl.get('CREATE_SOMETHING', {
-    something: intl.get('single.stage.centrifugal.pump')
-  });
+  const title = Translation.createSth('single.stage.centrifugal.pump');
   return (
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
         title,
-        okText: intl.get('CREATE'),
+        okText: Translation.get('common.action.create'),
         ...rest,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -41,7 +39,7 @@ export const AddForm = ({
       <Form {...formProps}>
         <TextFormItem
           {...useFormItemBindingsProps({
-            label: 'NAME',
+            label: 'common.name',
             name: 'name',
             rules: [{ required: true }]
           })}

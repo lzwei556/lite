@@ -31,7 +31,7 @@ export type HealthStatus = {
 
 export const Key = {
   get: (key: Value): HealthStatus => {
-    const PREFIX = 'health.status.';
+    const PREFIX = 'diagnosis.health.';
     const label = `${PREFIX}${transformSnake2Dot(toSnake(Value[key]))}`;
     return { key, label, color: color[key], range: range[key] };
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { WaveformData, WaveformUltrasound } from '../types';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { getValue } from 'utils';
 import { Card, LineChart } from 'components';
 import { monitoringPointTypeWaveformMap, WaveformMonitoringPointKey } from './common';
@@ -13,7 +13,13 @@ export const Ultrasound = (props: { data: WaveformData; type: WaveformMonitoring
   );
 };
 
-const useChartProps = ({ data, type }: { data: WaveformData; type: WaveformMonitoringPointKey }) => {
+const useChartProps = ({
+  data,
+  type
+}: {
+  data: WaveformData;
+  type: WaveformMonitoringPointKey;
+}) => {
   const { properties, xAxis } = monitoringPointTypeWaveformMap[type];
   const property = properties[0];
   const { tof, mv } = data.values as WaveformUltrasound;
@@ -31,7 +37,7 @@ const useChartProps = ({ data, type }: { data: WaveformData; type: WaveformMonit
     series: [
       {
         data: {
-          [intl.get(property.name)]: [
+          [Translation.get(property.name)]: [
             ...Array(paddingLefts.length).fill(0),
             ...mv,
             ...Array(paddingRights.length).fill(0)

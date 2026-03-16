@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Descriptions, Link } from '../../../components';
 import { ASSET_PATHNAME, AssetRow, Asset, Points } from '../../../asset-common';
 import * as Flange from '../flange';
@@ -26,7 +26,10 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
               column={2}
               contentStyle={{ transform: 'translate(-20px)' }}
               items={statistics.map(({ name, value }) => ({
-                label: intl.get(name),
+                label:
+                  name.indexOf('offline') > -1
+                    ? Translation.between('device.status.offline', 'devices')
+                    : Translation.get(name),
                 children: value
               }))}
               style={{ marginTop: 16 }}
@@ -46,7 +49,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
                   }) ?? []
                 }
                 showTitle={false}
-                style={{ height: 450 }}
+                style={style}
                 type={realPoints?.[0]?.type}
               />
             )}

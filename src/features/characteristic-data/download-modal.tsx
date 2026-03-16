@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Form, FormInstance, SelectProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from 'components/modalWrapper';
 import { RangeDatePicker, SelectFormItem, TextFormItem } from 'components';
 import { ModalFormProps } from 'types/common';
 import { useFormBindingsProps, useFormItemBindingsProps, useModalBindingsProps } from 'hooks';
-import { useLocaleContext } from 'localeProvider';
 import { Dayjs, downloadFile, getFilename } from 'utils';
 import {
   DownloadFormData,
@@ -14,6 +13,7 @@ import {
   useDownloadSubmit
 } from './use-services';
 import { CharacteristicData } from 'common';
+import { useI18n } from 'providers/i18n';
 
 type Props = ModalFormProps & {
   id: number;
@@ -51,7 +51,7 @@ const useFormProps = (
     formProps: useFormBindingsProps({ form, layout: 'vertical', initialValues: { range } }),
     propertiesSelectFromItemProps: usePropertiesSelectProps(properties),
     dateRangePickerFormItemProps: useFormItemBindingsProps({
-      label: 'DATE_RANGE',
+      label: 'label.data.range',
       name: 'range',
       rules: [{ required: true }]
     })
@@ -61,7 +61,7 @@ const useFormProps = (
 const usePropertiesSelectProps = (properties: CharacteristicData.DisplayProperty[]) => {
   return {
     ...useFormItemBindingsProps({
-      label: 'properties',
+      label: 'feature.properties',
       name: 'properties',
       rules: [{ required: true }]
     }),
@@ -69,7 +69,7 @@ const usePropertiesSelectProps = (properties: CharacteristicData.DisplayProperty
       mode: 'multiple',
       maxTagCount: 2,
       options: properties.map(({ key, name }) => ({
-        label: intl.get(name),
+        label: Translation.get(name),
         value: key
       }))
     } as SelectProps
@@ -84,12 +84,12 @@ const useModalProps = ({
 }: Omit<Props, 'properties'> & {
   form: FormInstance<DownloadFormData>;
 }) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const { runAsync: handleSubmit, loading } = useDownloadSubmit();
   return useModalBindingsProps({
     ...rest,
     afterClose: () => form.resetFields(),
-    okText: intl.get('DOWNLOAD'),
+    okText: Translation.get('common.action.download'),
     okButtonProps: { loading },
     onOk: () => {
       form.validateFields().then((values) => {
@@ -99,7 +99,7 @@ const useModalProps = ({
         });
       });
     },
-    title: intl.get('DWONLOAD_DATA'),
+    title: Translation.get('feature.download'),
     width: 400
   });
 };

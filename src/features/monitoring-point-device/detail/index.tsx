@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, MutedCard, TabsDetail, TabsDetailsItems } from '../../../components';
 import { FilterableAlarmRecordTable } from '../../alarm';
 import {
@@ -23,11 +23,11 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   const items: TabsDetailsItems = [
     {
       key: 'overview',
-      label: intl.get('OVERVIEW'),
+      label: Translation.get('common.overview'),
       content: (
         <Grid wrap={false}>
           <Col flex='auto'>
-            <MutedCard title={intl.get('real.time.data')}>
+            <MutedCard title={Translation.get('feature.real-time')}>
               <Monitor {...monitoringPoint} key={id} />
             </MutedCard>
           </Col>
@@ -46,14 +46,14 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
     },
     {
       key: 'history',
-      label: intl.get('HISTORY_DATA'),
+      label: Translation.get('feature.history'),
       content: <History {...monitoringPoint} key={id} />
     }
   ];
 
   items.push({
     key: 'alerts',
-    label: intl.get('ALARM_RECORDS'),
+    label: Translation.get('alarm.records'),
     content: (
       <FilterableAlarmRecordTable
         sourceId={id}
@@ -65,7 +65,7 @@ export const Index = (props: { monitoringPoint: MonitoringPointRow; onSuccess: (
   if (canEditMeasurement) {
     items.push({
       key: 'settings',
-      label: intl.get('SETTINGS'),
+      label: Translation.get('common.settings'),
       content: <Settings point={monitoringPoint} onSuccess={onSuccess} key={id} />
     });
   }

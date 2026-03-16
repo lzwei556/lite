@@ -1,7 +1,7 @@
 import React from 'react';
 import { message, Space, Upload } from 'antd';
 import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { EditIconButton, IconButton, SaveIconButton } from '../../components';
 import { Margin, Point } from './common';
 import { useCanvasContext } from './context';
@@ -41,7 +41,7 @@ export function ToolbarLegacy({
               setEditable(true);
             }}
             size='middle'
-            tooltipProps={{ title: intl.get('EDIT'), placement: 'top' }}
+            tooltipProps={{ title: Translation.get('common.action.edit'), placement: 'top' }}
           />
         </>
       )}
@@ -51,7 +51,7 @@ export function ToolbarLegacy({
             beforeUpload={(file) => {
               const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
               if (!isJpgOrPng) {
-                message.error(intl.get('only.jpeg.or.png'));
+                message.error(Translation.get('feedback.prompt.upload.image'));
               } else {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -66,7 +66,7 @@ export function ToolbarLegacy({
           >
             <IconButton
               icon={<PlusOutlined />}
-              tooltipProps={{ title: intl.get('replace.image') }}
+              tooltipProps={{ title: Translation.doSth('common.action.upload', 'common.image') }}
             />
           </Upload>
           <SaveIconButton
@@ -90,12 +90,10 @@ export function ToolbarLegacy({
               setEditable(false);
               onCancel?.();
             }}
-            tooltipProps={{ title: intl.get('CANCEL') }}
+            tooltipProps={{ title: Translation.get('common.action.cancel') }}
           />
         </>
       )}
     </Space>
   );
 }
-
-

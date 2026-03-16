@@ -22,7 +22,7 @@ type FaultType = {
   // description: string;
   suggestion: string;
 };
-const PREFIX = 'fault.type';
+const PREFIX = 'fault';
 export const Key = {
   get: (key: Value): FaultType => {
     const label = getLabel(Value[key]);

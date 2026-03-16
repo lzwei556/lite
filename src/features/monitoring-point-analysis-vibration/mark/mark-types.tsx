@@ -7,7 +7,7 @@ import { ReactComponent as SidebandSVG } from './sideband.svg';
 import { ReactComponent as Top10SVG } from './top10.svg';
 import { ReactComponent as FaultFrequencySVG } from './faultFrequency.svg';
 import { ColorDanger, ColorHealth, ColorWarn } from 'constants/color';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const editableMarkTypes = ['Peak', 'Double', 'Multiple', 'Harmonic', 'Sideband'] as const;
 export const readonlyMarkTypes = ['Faultfrequency', 'Top10'] as const;
@@ -35,7 +35,7 @@ export const getMarkTypeIcon = (type: MarkType) => {
 };
 
 export const getMarkTypeLabel = (type: MarkType) => {
-  return intl.get(`analysis.vibration.cursor.${type.toLowerCase()}`);
+  return Translation.get(`vibration.analysis.cursor.${type.toLowerCase()}`);
 };
 
 const get = (type: MarkType) => markTypeTable[type];

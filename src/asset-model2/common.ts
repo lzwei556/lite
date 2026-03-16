@@ -44,7 +44,7 @@ export const SingleStageCentrifugalPumpObj: PrimaryAssetModel<
   type: '',
   name: '',
   property: {
-    motorPolesNum: { desc: 'motor.poles.num', type: 'float', value: 4 },
+    motorPolesNum: { desc: 'asset.motor.poles.num', type: 'float', value: 4 },
     electricSupplyFreq: {
       desc: 'electric.supply.freq',
       type: 'float',
@@ -53,8 +53,12 @@ export const SingleStageCentrifugalPumpObj: PrimaryAssetModel<
       group: ''
     },
     rotSpe: { desc: 'rot.spe', type: 'int', unit: 'RPM', value: 1200, group: '' },
-    motorNonDriveSideBearing: { desc: 'motor.non.drive.side.bearing', type: 'float', value: 4 },
-    motorDriveSideBearing: { desc: 'motor.drive.side.bearing', type: 'float', value: 4 },
+    motorNonDriveSideBearing: {
+      desc: 'asset.motor.non.drive.side.bearing',
+      type: 'float',
+      value: 4
+    },
+    motorDriveSideBearing: { desc: 'asset.motor.drive.side.bearing', type: 'float', value: 4 },
     pumpDriveSideBearing: { desc: 'pump.drive.side.bearing', type: 'float', value: 4 },
     pumpNonDriveSideBearing: { desc: 'pump.non.drive.side.bearing', type: 'float', value: 4 },
     bladeNum: {

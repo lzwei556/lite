@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, Popover, Space } from 'antd';
 import { ColumnWidthOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Flex, IconButton, SelectFormItem, TextFormItem } from 'components';
 
 export const WindowLength = {
@@ -16,10 +16,10 @@ export const WindowLength = {
 
 export const windowLengths = Object.values(WindowLength).map((len) => len.value);
 export const windowLength = {
-  label: 'chart.window.length',
+  label: 'vibration.analysis.window.length',
   name: 'window_length',
   options: windowLengths.map((n) => ({
-    label: `chart.window.length.${n}`,
+    label: `${n}`,
     value: n
   }))
 };
@@ -56,16 +56,7 @@ export const WindowLengthPopup = ({
           initialValues={{ window_length: getDefault(maxLen) }}
           style={{ width: 220, padding: 12 }}
         >
-          <SelectFormItem
-            label={label}
-            name={name}
-            selectProps={{
-              options: options.map((len) => ({
-                ...len,
-                label: intl.get(len.label)
-              }))
-            }}
-          />
+          <SelectFormItem label={label} name={name} selectProps={{ options: options }} />
           <TextFormItem noStyle>
             <Flex>
               <Space>
@@ -74,7 +65,7 @@ export const WindowLengthPopup = ({
                     setOpen(false);
                   }}
                 >
-                  {intl.get('CANCEL')}
+                  {Translation.get('common.action.cancel')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -85,7 +76,7 @@ export const WindowLengthPopup = ({
                   }}
                   type='primary'
                 >
-                  {intl.get('OK')}
+                  {Translation.get('common.ok')}
                 </Button>
               </Space>
             </Flex>
@@ -102,7 +93,7 @@ export const WindowLengthPopup = ({
         icon={<ColumnWidthOutlined />}
         onClick={() => setOpen(true)}
         size='small'
-        tooltipProps={{ title: intl.get('analysis.vibration.window.length') }}
+        tooltipProps={{ title: Translation.get('vibration.analysis.window.length') }}
         variant='outlined'
       />
     </Popover>

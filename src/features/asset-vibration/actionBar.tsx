@@ -1,10 +1,10 @@
 import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { ModalFormProps } from '../../types/common';
 import { AssetRow } from '../../asset-common';
 import { Create } from '../monitoring-point-vibration';
 import { IconButton } from '../../components';
+import { Translation } from 'locales/utils';
 
 export const ActionBar = ({ asset, onSuccess }: { asset?: AssetRow; onSuccess: () => void }) => {
   const [open, setOpen] = React.useState(false);
@@ -32,7 +32,7 @@ export const ActionBar = ({ asset, onSuccess }: { asset?: AssetRow; onSuccess: (
           setOpen(true);
         }}
         tooltipProps={{
-          title: intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') })
+          title: Translation.createSth('monitoring.points')
         }}
         type='primary'
       />

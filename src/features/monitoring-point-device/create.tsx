@@ -1,10 +1,15 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ModalFormProps } from '../../types/common';
 import { addMonitoringPoints, Asset, AssetRow, MonitoringPointBatch } from '../../asset-common';
-import { getMonitoringPointTypeOptions, getProcessId, isParentValid, useSelectPoints } from './common';
+import {
+  getMonitoringPointTypeOptions,
+  getProcessId,
+  isParentValid,
+  useSelectPoints
+} from './common';
 import { PointItemList } from './pointItemList';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { useMonitoringPointParents } from '../../asset-variant';
@@ -14,11 +19,14 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
   const [form] = Form.useForm<MonitoringPointBatch>();
   const [parent, setParent] = React.useState<AssetRow | undefined>(asset);
   const [type, setType] = React.useState<number | undefined>();
-  const { selectedPoints, setSelectPoints } = useSelectPoints(form, intl.get('CHANNEL'));
+  const { selectedPoints, setSelectPoints } = useSelectPoints(
+    form,
+    Translation.get('device.channel')
+  );
 
   const reloadTypes = (asset?: AssetRow) => {
     if (asset) {
-      const types = getMonitoringPointTypeOptions()
+      const types = getMonitoringPointTypeOptions();
       const type = form.getFieldValue('type') as number | undefined;
       if (type && !types.map(({ value }) => value).includes(type) && types.length > 0) {
         form.setFieldValue('type', types[0].value);
@@ -41,8 +49,8 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
           form.resetFields();
           setSelectPoints([]);
         },
-        title: intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') }),
-        okText: intl.get('CREATE'),
+        title: Translation.createSth('monitoring.points'),
+        okText: Translation.get('common.action.create'),
         ...props,
         width: 500,
         onOk: () => {
@@ -111,7 +119,7 @@ function ParentSelection({
   } else {
     return (
       <SelectFormItem
-        label='ASSET'
+        label='asset'
         name='asset_id'
         rules={[{ required: true }]}
         selectProps={{
@@ -126,13 +134,13 @@ function ParentSelection({
 function TypeSelection({ parent, onChange }: { parent: AssetRow; onChange: (id: number) => void }) {
   return (
     <SelectFormItem
-      label='TYPE'
+      label='common.type'
       name='type'
       rules={[{ required: true }]}
       selectProps={{
         onChange,
         options: getMonitoringPointTypeOptions().map(({ value, label }) => ({
-          label: intl.get(label),
+          label: Translation.get(label),
           value
         }))
       }}

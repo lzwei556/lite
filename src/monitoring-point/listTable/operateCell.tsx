@@ -1,6 +1,6 @@
 import React from 'react';
 import { Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { deleteMeasurement } from '../services';
 import { MonitoringPointRow } from '../types';
 import { DeleteIconButton, EditIconButton } from '../../components';
@@ -23,7 +23,7 @@ export const OperateCell = ({
       <CanAccess {...Permission.MeasurementDelete}>
         <DeleteIconButton
           confirmProps={{
-            description: intl.get('DELETE_SOMETHING_PROMPT', { something: point.name }),
+            description: Translation.get('feedback.prompt.delete'),
             onConfirm: () => deleteMeasurement(point.id).then(() => onDeleteSuccess(point.id))
           }}
         />

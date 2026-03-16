@@ -1,11 +1,12 @@
 import React from 'react';
 import { Col, Spin } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Grid, TabsDetail, TabsDetailsItems } from '../../components';
 import {
   AssetNavigator,
   AssetRow,
   ContextProps,
+  MONITORING_POINT_LIST,
   MonitoringPointRow,
   MonitoringPointsTable
 } from '../../asset-common';
@@ -43,7 +44,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
     if (!isLegacy) {
       items.push({
         key: 'overview',
-        label: intl.get('OVERVIEW'),
+        label: Translation.get('common.overview'),
         content: <Overview asset={asset} onSuccess={refresh} key={asset.id} />
       });
     }
@@ -51,7 +52,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
       ...[
         {
           key: 'monitoringPointList',
-          label: intl.get('MONITORING_POINT_LIST'),
+          label: Translation.get(MONITORING_POINT_LIST),
           content: (
             <MonitoringPointsTable
               key={`${asset.monitoringPoints?.map(({ id }) => id).join()}`}
@@ -62,7 +63,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
         },
         {
           key: 'settings',
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           content: (
             <Grid>
               <Col span={24}>
@@ -77,7 +78,7 @@ export const Index = ({ loading, asset, refresh }: ContextProps & { asset: Asset
                     asset={asset}
                     key={`${asset.id}_${asset.monitoringPoints?.length}_${asset.image}`}
                     editable={canEditMonitoringPoint}
-                    title={intl.get('OVERVIEW')}
+                    title={Translation.get('common.overview')}
                     onSuccess={refresh}
                   />
                 </Col>

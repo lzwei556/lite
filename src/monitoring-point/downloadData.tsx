@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Form, ModalProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { RangeDatePicker, SelectFormItem, TextFormItem, useRange } from '../components';
 import { Dayjs, downloadFile } from '../utils';
 import { getFilename } from '../utils/format';
-import { useLocaleContext } from '../localeProvider';
 import { ModalWrapper } from '../components/modalWrapper';
 import { downloadHistory, MonitoringPointRow } from '../asset-common';
 import { MonitoringPointType } from 'common';
+import { useI18n } from 'providers/i18n';
 
 export interface DownloadModalProps extends ModalProps {
   measurement: MonitoringPointRow;
@@ -21,7 +21,7 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
   const { measurement, onSuccess, assetId } = props;
   const { numberedRange, setRange } = useRange(props.range);
   const [form] = Form.useForm();
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
 
   const properties = MonitoringPointType.Key.getProperties(
     measurement.type,
@@ -36,7 +36,7 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
           from,
           to,
           JSON.stringify(values.properties),
-          language === 'en-US' ? 'en' : 'zh',
+          language,
           assetId
         ).then((res) => {
           downloadFile(window.URL.createObjectURL(new Blob([res.data])), getFilename(res));
@@ -51,22 +51,25 @@ export const DownloadData: React.FC<DownloadModalProps> = (props) => {
       {...props}
       afterClose={() => form.resetFields()}
       width={400}
-      title={intl.get('DWONLOAD_DATA')}
-      okText={intl.get('DOWNLOAD')}
+      title={Translation.get('feature.download')}
+      okText={Translation.get('common.action.download')}
       onOk={onDownload}
     >
       <Form form={form} layout='vertical'>
         <SelectFormItem
-          label='properties'
+          label='feature.properties'
           name='properties'
           rules={[{ required: true }]}
           selectProps={{
             mode: 'multiple',
             maxTagCount: 2,
-            options: properties.map(({ key, name }) => ({ label: intl.get(name), value: key }))
+            options: properties.map(({ key, name }) => ({
+              label: Translation.get(name),
+              value: key
+            }))
           }}
         />
-        <TextFormItem label='DATE_RANGE'>
+        <TextFormItem label='label.data.range'>
           <RangeDatePicker
             onChange={setRange}
             style={{ width: '100%' }}

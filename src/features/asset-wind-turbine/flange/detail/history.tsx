@@ -5,7 +5,7 @@ import { AssetRow, HistoryData } from '../../../../asset-common';
 import { useHistoryDatas } from '../../utils';
 import { PointsLineChart } from './pointsLineChart';
 import { PointsScatterChart } from './pointsScatterChart';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useRequest } from 'ahooks';
 import request from 'utils/request';
 import { Dayjs } from 'utils';
@@ -72,7 +72,7 @@ export const History = ({
                   />
                 </Col>
                 <Col span={10}>
-                  <Card title={intl.get('BOLT_DIAGRAM')}>
+                  <Card title={Translation.get('asset.flange.bolt.diagram')}>
                     <PointsScatterChart
                       asset={data ? data : { ...flange, monitoringPoints: [] }}
                       loading={flangeLoading}
@@ -84,14 +84,14 @@ export const History = ({
           ) : (
             <Grid>
               <Col span={14}>
-                <Card title={intl.get('TREND_CHART')}>
+                <Card title={Translation.get('label.title.trend')}>
                   <Flex style={{ height: 600 }} justify='center' align='center'>
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                   </Flex>
                 </Card>
               </Col>
               <Col span={10}>
-                <Card title={intl.get('BOLT_DIAGRAM')}>
+                <Card title={Translation.get('asset.flange.bolt.diagram')}>
                   <Flex style={{ height: 600 }} justify='center' align='center'>
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                   </Flex>

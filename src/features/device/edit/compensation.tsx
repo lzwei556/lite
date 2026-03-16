@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
 import { NumberFormItem } from '../../../components';
@@ -25,25 +25,25 @@ export const Compensation = ({
     <ModalWrapper
       {...rest}
       afterClose={() => form.resetFields()}
-      title={intl.get('compensation')}
+      title={Translation.get('device.command.compensation')}
       footer={[
         <Button key='cancel' onClick={rest.onCancel}>
-          {intl.get('CANCEL')}
+          {Translation.get('common.action.cancel')}
         </Button>,
         <Button key='start' onClick={() => handleSubmit(0)} color='primary' variant='solid'>
-          {intl.get('compensation.start')}
+          {Translation.get('device.command.compensation.start')}
         </Button>,
         <Button key='stop' onClick={() => handleSubmit(1)}>
-          {intl.get('compensation.stop')}
+          {Translation.get('device.command.compensation.stop')}
         </Button>
       ]}
     >
       <Form form={form} layout='vertical'>
         <NumberFormItem
-          label={'compensation.duration'}
+          label={'device.command.compensation.duration'}
           name='param'
           rules={[{ required: true }]}
-          inputNumberProps={{ addonAfter: intl.get('hours'), max: 24 }}
+          inputNumberProps={{ addonAfter: Translation.get('label.unit.hour'), max: 24 }}
         />
       </Form>
     </ModalWrapper>

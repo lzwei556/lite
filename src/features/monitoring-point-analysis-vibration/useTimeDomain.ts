@@ -53,7 +53,7 @@ const getTimeDomain = async ({
   const len = Math.min(xAxis.length, values.length);
 
   return {
-    x: xAxis.slice(0, len).map(roundValue),
+    x: xAxis.slice(0, len).map((n) => roundValue(n)),
     y: values.slice(0, len),
     range,
     frequency,

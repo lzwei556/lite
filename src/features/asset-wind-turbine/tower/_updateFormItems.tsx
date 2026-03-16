@@ -20,7 +20,11 @@ export const UpdateFormItems = ({
   return (
     <Grid>
       <Col {...formItemColProps}>
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 50 }]}
+        />
         <TextFormItem name='type' hidden={true} />
       </Col>
       <Col {...formItemColProps}>
@@ -33,7 +37,7 @@ export const UpdateFormItems = ({
       </Col>
       <Col {...formItemColProps}>
         <SelectFormItem
-          label='INDEX_NUMBER'
+          label='common.index'
           name={['attributes', 'index']}
           selectProps={{ options: [1, 2, 3, 4, 5].map((value) => ({ label: value, value })) }}
         />

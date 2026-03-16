@@ -1,16 +1,16 @@
 import React from 'react';
 import { Button, Col, ModalProps, Row, Tree, message } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import JSZip from 'jszip';
 import { useRange, RangeDatePicker } from '../../components';
 import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
-import { useLocaleContext } from '../../localeProvider';
 import { mapTree, tree2List } from '../../utils/tree';
 import { AssetRow, downloadHistory } from '../../asset-common';
 import { combine } from './tree';
 import { MonitoringPointType } from 'common';
 import { downloadFile } from 'utils';
+import { useI18n } from 'providers/i18n';
 
 export const BatchDownlaodHistoryDataModal = ({
   assets,
@@ -20,7 +20,7 @@ export const BatchDownlaodHistoryDataModal = ({
   const [selectedIds, setSelectedIds] = React.useState<[number, number][]>([]);
   const [loading, setLoading] = React.useState(false);
   const [loading2, setLoading2] = React.useState(false);
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
 
   const getTreedata = (assets: AssetRow[]) => {
     if (assets.length > 0) {
@@ -59,11 +59,14 @@ export const BatchDownlaodHistoryDataModal = ({
             }
           });
           zip.generateAsync({ type: 'blob' }).then((content) => {
-            downloadFile(window.URL.createObjectURL(content), `${intl.get('DATA')}.zip`);
+            downloadFile(
+              window.URL.createObjectURL(content),
+              `${Translation.get('common.data')}.zip`
+            );
           });
         }
       })
-      .catch(() => message.error(intl.get('FAILED_TO_GET_DATA')))
+      .catch(() => message.error(Translation.failureDo('common.action.fetch')))
       .finally(() => {
         setLoading(false);
         setLoading2(false);
@@ -72,12 +75,12 @@ export const BatchDownlaodHistoryDataModal = ({
 
   return (
     <ModalWrapper
-      title={intl.get('BATCH_DOWNLOAD')}
+      title={Translation.get('common.action.download')}
       {...rest}
       okButtonProps={{ disabled: selectedIds.length === 0 }}
       footer={[
         <Button key='cancel' onClick={(e) => rest.onCancel && rest.onCancel(e as any)}>
-          {intl.get('CANCEL')}
+          {Translation.get('common.action.cancel')}
         </Button>,
         <Button
           key='ok'
@@ -89,7 +92,7 @@ export const BatchDownlaodHistoryDataModal = ({
           loading={loading2}
           type='primary'
         >
-          {intl.get('OK')}
+          {Translation.get('common.ok')}
         </Button>,
         <Button
           key='all'
@@ -110,7 +113,7 @@ export const BatchDownlaodHistoryDataModal = ({
           color='primary'
           variant='outlined'
         >
-          {intl.get('DOWNLOAD_ALL')}
+          {Translation.doSth('common.action.download', 'common.all')}
         </Button>
       ]}
     >

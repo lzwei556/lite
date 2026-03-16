@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Form, FormListFieldData } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { App, useAppType } from '../../../config';
 import { generateColProps } from '../../../utils/grid';
 import { ModalWrapper } from '../../../components/modalWrapper';
@@ -24,7 +24,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
     <ModalWrapper
       {...rest}
       afterClose={() => form.resetFields()}
-      okText={intl.get('SAVE')}
+      okText={Translation.get('common.action.save')}
       onOk={() => {
         form.validateFields().then((values: AlarmRule) => {
           const final = {
@@ -39,7 +39,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
           updateAlarmRule(alarm.id, final).then(props.onSuccess);
         });
       }}
-      title={intl.get('EDIT_ALARM_RULE')}
+      title={Translation.editSth('alarm.rules')}
       width={860}
     >
       <Form
@@ -56,7 +56,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
         <Grid>
           <Col {...generateColProps({ xl: 12, xxl: 12 })}>
             <TextFormItem
-              label='NAME'
+              label='common.name'
               name='name'
               rules={[{ required: true }, { min: 4, max: 16 }]}
             />
@@ -69,7 +69,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
               selectProps={{
                 disabled: true,
                 options: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-                  label: intl.get(label),
+                  label: Translation.get(label),
                   value
                 }))
               }}
@@ -78,7 +78,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
         </Grid>
         <Grid>
           <Col {...generateColProps({})}>
-            <TextFormItem label='DESCRIPTION' name='description' initialValue='' />
+            <TextFormItem label='common.description' name='description' initialValue='' />
           </Col>
         </Grid>
         <Form.List name='rules'>
@@ -90,7 +90,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                   columns={[
                     {
                       key: 'name',
-                      title: intl.get('NAME'),
+                      title: Translation.get('common.name'),
                       width: 120,
                       render: (_, row: FormListFieldData) => (
                         <NameFormItem disabled={true} nameIndex={row.name} />
@@ -98,7 +98,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     },
                     {
                       key: 'property',
-                      title: intl.get('INDEX'),
+                      title: Translation.get('alarm.metric'),
                       width: 150,
                       render: (_, row: FormListFieldData) => (
                         <IndexFormItem disabled={true} nameIndex={row.name} properties={[]} />
@@ -106,7 +106,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     },
                     {
                       key: 'duration',
-                      title: intl.get('alarm_group.consecutive_count'),
+                      title: Translation.get('alarm.consecutive.count'),
                       width: 60,
                       render: (_, row: FormListFieldData) => (
                         <DurationFormItem nameIndex={row.name} />
@@ -114,7 +114,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     },
                     {
                       key: 'condition',
-                      title: intl.get('CONDITION'),
+                      title: Translation.get('alarm.trigger.condition'),
                       width: 180,
                       render: (_, row: FormListFieldData, index: number) => {
                         return (
@@ -127,7 +127,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     },
                     {
                       key: 'severity',
-                      title: intl.get('SEVERITY'),
+                      title: Translation.get('alarm.level'),
                       width: 80,
                       render: (_, row: FormListFieldData) => (
                         <SeverityFormItem nameIndex={row.name} />
@@ -135,7 +135,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
                     }
                   ]}
                   dataSource={fields}
-                  header={{ title: intl.get('sub.rules') }}
+                  header={{ title: Translation.get('alarm.sub-rules') }}
                   noScroll={true}
                   pagination={false}
                 />

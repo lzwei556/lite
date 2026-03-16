@@ -1,6 +1,6 @@
 import { Option } from '../common';
 import { FormItemProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { UniversalFormItemProps } from '../components/form/formItem';
 import { ToSnake } from 'ts-case-convert';
 
@@ -53,7 +53,7 @@ export const toUniversalFormItemProps = <Entity extends Object>(
   const { type, optionType, label, defaultValue, unit, translatingUnit, rules } = field;
   const options = field.options?.map((opt) => ({
     ...opt,
-    label: intl.get(opt.label).d(opt.label)
+    label: Translation.get(opt.label)
   }));
   const props = {
     label,
@@ -101,7 +101,7 @@ const getUnit = (unit?: string, translatingUnit?: string) => {
   if (unit) {
     return unit;
   } else if (translatingUnit) {
-    return intl.get(translatingUnit);
+    return Translation.get(translatingUnit);
   }
 };
 

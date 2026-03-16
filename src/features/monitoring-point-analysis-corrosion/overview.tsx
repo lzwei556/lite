@@ -1,13 +1,21 @@
 import React from 'react';
-import { Col, Empty, Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Col, Empty } from 'antd';
+import { Translation } from 'locales/utils';
 import { Card, Grid } from '../../components';
-import { getValue } from '../../utils/format';
-import { CriticalThickness, HistoryData, InitialThickness, MonitoringPointRow } from '../../asset-common';
+import {
+  CriticalThickness,
+  HistoryData,
+  InitialThickness,
+  MonitoringPointRow
+} from '../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
-import { CorrosionAttributes, MonitoringPoint } from 'common';
+import { CorrosionAttributes } from 'common';
+import { PropertyValueCard } from './property-value-card';
 
-export const Overview = (props: { point: MonitoringPointRow; history: HistoryData | undefined }) => {
+export const Overview = (props: {
+  point: MonitoringPointRow;
+  history: HistoryData | undefined;
+}) => {
   const { history, point } = props;
   const attributes = point.attributes as CorrosionAttributes;
 
@@ -34,57 +42,29 @@ export const Overview = (props: { point: MonitoringPointRow; history: HistoryDat
   return (
     <Grid>
       <Col span={12}>
-        <PropertyCardedContent
-          label={intl.get(InitialThickness.label)}
-          unit={InitialThickness.unit!}
-          value={initial}
+        <PropertyValueCard
+          title={Translation.get(InitialThickness.label)}
+          values={[{ value: initial, unit: InitialThickness.unit! }]}
         />
       </Col>
       <Col span={12}>
-        <PropertyCardedContent
-          label={intl.get(CriticalThickness.label)}
-          unit={CriticalThickness.unit!}
-          value={critical}
+        <PropertyValueCard
+          title={Translation.get(CriticalThickness.label)}
+          values={[{ value: critical, unit: CriticalThickness.unit! }]}
         />
       </Col>
       <Col span={12}>
-        <PropertyCardedContent
-          label={intl.get('corrosion.analysis.forecast.thickness')}
-          unit='mm'
-          value={crt}
+        <PropertyValueCard
+          title={Translation.get('corrosion.analysis.forecast.thickness')}
+          values={[{ value: crt, unit: 'mm' }]}
         />
       </Col>
       <Col span={12}>
-        <PropertyCardedContent
-          label={intl.get('corrosion.analysis.forecast.diff')}
-          unit='mm'
-          value={diff < 0 ? 0 : diff}
+        <PropertyValueCard
+          title={Translation.get('corrosion.analysis.forecast.diff')}
+          values={[{ value: Math.max(0, diff), unit: 'mm' }]}
         />
       </Col>
     </Grid>
   );
 };
-
-function PropertyCardedContent({
-  label,
-  unit,
-  value
-}: {
-  label: string;
-  unit: string;
-  value?: number;
-}) {
-  return (
-    <Space direction='vertical'>
-      <Typography.Text type='secondary'>{label}</Typography.Text>
-      <Typography.Text style={{ fontSize: 18 }}>
-        {getValue({ value })}
-        {value !== undefined && (
-          <Typography.Text style={{ marginLeft: 4 }} type='secondary'>
-            {unit}
-          </Typography.Text>
-        )}
-      </Typography.Text>
-    </Space>
-  );
-}

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
-import { Language, useLocaleContext } from '../../../../localeProvider';
+import { Translation } from 'locales/utils';
 import { Card, CardProps, Chart, getOptions } from '../../../../components';
 import { getValue, roundValue } from '../../../../utils/format';
 import { HistoryData } from '../../../../asset-common';
 import { MonitoringPointType } from 'common';
+import { useI18n } from 'providers/i18n';
+import { getDisplayName } from 'locales/utils';
 
 type Data = {
   name: string;
@@ -34,20 +35,25 @@ export const PointsScatterChart = ({
   showTitle?: boolean;
   cardProps?: CardProps;
 }) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const transformedData: Data[] = [];
   if (data.length > 0) {
     transformedData.push(...getDataOfCircleChart(data, type));
   } else if (dynamicData && dynamicData.length > 0) {
     transformedData.push(...dynamicData);
   }
-  const dispalyPrefix = `${intl.get(
-    `FIELD_DISPLACEMENT_${type === MonitoringPointType.Value.BaseInclination ? 'AXIAL' : 'RADIAL'}`
-  )}${language === 'en-US' ? ' ' : ''}${intl.get('FIELD_DISPLACEMENT')}`;
+  const dispalyPrefix = `${getDisplayName({
+    name: Translation.get(
+      `FIELD_DISPLACEMENT_${
+        type === MonitoringPointType.Value.InclinationBase ? 'AXIAL' : 'RADIAL'
+      }`
+    ),
+    lang: language,
+    suffix: Translation.get('FIELD_DISPLACEMENT')
+  })}`;
   const options = buildCirclePointsChartOfTower({
     datas: transformedData,
-    titles: [dispalyPrefix, intl.get('FIELD_DIRECTION')],
-    lang: language
+    titles: [dispalyPrefix, Translation.get('FIELD_DIRECTION')]
   });
 
   return cardProps ? (
@@ -102,21 +108,13 @@ function getTitles(datas: Data[], dispalyPrefix: string) {
   });
 
   return {
-    main: intl.get('SCATTERGRAM'),
+    main: Translation.get('asset.tower.scattergram.title'),
     displacement: { label: dispalyPrefix, value: displacement, unit: 'mm' },
-    direction: { label: intl.get('FIELD_DIRECTION'), value: direction, unit: '°' }
+    direction: { label: Translation.get('FIELD_DIRECTION'), value: direction, unit: '°' }
   };
 }
 
-function buildCirclePointsChartOfTower({
-  datas,
-  titles,
-  lang = 'en-US'
-}: {
-  datas: Data[];
-  titles: string[];
-  lang?: Language;
-}) {
+function buildCirclePointsChartOfTower({ datas, titles }: { datas: Data[]; titles: string[] }) {
   const [displacement, direction] = titles;
   let max = undefined;
   const series: any = [];
@@ -150,7 +148,7 @@ function buildCirclePointsChartOfTower({
       },
       confine: true
     },
-    polar: { radius: 100, center: ['50%', '50%'] },
+    polar: { radius: '60%', center: ['50%', '50%'] },
     angleAxis: {
       type: 'value',
       min: -180,
@@ -165,13 +163,13 @@ function buildCirclePointsChartOfTower({
         formatter: (value: number) => {
           switch (value) {
             case 0:
-              return `${value} {direction|${lang === 'zh-CN' ? '东' : 'East'}}`;
+              return `${value} {direction|${Translation.get('common.east')}}`;
             case 90:
-              return ` {direction|${lang === 'zh-CN' ? '北' : 'North'}}\r\n${value}`;
+              return ` {direction|${Translation.get('common.north')}}\r\n${value}`;
             case -180:
-              return `{direction|${lang === 'zh-CN' ? '西' : 'West'}} ${value}`;
+              return `{direction|${Translation.get('common.west')}} ${value}`;
             case -90:
-              return `${value}\r\n{direction|${lang === 'zh-CN' ? '南' : 'South'}}`;
+              return `${value}\r\n{direction|${Translation.get('common.south')}}`;
             default:
               return value;
           }
@@ -220,7 +218,7 @@ export function getDataOfCircleChart(
           directions.push(roundValue(data['FIELD_DIRECTION'], 2));
         }
         const key = `FIELD_DISPLACEMENT_${
-          type === MonitoringPointType.Value.BaseInclination ? 'AXIAL' : 'RADIAL'
+          type === MonitoringPointType.Value.InclinationBase ? 'AXIAL' : 'RADIAL'
         }`;
         if (data[key] !== undefined) {
           displacements.push(roundValue(data[key], 2));

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Space, Spin, TableProps, Tag } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { AlarmRule } from '../features/alarm/alarm-group/types';
 import { translateMetricName } from '../features/alarm/alarm-group';
 import {
@@ -10,7 +10,7 @@ import {
 } from '../features/alarm/alarm-group/services';
 import { Table } from '../components';
 import { AlarmLevelTag } from '../features/alarm';
-import { MonitoringPoint, MonitoringPointType } from 'common';
+import { MonitoringPointType } from 'common';
 import { useMonitoringPointContext } from './provider';
 import { MonitoringPointRow } from 'asset-common';
 
@@ -23,15 +23,15 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
     return {
       rowKey: 'id',
       columns: [
-        { title: intl.get('NAME'), dataIndex: 'name', key: 'name', width: 400 },
+        { title: Translation.get('common.name'), dataIndex: 'name', key: 'name', width: 400 },
         {
-          title: intl.get('ALARM_METRIC'),
+          title: Translation.get('alarm.metric'),
           dataIndex: 'metric',
           key: 'metric',
           render: (metric: any) => translateMetricName(metric.name)
         },
         {
-          title: intl.get('ALARM_CONDITION'),
+          title: Translation.get('alarm.trigger.condition'),
           dataIndex: 'condition',
           key: 'condition',
           render: (_: string, record: any) => {
@@ -39,7 +39,7 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
           }
         },
         {
-          title: intl.get('ALAMR_LEVEL'),
+          title: Translation.get('alarm.level'),
           dataIndex: 'level',
           key: 'level',
           render: (level: number) => <AlarmLevelTag level={level} />
@@ -51,31 +51,31 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
   };
   const columns = [
     {
-      title: intl.get('STATUS'),
+      title: Translation.get('common.status'),
       dataIndex: 'bindedStatus',
       key: 'bindedStatus',
       render: (status: boolean) => (
         <Tag color={status ? 'green' : 'geekblue'}>
-          {status ? intl.get('BOUND') : intl.get('UNBOUND')}
+          {status ? Translation.get('common.binded') : Translation.get('common.unbinded')}
         </Tag>
       )
     },
     {
-      title: intl.get('NAME'),
+      title: Translation.get('common.name'),
       dataIndex: 'name',
       key: 'name'
     },
     {
-      title: intl.get('TYPE'),
+      title: Translation.get('common.type'),
       dataIndex: 'type',
       key: 'type',
       render: (typeId: number) => {
         const label = MonitoringPointType.Key.getLabel(typeId);
-        return label ? intl.get(label) : '-';
+        return label ? Translation.get(label) : '-';
       }
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: any, row: AlarmRule) => {
         return (
@@ -84,7 +84,7 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
               <Button
                 type='link'
                 size='small'
-                title={intl.get('REMOVE')}
+                title={Translation.get('common.action.remove')}
                 danger={true}
                 onClick={() => {
                   updateRow(row.id, { bindingStatus: true });
@@ -96,13 +96,13 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
                   );
                 }}
               >
-                {row.bindingStatus ? <Spin /> : intl.get('REMOVE')}
+                {row.bindingStatus ? <Spin /> : Translation.get('common.action.remove')}
               </Button>
             ) : (
               <Button
                 type='link'
                 size='small'
-                title={intl.get('BIND')}
+                title={Translation.get('common.action.bind')}
                 onClick={() => {
                   updateRow(row.id, { bindingStatus: true });
                   bindMeasurementsToAlarmRule(row.id, { monitoring_point_ids: [point.id] }).then(
@@ -113,7 +113,7 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
                   );
                 }}
               >
-                {row.bindingStatus ? <Spin /> : intl.get('BIND')}
+                {row.bindingStatus ? <Spin /> : Translation.get('common.action.bind')}
               </Button>
             )}
           </Space>
@@ -154,7 +154,7 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPointRow }) => {
   return (
     <Table
       rowKey='id'
-      cardProps={{ title: intl.get('ALARM_RULES') }}
+      cardProps={{ title: Translation.get('alarm.rules') }}
       columns={columns}
       dataSource={rules}
       expandable={{

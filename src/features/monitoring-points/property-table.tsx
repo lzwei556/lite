@@ -1,7 +1,7 @@
 import { MonitoringPoint, MonitoringPointType } from 'common';
 import { RadioFormItem, Table } from 'components';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { basicFieldColumns, usePropertyColumns } from './columns';
 import { uniq } from 'lodash';
 import { Points } from 'monitoring-point';
@@ -76,7 +76,7 @@ const TypeSwitcher = ({
         onChange: (e) => onChange(e.target.value),
         options: types.map((t) => ({
           value: t,
-          label: intl.get(MonitoringPointType.Key.getLabel(t))
+          label: Translation.get(MonitoringPointType.Key.getLabel(t))
         }))
       }}
     />

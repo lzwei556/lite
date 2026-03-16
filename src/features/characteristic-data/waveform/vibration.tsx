@@ -3,7 +3,7 @@ import { VibrationPropertyKey, WaveformData, WaveformProperty, WaveformVibration
 import { Card, LineChart, SeriesOption } from 'components';
 import { PROPERTIES_WITH_ENVELOPE } from './common';
 import { Checkbox, CheckboxChangeEvent, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { AxisWithVibrationDirectionLabel } from 'common';
 import { useGlobalStyles } from 'styles';
 
@@ -34,7 +34,7 @@ const useShowEnvelopeSwitch = (property: WaveformProperty) => {
   const [isEnvelopeShow, setIsShowEnvelope] = React.useState(false);
   return {
     checkboxProps: {
-      children: intl.get('SHOW_ENVELOPE'),
+      children: Translation.get('feature.waveform.envelope.enabled'),
       onChange: (e: CheckboxChangeEvent) => {
         setIsShowEnvelope(e.target.checked);
       },
@@ -56,7 +56,7 @@ const useChartProps = ({
   const { colorBorderStyle } = useGlobalStyles();
   const { highEnvelopes, lowEnvelopes, values, xAxis, xAxisUnit, frequency, yAxisUnit } =
     data.values as WaveformVibration;
-  const seriesName = intl.get(axis.label);
+  const seriesName = Translation.get(axis.label);
   const series: SeriesOption[] = [];
   let config;
   if (xAxis) {
@@ -82,12 +82,12 @@ const useChartProps = ({
         stack: 'confidence-band'
       };
       series.push({
-        data: { [intl.get('high.envelope')]: highEnvelopes },
+        data: { [Translation.get('feature.waveform.envelope.high')]: highEnvelopes },
         xAxisValues: xAxis.map((n) => n.toFixed(Number.isInteger(n) ? 0 : 3)),
         raw: envelopeRawOptions
       });
       series.push({
-        data: { [intl.get('low.envelope')]: lowEnvelopes },
+        data: { [Translation.get('feature.waveform.envelope.low')]: lowEnvelopes },
         xAxisValues: xAxis.map((n) => n.toFixed(Number.isInteger(n) ? 0 : 3)),
         raw: envelopeRawOptions
       });

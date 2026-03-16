@@ -1,6 +1,6 @@
 import React from 'react';
 import { Spin, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, TabsDetail, TabsDetailsItems } from '../../../components';
 import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
@@ -49,34 +49,34 @@ const DeviceDetailPage = () => {
     if (canReadDeviceData) {
       tabs.push({
         key: 'overview',
-        label: intl.get('OVERVIEW'),
+        label: Translation.get('common.overview'),
         content: renderOverview(device, network)
       });
     }
     if (DeviceType.isSensor(deviceTypeId) && canReadDeviceData) {
       tabs.push({
         key: 'history',
-        label: intl.get('HISTORY_DATA'),
+        label: Translation.get('feature.history'),
         content: device && <HistoryDataPage device={device} key={device.id} />
       });
     } else if (DeviceType.isGateway(deviceTypeId) && canReadDeviceRuntimeData) {
       tabs.push({
         key: 'history',
-        label: intl.get('STATUS_HISTORY'),
+        label: Translation.get('device.gateway.runtime'),
         content: device && <RuntimeChart device={device} key={device.id} />
       });
     }
     if (canReadDeviceEvent) {
       tabs.push({
         key: 'events',
-        label: intl.get('EVENTS'),
+        label: Translation.get('device.events'),
         content: device && <QueryEventTable device={device} key={device.id} />
       });
     }
     if (canEditDeviceSettings) {
       tabs.push({
         key: 'settings',
-        label: intl.get('SETTINGS'),
+        label: Translation.get('common.settings'),
         content: device && (
           <Index
             device={device}

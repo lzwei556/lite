@@ -1,7 +1,7 @@
 import React from 'react';
 import 'echarts-gl';
 import { Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { buildCustomTooltip, CardChart, chartColors, TooltipItem } from 'components';
 import { timeFrequency } from 'asset-common';
 import { useGlobalStyles } from 'styles';
@@ -17,9 +17,9 @@ export const TimeFrequency = ({ filters, intermediateData }: AnalysisProps) => {
   const { x = [], y = [], z = [] } = data || {};
   const { window, setWindow } = useWindow();
   const { window_length, setWindowLength } = useWindowLength(originalDomain?.values?.length);
-  const xAxisName = `${intl.get('FIELD_FREQUENCY')}（Hz）`;
-  const yAxisName = `${intl.get('TIMESTAMP')}（s）`;
-  const zAxisName = intl.get('amplitude');
+  const xAxisName = `${Translation.get('FIELD_FREQUENCY')}（Hz）`;
+  const yAxisName = `${Translation.get('common.timestamp')}（s）`;
+  const zAxisName = Translation.get('feature.amplitude');
   const { colorTextSecondaryStyle, colorTextDescriptionStyle } = useGlobalStyles();
 
   React.useEffect(() => {

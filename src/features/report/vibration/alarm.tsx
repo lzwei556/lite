@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { getAlarmDetail } from '../../alarm/alarm-group';
 import { Dayjs } from '../../../utils';
 import { Table } from '../../../components';
@@ -159,41 +159,41 @@ function AlarmRecordTable<T>({
       columns={[
         {
           dataIndex: 'level',
-          title: intl.get('ALARM_LEVEL'),
+          title: Translation.get('alarm.level'),
           width: 50,
-          render: (level: number) => intl.get(getLabelByValue(level))
+          render: (level: number) => Translation.get(getLabelByValue(level))
         },
         {
           dataIndex: 'source',
-          title: intl.get('ALARM_SOURCE'),
+          title: Translation.get('alarm.source'),
           render: (source: any) => {
             if (source) {
               return source.name;
             }
-            return intl.get('UNKNOWN_SOURCE');
+            return Translation.get('common.unknown');
           }
         },
         {
           dataIndex: 'metric',
-          title: intl.get('ALARM_DETAIL'),
+          title: Translation.get('alarm.detail'),
           render: (metric: any, record: any) => getAlarmDetail(record, metric)
         },
         {
           dataIndex: 'createdAt',
           width: 90,
-          title: intl.get('ALARM_TIMESTAMP'),
+          title: Translation.get('alarm.created-at'),
           render: (createdAt: number) => Dayjs.format(createdAt)
         },
         {
           dataIndex: 'status',
           width: 60,
-          title: intl.get('ALARM_STATUS'),
+          title: Translation.get('alarm.status'),
           render: (status: number) => {
             switch (status) {
               case 2:
-                return intl.get('ALARM_STATUS_AUTO_PROCESSED');
+                return Translation.get('alarm.status.auto-processed');
               default:
-                return intl.get('alarm.record.un.processed');
+                return Translation.get('alarm.status.unprocessed');
             }
           }
         }

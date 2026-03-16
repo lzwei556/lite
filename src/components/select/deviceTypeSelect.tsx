@@ -1,9 +1,9 @@
 import { FC, useEffect } from 'react';
 import { Select, SelectProps } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { DeviceType } from '../../types/device_type';
 import { App, useAppType } from '../../config';
+import { Translation } from 'locales/utils';
 
 const { Option, OptGroup } = Select;
 
@@ -25,7 +25,7 @@ const DeviceTypeSelect: FC<DeviceTypeSelectProps> = (props) => {
   const renderSensors = () => {
     return App.getDeviceTypes(appType).map((item) => (
       <Option key={item} value={item}>
-        {intl.get(DeviceType.toString(item))}
+        {Translation.get(DeviceType.toString(item))}
       </Option>
     ));
   };
@@ -43,23 +43,23 @@ const DeviceTypeSelect: FC<DeviceTypeSelectProps> = (props) => {
         <Select {...props}>
           {appType !== 'corrosionWirelessHART' && (
             <>
-              <OptGroup label={intl.get('GATEWAY')} key={'gateway'}>
+              <OptGroup label={Translation.get('device.gateway')} key={'gateway'}>
                 {DeviceType.getGateways().map((t) => (
                   <Option key={t} value={t}>
-                    {intl.get(DeviceType.toString(t))}
+                    {Translation.get(DeviceType.toString(t))}
                   </Option>
                 ))}
               </OptGroup>
-              <OptGroup label={intl.get('RELAY')} key={'router'}>
+              <OptGroup label={Translation.get('device.relay')} key={'router'}>
                 {DeviceType.getRouters().map((t) => (
                   <Option key={t} value={t}>
-                    {intl.get(DeviceType.toString(t))}
+                    {Translation.get(DeviceType.toString(t))}
                   </Option>
                 ))}
               </OptGroup>
             </>
           )}
-          <OptGroup label={intl.get('SENSOR')} key={'sensor'}>
+          <OptGroup label={Translation.get('device.sensor')} key={'sensor'}>
             {renderSensors()}
           </OptGroup>
         </Select>

@@ -4,7 +4,7 @@ import { Role } from '../../../types/role';
 import { GetMenusTreeRequest } from '../../../apis/menu';
 import { Menu } from '../../../types/menu';
 import { AllocMenusRequest } from '../../../apis/role';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { CanAccess, Permission } from '../../../providers/access-control';
 
 export interface MenuDrawerProps extends DrawerProps {
@@ -35,10 +35,10 @@ const MenuDrawer: FC<MenuDrawerProps> = (props) => {
   const renderExtra = () => {
     return (
       <Space>
-        <Button onClick={onCancel}>{intl.get('CANCEL')}</Button>
+        <Button onClick={onCancel}>{Translation.get('common.action.cancel')}</Button>
         <CanAccess {...Permission.RoleList}>
           <Button type={'primary'} onClick={onSave}>
-            {intl.get('SAVE')}
+            {Translation.get('common.action.save')}
           </Button>
         </CanAccess>
       </Space>
@@ -75,7 +75,7 @@ const MenuDrawer: FC<MenuDrawerProps> = (props) => {
       .filter((item) => !item.hidden)
       .map((menu) => {
         const data: any = {
-          title: intl.get(menu.title).d(menu.title),
+          title: Translation.get(menu.title),
           key: menu.id
         };
         if (menu.children) {
@@ -91,7 +91,7 @@ const MenuDrawer: FC<MenuDrawerProps> = (props) => {
   return (
     <Drawer
       {...props}
-      title={intl.get(role?.name).d(role?.name)}
+      title={Translation.get(role?.name)}
       placement={'right'}
       onClose={onCancel}
       extra={renderExtra()}

@@ -6,7 +6,7 @@ import { GetDeviceFirmwaresRequest } from '../../../apis/firmware';
 import { Dayjs } from '../../../utils';
 import { DeviceUpgradeRequest } from '../../../apis/device';
 import { DeviceCommand } from '../../../types/device_command';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { Card, Descriptions, SelectFormItem } from '../../../components';
 
@@ -39,10 +39,10 @@ const UpgradeModal: FC<UpgradeModalProps> = ({ open, device, onCancel, onSuccess
           <Card>
             <Descriptions
               items={[
-                { label: intl.get('FIRMWARE_VERSION'), children: firmware.version },
-                { label: intl.get('HARDWARE_VERSION'), children: firmware.productId },
+                { label: Translation.get('firmware.version'), children: firmware.version },
+                { label: Translation.get('firmware.version.hard'), children: firmware.productId },
                 {
-                  label: intl.get('BUILD_DATE'),
+                  label: Translation.get('firmware.build.time'),
                   children: Dayjs.format(firmware.buildTime)
                 }
               ]}
@@ -54,27 +54,23 @@ const UpgradeModal: FC<UpgradeModalProps> = ({ open, device, onCancel, onSuccess
   };
 
   const onUpgrade = () => {
-    if (firmware === undefined) {
-      message.success(
-        intl.get('PLEASE_SELECT_SOMETHING', { something: intl.get('firmware').toLowerCase() })
-      );
-      return;
-    }
-    if (device) {
-      setIsLoading(true);
-      DeviceUpgradeRequest(device.id, {
-        firmware_id: firmware.id,
-        type: DeviceCommand.Upgrade
-      }).then((res) => {
-        setIsLoading(false);
-        if (res.code === 200) {
-          message.success(intl.get('COMMAND_SENT_SUCCESSFUL')).then();
-          onSuccess();
-        } else {
-          message.error(intl.get('FAILED_TO_SEND_COMMAND')).then();
-        }
-      });
-    }
+    form.validateFields().then(() => {
+      if (device) {
+        setIsLoading(true);
+        DeviceUpgradeRequest(device.id, {
+          firmware_id: firmware.id,
+          type: DeviceCommand.Upgrade
+        }).then((res) => {
+          setIsLoading(false);
+          if (res.code === 200) {
+            message.success(Translation.get('feedback.success.send')).then();
+            onSuccess();
+          } else {
+            message.error(Translation.failureDo('common.action.send')).then();
+          }
+        });
+      }
+    });
   };
 
   return (
@@ -82,16 +78,19 @@ const UpgradeModal: FC<UpgradeModalProps> = ({ open, device, onCancel, onSuccess
       afterClose={() => form.resetFields()}
       width={420}
       open={open}
-      title={intl.get('UPGRADE_FIRMWARE')}
-      okText={intl.get('UPGRADE')}
+      title={Translation.get('device.command.upgrade')}
+      okText={Translation.get('common.action.upgrade')}
       onOk={onUpgrade}
       onCancel={onCancel}
       confirmLoading={isLoading}
     >
       <Form form={form} layout='vertical'>
         <SelectFormItem
-          label='SELECT_FIRMWARE_VERSION'
+          label='firmware.version'
           name='firmware'
+          rules={[
+            { required: true, message: Translation.pleaseDoSth('common.action.select', 'firmware') }
+          ]}
           selectProps={{
             onChange: (value) => {
               setFirmware(firmwares.find((item) => item.id === value));

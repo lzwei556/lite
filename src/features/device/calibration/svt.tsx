@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Property } from '../../../types/property';
 import { DeviceType } from '../../../types/device_type';
 import { NumberFormItem, SelectFormItem, TextFormItem } from '../../../components';
@@ -17,7 +17,7 @@ export const SVT = ({
   const properties = all.filter((p) => calibratedPropertyKeys.includes(p.key));
   const [property, setProperty] = React.useState(properties[0]);
   const isSVT220S1 = DeviceType.SVT220S1 === typeId;
-  const axisLabels = ['AXIS_X', 'AXIS_Y', 'AXIS_Z'];
+  const axisLabels = ['label.axis.x', 'label.axis.y', 'label.axis.z'];
   const axisValues = {
     [calibratedPropertyKeys[0]]: [1, 2, 3],
     [calibratedPropertyKeys[1]]: [17, 18, 19]
@@ -27,10 +27,10 @@ export const SVT = ({
   return (
     <>
       <SelectFormItem
-        label='calibrate.type'
+        label='device.command.calibration.property'
         selectProps={{
           defaultValue: property.key,
-          options: properties.map((p) => ({ label: intl.get(p.name), value: p.key })),
+          options: properties.map((p) => ({ label: Translation.get(p.name), value: p.key })),
           onChange: (value: string) => {
             setProperty(properties.find((p) => p.key === value)!);
             onChange(axisValues[value][0]);
@@ -45,12 +45,12 @@ export const SVT = ({
       />
       {!isSVT220S1 && (
         <SelectFormItem
-          label='AXIS'
+          label='label.axis'
           name='sub_command'
           rules={[{ required: true }]}
           initialValue={axisValues[property.key][0]}
           selectProps={{
-            options: axis.map(({ label, value }) => ({ label: intl.get(label), value }))
+            options: axis.map(({ label, value }) => ({ label: Translation.get(label), value }))
           }}
         />
       )}

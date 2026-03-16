@@ -1,6 +1,6 @@
 import React from 'react';
 import { Checkbox, Select, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, LineChart } from '../../../components';
 import { AXIS_OPTIONS, DynamicData, PropertyLightSelectFilter } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
@@ -96,7 +96,7 @@ const Content = <T extends Data>(props: {
     let series: any = [];
     if (!!values && !!xAxis) {
       series.push({
-        data: { [AXIS_OPTIONS.map(({ label }) => intl.get(label))[axis]]: values },
+        data: { [AXIS_OPTIONS.map(({ label }) => Translation.get(label))[axis]]: values },
         xAxisValues: xAxis.map((n) => `${n}`),
         raw: {
           smooth: true
@@ -104,7 +104,7 @@ const Content = <T extends Data>(props: {
       });
       if (isShowEnvelope) {
         series.push({
-          data: { [AXIS_OPTIONS.map(({ label }) => intl.get(label))[axis]]: highEnvelopes },
+          data: { [AXIS_OPTIONS.map(({ label }) => Translation.get(label))[axis]]: highEnvelopes },
           xAxisValues: xAxis.map((n) => `${n}`),
           raw: {
             lineStyle: {
@@ -116,7 +116,7 @@ const Content = <T extends Data>(props: {
           }
         });
         series.push({
-          data: { [AXIS_OPTIONS.map(({ label }) => intl.get(label))[axis]]: lowEnvelopes },
+          data: { [AXIS_OPTIONS.map(({ label }) => Translation.get(label))[axis]]: lowEnvelopes },
           xAxisValues: xAxis.map((n) => `${n}`),
           raw: {
             lineStyle: {
@@ -175,7 +175,10 @@ const Content = <T extends Data>(props: {
             onChange={(val) => {
               props.onAxisChange(val);
             }}
-            options={AXIS_OPTIONS.map(({ label, value }) => ({ label: intl.get(label), value }))}
+            options={AXIS_OPTIONS.map(({ label, value }) => ({
+              label: Translation.get(label),
+              value
+            }))}
             popupMatchSelectWidth={false}
             value={axis}
           />
@@ -186,12 +189,12 @@ const Content = <T extends Data>(props: {
                 setIsShowEnvelope(e.target.checked);
               }}
             >
-              {intl.get('SHOW_ENVELOPE')}
+              {Translation.get('feature.waveform.envelope.enabled')}
             </Checkbox>
           )}
         </Space>
       }
-      title={field.label ? intl.get(field.label) : undefined}
+      title={field.label ? Translation.get(field.label) : undefined}
     >
       {renderChart()}
     </Card>

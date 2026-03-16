@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, ColProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { NumberFormItem, NumberFormItemWithSwitcher } from '../../components';
 import {
   CorrosionRateLongTerm,
@@ -57,7 +57,7 @@ function ShortTerm(props: Omit<FieldProps, 'formItemColProps'>) {
       {...rest}
       label={CorrosionRateShortTerm.label}
       name={nameProp}
-      inputNumberProps={{ addonAfter: intl.get(CorrosionRateShortTerm.unit!) }}
+      inputNumberProps={{ addonAfter: Translation.get(CorrosionRateShortTerm.unit!) }}
     />
   );
 }
@@ -72,7 +72,7 @@ function LongTerm(props: Omit<FieldProps, 'formItemColProps'>) {
       {...rest}
       label={CorrosionRateLongTerm.label}
       name={nameProp}
-      inputNumberProps={{ addonAfter: intl.get(CorrosionRateLongTerm.unit!) }}
+      inputNumberProps={{ addonAfter: Translation.get(CorrosionRateLongTerm.unit!) }}
     />
   );
 }

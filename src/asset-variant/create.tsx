@@ -1,6 +1,5 @@
 import React from 'react';
 import { Col, Form } from 'antd';
-import intl from 'react-intl-universal';
 import { ModalWrapper } from '../components/modalWrapper';
 import { ModalFormProps } from '../types/common';
 import { Card, Grid, SelectFormItem, TextFormItem } from '../components';
@@ -9,6 +8,7 @@ import { addAsset, AssetCategory, AssetModel } from '../asset-common';
 import { SettingFormItems } from './settingFormItems';
 import { useParents } from './utils';
 import { TypeFormItem } from './typeFormItem';
+import { Translation } from 'locales/utils';
 
 export const Create = (
   props: Omit<ModalFormProps, 'onSuccess'> & {
@@ -20,7 +20,7 @@ export const Create = (
   const { onSuccess, parentId, types } = props;
   const [form] = Form.useForm<AssetModel>();
   const [type, setType] = React.useState<number | undefined>();
-  const label = intl.get('ASSET');
+  const label = 'asset';
   const parents = useParents();
 
   const renderParent = () => {
@@ -44,8 +44,8 @@ export const Create = (
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('CREATE_SOMETHING', { something: label }),
-        okText: intl.get('CREATE'),
+        title: Translation.createSth(label),
+        okText: Translation.get('common.action.create'),
         ...props,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -62,11 +62,11 @@ export const Create = (
       }}
     >
       <Form form={form} layout='vertical'>
-        <Card size='small' style={{ marginBottom: 16 }} title={intl.get('BASIC_INFORMATION')}>
+        <Card style={{ marginBottom: 16 }} title={Translation.get('common.basic')}>
           <Grid>
             <Col {...generateColProps({ xl: 12, xxl: 12 })}>
               <TextFormItem
-                label='NAME'
+                label='common.name'
                 name='name'
                 rules={[{ required: true }, { min: 4, max: 50 }]}
               />

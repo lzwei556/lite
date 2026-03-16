@@ -41,7 +41,12 @@ const WAVEFORM_CORROSION: Waveform = {
     THICKNESS,
     { ...TEMPERATURE, key: 'temp' },
     TOF,
-    { key: 'envTemp', name: 'rod.top.temperature', unit: '℃', precision: TEMPERATURE.precision },
+    {
+      key: 'envTemp',
+      name: 'corrosion.rod-top.temperature',
+      unit: '℃',
+      precision: TEMPERATURE.precision
+    },
     { ...SIGNAL_STRENGTH, key: 'sigStrength' },
     { ...SIGNAL_QUALITY, key: 'signalQuality' }
     // { ...CORROSION_RATE, key: 'shortCorrosionRate', hidden: true },
@@ -234,15 +239,15 @@ export const PROPERTIES_WITH_ENVELOPE: VibrationPropertyKey[] = [
 
 export enum WaveformMonitoringPointKey {
   Corrosion = MonitoringPointType.Value.Corrosion,
-  HighTemperatureCorrosion = MonitoringPointType.Value.HighTemperatureCorrosion,
-  UltraHighTemperatureCorrosion = MonitoringPointType.Value.UltraHighTemperatureCorrosion,
-  BoltPreload = MonitoringPointType.Value.BoltPreload,
-  AnchorPreload = MonitoringPointType.Value.AnchorPreload,
+  HighTemperatureCorrosion = MonitoringPointType.Value['High-Temperature'],
+  UltraHighTemperatureCorrosion = MonitoringPointType.Value['Ultra-High-Temperature'],
+  BoltPreload = MonitoringPointType.Value.PreloadBolt,
+  AnchorPreload = MonitoringPointType.Value.PreloadAnchor,
   Vibration = MonitoringPointType.Value.Vibration,
-  VibrationRotationSingleAxis = MonitoringPointType.Value.VibrationRotationSingleAxis,
+  VibrationRotationSingleAxis = MonitoringPointType.Value['VibrationRotationSingle-Axis'],
   VibrationRotation = MonitoringPointType.Value.VibrationRotation,
-  TopInclination = MonitoringPointType.Value.TopInclination,
-  BaseInclination = MonitoringPointType.Value.BaseInclination
+  TopInclination = MonitoringPointType.Value.InclinationTop,
+  BaseInclination = MonitoringPointType.Value.InclinationBase
 }
 
 export const monitoringPointTypeWaveformMap: Record<WaveformMonitoringPointKey, Waveform> = {

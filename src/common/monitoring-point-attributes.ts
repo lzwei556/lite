@@ -80,72 +80,72 @@ export type AttributesField =
 export const positionField: AttributesField = {
   source: 'position',
   name: 'index',
-  label: 'monitoirng.point.position',
+  label: 'monitoring.point.position',
   description: 'index.desc',
   type: 'number'
 };
 const towerInstallAngle: AttributesField = {
   source: 'top-inclination',
   name: 'tower_install_angle',
-  label: 'tower.install.angle',
-  description: 'tower.install.angle.desc',
+  label: 'asset.tower.install.angle',
+  description: 'asset.tower.install.angle.desc',
   unit: '°',
   type: 'number'
 };
 const towerInstallHeight: AttributesField = {
   source: 'top-inclination',
   name: 'tower_install_height',
-  label: 'tower.install.height',
-  description: 'tower.install.height.desc',
+  label: 'asset.tower.install.height',
+  description: 'asset.tower.install.height.desc',
   unit: 'm',
   type: 'number'
 };
 const towerBaseRadius: AttributesField = {
   source: 'base-inclination',
   name: 'tower_base_radius',
-  label: 'tower.base.radius',
-  description: 'tower.base.radius.desc',
+  label: 'asset.tower.base.radius',
+  description: 'asset.tower.base.radius.desc',
   unit: 'm',
   type: 'number'
 };
 const initialThickness: AttributesField = {
   source: 'corrosion',
   name: 'initial_thickness',
-  label: 'initial.thickness',
-  description: 'initial.thickness.desc',
+  label: 'corrosion.initial.thickness',
+  description: 'corrosion.initial.thickness.desc',
   unit: 'mm',
   type: 'number-switcher'
 };
 const criticalThickness: AttributesField = {
   source: 'corrosion',
   name: 'critical_thickness',
-  label: 'critical.thickness',
-  description: 'critical.thickness.desc',
+  label: 'corrosion.critical.thickness',
+  description: 'corrosion.critical.thickness.desc',
   unit: 'mm',
   type: 'number-switcher'
 };
 const corrosionRateShortTerm: AttributesField = {
   source: 'corrosion',
   name: 'corrosion_rate_short_term',
-  label: 'corrosion.rate.short.term',
-  description: 'corrosion.rate.short.term.desc',
-  translatingUnit: 'UNIT_DAY',
+  label: 'SETTING_CORROSION_RATE_SHORT',
+  description: 'SETTING_CORROSION_RATE_SHORT_DESC',
+  translatingUnit: 'label.unit.day',
   type: 'number',
   defaultValue: 30
 };
 const corrosionRateLongTerm: AttributesField = {
   source: 'corrosion',
   name: 'corrosion_rate_long_term',
-  label: 'corrosion.rate.long.term',
-  description: 'corrosion.rate.long.term.desc',
-  translatingUnit: 'UNIT_DAY',
+  label: 'SETTING_CORROSION_RATE_LONG',
+  description: 'SETTING_CORROSION_RATE_LONG_DESC',
+  translatingUnit: 'label.unit.day',
   type: 'number',
   defaultValue: 365
 };
 const options = Axis.options.map((opt) => ({ label: opt.label, value: opt.key }));
 const axial: AttributesField = {
   source: 'vibration',
-  label: 'direction.axial',
+  label: 'monitoring.point.direction.axial',
   name: 'axial',
   description: 'axial.desc',
   options,
@@ -154,7 +154,7 @@ const axial: AttributesField = {
 };
 const vertical: AttributesField = {
   source: 'vibration',
-  label: 'direction.vertical',
+  label: 'monitoring.point.direction.vertical',
   name: 'vertical',
   description: 'vertical.desc',
   options,
@@ -163,7 +163,7 @@ const vertical: AttributesField = {
 };
 const horizontal: AttributesField = {
   source: 'vibration',
-  label: 'direction.horizontal',
+  label: 'monitoring.point.direction.horizontal',
   name: 'horizontal',
   description: 'horizontal.desc',
   options,

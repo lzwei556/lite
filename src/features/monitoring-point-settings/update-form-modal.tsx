@@ -4,7 +4,6 @@ import React from 'react';
 import { ModalFormProps } from 'types/common';
 import { useType } from './use-basic-form-items';
 import { ModalWrapper } from 'components/modalWrapper';
-import intl from 'react-intl-universal';
 import { Grid } from 'components';
 import {
   AssetSelectFormItem,
@@ -13,6 +12,7 @@ import {
   TypeSelectFormItem
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
+import { Translation } from 'locales/utils';
 
 export const UpdateFormModal = ({
   onSuccess,
@@ -30,7 +30,7 @@ export const UpdateFormModal = ({
         ...rest,
         afterClose: () => form.resetFields(),
         onOk: () => form.validateFields().then(onSuccess),
-        title: intl.get('EDIT_SOMETHING', { something: intl.get('monitoring.points') })
+        title: Translation.editSth('monitoring.points')
       }}
     >
       <Form form={form} layout='vertical' initialValues={point}>

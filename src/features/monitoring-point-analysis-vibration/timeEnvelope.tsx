@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { timeEnvelope } from 'asset-common';
 import { useWindow, Window, FilterTypeRelated, useFilterTypeRelated } from './settings';
 import { CardChart, useLinedSeriesOptions } from 'components';
@@ -65,11 +65,11 @@ export const TimeEnvelope = ({ filters, intermediateData }: AnalysisProps) => {
         },
         series: [
           {
-            data: { [intl.get('time.envelope')]: y },
+            data: { [Translation.get('vibration.analysis.time-envelope')]: y },
             xAxisValues: x.map((n, i) => `${i}`)
           },
           {
-            data: { [intl.get('signal')]: x },
+            data: { [Translation.get('vibration.analysis.signal')]: x },
             xAxisValues: x.map((n, i) => `${i}`)
           }
         ],

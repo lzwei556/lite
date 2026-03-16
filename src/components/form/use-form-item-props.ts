@@ -1,43 +1,37 @@
-import React from 'react';
 import { FormItemProps } from 'antd';
-import { RuleObject } from 'antd/es/form';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const useFormItemIntlProps = (props: FormItemProps): FormItemProps => {
-  const { label, rules, ...rest } = props;
-  return isLabelString(label)
-    ? { ...rest, label: intl.get(label), rules: mixLabelToOjectRules(rules, label) }
-    : props;
+  const { label: originLabel, rules, ...rest } = props;
+  const isLabelString = typeof originLabel === 'string';
+  const label = isLabelString ? Translation.get(originLabel as string) : originLabel;
+  return {
+    ...rest,
+    label,
+    rules: rules?.map((rule) =>
+      translateRuleMessage(rule, isLabelString ? (label as string) : undefined)
+    )
+  };
 };
 
-const isLabelString = (label: React.ReactNode) => {
-  return typeof label === 'string';
-};
+type Rule = NonNullable<FormItemProps['rules']>[0];
 
-const mixLabelToOjectRules = (
-  rules: FormItemProps['rules'],
-  label: string
-): FormItemProps['rules'] => {
-  return rules?.map((rule) => {
-    return typeof rule == 'function' ? rule : padMessage(rule, label);
-  });
-};
-
-const padMessage = (rule: RuleObject, label: string) => {
-  let message = rule.message;
-  if (message) {
+const translateRuleMessage = (rule: Rule, label?: string): Rule => {
+  if (typeof rule == 'function') {
     return rule;
+  } else {
+    let message = rule.message;
+    if (!message && rule.required && label) {
+      message = getRequiredMessage(label);
+    } else if (message && typeof message === 'string') {
+      message = Translation.get(message);
+    }
+    return { ...rule, message };
   }
-  if (rule.required) {
-    message = getRequiredMessage(label);
-  }
-  return { ...rule, message };
 };
 
 export const getRequiredMessage = (label: string) => {
-  return intl.get('PLEASE_ENTER_SOMETHING', {
-    something: smoothCapitalization(intl.get(label))
-  });
+  return Translation.pleaseEnterSth(smoothCapitalization(label));
 };
 
 const smoothCapitalization = (text: string) => {

@@ -1,7 +1,6 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Table } from '../../components';
-import { useLocaleContext } from '../../localeProvider';
 import {
   AssetRow,
   CorrosionRateLongTerm,
@@ -14,9 +13,12 @@ import {
   Points,
   positionColumn
 } from '../../asset-common';
-import { getDisplayName, getValue } from '../../utils';
+import { getValue } from '../../utils';
 import { ActionBar } from './actionBar';
 import { Permission, useCan } from '../../providers/access-control';
+import { toPascal } from 'ts-case-convert';
+import { useI18n } from 'providers/i18n';
+import { getDisplayName } from 'locales/utils';
 
 export const PointsTable = (props: {
   asset: AssetRow;
@@ -24,7 +26,7 @@ export const PointsTable = (props: {
   onSuccess: () => void;
 }) => {
   const { asset, onUpdate, onSuccess } = props;
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const basicColumns = getMonitoringPointColumns({ language });
   const { monitoringPoints = [] } = asset;
   const actualPoints = Points.filter(monitoringPoints);
@@ -34,7 +36,7 @@ export const PointsTable = (props: {
   const initialCol = {
     title: () =>
       getDisplayName({
-        name: intl.get(InitialThickness.label),
+        name: Translation.get(InitialThickness.label),
         lang: language,
         suffix: InitialThickness.unit
       }),
@@ -46,7 +48,7 @@ export const PointsTable = (props: {
   const criticalCol = {
     title: () =>
       getDisplayName({
-        name: intl.get(CriticalThickness.label),
+        name: Translation.get(CriticalThickness.label),
         lang: language,
         suffix: CriticalThickness.unit
       }),
@@ -58,9 +60,9 @@ export const PointsTable = (props: {
   const shortTermCol = {
     title: () =>
       getDisplayName({
-        name: intl.get(CorrosionRateShortTerm.label),
+        name: Translation.get(CorrosionRateShortTerm.label),
         lang: language,
-        suffix: intl.get(CorrosionRateShortTerm.unit!)
+        suffix: toPascal(Translation.get(CorrosionRateShortTerm.unit!))
       }),
     dataIndex: ['attributes', CorrosionRateShortTerm.name],
     key: CorrosionRateShortTerm.name,
@@ -70,9 +72,9 @@ export const PointsTable = (props: {
   const longTermCol = {
     title: () =>
       getDisplayName({
-        name: intl.get(CorrosionRateLongTerm.label),
+        name: Translation.get(CorrosionRateLongTerm.label),
         lang: language,
-        suffix: intl.get(CorrosionRateLongTerm.unit!)
+        suffix: toPascal(Translation.get(CorrosionRateLongTerm.unit!))
       }),
     dataIndex: ['attributes', CorrosionRateLongTerm.name],
     key: CorrosionRateLongTerm.name,
@@ -92,7 +94,7 @@ export const PointsTable = (props: {
     <Table
       cardProps={{
         extra: canAddMonitoringPoint && <ActionBar {...props} />,
-        title: intl.get('monitoring.points')
+        title: Translation.get('monitoring.points')
       }}
       columns={columns}
       dataSource={Points.sort(actualPoints)}

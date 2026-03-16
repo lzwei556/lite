@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   AlarmRuleSetting,
   MonitoringPoint,
@@ -33,7 +33,7 @@ export const Settings = ({
               }}
             />
           }
-          title={intl.get('BASIC_INFORMATION')}
+          title={Translation.get('common.basic')}
         >
           <Form form={form} layout='vertical' initialValues={{ ...Point.convert(point) }}>
             <UpdateFormItems monitoringPoint={point} />

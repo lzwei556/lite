@@ -1,12 +1,12 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Role } from '../../types/role';
 import { PagingRolesRequest } from '../../apis/role';
 
 export const useRoleSelectProps = () => {
   const roles = useRoles();
   return {
-    options: roles.map((role) => ({ label: intl.get(role.name), value: role.id }))
+    options: roles.map((role) => ({ label: Translation.get(role.name), value: role.id }))
   };
 };
 

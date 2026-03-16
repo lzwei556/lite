@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { generateColProps } from '../../../../utils/grid';
 import { ModalFormProps } from '../../../../types/common';
 import { Card, SaveIconButton } from '../../../../components';
@@ -29,7 +29,7 @@ export const Update = (props: ModalFormProps & { asset: AssetRow }) => {
           />
         </CanAccess>
       }
-      title={intl.get('BASIC_INFORMATION')}
+      title={Translation.get('common.basic')}
     >
       <Form form={form} layout='vertical' initialValues={{ ...Asset.convert(asset) }}>
         <UpdateFormItems formItemColProps={generateColProps({ lg: 12, xl: 12, xxl: 8 })} />

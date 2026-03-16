@@ -2,7 +2,6 @@ import React from 'react';
 import { ChartMark } from 'components';
 import { getLineStyles, getMarkTypeLabel } from '../mark';
 import { Property } from '../useTrend';
-import intl from 'react-intl-universal';
 import { getValue } from 'utils';
 
 export const cursors = ['center', 'side'] as const;
@@ -56,7 +55,7 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
         type: 'append_multiple',
         mark: {
           name: `center${coord.join()}`,
-          label: 'sideband.center',
+          label: 'vibration.analysis.sideband.center',
           data: [coord, [coord[0], topY]],
           type: markType,
           chartProps: getLineStyles(
@@ -78,8 +77,8 @@ export const Context = ({ children }: { children: React.ReactNode }) => {
     (indexs: { index: number; label: string }[], x: number[], y: number[], topY: number) => {
       clearMarks('side');
       indexs.forEach(({ index, label }, i) => {
-        const xValue = x[index] ?? 'out.of.range';
-        const yValue = y[index] ?? 'out.of.range';
+        const xValue = x[index];
+        const yValue = y[index];
         dispatchMarks({
           type: 'append_multiple',
           mark: {
@@ -137,8 +136,8 @@ export const getIndexs = ({
   const halfNum = (cursor - 1) / 2;
   const lefts: { index: number; label: string }[] = [];
   const rights: { index: number; label: string }[] = [];
-  const left = 'sideband.left';
-  const right = 'sideband.right';
+  const left = 'vibration.analysis.sideband.left';
+  const right = 'vibration.analysis.sideband.right';
   if (isLeft) {
     Array(halfNum)
       .fill(-1)

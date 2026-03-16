@@ -2,7 +2,7 @@ import React from 'react';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { NumberFormItem } from '../../../components';
 
 export const FillModalForm = (
@@ -16,8 +16,8 @@ export const FillModalForm = (
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('oil.filler.fill'),
-        okText: intl.get('OK'),
+        title: Translation.get('device.command.fill'),
+        okText: Translation.get('common.ok'),
         ...rest,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -29,7 +29,7 @@ export const FillModalForm = (
       <Form form={form} layout='vertical'>
         <NumberFormItem
           name='param'
-          label={'oil.filler.fill.count'}
+          label={'device.command.fill.count'}
           rules={[{ required: true }, { type: 'number', min: 1, max: 20 }]}
         />
       </Form>

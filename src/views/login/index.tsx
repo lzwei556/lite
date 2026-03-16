@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { Col, Row } from 'antd';
 import { useGlobalStyles } from '../../styles';
 import ad from '../../assets/images/login-ad-dark.png';
-import { LangSwitcher, useLocaleContext } from '../../localeProvider';
 import { Brand } from '../layout/brand';
 import './login.css';
 import { LoginForm } from '../../features/auth';
+import { isLanguageChinese, LanguagesDropdown, useI18n } from 'providers/i18n';
 
 const LoginPage: FC = () => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const { colorWhiteStyle } = useGlobalStyles();
 
   return (
@@ -19,7 +19,7 @@ const LoginPage: FC = () => {
             <Brand
               height={80}
               gap={48}
-              brandNameStyle={{ fontSize: 42, letterSpacing: language === 'zh-CN' ? 12 : 0 }}
+              brandNameStyle={{ fontSize: 42, letterSpacing: isLanguageChinese(language) ? 12 : 0 }}
             />
           </Col>
         </Row>
@@ -36,7 +36,7 @@ const LoginPage: FC = () => {
       </div>
       <LoginForm />
       <div style={{ position: 'fixed', bottom: 20 }}>
-        <LangSwitcher style={colorWhiteStyle} />
+        <LanguagesDropdown style={colorWhiteStyle} />
       </div>
     </div>
   );

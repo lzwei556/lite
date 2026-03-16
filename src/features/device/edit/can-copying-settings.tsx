@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, ButtonProps, Checkbox, CheckboxChangeEvent, Col } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { Grid } from '../../../components';
 import { useModalBindingsProps } from '../../../hooks';
@@ -55,7 +55,7 @@ const useProps = (settingsForm: FormCommonProps['form'], device: Props['device']
     modalProps: useModalProps({ ...rest, device, selected, setSelected }),
     checkAllInputProps: {
       checked: isAllSelected,
-      children: intl.get('SELECT_ALL'),
+      children: Translation.get('common.action.select.all'),
       indeterminate: isIndeterminate,
       onChange: toggleSelectAll
     },
@@ -112,7 +112,7 @@ const useModalProps = ({
   return useModalBindingsProps({
     afterClose: () => setSelected([]),
     okButtonProps: { loading },
-    okText: intl.get('SAVE'),
+    okText: Translation.get('common.action.save'),
     onCancel: () => setOpen(false),
     onOk: () => handleSubmit(selected),
     open

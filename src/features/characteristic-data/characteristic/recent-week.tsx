@@ -2,7 +2,7 @@ import { Col, Collapse, Empty, Spin } from 'antd';
 import { Grid } from 'components';
 import { HistoryDataFea } from 'features';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   RecentWeekProps,
   useGridItemsProps,
@@ -43,7 +43,7 @@ const GroupedPropertyChartsGridCollapse = (props: Props) => {
       {...collapseProps}
       items={groups.map(([g, properties]) => ({
         key: g,
-        label: intl.get(g),
+        label: Translation.get(g),
         children: (
           <Grid>
             <GridItems {...{ ...props, properties }} group={g} />

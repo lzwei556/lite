@@ -19,7 +19,11 @@ export const UpdateFormItems = ({
   return (
     <Grid>
       <Col {...formItemColProps}>
-        <TextFormItem label='NAME' name='name' rules={[{ required: true }, { min: 4, max: 50 }]} />
+        <TextFormItem
+          label='common.name'
+          name='name'
+          rules={[{ required: true }, { min: 4, max: 50 }]}
+        />
       </Col>
       <Col {...formItemColProps}>
         {asset.parentId > 0 && (
@@ -33,3 +37,4 @@ export const UpdateFormItems = ({
     </Grid>
   );
 };
+

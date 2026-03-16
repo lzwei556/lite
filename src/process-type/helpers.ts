@@ -7,7 +7,7 @@ import { foreachTree } from 'utils/tree';
 export const getOptions = () =>
   processTypes.map(({ key }) => ({ value: key, label: Key.getLabel(key) }));
 
-const PREFIX = 'process.type.';
+const PREFIX = 'process.';
 
 export const Key = {
   getLabel: (key: ProcessTypeKey) => {

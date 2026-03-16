@@ -19,12 +19,13 @@ import {
   useFillRecords
 } from './use-services';
 import { MonitoringPointRow } from 'monitoring-point';
-import intl from 'react-intl-universal';
-import { Dayjs, getDisplayName, getOptionLabelByValue, getValue, roundValue } from 'utils';
+import { Translation } from 'locales/utils';
+import { Dayjs, getOptionLabelByValue, getValue, roundValue } from 'utils';
 import { autoFillParameter, ProcessType, ProcessTypeKey } from 'process-type';
-import { Language, useLocaleContext } from 'localeProvider';
 import { sourceIdField } from './common';
 import { FaultType } from 'common';
+import { LanguageCode, useI18n } from 'providers/i18n';
+import { getDisplayName } from 'locales/utils';
 
 type ReasonDetail = { label: string; children: string | number };
 
@@ -36,24 +37,24 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
   const { data, runAsync: fetch } = useFillRecords([id, { from, to, ...page }]);
   const { paged, ds } = transformPagedresult(data);
 
-  const monitoringPoints = ProcessType.useDataSources(assetId, ProcessTypeKey.AutoFill);
+  const monitoringPoints = ProcessType.useDataSources(assetId, ProcessTypeKey['Auto-Fill']);
 
   React.useEffect(() => {
     fetch(id, { from, to, ...page });
   }, [id, fetch, from, to, page]);
 
-  const getColumns = (lang: Language) => {
+  const getColumns = (lang: LanguageCode) => {
     const dataSourceId = {
       key: 'dataSourceId',
       dataIndex: 'dataSourceId',
-      title: intl.get(sourceIdField.label),
+      title: Translation.get(sourceIdField.label),
       render: (id: number) => monitoringPoints.find((m) => m.id === id)?.name
     };
     const capacity = {
       key: 'capacity',
       dataIndex: 'capacity',
       title: getDisplayName({
-        name: intl.get(autoFillParameter.fillingCapacity.label),
+        name: Translation.get(autoFillParameter.fillingCapacity.label),
         lang,
         suffix: autoFillParameter.fillingCapacity.unit
       })
@@ -61,19 +62,19 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
     const reason = {
       key: 'reasons',
       dataIndex: 'reasons',
-      title: intl.get('fill.reason'),
+      title: Translation.get('process.auto-fill.reason'),
       render: (_: string, row: FillRecord) => <ReasonsCell record={row} />
     };
     const result = {
       key: 'result',
       dataIndex: 'result',
-      title: intl.get('fill.result'),
-      render: (result: number) => intl.get(getOptionLabelByValue(fillResultOptions, result))
+      title: Translation.get('process.auto-fill.result'),
+      render: (result: number) => Translation.get(getOptionLabelByValue(fillResultOptions, result))
     };
     const timestamp = {
       key: 'timestamp',
       dataIndex: 'timestamp',
-      title: intl.get('TIMESTAMP'),
+      title: Translation.get('common.timestamp'),
       render: (timestamp: number) => Dayjs.format(timestamp)
     };
     return [dataSourceId, capacity, reason, result, timestamp];
@@ -94,7 +95,7 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
           onTabChange={setType}
           tabList={dataTypeOptions.map(({ label, value }) => ({
             key: `${value}`,
-            label: intl.get(label),
+            label: Translation.get(label),
             children: (
               <Table
                 columns={getColumns()}
@@ -106,7 +107,7 @@ export const FillRecords = ({ id, assetId }: MonitoringPointRow) => {
           }))}
         /> */}
         <Table
-          columns={getColumns(useLocaleContext().language)}
+          columns={getColumns(useI18n().language)}
           dataSource={ds}
           pagination={{ ...paged, onChange: (page, size) => setPage({ page, size }) }}
           // rowKey={}
@@ -132,10 +133,10 @@ const ReasonsCell = ({ record }: { record: FillRecord }) => {
           <Popover
             content={<Descriptions items={reasons} />}
             styles={{ body: { width: '25em' } }}
-            title={intl.get('fill.reason')}
+            title={Translation.get('process.auto-fill.reason')}
             trigger={['click']}
           >
-            {intl.get('CLICK_TO_VIEW')}
+            {Translation.get('common.action.view')}
           </Popover>
         </Button>
       </Space>
@@ -168,13 +169,13 @@ const getFailureReasonOfFeatureData = (reason: number, row: FillRecord): ReasonD
     velocityZ,
     temperature
   } = row;
-  const label = intl.get(getOptionLabelByValue(fillReasonOptions, reason));
+  const label = Translation.get(getOptionLabelByValue(fillReasonOptions, reason));
   switch (reason) {
     case Reason.Temperatue:
       return { label, children: getValue({ value: temperature, unit: '℃' }) };
-    case Reason.soundPressureLevel:
+    case Reason['Sound-Pressure-Level']:
       return { label, children: roundValue(soundPressureLevel) };
-    case Reason.energyRatio:
+    case Reason['Energy-Ratio']:
       return { label, children: roundValue(energyRatio) };
     case Reason.stationarity:
       return { label, children: roundValue(stationarity) };
@@ -185,10 +186,10 @@ const getFailureReasonOfFeatureData = (reason: number, row: FillRecord): ReasonD
     case Reason.velocityZ:
       return { label, children: getValue({ value: velocityZ, unit: 'mm/s' }) };
     default:
-      return { label: intl.get('DEVICE_TYPE_UNKNOWN'), children: -1 };
+      return { label: Translation.get('device.type.unknown'), children: -1 };
   }
 };
 
 const getFailureReasonOfFault = (reason: number): ReasonDetail => {
-  return { label: intl.get(getOptionLabelByValue(FaultType.options, reason)), children: '' };
+  return { label: Translation.get(getOptionLabelByValue(FaultType.options, reason)), children: '' };
 };

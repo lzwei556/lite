@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Statistic, Typography, Image } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Flex, Grid, Link } from '../../../components';
 import { Asset, ASSET_PATHNAME, AssetRow, AssetStatusTag } from '../../../asset-common';
 import { useGlobalStyles } from '../../../styles';
@@ -41,7 +41,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
     >
       <Grid>
         {Asset.Statistics.resolveStatus(statistics.monitoringPointNum, statistics.alarmNum)
-          .map((s) => ({ ...s, name: intl.get(s.name) }))
+          .map((s) => ({ ...s, name: Translation.get(s.name) }))
           .map(({ name, value }) => (
             <Col key={name} span={6}>
               <Statistic

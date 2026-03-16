@@ -1,4 +1,4 @@
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { CardProps, Descriptions, Flex, Grid, MutedCard } from 'components';
 import { FaultDiagnosis, useHealthStatus } from './common';
 import { Col, Progress, Space } from 'antd';
@@ -27,7 +27,7 @@ export const ComponentsHealthyList = ({
     );
   } else {
     return (
-      <MutedCard title={intl.get('component.health.status')} {...cardProps}>
+      <MutedCard title={Translation.get('diagnosis.health')} {...cardProps}>
         <Grid>
           {components.map((component) => (
             <Col key={component.componentId} {...generateColProps({ lg: 12, xl: 12, xxl: 12 })}>
@@ -49,8 +49,8 @@ const FaultDiagnosisBar = ({
     <>
       <Flex justify='space-between'>
         <Space>
-          {intl.get(Component.Key.get(componentId).label)}
-          <span>（{intl.get(status.label)}）</span>
+          {Translation.get(Component.Key.get(componentId).label)}
+          <span>（{Translation.get(status.label)}）</span>
         </Space>
         {healthIndex}
       </Flex>
@@ -79,13 +79,13 @@ const FaultDiagnosisCard = ({
         color,
         background: `no-repeat center right 15% / 80px url(${BoxSvg}) rgba(${healthy.status.color.join()}, .85)`
       }}
-      title={intl.get(Component.Key.get(componentId).label)}
+      title={Translation.get(Component.Key.get(componentId).label)}
     >
       <Descriptions
         items={[
           {
             label: healthy.label,
-            children: intl.get(healthy.status.label)
+            children: Translation.get(healthy.status.label)
           },
           {
             ...descriptionWithConfidence,
@@ -99,8 +99,10 @@ const FaultDiagnosisCard = ({
               : descriptionWithConfidence.children
           },
           {
-            label: intl.get('iso.diagnosis.status'),
-            children: iso ? `${iso.zone} ${intl.get(iso.recommendation)}` : intl.get('NONE')
+            label: Translation.get('diagnosis.iso.status'),
+            children: iso
+              ? `${iso.zone} ${Translation.get(iso.recommendation)}`
+              : Translation.get('common.none')
           }
         ]}
         labelStyle={{ width: '6em', color }}

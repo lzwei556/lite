@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Descriptions, Grid, MutedCard } from '../../../components';
 import { Device } from '../../../types/device';
 import { Network } from '../../../types/network';
@@ -30,8 +30,13 @@ export const GatewayDetail = ({ device, network }: { device: Device; network?: N
           <DeviceChildrenStatistics devices={network.nodes} />
           <DeviceStatus device={device} />
           <Col span={24}>
-            <MutedCard title={intl.get('BASIC_INFORMATION')}>
-              <Descriptions column={1} items={basisFields} />
+            <MutedCard title={Translation.get('common.basic')}>
+              <Descriptions
+                column={1}
+                items={basisFields}
+                contentStyle={{ justifyContent: 'flex-start' }}
+                layout='vertical'
+              />
             </MutedCard>
           </Col>
         </Grid>

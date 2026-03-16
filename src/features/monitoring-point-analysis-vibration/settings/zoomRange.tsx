@@ -1,12 +1,15 @@
 import React from 'react';
 import { Button, Form, Popover, Space } from 'antd';
 import { ZoomInOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Flex, IconButton, NumberFormItem, TextFormItem } from 'components';
 
 type RangeProps = { f_h: number; f_l: number };
 
-const Range = { label: 'zoom.frequency.range', range: [{ name: 'f_l' }, { name: 'f_h' }] };
+const Range = {
+  label: 'vibration.analysis.frequency.zoom.range',
+  range: [{ name: 'f_l' }, { name: 'f_h' }]
+};
 
 export function useZoomRange() {
   const [zoomRange, setZoomRange] = React.useState<RangeProps>({ f_h: 2000, f_l: 1000 });
@@ -41,7 +44,7 @@ export const ZoomRange = ({ onOk }: { onOk: (values: RangeProps) => void }) => {
                     setOpen(false);
                   }}
                 >
-                  {intl.get('CANCEL')}
+                  {Translation.get('common.action.cancel')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -52,7 +55,7 @@ export const ZoomRange = ({ onOk }: { onOk: (values: RangeProps) => void }) => {
                   }}
                   type='primary'
                 >
-                  {intl.get('OK')}
+                  {Translation.get('common.ok')}
                 </Button>
               </Space>
             </Flex>
@@ -69,7 +72,7 @@ export const ZoomRange = ({ onOk }: { onOk: (values: RangeProps) => void }) => {
         icon={<ZoomInOutlined />}
         onClick={() => setOpen(true)}
         size='small'
-        tooltipProps={{ title: intl.get('analysis.vibration.zoom.range') }}
+        tooltipProps={{ title: Translation.get('vibration.analysis.frequency.zoom') }}
         variant='outlined'
       />
     </Popover>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useWindow, Window, useZoomRange, ZoomRange } from './settings';
 import { roundValue } from 'utils';
 import { CardChart, Grid, useLinedSeriesOptions } from 'components';
@@ -69,7 +69,7 @@ export const Zoom = ({ filters, intermediateData }: AnalysisProps) => {
             },
             series: [
               {
-                data: { [intl.get(axis.label)]: y },
+                data: { [Translation.get(axis.label)]: y },
                 xAxisValues: x.map((n) => `${n}`)
               }
             ],

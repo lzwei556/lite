@@ -1,13 +1,12 @@
 import React from 'react';
 import { Divider, Input, List, Popover, Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   ChartMark,
   DeleteIconButtonWithoutConfirm,
   EditIconButton,
   useChartContext
 } from '../../components';
-import { useLocaleContext } from '../../localeProvider';
 import { CharacteristicData } from 'common';
 import { MarkType } from '.';
 
@@ -20,9 +19,9 @@ export const MarkList = ({
 }) => {
   const ref = useChartContext();
   const { marks, dispatchMarks } = ChartMark.useContext();
-  let propertyTitle = `${intl.get(property.name)} (${property.unit})`;
+  let propertyTitle = `${Translation.get(property.name)} (${property.unit})`;
   if (markType === 'area') {
-    propertyTitle = `${intl.get('FIELD_CORROSION_RATE')} (mm/a)`;
+    propertyTitle = `${Translation.get('FIELD_CORROSION_RATE')} (mm/a)`;
   }
   const visibledMarks = marks.filter((mark) => mark.type === markType);
   return (
@@ -46,7 +45,7 @@ export const MarkList = ({
       header={
         visibledMarks.length > 0 && (
           <Space split={<Divider type='vertical' />} size={8}>
-            {intl.get('INDEX_NUMBER')}
+            {Translation.get('common.index')}
             {propertyTitle}
           </Space>
         )
@@ -69,11 +68,10 @@ const Item = ({
   onRemove: () => void;
   onChange: (value: string) => void;
 }) => {
-  const { language } = useLocaleContext();
   const renderDescription = () => {
     const descriptions = description?.split(',') ?? [];
-    const start = language === 'en-US' ? 'Start ' : '开始';
-    const end = language === 'en-US' ? 'End ' : '结束';
+    const start = Translation.get('common.begin');
+    const end = Translation.get('common.end');
     return (
       <Space direction='vertical' size={0}>
         {descriptions.length <= 1
@@ -96,7 +94,7 @@ const Item = ({
               <Typography.Text type='secondary'>{label}</Typography.Text>
               <Pop key={name} val={label} onBlur={(e) => onChange(e.target.value)} />
             </span>
-            {value === '0' ? intl.get('no.corrosion') : value}
+            {value === '0' ? Translation.get('corrosion.analysis.no') : value}
           </Space>
         }
         description={renderDescription()}

@@ -4,7 +4,7 @@ import React from 'react';
 import { useFormItemBindingsProps } from 'hooks';
 import { MonitoringPointType } from 'common';
 import { App, useAppType } from 'config';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { DeviceSelect } from './device-select';
 import { generateColProps } from 'utils/grid';
 import { useAssets, useType } from './use-basic-form-items';
@@ -25,7 +25,7 @@ export const FormItemsBasic = ({
       <Col {...formItemColProps}>
         <TextFormItem
           {...useFormItemBindingsProps({
-            label: 'NAME',
+            label: 'common.name',
             name: 'name',
             rules: [{ required: true }, { min: 4, max: 50 }]
           })}
@@ -47,7 +47,7 @@ export const TypeSelectFormItem = (param: Omit<ReturnType<typeof useType>, 'sele
       <SelectFormItem
         {...{
           ...useFormItemBindingsProps({
-            label: 'TYPE',
+            label: 'common.type',
             name: 'type',
             rules: [{ required: true }]
           }),
@@ -58,7 +58,7 @@ export const TypeSelectFormItem = (param: Omit<ReturnType<typeof useType>, 'sele
               form.setFieldValue('typeLabel', opt?.label);
               form.setFieldValue('device_id', null);
             },
-            options: types.map((t) => ({ ...t, label: intl.get(t.label) }))
+            options: types.map((t) => ({ ...t, label: Translation.get(t.label) }))
           }
         }}
       />
@@ -73,7 +73,7 @@ export const SensorSelectFormItem = ({ type }: { type?: number }) => {
     <>
       <TextFormItem
         {...useFormItemBindingsProps({
-          label: 'SENSOR',
+          label: 'device.sensor',
           name: 'device_id',
           rules: [{ required: true }]
         })}
@@ -100,7 +100,7 @@ export const AssetSelectFormItem = ({
 }) => {
   const assets = useAssets(rest);
   const formItemProps = useFormItemBindingsProps({
-    label: 'ASSET',
+    label: 'asset',
     name: 'asset_id',
     rules: [{ required: true }],
     hidden: !!rest.assetId

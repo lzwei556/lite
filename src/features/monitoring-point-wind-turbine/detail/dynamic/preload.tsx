@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Col, Empty } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { getValue } from '../../../../utils/format';
 import { Card, Descriptions, Grid, LineChart, SeriesOption } from '../../../../components';
 import { AXIS_OPTIONS, Metadata, PropertyLightSelectFilter } from '../../../../asset-common';
@@ -31,7 +31,7 @@ export function Preload<T extends PreloadDynamicData>(props: { values: T }) {
         bordered={true}
         column={{ xxl: 3, xl: 2, lg: 2, md: 2, xs: 1 }}
         items={metaData.map(({ label, value, unit, precision }) => ({
-          label: intl.get(label),
+          label: Translation.get(label),
           children: getMetaProperty(values.metadata, value, unit, precision)
         }))}
       />
@@ -52,7 +52,7 @@ export function Preload<T extends PreloadDynamicData>(props: { values: T }) {
       if (typeof data[0] === 'number') {
         series = [
           {
-            data: { [intl.get(field.label)]: data as number[] },
+            data: { [Translation.get(field.label)]: data as number[] },
             xAxisValues: data.map((n, i) => `${i}`)
           }
         ];
@@ -62,7 +62,7 @@ export function Preload<T extends PreloadDynamicData>(props: { values: T }) {
           const axisData = (data as Dynamic_acceleration).map((item) => item[`${key}Axis`]);
           return {
             data: {
-              [intl.get(label)]: axisData
+              [Translation.get(label)]: axisData
             },
             xAxisValues: axisData.map((n, i) => `${i}`)
           };

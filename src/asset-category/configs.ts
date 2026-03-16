@@ -36,14 +36,14 @@ export enum Value {
   Fan = 320,
   Blower = 321,
   Compressor = 322,
-  MotorGeneratorSet = 331,
+  'Motor-GeneratorSet' = 331,
   Motor = 351,
   Pump = 361,
-  CoolingTower = 371,
+  'Cooling-Tower' = 371,
   Chiller = 372
 }
 
-const PREFIX = 'asset.category.';
+const PREFIX = 'asset.';
 
 const motorSettings: (SettingsField & { group: string })[] = motorFields.map((f) => ({
   ...f,
@@ -71,16 +71,16 @@ const configs: Config[] = [
       Value.Fan,
       Value.Blower,
       Value.Compressor,
-      Value.MotorGeneratorSet,
+      Value['Motor-GeneratorSet'],
       Value.Motor,
       Value.Pump,
-      Value.CoolingTower,
+      Value['Cooling-Tower'],
       Value.Chiller
     ],
     isRoot: true
   },
-  { key: Value.Pipe, label: Value[Value.Pipe], labelPlural: 'pipes', children: [] },
-  { key: Value.Tank, label: Value[Value.Tank], labelPlural: 'tanks', children: [] },
+  { key: Value.Pipe, label: Value[Value.Pipe], labelPlural: 'asset.pipes', children: [] },
+  { key: Value.Tank, label: Value[Value.Tank], labelPlural: 'asset.tanks', children: [] },
   {
     key: Value.Fan,
     label: Value[Value.Fan],
@@ -114,14 +114,16 @@ const configs: Config[] = [
     image: CompressorImage
   },
   {
-    key: Value.MotorGeneratorSet,
-    label: Value[Value.MotorGeneratorSet],
-    labelPlural: `${PREFIX}motor.generator.sets`,
+    key: Value['Motor-GeneratorSet'],
+    label: Value[Value['Motor-GeneratorSet']],
+    labelPlural: `${PREFIX}motor-generator.sets`,
     children: [],
     settings: motorSetSettings
       .map((s) => ({
         ...s,
-        group: `${PREFIX}${Value[Value.MotorGeneratorSet].toLowerCase()}.parameters`
+        group: `${PREFIX}${transformSnake2Dot(
+          toSnake(Value[Value['Motor-GeneratorSet']])
+        )}.parameters`
       }))
       .concat(motorSettings),
     image: MotorSetImage
@@ -135,8 +137,8 @@ const configs: Config[] = [
     iconPath: '',
     image: MotorImage,
     componentIds: [
-      Component.Value.MotorDriveEnd,
-      Component.Value.MotorNonDriveEnd,
+      Component.Value['MotorDrive-End'],
+      Component.Value['MotorNon-Drive-End'],
       Component.Value.GearboxInput,
       Component.Value.GearboxOutput
     ]
@@ -153,14 +155,14 @@ const configs: Config[] = [
     image: PumpImage
   },
   {
-    key: Value.CoolingTower,
-    label: Value[Value.CoolingTower],
-    labelPlural: `${PREFIX}cooling.towers`,
+    key: Value['Cooling-Tower'],
+    label: Value[Value['Cooling-Tower']],
+    labelPlural: `${PREFIX}cooling-towers`,
     children: [],
     settings: coolingTowerSettings
       .map((s) => ({
         ...s,
-        group: `${PREFIX}${Value[Value.CoolingTower].toLowerCase()}.parameters`
+        group: `${PREFIX}${Value[Value['Cooling-Tower']].toLowerCase()}.parameters`
       }))
       .concat(motorSettings),
     image: CoolingTowerImage
@@ -201,10 +203,10 @@ export const vibrationAssetOptions = [
   { label: Key.getLabel(Value.Fan), type: Value.Fan },
   { label: Key.getLabel(Value.Blower), type: Value.Blower },
   { label: Key.getLabel(Value.Compressor), type: Value.Compressor },
-  { label: Key.getLabel(Value.MotorGeneratorSet), type: Value.MotorGeneratorSet },
+  { label: Key.getLabel(Value['Motor-GeneratorSet']), type: Value['Motor-GeneratorSet'] },
   { label: Key.getLabel(Value.Motor), type: Value.Motor },
   { label: Key.getLabel(Value.Pump), type: Value.Pump },
-  { label: Key.getLabel(Value.CoolingTower), type: Value.CoolingTower },
+  { label: Key.getLabel(Value['Cooling-Tower']), type: Value['Cooling-Tower'] },
   { label: Key.getLabel(Value.Chiller), type: Value.Chiller }
 ];
 

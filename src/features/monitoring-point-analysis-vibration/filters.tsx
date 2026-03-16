@@ -1,6 +1,6 @@
 import { LightSelectFilter } from 'components';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Axis, useAxisWithVibrationDirection, VibrationDirectionAttributes } from 'common';
 import {
   AxisWithVibrationDirectionLabel,
@@ -18,7 +18,7 @@ export const PropertiesSelect = ({ property, setProperty, options }: PropertyFil
   return (
     <LightSelectFilter
       allowClear={false}
-      options={options.map((p) => ({ ...p, label: intl.get(p.label) }))}
+      options={options.map((p) => ({ ...p, label: Translation.get(p.label) }))}
       onChange={(value: Property['value']) => {
         const property = options.find((opt) => opt.value === value);
         if (property) {
@@ -47,7 +47,7 @@ export const AxisSelect = ({ axis, options, setAxis }: AxisFilters) => {
   return (
     <LightSelectFilter
       allowClear={false}
-      options={options.map((a) => ({ ...a, label: intl.get(a.label) }))}
+      options={options.map((a) => ({ ...a, label: Translation.get(a.label) }))}
       onChange={(value: Axis.Option['value']) => {
         const axis = options.find((opt) => opt.value === value);
         if (axis) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ModalFormProps } from '../../types/common';
 import { SelectFormItem, TextFormItem } from '../../components';
@@ -30,8 +30,8 @@ export const Create = (props: ModalFormProps & { asset?: AssetRow }) => {
           form.resetFields();
           setSelectPoints([]);
         },
-        title: intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') }),
-        okText: intl.get('CREATE'),
+        title: Translation.createSth('monitoring.points'),
+        okText: Translation.get('common.action.create'),
         ...props,
         width: 500,
         onOk: () => {
@@ -90,7 +90,7 @@ function ParentSelection({ asset }: { asset?: AssetRow }) {
   } else {
     return (
       <SelectFormItem
-        label='ASSET'
+        label='asset'
         name='asset_id'
         rules={[{ required: true }]}
         selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
@@ -102,14 +102,14 @@ function ParentSelection({ asset }: { asset?: AssetRow }) {
 function TypeSelection({ onChange }: { onChange: (id: number) => void }) {
   return (
     <SelectFormItem
-      label='TYPE'
+      label='common.type'
       name='type'
       rules={[{ required: true }]}
       selectProps={{
         onChange,
         options: MonitoringPointType.Categories.getOptions(['vibration']).map(
           ({ value, label }) => ({
-            label: intl.get(label),
+            label: Translation.get(label),
             value
           })
         )

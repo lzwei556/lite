@@ -1,6 +1,6 @@
 import React from 'react';
 import { Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Descriptions, Link, MutedCard } from '../components';
 import { SingleDeviceStatus } from '../device/SingleDeviceStatus';
 import { toMac } from '../utils/format';
@@ -11,11 +11,11 @@ export const RelatedDeviceCard = ({ monitoringPoint }: { monitoringPoint: Monito
   const { device } = transform(monitoringPoint as any);
   return (
     device && (
-      <MutedCard title={intl.get('SENSOR')}>
+      <MutedCard title={Translation.get('device.sensor')}>
         <Descriptions
           items={[
             {
-              label: intl.get('NAME'),
+              label: Translation.get('common.name'),
               children: (
                 <Space>
                   <Link to={`/devices/${device.id}`}>{device.name}</Link>
@@ -23,8 +23,13 @@ export const RelatedDeviceCard = ({ monitoringPoint }: { monitoringPoint: Monito
                 </Space>
               )
             },
-            { label: intl.get('MAC_ADDRESS'), children: toMac(device.macAddress.toUpperCase()) }
+            {
+              label: Translation.get('device.mac-address'),
+              children: toMac(device.macAddress.toUpperCase())
+            }
           ]}
+          contentStyle={{ justifyContent: 'flex-start' }}
+          layout='vertical'
         />
       </MutedCard>
     )

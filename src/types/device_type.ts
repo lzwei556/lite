@@ -57,107 +57,107 @@ export namespace DeviceType {
   export function toString(type: DeviceType) {
     switch (type) {
       case DeviceType.Gateway:
-        return 'DEVICE_TYPE_GATEWAY';
+        return 'device.type.gateway';
       case DeviceType.Gateway4G:
-        return 'DEVICE_TYPE_GATEWAY_4G';
+        return 'device.type.gateway.4g';
       case DeviceType.GatewayWIFI:
-        return 'DEVICE_TYPE_GATEWAY_WIFI';
+        return 'device.type.gateway.wifi';
       case DeviceType.GatewayLora:
-        return 'DEVICE_TYPE_GATEWAY_LORA';
+        return 'device.type.gateway.lora';
       case DeviceType.GatewayDual4G:
-        return 'DEVICE_TYPE_GATEWAY_DUAL_4G';
+        return 'device.type.gateway.dual.4g';
       case DeviceType.Gateway5G:
-        return 'DEVICE_TYPE_GATEWAY_5G';
+        return 'device.type.gateway.5g';
       case DeviceType.GatewayGS280:
-        return 'DEVICE_TYPE_GATEWAY_GS280';
+        return 'device.type.gateway.gs280';
       case DeviceType.Router:
-        return 'DEVICE_TYPE_RELAY';
+        return 'device.type.relay';
       case DeviceType.SA:
-        return 'DEVICE_TYPE_SA';
+        return 'device.type.sa';
       case DeviceType.SA_S:
-        return 'DEVICE_TYPE_SA_S';
+        return 'device.type.sa-s';
       case DeviceType.SAS:
-        return 'DEVICE_TYPE_SAS';
+        return 'device.type.sas';
       case DeviceType.DS4:
-        return 'DEVICE_TYPE_DS4';
+        return 'device.type.ds4';
       case DeviceType.DS8:
-        return 'DEVICE_TYPE_DS8';
+        return 'device.type.ds8';
       case DeviceType.SAS120D:
-        return 'DEVICE_TYPE_SAS120D';
+        return 'device.type.sas120d';
       case DeviceType.SAS120Q:
-        return 'DEVICE_TYPE_SAS120Q';
+        return 'device.type.sas120q';
       case DeviceType.DC110:
-        return 'DEVICE_TYPE_DC110';
+        return 'device.type.dc110';
       case DeviceType.DC110C:
-        return 'DEVICE_TYPE_DC110C';
+        return 'device.type.dc110c';
       case DeviceType.DC210:
-        return 'DEVICE_TYPE_DC210';
+        return 'device.type.dc210';
       case DeviceType.DC210C:
-        return 'DEVICE_TYPE_DC210C';
+        return 'device.type.dc210c';
       case DeviceType.DC110H:
-        return 'DEVICE_TYPE_DC110H';
+        return 'device.type.dc110h';
       case DeviceType.DC110HC:
-        return 'DEVICE_TYPE_DC110HC';
+        return 'device.type.dc110hc';
       case DeviceType.DC110HL:
-        return 'DEVICE_TYPE_DC110HL';
+        return 'device.type.dc110hl';
       case DeviceType.DC210L:
-        return 'DEVICE_TYPE_DC210L';
+        return 'device.type.dc210l';
       case DeviceType.DC110L:
-        return 'DEVICE_TYPE_DC110L';
+        return 'device.type.dc110l';
       case DeviceType.SVT220520P:
-        return 'DEVICE_TYPE_SVT220520P';
+        return 'device.type.svt220520p';
       case DeviceType.SVT520C:
-        return 'DEVICE_TYPE_SVT520C';
+        return 'device.type.svt520c';
       case DeviceType.SVT210510P:
-        return 'DEVICE_TYPE_SVT210510P';
+        return 'device.type.svt210510p';
       case DeviceType.SVT510C:
-        return 'DEVICE_TYPE_SVT510C';
+        return 'device.type.svt510c';
       case DeviceType.SVT210K:
-        return 'DEVICE_TYPE_SVT210K';
+        return 'device.type.svt210k';
       case DeviceType.SVT210A:
-        return 'DEVICE_TYPE_SVT210A';
+        return 'device.type.svt210a';
       case DeviceType.SVT210S:
-        return 'DEVICE_TYPE_SVT210S';
+        return 'device.type.svt210s';
       case DeviceType.SVT220S1:
-        return 'DEVICE_TYPE_SVT220S1';
+        return 'device.type.svt220s1';
       case DeviceType.SVT220S3:
-        return 'DEVICE_TYPE_SVT220S3';
+        return 'device.type.svt220s3';
       case DeviceType.SVT510L:
-        return 'DEVICE_TYPE_SVT510L';
+        return 'device.type.svt510l';
       case DeviceType.SVT210SU:
-        return 'DEVICE_TYPE_SVT210SU';
+        return 'device.type.svt210su';
       case DeviceType.ST100:
-        return 'DEVICE_TYPE_ST100';
+        return 'device.type.st100';
       case DeviceType.ST101S:
-        return 'DEVICE_TYPE_ST101S';
+        return 'device.type.st101s';
       case DeviceType.ST101L:
-        return 'DEVICE_TYPE_ST101L';
+        return 'device.type.st101l';
       case DeviceType.SPT510:
-        return 'DEVICE_TYPE_SPT510';
+        return 'device.type.spt510';
       case DeviceType.SQ100:
-        return 'DEVICE_TYPE_SQ100';
+        return 'device.type.sq100';
       case DeviceType.SQ110C:
-        return 'DEVICE_TYPE_SQ110C';
+        return 'device.type.sq110c';
       case DeviceType.PressureGuoDa:
-        return 'DEVICE_TYPE_GUODA_PRESSURE';
+        return 'device.type.guoda.pressure';
       case DeviceType.PressureWoErKe:
-        return 'DEVICE_TYPE_WOERKE_PRESSURE';
+        return 'device.type.woerke.pressure';
       case DeviceType.OilFiller:
-        return 'DEVICE_TYPE_Oil_Filler';
+        return 'device.type.oil.filler';
       case DeviceType.SASLoraWAN:
-        return 'DEVICE_TYPE_SASLoraWAN';
+        return 'device.type.saslw';
       case DeviceType.DC210LoraWAN:
-        return 'DEVICE_TYPE_DC210LoraWAN';
+        return 'device.type.dc210lw';
       case DeviceType.DC110HLoraWAN:
-        return 'DEVICE_TYPE_DC110HLoraWAN';
+        return 'device.type.dc110hlw';
       case DeviceType.DC110LoraWAN:
-        return 'DEVICE_TYPE_DC110LoraWAN';
+        return 'device.type.dc110lw';
       case DeviceType.SVT510LoraWAN:
-        return 'DEVICE_TYPE_SVT510LoraWAN';
+        return 'device.type.svt510lw';
       case DeviceType.STLoraWAN:
-        return 'DEVICE_TYPE_STLoraWAN';
+        return 'device.type.stlw';
       default:
-        return 'DEVICE_TYPE_UNKNOWN';
+        return 'device.type.unknown';
     }
   }
 

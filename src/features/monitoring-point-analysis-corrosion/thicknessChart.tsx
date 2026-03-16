@@ -1,6 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
-import { useLocaleContext } from '../../localeProvider';
+import { Translation } from 'locales/utils';
 import { Dayjs } from '../../utils';
 import { roundValue } from '../../utils/format';
 import { ChartBrush, ChartMark, useChartContext } from '../../components';
@@ -8,7 +7,7 @@ import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../ass
 import { useGlobalStyles } from '../../styles';
 import { HistoryDataFea } from '..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
-import { CharacteristicData, CorrosionAttributes, MonitoringPoint } from 'common';
+import { CharacteristicData, CorrosionAttributes } from 'common';
 import { Toolbar } from './toolbar';
 import { MarkType } from '.';
 
@@ -22,7 +21,6 @@ export const ThicknessChart = (
   }
 ) => {
   const ref = useChartContext();
-  const { language } = useLocaleContext();
   const { marks, dispatchMarks } = ChartMark.useContext();
   const { history, property, id, attributes, markType, setMarkType, onDispatchMark } = props;
   const { series: initialSeries, min, max } = HistoryDataFea.transform(history, property);
@@ -37,8 +35,8 @@ export const ThicknessChart = (
     const data = getDefaultLines(attributes as CorrosionAttributes)?.map((line) => ({
       ...line,
       label: {
-        distance: language === 'en-US' ? -110 : -60,
-        formatter: `${intl.get(line.name!)} {c}`
+        position: 'insideEndBottom' as 'insideEndBottom',
+        formatter: `${Translation.get(line.name!)} {c}`
       }
     }));
     return { symbol: 'none', data };
@@ -64,8 +62,8 @@ export const ThicknessChart = (
   return (
     <ChartMark.Chart
       cardProps={{
-        title: intl.get('OBJECT_TREND_CHART', {
-          object: intl.get(property.name)
+        title: Translation.get('label.title.trend.sth', {
+          object: Translation.get(property.name)
         })
       }}
       config={{ opts: { yAxis: { name: property.unit } } }}
@@ -97,9 +95,9 @@ export const ThicknessChart = (
                         position: 'middle',
                         formatterFn: (rate: number | string) => {
                           if (!rate || rate === '0') {
-                            return `${intl.get('no.corrosion')}`;
+                            return `${Translation.get('corrosion.analysis.no')}`;
                           } else {
-                            return `${intl.get('FIELD_CORROSION_RATE')} ${rate} mm/a`;
+                            return `${Translation.get('FIELD_CORROSION_RATE')} ${rate} mm/a`;
                           }
                         }
                       },

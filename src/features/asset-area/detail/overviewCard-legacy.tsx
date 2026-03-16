@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pagination, Space, Typography } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Flex, Link } from '../../../components';
 import { getValue } from '../../../utils';
 import { ASSET_PATHNAME, AssetRow } from '../../../asset-common';
@@ -77,7 +77,7 @@ export const OverviewCardLegacy = ({ asset }: { asset: AssetRow }) => {
                 </Typography.Paragraph>
                 <Space direction='vertical' size={0}>
                   <Typography.Text style={{ whiteSpace: 'nowrap' }} type='secondary'>
-                    {property ? intl.get(property.name) : '-'}
+                    {property ? Translation.get(property.name) : '-'}
                   </Typography.Text>
                   {getValue({ value, ...property })}
                 </Space>

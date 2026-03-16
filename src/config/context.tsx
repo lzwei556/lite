@@ -10,6 +10,7 @@ import Vibration from './vibration';
 import General from './general';
 import { ProjectType } from '../project';
 import { useSelectedProject } from '../providers/user-profile';
+import { LanguageCode } from 'providers/i18n';
 
 type AppType =
   | 'windTurbine'
@@ -26,7 +27,7 @@ type AppType =
   | 'pressure'
   | 'bolt';
 
-type ContextProps = { type: AppType; analysisEnabled?: boolean };
+type ContextProps = { type: AppType; languages?: LanguageCode[]; analysisEnabled?: boolean };
 
 const AppContext = React.createContext<ContextProps>({ type: 'windTurbine' });
 
@@ -70,29 +71,33 @@ export function useAppType() {
   const selectedProject = useSelectedProject();
   const projectType = selectedProject?.type;
   if (appType === 'general') {
-    if (projectType === ProjectType.WindPowerBoltMonitoring) {
+    if (projectType === ProjectType.BoltWindPower) {
       appType = 'windTurbinePro';
-    } else if (projectType === ProjectType.HydroPowerBoltMonitoring) {
+    } else if (projectType === ProjectType.BoltHydroPower) {
       appType = 'hydroTurbine';
-    } else if (projectType === ProjectType.TowerBoltMonitoring) {
+    } else if (projectType === ProjectType.BoltTower) {
       appType = 'towerBolt';
-    } else if (projectType === ProjectType.RailBoltMonitoring) {
+    } else if (projectType === ProjectType.BoltRail) {
       appType = 'railBolt';
-    } else if (projectType === ProjectType.BridgeBoltMonitoring) {
+    } else if (projectType === ProjectType.BoltBridge) {
       appType = 'bridgeBolt';
-    } else if (projectType === ProjectType.CorrosionMonitoring) {
+    } else if (projectType === ProjectType.Corrosion) {
       appType = 'corrosion';
-    } else if (projectType === ProjectType.VibrationMonitoring) {
+    } else if (projectType === ProjectType.Vibration) {
       appType = 'vibration';
-    } else if (projectType === ProjectType.TemperatureMonitoring) {
+    } else if (projectType === ProjectType.Temperature) {
       appType = 'temperature';
-    } else if (projectType === ProjectType.PressureMonitoring) {
+    } else if (projectType === ProjectType.Pressure) {
       appType = 'pressure';
-    } else if (projectType === ProjectType.BoltMonitoring) {
+    } else if (projectType === ProjectType.Bolt) {
       appType = 'bolt';
     }
   }
   return appType;
+}
+
+export function useLanguagesServerConfig() {
+  return useAppContext().languages;
 }
 
 export function useAppVibrationEnabled() {

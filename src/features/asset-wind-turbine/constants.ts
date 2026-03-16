@@ -1,14 +1,14 @@
 import { AssetCategory } from '../../asset-common';
 
 export const wind: AssetCategory = {
-  label: 'WIND_TURBINE',
+  label: 'asset.wind-turbine',
   type: 101
 };
 export const flange: AssetCategory = {
-  label: 'FLANGE',
+  label: 'asset.flange',
   type: 102
 };
 export const tower: AssetCategory = {
-  label: 'TOWER',
+  label: 'asset.tower',
   type: 103
 };

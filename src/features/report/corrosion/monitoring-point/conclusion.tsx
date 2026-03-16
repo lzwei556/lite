@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ReportMonitoringPoint } from '../../types';
 import { getMonitoringPointEvalLevel, MonitoringPointEvalLevel } from './common';
 import { formatNames } from '../../utils';
@@ -75,7 +75,7 @@ const Description = ({
   errors: ReportMonitoringPoint[];
   level: MonitoringPointEvalLevel;
 }) => {
-  const levelLabel = intl.get(getMonitoringPointEvalLevel(level));
+  const levelLabel = Translation.get(getMonitoringPointEvalLevel(level));
 
   return (
     <>

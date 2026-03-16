@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip, Space } from 'antd';
 import { SelectOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { CanCopySettings } from './can-copying-settings';
 import { FormCommonProps, FormSubmitButtonProps } from '../settings-common';
 import { SaveIconButton } from '../../../components';
@@ -39,6 +39,6 @@ const useProps = (props: Props) => {
       onClick: () => form?.validateFields().then(handleSubmit),
       loading
     },
-    selectButtonChildren: intl.get('apply.settings.to.the.same.types')
+    selectButtonChildren: Translation.get('device.settings.apply-to-same-types')
   };
 };

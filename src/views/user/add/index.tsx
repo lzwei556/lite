@@ -1,6 +1,6 @@
 import { Form, Input } from 'antd';
 import { useState } from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { GetProjectsRequest } from '../../../apis/project';
 import { AddUserRequest } from '../../../apis/user';
 import { Project } from '../../../types/project';
@@ -32,35 +32,38 @@ export const AddUserModal = (props: ModalFormProps) => {
     <ModalWrapper
       {...rest}
       afterClose={() => form.resetFields()}
-      title={intl.get('CREATE_USER')}
+      title={Translation.createSth('label.user')}
       onOk={onAdd}
-      okText={intl.get('CREATE')}
+      okText={Translation.get('common.action.create')}
       confirmLoading={isLoading}
     >
       <Form form={form} layout='vertical'>
         <TextFormItem
-          label='USERNAME'
+          label='auth.username'
           name='username'
           rules={[{ required: true }, { min: 4, max: 16 }]}
         />
         <TextFormItem
-          label='PASSWORD'
+          label='auth.password'
           name='password'
           rules={[{ required: true }, { min: 6, max: 16 }]}
         >
           <Input.Password />
         </TextFormItem>
         <TextFormItem
-          label='CONFIRM_PASSWORD'
+          label='auth.password.confirmation'
           name='confirmPwd'
           rules={[
-            { required: true, message: intl.get('PLEASE_CONFIRM_PASSWORD') },
+            {
+              required: true,
+              message: Translation.pleaseDoSth('common.action.confirm', 'auth.password')
+            },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error(intl.get('PASSWORDS_ARE_INCONSISTENT')));
+                return Promise.reject(new Error(Translation.get('auth.password.inconsistent')));
               }
             })
           ]}
@@ -68,25 +71,25 @@ export const AddUserModal = (props: ModalFormProps) => {
           <Input.Password />
         </TextFormItem>
         <SelectFormItem
-          label='USER_ROLE'
+          label='auth.role'
           name='role'
           rules={[{ required: true }]}
           selectProps={useRoleSelectProps()}
         />
         <TextFormItem
-          label='CELLPHONE'
+          label='common.mobile.phone'
           name='phone'
           initialValue={''}
-          rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
+          rules={[{ pattern: /^1[3-9]\d{9}$/, message: 'feedback.invalid.phone' }]}
         />
         <TextFormItem
-          label='EMAIL'
+          label='common.email'
           name='email'
           initialValue={''}
-          rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
+          rules={[{ type: 'email', message: 'feedback.invalid.email' }]}
         />
         <SelectFormItem
-          label='BIND_PROJECT'
+          label='project'
           name='projects'
           initialValue={[]}
           selectProps={{

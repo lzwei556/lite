@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, RadioFormItem, SaveIconButton, SelectFormItem } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { AssetModel, AssetRow, updateAsset } from '../../asset-common';
@@ -9,6 +9,7 @@ import { CanAccess, Permission } from '../../providers/access-control';
 import { AssetCategory } from '../../asset-category';
 import { useFormItemBindingsProps } from 'hooks';
 import { ENV } from 'utils';
+import { buildPeriodOption } from 'locales/utils';
 
 export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () => void }) => {
   const { name, parentId, type } = asset;
@@ -45,7 +46,7 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
         </CanAccess>
       }
       styles={{ body: { overflowY: 'auto', maxHeight: 500 } }}
-      title={intl.get('BASIC_INFORMATION')}
+      title={Translation.get('common.basic')}
     >
       <Form
         form={form}
@@ -77,14 +78,20 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
                       {...diagnosisFormItemProps}
                       selectProps={{
                         options: [
-                          { label: intl.get('diagnosis.period.real'), value: 0 },
-                          { label: intl.get('OPTION_1_HOUR'), value: 60 * 60 },
-                          { label: intl.get('OPTION_2_HOURS'), value: 2 * 60 * 60 },
-                          { label: intl.get('OPTION_4_HOURS'), value: 4 * 60 * 60 },
-                          { label: intl.get('OPTION_8_HOURS'), value: 8 * 60 * 60 },
-                          { label: intl.get('OPTION_12_HOURS'), value: 12 * 60 * 60 },
-                          { label: intl.get('OPTION_24_HOURS'), value: 24 * 60 * 60 }
-                        ]
+                          { label: 'diagnosis.period.real', value: 0 },
+                          buildPeriodOption(1, 'hour'),
+                          buildPeriodOption(2, 'hour'),
+                          buildPeriodOption(4, 'hour'),
+                          buildPeriodOption(8, 'hour'),
+                          buildPeriodOption(12, 'hour'),
+                          buildPeriodOption(24, 'hour')
+                        ].map((opt) => ({
+                          label:
+                            typeof opt.label === 'object'
+                              ? Translation.get(...opt.label)
+                              : Translation.get(opt.label),
+                          value: opt.value
+                        }))
                       }}
                     />
                   </Col>

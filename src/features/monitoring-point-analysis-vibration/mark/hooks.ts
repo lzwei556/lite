@@ -8,7 +8,7 @@ import { findClosest, formatNumericData, getValue, roundValue } from 'utils';
 import { getMarkTypeColor, getMarkTypeLabel, MarkType } from './mark-types';
 import { Property } from '../useTrend';
 import { FaultFrequency } from '../useFaultFrequency';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { FaultType } from 'common';
 
 export type MarkParams = {
@@ -374,7 +374,7 @@ export const getFaultFrequency = ({ faultFrequencies, x, y }: MarkParams) => {
 const getFaultFrequencyOptions = (faultFrequency?: FaultFrequency) => {
   return faultFrequency
     ? Object.entries(faultFrequency).map(([key, value]) => ({
-        label: intl.get(FaultType.getLabel(key)),
+        label: Translation.get(FaultType.getLabel(key)),
         value
       }))
     : [];

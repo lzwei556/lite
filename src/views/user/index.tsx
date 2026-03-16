@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   DeleteIconButton,
   EditIconButton,
@@ -61,31 +61,31 @@ const UserPage = () => {
 
   const columns = [
     {
-      title: intl.get('USERNAME'),
+      title: Translation.get('auth.username'),
       dataIndex: 'username',
       key: 'username'
     },
     {
-      title: intl.get('CELLPHONE'),
+      title: Translation.get('common.mobile.phone'),
       dataIndex: 'phone',
       key: 'phone'
     },
     {
-      title: intl.get('EMAIL'),
+      title: Translation.get('common.email'),
       dataIndex: 'email',
       key: 'email'
     },
     {
-      title: intl.get('ROLE'),
+      title: Translation.get('auth.role'),
       dataIndex: 'role',
       render: (roleId: number) => {
         const role = roles.find((role) => role.id === roleId);
-        return role?.name ? intl.get(role?.name) : '';
+        return role?.name ? Translation.get(role?.name) : '';
       },
       key: 'role'
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: string, record: User) => {
         return (
@@ -102,7 +102,7 @@ const UserPage = () => {
               <CanAccess {...Permission.UserDelete}>
                 <DeleteIconButton
                   confirmProps={{
-                    description: intl.get('DELETE_USER_PROMPT'),
+                    description: Translation.get('feedback.prompt.delete'),
                     onConfirm: () => onDelete(record.id)
                   }}
                 />
@@ -118,7 +118,7 @@ const UserPage = () => {
 
   return (
     <Content>
-      <Typography.Title level={4}>{intl.get('MENU_USER_MANAGEMENT')}</Typography.Title>
+      <Typography.Title level={4}>{Translation.get('MENU_USER_MANAGEMENT')}</Typography.Title>
       <Table
         columns={columns}
         dataSource={ds}
@@ -128,7 +128,7 @@ const UserPage = () => {
               <IconButton
                 icon={<UserAddOutlined />}
                 onClick={() => setOpen(true)}
-                tooltipProps={{ title: intl.get('CREATE_USER') }}
+                tooltipProps={{ title: Translation.createSth('label.user') }}
                 type='primary'
               />
             </CanAccess>

@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { LightSelectFilter, SeriesOption, ChartMark } from 'components';
 import { Dayjs } from 'utils';
 import { ValuesPropertyName } from 'asset-common';
@@ -41,7 +41,7 @@ export const Trend = ({
         ...options.map((o) => ({
           xAxisValues,
           data: {
-            [intl.get(o.label)]: data.map(
+            [Translation.get(o.label)]: data.map(
               ({ values }) =>
                 values[`${property.value}${o.key.toUpperCase()}RMS` as ValuesPropertyName]
             )
@@ -65,14 +65,14 @@ export const Trend = ({
   return (
     <ChartMark.Chart
       cardProps={{
-        title: intl.get('OBJECT_TREND_CHART', {
-          object: intl.get(property.label)
+        title: Translation.get('label.title.trend.sth', {
+          object: Translation.get(property.label)
         })
       }}
       config={{ opts: { yAxis: { name: property.unit }, grid: { top: 30 } } }}
       features={{
         download: {
-          tooltipProps: { title: intl.get('download.vibration.original.data') },
+          tooltipProps: { title: Translation.get('vibration.analysis.download') },
           onClick() {
             downlaodRawDataHandler();
           }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { AssetModel, AssetRow, updateAsset } from '../../asset-common';
@@ -13,8 +13,8 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('EDIT_SOMETHING', { something: intl.get('ASSET') }),
-        okText: intl.get('SAVE'),
+        title: Translation.editSth('asset'),
+        okText: Translation.get('common.action.save'),
         ...rest,
         onOk: () => {
           form.validateFields().then((values) => {

@@ -2,7 +2,7 @@ import { Form, FormInstance, SelectProps } from 'antd';
 import React from 'react';
 import { useFormBindingsProps, useFormItemBindingsProps, useModalBindingsProps } from '../../hooks';
 import { ModalFormProps } from '../../types/common';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ProcessFormDataDTO, transform, useBindProcess } from './use-services';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ParameterFormItem, ProcessType } from '../../process-type';
@@ -69,14 +69,14 @@ const useModalProps = ({
   return useModalBindingsProps({
     ...rest,
     afterClose: () => form.resetFields(),
-    okText: intl.get('SAVE'),
+    okText: Translation.get('common.action.save'),
     okButtonProps: { loading },
     onOk: () => {
       form.validateFields().then((values) => {
         runAsync(monitoringPoint.assetId, values).then(onSuccess);
       });
     },
-    title: intl.get('bind.process')
+    title: Translation.createSth('process')
   });
 };
 
@@ -103,7 +103,10 @@ const useTypesSelectFormItemProps = (
     ...useFormItemBindingsProps({ ...typeField, rules: [{ required: true }], hidden }),
     selectProps: {
       defaultValue: type,
-      options: ProcessType.getOptions().map((opt) => ({ ...opt, label: intl.get(opt.label) })),
+      options: ProcessType.getOptions().map((opt) => ({
+        ...opt,
+        label: Translation.get(opt.label)
+      })),
       disabled,
       onChange
     } as SelectProps

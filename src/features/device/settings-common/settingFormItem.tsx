@@ -9,11 +9,12 @@ import {
   RadioGroupProps,
   SelectProps
 } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useFormItemBindingsProps } from '../../../hooks';
 import { FormItem, Term } from '../../../components';
 import { DeviceSetting } from './common';
 import { CheckboxGroupProps } from 'antd/es/checkbox';
+import { convertKeyFromServer } from 'locales/utils';
 
 enum DeviceSettingValueType {
   uint8 = 'uint8',
@@ -52,10 +53,15 @@ export const SettingFormItem = ({
             setSetting({ ...setting, value });
           }
         },
-        options: Object.keys(options).map((value) => ({
-          label: intl.get(options[value]).d(options[value]),
-          value: Number(value)
-        }))
+        options: Object.keys(options).map((value) => {
+          const optionLabel = convertKeyFromServer(options[value]);
+          return {
+            label: Array.isArray(optionLabel)
+              ? Translation.get(...optionLabel)
+              : Translation.get(convertKeyFromServer(optionLabel) as string),
+            value: Number(value)
+          };
+        })
       };
       if (optionType === 'checkbox') {
         checkboxGroupProps = props;
@@ -63,7 +69,8 @@ export const SettingFormItem = ({
         selectProps = props;
       }
     } else {
-      const intlUnit = unit ? intl.get(unit).d(unit) : '';
+      const unitKey = unit === 'UNIT_DAY' ? 'label.unit.day' : unit;
+      const intlUnit = unitKey ? Translation.get(unitKey) : '';
       if (type === DeviceSettingValueType.bool) {
         radioGroupProps = {
           onChange: (e) => {
@@ -162,11 +169,16 @@ export const SettingFormItem = ({
   }
 
   const formItemProps = useFormItemBindingsProps({
-    label: <Term name={intl.get(setting.name)} description={intl.get(`${setting.name}_DESC`)} />,
+    label: (
+      <Term
+        name={Translation.get(setting.name)}
+        description={Translation.get(`${setting.name}_DESC`)}
+      />
+    ),
     name: [setting.category, setting.key],
     initialValue: setting.value,
     rules: getRules(setting),
-    messageVariables: { label: intl.get(setting.name).toLowerCase() }
+    messageVariables: { label: Translation.get(setting.name).toLowerCase() }
   });
 
   return (

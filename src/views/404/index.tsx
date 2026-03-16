@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Button, Result } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 const NotFoundPage: FC = () => {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ const NotFoundPage: FC = () => {
     <Result
       status='404'
       title='404'
-      subTitle={intl.get('INVALID_PAGE_PROMPT')}
+      subTitle={Translation.get('feedback.404')}
       extra={
         <Button
           type='primary'
@@ -17,7 +17,7 @@ const NotFoundPage: FC = () => {
             navigate('/');
           }}
         >
-          {intl.get('RETURN_TO_HOME')}
+          {Translation.get('button.return-to-home')}
         </Button>
       }
     />

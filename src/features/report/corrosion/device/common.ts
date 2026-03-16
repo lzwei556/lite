@@ -34,8 +34,8 @@ export const getDeviceStatus = (report: Report) => {
 
 export const getDeviceEvalReason = (level: number, reasons: number[]): string => {
   if (reasons.length > 0 && level === DeviceEvalLevel.Error) {
-    return getKeyByValue(DeviceEvalReason, reasons[0], 'device.eval.reason');
+    return getKeyByValue(DeviceEvalReason, reasons[0], 'device.status');
   } else {
-    return 'device.eval.reason.normal';
+    return 'device.status.normal';
   }
 };

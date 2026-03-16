@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Space } from 'antd';
 import useImage from 'use-image';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { App, useAppType } from '../../config';
 import { useGlobalStyles } from '../../styles';
 
@@ -26,7 +26,7 @@ export const Brand: React.FC<{
         />
       )}
       <strong style={{ ...brandNameStyle, ...colorWhiteStyle }} className='title'>
-        {intl.get(App.getSiteName(useAppType()))}
+        {Translation.get(App.getSiteName(useAppType()))}
       </strong>
     </Space>
   );

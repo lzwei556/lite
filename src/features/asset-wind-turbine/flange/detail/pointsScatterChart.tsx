@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { buildCustomTooltip, Chart, chartColors } from '../../../../components';
 import { isMobile } from '../../../../utils/deviceDetection';
 import { ColorHealth } from '../../../../constants/color';
@@ -13,7 +13,7 @@ import {
   Points
 } from '../../../../asset-common';
 import { useGlobalStyles } from '../../../../styles';
-import { AlarmLevel, getColorByValue } from '../../../alarm';
+import { AlarmLevel, getColorByValue, getLabelByValue } from '../../../alarm';
 import { ENV } from '../../../../utils';
 import { MonitoringPointType } from 'common';
 
@@ -98,7 +98,9 @@ function buildCirclePointsChartOfFlange(
     MonitoringPointType.Key.getFlangeAttributesKey(measurements[0].type) === 'normal' &&
     checkValidAttr(attributes, 'normal', min)
   ) {
-    const seriesName = `${intl.get('RATING')} ${attributes?.normal?.value}${unit}`;
+    const seriesName = `${Translation.get('asset.flange.rating')} ${
+      attributes?.normal?.value
+    }${unit}`;
     const normal = getSeries(ColorHealth, attributes?.normal?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color: ColorHealth } });
     series.push(normal.series);
@@ -108,14 +110,16 @@ function buildCirclePointsChartOfFlange(
     MonitoringPointType.Key.getFlangeAttributesKey(measurements[0].type) === 'initial' &&
     checkValidAttr(attributes, 'initial', min)
   ) {
-    const seriesName = `${intl.get('INITIAL_VALUE')} ${attributes?.initial?.value}${unit}`;
+    const seriesName = `${Translation.get('asset.flange.initial')} ${
+      attributes?.initial?.value
+    }${unit}`;
     const initial = getSeries(ColorHealth, attributes?.initial?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color: ColorHealth } });
     series.push(initial.series);
   }
 
   if (checkValidAttr(attributes, 'info', min)) {
-    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Minor}`)} ${
+    const seriesName = `${Translation.leveledAlarm(getLabelByValue(AlarmLevel.Minor))} ${
       attributes?.info?.value
     }${unit}`;
     const color = getColorByValue(AlarmLevel.Minor);
@@ -125,7 +129,7 @@ function buildCirclePointsChartOfFlange(
   }
 
   if (checkValidAttr(attributes, 'warn', min)) {
-    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Major}`)}  ${
+    const seriesName = `${Translation.leveledAlarm(getLabelByValue(AlarmLevel.Major))}  ${
       attributes?.warn?.value
     }${unit}`;
     const color = getColorByValue(AlarmLevel.Major);
@@ -135,7 +139,7 @@ function buildCirclePointsChartOfFlange(
   }
 
   if (checkValidAttr(attributes, 'danger', min)) {
-    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Critical}`)} ${
+    const seriesName = `${Translation.leveledAlarm(getLabelByValue(AlarmLevel.Critical))} ${
       attributes?.danger?.value
     }${unit}`;
     const color = getColorByValue(AlarmLevel.Critical);
@@ -252,7 +256,10 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
       },
       tooltip: {
         formatter: buildCustomTooltip({
-          title: alertLevel && alertLevel > 0 ? intl.get(`leveled.alarm.${alertLevel}`) : undefined,
+          title:
+            alertLevel && alertLevel > 0
+              ? Translation.leveledAlarm(getLabelByValue(alertLevel))
+              : undefined,
           items: [{ marker: '', name, text: getValue({ value, ...field }) }]
         })
       },
@@ -327,7 +334,7 @@ function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = fa
   };
   const series = {
     type: 'line',
-    name: intl.get('ACTUAL_VALUE'),
+    name: 'actualValue',
     data: [...seriesData, seriesData[0]],
     itemStyle: { color: chartColors[0] },
     tooltip: { show: false },

@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card } from '../../../../components';
 import { HistoryDataFea } from '../../..';
 import {
@@ -29,10 +29,10 @@ export const PointsLineChart = ({
   );
   const getTitle = () => {
     return property
-      ? intl.get('OBJECT_TREND_CHART', {
-          object: intl.get(property.name)
+      ? Translation.get('label.title.trend.sth', {
+          object: Translation.get(property.name)
         })
-      : intl.get('TREND_CHART');
+      : Translation.get('label.title.trend');
   };
 
   return (

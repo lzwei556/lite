@@ -1,17 +1,17 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { objectToCamel, objectToSnake, ObjectToSnake } from 'ts-case-convert';
 import { pickOptionsFromNumericEnum } from '../utils';
-import { millisecond } from '../constants';
 import { Field } from '../types';
 import { useFormItemBindingsProps } from '../hooks';
+import { buildPeriodOption, PeriodOptionLabel } from 'locales/utils';
 
 export enum ProvisioningMode {
   Group = 1,
-  TimeDivision,
+  'Time-Division',
   Continuous,
-  ManagedBroadcast,
-  UnManagedBroadcast
+  'Managed-Broadcast',
+  'Unmanaged-Broadcast'
 }
 
 export type WSN = {
@@ -39,7 +39,7 @@ type Update = {
 type Network = { mode: ProvisioningMode } & Omit<WSN, 'provisioningMode'>;
 
 const WSN_DEFAULT_SETTINGS: WSN = {
-  provisioningMode: ProvisioningMode.TimeDivision,
+  provisioningMode: ProvisioningMode['Time-Division'],
   communicationPeriod: 20 * 60 * 1000,
   communicationPeriod2: 0,
   communicationOffset: 10000,
@@ -49,45 +49,17 @@ const WSN_DEFAULT_SETTINGS: WSN = {
 };
 
 const rest = [
-  {
-    value: 10 * 60 * millisecond,
-    label: 'OPTION_10_MINUTES'
-  },
-
-  {
-    value: 20 * 60 * millisecond,
-    label: 'OPTION_20_MINUTES'
-  },
-  {
-    value: 30 * 60 * millisecond,
-    label: 'OPTION_30_MINUTES'
-  },
-  {
-    value: 60 * 60 * millisecond,
-    label: 'OPTION_1_HOUR'
-  },
-  {
-    value: 2 * 60 * 60 * millisecond,
-    label: 'OPTION_2_HOURS'
-  }
+  buildPeriodOption(10, 'minute'),
+  buildPeriodOption(20, 'minute'),
+  buildPeriodOption(30, 'minute'),
+  buildPeriodOption(1, 'hour'),
+  buildPeriodOption(2, 'hour')
 ];
 
 export const getCommunicationPeriodOptions = (mode?: ProvisioningMode) => {
-  return mode === ProvisioningMode.TimeDivision
-    ? [
-        {
-          value: 5 * 60 * millisecond,
-          label: 'OPTION_5_MINUTES'
-        },
-        ...rest
-      ]
-    : [
-        {
-          value: 4 * 60 * millisecond,
-          label: 'OPTION_4_MINUTES'
-        },
-        ...rest
-      ];
+  return mode === ProvisioningMode['Time-Division']
+    ? [buildPeriodOption(5, 'minute'), ...rest]
+    : [buildPeriodOption(4, 'minute'), ...rest];
 };
 
 export const resetInvalidCommunicationPeriod = (
@@ -103,27 +75,12 @@ export const resetInvalidCommunicationPeriod = (
 };
 
 export const SecondaryCommunicationPeriodOptions = [
-  {
-    value: 0,
-    label: 'NONE'
-  },
+  buildPeriodOption(),
   ...rest,
-  {
-    value: 4 * 60 * 60 * millisecond,
-    label: 'OPTION_4_HOURS'
-  },
-  {
-    value: 6 * 60 * 60 * millisecond,
-    label: 'OPTION_6_HOURS'
-  },
-  {
-    value: 8 * 60 * 60 * millisecond,
-    label: 'OPTION_8_HOURS'
-  },
-  {
-    value: 12 * 60 * 60 * millisecond,
-    label: 'OPTION_12_HOURS'
-  }
+  buildPeriodOption(4, 'hour'),
+  buildPeriodOption(6, 'hour'),
+  buildPeriodOption(8, 'hour'),
+  buildPeriodOption(12, 'hour')
 ];
 
 export const transform = (initial?: WSNDTO['exported'] | WSNDTO['network']): WSN => {
@@ -193,54 +150,52 @@ export const useProvisioningMode = (initial?: ProvisioningMode) => {
 
 const ProvisioningModeField: Field<WSN> = {
   name: 'provisioningMode',
-  label: 'provisioning.mode',
-  description: 'provisioning.mode.desc',
+  label: 'wsn.provisioning.mode',
+  description: 'wsn.provisioning.mode.desc',
   type: 'enum'
 };
 
 export const useProvisioningModeField = (onChange: (mode: ProvisioningMode) => void) => {
   return {
     termProps: {
-      name: intl.get(ProvisioningModeField.label),
-      description: intl.get(ProvisioningModeField.description!)
+      name: Translation.get(ProvisioningModeField.label),
+      description: Translation.get(ProvisioningModeField.description!)
     },
     formItemProps: useFormItemBindingsProps({ name: ProvisioningModeField.name }),
     controlProps: {
       onChange,
-      options: pickOptionsFromNumericEnum(ProvisioningMode, ProvisioningModeField.label).map(
-        (opts) => ({
-          ...opts,
-          label: intl.get(opts.label)
-        })
-      )
+      options: pickOptionsFromNumericEnum(ProvisioningMode, 'wsn.provisioning').map((opts) => ({
+        ...opts,
+        label: Translation.get(opts.label)
+      }))
     }
   };
 };
 
 export const useCommunicationPeriod = (
   name: string,
-  options?: { label: string; value: number }[]
+  options?: { label: PeriodOptionLabel; value: number }[]
 ) => {
   return {
     ...useFormItemBindingsProps({ name }),
     selectProps: {
-      options: options?.map((opts) => ({ ...opts, label: intl.get(opts.label) }))
+      options: options?.map((opts) => ({ ...opts, label: Translation.get(...opts.label) }))
     }
   };
 };
 
 const CommunicationOffsetField: Field<WSN> = {
   name: 'communicationOffset',
-  label: 'communication.offset',
-  description: 'communication.offset.desc',
+  label: 'wsn.communication.offset',
+  description: 'wsn.communication.offset.desc',
   type: 'enum'
 };
 
 export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name']) => {
   return {
     termProps: {
-      name: intl.get(CommunicationOffsetField.label),
-      description: intl.get(CommunicationOffsetField.description!)
+      name: Translation.get(CommunicationOffsetField.label),
+      description: Translation.get(CommunicationOffsetField.description!)
     },
     formItemProps: useFormItemBindingsProps({
       label: CommunicationOffsetField.label,
@@ -249,7 +204,7 @@ export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name
         {
           type: 'integer',
           min: 0,
-          message: intl.get('UNSIGNED_INTEGER_ENTER_PROMPT')
+          message: 'feedback.validation.integer'
         },
         ({ getFieldValue }: any) => ({
           validator(_, value: number) {
@@ -257,7 +212,7 @@ export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name
             if (!value || Number(period) >= value) {
               return Promise.resolve();
             }
-            return Promise.reject(intl.get('COMMUNICATION_OFFSET_PROMPT'));
+            return Promise.reject(Translation.get('wsn.communication.offset.constraint'));
           }
         })
       ],
@@ -265,7 +220,7 @@ export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name
     }),
     contorlProps: {
       controls: false,
-      addonAfter: intl.get('UNIT_MILLISECOND'),
+      addonAfter: Translation.get('label.unit.millisecond'),
       style: { width: '100%' }
     }
   };
@@ -273,16 +228,16 @@ export const useCommunicationOffset = (communicationPeriodName: Field<WSN>['name
 
 const IntervalCnt: Field<WSN> = {
   name: 'intervalCnt',
-  label: 'interval.cnt',
-  description: 'interval.cnt.desc',
+  label: 'wsn.interval-cnt',
+  description: 'wsn.interval-cnt.desc',
   type: 'number'
 };
 
 export const useIntervalCnt = () => {
   return {
     termProps: {
-      name: intl.get(IntervalCnt.label),
-      description: intl.get(IntervalCnt.description!)
+      name: Translation.get(IntervalCnt.label),
+      description: Translation.get(IntervalCnt.description!)
     },
     formItemProps: useFormItemBindingsProps({ name: IntervalCnt.name }),
     contorlProps: { controls: false, style: { width: '100%' } }
@@ -291,14 +246,17 @@ export const useIntervalCnt = () => {
 
 const GroupSize: Field<WSN> = {
   name: 'groupSize',
-  label: 'group.size',
-  description: 'group.size.desc',
+  label: 'wsn.group-size',
+  description: 'wsn.group-size.desc',
   type: 'enum'
 };
 
 export const useGroupSize = () => {
   return {
-    termProps: { name: intl.get(GroupSize.label), description: intl.get(GroupSize.description) },
+    termProps: {
+      name: Translation.get(GroupSize.label),
+      description: Translation.get(GroupSize.description)
+    },
     ...useFormItemBindingsProps({ name: GroupSize.name }),
     selectProps: {
       options: [1, 2, 4, 8].map((value) => ({ label: `${value}`, value }))
@@ -308,14 +266,17 @@ export const useGroupSize = () => {
 
 const GroupSize2: Field<WSN> = {
   name: 'groupSize2',
-  label: 'group.size.2',
-  description: 'group.size.2.desc',
+  label: 'wsn.group-size.waveform',
+  description: 'wsn.group-size.waveform.desc',
   type: 'enum'
 };
 
 export const useGroupSize2 = () => {
   return {
-    termProps: { name: intl.get(GroupSize2.label), description: intl.get(GroupSize2.description) },
+    termProps: {
+      name: Translation.get(GroupSize2.label),
+      description: Translation.get(GroupSize2.description)
+    },
     formItemProps: useFormItemBindingsProps({ name: GroupSize2.name }),
     contorlProps: { controls: false, style: { width: '100%' } }
   };

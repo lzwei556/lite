@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Collapse, Empty, Spin } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Dayjs } from '../../../utils';
 import { Grid } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
@@ -66,7 +66,7 @@ export const Monitor = (point: MonitoringPointRow) => {
         expandIconPosition='end'
         items={groups.map(([g, properties]) => ({
           key: g,
-          label: intl.get(g),
+          label: Translation.get(g),
           children: (
             <Grid>
               {properties

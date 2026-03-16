@@ -1,21 +1,22 @@
 import React from 'react';
 import { TableProps } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Dayjs, getAttrValue } from '../../utils';
 import { Link } from '../../components';
-import { getDisplayName, getValue } from '../../utils/format';
-import { Language } from '../../localeProvider';
+import { getValue } from '../../utils/format';
 import { ASSET_PATHNAME, AssetStatusTag } from '../../asset-common';
 import { MonitoringPointRow } from '../types';
 import { Point } from '../util';
 import { AXIS_ALIAS, TowerBaseRadius, TowerInstallAngle, TowerInstallHeight } from '../constants';
 import { OperateCell } from './operateCell';
 import { MonitoringPointType } from 'common';
+import { getDisplayName } from 'locales/utils';
+import { LanguageCode } from 'providers/i18n';
 
 export type Column = Required<TableProps<MonitoringPointRow>>['columns'][0];
 
 const name = {
-  title: () => intl.get('NAME'),
+  title: () => Translation.get('common.name'),
   dataIndex: 'name',
   key: 'name',
   render: (name: string, row: MonitoringPointRow) => (
@@ -30,14 +31,14 @@ const name = {
 };
 
 const status = {
-  title: () => intl.get('STATUS'),
+  title: () => Translation.get('common.status'),
   dataIndex: 'alertLevel',
   key: 'alertLevel',
   render: (level: number) => <AssetStatusTag status={level} />
 };
 
 const sensor = {
-  title: () => intl.get('SENSOR'),
+  title: () => Translation.get('device.sensor'),
   dataIndex: 'devices',
   key: 'devices',
   render: (_: string, row: MonitoringPointRow) =>
@@ -50,7 +51,7 @@ const sensor = {
       : ''
 };
 const time = {
-  title: () => intl.get('SAMPLING_TIME'),
+  title: () => Translation.get('device.data.timestamp'),
   key: 'timestamp',
   render: (_: string, row: MonitoringPointRow) => {
     return row.data && row.data.timestamp ? (
@@ -64,7 +65,7 @@ const time = {
 };
 
 export const positionColumn = {
-  title: () => intl.get('POSITION'),
+  title: () => Translation.get('monitoring.point.position'),
   key: 'position',
   render: (_: string, row: MonitoringPointRow) => getAttrValue(row.attributes, 'index')
 };
@@ -73,17 +74,17 @@ export type OperateCellProps = {
   onUpdate: (point: MonitoringPointRow) => void;
 };
 export const getOperateColumn = ({ onDeleteSuccess, onUpdate }: OperateCellProps) => ({
-  title: () => intl.get('OPERATION'),
+  title: () => Translation.get('common.operation'),
   key: 'action',
   render: (_: string, point: MonitoringPointRow) => (
     <OperateCell {...{ onDeleteSuccess, onUpdate, point }} />
   )
 });
-export const getInstallAngleColumn = (lang: Language) => {
+export const getInstallAngleColumn = (lang: LanguageCode) => {
   return {
     title: () =>
       getDisplayName({
-        name: intl.get(TowerInstallAngle.label),
+        name: Translation.get(TowerInstallAngle.label),
         lang,
         suffix: TowerInstallAngle.unit
       }),
@@ -92,11 +93,11 @@ export const getInstallAngleColumn = (lang: Language) => {
       getAttrValue(row.attributes, 'tower_install_angle')
   };
 };
-export const getInstallHeightColumn = (lang: Language) => {
+export const getInstallHeightColumn = (lang: LanguageCode) => {
   return {
     title: () =>
       getDisplayName({
-        name: intl.get(TowerInstallHeight.label),
+        name: Translation.get(TowerInstallHeight.label),
         lang,
         suffix: TowerInstallHeight.unit
       }),
@@ -105,11 +106,11 @@ export const getInstallHeightColumn = (lang: Language) => {
       getAttrValue(row.attributes, 'tower_install_height')
   };
 };
-export const getBaseRadiusColumn = (lang: Language) => {
+export const getBaseRadiusColumn = (lang: LanguageCode) => {
   return {
     title: () =>
       getDisplayName({
-        name: intl.get(TowerBaseRadius.label),
+        name: Translation.get(TowerBaseRadius.label),
         lang,
         suffix: TowerBaseRadius.unit
       }),
@@ -121,7 +122,7 @@ export const getBaseRadiusColumn = (lang: Language) => {
 
 function getPropertyedCols(
   measurement: MonitoringPointRow,
-  lang: Language,
+  lang: LanguageCode,
   needToFilterFirstProperties = false
 ): Column[] {
   if (!measurement) return [];
@@ -137,7 +138,7 @@ function getPropertyedCols(
         key: subKey,
         render: (d: MonitoringPointRow) =>
           getValue({ value: d?.data?.values[subKey] as number, precision }),
-        title: axis ? intl.get(axis.label) : intl.get(name)
+        title: axis ? Translation.get(axis.label) : Translation.get(name)
       };
     });
     if (Point.Assert.isThreeAxisedVibrationRelated(measurement.type)) {
@@ -152,11 +153,11 @@ function getPropertyedCols(
               precision
             });
           },
-          title: intl.get(abbr)
+          title: Translation.get(abbr)
         };
       });
     }
-    const title = getDisplayName({ name: intl.get(name), lang, suffix: unit });
+    const title = getDisplayName({ name: Translation.get(name), lang, suffix: unit });
     return children.length > 1 && fields.length === children.length
       ? { key, title, children, hidden: !first }
       : {
@@ -175,7 +176,7 @@ export function getColumns({
   operateCellProps,
   point
 }: {
-  language: Language;
+  language: LanguageCode;
   more?: boolean;
   operateCellProps?: OperateCellProps;
   point?: MonitoringPointRow;

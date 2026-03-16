@@ -4,10 +4,10 @@ export function isFlangePreloadCalculation(flange?: AssetRow) {
   return flange?.attributes?.sub_type === 1;
 }
 export const categories = [
-  { label: 'TOWER', value: 1 },
-  { label: 'BLADE', value: 2 },
-  { label: 'HUB_AND_NACELLE', value: 3 },
-  { label: 'PITCH_BEARING', value: 4 }
+  { label: 'asset.flange.tower', value: 1 },
+  { label: 'asset.flange.blade', value: 2 },
+  { label: 'asset.flange.hub.and.nacelle', value: 3 },
+  { label: 'asset.flange.pitch.bearing', value: 4 }
 ];
 
 export const mergeAttrsAboutFlangePreload = (

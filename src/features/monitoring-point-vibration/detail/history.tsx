@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   Card,
   Flex,
@@ -79,8 +79,7 @@ export const History = (point: MonitoringPointRow) => {
               <CanAccess {...Permission.MeasurementDataDelete}>
                 <DeleteIconButton
                   confirmProps={{
-                    description: intl.get('DELETE_PROPERTY_DATA_PROMPT', {
-                      property: name,
+                    description: Translation.get('feature.history.delete.prompt', {
                       start: Dayjs.format(from, 'YYYY-MM-DD'),
                       end: Dayjs.format(to, 'YYYY-MM-DD')
                     }),

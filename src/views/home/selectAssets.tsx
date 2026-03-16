@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Checkbox, Form, ModalProps, Col, Button } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { AssetRow, exportAssets } from '../../asset-common';
 import { getFilename } from '../../utils/format';
 import { ModalWrapper } from '../../components/modalWrapper';
@@ -35,10 +35,10 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
     <ModalWrapper
       {...props}
       afterClose={() => form.resetFields()}
-      title={intl.get('EXPORT')}
+      title={Translation.get('common.action.export')}
       footer={[
         <Button key='back' onClick={(e) => props.onCancel && props.onCancel(e as any)}>
-          {intl.get('CANCEL')}
+          {Translation.get('common.action.cancel')}
         </Button>,
         <Button
           key='submitall'
@@ -50,7 +50,7 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
           color='primary'
           variant='outlined'
         >
-          {intl.get('EXPORT_ALL')}
+          {Translation.doSth('common.action.export', 'common.all')}
         </Button>,
         <Button
           key='submit'
@@ -58,7 +58,7 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
           disabled={selected.length === 0}
           onClick={() => handleUpload(selected)}
         >
-          {intl.get('EXPORT')}
+          {Translation.get('common.action.export')}
         </Button>
       ]}
     >
@@ -77,7 +77,8 @@ export const SelectAssets: React.FC<{ assets: AssetRow[]; onSuccess: () => void 
                   ))}
                 </Grid>
               ),
-              onChange: setSelected
+              onChange: setSelected,
+              style: { width: '100%' }
             }}
           />
         </Form>

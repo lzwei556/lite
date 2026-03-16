@@ -1,23 +1,23 @@
 import React from 'react';
 import { Button, Form, Popover, Space } from 'antd';
 import { PlusSquareOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Flex, IconButton, SelectFormItem, TextFormItem } from 'components';
 
 const WindowSettings = {
-  label: 'chart.window',
+  label: 'vibration.analysis.window',
   name: 'window',
   options: [
-    { label: 'chart.window.none', value: 'none' },
-    { label: 'chart.window.rectangle', value: 'rectangle' },
-    { label: 'chart.window.hamming', value: 'hamming' },
-    { label: 'chart.window.hanning', value: 'hanning' },
-    { label: 'chart.window.triangular', value: 'triangular' },
-    { label: 'chart.window.blackman', value: 'blackman' },
-    { label: 'chart.window.kaiser', value: 'kaiser' },
-    { label: 'chart.window.chebwin', value: 'chebwin' },
-    { label: 'chart.window.bartlett', value: 'bartlett' },
-    { label: 'chart.window.flattop', value: 'flattop' }
+    { label: 'common.none', value: 'none' },
+    { label: 'vibration.analysis.window.rectangle', value: 'rectangle' },
+    { label: 'vibration.analysis.window.hamming', value: 'hamming' },
+    { label: 'vibration.analysis.window.hanning', value: 'hanning' },
+    { label: 'vibration.analysis.window.triangular', value: 'triangular' },
+    { label: 'vibration.analysis.window.blackman', value: 'blackman' },
+    { label: 'vibration.analysis.window.kaiser', value: 'kaiser' },
+    { label: 'vibration.analysis.window.chebwin', value: 'chebwin' },
+    { label: 'vibration.analysis.window.bartlett', value: 'bartlett' },
+    { label: 'vibration.analysis.window.flattop', value: 'flattop' }
   ]
 };
 
@@ -45,7 +45,7 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
             selectProps={{
               options: options.map((len) => ({
                 ...len,
-                label: intl.get(len.label)
+                label: Translation.get(len.label)
               }))
             }}
           />
@@ -57,7 +57,7 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
                     setOpen(false);
                   }}
                 >
-                  {intl.get('CANCEL')}
+                  {Translation.get('common.action.cancel')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -68,7 +68,7 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
                   }}
                   type='primary'
                 >
-                  {intl.get('OK')}
+                  {Translation.get('common.ok')}
                 </Button>
               </Space>
             </Flex>
@@ -85,7 +85,7 @@ export const Window = ({ onOk }: { onOk: (window: string) => void }) => {
         icon={<PlusSquareOutlined />}
         onClick={() => setOpen(true)}
         size='small'
-        tooltipProps={{ title: intl.get('analysis.vibration.window') }}
+        tooltipProps={{ title: Translation.get('vibration.analysis.window') }}
         variant='outlined'
       />
     </Popover>

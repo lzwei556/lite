@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Form, FormProps, message, Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { GetMyProfile, UpdateMyProfile } from '../../apis/profile';
 import { User } from '../../types/user';
 import {
@@ -40,13 +40,13 @@ const MePage = () => {
 
   return (
     <Content>
-      <Typography.Title level={4}>{intl.get('MENU_USER_CENTER')}</Typography.Title>
+      <Typography.Title level={4}>{Translation.get('MENU_USER_CENTER')}</Typography.Title>
       <Grid>
         <Col span={24}>
-          <MutedCard title={intl.get('BASIC_INFORMATION')}>
-            {renderItem(intl.get('ACCOUNT_NAME'), user?.username)}
+          <MutedCard title={Translation.get('common.basic')}>
+            {renderItem(Translation.get('auth.username'), user?.username)}
             {renderItem(
-              intl.get('CELLPHONE'),
+              Translation.get('common.mobile.phone'),
               user && (
                 <ProfileItemForm
                   formProps={{ form: phoneForm, initialValues: { phone: user.phone } }}
@@ -54,17 +54,17 @@ const MePage = () => {
                     <TextFormItem
                       name='phone'
                       noStyle
-                      rules={[{ pattern: /^1[3-9]\d{9}$/, message: intl.get('phone.is.invalid') }]}
+                      rules={[{ pattern: /^1[3-9]\d{9}$/, message: 'feedback.invalid.phone' }]}
                     />
                   }
                   value={user.phone}
                   onSubmit={(values) =>
                     UpdateMyProfile(values).then((res) => {
                       if (res.code === 200) {
-                        message.success(intl.get('SAVED_SUCCESSFUL')).then();
+                        message.success(Translation.get('feedback.success.save')).then();
                         setUser(res.data);
                       } else {
-                        message.error(intl.get('FAILED_TO_SAVE'));
+                        message.error(Translation.failureDo('common.action.save'));
                       }
                     })
                   }
@@ -72,7 +72,7 @@ const MePage = () => {
               )
             )}
             {renderItem(
-              intl.get('EMAIL'),
+              Translation.get('common.email'),
               user && (
                 <ProfileItemForm
                   formProps={{ form: emailForm, initialValues: { email: user.email } }}
@@ -80,17 +80,17 @@ const MePage = () => {
                     <TextFormItem
                       name='email'
                       noStyle
-                      rules={[{ type: 'email', message: intl.get('email.is.invalid') }]}
+                      rules={[{ type: 'email', message: 'feedback.invalid.email' }]}
                     />
                   }
                   value={user.email}
                   onSubmit={(values) =>
                     UpdateMyProfile(values).then((res) => {
                       if (res.code === 200) {
-                        message.success(intl.get('SAVED_SUCCESSFUL'));
+                        message.success(Translation.get('feedback.success.save'));
                         setUser(res.data);
                       } else {
-                        message.error(intl.get('FAILED_TO_SAVE'));
+                        message.error(Translation.failureDo('common.action.save'));
                       }
                     })
                   }
@@ -100,9 +100,9 @@ const MePage = () => {
           </MutedCard>
         </Col>
         <Col span={24}>
-          <MutedCard title={intl.get('ACCOUNT_SECURITY')}>
+          <MutedCard title={Translation.get('label.me.account.security')}>
             {renderItem(
-              intl.get('PASSWORD'),
+              Translation.get('auth.password'),
               <Space>
                 ****************
                 <EditIconButton
@@ -169,7 +169,7 @@ const ProfileItemForm = ({
           </>
         ) : (
           <>
-            {value && value.length > 0 ? value : intl.get('NOT_BOUND_PROMPT')}
+            {value && value.length > 0 ? value : Translation.get('common.unbinded')}
             <EditIconButton color='primary' onClick={() => setEditable(true)} variant='text' />
           </>
         )}

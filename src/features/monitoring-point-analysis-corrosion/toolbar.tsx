@@ -1,7 +1,7 @@
 import React from 'react';
 import { Space } from 'antd';
 import Icon from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { IconButton, IconButtonProps } from 'components';
 import { ReactComponent as MouseSVG } from './mouse.svg';
 import { ReactComponent as SelectSVG } from './select.svg';
@@ -13,7 +13,7 @@ const PointMarkSwitcherIconButton = (props: IconButtonProps) => {
   return (
     <IconButton
       icon={<Icon component={() => <MouseSVG {...iconProps} />} />}
-      tooltipProps={{ title: intl.get('analysis.select.single') }}
+      tooltipProps={{ title: Translation.get('button.chart.toolbar.click') }}
       {...props}
     />
   );
@@ -23,7 +23,7 @@ const AreaMarkSwitcherIconButton = (props: IconButtonProps) => {
   return (
     <IconButton
       icon={<Icon component={() => <SelectSVG {...iconProps} />} />}
-      tooltipProps={{ title: intl.get('analysis.select.double') }}
+      tooltipProps={{ title: Translation.get('button.chart.toolbar.brush') }}
       {...props}
     />
   );

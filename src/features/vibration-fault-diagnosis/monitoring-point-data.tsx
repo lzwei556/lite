@@ -9,17 +9,18 @@ import { LineChart, MutedCard } from 'components';
 import { useOriginalDomain } from 'features/monitoring-point-analysis-vibration/useOriginalDomain';
 import { useTimeDomain } from 'features/monitoring-point-analysis-vibration/useTimeDomain';
 import { SVT_OPTIONS } from 'features/monitoring-point-analysis-vibration/useTrend';
-import { useLocaleContext } from 'localeProvider';
+import { getDisplayName } from 'locales/utils';
 import {
   frequency,
   getDataOfMonitoringPoint,
   HistoryData,
   MonitoringPointRow
 } from 'monitoring-point';
+import { useI18n } from 'providers/i18n';
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { useGlobalStyles } from 'styles';
-import { Dayjs, getDisplayName, getValue, roundValue } from 'utils';
+import { Dayjs, getValue, roundValue } from 'utils';
 
 // 此功能和诊断已经没有关系了，所以应该放在feature-data文件夹下，然后在使用时调用
 
@@ -66,7 +67,7 @@ export const MoniotoringPointData = ({
       console.log(error);
     }
   }, [id]);
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const { colorLayoutBgStyle } = useGlobalStyles();
 
   if (!historyData || historyData.length === 0) {
@@ -84,7 +85,7 @@ export const MoniotoringPointData = ({
       <MutedCard
         extra={Dayjs.format(historyData[0].timestamp)}
         style={{ ...colorLayoutBgStyle }}
-        title={intl.get('feature.data')}
+        title={Translation.get('feature.data')}
       >
         {properties.map((p) => {
           const { name, precision, unit } = p;
@@ -92,7 +93,11 @@ export const MoniotoringPointData = ({
           return (
             <Space direction='vertical' styles={{ item: { marginRight: '2em' } }} key={p.name}>
               <Typography.Text type='secondary'>
-                {getDisplayName({ name: intl.get(name).d(name), suffix: unit, lang: language })}
+                {getDisplayName({
+                  name: Translation.get(name),
+                  suffix: unit,
+                  lang: language
+                })}
               </Typography.Text>
               <Space direction='vertical' size={2}>
                 {values.map(({ name, last }) => (
@@ -133,8 +138,8 @@ const transform = (
       )
       .map((f) => {
         let seriesName = property.onlyShowFirstField
-          ? intl.get(property.name)
-          : intl.get(f.alias ?? f.name);
+          ? Translation.get(property.name)
+          : Translation.get(f.alias ?? f.name);
         if (naming) {
           const { replace, prefix } = naming;
           if (replace) {
@@ -176,7 +181,7 @@ const Charts = (props: Props) => {
 };
 
 const TimeDomain = ({ id, timestamp, axis, property }: Props) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const timeDomain = useTimeDomain({ id, timestamp, axis, property });
   const { x = [], y = [], xAxisUnit } = timeDomain.data || {};
   const { colorLayoutBgStyle } = useGlobalStyles();
@@ -186,10 +191,12 @@ const TimeDomain = ({ id, timestamp, axis, property }: Props) => {
       style={{ marginTop: 8, ...colorLayoutBgStyle }}
       title={
         <Space>
-          {`${intl.get(property.label)}${language === 'en-US' ? ' ' : ''}${intl.get(
-            'time.domain'
-          )}`}
-          {intl.get(axis.label)}
+          {getDisplayName({
+            name: Translation.get(property.label),
+            lang: language,
+            suffix: Translation.get('vibration.analysis.time-domain')
+          })}
+          {Translation.get(axis.label)}
         </Space>
       }
     >
@@ -210,7 +217,7 @@ const TimeDomain = ({ id, timestamp, axis, property }: Props) => {
         loading={timeDomain.loading}
         series={[
           {
-            data: { [intl.get(axis.label)]: y },
+            data: { [Translation.get(axis.label)]: y },
             xAxisValues: x.map((n) => `${n}`),
             raw: { sampling: 'lttb' }
           }
@@ -232,7 +239,7 @@ const Frequency = ({
   originalDomain: any;
 }) => {
   const { x, y, loading } = useFrequency(originalDomain, property, rotationSpeed) || {};
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const { colorLayoutBgStyle } = useGlobalStyles();
   return (
     <MutedCard
@@ -240,8 +247,12 @@ const Frequency = ({
       style={{ marginTop: 8, ...colorLayoutBgStyle }}
       title={
         <Space>
-          {`${intl.get(property.label)}${language === 'en-US' ? ' ' : ''}${intl.get('spectrum')}`}
-          {intl.get(axis.label)}
+          {getDisplayName({
+            name: Translation.get(property.label),
+            lang: language,
+            suffix: Translation.get('vibration.analysis.spectrum')
+          })}
+          {Translation.get(axis.label)}
         </Space>
       }
     >
@@ -262,7 +273,7 @@ const Frequency = ({
         loading={loading}
         series={[
           {
-            data: { [intl.get(axis.label)]: y },
+            data: { [Translation.get(axis.label)]: y },
             xAxisValues: x.map((n: number) => `${n}`),
             raw: { sampling: 'lttb' }
           }

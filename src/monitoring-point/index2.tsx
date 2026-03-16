@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { MonitoringPoint, MonitoringPointType } from 'common';
 import { Permission, useCan } from 'providers/access-control';
 import { Grid, TabsDetail, TabsDetailsItems } from 'components';
@@ -43,12 +43,12 @@ const useFeatures = (monitoringPoint: MonitoringPoint) => {
   const items: TabsDetailsItems = [
     {
       key: 'overview',
-      label: intl.get('OVERVIEW'),
+      label: Translation.get('common.overview'),
       content: <Overview {...{ monitoringPoint }} key={id} />
     },
     {
       key: 'history',
-      label: intl.get('HISTORY_DATA'),
+      label: Translation.get('feature.history'),
       content: (
         <CustomizableIntervalMonitoringPointData
           {...{ ...monitoringPoint, ...useGetSeriesAlarm() }}
@@ -60,7 +60,7 @@ const useFeatures = (monitoringPoint: MonitoringPoint) => {
   useDynamicFeatures(monitoringPoint).forEach((item) => items.push(item));
   items.push({
     key: 'alerts',
-    label: intl.get('ALARM_RECORDS'),
+    label: Translation.get('alarm.records'),
     content: (
       <FilterableAlarmRecordTable
         sourceId={monitoringPoint.id}
@@ -76,7 +76,7 @@ const useFeatures = (monitoringPoint: MonitoringPoint) => {
   if (canEditMeasurement) {
     items.push({
       key: 'settings',
-      label: intl.get('SETTINGS'),
+      label: Translation.get('common.settings'),
       content: (
         <Grid>
           <Col {...generateColProps({ xl: 8, xxl: 8 })}>
@@ -88,10 +88,10 @@ const useFeatures = (monitoringPoint: MonitoringPoint) => {
                   rest.handleSubmit(values);
                   if (error) {
                     messageInstance.success(
-                      `${intl.get('FAILED_TO_UPDATE')}${intl.get(error).d(error)}`
+                      `${Translation.failureDo('common.action.update')}${Translation.get(error)}`
                     );
                   } else {
-                    messageInstance.success(intl.get('UPDATED_SUCCESSFUL'));
+                    messageInstance.success(Translation.get('feedback.success.update'));
                   }
                 }
               }}
@@ -112,7 +112,7 @@ const useDynamicFeatures = (point: MonitoringPoint) => {
   const { assetId, attributes, id, type } = point;
   const waveform = {
     key: 'waveformData',
-    label: intl.get('WAVEFORM_DATA'),
+    label: Translation.get('feature.waveform'),
     content: <MonitoringPointWaveform {...point} key={id} />
   };
   const vibrationEnabled = useAppVibrationEnabled();
@@ -121,8 +121,8 @@ const useDynamicFeatures = (point: MonitoringPoint) => {
       waveform,
       {
         key: 'analysis',
-        label: intl.get('intelligent.analysis'),
-        content: <CorrosionAnalysis {...point as any} key={id} />
+        label: Translation.get('button.intelligent-analysis'),
+        content: <CorrosionAnalysis {...(point as any)} key={id} />
       }
     ];
   } else if (MonitoringPointType.Categories.getKeys(['vibration']).includes(type)) {
@@ -130,13 +130,13 @@ const useDynamicFeatures = (point: MonitoringPoint) => {
       ? [
           {
             key: 'analysis',
-            label: intl.get('intelligent.analysis'),
+            label: Translation.get('button.intelligent-analysis'),
             content: <VibrationAnalysis {...{ assetId, id, attributes }} key={id} />
           }
         ]
       : [waveform];
   } else if (MonitoringPointType.Categories.getKeys(['inclination']).includes(type)) {
-    return [{ ...waveform, key: 'dynamicData', label: intl.get('DYNAMIC_DATA') }];
+    return [{ ...waveform, key: 'dynamicData', label: Translation.get('feature.dynamic') }];
   } else if (MonitoringPointType.Categories.getKeys(['preload']).includes(type)) {
     return [waveform];
   } else {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Grid, SaveIconButton, TextFormItem } from '../../../components';
 import { AssetRow, updateAsset, AssetModel } from '../../../asset-common';
 import { generateColProps } from '../../../utils/grid';
@@ -28,13 +28,13 @@ export const Update = ({ asset, onSuccess }: { asset: AssetRow; onSuccess: () =>
           />
         </CanAccess>
       }
-      title={intl.get('BASIC_INFORMATION')}
+      title={Translation.get('common.basic')}
     >
       <Form form={form} layout='vertical' initialValues={{ name: asset.name }}>
         <Grid>
           <Col {...generateColProps({ xl: 12, xxl: 12 })}>
             <TextFormItem
-              label='NAME'
+              label='common.name'
               name='name'
               rules={[{ required: true }, { min: 4, max: 50 }]}
             />

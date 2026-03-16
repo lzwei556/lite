@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../../types/common';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import {
@@ -65,7 +65,7 @@ const useModalProps = (props: Props, footer: React.ReactNode) => {
     ...rest,
     afterClose: () => form?.resetFields(),
     footer,
-    title: intl.get('EDIT_SOMETHING', { something: intl.get('DEVICE_SETTINGS') }),
+    title: Translation.editSth('device.settings'),
     width: 640
   });
 };
@@ -82,8 +82,11 @@ const Footer = (props: Props) => {
 
 const useFooter = (props: Props) => {
   return [
-    useButtonBindingsProps({ children: intl.get('CANCEL'), onClick: props.onCancel }),
-    useButtonBindingsProps({ children: intl.get('apply.settings.to.the.same.types') }),
+    useButtonBindingsProps({
+      children: Translation.get('common.action.cancel'),
+      onClick: props.onCancel
+    }),
+    useButtonBindingsProps({ children: Translation.get('device.settings.apply-to-same-types') }),
     useOKButtonProps(props)
   ];
 };
@@ -91,7 +94,7 @@ const useFooter = (props: Props) => {
 const useOKButtonProps = ({ device, onSuccess, form }: Props) => {
   const { loading, handleSubmit } = useUpdateSettings(device.id, onSuccess);
   return useButtonBindingsProps({
-    children: intl.get('SAVE'),
+    children: Translation.get('common.action.save'),
     loading,
     onClick: () => form?.validateFields().then(handleSubmit),
     type: 'primary'

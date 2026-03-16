@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Space } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card, Descriptions, Link, TabsDetail, Grid, MutedCard } from '../../components';
 import { generateColProps } from '../../utils/grid';
 import { App, useAppType } from '../../config';
@@ -27,7 +27,7 @@ export default function VirtualAssetDetail() {
   const getTitle = () => {
     let title = 'assets';
     if (App.isWindLike(appType)) {
-      title = 'wind.turbines';
+      title = 'asset.wind-turbines';
     } else if (appType !== 'general') {
       title = 'areas';
     }
@@ -38,7 +38,7 @@ export default function VirtualAssetDetail() {
     <TabsDetail
       items={[
         {
-          label: intl.get('OVERVIEW'),
+          label: Translation.get('common.overview'),
           key: 'overview',
           content: (
             <Grid wrap={false} align='stretch'>
@@ -62,7 +62,10 @@ export default function VirtualAssetDetail() {
                             <Descriptions
                               contentStyle={{ transform: 'translate(-40px)' }}
                               items={statistics.map(({ name, value }) => ({
-                                label: intl.get(name),
+                                label:
+                                  name.indexOf('offline') > -1
+                                    ? Translation.between('device.status.offline', 'devices')
+                                    : Translation.get(name),
                                 children: value
                               }))}
                             />
@@ -79,16 +82,16 @@ export default function VirtualAssetDetail() {
                     <AlarmsObjectStatistics
                       total={projectStatistics?.rootAssetNum}
                       alarms={projectStatistics?.rootAssetAlarmNum}
-                      title={intl.get(getTitle())}
-                      subtext={intl.get('total')}
+                      title={Translation.get(getTitle())}
+                      subtext={Translation.get('common.total')}
                     />
                   </Col>
                   <Col span={24}>
                     <AlarmsObjectStatistics
                       total={projectStatistics?.monitoringPointNum}
                       alarms={projectStatistics?.monitoringPointAlarmNum}
-                      title={intl.get('monitoring.points')}
-                      subtext={intl.get('total')}
+                      title={Translation.get('monitoring.points')}
+                      subtext={Translation.get('common.total')}
                     />
                   </Col>
                   <Col span={24}>
@@ -98,7 +101,10 @@ export default function VirtualAssetDetail() {
                     />
                   </Col>
                   <Col span={24}>
-                    <AlarmTrend chartStyle={{ height: 210 }} title={intl.get('ALARM_TREND')} />
+                    <AlarmTrend
+                      chartStyle={{ height: 210 }}
+                      title={Translation.get('alarm.trend')}
+                    />
                   </Col>
                 </Grid>
               </Col>
@@ -106,7 +112,7 @@ export default function VirtualAssetDetail() {
           )
         },
         {
-          label: intl.get('SETTINGS'),
+          label: Translation.get('common.settings'),
           key: 'settings',
           content: <Settings />
         }

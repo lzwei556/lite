@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Col, Form, FormListFieldData } from 'antd';
 import { MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { cloneDeep } from 'lodash';
 import { Grid, IconButton, SelectFormItem, Table, TextFormItem } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
@@ -31,7 +31,7 @@ export function CreateModal(props: ModalFormProps) {
     <ModalWrapper
       {...props}
       afterClose={() => form.resetFields()}
-      okText={intl.get('CREATE')}
+      okText={Translation.get('common.action.create')}
       onOk={() => {
         form.validateFields().then((values: AlarmRule) => {
           const final = {
@@ -50,14 +50,14 @@ export function CreateModal(props: ModalFormProps) {
           addAlarmRule(final).then(props.onSuccess);
         });
       }}
-      title={intl.get('CREATE_ALARM_RULE')}
+      title={Translation.createSth('alarm.rules')}
       width={860}
     >
       <Form form={form} layout='vertical'>
         <Grid>
           <Col {...generateColProps({ xl: 12, xxl: 12 })}>
             <TextFormItem
-              label='NAME'
+              label='common.name'
               name='name'
               rules={[{ required: true }, { min: 4, max: 16 }]}
             />
@@ -94,7 +94,7 @@ export function CreateModal(props: ModalFormProps) {
                   }
                 },
                 options: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-                  label: intl.get(label),
+                  label: Translation.get(label),
                   value
                 }))
               }}
@@ -103,7 +103,7 @@ export function CreateModal(props: ModalFormProps) {
         </Grid>
         <Grid>
           <Col {...generateColProps({})}>
-            <TextFormItem label='DESCRIPTION' name='description' initialValue='' />
+            <TextFormItem label='common.description' name='description' initialValue='' />
           </Col>
         </Grid>
         <Form.List name='rules' initialValue={[defaultValues]}>
@@ -115,13 +115,13 @@ export function CreateModal(props: ModalFormProps) {
                   columns={[
                     {
                       key: 'name',
-                      title: intl.get('NAME'),
+                      title: Translation.get('common.name'),
                       width: 120,
                       render: (_, row: FormListFieldData) => <NameFormItem nameIndex={row.name} />
                     },
                     {
                       key: 'property',
-                      title: intl.get('INDEX'),
+                      title: Translation.get('alarm.metric'),
                       width: 150,
                       render: (_, row: FormListFieldData) => (
                         <IndexFormItem
@@ -150,7 +150,7 @@ export function CreateModal(props: ModalFormProps) {
                     },
                     {
                       key: 'duration',
-                      title: intl.get('alarm_group.consecutive_count'),
+                      title: Translation.get('alarm.consecutive.count'),
                       width: 60,
                       render: (_, row: FormListFieldData) => (
                         <DurationFormItem nameIndex={row.name} />
@@ -158,20 +158,20 @@ export function CreateModal(props: ModalFormProps) {
                     },
                     {
                       key: 'condition',
-                      title: intl.get('CONDITION'),
+                      title: Translation.get('alarm.trigger.condition'),
                       width: 180,
                       render: (_, row: FormListFieldData) => {
                         let unitText = '';
                         if (metric.length > 0 && metric[row.name] && metric[row.name].unit) {
                           const unit = metric[row.name].unit as string;
-                          unitText = intl.get(unit).d(unit);
+                          unitText = Translation.get(unit);
                         }
                         return <ConditionFormItem nameIndex={row.name} unitText={unitText} />;
                       }
                     },
                     {
                       key: 'severity',
-                      title: intl.get('SEVERITY'),
+                      title: Translation.get('alarm.level'),
                       width: 80,
                       render: (_, row: FormListFieldData) => (
                         <SeverityFormItem nameIndex={row.name} />
@@ -179,7 +179,7 @@ export function CreateModal(props: ModalFormProps) {
                     },
                     {
                       key: 'operation',
-                      title: intl.get('REMOVE'),
+                      title: Translation.get('common.action.remove'),
                       width: 60,
                       render: (_, row: FormListFieldData) => {
                         return (
@@ -202,7 +202,7 @@ export function CreateModal(props: ModalFormProps) {
                       onClick={() => add(defaultValues)}
                     />
                   )}
-                  header={{ title: intl.get('sub.rules') }}
+                  header={{ title: Translation.get('alarm.sub-rules') }}
                   noScroll={true}
                   pagination={false}
                 />

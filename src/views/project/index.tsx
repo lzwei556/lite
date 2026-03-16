@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import {
   Card,
   Link,
@@ -83,52 +83,52 @@ const ProjectPage = () => {
 
   const columns = [
     {
-      title: intl.get('PROJECT_NAME'),
+      title: Translation.get('common.name'),
       dataIndex: 'name',
       key: 'name'
     },
     {
-      title: intl.get('ACCESS_CREDENTIALS'),
+      title: Translation.get('project.list.access.credentials'),
       dataIndex: 'token',
       key: 'token',
       render: (token: string, record: Project) => {
         if (token) {
           return (
             <Link onClick={() => setToken(token)} variant='button'>
-              {intl.get('CLICK_TO_VIEW')}
+              {Translation.get('common.action.view')}
             </Link>
           );
         }
         return (
           <Link onClick={() => onGenAccessToken(record.id)} variant='button'>
-            {intl.get('CLICK_TO_GENERATE_ACCESS_CREDENTIAL')}
+            {Translation.get('project.list.access.credentials.clicking')}
           </Link>
         );
       }
     },
     {
-      title: intl.get('DESCRIPTION'),
+      title: Translation.get('common.description'),
       dataIndex: 'description',
       key: 'description'
     },
     {
-      title: intl.get('project.type'),
+      title: Translation.get('project.type'),
       dataIndex: 'type',
       key: 'type',
       render: (type: number) => {
         const label = projectTypeOptions.find((o) => o.value === type)?.label;
-        return label ? intl.get(label) : '-';
+        return label ? Translation.get(label) : '-';
       }
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: string, record: Project) => {
         return (
           <Space>
             <CanAccess {...Permission.ProjectAllocUser}>
               <Link onClick={() => trigger('assign', record)} variant='button'>
-                {intl.get('ASSIGN_USERS')}
+                {Translation.get('project.user-assignment')}
               </Link>
             </CanAccess>
             <CanAccess {...Permission.ProjectEdit}>
@@ -137,7 +137,7 @@ const ProjectPage = () => {
             <CanAccess {...Permission.ProjectDelete}>
               <DeleteIconButton
                 confirmProps={{
-                  description: intl.get('DELETE_PROJECT_PROMPT'),
+                  description: Translation.get('feedback.prompt.delete'),
                   onConfirm: () => {
                     onDelete(record.id);
                   }
@@ -154,7 +154,7 @@ const ProjectPage = () => {
 
   return (
     <Content>
-      <Typography.Title level={4}>{intl.get('MENU_PROJECT_MANAGEMENT')}</Typography.Title>
+      <Typography.Title level={4}>{Translation.get('MENU_PROJECT_MANAGEMENT')}</Typography.Title>
       <Table
         columns={columns}
         dataSource={ds}
@@ -164,7 +164,7 @@ const ProjectPage = () => {
               <IconButton
                 icon={<PlusOutlined />}
                 onClick={() => trigger()}
-                tooltipProps={{ title: intl.get('CREATE_PROJECT') }}
+                tooltipProps={{ title: Translation.createSth('project') }}
                 type='primary'
               />
             </CanAccess>
@@ -198,7 +198,7 @@ const ProjectPage = () => {
       )}
       <Modal
         open={!!token}
-        title={intl.get('ACCESS_CREDENTIALS')}
+        title={Translation.get('project.list.access.credentials')}
         onCancel={() => setToken(undefined)}
         footer={null}
       >

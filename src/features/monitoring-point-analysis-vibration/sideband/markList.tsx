@@ -1,5 +1,5 @@
 import React from 'react';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { dispalyCoordValue, transformMarkData, useMarkChartProps } from '../mark';
 import { ChartMark, Table } from 'components';
 
@@ -16,7 +16,7 @@ export const MarkList = () => {
           render: (_, row: ChartMark.Mark) =>
             row.label ? (
               <span style={{ display: 'inline-block', minWidth: 65 }}>
-                {intl.get(row.label as string)}
+                {Translation.get(row.label as string)}
               </span>
             ) : (
               ''

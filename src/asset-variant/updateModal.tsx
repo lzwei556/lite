@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
 import { ModalWrapper } from '../components/modalWrapper';
 import { ModalFormProps } from '../types/common';
 import { generateColProps } from '../utils/grid';
@@ -9,19 +8,20 @@ import { BasisFormItems } from './basisFormItems';
 import { SettingFormItems } from './settingFormItems';
 import { useAssetCategories } from '../features/asset-area';
 import { Card } from '../components';
+import { Translation } from 'locales/utils';
 
 export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
   const { asset, onSuccess, ...rest } = props;
   const { id, name, parentId, type } = asset;
   const [form] = Form.useForm<AssetModel>();
-  const label = intl.get('ASSET');
+  const label = 'asset';
 
   return (
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('EDIT_SOMETHING', { something: label }),
-        okText: intl.get('SAVE'),
+        title: Translation.editSth(label),
+        okText: Translation.get('common.action.save'),
         ...rest,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -47,7 +47,7 @@ export const UpdateModal = (props: ModalFormProps & { asset: AssetRow }) => {
           type
         }}
       >
-        <Card size='small' style={{ marginBottom: 16 }} title={intl.get('BASIC_INFORMATION')}>
+        <Card size='small' style={{ marginBottom: 16 }} title={Translation.get('common.basic')}>
           <BasisFormItems
             types={useAssetCategories()}
             formItemColProps={generateColProps({ xl: 12, xxl: 12 })}

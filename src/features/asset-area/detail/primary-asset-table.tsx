@@ -1,14 +1,15 @@
 import React from 'react';
 import { Column } from './settings';
 import { AssetCategory } from '../../../asset-category';
-import { getDisplayName, getOptionLabelByValue } from '../../../utils';
-import intl from 'react-intl-universal';
+import { getOptionLabelByValue } from '../../../utils';
+import { Translation } from 'locales/utils';
 import { LightSelectFilter, Table } from '../../../components';
-import { useLocaleContext } from '../../../localeProvider';
 import { AssetRow } from '../../../asset-common';
 import { SelectProps, Space } from 'antd';
 import { SettingsField } from '../../../asset-category/settings';
 import { FieldHelper } from 'types';
+import { useI18n } from 'providers/i18n';
+import { getDisplayName } from 'locales/utils';
 
 export const PrimaryAssetTable = ({
   assets,
@@ -19,7 +20,7 @@ export const PrimaryAssetTable = ({
   column: { name: Column; operation: Column };
   type: number;
 }) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
   const cols = [column.name];
   const category = AssetCategory.Key.get(type);
   const settings = category?.settings ?? [];
@@ -29,19 +30,19 @@ export const PrimaryAssetTable = ({
     const settingsColumns = settings
       .filter((field) => (filterField && field.visibleWhen ? field.visibleWhen(values) : true))
       .filter(
-        (field) =>
-          field.group === `asset.category.${AssetCategory.Value[type].toLowerCase()}.parameters`
+        (field) => field.group === `asset.${AssetCategory.Value[type].toLowerCase()}.parameters`
       )
       .map(({ label, name, options, source, unit, type }) => {
         const common = {
           dataIndex: AssetCategory.getNamePath(source).concat(FieldHelper.getNamePath(name)),
           key: name,
-          title: () => getDisplayName({ name: intl.get(label), lang: language, suffix: unit })
+          title: () =>
+            getDisplayName({ name: Translation.get(label), lang: language, suffix: unit })
         };
         if (options) {
           return {
             ...common,
-            render: (value: string) => intl.get(getOptionLabelByValue(options, value)).d(value)
+            render: (value: string) => Translation.get(getOptionLabelByValue(options, value))
           };
         } else if (type === 'number-array') {
           return {
@@ -84,8 +85,8 @@ const useFilter = (assets: AssetRow[], field?: SettingsField) => {
       ? ({
           defaultValue: filter,
           onChange: setFilter,
-          options: field.options?.map((opt) => ({ ...opt, label: intl.get(opt.label) })),
-          prefix: intl.get(field.label)
+          options: field.options?.map((opt) => ({ ...opt, label: Translation.get(opt.label) })),
+          prefix: Translation.get(field.label)
         } as SelectProps)
       : undefined,
     values: field ? { [field.name]: filter } : undefined

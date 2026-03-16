@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { Card } from '../../../components';
 import { generateColProps } from '../../../utils/grid';
 import { useFormBindingsProps } from '../../../hooks';
@@ -84,7 +84,7 @@ const useMultipleGroupSectionProps = (props: Props) => {
     groupCardProps: {
       ...useGroupCardProps({
         styles: { body: { paddingBlock: 0 } },
-        title: intl.get('DEVICE_SETTINGS')
+        title: Translation.get('device.settings')
       }),
       extra: <Toolbar {...props} />
     },

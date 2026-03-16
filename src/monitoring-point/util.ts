@@ -23,7 +23,7 @@ export const Point = {
     isThreeAxisedVibrationRelated: (type: MonitoringPointType.Value) => {
       return (
         Point.Assert.isVibrationRelated(type) &&
-        type !== MonitoringPointType.Value.VibrationRotationSingleAxis
+        type !== MonitoringPointType.Value['VibrationRotationSingle-Axis']
       );
     },
     isCorrosionRelated: (type: MonitoringPointType.Value) => {

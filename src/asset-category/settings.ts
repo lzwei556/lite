@@ -2,14 +2,14 @@ import { Field } from '../types';
 import { pickOptionsFromNumericEnum } from '../utils';
 import { MotorSettings, RotationSpeed } from './motor';
 
-const PREFIX = 'asset.parameter';
+const PREFIX = 'asset';
 
 enum DriveTypeValue {
-  IntegralShaft = 1,
-  CouplingDrive,
-  BeltDrive,
-  ChainDrive,
-  GearDrive
+  'Integral-Shaft' = 1,
+  Coupling,
+  Belt,
+  Chain,
+  Gear
 }
 const driveTypeOptions = pickOptionsFromNumericEnum(DriveTypeValue, `${PREFIX}.drive.type`);
 type DriveType = { drive_type: DriveTypeValue };
@@ -29,17 +29,17 @@ const shaftOrientationOptions = pickOptionsFromNumericEnum(
 type ShaftOrientation = { shaft_orientation: Direction };
 
 enum SupportTypeValue {
-  TwoBearings = 1,
+  'Two-Bearings' = 1,
   Overhung
 }
 const supportTypeOptions = pickOptionsFromNumericEnum(SupportTypeValue, `${PREFIX}.support.type`);
 type SupportType = { support_type: SupportTypeValue };
 
 enum SetTypeValue {
-  DcMotorDcGenerator = 1,
-  AcMotorAcGenerator,
-  DcMotorAcGenerator,
-  AcMotorDcGenerator
+  'Dc-MotorDc-Generator' = 1,
+  'Ac-MotorAc-Generator',
+  'Dc-MotorAc-Generator',
+  'Ac-MotorDc-Generator'
 }
 type SetType = { set_type: SetTypeValue };
 
@@ -125,16 +125,16 @@ export type SettingsField =
 
 const rotationSpeed: SettingsField = {
   source: '',
-  label: 'rotation.speed',
+  label: 'asset.rotation.speed',
   name: 'rotation_speed',
-  description: 'rotation.speed.desc',
+  description: 'asset.rotation.speed.desc',
   type: 'number',
   rules: [
     {
       type: 'number',
       min: 0
     },
-    { type: 'integer' }
+    { type: 'integer', message: 'feedback.validation.integer' }
   ]
 };
 
@@ -183,12 +183,12 @@ const supportType: SettingsField = {
 
 const setType: SettingsField = {
   source: '',
-  label: `${PREFIX}.set.type`,
+  label: `${PREFIX}.motor-generator.set.type`,
   name: 'set_type',
   description: 'set.type.desc',
-  options: pickOptionsFromNumericEnum(SetTypeValue, `${PREFIX}.set.type`),
+  options: pickOptionsFromNumericEnum(SetTypeValue, `${PREFIX}.motor-generator.set`),
   type: 'enum',
-  defaultValue: SetTypeValue.DcMotorDcGenerator
+  defaultValue: SetTypeValue['Dc-MotorDc-Generator']
 };
 
 export const compressorType: SettingsField = {
@@ -196,7 +196,7 @@ export const compressorType: SettingsField = {
   label: `${PREFIX}.compressor.type`,
   name: 'compressor_type',
   description: 'compressor.type.desc',
-  options: pickOptionsFromNumericEnum(CompressorTypeValue, `${PREFIX}.compressor.type`),
+  options: pickOptionsFromNumericEnum(CompressorTypeValue, `${PREFIX}.compressor`),
   type: 'enum',
   defaultValue: CompressorTypeValue.Centrifugal
 };
@@ -206,7 +206,7 @@ const fanType: SettingsField = {
   label: `${PREFIX}.fan.type`,
   name: 'fan_type',
   description: 'fan.type.desc',
-  options: pickOptionsFromNumericEnum(FanTypeValue, `${PREFIX}.fan.type`),
+  options: pickOptionsFromNumericEnum(FanTypeValue, `${PREFIX}.fan`),
   type: 'enum',
   defaultValue: FanTypeValue.Centrifugal
 };
@@ -216,7 +216,7 @@ export const blowerType: SettingsField = {
   label: `${PREFIX}.blower.type`,
   name: 'blower_type',
   description: 'blower.type.desc',
-  options: pickOptionsFromNumericEnum(BlowerTypeValue, `${PREFIX}.blower.type`),
+  options: pickOptionsFromNumericEnum(BlowerTypeValue, `${PREFIX}.blower`),
   type: 'enum',
   defaultValue: BlowerTypeValue.Centrifugal
 };
@@ -226,7 +226,7 @@ export const pumpType: SettingsField = {
   label: `${PREFIX}.pump.type`,
   name: 'pump_type',
   description: 'pump.type.desc',
-  options: pickOptionsFromNumericEnum(PumpTypeValue, `${PREFIX}.pump.type`),
+  options: pickOptionsFromNumericEnum(PumpTypeValue, `${PREFIX}.pump`),
   type: 'enum',
   defaultValue: PumpTypeValue.Centrifugal
 };
@@ -242,7 +242,7 @@ const bladeCount: SettingsField = {
       type: 'number',
       min: 2
     },
-    { type: 'integer' }
+    { type: 'integer', message: 'feedback.validation.integer' }
   ],
   visibleWhen: (values) => {
     if (!values) {
@@ -278,7 +278,7 @@ const vaneCount: SettingsField = {
       type: 'number',
       min: 2
     },
-    { type: 'integer' }
+    { type: 'integer', message: 'feedback.validation.integer' }
   ],
   visibleWhen: (values) => values?.pump_type === PumpTypeValue.SlidingVane
 };
@@ -294,7 +294,7 @@ const toothCount: SettingsField = {
       type: 'number',
       min: 1
     },
-    { type: 'integer' }
+    { type: 'integer', message: 'feedback.validation.integer' }
   ],
   visibleWhen: (values) => {
     if (!values) {
@@ -320,7 +320,7 @@ const lobeCount: SettingsField = {
       type: 'number',
       min: 2
     },
-    { type: 'integer' }
+    { type: 'integer', message: 'feedback.validation.integer' }
   ],
   visibleWhen: (values) => values?.pump_type === PumpTypeValue.Lobe
 };
@@ -336,7 +336,7 @@ const pistonCount: SettingsField = {
       type: 'number',
       min: 1
     },
-    { type: 'integer' }
+    { type: 'integer', message: 'feedback.validation.integer' }
   ],
   visibleWhen: (values) => {
     if (!values) {
@@ -422,7 +422,7 @@ const fanTypeCoolingTower: SettingsField = {
   label: `${PREFIX}.fan.type`,
   name: 'fan_type',
   description: 'fan.type.desc',
-  options: pickOptionsFromNumericEnum(FanTypeCoolingTower, `${PREFIX}.fan.type`),
+  options: pickOptionsFromNumericEnum(FanTypeCoolingTower, `${PREFIX}.fan`),
   type: 'enum',
   defaultValue: FanTypeCoolingTower.Centrifugal
 };

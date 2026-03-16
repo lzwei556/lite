@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 import { ModalFormProps } from '../../types/common';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { Card, Grid } from '../../components';
@@ -18,8 +18,8 @@ export const UpdateModal = (props: ModalFormProps & { monitoringPoint: Monitorin
     <ModalWrapper
       {...{
         afterClose: () => form.resetFields(),
-        title: intl.get('EDIT_SOMETHING', { something: intl.get(MONITORING_POINT) }),
-        okText: intl.get('SAVE'),
+        title: Translation.editSth(MONITORING_POINT),
+        okText: Translation.get('common.action.save'),
         ...rest,
         onOk: () => {
           form.validateFields().then((values) => {
@@ -29,10 +29,14 @@ export const UpdateModal = (props: ModalFormProps & { monitoringPoint: Monitorin
       }}
     >
       <Form form={form} layout='vertical' initialValues={{ ...Point.convert(monitoringPoint) }}>
-        <Card size='small' style={{ marginBlock: 16 }} title={intl.get('BASIC_INFORMATION')}>
+        <Card size='small' style={{ marginBlock: 16 }} title={Translation.get('common.basic')}>
           <BasisFormItems monitoringPoint={monitoringPoint} />
         </Card>
-        <Card size='small' style={{ marginBlock: 16 }} title={intl.get('monitoring.point.attr')}>
+        <Card
+          size='small'
+          style={{ marginBlock: 16 }}
+          title={Translation.get('monitoring.point.attr')}
+        >
           <Grid>
             <Others formItemColProps={generateColProps({ xl: 12, xxl: 12 })} />
           </Grid>

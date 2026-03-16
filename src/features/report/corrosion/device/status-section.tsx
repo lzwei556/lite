@@ -7,7 +7,7 @@ import { PieChart } from '../../components/pie-chart';
 import { Typography } from 'antd';
 import { ReportTable } from '../../components/table';
 import { getValue, toMac } from '../../../../utils';
-import intl from 'react-intl-universal';
+import { Translation } from 'locales/utils';
 
 export const DevicesStatusSection = ({ report }: { report: Report }) => {
   const { devicesList, devicesStatistics } = getDeviceStatus(report);
@@ -62,7 +62,7 @@ export const DevicesStatusSection = ({ report }: { report: Report }) => {
                 render: (reasons: number[], d: ReportDevice) => {
                   return (
                     <span style={styles.colorErrorStyle}>
-                      {intl.get(getDeviceEvalReason(d.evaluationLevel, reasons))}
+                      {Translation.get(getDeviceEvalReason(d.evaluationLevel, reasons))}
                     </span>
                   );
                 }

@@ -2,14 +2,15 @@ import { Col, Space, Typography } from 'antd';
 import { Grid, Table } from 'components';
 import React from 'react';
 import { getMarkTypeLabel } from './mark-types';
-import intl from 'react-intl-universal';
-import { getDisplayName, getValue, roundValue } from 'utils';
-import { useLocaleContext } from 'localeProvider';
+import { Translation } from 'locales/utils';
+import { getValue, roundValue } from 'utils';
 import { getFaultFrequency, getTop10 } from './hooks';
 import { FaultFrequency } from '../useFaultFrequency';
 import { Property } from '../useTrend';
 import { HarmonicData } from 'asset-common';
 import { getHarmonic } from './harmonic';
+import { useI18n } from 'providers/i18n';
+import { getDisplayName } from 'locales/utils';
 
 export const StatisticsTable = ({
   x,
@@ -24,7 +25,7 @@ export const StatisticsTable = ({
   faultFrequencies?: FaultFrequency;
   property?: Property;
 }) => {
-  const { language } = useLocaleContext();
+  const { language } = useI18n();
 
   return (
     <Grid>
@@ -36,7 +37,7 @@ export const StatisticsTable = ({
               columns={[
                 {
                   dataIndex: 'index',
-                  title: intl.get('FIELD_FREQUENCY'),
+                  title: Translation.get('FIELD_FREQUENCY'),
                   render: (_, row, i) => {
                     return (
                       <Space>
@@ -52,7 +53,7 @@ export const StatisticsTable = ({
                 {
                   dataIndex: 'value',
                   title: getDisplayName({
-                    name: intl.get('amplitude'),
+                    name: Translation.get('feature.amplitude'),
                     lang: language,
                     suffix: property?.unit
                   }),
@@ -71,7 +72,7 @@ export const StatisticsTable = ({
               columns={[
                 {
                   dataIndex: 'index',
-                  title: intl.get('FIELD_FREQUENCY'),
+                  title: Translation.get('FIELD_FREQUENCY'),
                   render: (_, row, i) => {
                     return (
                       <Space>
@@ -86,14 +87,14 @@ export const StatisticsTable = ({
                 },
                 {
                   dataIndex: 'order',
-                  title: intl.get('top10.order'),
+                  title: Translation.get('vibration.analysis.top10.order'),
                   render: (_, row: any) => roundValue(row.order, 1),
                   width: 120
                 },
                 {
                   dataIndex: 'value',
                   title: getDisplayName({
-                    name: intl.get('amplitude'),
+                    name: Translation.get('feature.amplitude'),
                     lang: language,
                     suffix: property?.unit
                   }),
@@ -115,7 +116,7 @@ export const StatisticsTable = ({
           columns={[
             {
               dataIndex: 'name',
-              title: intl.get('NAME'),
+              title: Translation.get('common.name'),
               render: (_, row: any) => (
                 <Space>
                   <span style={{ display: 'inline-block', width: '3em' }}>{row.label}</span>

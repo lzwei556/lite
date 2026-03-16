@@ -2,10 +2,8 @@ import * as React from 'react';
 import { Button, message, Space, TableProps, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
-import intl from 'react-intl-universal';
 import { getValue } from '../../../utils/format';
 import { App, useAppType } from '../../../config';
-import { MONITORING_POINT } from '../../../asset-common';
 import {
   DeleteIconButton,
   EditIconButton,
@@ -23,6 +21,7 @@ import { deleteAlarmRule, getAlarmRules, importAlarmRules } from './services';
 import { AlarmRule } from './types';
 import { useGlobalStyles } from '../../../styles';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { convertKeyFromServer, Translation } from 'locales/utils';
 
 export default function AlarmRuleList() {
   const appType = useAppType();
@@ -46,26 +45,26 @@ export default function AlarmRuleList() {
   const [selectedRow, setSelectedRow] = React.useState<AlarmRule>();
   const columns = [
     {
-      title: intl.get('NAME'),
+      title: Translation.get('common.name'),
       dataIndex: 'name',
       key: 'name',
-      render: (name: string) => intl.get(name).d(name)
+      render: (name: string) => Translation.get(name)
     },
     {
-      title: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) }),
+      title: Translation.get('monitoring.point.type'),
       dataIndex: 'type',
       key: 'type',
       filters: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-        text: intl.get(label),
+        text: Translation.get(label),
         value
       })),
       render: (typeId: number) => {
         const label = App.getMonitoringPointTypes(appType).find((m) => m.value === typeId)?.label;
-        return label ? intl.get(label) : '-';
+        return label ? Translation.get(label) : '-';
       }
     },
     {
-      title: intl.get('OPERATION'),
+      title: Translation.get('common.operation'),
       key: 'action',
       render: (_: string, row: AlarmRule) => {
         return (
@@ -84,7 +83,7 @@ export default function AlarmRuleList() {
                 <CanAccess {...Permission.AlarmRuleDelete}>
                   <DeleteIconButton
                     confirmProps={{
-                      description: intl.get('DELETE_RULE_PROMPT'),
+                      description: Translation.get('feedback.prompt.delete'),
                       onConfirm: () => {
                         deleteAlarmRule(row.id).then(() => {
                           fetchAlarmRules(levels, monitoringPointType);
@@ -117,13 +116,13 @@ export default function AlarmRuleList() {
       rowKey: 'id',
       columns: [
         {
-          title: intl.get('NAME'),
+          title: Translation.get('common.name'),
           dataIndex: 'name',
           key: 'name',
-          render: (name: string) => intl.get(name).d(name)
+          render: (name: string) => Translation.get(name)
         },
         {
-          title: intl.get('ALARM_METRIC'),
+          title: Translation.get('alarm.metric'),
           dataIndex: 'metric',
           key: 'metric',
           render: (metric: any) => {
@@ -131,7 +130,7 @@ export default function AlarmRuleList() {
           }
         },
         {
-          title: intl.get('ALARM_CONDITION'),
+          title: Translation.get('alarm.trigger.condition'),
           dataIndex: 'condition',
           key: 'condition',
           render: (_: string, record: any) => {
@@ -139,14 +138,15 @@ export default function AlarmRuleList() {
           }
         },
         {
-          title: intl.get('ALARM_LEVEL'),
+          title: Translation.get('alarm.level'),
           dataIndex: 'level',
           key: 'level',
           render: (level: number) => <AlarmLevelTag level={level} />
         }
       ],
       dataSource,
-      pagination: false
+      pagination: false,
+      style: { marginLeft: 40, width: columns.length === 2 ? 'auto' : 770 }
     };
   };
 
@@ -174,7 +174,7 @@ export default function AlarmRuleList() {
 
   return (
     <Content>
-      <Typography.Title level={4}>{intl.get('ALARM_RULES')}</Typography.Title>
+      <Typography.Title level={4}>{Translation.get('alarm.rules')}</Typography.Title>
       <Table
         {...{
           rowKey: 'id',
@@ -204,7 +204,7 @@ export default function AlarmRuleList() {
                       setOpen(true);
                       setType('create');
                     }}
-                    tooltipProps={{ title: intl.get('CREATE_ALARM_RULE') }}
+                    tooltipProps={{ title: Translation.createSth('alarm.rules') }}
                     type='primary'
                   />
                 </CanAccess>
@@ -216,7 +216,9 @@ export default function AlarmRuleList() {
                         setOpen(true);
                         setType('export');
                       }}
-                      tooltipProps={{ title: intl.get('EXPORT_SETTINGS') }}
+                      tooltipProps={{
+                        title: Translation.doSth('common.action.export', 'common.settings')
+                      }}
                       type='primary'
                     />
                   )}
@@ -233,14 +235,10 @@ export default function AlarmRuleList() {
                     onUpload={(data) => {
                       return importAlarmRules(data).then((res) => {
                         if (res.data.code === 200) {
-                          message.success(intl.get('IMPORTED_SUCCESSFUL'));
+                          message.success(Translation.get('feedback.success.import'));
                           fetchAlarmRules(levels, monitoringPointType);
                         } else {
-                          message.error(
-                            `${intl.get('FAILED_TO_IMPORT')}${intl
-                              .get(res.data.msg)
-                              .d(res.data.msg)}`
-                          );
+                          message.error(Translation.failureDo('common.action.import'));
                         }
                       });
                     }}
@@ -294,10 +292,10 @@ export function translateMetricName(name: string) {
   if (name.indexOf(':')) {
     return name
       .split(':')
-      .map((n) => intl.get(n))
+      .map((n) => Translation.get(convertKeyFromServer(n) as string))
       .join(':');
   } else {
-    return intl.get(name);
+    return Translation.get(name);
   }
 }
 
@@ -314,7 +312,7 @@ export function getAlarmDetail(
   const { name, unit } = metric;
   const thres = getValue({ value: threshold, unit });
   const alarmValue = getValue({ value, unit });
-  return `${translateMetricName(name)} ${operation} ${thres} ${intl.get(
-    'ALARM_VALUE'
+  return `${translateMetricName(name)} ${operation} ${thres} ${Translation.get(
+    'alarm.value'
   )}: ${alarmValue}`;
 }

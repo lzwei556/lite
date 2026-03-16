@@ -1,10 +1,11 @@
 import React from 'react';
 import { Col, Statistic } from 'antd';
-import intl from 'react-intl-universal';
 import { generateColProps } from '../../utils/grid';
 import { Card, Grid } from '../../components';
 import { AssetRow } from '../types';
 import { Asset } from '..';
+import { Translation } from 'locales/utils';
+import { getLabelByValue } from 'features/alarm';
 
 export const StatisticBar = ({ asset }: { asset: AssetRow }) => {
   const getItems = () => {
@@ -12,12 +13,12 @@ export const StatisticBar = ({ asset }: { asset: AssetRow }) => {
       const { statistics } = asset;
       const descendant = Asset.Statistics.resolveDescendant(statistics).map((d) => ({
         ...d,
-        name: intl.get(d.name)
+        name: Translation.get(d.name)
       }));
       const status = Asset.Statistics.resolveStatus(
         statistics.monitoringPointNum,
         statistics.alarmNum
-      ).map((s) => ({ ...s, name: intl.get(`leveled.alarms.${s.level}`) }));
+      ).map((s) => ({ ...s, name: Translation.leveledAlarm(getLabelByValue(s.level)) }));
       descendant.splice(1, 1, ...status.slice(1).reverse());
       return descendant;
     }
