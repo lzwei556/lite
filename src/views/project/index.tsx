@@ -65,12 +65,11 @@ const ProjectPage = () => {
   const onDelete = (id: number) => {
     DeleteProjectRequest(id).then(() => {
       if (selectedProject?.id === id) {
-        deleteProject().then(() => {
-          if (dataSource) {
-            const { size, page, total } = dataSource;
-            gotoPage({ size, total, index: page }, 'prev');
-          }
-        });
+        deleteProject();
+      }
+      if (dataSource) {
+        const { size, page, total } = dataSource;
+        gotoPage({ size, total, index: page }, 'prev');
       }
     });
   };
