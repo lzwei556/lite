@@ -111,11 +111,12 @@ function mergeLocale(frontend: any, server: any) {
 
 const getI18nFiles = async (lang: string) => {
   try {
-    const res = await fetch(`http://172.16.7.134:8095/res/${lang}.json`);
+    const res = await fetch(`/res/${lang}.json`);
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
-    return res.json();
+    const data = await res.json();
+    return data;
   } catch {
     console.log('Failed to load i18n files');
     return null;
