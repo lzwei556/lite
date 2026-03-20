@@ -4,6 +4,7 @@ import { ReportDTO } from '../types';
 import { useAppType } from '../../../config';
 import { transform } from '../utils';
 import { Index } from '../corrosion';
+import Report from '../preload';
 
 export default function ReportDetail() {
   const appType = useAppType();
@@ -14,6 +15,7 @@ export default function ReportDetail() {
   } else if (appType === 'corrosion') {
     return <Index report={transform(report)} />;
   } else {
-    return <Index report={transform(report)} />;
+    // return <Index report={transform(report)} />;
+    return <Report />;
   }
 }

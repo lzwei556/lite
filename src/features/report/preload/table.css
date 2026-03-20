@@ -1,0 +1,14 @@
+.ant-table {
+  font-size: 12px;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  border: 1px solid #f81c1c !important;
+  padding: 4px !important;
+  background: #fff !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #fff !important;
+}
