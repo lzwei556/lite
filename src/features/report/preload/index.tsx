@@ -14,6 +14,8 @@ const Report = () => {
     <ReportContainer filename=''>
       <CoverPage />
       <MonitoringSolutionSection />
+      <StandardSection />
+      <DefinitionSection />
     </ReportContainer>
   );
 };

@@ -2,16 +2,17 @@ import { createStyles } from 'antd-style';
 
 export const useReportBaseStyles = createStyles(({ css }) => ({
   section: css`
-    margin-bottom: 14px;
+    margin: 16px 0;
   `,
 
   title: css`
-    font-weight: bold;
-    margin-bottom: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
   `,
 
   subTitle: css`
-    margin: 6px 0 2px;
+    margin: 12px 0 8px;
   `,
 
   text: css`
@@ -23,5 +24,5 @@ export const useReportBaseStyles = createStyles(({ css }) => ({
   noIndent: css`
     margin: 2px 0;
     font-size: 13px;
-  `,
+  `
 }));

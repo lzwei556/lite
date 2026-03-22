@@ -1,12 +1,9 @@
 import React from 'react';
 import { createStyles } from 'antd-style';
-import { Table } from 'antd';
+import { Table, TableProps } from 'antd';
 
-export type ReportTableProps<T> = {
-  columns: any;
-  dataSource: T[];
+export type ReportTableProps<T> = TableProps<T> & {
   showHeader: boolean;
-  style?: React.CSSProperties;
 };
 
 const useStyles = createStyles(({ css }) => ({
@@ -32,7 +29,6 @@ export const ReportTable = <T,>(props: ReportTableProps<T>) => {
   return (
     <Table
       {...props}
-      bordered={false}
       className={styles.table}
       pagination={false}
       size='small'

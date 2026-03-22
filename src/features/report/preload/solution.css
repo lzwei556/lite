@@ -1,0 +1,38 @@
+/* 整体表格 */
+.report-table .ant-table {
+  border-radius: 0; /* 去圆角 */
+}
+
+/* 表头 */
+.report-table .ant-table-thead > tr > th {
+  text-align: center;
+  font-weight: 600;
+  padding: 6px 8px; /* 更紧凑 */
+}
+
+/* 单元格 */
+.report-cell {
+  padding: 6px 8px !important;
+  height: 36px;              /* 行高统一 */
+  line-height: 1.2;
+}
+
+/* 右侧图单元格 */
+.report-chart-cell {
+  padding: 0 !important;     /* 🔥 去掉所有内边距 */
+  text-align: center;
+  vertical-align: middle;    /* 垂直居中 */
+}
+
+/* 标题 */
+.report-title {
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 8px 0;
+}
+
+/* 去掉多余间距 */
+.report-table .ant-table-container {
+  border-top: 1px solid #d9d9d9;
+}
