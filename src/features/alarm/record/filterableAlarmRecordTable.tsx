@@ -14,11 +14,11 @@ import {
 import { PagingAlarmRecordRequest, RemoveAlarmRecordRequest } from '../../../apis/alarm';
 import { Store, useStore } from '../../../hooks/store';
 import { pickOptionsFromNumericEnum } from '../../../utils';
-import { App, useAppType } from '../../../config';
 import { getAlarmDetail } from '../alarm-group';
 import { MONITORING_POINT } from '../../../asset-common';
 import { alarmLevelOptions, AlarmLevelTag } from '..';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { useAppConfig } from 'providers/app';
 
 enum Status {
   UnProcessed = 0,
@@ -37,7 +37,7 @@ export const FilterableAlarmRecordTable: React.FC<{
     ({ label, value }) => ({ text: intl.get(label), value })
   );
   const [alarmName, setAlarmName] = React.useState<string | undefined>();
-  const appType = useAppType();
+  const monitoringPointTypeOptions = useAppConfig().monitoringPointTypeOptions;
   const [monitoringPointType, setMontoringPointType] = React.useState<number[]>([]);
 
   const fetchAlarmRecords = (
@@ -199,10 +199,7 @@ export const FilterableAlarmRecordTable: React.FC<{
                 maxTagCount={2}
                 mode='multiple'
                 onChange={setMontoringPointType}
-                options={App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-                  label: intl.get(label),
-                  value
-                }))}
+                options={monitoringPointTypeOptions}
                 prefix={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
               />
             )}

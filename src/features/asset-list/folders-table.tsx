@@ -3,7 +3,6 @@ import { DownloadIconButton, IconButton, Table } from 'components';
 import React from 'react';
 import { useColumns } from './columns';
 import { Permission, useCan } from 'providers/access-control';
-import { AssetCategory } from 'common/asset-category';
 import { Space } from 'antd';
 import { ImportButton } from './import';
 import { DownloadModal } from './download-modal';
@@ -11,6 +10,7 @@ import { ExportModal } from './export-modal';
 import intl from 'react-intl-universal';
 import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import { mapTree } from 'utils/tree';
+import { FolderAsset } from 'domain/asset';
 
 export const FolderAssetsTable = ({
   assets,
@@ -88,7 +88,7 @@ export const FolderAssetsTable = ({
 const getDataSource = (assets: AssetRow[]) => {
   const dataSource: AssetRow[] = [];
   mapTree(assets, (asset) => {
-    if (AssetCategory.Categories.getKeys(['folder']).includes(asset.type)) {
+    if (FolderAsset.types.includes(asset.type)) {
       dataSource.push({ ...asset, children: undefined });
     }
   });

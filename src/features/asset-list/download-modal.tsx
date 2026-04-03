@@ -2,14 +2,15 @@ import React from 'react';
 import { Button, Col, ModalProps, Row, Tree, message } from 'antd';
 import intl from 'react-intl-universal';
 import JSZip from 'jszip';
-import { AssetRow, combine, downloadHistory } from 'asset-common';
+import { AssetRow, downloadHistory } from 'asset-common';
 import { RangeDatePicker, useRange } from 'components';
 import { useLocaleContext } from 'localeProvider';
 import { mapTree, tree2List } from 'utils/tree';
-import { MonitoringPointType } from 'common';
 import { downloadFile } from 'utils/download';
 import { getFilename } from 'utils';
 import { ModalWrapper } from 'components/modalWrapper';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { AssetTree } from 'domain/asset';
 
 export const DownloadModal = ({ assets, ...rest }: { assets: AssetRow[] } & ModalProps) => {
   const { numberedRange, setRange } = useRange();
@@ -20,7 +21,7 @@ export const DownloadModal = ({ assets, ...rest }: { assets: AssetRow[] } & Moda
 
   const getTreedata = (assets: AssetRow[]) => {
     if (assets.length > 0) {
-      const mixedTree = mapTree(assets, (asset) => combine(asset));
+      const mixedTree = mapTree(assets, (asset) => AssetTree.combine(asset));
       return mapTree(mixedTree, (mix) => {
         return {
           ...mix,
@@ -35,7 +36,7 @@ export const DownloadModal = ({ assets, ...rest }: { assets: AssetRow[] } & Moda
   const handleDownload = (ids: [number, number][]) => {
     const [from, to] = numberedRange;
     const fetchs = ids.map(([id, type]) => {
-      const properties = MonitoringPointType.Key.getProperties(type);
+      const properties = OMonitoringPoint.Type.getProperties({ type });
       return downloadHistory(id, from, to, JSON.stringify(properties.map((p) => p.key)), language);
     });
     Promise.all(fetchs)
@@ -91,7 +92,7 @@ export const DownloadModal = ({ assets, ...rest }: { assets: AssetRow[] } & Moda
           key='all'
           loading={loading}
           onClick={() => {
-            const mixedTree = mapTree(assets, (asset) => combine(asset));
+            const mixedTree = mapTree(assets, (asset) => AssetTree.combine(asset));
             const list = tree2List(mixedTree);
             const points = list.filter((item) => item.type > 10000);
             if (points.length > 0) {

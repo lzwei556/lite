@@ -4,12 +4,17 @@ import { ModalFormProps } from 'types/common';
 import { useType } from './use-basic-form-items';
 import { ModalWrapper } from 'components/modalWrapper';
 import intl from 'react-intl-universal';
-import { DiagnosisFormItems, FormItemsBasic, ParentSelectFormItem, TypeSelectFormItem } from './form-items-basic';
+import {
+  DiagnosisFormItems,
+  FormItemsBasic,
+  ParentSelectFormItem,
+  TypeSelectFormItem
+} from './form-items-basic';
 import { UpdateFormProps } from './update-form';
 import { FormItemsSettings } from './form-items-settings';
 import { generateColProps } from 'utils/grid';
 import { Grid } from 'components';
-import { AssetCategory } from 'common/asset-category';
+import { PrimaryAssetType } from 'domain/asset';
 
 export const UpdateFormModal = ({
   onSuccess,
@@ -52,7 +57,7 @@ export const UpdateFormModal = ({
               parentSelectFormItem: <ParentSelectFormItem {...{ formItemColProps, type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...typeRest} />,
               diagnosisFormItems: type &&
-                AssetCategory.Categories.getKeys(['vibration']).includes(type) && (
+                PrimaryAssetType.Category.getTypes(['vibration']).includes(type) && (
                   <DiagnosisFormItems asset={editingAsset} formItemColProps={formItemColProps} />
                 )
             }}

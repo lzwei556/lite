@@ -4,9 +4,9 @@ import React from 'react';
 import { generateColProps } from 'utils/grid';
 import { useParents, useType } from './use-basic-form-items';
 import { useFormItemBindingsProps } from 'hooks';
-import { AssetCategory } from 'common/asset-category';
 import intl from 'react-intl-universal';
 import { AssetRow } from 'asset-common';
+import { FolderAsset, PrimaryAssetType } from 'domain/asset';
 
 export const FormItemsBasic = ({
   formItemColProps = generateColProps({}),
@@ -59,8 +59,8 @@ export const TypeSelectFormItem = ({
 }: Omit<ReturnType<typeof useType>, 'selectedType'> & { parentType?: number }) => {
   const options = (
     parentType
-      ? AssetCategory.Key.getChildren(parentType)
-      : AssetCategory.Categories.getOptions(['bolt', 'corrosion', 'device', 'vibration'])
+      ? FolderAsset.getChildrenOptions([parentType])
+      : PrimaryAssetType.Category.getTypeOptions(['bolt', 'corrosion', 'device', 'vibration'])
   ).map((t) => ({
     ...t,
     label: intl.get(t.label)

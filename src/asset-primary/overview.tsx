@@ -4,10 +4,10 @@ import intl from 'react-intl-universal';
 import { Grid, MutedCard } from 'components';
 import { AlarmsObjectStatistics, AlarmTrend, AssetRow } from 'asset-common';
 import { AssetAnnotationImage } from 'features/imageAnnotation';
-import { SettingsDetail } from './settings-detail';
 import { SelectedPointPropertyHistory } from 'asset-model/selected-point-property-history';
 import { FaultDiagnosis, FaultDiagnosisOverview } from 'features/vibration-fault-diagnosis';
 import { shouldDisplayDiagnosis } from 'asset-primary';
+import { PrimaryAssetSettingsDetail } from 'features/asset-settings';
 
 export const Overview = (props: {
   asset: AssetRow;
@@ -46,7 +46,7 @@ export const Overview = (props: {
         <Grid>
           <Col span={24}>
             <MutedCard title={intl.get('BASIC_INFORMATION')}>
-              <SettingsDetail attributes={asset.attributes} type={asset.type} />
+              <PrimaryAssetSettingsDetail attributes={asset.attributes} type={asset.type} />
             </MutedCard>
           </Col>
           <Col span={24}>

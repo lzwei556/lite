@@ -1,7 +1,8 @@
-import { AssetCategory } from 'common/asset-category';
-import { AssetRow, useContext } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import React from 'react';
 import { mapTree } from 'utils/tree';
+import { useAssetsContext } from 'providers/assets';
+import { FolderAsset } from 'domain/asset';
 
 export const useType = (type?: number) => {
   const [selectedType, setSelectedType] = React.useState(type);
@@ -13,10 +14,10 @@ export const useType = (type?: number) => {
 };
 
 export const useParents = ({ assetId, type }: { assetId?: number; type?: number }) => {
-  const { assets } = useContext();
+  const { assets } = useAssetsContext();
   const parents: AssetRow[] = [];
   mapTree(assets, (asset) => {
-    if (type && AssetCategory.Key.getParents(type).includes(asset.type)) {
+    if (type && FolderAsset.types.includes(asset.type)) {
       parents.push(asset);
     }
   });

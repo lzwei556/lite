@@ -1,6 +1,6 @@
 import { Col, ColProps, FormItemProps } from 'antd';
-import { Key } from 'common/monitoring-point-type';
 import { FormItem } from 'components';
+import { OMonitoringPoint } from 'domain/monitoring-point';
 import React from 'react';
 import { toUniversalFormItemProps } from 'types';
 import { generateColProps } from 'utils/grid';
@@ -14,7 +14,7 @@ export const FormItemsAttributes = ({
   formItemColProps?: ColProps;
   formItemProps?: FormItemProps;
 }) => {
-  return Key.getAttributes(type)
+  return OMonitoringPoint.Type.getSettings(type)
     .map((attr) => toUniversalFormItemProps(attr, formItemProps))
     .map((props, index) => (
       <Col key={index} {...formItemColProps}>

@@ -2,11 +2,11 @@ import React from 'react';
 import { Select, SelectProps, Space, Typography } from 'antd';
 import { toMac } from '../../../utils/format';
 import { DeviceType } from '../../../types/device_type';
-import { useAppType } from '../../../config';
 import { Device } from '../../../types/device';
 import { foreachTree } from '../../../utils/tree';
 import { DeviceTreeNode } from '../deviceTree';
 import { useContext } from '..';
+import { useAppConfig } from 'providers/app';
 
 type Parent = Device & { gatewayId: number };
 
@@ -27,7 +27,7 @@ export function ParentsSelect({
   device?: Device;
   filterTypes?: DeviceType[];
 }) {
-  const appType = useAppType();
+  const appType = useAppConfig().type;
   const { devices } = useContext();
   const parents: Parent[] = [];
   let all = devices

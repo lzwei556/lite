@@ -2,13 +2,13 @@ import { Col, ColProps, Form, SelectProps } from 'antd';
 import { SelectFormItem, TextFormItem } from 'components';
 import React from 'react';
 import { useFormItemBindingsProps } from 'hooks';
-import { MonitoringPointType } from 'common';
-import { App, useAppType } from 'config';
 import intl from 'react-intl-universal';
 import { DeviceSelect } from './device-select';
 import { generateColProps } from 'utils/grid';
 import { useAssets, useType } from './use-basic-form-items';
 import { useComponents } from './hooks';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { useAppConfig } from 'providers/app';
 
 export const FormItemsBasic = ({
   assetSelectFormItem,
@@ -43,8 +43,6 @@ export const FormItemsBasic = ({
 };
 
 export const TypeSelectFormItem = (param: Omit<ReturnType<typeof useType>, 'selectedType'>) => {
-  const appType = useAppType();
-  const types = App.getMonitoringPointTypes(appType);
   const form = Form.useFormInstance();
   return (
     <>
@@ -62,7 +60,7 @@ export const TypeSelectFormItem = (param: Omit<ReturnType<typeof useType>, 'sele
               form.setFieldValue('typeLabel', opt?.label);
               form.setFieldValue('device_id', null);
             },
-            options: types.map((t) => ({ ...t, label: intl.get(t.label) }))
+            options: useAppConfig().monitoringPointTypeOptions
           }
         }}
       />
@@ -86,7 +84,7 @@ export const SensorSelectFormItem = ({ type }: { type?: number }) => {
           onChange={(_, opt?: NonNullable<SelectProps['options']>[number]) => {
             form.setFieldValue('deviceName', opt?.label);
           }}
-          types={type ? MonitoringPointType.Key.getDeviceTypes(type) : []}
+          types={type ? OMonitoringPoint.Type.getDeviceTypes(type) : []}
         />
       </TextFormItem>
       <TextFormItem {...useFormItemBindingsProps({ name: 'deviceName', hidden: true })} />

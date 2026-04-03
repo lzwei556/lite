@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Col, Form, FormListFieldData } from 'antd';
 import intl from 'react-intl-universal';
-import { App, useAppType } from '../../../config';
 import { generateColProps } from '../../../utils/grid';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
@@ -14,10 +13,11 @@ import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
 import { updateAlarmRule } from './services';
 import { translateMetricName } from '.';
+import { useAppConfig } from 'providers/app';
 
 export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
   const { alarm, ...rest } = props;
-  const appType = useAppType();
+  const monitoringPointTypeOptions = useAppConfig().monitoringPointTypeOptions;
   const [form] = Form.useForm();
 
   return (
@@ -66,13 +66,7 @@ export function UpdateModal(props: ModalFormProps & { alarm: AlarmRule }) {
               label='monitoring.point.type'
               name='type'
               rules={[{ required: true }]}
-              selectProps={{
-                disabled: true,
-                options: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-                  label: intl.get(label),
-                  value
-                }))
-              }}
+              selectProps={{ disabled: true, options: monitoringPointTypeOptions }}
             />
           </Col>
         </Grid>

@@ -1,16 +1,23 @@
 import React from 'react';
 import { Col, Empty, Spin } from 'antd';
 import intl from 'react-intl-universal';
-import { Card, ChartMark, Flex, Grid, RangeDatePicker, useRange } from '../../components';
-import { AnalysisSidebarCollapse } from '..';
+import {
+  Card,
+  ChartMark,
+  Flex,
+  Grid,
+  RangeDatePicker,
+  useRange,
+  AnalysisSidebarCollapse
+} from '../../components';
 import { Dayjs } from '../../utils';
 import { Forecast } from './forecast';
 import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
 import { MarkList } from './markList';
-import { MonitoringPointType } from 'common';
 import { MonitoringPointRow } from 'monitoring-point';
+import { OMonitoringPoint } from 'domain/monitoring-point';
 
 export type MarkType = 'point' | 'area';
 
@@ -36,7 +43,7 @@ export const CorrosionAnalysis = (props: MonitoringPointRow) => {
 };
 
 const Content = (props: MonitoringPointRow & { range: Range }) => {
-  const { id, range, properties, type } = props;
+  const { id, range } = props;
   const { history, loading } = useAnalysisData(id, range);
   const [activeKey, setActiveKey] = React.useState('overview');
   const [markType, setMarkType] = React.useState<MarkType>('point');
@@ -48,7 +55,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
       </Card>
     );
   }
-  const _properties = MonitoringPointType.Key.getProperties(type, properties);
+  const _properties = OMonitoringPoint.Type.getProperties(props);
   if (_properties.length === 0) return null;
   const property = _properties[0];
 

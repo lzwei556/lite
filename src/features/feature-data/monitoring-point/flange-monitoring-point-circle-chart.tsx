@@ -1,14 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import intl from 'react-intl-universal';
-import { MonitoringPointType } from 'common';
-import { Asset, ASSET_PATHNAME, AssetRow, MonitoringPointRow, Points } from 'asset-common';
+import { Asset, AssetRow, MonitoringPointRow, Points } from 'asset-common';
 import { useGlobalStyles } from 'styles';
 import { buildCustomTooltip, Chart, chartColors } from 'components';
 import { ColorHealth } from 'constants/color';
 import { AlarmLevel, getColorByValue } from 'features/alarm/alarmLevel';
 import { isMobile } from 'utils/deviceDetection';
 import { ENV, getValue, roundValue } from 'utils';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { AssetTree, PrimaryAssetType } from 'domain/asset';
 
 export const FlangeMonitoringPointsCircleChart = ({
   asset,
@@ -35,7 +36,7 @@ export const FlangeMonitoringPointsCircleChart = ({
         click: (paras: any) => {
           const index = paras.value[2];
           if (points.length > index) {
-            navigate(`/${ASSET_PATHNAME}/${points[index].id}-${points[index].type}`, {
+            navigate(`/${AssetTree.Path.Assets}/${points[index].id}-${points[index].type}`, {
               state: [`${points[index].id}-${points[index].type}`]
             });
           }
@@ -70,7 +71,7 @@ function buildCirclePointsChartOfFlange(
   angleAxis.push(actuals.angleAxis);
   let max = getMax(actuals.max, attributes, measurements[0].type);
   let min = actuals.min || -1;
-  if (measurements[0].type === MonitoringPointType.Value.BoltLoosening) {
+  if (measurements[0].type === OMonitoringPoint.Type.BoltLoosening) {
     if (max < 5) {
       max = 10;
     }
@@ -80,12 +81,9 @@ function buildCirclePointsChartOfFlange(
   series.push(actuals.series);
 
   const legends = [];
-  const unit = MonitoringPointType.Key.getProperties(
-    measurements[0].type,
-    measurements[0].properties
-  ).filter((p) => p.first)?.[0]?.unit;
+  const unit = OMonitoringPoint.Type.getProperties(measurements[0]).filter((p) => p.first)?.[0]?.unit;
   if (
-    MonitoringPointType.Key.getFlangeAttributesKey(measurements[0].type) === 'normal' &&
+    PrimaryAssetType.Category.Flange.MonitoringPoints.isPreload(measurements[0].type) &&
     checkValidAttr(attributes, 'normal', min)
   ) {
     const seriesName = `${intl.get('RATING')} ${attributes?.normal?.value}${unit}`;
@@ -95,7 +93,7 @@ function buildCirclePointsChartOfFlange(
   }
 
   if (
-    MonitoringPointType.Key.getFlangeAttributesKey(measurements[0].type) === 'initial' &&
+    PrimaryAssetType.Category.Flange.MonitoringPoints.isLoosening(measurements[0].type) &&
     checkValidAttr(attributes, 'initial', min)
   ) {
     const seriesName = `${intl.get('INITIAL_VALUE')} ${attributes?.initial?.value}${unit}`;
@@ -173,13 +171,13 @@ function checkValidAttr(
 function getMax(max: number, attributes: AssetRow['attributes'], type: number) {
   let final = max;
   if (
-    MonitoringPointType.Key.getFlangeAttributesKey(type) === 'normal' &&
+    PrimaryAssetType.Category.Flange.MonitoringPoints.isPreload(type) &&
     checkValidAttr(attributes, 'normal', final, true)
   ) {
     final = Math.abs(attributes?.normal?.value as number);
   }
   if (
-    MonitoringPointType.Key.getFlangeAttributesKey(type) === 'initial' &&
+    PrimaryAssetType.Category.Flange.MonitoringPoints.isLoosening(type) &&
     checkValidAttr(attributes, 'initial', final, true)
   ) {
     final = Math.abs(attributes?.initial?.value as number);
@@ -224,10 +222,7 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
     splitLine: { show: false }
   };
   const seriesData = measurements.map(({ name, attributes, data, alertLevel }, index) => {
-    let field = MonitoringPointType.Key.getProperties(
-      measurements[0].type,
-      measurements[0].properties
-    ).filter((p) => p.first)?.[0];
+    let field = OMonitoringPoint.Type.getProperties(measurements[0]).filter((p) => p.first)?.[0];
     let value = NaN;
     if (field && data) {
       value = data.values[field.key] as number;
@@ -275,13 +270,10 @@ function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = fa
     }
   }
   const seriesData: any = [];
- let field = MonitoringPointType.Key.getProperties(
-    measurements[0].type,
-    measurements[0].properties
-  ).filter((p) => p.first)?.[0];
+  let field = OMonitoringPoint.Type.getProperties(measurements[0]).filter((p) => p.first)?.[0];
   let max = 0;
   let min = 0;
-  measurements.forEach(({ data, name }, index) => {
+  measurements.forEach(({ data }, index) => {
     let value = NaN;
     if (field && data) {
       value = roundValue(data.values[field.key] as number, field.precision);

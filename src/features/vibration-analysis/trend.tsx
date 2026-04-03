@@ -5,12 +5,8 @@ import { Dayjs } from 'utils';
 import { ValuesPropertyName } from 'asset-common';
 import { TrendDataProps } from './useTrend';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
-import {
-  MonitoringPoint,
-  useAxisWithVibrationDirection,
-  VibrationDirectionAttributes
-} from 'common';
 import { PropertiesSelect, usePropertiesFilters } from './filters';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
 
 export const Trend = ({
   id,
@@ -19,7 +15,7 @@ export const Trend = ({
   onClick
 }: {
   id: number;
-  attributes: MonitoringPoint['attributes'];
+  attributes: TMonitoringPoint.Base['attributes'];
   data: TrendDataProps['data'];
   onClick: (t: number) => void;
 }) => {
@@ -30,7 +26,9 @@ export const Trend = ({
   const [timestamp, setTimestamp] = React.useState<number | undefined>(
     data.find((d) => !!d.selected)?.timestamp
   );
-  const { options } = useAxisWithVibrationDirection(attributes as VibrationDirectionAttributes);
+  const { options } = OMonitoringPoint.Settings.Vibration.useAxisWithVibrationDirection(
+    attributes as TMonitoringPoint.Settings.VibrationDirection
+  );
   const downlaodRawDataHandler = useDownloadRawDataHandler(id, timestamp, 'originalDomain');
   const chartProps = ChartMark.useAxisMarkLineStyleProps();
   const getSeries = () => {

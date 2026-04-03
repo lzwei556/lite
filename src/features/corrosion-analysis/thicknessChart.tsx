@@ -8,14 +8,15 @@ import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../ass
 import { useGlobalStyles } from '../../styles';
 import { HistoryDataFea } from '..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
-import { CorrosionAttributes, FeatureData } from 'common';
 import { Toolbar } from './toolbar';
 import { MarkType } from '.';
+import { TMonitoringPoint } from 'domain/monitoring-point';
+import { Feature } from 'domain/feature-property';
 
 export const ThicknessChart = (
   props: MonitoringPointRow & {
     history?: HistoryData;
-    property: FeatureData.DisplayProperty;
+    property: Feature.Property;
     markType: MarkType;
     setMarkType: React.Dispatch<React.SetStateAction<MarkType>>;
     onDispatchMark?: () => void;
@@ -34,7 +35,7 @@ export const ThicknessChart = (
   const visibledMarks = marks.filter((mark) => mark.type === markType);
 
   function getMarkLine() {
-    const data = getDefaultLines(attributes as CorrosionAttributes)?.map((line) => ({
+    const data = getDefaultLines(attributes as TMonitoringPoint.Settings.Corrosion)?.map((line) => ({
       ...line,
       label: {
         distance: language === 'en-US' ? -110 : -60,

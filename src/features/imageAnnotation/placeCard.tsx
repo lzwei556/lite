@@ -2,12 +2,11 @@ import React from 'react';
 import { List, Typography } from 'antd';
 import { createStyles } from 'antd-style';
 import { Card, Flex } from '../../components';
-import { Space } from '../../common';
-import { useGlobalStyles } from '../../styles';
+import { GlobalStyle, useGlobalStyles } from '../../styles';
 import { PropertyItem } from '../../asset-model';
 import { truncate } from '../../utils';
 
-const cardStyles = { BorderWidth: 1, Padding: Space / 2, width: 220, height: 210 };
+const cardStyles = { BorderWidth: 1, Padding: GlobalStyle.BaseSpace / 2, width: 220, height: 210 };
 
 const useStyles = createStyles(({ token, css }) => ({
   listItem: css`

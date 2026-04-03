@@ -7,7 +7,6 @@ import { Grid, IconButton, SelectFormItem, Table, TextFormItem } from '../../../
 import { generateColProps } from '../../../utils/grid';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
-import { App, useAppType } from '../../../config';
 import { AlarmLevel } from '../alarmLevel';
 import { getPropertiesByMeasurementType } from './services';
 import { AlarmRule } from './types';
@@ -17,12 +16,14 @@ import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
 import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
-import { FeatureData, MonitoringPointType } from 'common';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { useAppConfig } from 'providers/app';
+import { Feature } from 'domain/feature-property';
 
 export function CreateModal(props: ModalFormProps) {
-  const appType = useAppType();
+  const monitoringPointTypeOptions = useAppConfig().monitoringPointTypeOptions;
   const [form] = Form.useForm();
-  const [properties, setProperties] = React.useState<FeatureData.DisplayProperty[]>([]);
+  const [properties, setProperties] = React.useState<Feature.Property[]>([]);
   const [metric, setMetric] = React.useState<{ key: string; name: string; unit?: string }[]>([]);
 
   const defaultValues = { duration: 1, operation: '>=', level: AlarmLevel.Critical };
@@ -70,15 +71,16 @@ export function CreateModal(props: ModalFormProps) {
               selectProps={{
                 onChange: (e) => {
                   getPropertiesByMeasurementType(e).then((res) => {
-                    const measurementType = App.getMonitoringPointTypes(appType).find(
+                    const measurementType = monitoringPointTypeOptions.find(
                       ({ value }) => e === value
                     )?.value;
                     if (measurementType) {
                       setProperties(
                         removeDulpicateProperties(
-                          MonitoringPointType.Key.getProperties(measurementType, res).map(
-                            NormalizeAttitudeIndexProperty
-                          )
+                          OMonitoringPoint.Type.getProperties({
+                            type: measurementType,
+                            properties: res
+                          }).map(NormalizeAttitudeIndexProperty)
                         )
                       );
                     }
@@ -93,10 +95,7 @@ export function CreateModal(props: ModalFormProps) {
                     });
                   }
                 },
-                options: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-                  label: intl.get(label),
-                  value
-                }))
+                options: monitoringPointTypeOptions
               }}
             />
           </Col>
@@ -216,7 +215,7 @@ export function CreateModal(props: ModalFormProps) {
   );
 }
 
-function removeDulpicateProperties(properties: FeatureData.DisplayProperty[]) {
+function removeDulpicateProperties(properties: Feature.Property[]) {
   const final = cloneDeep(properties);
   return final.map((property) => {
     const fields = property.fields;
@@ -228,7 +227,7 @@ function removeDulpicateProperties(properties: FeatureData.DisplayProperty[]) {
   });
 }
 
-function NormalizeAttitudeIndexProperty(property: FeatureData.DisplayProperty) {
+function NormalizeAttitudeIndexProperty(property: Feature.Property) {
   const p = { ...property };
   return p.key === 'attitude' ? { ...p, key: p.fields?.[0]?.key ?? p.key } : p;
 }

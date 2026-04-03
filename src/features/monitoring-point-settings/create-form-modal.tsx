@@ -3,7 +3,6 @@ import { ModalWrapper } from 'components/modalWrapper';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { ModalFormProps } from 'types/common';
-import { MonitoringPointPostDTO } from 'common/monitoring-point';
 import { Grid } from 'components';
 import {
   AssetSelectFormItem,
@@ -14,11 +13,11 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
-import { MonitoringPointType } from 'common';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
 
 export type CreateFormProps = {
   loading: boolean;
-  handleSubmit: (values: MonitoringPointPostDTO[]) => void;
+  handleSubmit: (values: TMonitoringPoint.PostDTO[]) => void;
 };
 
 export const CreateFormModal = ({
@@ -31,8 +30,8 @@ export const CreateFormModal = ({
 }: Omit<ModalFormProps, 'onSuccess'> &
   CreateFormProps & {
     assetId: number;
-    onSuccess: (values: MonitoringPointPostDTO) => void;
-    point?: MonitoringPointPostDTO;
+    onSuccess: (values: TMonitoringPoint.PostDTO) => void;
+    point?: TMonitoringPoint.PostDTO;
   }) => {
   const [form] = Form.useForm();
   const { selectedType: type, ...typeRest } = useType(point?.type);
@@ -57,10 +56,9 @@ export const CreateFormModal = ({
               assetSelectFormItem: <AssetSelectFormItem {...{ assetId, type }} />,
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest, disabled: false }} />,
-              componentSelectFormItem:
-                type &&
-                MonitoringPointType.Categories.getKeys(['vibration']).includes(type) &&
-                type !== MonitoringPointType.Value.OilFiller && <ComponentSelectFormItem type={type}/>
+              componentSelectFormItem: type &&
+                OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
+                type !== OMonitoringPoint.Type.OilFiller && <ComponentSelectFormItem type={type} />
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

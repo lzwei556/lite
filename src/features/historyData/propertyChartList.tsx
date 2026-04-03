@@ -3,7 +3,7 @@ import { LineChart, LineChartProps, SeriesOption } from '../../components';
 import { Dayjs } from '../../utils';
 import { hasData, HistoryData } from '../../asset-common';
 import { transform } from './propertyChart';
-import { FeatureData } from 'common';
+import { Feature } from 'domain/feature-property';
 
 export const PropertyChartList = (
   props: {
@@ -11,7 +11,7 @@ export const PropertyChartList = (
       name: string;
       data: HistoryData;
     }[];
-    property: FeatureData.DisplayProperty;
+    property: Feature.Property;
   } & Partial<LineChartProps>
 ) => {
   const { data, property, ...rest } = props;

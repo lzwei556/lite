@@ -1,5 +1,5 @@
 import { Col } from 'antd';
-import { AssetNavigator, AssetRow } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import { Grid, TabsDetail } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
@@ -10,13 +10,14 @@ import {
   UpdateFormModal,
   useUpdateFormProps
 } from 'features/asset-settings';
-import { AssetCategory } from 'common/asset-category';
 import { AssetsArea } from './area/assets';
 import { AssetsWindTurbine } from './wind-turbine/assets';
 import { SettingsTableTabs } from 'features/asset-list';
 import { Permission, useCan } from 'providers/access-control';
+import { AssetNavigator } from 'features/asset-tree';
+import { FolderAsset } from 'domain/asset';
 
-export const Index = ({ asset }: { asset: AssetRow }) => {
+export default function Index({ asset }: { asset: AssetRow }) {
   const updateFolderFormProps = useUpdateFormProps(asset.id);
   const [open, setOpen] = React.useState(false);
   const [editingAsset, setEditingAsset] = React.useState<AssetRow>();
@@ -38,7 +39,7 @@ export const Index = ({ asset }: { asset: AssetRow }) => {
           label: intl.get('assets'),
           key: 'asset',
           content:
-            AssetCategory.Value.Area === asset.type ? (
+            FolderAsset.Type.Area === asset.type ? (
               <AssetsArea asset={asset} key={asset.id} />
             ) : (
               <AssetsWindTurbine asset={asset} key={asset.id} />
@@ -83,4 +84,4 @@ export const Index = ({ asset }: { asset: AssetRow }) => {
       title={<AssetNavigator asset={asset} />}
     />
   );
-};
+}

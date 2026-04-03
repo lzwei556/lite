@@ -1,21 +1,23 @@
 import React from 'react';
 import { TimeDomainData, useTimeDomainList, UseTimeDomainListResult } from './useTimeDomain';
 import { OriginalDomainResponse, useOriginalDomain } from './useOriginalDomain';
-import { AxisWithVibrationDirectionLabel } from 'common/monitoring-point-attributes';
 import { Property } from './useTrend';
 import { AssetRow } from 'asset-common';
-import { MonitoringPoint } from 'common';
+import { TMonitoringPoint } from 'domain/monitoring-point';
 
-export type Filters = { axis: AxisWithVibrationDirectionLabel; property: Property };
+export type Filters = {
+  axis: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel;
+  property: Property;
+};
 
 export type AnalysisProps = {
   monitoringPoint: {
     id: number;
     parent: AssetRow;
-    attributes?: MonitoringPoint['attributes'];
+    attributes?: TMonitoringPoint.Base['attributes'];
   };
   trend: { timestamp: number; timestamps: number[] };
-  filters: { axis: AxisWithVibrationDirectionLabel; property: Property };
+  filters: { axis: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel; property: Property };
   intermediateData: AnalysisDataProps;
 };
 

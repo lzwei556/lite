@@ -4,7 +4,6 @@ import { Content } from 'antd/es/layout/layout';
 import { ExportOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { getValue } from '../../../utils/format';
-import { App, useAppType } from '../../../config';
 import { MONITORING_POINT } from '../../../asset-common';
 import {
   DeleteIconButton,
@@ -23,14 +22,15 @@ import { deleteAlarmRule, getAlarmRules, importAlarmRules } from './services';
 import { AlarmRule } from './types';
 import { useGlobalStyles } from '../../../styles';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { useAppConfig } from 'providers/app';
 
 export default function AlarmRuleList() {
-  const appType = useAppType();
   const [type, setType] = React.useState<string | undefined>();
   const [open, setOpen] = React.useState(false);
   const [levels, setLevels] = React.useState([1, 2, 3]);
   const [monitoringPointType, setMontoringPointType] = React.useState<number[]>([]);
   const { colorPrimaryHoverStyle } = useGlobalStyles();
+  const monitoringPointTypeOptions = useAppConfig().monitoringPointTypeOptions;
 
   const reset = () => {
     setOpen(false);
@@ -55,12 +55,9 @@ export default function AlarmRuleList() {
       title: intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) }),
       dataIndex: 'type',
       key: 'type',
-      filters: App.getMonitoringPointTypes(appType).map(({ label, value }) => ({
-        text: intl.get(label),
-        value
-      })),
+      filters: monitoringPointTypeOptions.map((opt) => ({ ...opt, text: opt.label })),
       render: (typeId: number) => {
-        const label = App.getMonitoringPointTypes(appType).find((m) => m.value === typeId)?.label;
+        const label = monitoringPointTypeOptions.find((m) => m.value === typeId)?.label;
         return label ? intl.get(label) : '-';
       }
     },

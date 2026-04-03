@@ -3,10 +3,10 @@ import AntIcon from '@ant-design/icons';
 import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 import { Asset, AssetRow } from '../../asset-common';
 import { useGlobalStyles } from 'styles';
-import { AssetCategory } from 'common/asset-category';
 import { Flex } from 'components';
 import { ReactComponent as WindSvg } from './wind_turbine.svg';
 import { ReactComponent as GeneralSvg } from './general.svg';
+import { FolderAsset } from 'domain/asset';
 
 export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRow }) => {
   const { asset, ...rest } = props;
@@ -14,7 +14,7 @@ export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRo
   const commonProps = { ...rest, fill: assetStatusColor };
   const { colorBgContainerStyle } = useGlobalStyles();
 
-  if (asset.type === AssetCategory.Value.WindTurbine) {
+  if (asset.type === FolderAsset.Type.WindTurbine) {
     return (
       <Flex
         justify='center'
@@ -22,7 +22,11 @@ export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRo
       >
         <AntIcon
           component={() => (
-            <WindSvg {...commonProps} fill={colorBgContainerStyle.backgroundColor} />
+            <WindSvg
+              height={rest.height}
+              width={rest.width}
+              fill={colorBgContainerStyle.backgroundColor}
+            />
           )}
         />
       </Flex>

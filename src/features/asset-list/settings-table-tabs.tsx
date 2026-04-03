@@ -5,9 +5,9 @@ import { uniq } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { PrimaryAssetSettingsTable } from './settings-table';
-import { AssetCategory } from 'common/asset-category';
 import { CanAccess, Permission } from 'providers/access-control';
 import { PlusOutlined } from '@ant-design/icons';
+import { PrimaryAssetType } from 'domain/asset';
 
 export type Props = {
   asset: AssetRow;
@@ -81,7 +81,7 @@ const TabbedTable = ({
         tabBarExtraContent={getExtra(rest, setActiveKey)}
         tabList={types.map((t) => {
           const assets = children.filter((asset) => asset.type === t);
-          const typeLabel = AssetCategory.Key.getlabelPlural(t);
+          const typeLabel = PrimaryAssetType.getlabelPlural(t);
           const label = typeLabel ? intl.get(typeLabel) : intl.get('ASSET');
           return {
             key: `${t}`,

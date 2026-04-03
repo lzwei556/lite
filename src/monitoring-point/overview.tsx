@@ -5,10 +5,10 @@ import { BasicCard } from './basicCard';
 import { RelatedDeviceCard } from './relatedDeviceCard';
 import intl from 'react-intl-universal';
 import { RecentWeekMonitoringPointData } from 'features/feature-data';
-import { MonitoringPoint } from 'common';
 import { useGetSeriesAlarm } from './provider';
+import { TMonitoringPoint } from 'domain/monitoring-point';
 
-export const Overview = ({ monitoringPoint }: { monitoringPoint: MonitoringPoint }) => {
+export const Overview = ({ monitoringPoint }: { monitoringPoint: TMonitoringPoint.Base }) => {
   return (
     <Grid wrap={false}>
       <Col flex='auto'>

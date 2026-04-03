@@ -1,21 +1,21 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
-import { MonitoringPoint, MonitoringPointType } from 'common';
 import { DeleteIconButton, EditIconButton, IconButton, Table } from 'components';
 import { CanAccess, Permission, useCan } from 'providers/access-control';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { getOptionLabelByValue } from 'utils';
 import { basicFieldColumns } from './columns';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
 
 export const AttributeTable = ({
   monitoringPoints,
   ...rest
 }: {
-  monitoringPoints: MonitoringPoint[];
+  monitoringPoints: TMonitoringPoint.Base[];
   onDeleteSuccess: (id: number) => void;
   openCreate: () => void;
-  openUpdate: (point: MonitoringPoint) => void;
+  openUpdate: (point: TMonitoringPoint.Base) => void;
   createFormModal: React.ReactNode;
   updateFormModal: React.ReactNode;
 }) => {
@@ -24,26 +24,24 @@ export const AttributeTable = ({
   const canDelete = useCan(Permission.MeasurementDelete);
 
   const getColumns = (canEdit: boolean) => {
-    const attributeColumns = MonitoringPointType.Key.getAttributes(monitoringPoints?.[0]?.type).map(
-      (attr) => {
-        const { options } = attr;
-        const common = {
-          dataIndex: [`attributes`, attr.name],
-          key: attr.name,
-          title: () => intl.get(attr.label)
-        };
-        return options
-          ? { ...common, render: (axis: string) => intl.get(getOptionLabelByValue(options, axis)) }
-          : common;
-      }
-    );
+    const attributeColumns = OMonitoringPoint.Type.getSettings(monitoringPoints?.[0]?.type).map((attr) => {
+      const { options } = attr;
+      const common = {
+        dataIndex: [`attributes`, attr.name],
+        key: attr.name,
+        title: () => intl.get(attr.label)
+      };
+      return options
+        ? { ...common, render: (axis: string) => intl.get(getOptionLabelByValue(options, axis)) }
+        : common;
+    });
     const columns = [...basicFieldColumns, ...attributeColumns];
     if (canEdit) {
       columns.push({
         key: 'action',
         dataIndex: 'action',
         title: () => intl.get('OPERATION'),
-        render: (_: string, point: MonitoringPoint) => <OperateCell {...{ ...rest, point }} />
+        render: (_: string, point: TMonitoringPoint.Base) => <OperateCell {...{ ...rest, point }} />
       });
     }
     return columns;
@@ -82,7 +80,7 @@ const OperateCell = ({
   onDeleteSuccess,
   openUpdate
 }: {
-  point: MonitoringPoint;
+  point: TMonitoringPoint.Base;
 } & Omit<Parameters<typeof AttributeTable>[0], 'monitoringPoints'>) => {
   return (
     <Space>

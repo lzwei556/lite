@@ -3,14 +3,14 @@ import * as React from 'react';
 import { Device } from '../../types/device';
 import { GetDevicesRequest } from '../../apis/device';
 import { toMac } from '../../utils/format';
-import { useAppType } from '../../config';
+import { useAppConfig } from 'providers/app';
 
 export const DeviceSelect = ({
   types,
   dispalyField = 'id',
   ...rest
 }: SelectProps & { types: number[]; dispalyField?: keyof Pick<Device, 'id' | 'macAddress'> }) => {
-  const appType = useAppType();
+  const appType = useAppConfig().type;
   const [devices, setDevices] = React.useState<Device[]>([]);
 
   React.useEffect(() => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card as AntCard, CardProps as AntCardProps } from 'antd';
-import { Space } from '../../common';
+import { GlobalStyle } from 'styles';
 
 export type CardProps = AntCardProps;
 
@@ -15,9 +15,9 @@ const CardComponent = React.forwardRef(function CardComponent(
 ) {
   const { styles, ...rest } = props;
   const { header = {}, body = {}, ...stylesRest } = styles || {};
-  const { paddingInline = Space, fontWeight = 400, ...headerStyleRest } = header;
+  const { paddingInline = GlobalStyle.BaseSpace, fontWeight = 400, ...headerStyleRest } = header;
   const headerStyles = { paddingInline, fontWeight, ...headerStyleRest };
-  const { padding = Space, ...bodyStyleRest } = body;
+  const { padding = GlobalStyle.BaseSpace, ...bodyStyleRest } = body;
   const bodyStyles = { padding, ...bodyStyleRest };
   return (
     <AntCard

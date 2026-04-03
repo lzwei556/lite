@@ -9,13 +9,13 @@ import {
 } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
 import { MarkType } from '.';
-import { FeatureData } from 'common';
+import { Feature } from 'domain/feature-property';
 
 export const MarkList = ({
   property,
   markType
 }: {
-  property: FeatureData.DisplayProperty;
+  property: Feature.Property;
   markType: MarkType;
 }) => {
   const ref = useChartContext();

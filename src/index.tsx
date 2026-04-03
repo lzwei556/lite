@@ -2,9 +2,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { LocaleProvider } from './localeProvider';
-import { AppProvider } from './config';
 import { configResponsive } from 'ahooks';
 import { Main } from './main';
+import { AppProvider } from 'providers/app';
 
 configResponsive({
   xs: 0,

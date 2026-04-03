@@ -10,9 +10,9 @@ import { MoniotoringPointData } from './monitoring-point-data';
 import { MonitoringPointRow } from 'asset-common';
 import { ZoneScoreTable } from './iso-zone-table';
 import intl from 'react-intl-universal';
-import { Component } from 'common';
 import { getDisplayName, roundValue } from 'utils';
 import { useLocaleContext } from 'localeProvider';
+import { Component } from 'domain/asset';
 
 export const FaultDiagnosisDetail = (
   props: FaultDiagnosis & { monitoringPoints: MonitoringPointRow[]; rotationSpeed?: number }
@@ -49,7 +49,7 @@ export const FaultDiagnosisDetail = (
                   zones={['A', 'B', 'C', 'D']}
                   boundaries={props.components[0].iso?.zoneBoundaries ?? []}
                   rows={props.components.map((c) => ({
-                    title: intl.get(Component.Key.get(c.componentId).label),
+                    title: intl.get(Component.get(c.componentId).label),
                     score: roundValue(Math.max(...(c.iso?.data ?? [0])))
                   }))}
                   max={15}

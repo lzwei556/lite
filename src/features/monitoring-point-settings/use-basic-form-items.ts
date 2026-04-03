@@ -1,5 +1,6 @@
-import { AssetRow, useContext } from 'asset-common';
-import { MonitoringPointType } from 'common';
+import { AssetRow } from 'asset-common';
+import { PrimaryAssetType } from 'domain/asset';
+import { useAssetsContext } from 'providers/assets';
 import React from 'react';
 import { mapTree } from 'utils/tree';
 
@@ -13,10 +14,10 @@ export const useType = (type?: number) => {
 };
 
 export const useAssets = ({ assetId, type }: { assetId?: number; type?: number }) => {
-  const { assets } = useContext();
+  const { assets } = useAssetsContext();
   const parents: AssetRow[] = [];
   mapTree(assets, (asset) => {
-    if (type && MonitoringPointType.Key.getAssetCategories(type).includes(asset.type)) {
+    if (type && PrimaryAssetType.getTypesByMonitoringPointTypes([type]).includes(asset.type)) {
       parents.push(asset);
     }
   });

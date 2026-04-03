@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Avatar, List, Space } from 'antd';
-import { MonitoringPointPostDTO } from 'common/monitoring-point';
+
 import {
   Card,
   DeleteIconButtonWithoutConfirm,
@@ -12,8 +12,9 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { truncate } from 'utils';
 import { CreateFormModal } from './create-form-modal';
+import { TMonitoringPoint } from 'domain/monitoring-point';
 
-type Item = { _id: string } & MonitoringPointPostDTO;
+type Item = { _id: string } & TMonitoringPoint.PostDTO;
 
 export const CreateMultipleFormCard = ({ assetId }: { assetId: number }) => {
   const [items, dispatch] = useItems();
@@ -30,7 +31,7 @@ export const CreateMultipleFormCard = ({ assetId }: { assetId: number }) => {
     setOpen(true);
   };
 
-  const handleSuccess = (values: MonitoringPointPostDTO) => {
+  const handleSuccess = (values: TMonitoringPoint.PostDTO) => {
     if (editing) {
       dispatch({ type: 'update', id: editing._id, payload: values });
     } else {
@@ -94,8 +95,8 @@ const useItems = () => {
     (
       state: Item[],
       action:
-        | { type: 'add'; payload: MonitoringPointPostDTO }
-        | { type: 'update'; id: string; payload: MonitoringPointPostDTO }
+        | { type: 'add'; payload: TMonitoringPoint.PostDTO }
+        | { type: 'update'; id: string; payload: TMonitoringPoint.PostDTO }
         | { type: 'delete'; id: string }
     ): Item[] => {
       const { type } = action;

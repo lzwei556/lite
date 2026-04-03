@@ -1,7 +1,7 @@
-import { Asset, ASSET_PATHNAME, AssetRow } from 'asset-common';
+import { Asset,  AssetRow } from 'asset-common';
 import { Icon } from 'asset-primary/icons';
-import { AssetCategory } from 'common/asset-category';
 import { Card, Descriptions, Link } from 'components';
+import { AssetTree, PrimaryAssetType } from 'domain/asset';
 import { FlangeMonitoringPointsCircleChart, InclinationOffsetsChart } from 'features/feature-data';
 import React from 'react';
 import intl from 'react-intl-universal';
@@ -27,14 +27,14 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
               }))}
               style={{ marginTop: 16 }}
             />
-            {AssetCategory.Value.Flange === type ? (
+            {PrimaryAssetType.Flange === type ? (
               <FlangeMonitoringPointsCircleChart asset={asset} style={style} />
             ) : (
               <InclinationOffsetsChart asset={asset} />
             )}
           </>
         }
-        title={<Link to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</Link>}
+        title={<Link to={`/${AssetTree.Path.Assets}/${id}-${type}`}>{name}</Link>}
       />
     </Card>
   );

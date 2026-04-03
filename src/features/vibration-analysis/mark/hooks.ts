@@ -9,7 +9,7 @@ import { getMarkTypeColor, getMarkTypeLabel, MarkType } from './mark-types';
 import { Property } from '../useTrend';
 import { FaultFrequency } from '../useFaultFrequency';
 import intl from 'react-intl-universal';
-import { FaultType } from 'common';
+import { FaultTypeConfig } from 'domain/fault-types';
 
 export type MarkParams = {
   x: number[];
@@ -374,7 +374,7 @@ export const getFaultFrequency = ({ faultFrequencies, x, y }: MarkParams) => {
 const getFaultFrequencyOptions = (faultFrequency?: FaultFrequency) => {
   return faultFrequency
     ? Object.entries(faultFrequency).map(([key, value]) => ({
-        label: intl.get(FaultType.getLabel(key)),
+        label: intl.get(FaultTypeConfig.getLabel(key)),
         value
       }))
     : [];

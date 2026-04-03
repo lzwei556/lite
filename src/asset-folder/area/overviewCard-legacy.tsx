@@ -1,31 +1,30 @@
 import React from 'react';
 import { Pagination, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import { MonitoringPointType } from 'common';
-import { ASSET_PATHNAME, AssetRow } from 'asset-common';
+import {  AssetRow } from 'asset-common';
 import { useGlobalStyles } from 'styles';
 import { Card, Flex, Link } from 'components';
 import { getValue } from 'utils/format';
 import { Icon as PrimaryIcon } from 'asset-primary/icons';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { AssetTree } from 'domain/asset';
 
 export const OverviewCardLegacy = ({ asset }: { asset: AssetRow }) => {
   const { id, monitoringPoints = [], name, type } = asset;
-  const items = monitoringPoints.map(({ id, name, data, properties, type }) => {
-    const property = MonitoringPointType.Key.getProperties(type, properties).filter(
-      (p) => p.first
-    )?.[0];
+  const items = monitoringPoints.map((m) => {
+    const property = OMonitoringPoint.Type.getProperties(m).filter((p) => p.first)?.[0];
     let value = NaN;
     if (property) {
       const key =
         property.fields && property.fields.length > 1
           ? property.fields[property.fields.length - 1].key
           : property.key;
-
+      const data = m.data;
       if (data && data.values && data.values[key] !== undefined) {
         value = data.values[key] as number;
       }
     }
-    return { id, name, type, value, property };
+    return { ...m, value, property };
   });
   const [page, setPage] = React.useState(1);
   const pageSize = 4;
@@ -73,7 +72,7 @@ export const OverviewCardLegacy = ({ asset }: { asset: AssetRow }) => {
                   ellipsis={{ rows: 2 }}
                   style={{ margin: 0, paddingRight: 8, lineHeight: 1.35 }}
                 >
-                  <Link to={`/${ASSET_PATHNAME}/${id}-${type}`}>{name}</Link>
+                  <Link to={`/${AssetTree.Path.Assets}/${id}-${type}`}>{name}</Link>
                 </Typography.Paragraph>
                 <Space direction='vertical' size={0}>
                   <Typography.Text style={{ whiteSpace: 'nowrap' }} type='secondary'>
@@ -86,7 +85,7 @@ export const OverviewCardLegacy = ({ asset }: { asset: AssetRow }) => {
           ))
         }
         title={
-          <Link to={`/${ASSET_PATHNAME}/${id}-${type}`} title={name}>
+          <Link to={`/${AssetTree.Path.Assets}/${id}-${type}`} title={name}>
             {name}
           </Link>
         }

@@ -3,13 +3,16 @@ import { Col, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Grid } from '../../components';
 import { getValue } from '../../utils/format';
-import { CriticalThickness, HistoryData, InitialThickness, MonitoringPointRow } from '../../asset-common';
+import { HistoryData, MonitoringPointRow } from '../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
-import { CorrosionAttributes, MonitoringPoint } from 'common';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
 
-export const Overview = (props: { point: MonitoringPointRow; history: HistoryData | undefined }) => {
+export const Overview = (props: {
+  point: MonitoringPointRow;
+  history: HistoryData | undefined;
+}) => {
   const { history, point } = props;
-  const attributes = point.attributes as CorrosionAttributes;
+  const attributes = point.attributes as TMonitoringPoint.Settings.Corrosion;
 
   if (!history || history.length === 0) {
     return (
@@ -35,15 +38,15 @@ export const Overview = (props: { point: MonitoringPointRow; history: HistoryDat
     <Grid>
       <Col span={12}>
         <PropertyCardedContent
-          label={intl.get(InitialThickness.label)}
-          unit={InitialThickness.unit!}
+          label={intl.get(OMonitoringPoint.Settings.Corrosion.InitialThickness.label)}
+          unit={OMonitoringPoint.Settings.Corrosion.InitialThickness.unit!}
           value={initial}
         />
       </Col>
       <Col span={12}>
         <PropertyCardedContent
-          label={intl.get(CriticalThickness.label)}
-          unit={CriticalThickness.unit!}
+          label={intl.get(OMonitoringPoint.Settings.Corrosion.CriticalThickness.label)}
+          unit={OMonitoringPoint.Settings.Corrosion.CriticalThickness.unit!}
           value={critical}
         />
       </Col>

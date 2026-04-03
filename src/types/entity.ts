@@ -1,4 +1,4 @@
-import { Option } from '../common';
+import { Option } from 'common/types';
 import { FormItemProps } from 'antd';
 import intl from 'react-intl-universal';
 import { UniversalFormItemProps } from '../components/form/formItem';
@@ -45,7 +45,7 @@ export type Field<Entity extends Object> = {
   translatingUnit?: string;
   nameMode?: NameMode;
   rules?: FormItemProps['rules'];
-  group?: string;
+  group?: string | number;
 };
 
 export const toUniversalFormItemProps = <Entity extends Object>(

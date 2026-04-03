@@ -1,16 +1,19 @@
 import React, { lazy, Suspense } from 'react';
 import { HashRouter, Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import { Spin } from 'antd';
-import { ASSET_PATHNAME } from '../asset-common';
 import { PrimaryLayout } from './layout/primaryLayout';
 import { Authenticated } from '../features/auth';
 import { ProfileProvider, ProjectVerification } from '../providers/user-profile';
+import { TreeNodeDetail } from 'features/asset-tree';
+import { AssetTree } from 'domain/asset';
 
 const AlarmRuleGroups = lazy(() => import('../features/alarm/alarm-group/index'));
 const Login = lazy(() => import('./login'));
-const Assets = lazy(() => import('../views/home'));
+const Assets = lazy(() => import('./home'));
 const VirtualAssetDetail = lazy(() => import('../asset-root'));
-const Asset = lazy(() => import('../views/home/main'));
+const AssetFolder = lazy(() => import('../asset-folder'));
+const AssetPrimary = lazy(() => import('../asset-primary'));
+const MonitoringPoint = lazy(() => import('../monitoring-point/index2'));
 const Device = lazy(() => import('../features/device'));
 const DeviceVirtual = lazy(() => import('../features/device/virtual'));
 const DeviceCreate = lazy(() => import('../features/device/add/create'));
@@ -62,7 +65,7 @@ const AppRouter = () => {
               }
             />
             <Route
-              path={ASSET_PATHNAME}
+              path={AssetTree.Path.Assets}
               element={
                 <ProjectVerification>
                   <Assets />
@@ -70,7 +73,16 @@ const AppRouter = () => {
               }
             >
               <Route index element={<VirtualAssetDetail />} />
-              <Route path=':id' element={<Asset />} />
+              <Route
+                path=':id'
+                element={
+                  <TreeNodeDetail
+                    AssetFolder={AssetFolder}
+                    AssetPrimary={AssetPrimary}
+                    MonitoringPoint={MonitoringPoint}
+                  />
+                }
+              />
               <Route path='0-0' element={<VirtualAssetDetail />} />
             </Route>
             <Route

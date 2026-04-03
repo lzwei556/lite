@@ -1,10 +1,11 @@
 import React from 'react';
 import { Sidebar } from './mark/sidebar';
-import { AnalysisSidebarCollapse } from 'features/monitoringPoint';
 import intl from 'react-intl-universal';
 import { MarkList, MarkType } from './mark';
-import { SettingsDetail } from 'asset-variant';
 import { AssetRow } from 'asset-common';
+import { PrimaryAssetSettingsDetail } from 'features/asset-settings';
+import { AnalysisSidebarCollapse } from 'components';
+import { PrimaryAssetType } from 'domain/asset';
 
 export const SidebarMarkList = ({ asset, markType }: { asset: AssetRow; markType: MarkType }) => {
   return (
@@ -21,10 +22,13 @@ export const SidebarMarkList = ({ asset, markType }: { asset: AssetRow; markType
             key: 'overview',
             label: intl.get('BASIC_INFORMATION'),
             children: (
-              <SettingsDetail
+              <PrimaryAssetSettingsDetail
                 attributes={asset.attributes}
                 type={asset.type}
-                groups={['bearing.parameters']}
+                groups={[
+                  PrimaryAssetType.SettingsGroup.Motor,
+                  PrimaryAssetType.SettingsGroup.Bearing
+                ]}
                 maxHeight={400}
                 labelStyle={{ minWidth: '5em' }}
                 contentStyle={{ justifyContent: 'flex-start' }}

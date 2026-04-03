@@ -1,22 +1,19 @@
 import { GlobalStyles, useGlobalStyles } from 'styles';
 import { generateColProps } from 'utils/grid';
 import { CollapseProps, ColProps } from 'antd';
-import { FeatureData } from 'common';
 import { FeatureDataDTO } from '../types';
-import { getGroupedProperties } from 'common/feature-data';
+import { Feature, FeatureProperty } from 'domain/feature-property';
 
 export type RecentWeekProps = {
-  properties: FeatureData.DisplayProperty[];
+  properties: Feature.Property[];
   data: FeatureDataDTO;
-  getAlarm?: (property: FeatureData.DisplayProperty) => any;
+  getAlarm?: (property: Feature.Property) => any;
   colProps?: ColProps;
 };
 
-export const useGroupedPropertyChartsGridCollapseProps = (
-  properties: FeatureData.DisplayProperty[]
-) => {
+export const useGroupedPropertyChartsGridCollapseProps = (properties: Feature.Property[]) => {
   const styles = useGlobalStyles();
-  const groups = getGroupedProperties(properties);
+  const groups = FeatureProperty.getGrouped(properties);
   return {
     collapseProps: {
       bordered: false,
@@ -37,7 +34,7 @@ export const useGridItemsProps = (params: RecentWeekProps & { colProps?: ColProp
 };
 
 const getPropertyChartCardProps = (
-  params: RecentWeekProps & { property: FeatureData.DisplayProperty } & {
+  params: RecentWeekProps & { property: Feature.Property } & {
     styles: GlobalStyles;
   }
 ) => {

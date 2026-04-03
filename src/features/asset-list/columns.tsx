@@ -1,7 +1,7 @@
 import { Space, TableProps } from 'antd';
-import { ASSET_PATHNAME, AssetRow, deleteAsset } from 'asset-common';
-import { AssetCategory } from 'common/asset-category';
+import { AssetRow, deleteAsset } from 'asset-common';
 import { DeleteIconButton, EditIconButton, Link } from 'components';
+import { AssetTree, PrimaryAsset } from 'domain/asset';
 import { useLocaleContext } from 'localeProvider';
 import { CanAccess, Permission, useCan } from 'providers/access-control';
 import intl from 'react-intl-universal';
@@ -21,7 +21,7 @@ export const useColumns = ({
   openUpdate: (asset: AssetRow) => void;
   createFormModal: React.ReactNode;
   updateFormModal: React.ReactNode;
-  category?: AssetCategory.Config;
+  category?: PrimaryAsset.Config;
   values?: any;
   canEdit: boolean;
 }) => {
@@ -31,7 +31,7 @@ export const useColumns = ({
     render: (_, row: AssetRow) => (
       <Link
         style={{ display: 'inline-block', minWidth: 160 }}
-        to={`/${ASSET_PATHNAME}/${row.id}-${row.type}`}
+        to={`/${AssetTree.Path.Assets}/${row.id}-${row.type}`}
       >
         {row.name}
       </Link>
@@ -67,9 +67,9 @@ export const useColumns = ({
       .filter((field) =>
         filterField && field.visibleWhen && values ? field.visibleWhen(values) : true
       )
-      .map(({ label, name, options, source, unit, type }) => {
+      .map(({ label, name, options, unit, type }) => {
         const common = {
-          dataIndex: AssetCategory.getNamePath(source).concat(FieldHelper.getNamePath(name)),
+          dataIndex: FieldHelper.getNamePath(name),
           key: name,
           title: () => getDisplayName({ name: intl.get(label), lang: language, suffix: unit })
         };

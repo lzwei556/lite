@@ -1,13 +1,10 @@
 import { Form } from 'antd';
 import { ModalWrapper } from 'components/modalWrapper';
 import React from 'react';
-import intl from 'react-intl-universal';
 import { ModalFormProps } from 'types/common';
 import { Grid } from 'components';
 import { FormItemsBasic } from './form-items-basic';
 import { AssetModel, AssetRow } from 'asset-common';
-import { App, useAppType } from 'config/context';
-import { AssetCategory } from 'common/asset-category';
 
 export type CreateFormProps = {
   parent?: AssetRow;
@@ -20,14 +17,14 @@ export const CreateFolderAssetFormModal = ({
   onSuccess,
   loading,
   handleSubmit,
+  title,
   ...rest
 }: Omit<ModalFormProps, 'onSuccess'> &
   CreateFormProps & {
+    title: string;
     onSuccess: (values: AssetModel) => void;
   }) => {
   const [form] = Form.useForm();
-  const appType = useAppType();
-  // const;
 
   return (
     <ModalWrapper
@@ -39,13 +36,7 @@ export const CreateFolderAssetFormModal = ({
         },
         onOk: () => form.validateFields().then((values) => handleSubmit(values)),
         okButtonProps: { loading },
-        title: intl.get('CREATE_SOMETHING', {
-          something: intl.get(
-            App.isWindLike(appType)
-              ? AssetCategory.Key.getLabel(AssetCategory.Value.WindTurbine)
-              : 'ASSET'
-          )
-        })
+        title
       }}
     >
       <Form form={form} layout='vertical'>

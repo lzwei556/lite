@@ -2,10 +2,10 @@ import intl from 'react-intl-universal';
 import { CardProps, Descriptions, Flex, Grid, MutedCard } from 'components';
 import { FaultDiagnosis, useHealthStatus } from './common';
 import { Col, Progress, Space } from 'antd';
-import { Component } from 'common';
 import { generateColProps } from 'utils/grid';
 import BoxSvg from './box.svg';
 import React from 'react';
+import { Component } from 'domain/asset';
 
 export const ComponentsHealthyList = ({
   cardProps,
@@ -49,7 +49,7 @@ const FaultDiagnosisBar = ({
     <>
       <Flex justify='space-between'>
         <Space>
-          {intl.get(Component.Key.get(componentId).label)}
+          {intl.get(Component.get(componentId).label)}
           <span>（{intl.get(status.label)}）</span>
         </Space>
         {healthIndex}
@@ -79,7 +79,7 @@ const FaultDiagnosisCard = ({
         color,
         background: `no-repeat center right 15% / 80px url(${BoxSvg}) rgba(${healthy.status.color.join()}, .85)`
       }}
-      title={intl.get(Component.Key.get(componentId).label)}
+      title={intl.get(Component.get(componentId).label)}
     >
       <Descriptions
         items={[

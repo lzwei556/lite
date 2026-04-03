@@ -7,11 +7,11 @@ import { getDisplayName, getValue } from '../../utils/format';
 import { HistoryData } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
 import { PropertyChart, transform } from './propertyChart';
-import { FeatureData } from 'common';
+import { Feature } from 'domain/feature-property';
 
 export const PropertyChartCard = (props: {
   data?: HistoryData;
-  property: FeatureData.DisplayProperty;
+  property: Feature.Property;
   cardProps?: CardProps;
   alarm?: Pick<SeriesAlarm, 'rules'> & { propertyKey: string };
 }) => {
@@ -34,7 +34,7 @@ const PropertyChartTitle = ({
   property
 }: {
   data?: HistoryData;
-  property: FeatureData.DisplayProperty;
+  property: Feature.Property;
 }) => {
   const { language } = useLocaleContext();
   const { name, unit, precision } = property;

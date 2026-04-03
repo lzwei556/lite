@@ -36,4 +36,8 @@ export const useGlobalStyles = () => {
   };
 };
 
-export type GlobalStyles = ReturnType<typeof useGlobalStyles>
+export type GlobalStyles = ReturnType<typeof useGlobalStyles>;
+
+export const GlobalStyle = {
+  BaseSpace: 16
+};

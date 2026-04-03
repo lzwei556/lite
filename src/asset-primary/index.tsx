@@ -1,4 +1,4 @@
-import { AssetNavigator, AssetRow } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import { TabsDetail, TabsDetailsItems } from 'components';
 import { PropertyTable } from 'features/monitoring-points/property-table';
 import React from 'react';
@@ -6,7 +6,6 @@ import intl from 'react-intl-universal';
 import { Settings } from './settings';
 import { Overview } from './overview';
 import { AssetModelProvider } from 'asset-model/context';
-import { AssetCategory, isFlangePreloadCalculationEnabled } from 'common/asset-category';
 import { ENV } from 'utils/env';
 import { OverviewLegacy } from './overview-legacy';
 import { CustomizableIntervals } from 'features/feature-data';
@@ -18,14 +17,16 @@ import {
   FaultDiagnosisDetail,
   useAssetDiagnosis
 } from 'features/vibration-fault-diagnosis';
+import { AssetNavigator } from 'features/asset-tree';
+import { PrimaryAssetType } from 'domain/asset';
 
-export const Index = ({ asset }: { asset: AssetRow }) => {
+export default function Index({ asset }: { asset: AssetRow }) {
   return (
     <AssetModelProvider asset={asset}>
       <TabsDetail items={useFeatures(asset)} title={<AssetNavigator asset={asset} />} />
     </AssetModelProvider>
   );
-};
+}
 
 const useFeatures = (asset: AssetRow) => {
   const { data: diagnosisResult } = useAssetDiagnosis(
@@ -60,7 +61,7 @@ const useFeatures = (asset: AssetRow) => {
 const useOverview = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
   const isLegacy = ENV.legacyEnabled === 'true';
   let overview = null;
-  if (AssetCategory.Categories.getKeys(['vibration']).includes(asset.type)) {
+  if (PrimaryAssetType.Category.getTypes(['vibration']).includes(asset.type)) {
     overview = {
       key: 'overview',
       label: intl.get('OVERVIEW'),
@@ -70,7 +71,7 @@ const useOverview = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
         <Overview asset={asset} key={asset.id} diagnosis={diagnosis} />
       )
     };
-  } else if (AssetCategory.Categories.getKeys(['corrosion']).includes(asset.type)) {
+  } else if (PrimaryAssetType.Category.getTypes(['corrosion']).includes(asset.type)) {
     overview = isLegacy
       ? null
       : {
@@ -78,7 +79,7 @@ const useOverview = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
           label: intl.get('OVERVIEW'),
           content: <Overview asset={asset} key={asset.id} />
         };
-  } else if (AssetCategory.Value.Flange === asset.type) {
+  } else if (PrimaryAssetType.Flange === asset.type) {
     overview = {
       key: 'overview',
       label: intl.get('OVERVIEW'),
@@ -116,7 +117,7 @@ const useDiagnosis = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
 };
 
 const useHistory = (asset: AssetRow) => {
-  if (AssetCategory.Categories.getKeys(['bolt']).includes(asset.type)) {
+  if (PrimaryAssetType.Category.getTypes(['bolt']).includes(asset.type)) {
     return [
       {
         key: 'history',
@@ -132,7 +133,10 @@ const useHistory = (asset: AssetRow) => {
 };
 
 const useFlangeStatus = (asset: AssetRow) => {
-  if (AssetCategory.Value.Flange === asset.type && isFlangePreloadCalculationEnabled(asset)) {
+  if (
+    PrimaryAssetType.Flange === asset.type &&
+    PrimaryAssetType.Category.Flange.isPreloadCalculationEnabled(asset)
+  ) {
     return [
       {
         key: 'flange-status',

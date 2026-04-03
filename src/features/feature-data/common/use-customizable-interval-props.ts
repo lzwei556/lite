@@ -5,14 +5,14 @@ import { useModalBindingsProps } from 'hooks';
 import intl from 'react-intl-universal';
 import { ButtonProps } from 'antd';
 import { clearData, URLPathname, useCustomizableInterval } from '../use-services';
-import { FeatureData } from 'common';
+import { Feature } from 'domain/feature-property';
 
 export type CustomizableIntervalProps = ReturnType<typeof useCustomizableInterval> & {
   urlPathname: URLPathname;
   id: number;
   name: string;
-  properties: FeatureData.DisplayProperty[];
-  getAlarm?: (property: FeatureData.DisplayProperty) => any;
+  properties: Feature.Property[];
+  getAlarm?: (property: Feature.Property) => any;
 };
 
 export const useProps = (props: CustomizableIntervalProps) => {
@@ -49,13 +49,13 @@ export const useProps = (props: CustomizableIntervalProps) => {
   };
 };
 
-const useSelectedProperty = (initial?: FeatureData.DisplayProperty) => {
-  const [property, setProperty] = React.useState<FeatureData.DisplayProperty | undefined>(initial);
+const useSelectedProperty = (initial?: Feature.Property) => {
+  const [property, setProperty] = React.useState<Feature.Property | undefined>(initial);
   return { property, setProperty };
 };
 
 const usePropertyChartProps = (
-  params: CustomizableIntervalProps & { property: FeatureData.DisplayProperty }
+  params: CustomizableIntervalProps & { property: Feature.Property }
 ) => {
   const { property, getAlarm, ...rest } = params;
   return {

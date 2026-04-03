@@ -1,7 +1,7 @@
 import React from 'react';
-import { Space } from '../../common';
 import { Flex } from '../flex';
 import { Card, CardProps } from './card';
+import { GlobalStyle } from 'styles';
 
 export const MutedCard = ({
   children,
@@ -28,7 +28,7 @@ export const MutedCard = ({
 
   return (
     <Card style={style} styles={styles}>
-      <Flex align='center' justify={justify} style={{ marginBottom: Space }}>
+      <Flex align='center' justify={justify} style={{ marginBottom: GlobalStyle.BaseSpace }}>
         <span style={{ fontSize: 16 }}>{title}</span>
         {extra}
       </Flex>

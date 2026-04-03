@@ -1,34 +1,18 @@
 import React from 'react';
 import { Col, Space } from 'antd';
 import intl from 'react-intl-universal';
-import {
-  AlarmsObjectStatistics,
-  AlarmTrend,
-  Asset,
-  ASSET_PATHNAME,
-  SensorsStatistics,
-  useContext
-} from 'asset-common';
-import { App, useAppType } from 'config/context';
+import { AlarmsObjectStatistics, AlarmTrend, Asset, SensorsStatistics } from 'asset-common';
 import { useProjectStatistics } from './hooks';
 import { Card, Descriptions, Grid, Link, MutedCard } from 'components';
 import { generateColProps } from 'utils/grid';
 import { Icon } from 'asset-folder/icons';
+import { useAssetsContext } from 'providers/assets';
+import { useAppConfig } from 'providers/app';
+import { AssetTree } from 'domain/asset';
 
 export const Overview = () => {
-  const { assets } = useContext();
-  const appType = useAppType();
+  const { assets } = useAssetsContext();
   const projectStatistics = useProjectStatistics();
-
-  const getTitle = () => {
-    let title = 'assets';
-    if (App.isWindLike(appType)) {
-      title = 'wind.turbines';
-    } else if (appType !== 'general') {
-      title = 'areas';
-    }
-    return title;
-  };
 
   return (
     <Grid wrap={false} align='stretch'>
@@ -43,7 +27,7 @@ export const Overview = () => {
                     title={
                       <Space size={24}>
                         <Icon asset={item} height={30} width={30} />
-                        <Link to={`/${ASSET_PATHNAME}/${item.id}-${item.type}`}>{item.name}</Link>
+                        <Link to={`/${AssetTree.Path.Assets}/${item.id}-${item.type}`}>{item.name}</Link>
                       </Space>
                     }
                   >
@@ -67,7 +51,7 @@ export const Overview = () => {
             <AlarmsObjectStatistics
               total={projectStatistics?.rootAssetNum}
               alarms={projectStatistics?.rootAssetAlarmNum}
-              title={intl.get(getTitle())}
+              title={intl.get(useAppConfig().rootAsset.labels)}
               subtext={intl.get('total')}
             />
           </Col>

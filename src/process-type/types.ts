@@ -1,4 +1,4 @@
-import { Option } from '../common';
+import { Option } from 'common/types';
 
 export type ProcessType = {
   key: number;

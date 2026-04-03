@@ -13,11 +13,11 @@ import { IsUpgrading } from '../../types/device_upgrade_status';
 import { isMobile } from '../../utils/deviceDetection';
 import { NetworkProvisionRequest, NetworkSyncRequest } from '../../apis/network';
 import { Network } from '../../types/network';
-import { useAppType } from '../../config';
 import { IconButton } from '../../components';
 import { Compensation } from './edit/compensation';
 import { Permission, useCan } from '../../providers/access-control';
 import { FillModalForm } from './edit/fillModalForm';
+import { useAppConfig } from 'providers/app';
 
 export const CommandDropdown = ({
   device,
@@ -30,7 +30,7 @@ export const CommandDropdown = ({
   initialUpgradeCode?: number;
   network?: Network;
 }) => {
-  const appType = useAppType();
+  const appType = useAppConfig().type;
   const { id, typeId, macAddress } = device;
   const { PubSub } = useSocket();
   const [upgradedCode, setUpgradeCode] = useState(initialUpgradeCode ?? device.upgradeStatus?.code);

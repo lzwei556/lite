@@ -3,7 +3,7 @@ import { Select, SelectProps } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { DeviceType } from '../../types/device_type';
-import { App, useAppType } from '../../config';
+import { useAppConfig } from 'providers/app';
 
 const { Option, OptGroup } = Select;
 
@@ -14,7 +14,7 @@ export interface DeviceTypeSelectProps extends SelectProps<any> {
 
 const DeviceTypeSelect: FC<DeviceTypeSelectProps> = (props) => {
   const { sensors, children, onChange } = props;
-  const appType = useAppType();
+  const { type, deviceTypes } = useAppConfig();
 
   useEffect(() => {
     if (onChange && sensors) {
@@ -23,7 +23,7 @@ const DeviceTypeSelect: FC<DeviceTypeSelectProps> = (props) => {
   }, [onChange, sensors]);
 
   const renderSensors = () => {
-    return App.getDeviceTypes(appType).map((item) => (
+    return deviceTypes.map((item) => (
       <Option key={item} value={item}>
         {intl.get(DeviceType.toString(item))}
       </Option>
@@ -41,7 +41,7 @@ const DeviceTypeSelect: FC<DeviceTypeSelectProps> = (props) => {
     } else {
       return (
         <Select {...props}>
-          {appType !== 'corrosionWirelessHART' && (
+          {type !== 'corrosionWirelessHART' && (
             <>
               <OptGroup label={intl.get('GATEWAY')} key={'gateway'}>
                 {DeviceType.getGateways().map((t) => (

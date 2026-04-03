@@ -14,10 +14,10 @@ import intl from 'react-intl-universal';
 import { Grid } from '../grid';
 import { Flex } from '../flex';
 import { Card, CardProps } from '../card/card';
-import { Space } from '../../common';
 import { PageResult } from '../../types/page';
 import { IconButton } from '../icon-button';
 import { CheckboxFormItem } from '../form/checkboxFormItem';
+import { GlobalStyle } from 'styles';
 
 type Header = {
   enableSettingColumnsCount?: boolean;
@@ -108,7 +108,7 @@ function Head({ columnsSettingBtn, header }: { columnsSettingBtn?: JSX.Element; 
     justify = 'flex-start';
   }
   return (
-    <Flex justify={justify} style={{ paddingBottom: Space }}>
+    <Flex justify={justify} style={{ paddingBottom: GlobalStyle.BaseSpace }}>
       <Typography.Text style={{ fontWeight: 500, fontSize: 16 }}>{title}</Typography.Text>
       <AntSpace>
         {toolbar}

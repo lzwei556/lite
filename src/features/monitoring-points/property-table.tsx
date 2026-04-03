@@ -1,4 +1,3 @@
-import { MonitoringPoint, MonitoringPointType } from 'common';
 import { RadioFormItem, Table } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
@@ -6,6 +5,7 @@ import { basicFieldColumns, usePropertyColumns } from './columns';
 import { uniq } from 'lodash';
 import { Points } from 'monitoring-point';
 import { AssetRow } from 'asset-common';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
 
 export const PropertyTable = ({
   asset,
@@ -21,7 +21,7 @@ export const PropertyTable = ({
     cardBordered: true,
     bordered: true,
     header: { enableSettingColumnsCount },
-    rowKey: (point: MonitoringPoint) => point.id
+    rowKey: (point: TMonitoringPoint.Base) => point.id
   };
 
   if (actualPoints.length > 0) {
@@ -37,7 +37,7 @@ const TypedTable = ({
   types,
   tableProps
 }: {
-  actualPoints: MonitoringPoint[];
+  actualPoints: TMonitoringPoint.Base[];
   types: number[];
   tableProps: any;
 }) => {
@@ -76,7 +76,7 @@ const TypeSwitcher = ({
         onChange: (e) => onChange(e.target.value),
         options: types.map((t) => ({
           value: t,
-          label: intl.get(MonitoringPointType.Key.getLabel(t))
+          label: intl.get(OMonitoringPoint.Type.getLabel(t))
         }))
       }}
     />

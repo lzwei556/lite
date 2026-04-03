@@ -1,23 +1,16 @@
 import { AssetModel, AssetRow } from './types';
-import { isArea, isCorrosionRelated, isDeviceRelated, isVibrationRelated } from '../asset-variant';
 import { isMonitoringPoint } from '../monitoring-point';
 import { getColorByValue, getLabelByValue } from './assetStatus';
 import { resolveDescendant, resolveStatus } from './utils/statistics';
 
-export * from '../views/home/tree';
 export * from './components';
 export * from '../monitoring-point';
-export * from './constants';
 export * from './services';
 export * from './types';
 
 export const Asset = {
   Assert: {
-    isArea,
-    isMonitoringPoint,
-    isVibrationRelated,
-    isCorrosionRelated,
-    isDeviceRelated
+    isMonitoringPoint
   },
   convert: (values?: AssetRow): AssetModel | null => {
     if (!values) return null;

@@ -2,17 +2,21 @@ import { useLocaleContext } from 'localeProvider/context';
 import { getValue, roundValue } from 'utils';
 import { ChartProps, getOptions } from 'components';
 import intl from 'react-intl-universal';
-import { MonitoringPointType } from 'common';
-import { DIRECTION, TopInclination_DISPLACEMENT_COMBINED } from 'common/feature-data';
 import { FeatureDataDTO } from '../../types';
+import { FeatureProperty } from 'domain/feature-property';
+import { OMonitoringPoint } from 'domain/monitoring-point';
 
 const INCLINATION_OFFSET_PROPERTY = {
   displacement: {
     key: 'FIELD_DISPLACEMENT',
     label: 'FIELD_DISPLACEMENT',
-    unit: TopInclination_DISPLACEMENT_COMBINED.unit!
+    unit: FeatureProperty.TopInclination.Displacement.unit!
   },
-  direction: { key: DIRECTION.name, label: DIRECTION.name, unit: DIRECTION.unit! }
+  direction: {
+    key: FeatureProperty.TopInclination.Direction.name,
+    label: FeatureProperty.TopInclination.Direction.name,
+    unit: FeatureProperty.TopInclination.Direction.unit!
+  }
 };
 
 export type Props = { name: string; type: number; data: FeatureDataDTO };
@@ -23,12 +27,12 @@ export type Data = {
   data: [displacement: number, direction: number][];
   height?: number;
   radius?: number;
-  displacementKey: ReturnType<typeof MonitoringPointType.Key.getInclinationDisplacement>;
+  displacementKey: string;
 };
 
 export const transform = (monitoringPoints: Props[]) => {
   return monitoringPoints.map(({ name, type, data }) => {
-    const displacementKey = MonitoringPointType.Key.getInclinationDisplacement(type);
+    const displacementKey = OMonitoringPoint.Type.Category.Inclination.getDisplacementKey(type);
     return {
       name,
       data: pickData(data, displacementKey),
@@ -37,7 +41,7 @@ export const transform = (monitoringPoints: Props[]) => {
   });
 };
 
-const pickData = (history: FeatureDataDTO, displacementKey: string) => {
+const pickData = (history: FeatureDataDTO, displacementKey?: string) => {
   const directions: number[] = [];
   const displacements: number[] = [];
   history.forEach(({ values }) => {

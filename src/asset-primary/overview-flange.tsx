@@ -5,8 +5,8 @@ import {
   EmptyMonitoringPoints,
   SensorsStatistics
 } from 'asset-common';
-import { isFlangePreloadCalculationEnabled } from 'common/asset-category';
 import { Grid, MutedCard } from 'components';
+import { PrimaryAssetType } from 'domain/asset';
 import {
   CustomizableIntervals,
   FakeVSRealChart,
@@ -27,7 +27,7 @@ export const FlangeOverview = ({ asset }: { asset: AssetRow }) => {
               </MutedCard>
             </Col>
             <Col span={24}>
-              {isFlangePreloadCalculationEnabled(asset) ? (
+              {PrimaryAssetType.Category.Flange.isPreloadCalculationEnabled(asset) ? (
                 <FakeVSRealChart asset={asset} />
               ) : (
                 <CustomizableIntervals

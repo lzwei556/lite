@@ -1,10 +1,10 @@
 import { Col, ColProps, Form } from 'antd';
-import { AssetCategory } from 'common/asset-category';
 import { Card, FormItem, Grid } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { generateColProps } from 'utils/grid';
 import { toUniversalFormItemProps } from 'types';
+import { PrimaryAssetType } from 'domain/asset';
 
 export const FormItemsSettings = ({
   type,
@@ -25,7 +25,7 @@ export const FormItemsSettings = ({
     return colProps;
   };
 
-  return AssetCategory.Key.getGroupedSettings(type).map(([group, fields], i) => (
+  return PrimaryAssetType.getGroupedSettings(type).map(([group, fields], i) => (
     <Card
       style={{ marginTop: i === 0 ? 16 : 0, marginBottom: 16 }}
       title={intl.get(group).d(group)}
@@ -37,11 +37,7 @@ export const FormItemsSettings = ({
           if (!visible) return null;
           return (
             <Col {...getFormItemColProps(field.name)} key={field.name}>
-              <FormItem
-                {...toUniversalFormItemProps(field, {
-                  name: AssetCategory.getNamePath(field.source)
-                })}
-              />
+              <FormItem {...toUniversalFormItemProps(field)} />
             </Col>
           );
         })}

@@ -1,11 +1,11 @@
-import { Space } from '../../common';
+import { GlobalStyle } from 'styles';
 import { ENV } from '../../utils';
 
 export type Size = { width: number; height: number };
 export type Point = { x: number; y: number };
 type StageProps = { x: number; y: number; scale: number };
 
-export const Margin = Space;
+export const Margin = GlobalStyle.BaseSpace;
 const PlaceTextCardStyle = {
   width: 220,
   height: 210

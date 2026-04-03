@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { useSize } from 'ahooks';
-import { Space } from '../../common';
 import { Flex } from '../flex';
 import { Card } from '../card/card';
+import { GlobalStyle } from 'styles';
 
 export const TitleExtraLayout = ({
   title,
@@ -24,7 +24,7 @@ export const TitleExtraLayout = ({
   return (
     <Card
       ref={cardRef}
-      styles={{ body: isWrap ? { padding: `${Space}px ${Space}px 0` } : { paddingBlock } }}
+      styles={{ body: isWrap ? { padding: `${GlobalStyle.BaseSpace}px ${GlobalStyle.BaseSpace}px 0` } : { paddingBlock } }}
     >
       {cardSize && (
         <Flex align='center' justify='flex-start' wrap={isWrap}>

@@ -1,10 +1,11 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { FeatureData, MonitoringPointType } from 'common';
 import { Card, CardProps, LineChart } from 'components';
 import { AssetRow, MONITORING_POINT, Points } from 'asset-common';
 import { roundValue } from 'utils/format';
 import { FlangeStatusData } from './use-services';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { Feature } from 'domain/feature-property';
 
 export const FakeVSRealChart = ({
   asset,
@@ -15,7 +16,7 @@ export const FakeVSRealChart = ({
   asset: AssetRow;
   cardProps?: CardProps;
   flangeData?: FlangeStatusData;
-  property?: FeatureData.DisplayProperty;
+  property?: Feature.Property;
 }) => {
   const { bolts, points, indexs } = flangeData ? transform(flangeData, property?.key) : pick(asset);
   return (
@@ -52,11 +53,11 @@ const pick = (asset: AssetRow) => {
   const points = asset.monitoringPoints ?? [];
   const actuals = Points.filter(points).filter((point) => !!point.data);
   const fakes = points
-    .filter((point) => MonitoringPointType.Key.filterNonVirtualTypes(point.type))
+    .filter((point) => OMonitoringPoint.Type.isVirtual(point.type))
     .filter((point) => !!point.data);
-  let properties: FeatureData.DisplayProperty[] = [];
+  let properties: Feature.Property[] = [];
   if (actuals.length > 0) {
-    properties = MonitoringPointType.Key.getProperties(actuals[0].type, actuals[0].properties);
+    properties = OMonitoringPoint.Type.getProperties(actuals[0]);
   }
   const property = properties.length > 0 ? properties[0] : undefined;
   let bolts: number[] = [];

@@ -12,7 +12,7 @@ import { FormItemsSettings } from './form-items-settings';
 import { useType } from './use-basic-form-items';
 import { AssetModel, AssetRow } from 'asset-common';
 import { generateColProps } from 'utils/grid';
-import { AssetCategory } from 'common/asset-category';
+import { PrimaryAssetType } from 'domain/asset';
 
 export type UpdateFormProps = {
   loading: boolean;
@@ -59,7 +59,7 @@ export const UpdateFormCard = ({
               parentSelectFormItem: <ParentSelectFormItem {...{ formItemColProps, type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...typeRest} />,
               diagnosisFormItems: type &&
-                AssetCategory.Categories.getKeys(['vibration']).includes(type) && (
+                PrimaryAssetType.Category.getTypes(['vibration']).includes(type) && (
                   <DiagnosisFormItems asset={editingAsset} formItemColProps={formItemColProps} />
                 )
             }}

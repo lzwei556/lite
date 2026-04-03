@@ -1,6 +1,5 @@
 import { Col } from 'antd';
 import { AssetRow, MonitoringPointRow } from 'asset-common';
-import { AssetCategory } from 'common/asset-category';
 import { Grid } from 'components';
 import React from 'react';
 import { generateColProps } from 'utils/grid';
@@ -13,9 +12,10 @@ import {
   useUpdateFormProps as useUpdateMonitoringPointFormProps
 } from 'features/monitoring-point-settings';
 import { ModalFormProps } from 'types/common';
+import { PrimaryAssetType } from 'domain/asset';
 
 export const Settings = ({ editingAsset }: { editingAsset: AssetRow }) => {
-  const settings = AssetCategory.Key.getSettings(editingAsset.type);
+  const settings = PrimaryAssetType.getSettings(editingAsset.type);
   const updateFormProps = useUpdateFormProps(editingAsset.id);
 
   if (settings.length > 0) {

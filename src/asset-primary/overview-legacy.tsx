@@ -6,8 +6,8 @@ import { AlarmsObjectStatistics, AlarmTrend, AssetRow } from 'asset-common';
 import { Card, Grid, IconButton } from 'components';
 import { AssetAnnotationImage } from 'features/imageAnnotation';
 import { ModalWrapper } from 'components/modalWrapper';
-import { SettingsDetail } from './settings-detail';
 import { SelectedPointPropertyHistory } from 'asset-model/selected-point-property-history';
+import { PrimaryAssetSettingsDetail } from 'features/asset-settings';
 
 
 export const OverviewLegacy = (props: { asset: AssetRow; onSuccess?: () => void }) => {
@@ -39,7 +39,7 @@ export const OverviewLegacy = (props: { asset: AssetRow; onSuccess?: () => void 
                     footer={null}
                   >
                     <Card>
-                      <SettingsDetail attributes={asset.attributes} type={asset.type} />
+                      <PrimaryAssetSettingsDetail attributes={asset.attributes} type={asset.type} />
                     </Card>
                   </ModalWrapper>
                 </React.Fragment>

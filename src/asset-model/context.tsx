@@ -9,14 +9,15 @@ import {
 } from '../monitoring-point';
 import { AssetRow } from '../asset-common';
 import { Dayjs, getValue } from '../utils';
-import { FeatureData, MonitoringPointType } from 'common';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { Feature } from 'domain/feature-property';
 
 export type PropertyItem = {
   selected: boolean;
   title: string;
   children: string;
   self: MonitoringPointRow;
-  property?: FeatureData.DisplayProperty;
+  property?: Feature.Property;
   visibleKeys: string[];
   axisKey?: string;
   fieldKey?: string;
@@ -66,12 +67,14 @@ export const AssetModelProvider = ({
   };
 
   React.useEffect(() => {
-    const isSelectedPointValid = monitoringPoints.every((m) => m.self.assetId === asset.id);
-    const selectedMonitoringPoint = monitoringPoints.find((m) => !!m.selected);
-    if (selectedMonitoringPoint?.self.id && isSelectedPointValid) {
-      fetchData(selectedMonitoringPoint.self.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
-    } else {
-      setMonitoringPoints(getInitial(asset));
+    if (monitoringPoints.length > 0) {
+      const isSelectedPointValid = monitoringPoints.every((m) => m.self.assetId === asset.id);
+      const selectedMonitoringPoint = monitoringPoints.find((m) => !!m.selected);
+      if (selectedMonitoringPoint?.self.id && isSelectedPointValid) {
+        fetchData(selectedMonitoringPoint.self.id, Dayjs.toRange(Dayjs.CommonRange.PastWeek));
+      } else {
+        setMonitoringPoints(getInitial(asset));
+      }
     }
   }, [monitoringPoints, asset]);
 
@@ -100,7 +103,7 @@ const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
       return prevIndex - nextIndex;
     })
     .map((m, i) => {
-      const properties = MonitoringPointType.Key.getProperties(m.type, m.properties);
+      const properties = OMonitoringPoint.Type.getProperties(m);
       const property = properties?.[0];
       const items = getPropertyItem(m, property);
       return {
@@ -114,20 +117,17 @@ const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
     });
 };
 
-export function getPropertyItems(m: MonitoringPointRow, properties: FeatureData.DisplayProperty[]) {
+export function getPropertyItems(m: MonitoringPointRow, properties: Feature.Property[]) {
   const items: PropertyItem[] = [];
   properties.forEach((p) => items.push(...getPropertyItem(m, p)));
   return items;
 }
 
-const getPropertyItem = (
-  m: MonitoringPointRow,
-  property: FeatureData.DisplayProperty
-): PropertyItem[] => {
+const getPropertyItem = (m: MonitoringPointRow, property: Feature.Property): PropertyItem[] => {
   const { fields = [], key, name, precision, unit } = property;
   const self = m;
   const selected = false;
-  const visibleKeys = MonitoringPointType.Key.getProperties(m.type, m.properties)
+  const visibleKeys = OMonitoringPoint.Type.getProperties(m)
     .filter((p) => !!p.first)
     .map((p) => p.key);
   if (fields.length > 1) {

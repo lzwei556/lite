@@ -3,9 +3,9 @@ import { Data, Props, transform, useCardTitleProps, useChartProps } from './use-
 import { Card, CardProps, Chart, ChartProps } from 'components';
 import intl from 'react-intl-universal';
 import { useGlobalStyles } from 'styles';
-import { MonitoringPointType } from 'common';
 import { AssetRow } from 'asset-common';
 import { useCustomizableIntervals } from '../../use-services';
+import { OMonitoringPoint } from 'domain/monitoring-point';
 
 export const InclinationGridItem = (props: Props & { colProps?: ColProps }) => {
   const { visible, chartCardProps } = useInclinationGridItemProps(props);
@@ -19,7 +19,7 @@ export const InclinationGridItem = (props: Props & { colProps?: ColProps }) => {
 };
 
 const useInclinationGridItemProps = (params: Props) => {
-  const visible = MonitoringPointType.Categories.getKeys(['inclination']).includes(params.type);
+  const visible = OMonitoringPoint.Type.Category.getTypes(['inclination']).includes(params.type);
   const styles = useGlobalStyles();
   return {
     visible,

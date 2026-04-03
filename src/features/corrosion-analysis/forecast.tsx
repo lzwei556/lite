@@ -6,7 +6,6 @@ import { Dayjs, getPluralUnitInEnglish } from '../../utils';
 import { getValue } from '../../utils/format';
 import { useLocaleContext } from '../../localeProvider';
 import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
-import { MonitoringPoint } from 'common';
 import { MonitoringPointRow } from 'monitoring-point';
 
 export const Forecast = ({

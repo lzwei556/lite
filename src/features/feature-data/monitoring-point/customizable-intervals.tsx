@@ -4,15 +4,16 @@ import React from 'react';
 import { HistoryDataFea } from 'features';
 import { PropertyLightSelectFilter } from 'asset-common';
 import { CustmizableIntervalLayout } from '../custmizable-interval-layout';
-import { FeatureData, MonitoringPoint, MonitoringPointType } from 'common';
 import { useCustomizableIntervals } from '../use-services';
 import intl from 'react-intl-universal';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import { Feature } from 'domain/feature-property';
 
 export const CustomizableIntervals = ({
   monitoringPoints,
   interactionDisabled = false
 }: {
-  monitoringPoints: MonitoringPoint[];
+  monitoringPoints: TMonitoringPoint.Base[];
   interactionDisabled?: boolean;
 }) => {
   const { property, cardProps, chartProps, ...rest } = useProps(monitoringPoints);
@@ -44,9 +45,8 @@ export const CustomizableIntervals = ({
   );
 };
 
-const useProps = (monitoringPoints: MonitoringPoint[]) => {
-  const { properties: _properties, type } = monitoringPoints[0];
-  const properties = MonitoringPointType.Key.getProperties(type, _properties);
+const useProps = (monitoringPoints: TMonitoringPoint.Base[]) => {
+  const properties = OMonitoringPoint.Type.getProperties(monitoringPoints[0]);
   const { numberedRange, setRange } = useRange();
   const { datas, initialRange, loading } = useCustomizableIntervals(
     monitoringPoints,
@@ -77,7 +77,7 @@ const useProps = (monitoringPoints: MonitoringPoint[]) => {
   };
 };
 
-const useSelectedProperty = (initial?: FeatureData.DisplayProperty) => {
-  const [property, setProperty] = React.useState<FeatureData.DisplayProperty | undefined>(initial);
+const useSelectedProperty = (initial?: Feature.Property) => {
+  const [property, setProperty] = React.useState<Feature.Property | undefined>(initial);
   return { property, setProperty };
 };

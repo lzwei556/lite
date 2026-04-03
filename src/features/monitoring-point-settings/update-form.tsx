@@ -11,16 +11,16 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
-import { MonitoringPoint, MonitoringPointPostDTO, MonitoringPointType, transform2PostDTO } from 'common';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
 
 export type UpdateFormProps = {
   loading: boolean;
-  monitoringPoint: MonitoringPoint;
-  handleSubmit: (values: MonitoringPointPostDTO) => void;
+  monitoringPoint: TMonitoringPoint.Base;
+  handleSubmit: (values: TMonitoringPoint.PostDTO) => void;
 };
 
 export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: UpdateFormProps) => {
-  const [form] = Form.useForm<MonitoringPointPostDTO>();
+  const [form] = Form.useForm<TMonitoringPoint.PostDTO>();
   const { selectedType: type, ...typeRest } = useType(monitoringPoint.type);
   return (
     <Card
@@ -33,7 +33,11 @@ export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: Updat
       styles={{ body: { overflowY: 'auto', maxHeight: 725 } }}
       title={intl.get('BASIC_INFORMATION')}
     >
-      <Form form={form} layout='vertical' initialValues={transform2PostDTO(monitoringPoint)}>
+      <Form
+        form={form}
+        layout='vertical'
+        initialValues={OMonitoringPoint.transform2PostDTO(monitoringPoint)}
+      >
         <Grid>
           <FormItemsBasic
             {...{
@@ -41,10 +45,8 @@ export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: Updat
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />,
               componentSelectFormItem: type &&
-                MonitoringPointType.Categories.getKeys(['vibration']).includes(type) &&
-                type !== MonitoringPointType.Value.OilFiller && (
-                  <ComponentSelectFormItem type={type} />
-                )
+                OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
+                type !== OMonitoringPoint.Type.OilFiller && <ComponentSelectFormItem type={type} />
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

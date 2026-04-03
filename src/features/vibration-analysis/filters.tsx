@@ -1,12 +1,9 @@
 import { LightSelectFilter } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Axis, useAxisWithVibrationDirection, VibrationDirectionAttributes } from 'common';
-import {
-  AxisWithVibrationDirectionLabel,
-  MonitoringPointAttributes
-} from 'common/monitoring-point-attributes';
 import { Property, useProperty } from './useTrend';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import { AxisOption } from 'domain/axis';
 
 export type PropertyFilters = {
   property: Property;
@@ -38,9 +35,11 @@ export const usePropertiesFilters = (isAnalysisOnlyAcceleration?: boolean): Prop
 };
 
 export type AxisFilters = {
-  axis: AxisWithVibrationDirectionLabel;
-  setAxis: React.Dispatch<React.SetStateAction<AxisWithVibrationDirectionLabel>>;
-  options: AxisWithVibrationDirectionLabel[];
+  axis: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel;
+  setAxis: React.Dispatch<
+    React.SetStateAction<TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel>
+  >;
+  options: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel[];
 };
 
 export const AxisSelect = ({ axis, options, setAxis }: AxisFilters) => {
@@ -48,7 +47,7 @@ export const AxisSelect = ({ axis, options, setAxis }: AxisFilters) => {
     <LightSelectFilter
       allowClear={false}
       options={options.map((a) => ({ ...a, label: intl.get(a.label) }))}
-      onChange={(value: Axis.Option['value']) => {
+      onChange={(value: AxisOption['value']) => {
         const axis = options.find((opt) => opt.value === value);
         if (axis) {
           setAxis(axis);
@@ -60,9 +59,10 @@ export const AxisSelect = ({ axis, options, setAxis }: AxisFilters) => {
   );
 };
 
-export const useAxisFilters = (attributes?: MonitoringPointAttributes): AxisFilters => {
-  const { axis, setAxis, options } = useAxisWithVibrationDirection(
-    attributes as VibrationDirectionAttributes
-  );
+export const useAxisFilters = (attributes?: TMonitoringPoint.Settings): AxisFilters => {
+  const { axis, setAxis, options } =
+    OMonitoringPoint.Settings.Vibration.useAxisWithVibrationDirection(
+      attributes as TMonitoringPoint.Settings.VibrationDirection
+    );
   return { axis, setAxis, options };
 };

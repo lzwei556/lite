@@ -11,6 +11,7 @@ export * from './form/textFormItem';
 export * from './layout/content-top-bottom-layout';
 export * from './layout/pageWithSideBar';
 export * from './layout/title-extra';
+export * from './analysisSidebarCollapse';
 export * from './descriptions';
 export * from './flex';
 export * from './fontIcon';

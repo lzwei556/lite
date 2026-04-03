@@ -3,19 +3,17 @@ import { Card } from '../components';
 import { HistoryDataFea } from '../features';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { MonitoringPointRow, Point } from '../monitoring-point';
-import { FeatureData, MonitoringPointType } from 'common';
+import { OMonitoringPoint } from 'domain/monitoring-point';
+import { Feature, FeatureProperty } from 'domain/feature-property';
 
 export const SelectedPointPropertyHistory = () => {
   const { selectedMonitoringPoint, loading, historyData } = useAssetModelContext();
   if (selectedMonitoringPoint) {
     const { self, property, axisKey, fieldKey } = selectedMonitoringPoint;
 
-    const getTitle = (m: MonitoringPointRow, property: FeatureData.DisplayProperty) => {
+    const getTitle = (m: MonitoringPointRow, property: Feature.Property) => {
       const key = property.key;
-      const items = getPropertyItems(
-        m,
-        MonitoringPointType.Key.getProperties(m.type, m.properties)
-      );
+      const items = getPropertyItems(m, OMonitoringPoint.Type.getProperties(m));
       let title = items.find((item) => item.property?.key === key)?.title;
       if (axisKey) {
         title = items.find((item) => item.property?.key === key && item.axisKey === axisKey)?.title;
@@ -44,7 +42,7 @@ export const SelectedPointPropertyHistory = () => {
               Point.Assert.isVibrationRelated(self.type)
                 ? {
                     ...property,
-                    fields: FeatureData.appendVibrationDirectionAbbrToField(
+                    fields: FeatureProperty.appendVibrationDirectionAbbr(
                       property.fields,
                       self.attributes
                     )

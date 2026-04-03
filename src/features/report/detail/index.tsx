@@ -1,12 +1,12 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { ReportDTO } from '../types';
-import { useAppType } from '../../../config';
 import { transform } from '../utils';
 import { Index } from '../corrosion';
+import { useAppConfig } from 'providers/app';
 
 export default function ReportDetail() {
-  const appType = useAppType();
+  const appType = useAppConfig().type;
   const { state } = useLocation();
   const report = state as ReportDTO;
 

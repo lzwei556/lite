@@ -1,4 +1,4 @@
-import { ProjectType } from '../project';
+import { ProjectType } from 'domain/project-type';
 
 export type Project = {
   id: number;

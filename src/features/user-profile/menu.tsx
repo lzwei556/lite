@@ -6,7 +6,7 @@ import { useRequest } from 'ahooks';
 import request from '../../utils/request';
 import { useLocation } from 'react-router-dom';
 import { mapTree } from '../../utils/tree';
-import { ASSET_PATHNAME } from '../../asset-common';
+import { AssetTree } from 'domain/asset';
 
 // UI related logic begin
 
@@ -63,7 +63,7 @@ const useMenuProps = (
     .split('/')
     .filter((p) => p.length > 0)
     .filter((p) => Number.isNaN(Number(p)));
-  const selectedKeys = paths.length > 0 ? paths : [ASSET_PATHNAME];
+  const selectedKeys = paths.length > 0 ? paths : [AssetTree.Path.Assets];
   const { data } = useMyMenus();
   return {
     items: data ? mapTree(data, (menu) => transformFn({ menu, ...paras })) : [],

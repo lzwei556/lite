@@ -1,10 +1,11 @@
 import React from 'react';
 import { Col, Statistic, Typography, Image } from 'antd';
 import intl from 'react-intl-universal';
-import { Asset, ASSET_PATHNAME, AssetRow, AssetStatusTag } from 'asset-common';
+import { Asset, AssetRow, AssetStatusTag } from 'asset-common';
 import { useGlobalStyles } from 'styles';
 import { Card, Flex, Grid, Link } from 'components';
 import { getAssetImage } from 'asset-model/utils';
+import { AssetTree } from 'domain/asset';
 
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, name, type, statistics } = asset;
@@ -29,7 +30,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
           <div style={{ position: 'absolute', top: 16, left: 16, right: 8 }}>
             <Flex justify='space-between'>
               <Typography.Text ellipsis={true}>
-                <Link to={`/${ASSET_PATHNAME}/${id}-${type}`} title={name}>
+                <Link to={`/${AssetTree.Path.Assets}/${id}-${type}`} title={name}>
                   {name}
                 </Link>
               </Typography.Text>

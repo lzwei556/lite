@@ -2,17 +2,16 @@ import React from 'react';
 import { Col, Empty, Space, Spin } from 'antd';
 import { ChartMark, Card, Flex, Grid, useRange, RangeDatePicker } from 'components';
 import { Dayjs } from 'utils';
-import { useMonitoringPointParents } from 'asset-variant';
-import { Asset, TrendData } from 'asset-common';
+import { AssetRow, TrendData } from 'asset-common';
 import { useTrendData } from './useTrend';
 import { AnalysisTabs } from './analysis-tabs';
 import { Trend } from './trend';
 import { SidebarProvider } from './mark/sidebar';
-import { MonitoringPoint } from 'common';
 import { AxisSelect, PropertiesSelect, useAxisFilters, usePropertiesFilters } from './filters';
 import { useAnalysisDataProps, useAnalysisTabsProps } from './useProps';
+import { TMonitoringPoint } from 'domain/monitoring-point';
 
-type Props = { id: number; attributes: MonitoringPoint['attributes']; assetId: number };
+type Props = { id: number; attributes: TMonitoringPoint.Base['attributes']; asset: AssetRow };
 
 export const VibrationAnalysis = (props: Props) => {
   const { numberedRange, setRange } = useRange();
@@ -47,7 +46,7 @@ export const VibrationAnalysis = (props: Props) => {
 };
 
 const Content = ({
-  assetId,
+  asset,
   id,
   data,
   attributes
@@ -58,7 +57,6 @@ const Content = ({
     data.find((d) => !!d.selected)?.timestamp
   );
   const chartProps = ChartMark.useAxisMarkLineStyleProps();
-  const parents = useMonitoringPointParents((asset) => Asset.Assert.isVibrationRelated(asset.type));
   const { isAnalysisOnlyAcceleration, ...tabsProps } = useAnalysisTabsProps();
   const propertyFilters = usePropertiesFilters(isAnalysisOnlyAcceleration);
   const axisFilters = useAxisFilters(attributes);
@@ -107,7 +105,7 @@ const Content = ({
               monitoringPoint={{
                 id,
                 attributes,
-                parent: parents.find((asset) => asset.id === assetId)!
+                parent: asset
               }}
               trend={{ timestamp: selected, timestamps: data.map(({ timestamp }) => timestamp) }}
               filters={filters}

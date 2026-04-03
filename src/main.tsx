@@ -9,14 +9,14 @@ import { useLocaleContext } from './localeProvider';
 import en_US from './locales/en-US.json';
 import zh_CN from './locales/zh-CN.json';
 import { Dayjs } from './utils';
-import { App, useAppType } from './config';
 import AppRouter from './views/router';
 import { AuthProvider } from './providers/auth';
 import { AccessControlProvider } from './providers/access-control';
 import { NotificationProvider } from 'providers/notification';
+import { useAppConfig } from 'providers/app';
 
 export const Main = () => {
-  const config = useAppType();
+  const name = useAppConfig().name;
   const [renderingKey, setRenderingKey] = React.useState(0);
   const { language, theme } = useLocaleContext();
 
@@ -38,9 +38,9 @@ export const Main = () => {
 
   React.useEffect(() => {
     if (renderingKey) {
-      document.title = intl.get(App.getSiteName(config));
+      document.title = intl.get(name);
     }
-  }, [language, renderingKey, config]);
+  }, [language, renderingKey, name]);
 
   const customDarkAlgorithm = (seedToken: any, mapToken: any) => {
     const mergeToken = AntdTheme.darkAlgorithm(seedToken, mapToken);

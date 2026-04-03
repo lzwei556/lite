@@ -8,8 +8,8 @@ import { useCrossTarget } from './useCrossTarget';
 import { useOriginalDomain } from './useOriginalDomain';
 import { cross } from 'monitoring-point/services';
 import { getValue } from 'utils';
-import { useAxisWithVibrationDirection, VibrationDirectionAttributes } from 'common';
 import { AnalysisProps } from './useProps';
+import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
 
 export const Cross = ({
   monitoringPoint: { id },
@@ -25,8 +25,8 @@ export const Cross = ({
   const { points, setPoints } = useCrossTarget(id);
   const selectedPoint = points?.find((p) => p.selected);
   const selectedPointId = selectedPoint?.value;
-  const targetAxis = useAxisWithVibrationDirection(
-    selectedPoint?.attributes as VibrationDirectionAttributes
+  const targetAxis = OMonitoringPoint.Settings.Vibration.useAxisWithVibrationDirection(
+    selectedPoint?.attributes as TMonitoringPoint.Settings.VibrationDirection
   );
   const targetOriginalDomain = useOriginalDomain(selectedPointId, timestamp, targetAxis.axis.value);
 

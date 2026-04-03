@@ -1,9 +1,8 @@
 import { Col, ColProps } from 'antd';
-import { AssetRow, useContext } from 'asset-common';
-import { canAddAreaChild } from 'common';
-import { AssetCategory } from 'common/asset-category';
+import { AssetRow } from 'asset-common';
 import { SelectFormItem, TextFormItem } from 'components';
-import intl from 'react-intl-universal';
+import { FolderAsset } from 'domain/asset';
+import { useAssetsContext } from 'providers/assets';
 
 import { generateColProps } from 'utils/grid';
 
@@ -25,7 +24,7 @@ export const FormItemsBasic = ({
       {(parentId || parents.length > 0) && (
         <Col {...formItemColProps}>
           <SelectFormItem
-            label={AssetCategory.Key.getlabelPlural(AssetCategory.Value.Area)}
+            label={FolderAsset.getlabelPlural(FolderAsset.Type.Area)}
             name='parent_id'
             selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
           />
@@ -36,10 +35,10 @@ export const FormItemsBasic = ({
 };
 
 const useParents = () => {
-  const { assets } = useContext();
+  const { assets } = useAssetsContext();
   const parents: AssetRow[] = [];
   assets.forEach((asset) => {
-    if (AssetCategory.Value.Area === asset.type && canAddAreaChild(asset, 1)) {
+    if (FolderAsset.Type.Area === asset.type && FolderAsset.Area.canAddAreaChild(asset, 1)) {
       parents.push(asset);
     }
   });

@@ -1,5 +1,5 @@
 import { toSnake } from 'ts-case-convert';
-import { Option } from '../common';
+import { Option } from 'common/types';
 import { transformSnake2Dot } from './format';
 type NumericEnum = { [key: string | number]: number | string };
 

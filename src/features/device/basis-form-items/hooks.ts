@@ -5,12 +5,12 @@ import { useFormItemBindingsProps } from '../../../hooks';
 import { Normalizes } from '../../../constants/validator';
 import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
-import { App, useAppType } from '../../../config';
 import { pickOptionsFromNumericEnum } from '../../../utils';
 import { GetNetworksRequest } from '../../../apis/network';
 import { GetDefaultDeviceSettingsRequest } from '../../../apis/device';
 import { FormCommonProps, FormItemsProps } from '../settings-common';
 import * as Basis from '.';
+import { useAppConfig } from 'providers/app';
 
 export type CommonProps = Pick<FormCommonProps, 'form'>;
 
@@ -76,17 +76,17 @@ const useDeviceTypeSelectProps = (form: CommonProps['form']) => {
 };
 
 const useGroupedDeviceTypeOptions = () => {
-  const appType = useAppType();
-  const deviceTypes: SelectProps['options'] = [];
-  if (appType !== 'corrosionWirelessHART') {
-    deviceTypes.push({
+  const { type, deviceTypes } = useAppConfig();
+  const deviceTypeOptions: SelectProps['options'] = [];
+  if (type !== 'corrosionWirelessHART') {
+    deviceTypeOptions.push({
       label: intl.get('GATEWAY'),
       options: DeviceType.getGateways().map((t) => ({
         label: intl.get(DeviceType.toString(t)),
         value: t
       }))
     });
-    deviceTypes.push({
+    deviceTypeOptions.push({
       label: intl.get('RELAY'),
       options: DeviceType.getRouters().map((t) => ({
         label: intl.get(DeviceType.toString(t)),
@@ -94,14 +94,14 @@ const useGroupedDeviceTypeOptions = () => {
       }))
     });
   }
-  deviceTypes.push({
+  deviceTypeOptions.push({
     label: intl.get('SENSOR'),
-    options: App.getDeviceTypes(appType).map((t) => ({
+    options: deviceTypes.map((t) => ({
       label: intl.get(DeviceType.toString(t)),
       value: t
     }))
   });
-  return deviceTypes;
+  return deviceTypeOptions;
 };
 
 const setSettingsInitialValues = (

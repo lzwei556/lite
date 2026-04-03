@@ -8,8 +8,8 @@ import { ModalWrapper } from '../../components/modalWrapper';
 import { ParameterFormItem, ProcessType } from '../../process-type';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { MonitoringPointRow } from '../../monitoring-point';
-import { Option } from '../../common';
 import { CommonProps, sourceIdField, typeField } from './common';
+import { Option } from 'common/types';
 
 type Props = ModalFormProps & CommonProps;
 

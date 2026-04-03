@@ -1,4 +1,4 @@
-import { Option } from '../common';
+import { Option } from 'common/types';
 import { getAttrValue } from './object';
 
 export const getOptionByValue = (options: Option[], value?: string | number | boolean) => {

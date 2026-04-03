@@ -4,6 +4,7 @@ import { Result, SelectProps, Spin } from 'antd';
 import { GlobalStore } from '../utils/global-store';
 import request from '../utils/request';
 import intl from 'react-intl-universal';
+import { ProjectType, ProjectTypeConfig } from 'domain/project-type';
 
 const store = GlobalStore.getInstance(true);
 
@@ -122,4 +123,12 @@ export const useProjectsSelectProps = (onSuccess: () => void): SelectProps | und
 const getMyProject = async (id: number) => {
   const res = await request.get<Project>(`/my/projects/${id}`);
   return res.data.data;
+};
+
+export const useAppTypeMappingWithSelectedProject = () => {
+  const selectedProject = useSelectedProject();
+  const projectType = selectedProject?.type;
+  if (projectType) {
+    return ProjectTypeConfig.getAppType(projectType as unknown as ProjectType);
+  }
 };

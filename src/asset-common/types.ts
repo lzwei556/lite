@@ -1,4 +1,4 @@
-import { MotorSettings } from 'common/asset-category';
+import { MotorSettings } from 'domain/asset/settings/motor';
 import { ProcessDTO } from '../features/process/use-services';
 import { MonitoringPointRow } from '../monitoring-point';
 import { AssetChildrenStatistics } from './utils/statistics';
@@ -53,7 +53,7 @@ export type AssetRow = {
     initial_preload: number;
     initial_pressure: number;
     canvasSnapshot?: { id: number; x: number; y: number }[];
-  } & Partial<MotorSettings>;
+  } & Partial<MotorSettings>; // TODO
   actions?: ProcessDTO[];
   diagnosisIsEnabled: boolean;
   diagnosisPeriod: number;
