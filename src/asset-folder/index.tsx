@@ -39,7 +39,7 @@ export default function Index({ asset }: { asset: AssetRow }) {
           label: intl.get('assets'),
           key: 'asset',
           content:
-            FolderAsset.Type.Area === asset.type ? (
+            FolderAsset.Enum.Area === asset.type ? (
               <AssetsArea asset={asset} key={asset.id} />
             ) : (
               <AssetsWindTurbine asset={asset} key={asset.id} />

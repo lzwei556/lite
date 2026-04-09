@@ -6,7 +6,7 @@ import { useParents, useType } from './use-basic-form-items';
 import { useFormItemBindingsProps } from 'hooks';
 import intl from 'react-intl-universal';
 import { AssetRow } from 'asset-common';
-import { FolderAsset, PrimaryAssetType } from 'domain/asset';
+import { FolderAsset, PrimaryAsset } from 'domain/asset';
 
 export const FormItemsBasic = ({
   formItemColProps = generateColProps({}),
@@ -60,7 +60,7 @@ export const TypeSelectFormItem = ({
   const options = (
     parentType
       ? FolderAsset.getChildrenOptions([parentType])
-      : PrimaryAssetType.Category.getTypeOptions(['bolt', 'corrosion', 'device', 'vibration'])
+      : PrimaryAsset.Category.getTypeOptions(['bolt', 'corrosion', 'device', 'vibration'])
   ).map((t) => ({
     ...t,
     label: intl.get(t.label)

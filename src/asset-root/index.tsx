@@ -1,7 +1,6 @@
 import { TabsDetail } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { useVirturalAsset } from './hooks';
 import { ENV } from 'utils/env';
 import { Overview } from './overview';
 import { OverviewLegacy } from './overview-legacy';
@@ -15,6 +14,7 @@ import {
 } from 'features/asset-settings';
 import { generateColProps } from 'utils/grid';
 import { useAssetsContext } from 'providers/assets';
+import { Hooks } from 'domain/asset';
 
 export default function Index() {
   const isLegacy = ENV.legacyEnabled === 'true';
@@ -73,7 +73,7 @@ export default function Index() {
           )
         }
       ]}
-      title={useVirturalAsset().root.name}
+      title={Hooks.useVirturalAsset().root.name}
     />
   );
 }

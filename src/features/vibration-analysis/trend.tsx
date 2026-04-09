@@ -6,7 +6,7 @@ import { ValuesPropertyName } from 'asset-common';
 import { TrendDataProps } from './useTrend';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { PropertiesSelect, usePropertiesFilters } from './filters';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const Trend = ({
   id,
@@ -15,7 +15,7 @@ export const Trend = ({
   onClick
 }: {
   id: number;
-  attributes: TMonitoringPoint.Base['attributes'];
+  attributes: MonitoringPoint.Types.Entity['attributes'];
   data: TrendDataProps['data'];
   onClick: (t: number) => void;
 }) => {
@@ -26,8 +26,8 @@ export const Trend = ({
   const [timestamp, setTimestamp] = React.useState<number | undefined>(
     data.find((d) => !!d.selected)?.timestamp
   );
-  const { options } = OMonitoringPoint.Settings.Vibration.useAxisWithVibrationDirection(
-    attributes as TMonitoringPoint.Settings.VibrationDirection
+  const { options } = MonitoringPoint.Hooks.useAxisWithVibrationDirection(
+    attributes as MonitoringPoint.Settings.VibrationDirection
   );
   const downlaodRawDataHandler = useDownloadRawDataHandler(id, timestamp, 'originalDomain');
   const chartProps = ChartMark.useAxisMarkLineStyleProps();

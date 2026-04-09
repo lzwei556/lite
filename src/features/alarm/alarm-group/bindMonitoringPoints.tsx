@@ -6,7 +6,7 @@ import { AssetRow, getAssets, MONITORING_POINT } from '../../../asset-common';
 import { bindMeasurementsToAlarmRule2 } from './services';
 import { AlarmRule } from './types';
 import { CheckboxFormItem, Grid, TextFormItem } from '../../../components';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 type MixinAssetRow = AssetRow & {
   pointIds: number[];
@@ -53,9 +53,7 @@ export const BindMonitoringPoints: React.FC<
       setLoading(false);
       const assets = data
         .filter((asset) =>
-          PrimaryAssetType.getTypesByMonitoringPointTypes([props.selectedRow.type]).includes(
-            asset.type
-          )
+          PrimaryAsset.getTypesByMonitoringPointTypes([props.selectedRow.type]).includes(asset.type)
         )
         .map((asset, i) => {
           const pointIds = getPointIds(asset);

@@ -11,16 +11,16 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type UpdateFormProps = {
   loading: boolean;
-  monitoringPoint: TMonitoringPoint.Base;
-  handleSubmit: (values: TMonitoringPoint.PostDTO) => void;
+  monitoringPoint: MonitoringPoint.Types.Entity;
+  handleSubmit: (values: MonitoringPoint.Types.PostDTO) => void;
 };
 
 export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: UpdateFormProps) => {
-  const [form] = Form.useForm<TMonitoringPoint.PostDTO>();
+  const [form] = Form.useForm<MonitoringPoint.Types.PostDTO>();
   const { selectedType: type, ...typeRest } = useType(monitoringPoint.type);
   return (
     <Card
@@ -36,7 +36,7 @@ export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: Updat
       <Form
         form={form}
         layout='vertical'
-        initialValues={OMonitoringPoint.transform2PostDTO(monitoringPoint)}
+        initialValues={MonitoringPoint.Types.transform2PostDTO(monitoringPoint)}
       >
         <Grid>
           <FormItemsBasic
@@ -45,8 +45,10 @@ export const UpdateFormCard = ({ loading, monitoringPoint, handleSubmit }: Updat
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />,
               componentSelectFormItem: type &&
-                OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
-                type !== OMonitoringPoint.Type.OilFiller && <ComponentSelectFormItem type={type} />
+                MonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
+                type !== MonitoringPoint.Type.Enum.OilFiller && (
+                  <ComponentSelectFormItem type={type} />
+                )
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

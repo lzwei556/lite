@@ -10,13 +10,8 @@ export enum Id {
   GearboxOutput = 30021
 }
 
-export type ComponentId = Id;
-
-export const Component = {
-  Id,
-  get: (key: Id) => {
-    const PREFIX = 'component.';
-    const label = `${PREFIX}${transformSnake2Dot(toSnake(Id[key]))}`;
-    return { key, label };
-  }
+export const get = (key: Id) => {
+  const PREFIX = 'component.';
+  const label = `${PREFIX}${transformSnake2Dot(toSnake(Id[key]))}`;
+  return { key, label };
 };

@@ -18,15 +18,15 @@ import { FillRecords, ProcessList } from 'features/process';
 import { ProcessTypeKey } from 'process-type';
 import { AssetNavigator } from 'features/asset-tree';
 import { AlarmRuleSetting } from './alarm';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { useAppConfig } from 'providers/app';
-import { useAsset } from 'domain/asset';
+import { Hooks } from 'domain/asset';
 
 export default function Index2({
   monitoringPoint,
   onSuccess
 }: {
-  monitoringPoint: TMonitoringPoint.Base;
+  monitoringPoint: MonitoringPoint.Types.Entity;
   onSuccess: () => void;
 }) {
   return (
@@ -39,7 +39,7 @@ export default function Index2({
   );
 }
 
-const useFeatures = (monitoringPoint: TMonitoringPoint.Base) => {
+const useFeatures = (monitoringPoint: MonitoringPoint.Types.Entity) => {
   const canEditMeasurement = useCan(Permission.MeasurementEdit);
   const { id } = monitoringPoint;
   const items: TabsDetailsItems = [
@@ -84,7 +84,7 @@ const useFeatures = (monitoringPoint: TMonitoringPoint.Base) => {
             <UpdateFormCard {...updateFormProps} key={id} />
           </Col>
           <Col {...generateColProps({ xl: 16, xxl: 16 })}>
-            {monitoringPoint.type === OMonitoringPoint.Type.OilFiller ? (
+            {monitoringPoint.type === MonitoringPoint.Type.Enum.OilFiller ? (
               <Grid>
                 <Col span={24}>
                   <AlarmRuleSetting point={monitoringPoint as any} key={id} />
@@ -115,16 +115,16 @@ const useFeatures = (monitoringPoint: TMonitoringPoint.Base) => {
   return items;
 };
 
-const useDynamicFeatures = (point: TMonitoringPoint.Base) => {
+const useDynamicFeatures = (point: MonitoringPoint.Types.Entity) => {
   const { assetId, attributes, id, type } = point;
-  const asset = useAsset(assetId);
+  const asset = Hooks.useAsset(assetId);
   const waveform = {
     key: 'waveformData',
     label: intl.get('WAVEFORM_DATA'),
     content: <MonitoringPointWaveform {...point} key={id} />
   };
   const vibrationEnabled = !!useAppConfig().analysisEnabled;
-  if (OMonitoringPoint.Type.Category.getTypes(['corrosion']).includes(type)) {
+  if (MonitoringPoint.Type.Category.getTypes(['corrosion']).includes(type)) {
     return [
       waveform,
       {
@@ -133,8 +133,8 @@ const useDynamicFeatures = (point: TMonitoringPoint.Base) => {
         content: <CorrosionAnalysis {...(point as any)} key={id} />
       }
     ];
-  } else if (OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(type)) {
-    if (type === OMonitoringPoint.Type.OilFiller) {
+  } else if (MonitoringPoint.Type.Category.getTypes(['vibration']).includes(type)) {
+    if (type === MonitoringPoint.Type.Enum.OilFiller) {
       return [
         {
           key: 'fillRecords',
@@ -153,9 +153,9 @@ const useDynamicFeatures = (point: TMonitoringPoint.Base) => {
     } else {
       return [waveform];
     }
-  } else if (OMonitoringPoint.Type.Category.getTypes(['inclination']).includes(type)) {
+  } else if (MonitoringPoint.Type.Category.getTypes(['inclination']).includes(type)) {
     return [{ ...waveform, key: 'dynamicData', label: intl.get('DYNAMIC_DATA') }];
-  } else if (OMonitoringPoint.Type.Category.getTypes(['preload']).includes(type)) {
+  } else if (MonitoringPoint.Type.Category.getTypes(['preload']).includes(type)) {
     return [waveform];
   } else {
     return [];

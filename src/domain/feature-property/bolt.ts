@@ -1,5 +1,5 @@
 import {
-  DisplayProperty,
+  Property,
   TEMPERATURE as COMMON_TEMPERATURE,
   TOF,
   SIGNAL_STRENGTH,
@@ -8,7 +8,7 @@ import {
   TEMPERATURE
 } from './common';
 
-const LOOSENING_ANGLE: DisplayProperty = {
+const LOOSENING_ANGLE: Property = {
   key: 'loosening_angle',
   name: 'FIELD_LOOSENING_ANGLE',
   first: true,
@@ -16,17 +16,17 @@ const LOOSENING_ANGLE: DisplayProperty = {
   interval: 0.5,
   unit: '°'
 };
-const MEASUREMENT_INDEX: DisplayProperty = {
+const MEASUREMENT_INDEX: Property = {
   key: 'measurement_index',
   name: 'FIELD_MEASUREMENT_INDEX',
   precision: 3
 };
-const MOTION: DisplayProperty = {
+const MOTION: Property = {
   key: 'motion',
   name: 'FIELD_MOTION',
   precision: 3
 };
-const ATTITUDE_INDEX: DisplayProperty = {
+const ATTITUDE_INDEX: Property = {
   key: 'attitude',
   name: 'FIELD_ATTITUDE_INDEX',
   precision: 4
@@ -46,7 +46,7 @@ export const SA = {
   ]
 };
 
-const PRELOAD: DisplayProperty = {
+const PRELOAD: Property = {
   key: 'preload',
   name: 'FIELD_PRELOAD',
   first: true,
@@ -55,7 +55,7 @@ const PRELOAD: DisplayProperty = {
   unit: 'kN'
 };
 
-const STRESS: DisplayProperty = {
+const STRESS: Property = {
   key: 'pressure',
   name: 'FIELD_STRESS',
   first: true,
@@ -64,7 +64,7 @@ const STRESS: DisplayProperty = {
   unit: 'MPa'
 };
 
-const LENGTH: DisplayProperty = {
+const LENGTH: Property = {
   key: 'length',
   name: 'FIELD_LENGTH',
   interval: 1,
@@ -109,7 +109,7 @@ export const SAS = {
   ]
 };
 
-export const TopInclination_DISPLACEMENT_COMBINED: DisplayProperty = {
+export const TopInclination_DISPLACEMENT_COMBINED: Property = {
   key: 'displacement_combined',
   first: true,
   name: 'FIELD_DISPLACEMENT_COMBINED',
@@ -117,7 +117,7 @@ export const TopInclination_DISPLACEMENT_COMBINED: DisplayProperty = {
   unit: 'mm',
   defaultFirstFieldKey: 'displacement_radial'
 };
-export const TopInclination_INCLINATION_COMBINED: DisplayProperty = {
+export const TopInclination_INCLINATION_COMBINED: Property = {
   key: 'inclination_combined',
   first: true,
   name: 'FIELD_INCLINATION_COMBINED',
@@ -125,7 +125,7 @@ export const TopInclination_INCLINATION_COMBINED: DisplayProperty = {
   unit: '°',
   defaultFirstFieldKey: 'inclination_radial'
 };
-const BaseInclination_DISPLACEMENT_COMBINED: DisplayProperty = {
+const BaseInclination_DISPLACEMENT_COMBINED: Property = {
   key: 'displacement_combined',
   first: true,
   name: 'FIELD_DISPLACEMENT_COMBINED',
@@ -133,7 +133,7 @@ const BaseInclination_DISPLACEMENT_COMBINED: DisplayProperty = {
   unit: 'mm',
   defaultFirstFieldKey: 'displacement_axial'
 };
-const BaseInclination_INCLINATION_COMBINED: DisplayProperty = {
+const BaseInclination_INCLINATION_COMBINED: Property = {
   key: 'inclination_combined',
   first: true,
   name: 'FIELD_INCLINATION_COMBINED',
@@ -141,7 +141,7 @@ const BaseInclination_INCLINATION_COMBINED: DisplayProperty = {
   unit: '°',
   defaultFirstFieldKey: 'inclination_axial'
 };
-export const DIRECTION: DisplayProperty = {
+export const DIRECTION: Property = {
   key: 'direction',
   first: true,
   name: 'FIELD_DIRECTION',

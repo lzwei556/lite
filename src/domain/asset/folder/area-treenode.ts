@@ -1,6 +1,6 @@
 import { AssetRow } from 'asset-common';
-import { Type } from './type-enum';
-import { PrimaryAssetType } from '../primary';
+import { Enum } from './type-enum';
+import * as PrimaryAsset from '../primary';
 
 const getChildrenKind = (node: AssetRow) => {
   if (!node.children || node.children.length === 0) return null;
@@ -14,7 +14,7 @@ export const canAddAreaChild = (node: AssetRow, depth: number): boolean => {
   const kind = getChildrenKind(node);
 
   // Rule 2: children can’t be mixed
-  return kind === null || kind === Type.Area;
+  return kind === null || kind === Enum.Area;
 };
 
 export const canAddAssetChild = (node: AssetRow): boolean => {
@@ -24,7 +24,7 @@ export const canAddAssetChild = (node: AssetRow): boolean => {
   // but only if no area children exist
   return (
     kind === null ||
-    PrimaryAssetType.Category.getTypes(['bolt', 'corrosion', 'device', 'vibration']).includes(kind)
+    PrimaryAsset.Category.getTypes(['bolt', 'corrosion', 'device', 'vibration']).includes(kind)
   );
 };
 
@@ -39,7 +39,7 @@ export const getValidAreaParents = (root: AssetRow): AssetRow[] => {
     if (!node.children) return;
 
     for (const child of node.children) {
-      if (child.type === Type.Area) {
+      if (child.type === Enum.Area) {
         dfs(child, depth + 1);
       }
     }

@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Device } from '../../types/device';
 import { PageResult } from 'types/page';
 import { pickOptionsFromNumericEnum } from 'utils';
-import { FaultType } from 'domain/fault-types';
+import * as FaultType from 'domain/fault-types';
 
 type AutoFillParameter = { [Key in keyof typeof autoFillParameter]: number };
 
@@ -90,7 +90,7 @@ export type FillRecord = {
   velocityY: number;
   velocityZ: number;
   temperature: number;
-  diagnosisResults: { items: { diagnosis: FaultType; confidence: 1 | 2 | 3 | 4 }[] };
+  diagnosisResults: { items: { diagnosis: FaultType.Enum; confidence: 1 | 2 | 3 | 4 }[] };
   reasons: Reason[];
 };
 

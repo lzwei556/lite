@@ -1,6 +1,6 @@
 import { DataType } from './use-services';
-import { AxisOption } from 'domain/axis';
-import { Feature } from 'domain/feature-property';
+import * as Axis from 'domain/axis';
+import * as Feature from 'domain/feature-property';
 
 export type Property = {
   key: string;
@@ -74,12 +74,12 @@ export type WaveformProperty = {
 
 export type Waveform = {
   dataType: DataType;
-  meta?: readonly Feature.Property[];
+  meta?: readonly Feature.Types.Property[];
   properties: WaveformProperty[];
-  xAxis?: Feature.Property;
+  xAxis?: Feature.Types.Property;
 };
 
 export type VibrationWaveformFilters = {
   calculate: VibrationPropertyKey;
-  dimension: AxisOption['value'];
+  dimension: Axis.Option['value'];
 };

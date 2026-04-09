@@ -1,7 +1,7 @@
 import { AssetRow } from '../asset-common';
 import Tank from './default-image/tank.png';
 import General from './default-image/general.png';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 export const getAssetImage = (asset: AssetRow) => {
   if (asset.image) {
@@ -12,9 +12,9 @@ export const getAssetImage = (asset: AssetRow) => {
 };
 
 export const getDefaultImage = (asset: AssetRow) => {
-  if (PrimaryAssetType.Category.getTypes(['vibration']).includes(asset.type)) {
-    return PrimaryAssetType.getImage(asset.type) ?? General;
-  } else if (PrimaryAssetType.Category.getTypes(['corrosion']).includes(asset.type)) {
+  if (PrimaryAsset.Category.getTypes(['vibration']).includes(asset.type)) {
+    return PrimaryAsset.getImage(asset.type) ?? General;
+  } else if (PrimaryAsset.Category.getTypes(['corrosion']).includes(asset.type)) {
     return Tank;
   } else {
     return General;

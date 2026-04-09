@@ -7,7 +7,7 @@ import { useRange } from 'components';
 import { Dayjs } from 'utils';
 import { AssetRow, PropertyLightSelectFilter } from 'asset-common';
 import { FakeVSRealChart } from './fakeVSRealChart';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const FlangeStatus = (props: AssetRow) => {
   const { timestamps, ...rest } = useLayoutProps(props.id);
@@ -17,7 +17,7 @@ export const FlangeStatus = (props: AssetRow) => {
   });
   const properties =
     props.monitoringPoints && props.monitoringPoints.length > 0
-      ? OMonitoringPoint.Type.getProperties(props.monitoringPoints[0])
+      ? MonitoringPoint.Type.getProperties(props.monitoringPoints[0])
       : [];
   const [property, setProperty] = React.useState(properties.length > 0 ? properties[0] : undefined);
   return (

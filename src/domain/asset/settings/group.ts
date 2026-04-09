@@ -1,4 +1,4 @@
-export enum MotorSettingsGroup {
+export enum SettingsGroup {
   Motor = 1,
   Bearing,
   Algorithm,
@@ -6,8 +6,8 @@ export enum MotorSettingsGroup {
 }
 
 export type GroupField = {
-  group?: MotorSettingsGroup;
+  group?: SettingsGroup;
 };
 
-export const getGroupLabel = (type: MotorSettingsGroup): string =>
-  `${MotorSettingsGroup[type]}.parameters`.toLowerCase();
+export const getGroupLabel = (type: SettingsGroup): string =>
+  `${SettingsGroup[type]}.parameters`.toLowerCase();

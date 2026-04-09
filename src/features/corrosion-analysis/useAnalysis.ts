@@ -3,7 +3,7 @@ import { floor } from 'lodash';
 import { Dayjs } from '../../utils';
 import { ColorHealth } from '../../constants/color';
 import { getThicknessAnalysis, HistoryData, ThicknessAnalysis } from '../../asset-common';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type Range = [number, number];
 type Line = [start: [string, number], end: [string, number]];
@@ -13,24 +13,24 @@ export type AnalysisResult = {
   life: number;
 };
 
-export const isCriticalThicknessValid = (attributes: TMonitoringPoint.Settings.Corrosion) =>
+export const isCriticalThicknessValid = (attributes: MonitoringPoint.Settings.Corrosion) =>
   attributes?.critical_thickness && attributes?.critical_thickness_enabled;
 
-export const isInitialThicknessValid = (attributes: TMonitoringPoint.Settings.Corrosion) =>
+export const isInitialThicknessValid = (attributes: MonitoringPoint.Settings.Corrosion) =>
   attributes?.initial_thickness && attributes?.initial_thickness_enabled;
 
-export const getDefaultLines = (attributes: TMonitoringPoint.Settings.Corrosion) => {
+export const getDefaultLines = (attributes: MonitoringPoint.Settings.Corrosion) => {
   const lines = [];
   if (isInitialThicknessValid(attributes)) {
     lines.push({
-      name: OMonitoringPoint.Settings.Corrosion.InitialThickness.label,
+      name: MonitoringPoint.Settings.CorrosionConfig.InitialThickness.label,
       yAxis: attributes?.initial_thickness,
       lineStyle: { color: ColorHealth }
     });
   }
   if (isCriticalThicknessValid(attributes)) {
     lines.push({
-      name: OMonitoringPoint.Settings.Corrosion.CriticalThickness.label,
+      name: MonitoringPoint.Settings.CorrosionConfig.CriticalThickness.label,
       yAxis: attributes?.critical_thickness,
       lineStyle: { color: ColorHealth }
     });

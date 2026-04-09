@@ -8,20 +8,22 @@ import { VibrationPropertyKey } from '../types';
 import intl from 'react-intl-universal';
 import { PropertyLightSelectFilter } from 'asset-common';
 import { Select } from 'antd';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
-import { AxisOption } from 'domain/axis';
+import * as MonitoringPoint from 'domain/monitoring-point';
+import * as Axis from 'domain/axis';
 
-export const MonitoringPointWaveform = (props: TMonitoringPoint.Base) => {
+export const MonitoringPointWaveform = (props: MonitoringPoint.Types.Entity) => {
   const { getAxisSelectProps, getPropertiesSelectProps, vibrationFilters, ...rest } =
     useVibrationProps(props);
-  const isTypeVibration = OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(props.type);
+  const isTypeVibration = MonitoringPoint.Type.Category.getTypes(['vibration']).includes(
+    props.type
+  );
 
   return (
     <WaveformContainer {...props} vibrationFilters={isTypeVibration ? vibrationFilters : undefined}>
       {(params) => {
-        if (OMonitoringPoint.Type.Category.getTypes(['corrosion', 'preload']).includes(props.type)) {
+        if (MonitoringPoint.Type.Category.getTypes(['corrosion', 'preload']).includes(props.type)) {
           return <Ultrasound {...params} />;
-        } else if (OMonitoringPoint.Type.Category.getTypes(['inclination']).includes(props.type)) {
+        } else if (MonitoringPoint.Type.Category.getTypes(['inclination']).includes(props.type)) {
           return <Inclination {...params} />;
         } else if (isTypeVibration) {
           return (
@@ -42,18 +44,17 @@ export const MonitoringPointWaveform = (props: TMonitoringPoint.Base) => {
   );
 };
 
-const useVibrationProps = ({ attributes, type }: TMonitoringPoint.Base) => {
-  const { axis, setAxis, options } =
-    OMonitoringPoint.Settings.Vibration.useAxisWithVibrationDirection(
-      attributes as TMonitoringPoint.Settings.VibrationDirection
-    );
+const useVibrationProps = ({ attributes, type }: MonitoringPoint.Types.Entity) => {
+  const { axis, setAxis, options } = MonitoringPoint.Hooks.useAxisWithVibrationDirection(
+    attributes as MonitoringPoint.Settings.VibrationDirection
+  );
   const { properties } = monitoringPointTypeWaveformMap[type as WaveformMonitoringPointKey];
   const [property, setProperty] = React.useState(properties[0]);
   return {
     axis,
     getAxisSelectProps: (fetchData: FetchData) => {
       return {
-        onChange: (value: AxisOption['value']) => {
+        onChange: (value: Axis.Option['value']) => {
           const axis = options.find((o) => o.value === value);
           if (axis) {
             setAxis(axis);

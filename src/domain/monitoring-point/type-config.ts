@@ -1,12 +1,12 @@
-import { FeatureProperty, Feature } from 'domain/feature-property';
+import * as Feature from '../feature-property';
 import { DeviceType } from 'types/device_type';
 import { Property } from './types';
 import { transformSnake2Dot } from 'utils/format';
 import { toSnake } from 'ts-case-convert';
 import { Field } from 'types';
-import { MonitoringPointSettings, MonitoringPointSettingsFieldConfig } from './settings';
+import * as Settings from './settings';
 
-export enum Type {
+export enum Enum {
   BoltLoosening = 10101,
   Corrosion = 10201,
   HighTemperatureCorrosion = 10203,
@@ -27,6 +27,8 @@ export enum Type {
   OilFiller = 11101
 }
 
+export const Enums = Object.values(Enum).filter((v) => typeof v === 'number') as Enum[];
+
 type Config = {
   label: string;
   category:
@@ -39,42 +41,42 @@ type Config = {
     | 'temperature'
     | 'pressure';
   deviceTypes: DeviceType[];
-  properties: readonly Feature.Property[];
-  settings: Field<MonitoringPointSettings>[];
+  properties: readonly Feature.Types.Property[];
+  settings: Field<Settings.Entity>[];
   processId?: number;
 };
 
-const table: { [Key in Type]: Config } = {
-  [Type.BoltLoosening]: {
-    label: Type[Type.BoltLoosening],
+const table: { [Key in Enum]: Config } = {
+  [Enum.BoltLoosening]: {
+    label: Enum[Enum.BoltLoosening],
     category: 'loosening',
     deviceTypes: [DeviceType.SA, DeviceType.SA_S],
-    properties: FeatureProperty.SA.properties,
-    settings: [MonitoringPointSettingsFieldConfig.PositionField]
+    properties: Feature.Property.SA.properties,
+    settings: [Settings.Config.PositionField]
   },
-  [Type.Corrosion]: {
-    label: Type[Type.Corrosion],
+  [Enum.Corrosion]: {
+    label: Enum[Enum.Corrosion],
     category: 'corrosion',
     deviceTypes: DeviceType.getDCSensors(),
-    properties: FeatureProperty.DC.properties,
-    settings: MonitoringPointSettingsFieldConfig.Corrosion.Fields
+    properties: Feature.Property.DC.properties,
+    settings: Settings.CorrosionConfig.Fields
   },
-  [Type.HighTemperatureCorrosion]: {
-    label: Type[Type.HighTemperatureCorrosion],
+  [Enum.HighTemperatureCorrosion]: {
+    label: Enum[Enum.HighTemperatureCorrosion],
     category: 'corrosion',
     deviceTypes: DeviceType.getHighDCSensors(),
-    properties: FeatureProperty.DC_HIGH_TEMPERATURE.properties,
-    settings: MonitoringPointSettingsFieldConfig.Corrosion.Fields
+    properties: Feature.Property.DC_HIGH_TEMPERATURE.properties,
+    settings: Settings.CorrosionConfig.Fields
   },
-  [Type.UltraHighTemperatureCorrosion]: {
-    label: Type[Type.UltraHighTemperatureCorrosion],
+  [Enum.UltraHighTemperatureCorrosion]: {
+    label: Enum[Enum.UltraHighTemperatureCorrosion],
     category: 'corrosion',
     deviceTypes: DeviceType.getUltraHighDCSensors(),
-    properties: FeatureProperty.DC_ULTRA_HIGH_TEMPERATURE.properties,
-    settings: MonitoringPointSettingsFieldConfig.Corrosion.Fields
+    properties: Feature.Property.DC_ULTRA_HIGH_TEMPERATURE.properties,
+    settings: Settings.CorrosionConfig.Fields
   },
-  [Type.BoltPreload]: {
-    label: Type[Type.BoltPreload],
+  [Enum.BoltPreload]: {
+    label: Enum[Enum.BoltPreload],
     category: 'preload',
     deviceTypes: [
       DeviceType.SAS,
@@ -84,18 +86,18 @@ const table: { [Key in Type]: Config } = {
       DeviceType.SAS120D,
       DeviceType.SAS120Q
     ],
-    properties: FeatureProperty.SAS.properties,
-    settings: [MonitoringPointSettingsFieldConfig.PositionField]
+    properties: Feature.Property.SAS.properties,
+    settings: [Settings.Config.PositionField]
   },
-  [Type.AnchorPreload]: {
-    label: Type[Type.AnchorPreload],
+  [Enum.AnchorPreload]: {
+    label: Enum[Enum.AnchorPreload],
     category: 'preload',
     deviceTypes: [DeviceType.SAS, DeviceType.SASLoraWAN],
-    properties: FeatureProperty.SAS.properties,
-    settings: [MonitoringPointSettingsFieldConfig.PositionField]
+    properties: Feature.Property.SAS.properties,
+    settings: [Settings.Config.PositionField]
   },
-  [Type.FlangeBoltPreload]: {
-    label: Type[Type.FlangeBoltPreload],
+  [Enum.FlangeBoltPreload]: {
+    label: Enum[Enum.FlangeBoltPreload],
     category: 'flage-preload',
     deviceTypes: [
       DeviceType.SAS,
@@ -105,11 +107,11 @@ const table: { [Key in Type]: Config } = {
       DeviceType.SAS120D,
       DeviceType.SAS120Q
     ],
-    properties: FeatureProperty.SAS.properties,
-    settings: [MonitoringPointSettingsFieldConfig.PositionField]
+    properties: Feature.Property.SAS.properties,
+    settings: [Settings.Config.PositionField]
   },
-  [Type.FlangeAnchorPreload]: {
-    label: Type[Type.FlangeAnchorPreload],
+  [Enum.FlangeAnchorPreload]: {
+    label: Enum[Enum.FlangeAnchorPreload],
     category: 'flage-preload',
     deviceTypes: [
       DeviceType.SAS,
@@ -119,11 +121,11 @@ const table: { [Key in Type]: Config } = {
       DeviceType.SAS120D,
       DeviceType.SAS120Q
     ],
-    properties: FeatureProperty.SAS.properties,
-    settings: [MonitoringPointSettingsFieldConfig.PositionField]
+    properties: Feature.Property.SAS.properties,
+    settings: [Settings.Config.PositionField]
   },
-  [Type.Vibration]: {
-    label: Type[Type.Vibration],
+  [Enum.Vibration]: {
+    label: Enum[Enum.Vibration],
     category: 'vibration',
     deviceTypes: [
       DeviceType.SVT220520P,
@@ -133,147 +135,107 @@ const table: { [Key in Type]: Config } = {
       DeviceType.SVT210K,
       DeviceType.SVT210A
     ],
-    properties: FeatureProperty.SVT_WIRELESS.properties,
-    settings: MonitoringPointSettingsFieldConfig.Vibration.Fields
+    properties: Feature.Property.SVT_WIRELESS.properties,
+    settings: Settings.Config.Vibration.Fields
   },
-  [Type.VibrationRotationSingleAxis]: {
-    label: Type[Type.VibrationRotationSingleAxis],
+  [Enum.VibrationRotationSingleAxis]: {
+    label: Enum[Enum.VibrationRotationSingleAxis],
     category: 'vibration',
     deviceTypes: [DeviceType.SVT220S1],
-    properties: FeatureProperty.SVT_RS485.properties,
-    settings: MonitoringPointSettingsFieldConfig.Vibration.Fields
+    properties: Feature.Property.SVT_RS485.properties,
+    settings: Settings.Config.Vibration.Fields
   },
-  [Type.VibrationRotation]: {
-    label: Type[Type.VibrationRotation],
+  [Enum.VibrationRotation]: {
+    label: Enum[Enum.VibrationRotation],
     category: 'vibration',
     deviceTypes: [DeviceType.SVT210S, DeviceType.SVT220S3, DeviceType.SVT510L, DeviceType.SVT210SU],
-    properties: FeatureProperty.SVT_RS485.properties,
-    settings: MonitoringPointSettingsFieldConfig.Vibration.Fields
+    properties: Feature.Property.SVT_RS485.properties,
+    settings: Settings.Config.Vibration.Fields
   },
-  [Type.VibrationAudio]: {
-    label: Type[Type.VibrationAudio],
+  [Enum.VibrationAudio]: {
+    label: Enum[Enum.VibrationAudio],
     category: 'vibration',
     deviceTypes: [DeviceType.SVT210SU],
-    properties: FeatureProperty.SVT_AUDIO.properties,
-    settings: MonitoringPointSettingsFieldConfig.Vibration.Fields
+    properties: Feature.Property.SVT_AUDIO.properties,
+    settings: Settings.Config.Vibration.Fields
   },
-  // [Type.Inclination]: {
-  //   label: Type[Type.Inclination],
+  // [Enum.Inclination]: {
+  //   label: Enum[Enum.Inclination],
   //   category: 'inclination',
   //   deviceTypes: [DeviceType.SQ100, DeviceType.SQ110C]
   // },
-  [Type.TopInclination]: {
-    label: Type[Type.TopInclination],
+  [Enum.TopInclination]: {
+    label: Enum[Enum.TopInclination],
     category: 'inclination',
     deviceTypes: [DeviceType.SQ100, DeviceType.SQ110C],
-    properties: FeatureProperty.TopInclination.properties,
-    settings: MonitoringPointSettingsFieldConfig.TopInclination
+    properties: Feature.Property.TopInclination.properties,
+    settings: Settings.Config.TopInclination
   },
-  [Type.BaseInclination]: {
-    label: Type[Type.BaseInclination],
+  [Enum.BaseInclination]: {
+    label: Enum[Enum.BaseInclination],
     category: 'inclination',
     deviceTypes: [DeviceType.SQ100, DeviceType.SQ110C],
-    properties: FeatureProperty.BaseInclination.properties,
-    settings: MonitoringPointSettingsFieldConfig.BaseInclination
+    properties: Feature.Property.BaseInclination.properties,
+    settings: Settings.Config.BaseInclination
   },
-  [Type.Pressure]: {
-    label: Type[Type.Pressure],
+  [Enum.Pressure]: {
+    label: Enum[Enum.Pressure],
     category: 'pressure',
     deviceTypes: [DeviceType.SPT510],
-    properties: FeatureProperty.SPT.properties,
-    settings: [MonitoringPointSettingsFieldConfig.PositionField]
+    properties: Feature.Property.SPT.properties,
+    settings: [Settings.Config.PositionField]
   },
-  [Type.Temperature]: {
-    label: Type[Type.Temperature],
+  [Enum.Temperature]: {
+    label: Enum[Enum.Temperature],
     category: 'temperature',
     deviceTypes: [DeviceType.ST100, DeviceType.ST101L, DeviceType.ST101S],
-    properties: FeatureProperty.ST.properties,
-    settings: [MonitoringPointSettingsFieldConfig.PositionField]
+    properties: Feature.Property.ST.properties,
+    settings: [Settings.Config.PositionField]
   },
-  [Type.OilFiller]: {
-    label: Type[Type.OilFiller],
+  [Enum.OilFiller]: {
+    label: Enum[Enum.OilFiller],
     category: 'vibration',
     deviceTypes: [DeviceType.OilFiller],
-    properties: FeatureProperty.OilFiller.properties,
+    properties: Feature.Property.OilFiller.properties,
     settings: []
   }
 };
 
-const get = (type: Type): Config => table[type];
-const getLabel = (key: Type) => {
+const get = (type: Enum): Config => table[type];
+export const getLabel = (key: Enum) => {
   const PREFIX = 'monitoring.point.type.';
   const type = get(key);
   return type ? `${PREFIX}${transformSnake2Dot(toSnake(type.label))}` : `${key}`;
 };
-const toOption = (type: Type) => ({
+const toOption = (type: Enum) => ({
   value: type,
   label: getLabel(type)
 });
-const getDeviceTypes = (key: Type) => get(key)?.deviceTypes ?? [];
-const getTypes = (categories: Config['category'][]): Type[] => {
-  const result: Type[] = [];
+export const getDeviceTypes = (key: Enum) => get(key)?.deviceTypes ?? [];
+const getTypes = (categories: Config['category'][]): Enum[] => {
+  const result: Enum[] = [];
   const set = new Set(categories);
   for (const [type, config] of Object.entries(table)) {
     if (set.has(config.category)) {
-      result.push(Number(type) as Type);
+      result.push(Number(type) as Enum);
     }
   }
   return result;
 };
 
-export type MonitoringPointType = Type;
+export const getSettings = (type: Enum) => get(type)?.settings ?? [];
 
-export const MPTypeConfig = {
-  getLabel,
-  getProperties,
-  getDeviceTypes,
-  getSettings: (type: Type) => get(type)?.settings ?? [],
-  getProcessId: (type: Type) => get(type)?.processId,
-  isVirtual: (type: Type) => type === Type.FlangeBoltPreload,
-  Category: {
-    getTypes,
-    getOptions: (categories: Config['category'][]) => {
-      const set = new Set(categories);
-      return (Object.keys(table) as unknown as Type[])
-        .filter((type) => set.has(table[type].category))
-        .map(toOption);
-    },
-    getDeviceTypes: (categories: Config['category'][]): DeviceType[] => {
-      const deviceTypes = new Set<DeviceType>();
-      getTypes(categories).forEach((type) => {
-        getDeviceTypes(type).forEach((deviceType) => {
-          deviceTypes.add(deviceType);
-        });
-      });
-      return Array.from(deviceTypes);
-    },
-    boltsWithoutInclination: [
-      Type.BoltLoosening,
-      Type.BoltPreload,
-      Type.AnchorPreload,
-      Type.FlangeBoltPreload,
-      Type.FlangeAnchorPreload
-    ],
-    corrosions: [Type.Corrosion, Type.HighTemperatureCorrosion, Type.UltraHighTemperatureCorrosion],
-    vibrations: [
-      Type.Vibration,
-      Type.VibrationRotationSingleAxis,
-      Type.VibrationRotation,
-      Type.VibrationAudio
-    ],
-    Inclination: {
-      getDisplacementKey: (type: Type) => (type === Type.TopInclination ? 'RADIAL' : 'AXIAL')
-    }
-  }
-};
+export const getProcessId = (type: Enum) => get(type)?.processId;
 
-function getProperties({ type, properties = [] }: { type: Type; properties?: Property[] }) {
+export const isVirtual = (type: Enum) => type === Enum.FlangeBoltPreload;
+
+export function getProperties({ type, properties = [] }: { type: Enum; properties?: Property[] }) {
   const config = get(type);
   const dispalyProperties = config?.properties;
   if (!dispalyProperties || dispalyProperties.length === 0) {
     return properties
       .filter((p) => !!p.isShow)
-      .sort((prev, crt) => prev.sort - crt.sort) as Feature.Property[];
+      .sort((prev, crt) => prev.sort - crt.sort) as Feature.Types.Property[];
   } else {
     return dispalyProperties
       .map((p) => {
@@ -290,6 +252,42 @@ function getProperties({ type, properties = [] }: { type: Type; properties?: Pro
             }))
         };
       })
-      .filter((p) => !!p.fields) as Feature.Property[];
+      .filter((p) => !!p.fields) as Feature.Types.Property[];
   }
 }
+
+export const Category = {
+  getTypes,
+  getOptions: (categories: Config['category'][]) => {
+    const set = new Set(categories);
+    return (Object.keys(table) as unknown as Enum[])
+      .filter((type) => set.has(table[type].category))
+      .map(toOption);
+  },
+  getDeviceTypes: (categories: Config['category'][]): DeviceType[] => {
+    const deviceTypes = new Set<DeviceType>();
+    getTypes(categories).forEach((type) => {
+      getDeviceTypes(type).forEach((deviceType) => {
+        deviceTypes.add(deviceType);
+      });
+    });
+    return Array.from(deviceTypes);
+  },
+  boltsWithoutInclination: [
+    Enum.BoltLoosening,
+    Enum.BoltPreload,
+    Enum.AnchorPreload,
+    Enum.FlangeBoltPreload,
+    Enum.FlangeAnchorPreload
+  ],
+  corrosions: [Enum.Corrosion, Enum.HighTemperatureCorrosion, Enum.UltraHighTemperatureCorrosion],
+  vibrations: [
+    Enum.Vibration,
+    Enum.VibrationRotationSingleAxis,
+    Enum.VibrationRotation,
+    Enum.VibrationAudio
+  ],
+  Inclination: {
+    getDisplacementKey: (type: Enum) => (type === Enum.TopInclination ? 'RADIAL' : 'AXIAL')
+  }
+};

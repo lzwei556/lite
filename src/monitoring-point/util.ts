@@ -1,10 +1,10 @@
-import { MonitoringPointType, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { HistoryData, MonitoringPointRow } from './types';
 
 export const Point = {
   Assert: {
-    isVibrationRelated: (type: MonitoringPointType) => {
-      return OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(type);
+    isVibrationRelated: (type: MonitoringPoint.Type.Enum) => {
+      return MonitoringPoint.Type.Category.getTypes(['vibration']).includes(type);
     }
   }
 };
@@ -12,7 +12,7 @@ export const Point = {
 export const Points = {
   filter: (measurements?: MonitoringPointRow[]) => {
     if (!measurements) return [];
-    return measurements.filter((point) => !OMonitoringPoint.Type.isVirtual(point.type));
+    return measurements.filter((point) => !MonitoringPoint.Type.isVirtual(point.type));
   },
   sort: (measurements: MonitoringPointRow[]) => {
     return measurements.sort((prev, next) => {

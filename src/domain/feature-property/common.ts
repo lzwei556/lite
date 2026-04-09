@@ -1,11 +1,11 @@
-export type DisplayPropertyGroup = `property.group.${
+export type Group = `property.group.${
   | 'core'
   | 'timeDomain'
   | 'frequency'
   | 'statistics'
   | 'skew'}`;
 
-type Property = {
+type PropertyCommon = {
   key: string;
   name: string;
   first?: boolean;
@@ -14,16 +14,16 @@ type Property = {
   unit2?: string;
   interval?: number;
   defaultFirstFieldKey?: string;
-  group?: DisplayPropertyGroup;
+  group?: Group;
   onlyShowFirstField?: boolean;
   min?: number;
   hidden?: boolean;
 };
 type Field = { name: string; key: string; dataIndex: number; first?: boolean; alias?: string };
-export type DisplayProperty = Property & { fields?: Field[] };
-export type DisaplyFieldProperty = Property & { field?: Field };
+export type Property = PropertyCommon & { fields?: Field[] };
+export type FieldProperty = PropertyCommon & { field?: Field };
 
-export const TEMPERATURE: DisplayProperty = {
+export const TEMPERATURE: Property = {
   key: 'temperature',
   name: 'FIELD_TEMPERATURE',
   first: true,
@@ -32,43 +32,43 @@ export const TEMPERATURE: DisplayProperty = {
   unit2: '°C'
 };
 
-export const TOF: DisplayProperty = {
+export const TOF: Property = {
   key: 'tof',
   name: 'FIELD_TOF',
   precision: 0,
   unit: 'ns',
   interval: 600
 };
-export const SIGNAL_STRENGTH: DisplayProperty = {
+export const SIGNAL_STRENGTH: Property = {
   key: 'signal_strength',
   name: 'FIELD_SIGNAL_STRENGTH',
   precision: 1
 };
-export const SIGNAL_QUALITY: DisplayProperty = {
+export const SIGNAL_QUALITY: Property = {
   key: 'signal_quality',
   name: 'FIELD_SIGNAL_QUALITY',
   precision: 1
 };
 
-export const INCLINATION: DisplayProperty = {
+export const INCLINATION: Property = {
   key: 'inclination',
   name: 'FIELD_INCLINATION',
   precision: 4,
   unit: '°'
 };
-export const PITCH: DisplayProperty = {
+export const PITCH: Property = {
   key: 'pitch',
   name: 'FIELD_PITCH',
   precision: 4,
   unit: '°'
 };
-export const ROLL: DisplayProperty = {
+export const ROLL: Property = {
   key: 'roll',
   name: 'FIELD_ROLL',
   precision: 4,
   unit: '°'
 };
-export const WAGGLE: DisplayProperty = {
+export const WAGGLE: Property = {
   key: 'waggle',
   name: 'FIELD_WAGGLE',
   precision: 3,

@@ -13,11 +13,11 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type CreateFormProps = {
   loading: boolean;
-  handleSubmit: (values: TMonitoringPoint.PostDTO[]) => void;
+  handleSubmit: (values: MonitoringPoint.Types.PostDTO[]) => void;
 };
 
 export const CreateFormModal = ({
@@ -30,8 +30,8 @@ export const CreateFormModal = ({
 }: Omit<ModalFormProps, 'onSuccess'> &
   CreateFormProps & {
     assetId: number;
-    onSuccess: (values: TMonitoringPoint.PostDTO) => void;
-    point?: TMonitoringPoint.PostDTO;
+    onSuccess: (values: MonitoringPoint.Types.PostDTO) => void;
+    point?: MonitoringPoint.Types.PostDTO;
   }) => {
   const [form] = Form.useForm();
   const { selectedType: type, ...typeRest } = useType(point?.type);
@@ -57,8 +57,8 @@ export const CreateFormModal = ({
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest, disabled: false }} />,
               componentSelectFormItem: type &&
-                OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
-                type !== OMonitoringPoint.Type.OilFiller && <ComponentSelectFormItem type={type} />
+                MonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
+                type !== MonitoringPoint.Type.Enum.OilFiller && <ComponentSelectFormItem type={type} />
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

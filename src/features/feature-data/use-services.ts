@@ -3,20 +3,20 @@ import { FeatureDataDTO, VibrationWaveformFilters, WaveformData } from './types'
 import { useRequest } from 'ahooks';
 import { Dayjs } from 'utils';
 import React from 'react';
-import { TMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 const CUSTOM_RANGE = Dayjs.CommonRange.PastWeek;
 const RECENT_RANGE = Dayjs.CommonRange.PastWeek;
 
 export const useCustomizableIntervals = (
-  monitoringPoints: TMonitoringPoint.Base[],
+  monitoringPoints: MonitoringPoint.Types.Entity[],
   range?: Dayjs.Range
 ) => {
   const [loading, setLoading] = React.useState(false);
   const [datas, setDatas] = React.useState<
     { id: number; data: FeatureDataDTO; name: string; type: number }[]
   >([]);
-  const monitoringPointsRef = React.useRef<TMonitoringPoint.Base[]>(monitoringPoints);
+  const monitoringPointsRef = React.useRef<MonitoringPoint.Types.Entity[]>(monitoringPoints);
   monitoringPointsRef.current = monitoringPoints;
 
   React.useEffect(() => {

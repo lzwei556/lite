@@ -1,8 +1,8 @@
 import { AssetStatusTag } from 'asset-common';
 import { Link } from 'components';
 import { AssetTree } from 'domain/asset';
-import { FeatureProperty } from 'domain/feature-property';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { useLocaleContext } from 'localeProvider';
 import intl from 'react-intl-universal';
 import { getDisplayName, getValue } from 'utils';
@@ -11,7 +11,7 @@ const name = {
   title: () => intl.get('NAME'),
   dataIndex: 'name',
   key: 'name',
-  render: (name: string, row: TMonitoringPoint.Base) => (
+  render: (name: string, row: MonitoringPoint.Types.Entity) => (
     <Link
       style={{ display: 'inline-block', minWidth: 120 }}
       to={`/${AssetTree.Path.Assets}/${row.id}-${row.type}`}
@@ -33,7 +33,7 @@ const sensor = {
   title: () => intl.get('SENSOR'),
   dataIndex: 'devices',
   key: 'devices',
-  render: (_: string, row: TMonitoringPoint.Base) => {
+  render: (_: string, row: MonitoringPoint.Types.Entity) => {
     if (row.device) {
       const { id, name } = row.device;
       return (
@@ -49,17 +49,17 @@ const sensor = {
 
 export const basicFieldColumns = [name, status, sensor];
 
-export const usePropertyColumns = (point: TMonitoringPoint.Base) => {
+export const usePropertyColumns = (point: MonitoringPoint.Types.Entity) => {
   const { language } = useLocaleContext();
-  return OMonitoringPoint.Type.getProperties(point)
+  return MonitoringPoint.Type.getProperties(point)
     .map((property) => ({
       ...property,
-      fields: FeatureProperty.appendVibrationDirectionAbbr(property.fields, point.attributes)
+      fields: Feature.Property.appendVibrationDirectionAbbr(property.fields, point.attributes)
     }))
     .map(({ fields = [], first, key, name, precision, unit }) => {
       const children = fields.map(({ alias, key, name }) => ({
         key,
-        render: (d: TMonitoringPoint.Base) =>
+        render: (d: MonitoringPoint.Types.Entity) =>
           getValue({ value: d?.data?.values[key] as number, precision }),
         title: alias ? intl.get(alias) : intl.get(name)
       }));
@@ -68,7 +68,7 @@ export const usePropertyColumns = (point: TMonitoringPoint.Base) => {
         ? { key, title, children, hidden: !first }
         : {
             key,
-            render: (d: TMonitoringPoint.Base) =>
+            render: (d: MonitoringPoint.Types.Entity) =>
               getValue({ value: d?.data?.values[key] as number, precision }),
             title,
             hidden: !first

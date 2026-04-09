@@ -1,7 +1,7 @@
 import { Empty, Space, Typography } from 'antd';
 import { LineChart, MutedCard } from 'components';
-import { Feature, FeatureProperty } from 'domain/feature-property';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { useOriginalDomain } from 'features/vibration-analysis/useOriginalDomain';
 import { useTimeDomain } from 'features/vibration-analysis/useTimeDomain';
 import { SVT_OPTIONS } from 'features/vibration-analysis/useTrend';
@@ -37,8 +37,8 @@ export const MoniotoringPointData = ({
 }) => {
   const { id, attributes } = monitoringPoint;
   const [historyData, setHistoryData] = React.useState<HistoryData>();
-  const { options } = OMonitoringPoint.Settings.Vibration.useAxisWithVibrationDirection(
-    attributes as TMonitoringPoint.Settings.VibrationDirection
+  const { options } = MonitoringPoint.Hooks.useAxisWithVibrationDirection(
+    attributes as MonitoringPoint.Settings.VibrationDirection
   );
   const axis = options[0];
   const [timestamp, setTimestamp] = React.useState<number>();
@@ -70,11 +70,11 @@ export const MoniotoringPointData = ({
   if (!historyData || historyData.length === 0) {
     return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
   }
-  const properties = OMonitoringPoint.Type.getProperties(monitoringPoint)
+  const properties = MonitoringPoint.Type.getProperties(monitoringPoint)
     .filter((p) => !!p.first)
     .map((p) => ({
       ...p,
-      fields: FeatureProperty.appendVibrationDirectionAbbr(p.fields, attributes)
+      fields: Feature.Property.appendVibrationDirectionAbbr(p.fields, attributes)
     }));
 
   return (
@@ -115,7 +115,7 @@ export const MoniotoringPointData = ({
 
 const transform = (
   origin: HistoryData | undefined | null,
-  property: Feature.Property,
+  property: Feature.Types.Property,
   naming?: { replace?: string; prefix?: string },
   axisKey?: string
 ) => {

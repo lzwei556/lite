@@ -20,7 +20,7 @@ export const TreeNodeDetail = ({
 
   if (selectedNode) {
     const { type } = selectedNode;
-    if (FolderAsset.types.includes(type)) {
+    if (FolderAsset.Enums.includes(type)) {
       return <AssetFolder asset={selectedNode as AssetRow} />;
     } else if (type < 10000) {
       return <AssetPrimary asset={selectedNode as AssetRow} />;

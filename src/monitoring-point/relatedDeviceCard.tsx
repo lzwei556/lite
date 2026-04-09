@@ -5,10 +5,10 @@ import { Descriptions, Link, MutedCard } from '../components';
 import { SingleDeviceStatus } from '../device/SingleDeviceStatus';
 import { toMac } from '../utils/format';
 import { MonitoringPointRow } from 'asset-common';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const RelatedDeviceCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
-  const { device } = OMonitoringPoint.transform(monitoringPoint as any);
+  const { device } = MonitoringPoint.Types.transform(monitoringPoint as any);
   return (
     device && (
       <MutedCard title={intl.get('SENSOR')}>

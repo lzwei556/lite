@@ -12,9 +12,9 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { truncate } from 'utils';
 import { CreateFormModal } from './create-form-modal';
-import { TMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
-type Item = { _id: string } & TMonitoringPoint.PostDTO;
+type Item = { _id: string } & MonitoringPoint.Types.PostDTO;
 
 export const CreateMultipleFormCard = ({ assetId }: { assetId: number }) => {
   const [items, dispatch] = useItems();
@@ -31,7 +31,7 @@ export const CreateMultipleFormCard = ({ assetId }: { assetId: number }) => {
     setOpen(true);
   };
 
-  const handleSuccess = (values: TMonitoringPoint.PostDTO) => {
+  const handleSuccess = (values: MonitoringPoint.Types.PostDTO) => {
     if (editing) {
       dispatch({ type: 'update', id: editing._id, payload: values });
     } else {
@@ -95,8 +95,8 @@ const useItems = () => {
     (
       state: Item[],
       action:
-        | { type: 'add'; payload: TMonitoringPoint.PostDTO }
-        | { type: 'update'; id: string; payload: TMonitoringPoint.PostDTO }
+        | { type: 'add'; payload: MonitoringPoint.Types.PostDTO }
+        | { type: 'update'; id: string; payload: MonitoringPoint.Types.PostDTO }
         | { type: 'delete'; id: string }
     ): Item[] => {
       const { type } = action;

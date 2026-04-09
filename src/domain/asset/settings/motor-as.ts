@@ -109,7 +109,7 @@ type CommonSettings = DriveType &
   LobeCount &
   PistonCount;
 
-export type MotorAsSettingsField = Omit<Field<CommonSettings>, 'group'> &
+export type MotorAs = Omit<Field<CommonSettings>, 'group'> &
   GroupField & {
     visibleWhen?: (values?: {
       pump_type?: PumpTypeValue;
@@ -119,7 +119,7 @@ export type MotorAsSettingsField = Omit<Field<CommonSettings>, 'group'> &
     }) => boolean;
   };
 
-const rotationSpeed: MotorAsSettingsField = {
+const rotationSpeed: MotorAs = {
   label: 'rotation.speed',
   name: 'rotation_speed',
   description: 'rotation.speed.desc',
@@ -133,7 +133,7 @@ const rotationSpeed: MotorAsSettingsField = {
   ]
 };
 
-const driveType: MotorAsSettingsField = {
+const driveType: MotorAs = {
   label: `${PREFIX}.drive.type`,
   name: 'drive_type',
   description: 'drive.type.desc',
@@ -141,21 +141,21 @@ const driveType: MotorAsSettingsField = {
   type: 'enum'
 };
 
-const inputBearing: MotorAsSettingsField = {
+const inputBearing: MotorAs = {
   label: `${PREFIX}.input.bearing`,
   name: 'input_bearing',
   description: 'input.bearing.desc',
   type: 'string'
 };
 
-const outputBearing: MotorAsSettingsField = {
+const outputBearing: MotorAs = {
   label: `${PREFIX}.output.bearing`,
   name: 'output_bearing',
   description: 'output.bearing.desc',
   type: 'string'
 };
 
-const shaftOrientation: MotorAsSettingsField = {
+const shaftOrientation: MotorAs = {
   label: `${PREFIX}.shaft.orientation`,
   name: 'shaft_orientation',
   description: 'shaft.orientation.desc',
@@ -163,7 +163,7 @@ const shaftOrientation: MotorAsSettingsField = {
   type: 'enum'
 };
 
-const supportType: MotorAsSettingsField = {
+const supportType: MotorAs = {
   label: `${PREFIX}.support.type`,
   name: 'support_type',
   description: 'support.type.desc',
@@ -171,7 +171,7 @@ const supportType: MotorAsSettingsField = {
   type: 'enum'
 };
 
-const setType: MotorAsSettingsField = {
+const setType: MotorAs = {
   label: `${PREFIX}.set.type`,
   name: 'set_type',
   description: 'set.type.desc',
@@ -180,7 +180,7 @@ const setType: MotorAsSettingsField = {
   defaultValue: SetTypeValue.DcMotorDcGenerator
 };
 
-export const compressorType: MotorAsSettingsField = {
+export const compressorType: MotorAs = {
   label: `${PREFIX}.compressor.type`,
   name: 'compressor_type',
   description: 'compressor.type.desc',
@@ -189,7 +189,7 @@ export const compressorType: MotorAsSettingsField = {
   defaultValue: CompressorTypeValue.Centrifugal
 };
 
-const fanType: MotorAsSettingsField = {
+const fanType: MotorAs = {
   label: `${PREFIX}.fan.type`,
   name: 'fan_type',
   description: 'fan.type.desc',
@@ -198,7 +198,7 @@ const fanType: MotorAsSettingsField = {
   defaultValue: FanTypeValue.Centrifugal
 };
 
-export const blowerType: MotorAsSettingsField = {
+export const blowerType: MotorAs = {
   label: `${PREFIX}.blower.type`,
   name: 'blower_type',
   description: 'blower.type.desc',
@@ -207,7 +207,7 @@ export const blowerType: MotorAsSettingsField = {
   defaultValue: BlowerTypeValue.Centrifugal
 };
 
-export const pumpType: MotorAsSettingsField = {
+export const pumpType: MotorAs = {
   label: `${PREFIX}.pump.type`,
   name: 'pump_type',
   description: 'pump.type.desc',
@@ -216,7 +216,7 @@ export const pumpType: MotorAsSettingsField = {
   defaultValue: PumpTypeValue.Centrifugal
 };
 
-const bladeCount: MotorAsSettingsField = {
+const bladeCount: MotorAs = {
   label: `${PREFIX}.blade.count`,
   name: 'blade_count',
   description: 'blade.count.desc',
@@ -251,7 +251,7 @@ const bladeCount: MotorAsSettingsField = {
   }
 };
 
-const vaneCount: MotorAsSettingsField = {
+const vaneCount: MotorAs = {
   label: `${PREFIX}.vane.count`,
   name: 'vane_count',
   description: 'vane.count.desc',
@@ -266,7 +266,7 @@ const vaneCount: MotorAsSettingsField = {
   visibleWhen: (values) => values?.pump_type === PumpTypeValue.SlidingVane
 };
 
-const toothCount: MotorAsSettingsField = {
+const toothCount: MotorAs = {
   label: `${PREFIX}.tooth.count`,
   name: 'tooth_count',
   description: 'tooth.count.desc',
@@ -291,7 +291,7 @@ const toothCount: MotorAsSettingsField = {
   }
 };
 
-const lobeCount: MotorAsSettingsField = {
+const lobeCount: MotorAs = {
   label: `${PREFIX}.lobe.count`,
   name: 'lobe_count',
   description: 'lobe.count.desc',
@@ -306,7 +306,7 @@ const lobeCount: MotorAsSettingsField = {
   visibleWhen: (values) => values?.pump_type === PumpTypeValue.Lobe
 };
 
-const pistonCount: MotorAsSettingsField = {
+const pistonCount: MotorAs = {
   label: `${PREFIX}.piston.count`,
   name: 'piston_count',
   description: 'piston.count.desc',
@@ -330,7 +330,7 @@ const pistonCount: MotorAsSettingsField = {
   }
 };
 
-export const pumpFields: MotorAsSettingsField[] = [
+export const pumpFields: MotorAs[] = [
   pumpType,
   shaftOrientation,
   driveType,
@@ -345,7 +345,7 @@ export const pumpFields: MotorAsSettingsField[] = [
   pistonCount
 ];
 
-export const fanFields: MotorAsSettingsField[] = [
+export const fanFields: MotorAs[] = [
   fanType,
   shaftOrientation,
   driveType,
@@ -356,7 +356,7 @@ export const fanFields: MotorAsSettingsField[] = [
   bladeCount
 ];
 
-export const blowerFields: MotorAsSettingsField[] = [
+export const blowerFields: MotorAs[] = [
   blowerType,
   shaftOrientation,
   driveType,
@@ -368,7 +368,7 @@ export const blowerFields: MotorAsSettingsField[] = [
   toothCount
 ];
 
-export const compressorFields: MotorAsSettingsField[] = [
+export const compressorFields: MotorAs[] = [
   compressorType,
   shaftOrientation,
   driveType,
@@ -384,7 +384,7 @@ export const compressorFields: MotorAsSettingsField[] = [
 enum DirectionCoolingTower {
   Vertical = Direction.Vertical
 }
-const shaftOrientationCoolingTower: MotorAsSettingsField = {
+const shaftOrientationCoolingTower: MotorAs = {
   label: `${PREFIX}.shaft.orientation`,
   name: 'shaft_orientation',
   description: 'shaft.orientation.desc',
@@ -396,7 +396,7 @@ enum FanTypeCoolingTower {
   Axial = FanTypeValue.Axial,
   MixedFlow = FanTypeValue.MixedFlow
 }
-const fanTypeCoolingTower: MotorAsSettingsField = {
+const fanTypeCoolingTower: MotorAs = {
   label: `${PREFIX}.fan.type`,
   name: 'fan_type',
   description: 'fan.type.desc',
@@ -404,7 +404,7 @@ const fanTypeCoolingTower: MotorAsSettingsField = {
   type: 'enum',
   defaultValue: FanTypeCoolingTower.Centrifugal
 };
-export const coolingTowerFields: MotorAsSettingsField[] = [
+export const coolingTowerFields: MotorAs[] = [
   fanTypeCoolingTower,
   shaftOrientationCoolingTower,
   driveType,
@@ -414,7 +414,7 @@ export const coolingTowerFields: MotorAsSettingsField[] = [
   bladeCount
 ];
 
-export const chillerFields: MotorAsSettingsField[] = [
+export const chillerFields: MotorAs[] = [
   compressorType,
   shaftOrientation,
   driveType,
@@ -427,7 +427,7 @@ export const chillerFields: MotorAsSettingsField[] = [
   pistonCount
 ];
 
-export const motorSetFields: MotorAsSettingsField[] = [
+export const motorSetFields: MotorAs[] = [
   setType,
   shaftOrientation,
   driveType,

@@ -9,7 +9,7 @@ import { mapTree, tree2List } from 'utils/tree';
 import { downloadFile } from 'utils/download';
 import { getFilename } from 'utils';
 import { ModalWrapper } from 'components/modalWrapper';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { AssetTree } from 'domain/asset';
 
 export const DownloadModal = ({ assets, ...rest }: { assets: AssetRow[] } & ModalProps) => {
@@ -36,7 +36,7 @@ export const DownloadModal = ({ assets, ...rest }: { assets: AssetRow[] } & Moda
   const handleDownload = (ids: [number, number][]) => {
     const [from, to] = numberedRange;
     const fetchs = ids.map(([id, type]) => {
-      const properties = OMonitoringPoint.Type.getProperties({ type });
+      const properties = MonitoringPoint.Type.getProperties({ type });
       return downloadHistory(id, from, to, JSON.stringify(properties.map((p) => p.key)), language);
     });
     Promise.all(fetchs)

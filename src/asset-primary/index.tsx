@@ -18,7 +18,7 @@ import {
   useAssetDiagnosis
 } from 'features/vibration-fault-diagnosis';
 import { AssetNavigator } from 'features/asset-tree';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 export default function Index({ asset }: { asset: AssetRow }) {
   return (
@@ -61,7 +61,7 @@ const useFeatures = (asset: AssetRow) => {
 const useOverview = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
   const isLegacy = ENV.legacyEnabled === 'true';
   let overview = null;
-  if (PrimaryAssetType.Category.getTypes(['vibration']).includes(asset.type)) {
+  if (PrimaryAsset.Category.getTypes(['vibration']).includes(asset.type)) {
     overview = {
       key: 'overview',
       label: intl.get('OVERVIEW'),
@@ -71,7 +71,7 @@ const useOverview = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
         <Overview asset={asset} key={asset.id} diagnosis={diagnosis} />
       )
     };
-  } else if (PrimaryAssetType.Category.getTypes(['corrosion']).includes(asset.type)) {
+  } else if (PrimaryAsset.Category.getTypes(['corrosion']).includes(asset.type)) {
     overview = isLegacy
       ? null
       : {
@@ -79,7 +79,7 @@ const useOverview = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
           label: intl.get('OVERVIEW'),
           content: <Overview asset={asset} key={asset.id} />
         };
-  } else if (PrimaryAssetType.Flange === asset.type) {
+  } else if (PrimaryAsset.Enum.Flange === asset.type) {
     overview = {
       key: 'overview',
       label: intl.get('OVERVIEW'),
@@ -117,7 +117,7 @@ const useDiagnosis = (asset: AssetRow, diagnosis?: FaultDiagnosis) => {
 };
 
 const useHistory = (asset: AssetRow) => {
-  if (PrimaryAssetType.Category.getTypes(['bolt']).includes(asset.type)) {
+  if (PrimaryAsset.Category.getTypes(['bolt']).includes(asset.type)) {
     return [
       {
         key: 'history',
@@ -134,8 +134,8 @@ const useHistory = (asset: AssetRow) => {
 
 const useFlangeStatus = (asset: AssetRow) => {
   if (
-    PrimaryAssetType.Flange === asset.type &&
-    PrimaryAssetType.Category.Flange.isPreloadCalculationEnabled(asset)
+    PrimaryAsset.Enum.Flange === asset.type &&
+    PrimaryAsset.Category.Flange.isPreloadCalculationEnabled(asset)
   ) {
     return [
       {

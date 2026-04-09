@@ -8,9 +8,9 @@ import { Link } from '../../components';
 import { AssetRow } from 'asset-common/types';
 import { useAssetsContext } from 'providers/assets';
 import { AssetStatusTag } from 'asset-common/components';
-import { AssetTree, AssetTreeNode } from 'domain/asset';
+import { AssetTree, Hooks } from 'domain/asset';
 
-export type TreeFlatListItem = AssetTreeNode & { path: number[] };
+export type TreeFlatListItem = AssetTree.Node & { path: number[] };
 
 export const AssetNavigator = ({
   asset,
@@ -19,7 +19,7 @@ export const AssetNavigator = ({
   const { id, type, alertLevel } = asset;
   const items: BreadcrumbProps['items'] = [];
   const { assets } = useAssetsContext();
-  const { root: virturalAsset } = AssetTree.useVirturalAsset();
+  const { root: virturalAsset } = Hooks.useVirturalAsset();
 
   if (assets.length > 0) {
     const root = {

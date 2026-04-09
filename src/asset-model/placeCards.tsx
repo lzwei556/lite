@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '../components';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { Dayjs } from '../utils';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { AssetTree } from 'domain/asset';
 
 export const usePlaceCards = (selected?: boolean) => {
@@ -15,7 +15,7 @@ export const usePlaceCards = (selected?: boolean) => {
       title: <Link to={`/${AssetTree.Path.Assets}/${id}-${type}`}>{name}</Link>,
       items: getPropertyItems(
         self,
-        OMonitoringPoint.Type.getProperties(self).filter((p) => visibleKeys.includes(p.key))
+        MonitoringPoint.Type.getProperties(self).filter((p) => visibleKeys.includes(p.key))
       ).map((item) => ({
         ...item,
         index: id,

@@ -13,11 +13,11 @@ import {
   URLPathname,
   useDownloadSubmit
 } from './use-services';
-import { Feature } from 'domain/feature-property';
+import * as Feature from 'domain/feature-property';
 
 type Props = ModalFormProps & {
   id: number;
-  properties: Feature.Property[];
+  properties: Feature.Types.Property[];
   urlPathname: URLPathname;
 } & {
   range?: Dayjs.RangeValue;
@@ -42,7 +42,7 @@ export const DownloadModal = ({ id, properties, range, ...rest }: Props) => {
   );
 };
 
-const useFormProps = (properties: Feature.Property[], range?: Dayjs.RangeValue) => {
+const useFormProps = (properties: Feature.Types.Property[], range?: Dayjs.RangeValue) => {
   const [form] = Form.useForm<DownloadFormData>();
   return {
     formProps: useFormBindingsProps({ form, layout: 'vertical', initialValues: { range } }),
@@ -55,7 +55,7 @@ const useFormProps = (properties: Feature.Property[], range?: Dayjs.RangeValue) 
   };
 };
 
-const usePropertiesSelectProps = (properties: Feature.Property[]) => {
+const usePropertiesSelectProps = (properties: Feature.Types.Property[]) => {
   return {
     ...useFormItemBindingsProps({
       label: 'properties',

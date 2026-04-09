@@ -3,7 +3,6 @@ import { AssetRow } from 'asset-common';
 import { SelectFormItem, TextFormItem } from 'components';
 import { FolderAsset } from 'domain/asset';
 import { useAssetsContext } from 'providers/assets';
-
 import { generateColProps } from 'utils/grid';
 
 export const FormItemsBasic = ({
@@ -24,7 +23,7 @@ export const FormItemsBasic = ({
       {(parentId || parents.length > 0) && (
         <Col {...formItemColProps}>
           <SelectFormItem
-            label={FolderAsset.getlabelPlural(FolderAsset.Type.Area)}
+            label={FolderAsset.getlabelPlural(FolderAsset.Enum.Area)}
             name='parent_id'
             selectProps={{ options: parents.map(({ id, name }) => ({ label: name, value: id })) }}
           />
@@ -38,7 +37,7 @@ const useParents = () => {
   const { assets } = useAssetsContext();
   const parents: AssetRow[] = [];
   assets.forEach((asset) => {
-    if (FolderAsset.Type.Area === asset.type && FolderAsset.Area.canAddAreaChild(asset, 1)) {
+    if (FolderAsset.Enum.Area === asset.type && FolderAsset.canAddAreaChild(asset, 1)) {
       parents.push(asset);
     }
   });

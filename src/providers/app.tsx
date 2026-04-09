@@ -1,11 +1,11 @@
 import { Spin } from 'antd';
-import { AppType, AppTypeConfig } from 'domain/app-type';
+import * as AppType from 'domain/app-type';
 import React from 'react';
 import request from 'utils/request';
 import { useAppTypeMappingWithSelectedProject } from './user-profile';
 import intl from 'react-intl-universal';
 
-type ContextProps = { type: AppType; analysisEnabled?: boolean };
+type ContextProps = { type: AppType.Enum; analysisEnabled?: boolean };
 
 const Context = React.createContext<ContextProps>({ type: 'windTurbine' });
 
@@ -39,11 +39,11 @@ export function AppProvider({ children }: { children?: JSX.Element }) {
 export const useAppConfig = () => {
   const { analysisEnabled } = React.useContext(Context);
   const type = useAppType();
-  const { name, rootAsset } = AppTypeConfig.get(type);
-  const monitoringPointTypeOptions = AppTypeConfig.getMonitoringPointTypeOptions(type).map(
+  const { name, rootAsset } = AppType.get(type);
+  const monitoringPointTypeOptions = AppType.getMonitoringPointTypeOptions(type).map(
     (opt) => ({ ...opt, label: intl.get(opt.label) })
   );
-  const deviceTypes = AppTypeConfig.getDeviceTypes(type);
+  const deviceTypes = AppType.getDeviceTypes(type);
   return { type, analysisEnabled, name, rootAsset, monitoringPointTypeOptions, deviceTypes };
 };
 

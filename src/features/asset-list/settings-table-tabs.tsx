@@ -7,7 +7,7 @@ import intl from 'react-intl-universal';
 import { PrimaryAssetSettingsTable } from './settings-table';
 import { CanAccess, Permission } from 'providers/access-control';
 import { PlusOutlined } from '@ant-design/icons';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 export type Props = {
   asset: AssetRow;
@@ -81,7 +81,7 @@ const TabbedTable = ({
         tabBarExtraContent={getExtra(rest, setActiveKey)}
         tabList={types.map((t) => {
           const assets = children.filter((asset) => asset.type === t);
-          const typeLabel = PrimaryAssetType.getlabelPlural(t);
+          const typeLabel = PrimaryAsset.getlabelPlural(t);
           const label = typeLabel ? intl.get(typeLabel) : intl.get('ASSET');
           return {
             key: `${t}`,

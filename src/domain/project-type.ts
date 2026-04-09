@@ -1,7 +1,7 @@
 import { pickOptionsFromNumericEnum } from 'utils';
-import { AppType } from './app-type';
+import * as AppType from './app-type';
 
-enum Type {
+export enum Enum {
   ConditionMonitoring = 0x00,
   WindPowerBoltMonitoring = 0x11,
   HydroPowerBoltMonitoring = 0x12,
@@ -15,25 +15,18 @@ enum Type {
   BoltMonitoring = 0x34
 }
 
-export type ProjectType = Type;
-
-const map = new Map<Type, AppType>([
-  [Type.WindPowerBoltMonitoring, 'windTurbinePro'],
-  [Type.HydroPowerBoltMonitoring, 'hydroTurbine'],
-  [Type.TowerBoltMonitoring, 'towerBolt'],
-  [Type.RailBoltMonitoring, 'railBolt'],
-  [Type.BridgeBoltMonitoring, 'bridgeBolt'],
-  [Type.CorrosionMonitoring, 'corrosion'],
-  [Type.VibrationMonitoring, 'vibration'],
-  [Type.TemperatureMonitoring, 'temperature'],
-  [Type.PressureMonitoring, 'pressure'],
-  [Type.BoltMonitoring, 'bolt']
+const map = new Map<Enum, AppType.Enum>([
+  [Enum.WindPowerBoltMonitoring, 'windTurbinePro'],
+  [Enum.HydroPowerBoltMonitoring, 'hydroTurbine'],
+  [Enum.TowerBoltMonitoring, 'towerBolt'],
+  [Enum.RailBoltMonitoring, 'railBolt'],
+  [Enum.BridgeBoltMonitoring, 'bridgeBolt'],
+  [Enum.CorrosionMonitoring, 'corrosion'],
+  [Enum.VibrationMonitoring, 'vibration'],
+  [Enum.TemperatureMonitoring, 'temperature'],
+  [Enum.PressureMonitoring, 'pressure'],
+  [Enum.BoltMonitoring, 'bolt']
 ]);
 
-export const ProjectTypeConfig = {
-  Type,
-  getAppType: (type: Type): AppType | undefined => map.get(type),
-  get options() {
-    return pickOptionsFromNumericEnum(Type, 'project.type');
-  }
-};
+export const getAppType = (type: Enum): AppType.Enum | undefined => map.get(type);
+export const options = pickOptionsFromNumericEnum(Enum, 'project.type');

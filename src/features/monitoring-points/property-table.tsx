@@ -5,7 +5,7 @@ import { basicFieldColumns, usePropertyColumns } from './columns';
 import { uniq } from 'lodash';
 import { Points } from 'monitoring-point';
 import { AssetRow } from 'asset-common';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const PropertyTable = ({
   asset,
@@ -21,7 +21,7 @@ export const PropertyTable = ({
     cardBordered: true,
     bordered: true,
     header: { enableSettingColumnsCount },
-    rowKey: (point: TMonitoringPoint.Base) => point.id
+    rowKey: (point: MonitoringPoint.Types.Entity) => point.id
   };
 
   if (actualPoints.length > 0) {
@@ -37,7 +37,7 @@ const TypedTable = ({
   types,
   tableProps
 }: {
-  actualPoints: TMonitoringPoint.Base[];
+  actualPoints: MonitoringPoint.Types.Entity[];
   types: number[];
   tableProps: any;
 }) => {
@@ -76,7 +76,7 @@ const TypeSwitcher = ({
         onChange: (e) => onChange(e.target.value),
         options: types.map((t) => ({
           value: t,
-          label: intl.get(OMonitoringPoint.Type.getLabel(t))
+          label: intl.get(MonitoringPoint.Type.getLabel(t))
         }))
       }}
     />

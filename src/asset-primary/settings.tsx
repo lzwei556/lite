@@ -12,10 +12,10 @@ import {
   useUpdateFormProps as useUpdateMonitoringPointFormProps
 } from 'features/monitoring-point-settings';
 import { ModalFormProps } from 'types/common';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 export const Settings = ({ editingAsset }: { editingAsset: AssetRow }) => {
-  const settings = PrimaryAssetType.getSettings(editingAsset.type);
+  const settings = PrimaryAsset.getSettings(editingAsset.type);
   const updateFormProps = useUpdateFormProps(editingAsset.id);
 
   if (settings.length > 0) {

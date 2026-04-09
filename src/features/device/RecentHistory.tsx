@@ -11,7 +11,7 @@ import { useGlobalStyles } from '../../styles';
 import { HistoryData } from '../../asset-common';
 import { HistoryDataFea } from '..';
 import { getDisplayProperties } from './util';
-import { Feature, FeatureProperty } from 'domain/feature-property';
+import * as Feature from 'domain/feature-property';
 
 export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   const channels = DeviceType.getChannels(device.typeId);
@@ -56,7 +56,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
       </Card>
     );
   } else if (DeviceType.isVibration(device.typeId)) {
-    const groups = FeatureProperty.getGrouped(getDisplayProperties(device.properties, device.typeId));
+    const groups = Feature.Property.getGrouped(getDisplayProperties(device.properties, device.typeId));
     return (
       <Collapse
         bordered={false}
@@ -67,7 +67,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
           label: intl.get(g),
           children: (
             <Grid>
-              {properties.map((p: Feature.Property, index: number) => {
+              {properties.map((p: Feature.Types.Property, index: number) => {
                 return (
                   <Col {...generateColProps({ lg: 12, xl: 12, xxl: 12 })} key={index}>
                     <HistoryDataFea.PropertyChartCard
@@ -89,7 +89,7 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
     const chartGrid = (
       <Grid>
         {getDisplayProperties(device.properties, device.typeId).map(
-          (p: Feature.Property, index: number) => {
+          (p: Feature.Types.Property, index: number) => {
             return (
               <Col {...getCols(device.properties.length)} key={index}>
                 <HistoryDataFea.PropertyChartCard

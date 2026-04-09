@@ -1,6 +1,6 @@
 import { Field } from 'types';
 import { pickOptionsFromNumericEnum } from 'utils/enum';
-import { GroupField, MotorSettingsGroup } from './group';
+import { GroupField, SettingsGroup } from './group';
 
 export type MotorSettings = {
   bearing: { n_balls: number; d: number; big_d: number; theta: number };
@@ -51,10 +51,10 @@ enum RotationMode {
 //   { label: RotationMode['Outer'], value: RotationMode.Outer }
 // ];
 
-export type MotorSettingsField = Omit<Field<MotorSettings>, 'group'> & GroupField;
+export type Motor = Omit<Field<MotorSettings>, 'group'> & GroupField;
 
 export type RotationSpeed = { rotation_speed: number };
-export const rotationSpeed: MotorSettingsField = {
+export const rotationSpeed: Motor = {
   label: 'rotation.speed',
   name: 'rpm',
   description: 'rotation.speed.desc',
@@ -75,7 +75,7 @@ enum SeveritySensitivity {
   High
 }
 
-export const motorFields: MotorSettingsField[] = [
+export const motorFields: Motor[] = [
   rotationSpeed,
   {
     label: 'motor.env.band',
@@ -106,7 +106,7 @@ export const motorFields: MotorSettingsField[] = [
     description: 'bearing.n.balls.desc',
     type: 'number',
     defaultValue: 8,
-    group: MotorSettingsGroup.Bearing
+    group: SettingsGroup.Bearing
   },
   {
     label: 'motor.bearing.d',
@@ -115,7 +115,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'mm',
     defaultValue: 6.75,
-    group: MotorSettingsGroup.Bearing
+    group: SettingsGroup.Bearing
   },
   {
     label: 'motor.bearing.big.d',
@@ -124,7 +124,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'mm',
     defaultValue: 29.05,
-    group: MotorSettingsGroup.Bearing
+    group: SettingsGroup.Bearing
   },
   {
     label: 'motor.bearing.theta',
@@ -133,7 +133,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'rad',
     defaultValue: 0,
-    group: MotorSettingsGroup.Bearing
+    group: SettingsGroup.Bearing
   },
   {
     label: 'motor.motor.poles',
@@ -156,7 +156,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'enum',
     options: pickOptionsFromNumericEnum(FaultSensitivity, 'fault.sensitivity'),
     defaultValue: 2,
-    group: MotorSettingsGroup.Algorithm
+    group: SettingsGroup.Algorithm
   },
   {
     label: 'motor.severity.sensitivity',
@@ -165,7 +165,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'enum',
     options: pickOptionsFromNumericEnum(SeveritySensitivity, 'severity.sensitivity'),
     defaultValue: 2,
-    group: MotorSettingsGroup.Algorithm
+    group: SettingsGroup.Algorithm
   },
   // {
   //   label: 'motor.rolling.elements.num',
@@ -212,7 +212,7 @@ export const motorFields: MotorSettingsField[] = [
     description: 'vel.base.vel.base.1.10x.desc',
     type: 'number-array',
     defaultValue: [105, 90, 85, 85, 85, 85, 80, 80, 80, 80],
-    group: MotorSettingsGroup.Velocity
+    group: SettingsGroup.Velocity
   },
   {
     label: 'motor.vel.base.vel.non.int.base.0.10x',
@@ -221,7 +221,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: MotorSettingsGroup.Velocity
+    group: SettingsGroup.Velocity
   },
   {
     label: 'motor.vel.base.vel.base.10.40x',
@@ -230,7 +230,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'dB',
     defaultValue: 75,
-    group: MotorSettingsGroup.Velocity
+    group: SettingsGroup.Velocity
   },
   {
     label: 'motor.vel.base.vel.base.40.99x',
@@ -239,7 +239,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'dB',
     defaultValue: 70,
-    group: MotorSettingsGroup.Velocity
+    group: SettingsGroup.Velocity
   },
   {
     label: 'motor.vel.base.vel.base.bearing',
@@ -248,7 +248,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: MotorSettingsGroup.Velocity
+    group: SettingsGroup.Velocity
   },
   {
     label: 'motor.vel.base.vel.base.100.hz',
@@ -257,7 +257,7 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: MotorSettingsGroup.Velocity
+    group: SettingsGroup.Velocity
   },
   {
     label: 'motor.vel.base.vel.base.mfb',
@@ -266,6 +266,6 @@ export const motorFields: MotorSettingsField[] = [
     type: 'number',
     unit: 'dB',
     defaultValue: 80,
-    group: MotorSettingsGroup.Velocity
+    group: SettingsGroup.Velocity
   }
 ];

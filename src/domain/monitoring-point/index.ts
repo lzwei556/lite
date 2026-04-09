@@ -1,18 +1,6 @@
-import { MonitoringPointSettingsFieldConfig } from './settings';
-import { MPTypeConfig, Type } from './type-config';
-import { transform, transform2PostDTO } from './types';
+import * as Hooks from './hooks';
+import * as Settings from './settings';
+import * as Type from './type-config';
+import * as Types from './types';
 
-export * from './type-config';
-export type { TMonitoringPoint } from './types';
-export const OMonitoringPoint = {
-  transform,
-  transform2PostDTO,
-  Settings: MonitoringPointSettingsFieldConfig,
-  Type: {
-    ...Type,
-    ...MPTypeConfig
-  },
-  get types() {
-    return Object.values(Type).filter((v) => typeof v === 'number') as Type[];
-  }
-};
+export { Hooks, Settings, Type, Types };

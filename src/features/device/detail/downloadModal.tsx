@@ -11,12 +11,12 @@ import { DeviceType } from '../../../types/device_type';
 import { DownloadDeviceDataRequest } from '../../../apis/device';
 import { useContext } from '..';
 import { downloadFile } from 'utils';
-import { Feature } from 'domain/feature-property';
+import * as Feature from 'domain/feature-property';
 
 export interface DownloadModalProps extends ModalProps {
   device: Device;
   property?: any;
-  properties: Feature.Property[];
+  properties: Feature.Types.Property[];
   onSuccess: () => void;
   channel?: string;
 }

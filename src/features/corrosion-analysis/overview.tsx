@@ -5,14 +5,14 @@ import { Card, Grid } from '../../components';
 import { getValue } from '../../utils/format';
 import { HistoryData, MonitoringPointRow } from '../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const Overview = (props: {
   point: MonitoringPointRow;
   history: HistoryData | undefined;
 }) => {
   const { history, point } = props;
-  const attributes = point.attributes as TMonitoringPoint.Settings.Corrosion;
+  const attributes = point.attributes as MonitoringPoint.Settings.Corrosion;
 
   if (!history || history.length === 0) {
     return (
@@ -38,15 +38,15 @@ export const Overview = (props: {
     <Grid>
       <Col span={12}>
         <PropertyCardedContent
-          label={intl.get(OMonitoringPoint.Settings.Corrosion.InitialThickness.label)}
-          unit={OMonitoringPoint.Settings.Corrosion.InitialThickness.unit!}
+          label={intl.get(MonitoringPoint.Settings.CorrosionConfig.InitialThickness.label)}
+          unit={MonitoringPoint.Settings.CorrosionConfig.InitialThickness.unit!}
           value={initial}
         />
       </Col>
       <Col span={12}>
         <PropertyCardedContent
-          label={intl.get(OMonitoringPoint.Settings.Corrosion.CriticalThickness.label)}
-          unit={OMonitoringPoint.Settings.Corrosion.CriticalThickness.unit!}
+          label={intl.get(MonitoringPoint.Settings.CorrosionConfig.CriticalThickness.label)}
+          unit={MonitoringPoint.Settings.CorrosionConfig.CriticalThickness.unit!}
           value={critical}
         />
       </Col>

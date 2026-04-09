@@ -1,71 +1,61 @@
-import { MonitoringPointType, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { DeviceType } from 'types/device_type';
 import { transformSnake2Dot } from 'utils/format';
 import { toSnake } from 'ts-case-convert';
-import { Type } from './type-enum';
-import { PrimaryAsset, PrimaryAssetType } from '../primary';
+import { Enum } from './type-enum';
+import * as PrimaryAsset from '../primary';
 import { canAddAreaChild } from './area-treenode';
 
 type Config = {
   label: string;
-  children: PrimaryAsset.Type[];
+  children: PrimaryAsset.Enum[];
 };
 
-const table: { [Key in Type]: Config } = {
-  [Type.WindTurbine]: {
-    label: Type[Type.WindTurbine],
-    children: [PrimaryAssetType.Flange, PrimaryAssetType.Tower]
+const table: { [Key in Enum]: Config } = {
+  [Enum.WindTurbine]: {
+    label: Enum[Enum.WindTurbine],
+    children: [PrimaryAsset.Enum.Flange, PrimaryAsset.Enum.Tower]
   },
-  [Type.Area]: {
-    label: Type[Type.Area],
-    children: PrimaryAssetType.Category.vibrations
+  [Enum.Area]: {
+    label: Enum[Enum.Area],
+    children: PrimaryAsset.Category.vibrations
   }
 };
 
-const getMonitoringPointTypes = (
-  folderTypes: Type[],
-  primaryAssetTypes?: PrimaryAsset.Type[]
-): MonitoringPointType[] => {
+export const getMonitoringPointTypes = (
+  folderTypes: Enum[],
+  primaryAssetTypes?: PrimaryAsset.Enum[]
+): MonitoringPoint.Type.Enum[] => {
   const children = getChildren(folderTypes);
   const filtered = primaryAssetTypes
     ? children.filter((type) => primaryAssetTypes.includes(type))
     : children;
-  return PrimaryAssetType.getMonitoringPointTypes(filtered);
+  return PrimaryAsset.getMonitoringPointTypes(filtered);
+};
+export const Enums = Object.values(Enum).filter((v) => typeof v === 'number') as Enum[];
+export { Enum, canAddAreaChild };
+
+export const getlabelPlural = (key: Enum) => `${getLabel(key)}s`;
+export const getChildrenOptions = (keys: Enum[]) =>
+  getChildren(keys).map((type) => ({ value: type, label: PrimaryAsset.getLabel(type) }));
+export const getDeviceTypes = (folderTypes: Enum[], primaryAssetTypes?: PrimaryAsset.Enum[]) => {
+  const result = new Set<DeviceType>();
+  getMonitoringPointTypes(folderTypes, primaryAssetTypes).forEach((type) =>
+    MonitoringPoint.Type.getDeviceTypes(type).forEach((deviceType) => {
+      result.add(deviceType);
+    })
+  );
+  return Array.from(result);
 };
 
-export type FolderAssetType = Type;
-
-export const FolderAsset = {
-  Type,
-  get types() {
-    return Object.values(Type).filter((v): v is Type => typeof v === 'number');
-  },
-  getlabelPlural: (key: Type) => `${getLabel(key)}s`,
-  getChildrenOptions: (keys: Type[]) =>
-    getChildren(keys).map((type) => ({ value: type, label: PrimaryAssetType.getLabel(type) })),
-  getMonitoringPointTypes,
-  getDeviceTypes: (folderTypes: Type[], primaryAssetTypes?: PrimaryAsset.Type[]) => {
-    const result = new Set<DeviceType>();
-    getMonitoringPointTypes(folderTypes, primaryAssetTypes).forEach((type) =>
-      OMonitoringPoint.Type.getDeviceTypes(type).forEach((deviceType) => {
-        result.add(deviceType);
-      })
-    );
-    return Array.from(result);
-  },
-  Area: {
-    canAddAreaChild
-  }
-};
-
-const getLabel = (type: Type) => {
+export const getLabel = (type: Enum) => {
   const PREFIX = 'asset.category.';
   const config = table[type];
   return type ? `${PREFIX}${transformSnake2Dot(toSnake(config.label))}` : `${type}`;
 };
 
-const getChildren = (types: Type[]): PrimaryAsset.Type[] => {
-  const result = new Set<PrimaryAsset.Type>();
+const getChildren = (types: Enum[]): PrimaryAsset.Enum[] => {
+  const result = new Set<PrimaryAsset.Enum>();
 
   for (const type of types) {
     const children = table[type]?.children ?? [];

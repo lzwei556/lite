@@ -14,7 +14,7 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { UpdateFormProps } from './update-form';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const UpdateFormModal = ({
   onSuccess,
@@ -47,8 +47,10 @@ export const UpdateFormModal = ({
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest }} />,
               componentSelectFormItem: type &&
-                OMonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
-                type !== OMonitoringPoint.Type.OilFiller && <ComponentSelectFormItem type={type} />
+                MonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
+                type !== MonitoringPoint.Type.Enum.OilFiller && (
+                  <ComponentSelectFormItem type={type} />
+                )
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

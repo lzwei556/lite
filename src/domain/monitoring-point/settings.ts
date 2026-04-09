@@ -1,31 +1,20 @@
-import { Axis, AxisKey, AxisOption } from 'domain/axis';
-import {
-  VibrationDirection,
-  VibrationDirectionKey,
-  VibrationDirectionOption
-} from 'domain/vibration-direction';
-import _ from 'lodash';
-import React from 'react';
+import * as VD from '../vibration-direction';
+import * as Axis from '../axis';
 import { Field } from 'types/entity';
-
-export type VibrationDirectionSettings = { [Key in VibrationDirectionKey]: AxisKey };
-export type AxisWithVibrationDirectionLabel = Omit<AxisOption, 'label'> & {
-  label: AxisOption['label'] | VibrationDirectionOption['abbr'];
-};
 
 type NumericPosition = { index: number };
 
-type InclinationSettings = NumericPosition & { tower_install_angle: number };
+type Inclination = NumericPosition & { tower_install_angle: number };
 
-type TopInclinationSettings = InclinationSettings & {
+type TopInclination = Inclination & {
   tower_install_height: number;
 };
 
-type BaseInclinationSettings = InclinationSettings & {
+type BaseInclination = Inclination & {
   tower_base_radius: number;
 };
 
-export type CorrosionMonitoringPointSettings = NumericPosition & {
+export type Corrosion = NumericPosition & {
   initial_thickness_enabled: boolean;
   initial_thickness: number;
   critical_thickness_enabled: boolean;
@@ -34,57 +23,58 @@ export type CorrosionMonitoringPointSettings = NumericPosition & {
   corrosion_rate_long_term: number;
 };
 
-type VibrationSettings = { index: string } & VibrationDirectionSettings;
+export type VibrationDirection = { [Key in VD.Key]: Axis.Key };
 
-export type MonitoringPointSettings =
-  | NumericPosition
-  | TopInclinationSettings
-  | BaseInclinationSettings
-  | CorrosionMonitoringPointSettings
-  | VibrationSettings;
+export type Vibration = { index: string } & VibrationDirection;
 
-const positionField: Field<MonitoringPointSettings> = {
+export type AxisWithVibrationDirection = Omit<Axis.Option, 'label'> & {
+  label: Axis.Option['label'] | VD.Option['abbr'];
+};
+
+export type Entity = NumericPosition | TopInclination | BaseInclination | Corrosion | Vibration;
+
+const positionField: Field<Entity> = {
   name: 'index',
   label: 'monitoirng.point.position',
   description: 'index.desc',
   type: 'number'
 };
-const towerInstallAngle: Field<MonitoringPointSettings> = {
+const towerInstallAngle: Field<Entity> = {
   name: 'tower_install_angle',
   label: 'tower.install.angle',
   description: 'tower.install.angle.desc',
   unit: '°',
   type: 'number'
 };
-const towerInstallHeight: Field<MonitoringPointSettings> = {
+const towerInstallHeight: Field<Entity> = {
   name: 'tower_install_height',
   label: 'tower.install.height',
   description: 'tower.install.height.desc',
   unit: 'm',
   type: 'number'
 };
-const towerBaseRadius: Field<MonitoringPointSettings> = {
+const towerBaseRadius: Field<Entity> = {
   name: 'tower_base_radius',
   label: 'tower.base.radius',
   description: 'tower.base.radius.desc',
   unit: 'm',
   type: 'number'
 };
-const initialThickness: Field<MonitoringPointSettings> = {
+const initialThickness: Field<Entity> = {
   name: 'initial_thickness',
   label: 'initial.thickness',
   description: 'initial.thickness.desc',
   unit: 'mm',
   type: 'number-switcher'
 };
-const criticalThickness: Field<MonitoringPointSettings> = {
+const criticalThickness: Field<Entity> = {
   name: 'critical_thickness',
   label: 'critical.thickness',
   description: 'critical.thickness.desc',
   unit: 'mm',
   type: 'number-switcher'
 };
-const corrosionRateShortTerm: Field<MonitoringPointSettings> = {
+const corrosionRateShortTerm: Field<Entity> = {
   name: 'corrosion_rate_short_term',
   label: 'corrosion.rate.short.term',
   description: 'corrosion.rate.short.term.desc',
@@ -92,7 +82,7 @@ const corrosionRateShortTerm: Field<MonitoringPointSettings> = {
   type: 'number',
   defaultValue: 30
 };
-const corrosionRateLongTerm: Field<MonitoringPointSettings> = {
+const corrosionRateLongTerm: Field<Entity> = {
   name: 'corrosion_rate_long_term',
   label: 'corrosion.rate.long.term',
   description: 'corrosion.rate.long.term.desc',
@@ -101,7 +91,7 @@ const corrosionRateLongTerm: Field<MonitoringPointSettings> = {
   defaultValue: 365
 };
 const options = Axis.Options.map((opt) => ({ label: opt.label, value: opt.key }));
-const axial: Field<MonitoringPointSettings> = {
+const axial: Field<Entity> = {
   label: 'direction.axial',
   name: 'axial',
   description: 'axial.desc',
@@ -109,7 +99,7 @@ const axial: Field<MonitoringPointSettings> = {
   type: 'enum',
   defaultValue: Axis.Z.key
 };
-const vertical: Field<MonitoringPointSettings> = {
+const vertical: Field<Entity> = {
   label: 'direction.vertical',
   name: 'vertical',
   description: 'vertical.desc',
@@ -117,7 +107,7 @@ const vertical: Field<MonitoringPointSettings> = {
   type: 'enum',
   defaultValue: Axis.Y.key
 };
-const horizontal: Field<MonitoringPointSettings> = {
+const horizontal: Field<Entity> = {
   label: 'direction.horizontal',
   name: 'horizontal',
   description: 'horizontal.desc',
@@ -126,57 +116,24 @@ const horizontal: Field<MonitoringPointSettings> = {
   defaultValue: Axis.X.key
 };
 
-export const MonitoringPointSettingsFieldConfig = {
+export const CorrosionConfig = {
+  InitialThickness: initialThickness,
+  CriticalThickness: criticalThickness,
+  Fields: [
+    positionField,
+    initialThickness,
+    criticalThickness,
+    corrosionRateShortTerm,
+    corrosionRateLongTerm
+  ]
+};
+
+export const Config = {
   PositionField: positionField,
-  Corrosion: {
-    InitialThickness: initialThickness,
-    CriticalThickness: criticalThickness,
-    Fields: [
-      positionField,
-      initialThickness,
-      criticalThickness,
-      corrosionRateShortTerm,
-      corrosionRateLongTerm
-    ]
-  },
+
   Vibration: {
-    Fields: [
-      { ...positionField, type: 'string' },
-      axial,
-      vertical,
-      horizontal
-    ] as Field<MonitoringPointSettings>[],
-    useAxisWithVibrationDirection: (attrs?: VibrationDirectionSettings) => {
-      const options: AxisWithVibrationDirectionLabel[] = _.orderBy(
-        Axis.Options.map((opt) => {
-          const direction = getVibrationDirectionByAxisKey(opt.key, attrs);
-          return { ...opt, direction };
-        }),
-        (option) => option.direction?.sort ?? option.value,
-        'desc'
-      ).map(({ direction, ...rest }) => ({
-        ...rest,
-        label: direction ? direction.abbr : rest.label
-      }));
-      const [axis, setAxis] = React.useState(options[0]);
-      return { axis, setAxis, options };
-    }
+    Fields: [{ ...positionField, type: 'string' }, axial, vertical, horizontal] as Field<Entity>[]
   },
   TopInclination: [positionField, towerInstallAngle, towerInstallHeight],
   BaseInclination: [positionField, towerInstallAngle, towerBaseRadius]
-};
-
-const getVibrationDirectionByAxisKey = (
-  axisKey: AxisKey,
-  attrs?: VibrationDirectionSettings
-): VibrationDirectionOption | undefined => {
-  let key: VibrationDirectionKey;
-  if (attrs) {
-    for (key in attrs) {
-      const _axisKey = attrs[key];
-      if (_axisKey === axisKey) {
-        return VibrationDirection.get(key);
-      }
-    }
-  }
 };

@@ -1,4 +1,4 @@
-import { OMonitoringPoint, MonitoringPointType } from 'domain/monitoring-point';
+import * as MonitoringPoint from '../monitoring-point';
 import {
   blowerSettings,
   chillerSettings,
@@ -9,7 +9,7 @@ import {
   motorSetSettings,
   motorSettings,
   pumpSettings,
-  PrimaryAssetSettingsField
+  Settings
 } from './settings/capability';
 import { AssetRow, MonitoringPointRow } from 'asset-common';
 import { toSnake } from 'ts-case-convert';
@@ -23,10 +23,12 @@ import PumpImage from './images/pump.png';
 import CompressorImage from './images/compressor.png';
 import _ from 'lodash';
 import { blowerType, compressorType, pumpType } from './settings/motor-as';
-import { Component, ComponentId } from './component';
-import { getGroupLabel, MotorSettingsGroup } from './settings/group';
+import * as Component from './component';
+import { getGroupLabel } from './settings/group';
 
-enum Type {
+export { SettingsGroup } from './settings/group';
+
+export enum Enum {
   Device = 100,
   Flange = 102,
   Tower = 103,
@@ -41,81 +43,85 @@ enum Type {
   CoolingTower = 371,
   Chiller = 372
 }
+export const Enums = Object.values(Enum).filter((v) => typeof v === 'number') as Enum[];
 
-type Config = {
+export type Config = {
   label: string;
   category: 'bolt' | 'vibration' | 'corrosion' | 'device';
-  monitoringPointTypes: MonitoringPointType[];
-  settings?: PrimaryAssetSettingsField[];
-  filter?: PrimaryAssetSettingsField;
-  componentIds?: ComponentId[];
+  monitoringPointTypes: MonitoringPoint.Type.Enum[];
+  settings?: Settings[];
+  filter?: Settings;
+  componentIds?: Component.Id[];
   image?: string;
 };
 
-const table: { [Key in Type]: Config } = {
-  [Type.Device]: {
-    label: Type[Type.Device],
+const table: { [Key in Enum]: Config } = {
+  [Enum.Device]: {
+    label: Enum[Enum.Device],
     category: 'device',
-    monitoringPointTypes: [OMonitoringPoint.Type.Pressure, OMonitoringPoint.Type.Temperature]
-  },
-  [Type.Flange]: {
-    label: Type[Type.Flange],
-    category: 'bolt',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.boltsWithoutInclination,
-    settings: flangeSettings
-  },
-  [Type.Tower]: {
-    label: Type[Type.Tower],
-    category: 'bolt',
     monitoringPointTypes: [
-      OMonitoringPoint.Type.TopInclination,
-      OMonitoringPoint.Type.BaseInclination
+      MonitoringPoint.Type.Enum.Pressure,
+      MonitoringPoint.Type.Enum.Temperature
     ]
   },
-  [Type.Pipe]: {
-    label: Type[Type.Pipe],
-    category: 'corrosion',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.corrosions
+  [Enum.Flange]: {
+    label: Enum[Enum.Flange],
+    category: 'bolt',
+    monitoringPointTypes: MonitoringPoint.Type.Category.boltsWithoutInclination,
+    settings: flangeSettings
   },
-  [Type.Tank]: {
-    label: Type[Type.Tank],
-    category: 'corrosion',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.corrosions
+  [Enum.Tower]: {
+    label: Enum[Enum.Tower],
+    category: 'bolt',
+    monitoringPointTypes: [
+      MonitoringPoint.Type.Enum.TopInclination,
+      MonitoringPoint.Type.Enum.BaseInclination
+    ]
   },
-  [Type.Fan]: {
-    label: Type[Type.Fan],
+  [Enum.Pipe]: {
+    label: Enum[Enum.Pipe],
+    category: 'corrosion',
+    monitoringPointTypes: MonitoringPoint.Type.Category.corrosions
+  },
+  [Enum.Tank]: {
+    label: Enum[Enum.Tank],
+    category: 'corrosion',
+    monitoringPointTypes: MonitoringPoint.Type.Category.corrosions
+  },
+  [Enum.Fan]: {
+    label: Enum[Enum.Fan],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: fanSettings,
     image: FanImage
   },
-  [Type.Blower]: {
-    label: Type[Type.Blower],
+  [Enum.Blower]: {
+    label: Enum[Enum.Blower],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: blowerSettings,
     filter: blowerType,
     image: BlowerImage
   },
-  [Type.Compressor]: {
-    label: Type[Type.Compressor],
+  [Enum.Compressor]: {
+    label: Enum[Enum.Compressor],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: compressorSettings,
     filter: compressorType,
     image: CompressorImage
   },
-  [Type.MotorGeneratorSet]: {
-    label: Type[Type.MotorGeneratorSet],
+  [Enum.MotorGeneratorSet]: {
+    label: Enum[Enum.MotorGeneratorSet],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: motorSetSettings,
     image: MotorSetImage
   },
-  [Type.Motor]: {
-    label: Type[Type.Motor],
+  [Enum.Motor]: {
+    label: Enum[Enum.Motor],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: motorSettings,
     componentIds: [
       Component.Id.MotorDriveEnd,
@@ -125,120 +131,106 @@ const table: { [Key in Type]: Config } = {
     ],
     image: MotorImage
   },
-  [Type.Pump]: {
-    label: Type[Type.Pump],
+  [Enum.Pump]: {
+    label: Enum[Enum.Pump],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: pumpSettings,
     filter: pumpType,
     image: PumpImage
   },
-  [Type.CoolingTower]: {
-    label: Type[Type.CoolingTower],
+  [Enum.CoolingTower]: {
+    label: Enum[Enum.CoolingTower],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: coolingTowerSettings,
     image: CoolingTowerImage
   },
-  [Type.Chiller]: {
-    label: Type[Type.Chiller],
+  [Enum.Chiller]: {
+    label: Enum[Enum.Chiller],
     category: 'vibration',
-    monitoringPointTypes: OMonitoringPoint.Type.Category.vibrations,
+    monitoringPointTypes: MonitoringPoint.Type.Category.vibrations,
     settings: chillerSettings,
     filter: compressorType,
     image: CompressorImage // TODO: The image of chiller is unavailable now.
   }
 };
 
-const get = (type: Type): Config => table[type];
+export type { Settings };
 
-const getLabel = (type: Type) => {
+export const get = (type: Enum): Config => table[type];
+
+export const getLabel = (type: Enum) => {
   const PREFIX = 'asset.category.';
   const config = get(type);
   return type ? `${PREFIX}${transformSnake2Dot(toSnake(config.label))}` : `${type}`;
 };
 
-const getTypes = (categories: Config['category'][]): Type[] => {
-  const result: Type[] = [];
+export const getlabelPlural = (key: Enum) => `${getLabel(key)}s`;
+export const getSettings = (type: Enum) => get(type)?.settings ?? [];
+export const getGroupedSettings = (key: Enum) =>
+  Object.entries(
+    _.groupBy(getSettings(key), (field) =>
+      field.group ? getGroupLabel(field.group) : `${getLabel(key)}.parameters`
+    )
+  );
+export const getComponentIds = (key: Enum) => get(key)?.componentIds ?? [];
+export const getImage = (type: Enum) => get(type)?.image;
+export const getMonitoringPointTypes = (types: Enum[]): MonitoringPoint.Type.Enum[] => {
+  return Array.from(new Set(types.flatMap((type) => get(type)?.monitoringPointTypes ?? [])));
+};
+export const getTypesByMonitoringPointTypes = (pointTypes: MonitoringPoint.Type.Enum[]): Enum[] => {
+  const set = new Set(pointTypes);
+  return Object.keys(table)
+    .map((key) => Number(key) as Enum)
+    .filter((type) => get(type).monitoringPointTypes.some((p) => set.has(p)));
+};
+
+const getTypes = (categories: Config['category'][]): Enum[] => {
+  const result: Enum[] = [];
   const set = new Set(categories);
   for (const [type, config] of Object.entries(table)) {
     if (set.has(config.category)) {
-      result.push(Number(type) as Type);
+      result.push(Number(type) as Enum);
     }
   }
   return result;
 };
 
-type AssetType = Type;
-type AssetConfig = Config;
-export namespace PrimaryAsset {
-  export type Type = AssetType;
-  export type Config = AssetConfig;
-  export type SettingsField = PrimaryAssetSettingsField;
-}
-
-export const PrimaryAssetType = {
-  ...Type,
-  get types() {
-    return Object.values(Type).filter((v) => typeof v === 'number') as Type[];
-  },
-  get,
-  getLabel,
-  getlabelPlural: (key: Type) => `${getLabel(key)}s`,
-  getSettings: (type: Type) => get(type)?.settings ?? [],
-  getGroupedSettings: (key: Type) =>
-    Object.entries(
-      _.groupBy(PrimaryAssetType.getSettings(key), (field) =>
-        field.group ? getGroupLabel(field.group) : `${getLabel(key)}.parameters`
-      )
-    ),
-  getComponentIds: (key: Type) => get(key)?.componentIds ?? [],
-  getImage: (type: Type) => get(type)?.image,
-  getMonitoringPointTypes: (types: Type[]): MonitoringPointType[] => {
-    return Array.from(new Set(types.flatMap((type) => get(type)?.monitoringPointTypes ?? [])));
-  },
-  getTypesByMonitoringPointTypes: (pointTypes: MonitoringPointType[]): AssetType[] => {
-    const set = new Set(pointTypes);
-    return Object.keys(table)
-      .map((key) => Number(key) as Type)
-      .filter((type) => get(type).monitoringPointTypes.some((p) => set.has(p)));
-  },
-  Category: {
-    getTypes,
-    getTypeOptions: (categories: Config['category'][]) =>
-      getTypes(categories).map((type) => ({ value: type, label: getLabel(type) })),
-    vibrations: [
-      Type.Fan,
-      Type.Blower,
-      Type.Compressor,
-      Type.MotorGeneratorSet,
-      Type.Motor,
-      Type.Pump,
-      Type.CoolingTower,
-      Type.Chiller
-    ],
-    Flange: {
-      isPreloadCalculationEnabled: (flange?: AssetRow) => flange?.attributes?.sub_type === 1,
-      MonitoringPoints: {
-        filter,
-        sort,
-        isPreload: (firstMonitoringPointType: number) => {
-          return (
-            firstMonitoringPointType === OMonitoringPoint.Type.BoltPreload ||
-            firstMonitoringPointType === OMonitoringPoint.Type.AnchorPreload
-          );
-        },
-        isLoosening: (firstMonitoringPointType: number) =>
-          firstMonitoringPointType === OMonitoringPoint.Type.BoltLoosening
-      }
+export const Category = {
+  getTypes,
+  getTypeOptions: (categories: Config['category'][]) =>
+    getTypes(categories).map((type) => ({ value: type, label: getLabel(type) })),
+  vibrations: [
+    Enum.Fan,
+    Enum.Blower,
+    Enum.Compressor,
+    Enum.MotorGeneratorSet,
+    Enum.Motor,
+    Enum.Pump,
+    Enum.CoolingTower,
+    Enum.Chiller
+  ],
+  Flange: {
+    isPreloadCalculationEnabled: (flange?: AssetRow) => flange?.attributes?.sub_type === 1,
+    MonitoringPoints: {
+      filter,
+      sort,
+      isPreload: (firstMonitoringPointType: number) => {
+        return (
+          firstMonitoringPointType === MonitoringPoint.Type.Enum.BoltPreload ||
+          firstMonitoringPointType === MonitoringPoint.Type.Enum.AnchorPreload
+        );
+      },
+      isLoosening: (firstMonitoringPointType: number) =>
+        firstMonitoringPointType === MonitoringPoint.Type.Enum.BoltLoosening
     }
-  },
-  SettingsGroup: MotorSettingsGroup
+  }
 };
 
 function filter(measurements?: MonitoringPointRow[]) {
   if (!measurements) return [];
-  return measurements.filter((point) => !OMonitoringPoint.Type.isVirtual(point.type));
+  return measurements.filter((point) => !MonitoringPoint.Type.isVirtual(point.type));
 }
 
 function sort(measurements: MonitoringPointRow[]) {

@@ -5,21 +5,21 @@ import { UpdateFormProps } from './update-form';
 import { useNotificationContext } from 'providers/notification';
 import intl from 'react-intl-universal';
 import { CreateFormProps } from './create-form-modal';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
-import { Component, PrimaryAssetType } from 'domain/asset';
+import * as MonitoringPoint from 'domain/monitoring-point';
+import { Component, PrimaryAsset } from 'domain/asset';
 
 export const useComponents = (type: number) => {
-  const assetCategories = PrimaryAssetType.getTypesByMonitoringPointTypes([type]);
+  const assetCategories = PrimaryAsset.getTypesByMonitoringPointTypes([type]);
   const componentIds: number[] = [];
   assetCategories.forEach((type) => {
-    componentIds.push(...PrimaryAssetType.getComponentIds(type));
+    componentIds.push(...PrimaryAsset.getComponentIds(type));
   });
   return [{ key: 0, label: 'NONE' }].concat(
     Array.from(new Set(componentIds)).map((id) => Component.get(id))
   );
 };
 
-type SensorBindingInput = Pick<TMonitoringPoint.PostDTO, 'channel' | 'device_id'> & {
+type SensorBindingInput = Pick<MonitoringPoint.Types.PostDTO, 'channel' | 'device_id'> & {
   process_id: number;
 };
 type SensorBindingOutput = Omit<SensorBindingInput, 'channel'> & {
@@ -48,7 +48,7 @@ export const useCreateFormProps = (): CreateFormProps => {
 
 const useAddMonitoringPoints = () => useRequest(addMonitoringPoints, { manual: true });
 
-const addMonitoringPoints = async (params: TMonitoringPoint.PostDTO[]) => {
+const addMonitoringPoints = async (params: MonitoringPoint.Types.PostDTO[]) => {
   const { data } = await request.post(`monitoringPoints/batch`, {
     monitoring_points: params.map((m) => ({
       ...m,
@@ -58,7 +58,9 @@ const addMonitoringPoints = async (params: TMonitoringPoint.PostDTO[]) => {
   return data;
 };
 
-export const useUpdateFormProps = (monitoringPoint: TMonitoringPoint.Base): UpdateFormProps => {
+export const useUpdateFormProps = (
+  monitoringPoint: MonitoringPoint.Types.Entity
+): UpdateFormProps => {
   const { error, handleSubmit, loading } = useUpdateMonitoringPoint(monitoringPoint);
   const { messageInstance } = useNotificationContext();
   return {
@@ -75,13 +77,13 @@ export const useUpdateFormProps = (monitoringPoint: TMonitoringPoint.Base): Upda
   };
 };
 
-const useUpdateMonitoringPoint = ({ id, device }: TMonitoringPoint.Base) => {
+const useUpdateMonitoringPoint = ({ id, device }: MonitoringPoint.Types.Entity) => {
   const unBindSensorRq = useUnBindSensor();
   const bindSensorRq = useBindSensor();
   const updateRq = useRequest(updateMonitoringPoint, { manual: true });
   const [error, setError] = React.useState<string>();
 
-  const handleSubmit = async (data: TMonitoringPoint.PostDTO) => {
+  const handleSubmit = async (data: MonitoringPoint.Types.PostDTO) => {
     const oldSensorId = device?.id;
     const bindingInput = { ...data, process_id: getProcessId(data) };
     let canDoNext = false;
@@ -123,12 +125,12 @@ const useUpdateMonitoringPoint = ({ id, device }: TMonitoringPoint.Base) => {
   };
 };
 
-const getProcessId = (data: TMonitoringPoint.PostDTO) => {
-  const processId = OMonitoringPoint.Type.getProcessId(data.type);
+const getProcessId = (data: MonitoringPoint.Types.PostDTO) => {
+  const processId = MonitoringPoint.Type.getProcessId(data.type);
   return processId ? processId : data.channel ? 2 : 1;
 };
 
-const updateMonitoringPoint = async (id: number, data: TMonitoringPoint.PostDTO) => {
+const updateMonitoringPoint = async (id: number, data: MonitoringPoint.Types.PostDTO) => {
   const res = await request.put(`/monitoringPoints/${id}`, data);
   return res.data;
 };

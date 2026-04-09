@@ -1,10 +1,5 @@
 import { Device } from 'types/device';
-import {
-  AxisWithVibrationDirectionLabel as AxisWithDirectionLabel,
-  CorrosionMonitoringPointSettings,
-  MonitoringPointSettings,
-  VibrationDirectionSettings
-} from './settings';
+import { Entity as Settings } from './settings';
 
 export type Property = {
   key: string;
@@ -17,10 +12,10 @@ export type Property = {
   isShow: boolean;
 };
 
-type MonitoringPointDTO = {
+export type DTO = {
   alertLevel: number;
   assetId: number;
-  attributes: MonitoringPointSettings;
+  attributes: Settings;
   bindingDevices: Device[];
   data: { timestamp: number; values: { [key: string]: number } };
   id: number;
@@ -29,9 +24,9 @@ type MonitoringPointDTO = {
   type: number;
 };
 
-type MonitoringPointPostDTO = {
+export type PostDTO = {
   asset_id: number;
-  attributes: MonitoringPointSettings;
+  attributes: Settings;
   channel?: number;
   device_id?: number;
   deviceName?: string;
@@ -40,24 +35,12 @@ type MonitoringPointPostDTO = {
   typeLabel?: string;
 };
 
-export namespace TMonitoringPoint {
-  export type Base = Omit<MonitoringPointDTO, 'bindingDevices'> & { device?: Device };
-  export type DTO = MonitoringPointDTO;
-  export type PostDTO = MonitoringPointPostDTO;
-  export type Settings = MonitoringPointSettings;
-  export namespace Settings {
-    export type Corrosion = CorrosionMonitoringPointSettings;
-    export type VibrationDirection = VibrationDirectionSettings;
-    export type AxisWithVibrationDirectionLabel = AxisWithDirectionLabel;
-  }
-}
+export type Entity = Omit<DTO, 'bindingDevices'> & { device?: Device };
 
-export const transform = (dto: MonitoringPointDTO): TMonitoringPoint.Base => {
+export const transform = (dto: DTO): Entity => {
   return { ...dto, device: dto?.bindingDevices?.[0] };
 };
 
-export const transform2PostDTO = (point: TMonitoringPoint.Base): MonitoringPointPostDTO => {
+export const transform2PostDTO = (point: Entity): PostDTO => {
   return { ...point, asset_id: point.assetId, device_id: point.device?.id };
 };
-
-

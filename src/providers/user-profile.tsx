@@ -4,7 +4,7 @@ import { Result, SelectProps, Spin } from 'antd';
 import { GlobalStore } from '../utils/global-store';
 import request from '../utils/request';
 import intl from 'react-intl-universal';
-import { ProjectType, ProjectTypeConfig } from 'domain/project-type';
+import * as ProjectType from 'domain/project-type';
 
 const store = GlobalStore.getInstance(true);
 
@@ -129,6 +129,6 @@ export const useAppTypeMappingWithSelectedProject = () => {
   const selectedProject = useSelectedProject();
   const projectType = selectedProject?.type;
   if (projectType) {
-    return ProjectTypeConfig.getAppType(projectType as unknown as ProjectType);
+    return ProjectType.getAppType(projectType as unknown as ProjectType.Enum);
   }
 };

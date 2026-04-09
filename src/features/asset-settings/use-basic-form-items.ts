@@ -17,7 +17,7 @@ export const useParents = ({ assetId, type }: { assetId?: number; type?: number 
   const { assets } = useAssetsContext();
   const parents: AssetRow[] = [];
   mapTree(assets, (asset) => {
-    if (type && FolderAsset.types.includes(asset.type)) {
+    if (type && FolderAsset.Enums.includes(asset.type)) {
       parents.push(asset);
     }
   });

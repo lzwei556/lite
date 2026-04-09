@@ -1,7 +1,7 @@
 import { toSnake } from 'ts-case-convert';
 import { pickOptionsFromNumericEnum, transformSnake2Dot } from 'utils';
 
-enum Type {
+export enum Enum {
   ShaftWear = 1001,
   BearingLooseness = 1002,
   BearingMisalignment = 1003,
@@ -17,26 +17,21 @@ enum Type {
 }
 
 type Config = {
-  key: Type;
+  key: Enum;
   label: string;
   // description: string;
   suggestion: string;
 };
 const PREFIX = 'fault.type';
 
-const getLabel = (enumKey: string) => {
+export const getLabel = (enumKey: string) => {
   return `${PREFIX}.${transformSnake2Dot(toSnake(enumKey))}`;
 };
 
-const get = (key: Type): Config => {
-  const label = getLabel(Type[key]);
+export const get = (key: Enum): Config => {
+  const label = getLabel(Enum[key]);
   return { key, label, suggestion: `${label}.suggestion` };
 };
 
-export type FaultType = Type;
+export const options = pickOptionsFromNumericEnum(Enum, PREFIX)
 
-export const FaultTypeConfig = {
-  get,
-  getLabel,
-  options: pickOptionsFromNumericEnum(Type, PREFIX)
-};

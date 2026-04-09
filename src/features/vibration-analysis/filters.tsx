@@ -2,8 +2,8 @@ import { LightSelectFilter } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Property, useProperty } from './useTrend';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
-import { AxisOption } from 'domain/axis';
+import * as MonitoringPoint from 'domain/monitoring-point';
+import * as Axis from 'domain/axis';
 
 export type PropertyFilters = {
   property: Property;
@@ -35,11 +35,11 @@ export const usePropertiesFilters = (isAnalysisOnlyAcceleration?: boolean): Prop
 };
 
 export type AxisFilters = {
-  axis: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel;
+  axis: MonitoringPoint.Settings.AxisWithVibrationDirection;
   setAxis: React.Dispatch<
-    React.SetStateAction<TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel>
+    React.SetStateAction<MonitoringPoint.Settings.AxisWithVibrationDirection>
   >;
-  options: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel[];
+  options: MonitoringPoint.Settings.AxisWithVibrationDirection[];
 };
 
 export const AxisSelect = ({ axis, options, setAxis }: AxisFilters) => {
@@ -47,7 +47,7 @@ export const AxisSelect = ({ axis, options, setAxis }: AxisFilters) => {
     <LightSelectFilter
       allowClear={false}
       options={options.map((a) => ({ ...a, label: intl.get(a.label) }))}
-      onChange={(value: AxisOption['value']) => {
+      onChange={(value: Axis.Option['value']) => {
         const axis = options.find((opt) => opt.value === value);
         if (axis) {
           setAxis(axis);
@@ -59,10 +59,9 @@ export const AxisSelect = ({ axis, options, setAxis }: AxisFilters) => {
   );
 };
 
-export const useAxisFilters = (attributes?: TMonitoringPoint.Settings): AxisFilters => {
-  const { axis, setAxis, options } =
-    OMonitoringPoint.Settings.Vibration.useAxisWithVibrationDirection(
-      attributes as TMonitoringPoint.Settings.VibrationDirection
-    );
+export const useAxisFilters = (attributes?: MonitoringPoint.Settings.Entity): AxisFilters => {
+  const { axis, setAxis, options } = MonitoringPoint.Hooks.useAxisWithVibrationDirection(
+    attributes as MonitoringPoint.Settings.VibrationDirection
+  );
   return { axis, setAxis, options };
 };

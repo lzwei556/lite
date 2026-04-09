@@ -16,14 +16,14 @@ import { DurationFormItem } from './durationFormItem';
 import { ConditionFormItem } from './conditionFormItem';
 import { SeverityFormItem } from './severityFormItem';
 import { IndexFormItem } from './indexFormItem';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { useAppConfig } from 'providers/app';
-import { Feature } from 'domain/feature-property';
+import * as Feature from 'domain/feature-property';
 
 export function CreateModal(props: ModalFormProps) {
   const monitoringPointTypeOptions = useAppConfig().monitoringPointTypeOptions;
   const [form] = Form.useForm();
-  const [properties, setProperties] = React.useState<Feature.Property[]>([]);
+  const [properties, setProperties] = React.useState<Feature.Types.Property[]>([]);
   const [metric, setMetric] = React.useState<{ key: string; name: string; unit?: string }[]>([]);
 
   const defaultValues = { duration: 1, operation: '>=', level: AlarmLevel.Critical };
@@ -77,7 +77,7 @@ export function CreateModal(props: ModalFormProps) {
                     if (measurementType) {
                       setProperties(
                         removeDulpicateProperties(
-                          OMonitoringPoint.Type.getProperties({
+                          MonitoringPoint.Type.getProperties({
                             type: measurementType,
                             properties: res
                           }).map(NormalizeAttitudeIndexProperty)
@@ -215,7 +215,7 @@ export function CreateModal(props: ModalFormProps) {
   );
 }
 
-function removeDulpicateProperties(properties: Feature.Property[]) {
+function removeDulpicateProperties(properties: Feature.Types.Property[]) {
   const final = cloneDeep(properties);
   return final.map((property) => {
     const fields = property.fields;
@@ -227,7 +227,7 @@ function removeDulpicateProperties(properties: Feature.Property[]) {
   });
 }
 
-function NormalizeAttitudeIndexProperty(property: Feature.Property) {
+function NormalizeAttitudeIndexProperty(property: Feature.Types.Property) {
   const p = { ...property };
   return p.key === 'attitude' ? { ...p, key: p.fields?.[0]?.key ?? p.key } : p;
 }

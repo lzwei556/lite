@@ -1,6 +1,6 @@
 import { DeviceType } from '../types/device_type';
 import { ProcessType } from './types';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export enum ProcessTypeKey {
   AutoFill = 101
@@ -19,7 +19,7 @@ export const processTypes: ProcessType[] = [
   {
     key: ProcessTypeKey.AutoFill,
     label: ProcessTypeKey[ProcessTypeKey.AutoFill],
-    sourceType: OMonitoringPoint.Type.VibrationAudio,
+    sourceType: MonitoringPoint.Type.Enum.VibrationAudio,
     deviceType: DeviceType.OilFiller,
     parameters: [
       {

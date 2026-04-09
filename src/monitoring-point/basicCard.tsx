@@ -4,7 +4,7 @@ import { Descriptions, DescriptionsProps, MutedCard } from '../components';
 import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { useAssets } from 'features/monitoring-point-settings/use-basic-form-items';
 import { MonitoringPointRow } from 'asset-common';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
   const { assetId, attributes, type } = monitoringPoint;
@@ -12,16 +12,16 @@ export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPoin
   const items: DescriptionsProps['items'] = [
     {
       label: intl.get('TYPE'),
-      children: intl.get(OMonitoringPoint.Type.getLabel(type))
+      children: intl.get(MonitoringPoint.Type.getLabel(type))
     }
   ];
   if (parent) {
     items.push({ label: intl.get('asset.parent'), children: truncate(parent.name, 24) });
   }
   if (attributes) {
-    const fields = OMonitoringPoint.Type.getSettings(type);
+    const fields = MonitoringPoint.Type.getSettings(type);
     fields.forEach(({ label, name, translatingUnit, type, options, unit }) => {
-      const children = attributes[name as keyof TMonitoringPoint.Settings];
+      const children = attributes[name as keyof MonitoringPoint.Settings.Entity];
       if (type === 'string') {
         items.push({
           label: intl.get(label),

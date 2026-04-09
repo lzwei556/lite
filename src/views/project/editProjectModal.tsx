@@ -6,9 +6,8 @@ import { Project } from '../../types/project';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { CreateProjectRequest, UpdateProjectRequest } from '../../apis/project';
-
 import { useAppConfig } from 'providers/app';
-import { ProjectTypeConfig } from 'domain/project-type';
+import * as ProjectType from 'domain/project-type';
 
 export const EditProjectModal = ({
   project,
@@ -17,7 +16,7 @@ export const EditProjectModal = ({
 }: ModalFormProps & { project?: Project }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [form] = Form.useForm();
-  const projectTypeOptions = ProjectTypeConfig.options;
+  const projectTypeOptions = ProjectType.options;
 
   const handleOK = () => {
     form.validateFields().then((values) => {
@@ -48,7 +47,7 @@ export const EditProjectModal = ({
         layout='vertical'
         initialValues={{
           ...project,
-          type: project?.type ?? ProjectTypeConfig.Type.ConditionMonitoring,
+          type: project?.type ?? ProjectType.Enum.ConditionMonitoring,
           description: project?.description ?? ''
         }}
       >

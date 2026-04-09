@@ -17,7 +17,7 @@ import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
 import { MarkList } from './markList';
 import { MonitoringPointRow } from 'monitoring-point';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type MarkType = 'point' | 'area';
 
@@ -55,7 +55,7 @@ const Content = (props: MonitoringPointRow & { range: Range }) => {
       </Card>
     );
   }
-  const _properties = OMonitoringPoint.Type.getProperties(props);
+  const _properties = MonitoringPoint.Type.getProperties(props);
   if (_properties.length === 0) return null;
   const property = _properties[0];
 

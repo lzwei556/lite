@@ -4,7 +4,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { generateColProps } from 'utils/grid';
 import { toUniversalFormItemProps } from 'types';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 export const FormItemsSettings = ({
   type,
@@ -25,7 +25,7 @@ export const FormItemsSettings = ({
     return colProps;
   };
 
-  return PrimaryAssetType.getGroupedSettings(type).map(([group, fields], i) => (
+  return PrimaryAsset.getGroupedSettings(type).map(([group, fields], i) => (
     <Card
       style={{ marginTop: i === 0 ? 16 : 0, marginBottom: 16 }}
       title={intl.get(group).d(group)}

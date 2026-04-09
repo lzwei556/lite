@@ -1,18 +1,18 @@
 import React from 'react';
 import { Pagination, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
-import {  AssetRow } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import { useGlobalStyles } from 'styles';
 import { Card, Flex, Link } from 'components';
 import { getValue } from 'utils/format';
 import { Icon as PrimaryIcon } from 'asset-primary/icons';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { AssetTree } from 'domain/asset';
 
 export const OverviewCardLegacy = ({ asset }: { asset: AssetRow }) => {
   const { id, monitoringPoints = [], name, type } = asset;
   const items = monitoringPoints.map((m) => {
-    const property = OMonitoringPoint.Type.getProperties(m).filter((p) => p.first)?.[0];
+    const property = MonitoringPoint.Type.getProperties(m).filter((p) => p.first)?.[0];
     let value = NaN;
     if (property) {
       const key =

@@ -88,7 +88,7 @@ export const FolderAssetsTable = ({
 const getDataSource = (assets: AssetRow[]) => {
   const dataSource: AssetRow[] = [];
   mapTree(assets, (asset) => {
-    if (FolderAsset.types.includes(asset.type)) {
+    if (FolderAsset.Enums.includes(asset.type)) {
       dataSource.push({ ...asset, children: undefined });
     }
   });

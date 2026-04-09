@@ -1,44 +1,35 @@
-import { flangeFields, FlangeSettingsField } from './flange';
-import { MotorSettingsGroup } from './group';
-import { motorFields, MotorSettingsField } from './motor';
+import { flangeFields, Flange } from './flange';
+import { SettingsGroup } from './group';
+import { motorFields, Motor } from './motor';
 import {
   blowerFields,
   chillerFields,
   compressorFields,
   fanFields,
-  MotorAsSettingsField,
+  MotorAs,
   motorSetFields,
   pumpFields
 } from './motor-as';
 
-export type PrimaryAssetSettingsField =
-  | (MotorSettingsField & { visibleWhen?: (values: any) => boolean })
-  | MotorAsSettingsField
-  | FlangeSettingsField;
+export type Settings = (Motor & { visibleWhen?: (values: any) => boolean }) | MotorAs | Flange;
 
-export const flangeSettings: PrimaryAssetSettingsField[] = flangeFields;
+export const flangeSettings: Settings[] = flangeFields;
 
-export const motorSettings: PrimaryAssetSettingsField[] = motorFields.map((f) => ({
+export const motorSettings: Settings[] = motorFields.map((f) => ({
   ...f,
-  group: f.group ?? MotorSettingsGroup.Motor
+  group: f.group ?? SettingsGroup.Motor
 }));
 
-export const fanSettings = (fanFields as PrimaryAssetSettingsField[]).concat(motorSettings);
+export const fanSettings = (fanFields as Settings[]).concat(motorSettings);
 
-export const blowerSettings = (blowerFields as PrimaryAssetSettingsField[]).concat(motorSettings);
+export const blowerSettings = (blowerFields as Settings[]).concat(motorSettings);
 
-export const compressorSettings = (compressorFields as PrimaryAssetSettingsField[]).concat(
-  motorSettings
-);
+export const compressorSettings = (compressorFields as Settings[]).concat(motorSettings);
 
-export const motorSetSettings = (motorSetFields as PrimaryAssetSettingsField[]).concat(
-  motorSettings
-);
+export const motorSetSettings = (motorSetFields as Settings[]).concat(motorSettings);
 
-export const pumpSettings = (pumpFields as PrimaryAssetSettingsField[]).concat(motorSettings);
+export const pumpSettings = (pumpFields as Settings[]).concat(motorSettings);
 
-export const coolingTowerSettings = (fanFields as PrimaryAssetSettingsField[]).concat(
-  motorSettings
-);
+export const coolingTowerSettings = (fanFields as Settings[]).concat(motorSettings);
 
-export const chillerSettings = (chillerFields as PrimaryAssetSettingsField[]).concat(motorSettings);
+export const chillerSettings = (chillerFields as Settings[]).concat(motorSettings);

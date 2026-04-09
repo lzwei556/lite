@@ -2,7 +2,7 @@ import { Device } from '../../types/device';
 import { Property } from '../../types/property';
 import { DeviceType, SENSOR_DISPLAY_PROPERTIES } from '../../types/device_type';
 import { getValue } from '../../utils/format';
-import { Feature } from 'domain/feature-property';
+import * as Feature from 'domain/feature-property';
 
 export const getValueOfFirstClassProperty = (device: Device) => {
   const properties = getDisplayProperties(device.properties, device.typeId).filter((p) => p.first);
@@ -11,7 +11,7 @@ export const getValueOfFirstClassProperty = (device: Device) => {
 };
 
 export function pickDataOfFirstProperties(
-  properties: Feature.Property[],
+  properties: Feature.Types.Property[],
   data?: {
     timestamp: number;
     values: {
@@ -87,7 +87,7 @@ export function getDisplayProperties(properties: Property[], deviceType: DeviceT
   const dispalyPropertiesSettings =
     SENSOR_DISPLAY_PROPERTIES[deviceType as keyof typeof SENSOR_DISPLAY_PROPERTIES];
   if (!dispalyPropertiesSettings || dispalyPropertiesSettings.length === 0) {
-    return remotes.sort((prev, crt) => prev.sort - crt.sort) as Feature.Property[];
+    return remotes.sort((prev, crt) => prev.sort - crt.sort) as Feature.Types.Property[];
   } else {
     return dispalyPropertiesSettings
       .map((p) => {
@@ -104,7 +104,7 @@ export function getDisplayProperties(properties: Property[], deviceType: DeviceT
             }))
         };
       })
-      .filter((p) => !!p.fields) as Feature.Property[];
+      .filter((p) => !!p.fields) as Feature.Types.Property[];
   }
 }
 

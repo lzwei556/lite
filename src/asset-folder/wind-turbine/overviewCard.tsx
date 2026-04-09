@@ -1,7 +1,7 @@
 import { Asset,  AssetRow } from 'asset-common';
 import { Icon } from 'asset-primary/icons';
 import { Card, Descriptions, Link } from 'components';
-import { AssetTree, PrimaryAssetType } from 'domain/asset';
+import { AssetTree, PrimaryAsset } from 'domain/asset';
 import { FlangeMonitoringPointsCircleChart, InclinationOffsetsChart } from 'features/feature-data';
 import React from 'react';
 import intl from 'react-intl-universal';
@@ -27,7 +27,7 @@ export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
               }))}
               style={{ marginTop: 16 }}
             />
-            {PrimaryAssetType.Flange === type ? (
+            {PrimaryAsset.Enum.Flange === type ? (
               <FlangeMonitoringPointsCircleChart asset={asset} style={style} />
             ) : (
               <InclinationOffsetsChart asset={asset} />

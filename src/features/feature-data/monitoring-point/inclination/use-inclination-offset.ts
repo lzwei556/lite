@@ -3,19 +3,19 @@ import { getValue, roundValue } from 'utils';
 import { ChartProps, getOptions } from 'components';
 import intl from 'react-intl-universal';
 import { FeatureDataDTO } from '../../types';
-import { FeatureProperty } from 'domain/feature-property';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 const INCLINATION_OFFSET_PROPERTY = {
   displacement: {
     key: 'FIELD_DISPLACEMENT',
     label: 'FIELD_DISPLACEMENT',
-    unit: FeatureProperty.TopInclination.Displacement.unit!
+    unit: Feature.Property.TopInclination.Displacement.unit!
   },
   direction: {
-    key: FeatureProperty.TopInclination.Direction.name,
-    label: FeatureProperty.TopInclination.Direction.name,
-    unit: FeatureProperty.TopInclination.Direction.unit!
+    key: Feature.Property.TopInclination.Direction.name,
+    label: Feature.Property.TopInclination.Direction.name,
+    unit: Feature.Property.TopInclination.Direction.unit!
   }
 };
 
@@ -32,7 +32,7 @@ export type Data = {
 
 export const transform = (monitoringPoints: Props[]) => {
   return monitoringPoints.map(({ name, type, data }) => {
-    const displacementKey = OMonitoringPoint.Type.Category.Inclination.getDisplacementKey(type);
+    const displacementKey = MonitoringPoint.Type.Category.Inclination.getDisplacementKey(type);
     return {
       name,
       data: pickData(data, displacementKey),

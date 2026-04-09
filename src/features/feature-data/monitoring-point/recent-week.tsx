@@ -3,8 +3,8 @@ import { RecentWeek } from '../common/recent-week';
 import { useRecentWeek } from '../use-services';
 import { InclinationGridItem } from './inclination/inclination-offset';
 import { getColProps } from '../common/use-recent-week-props';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
-import { Feature, FeatureProperty } from 'domain/feature-property';
+import * as MonitoringPoint from 'domain/monitoring-point';
+import * as Feature from 'domain/feature-property';
 
 export const RecentWeekMonitoringPointData = ({
   id,
@@ -12,12 +12,12 @@ export const RecentWeekMonitoringPointData = ({
   type,
   attributes,
   ...rest
-}: TMonitoringPoint.Base & { getAlarm: (property: Feature.Property) => void }) => {
+}: MonitoringPoint.Types.Entity & { getAlarm: (property: Feature.Types.Property) => void }) => {
   const { data, loading } = useRecentWeek(id, 'monitoringPoints');
-  const properties = OMonitoringPoint.Type.getProperties({ type, properties: rest.properties }).map(
+  const properties = MonitoringPoint.Type.getProperties({ type, properties: rest.properties }).map(
     (property) => ({
       ...property,
-      fields: FeatureProperty.appendVibrationDirectionAbbr(property.fields, attributes)
+      fields: Feature.Property.appendVibrationDirectionAbbr(property.fields, attributes)
     })
   );
   const colProps = getColProps(properties.length);

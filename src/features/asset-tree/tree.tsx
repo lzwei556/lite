@@ -4,7 +4,7 @@ import { MonitoringPointRow } from 'monitoring-point/types';
 import { useAssetsContext } from 'providers/assets';
 import { useNavigate } from 'react-router-dom';
 import { mapTree } from 'utils/tree';
-import { AssetTree as AssetTreeConfig } from 'domain/asset';
+import { Hooks, AssetTree as AT } from 'domain/asset';
 
 export const AssetTree = ({
   height,
@@ -19,7 +19,7 @@ export const AssetTree = ({
 }) => {
   const { assets, assetsLoading } = useAssetsContext();
   const navigate = useNavigate();
-  const { root } = AssetTreeConfig.useVirturalAsset();
+  const { root } = Hooks.useVirturalAsset();
   const mixedTree = mapTree(
     [
       {
@@ -27,7 +27,7 @@ export const AssetTree = ({
         children: assets
       } as AssetRow
     ],
-    (asset) => AssetTreeConfig.combine(asset)
+    (asset) => AT.combine(asset)
   );
   const treedata = mapTree(mixedTree, (mix) => {
     const { id, type } = mix;
@@ -57,7 +57,7 @@ export const AssetTree = ({
           onClick={onClick}
           onSelect={(_, e: any) => {
             const { id, type } = e.node;
-            navigate(`/${AssetTreeConfig.Path.Assets}/${AssetTreeConfig.pickId(id)}-${type}`);
+            navigate(`/${AT.Path.Assets}/${AT.pickId(id)}-${type}`);
           }}
           selectedKeys={selectedKeys}
           defaultExpandAll={true}

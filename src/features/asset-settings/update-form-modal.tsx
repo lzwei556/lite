@@ -14,7 +14,7 @@ import { UpdateFormProps } from './update-form';
 import { FormItemsSettings } from './form-items-settings';
 import { generateColProps } from 'utils/grid';
 import { Grid } from 'components';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 export const UpdateFormModal = ({
   onSuccess,
@@ -57,7 +57,7 @@ export const UpdateFormModal = ({
               parentSelectFormItem: <ParentSelectFormItem {...{ formItemColProps, type }} />,
               typeSelectFormItem: <TypeSelectFormItem {...typeRest} />,
               diagnosisFormItems: type &&
-                PrimaryAssetType.Category.getTypes(['vibration']).includes(type) && (
+                PrimaryAsset.Category.getTypes(['vibration']).includes(type) && (
                   <DiagnosisFormItems asset={editingAsset} formItemColProps={formItemColProps} />
                 )
             }}

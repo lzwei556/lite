@@ -24,7 +24,7 @@ import { EditProjectModal } from './editProjectModal';
 import { AllocUserDrawer } from './allocUserDrawer';
 import { ProfileContext, useDeleteProject } from '../../providers/user-profile';
 import { CanAccess, Permission } from '../../providers/access-control';
-import { ProjectTypeConfig } from 'domain/project-type';
+import * as ProjectType from 'domain/project-type';
 
 type ModalType = 'update' | 'assign' | undefined;
 
@@ -34,7 +34,7 @@ const ProjectPage = () => {
   const [dataSource, setDataSource] = React.useState<PageResult<any>>();
   const [project, setProject] = React.useState<Project>();
   const [store, setStore, gotoPage] = useStore('projectList');
-  const projectTypeOptions = ProjectTypeConfig.options;
+  const projectTypeOptions = ProjectType.options;
   const [token, setToken] = React.useState<string>();
   const { selectedProject } = React.useContext(ProfileContext);
   const deleteProject = useDeleteProject();

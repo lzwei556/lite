@@ -2,12 +2,12 @@ import intl from 'react-intl-universal';
 import { getOptionLabelByValue, getValue, truncate } from 'utils';
 import { Descriptions, DescriptionsProps } from 'components';
 import { FieldHelper } from 'types';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 export const PrimaryAssetSettingsDetail = ({
   attributes,
   type,
-  groups = [PrimaryAssetType.SettingsGroup.Motor],
+  groups = [PrimaryAsset.SettingsGroup.Motor],
   maxHeight = 400,
   ...rest
 }: DescriptionsProps & {
@@ -18,7 +18,7 @@ export const PrimaryAssetSettingsDetail = ({
 }) => {
   const items: DescriptionsProps['items'] = [];
   if (attributes) {
-    const settings = PrimaryAssetType.getSettings(type);
+    const settings = PrimaryAsset.getSettings(type);
     if (settings.length > 0) {
       settings
         .filter((field) => (field.visibleWhen ? field.visibleWhen(attributes) : true))

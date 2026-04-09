@@ -1,8 +1,8 @@
 import React from 'react';
 import { CustomizableInterval } from '../common/customizable-interval';
 import { useCustomizableInterval } from '../use-services';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
-import { Feature, FeatureProperty } from 'domain/feature-property';
+import * as MonitoringPoint from 'domain/monitoring-point';
+import * as Feature from 'domain/feature-property';
 
 export const CustomizableIntervalMonitoringPointData = ({
   id,
@@ -10,16 +10,16 @@ export const CustomizableIntervalMonitoringPointData = ({
   type,
   properties,
   attributes
-}: TMonitoringPoint.Base & { getAlarm: (property: Feature.Property) => void }) => {
+}: MonitoringPoint.Types.Entity & { getAlarm: (property: Feature.Types.Property) => void }) => {
   return (
     <CustomizableInterval
       {...{
         ...useCustomizableInterval(id, 'monitoringPoints'),
         id,
         name,
-        properties: OMonitoringPoint.Type.getProperties({ type, properties }).map((property) => ({
+        properties: MonitoringPoint.Type.getProperties({ type, properties }).map((property) => ({
           ...property,
-          fields: FeatureProperty.appendVibrationDirectionAbbr(property.fields, attributes)
+          fields: Feature.Property.appendVibrationDirectionAbbr(property.fields, attributes)
         })),
         urlPathname: 'monitoringPoints'
       }}

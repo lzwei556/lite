@@ -1,9 +1,9 @@
 import { DeviceType } from 'types/device_type';
-import { FolderAssetType, FolderAsset } from './asset/folder';
-import { PrimaryAsset, PrimaryAssetType } from './asset/primary';
-import { MonitoringPointType, OMonitoringPoint } from './monitoring-point';
+import * as FolderAsset from './asset/folder';
+import * as PrimaryAsset from './asset/primary';
+import * as MonitoringPoint from './monitoring-point';
 
-type Type =
+export type Enum =
   | 'bolt'
   | 'bridgeBolt'
   | 'corrosion'
@@ -21,34 +21,34 @@ type Type =
 type Config = {
   name: string;
   rootAsset: { label: string; labels: string };
-  folderAssetTypes: FolderAssetType[];
-  primaryAssetTypes?: PrimaryAsset.Type[];
+  folderAssetTypes: FolderAsset.Enum[];
+  primaryAssetTypes?: PrimaryAsset.Enum[];
 };
 const corrosion: Config = {
   name: 'CORROSION_MONITORING_SYSTEM',
-  rootAsset: { label: FolderAsset.Type[FolderAsset.Type.Area], labels: 'areas' },
-  folderAssetTypes: [FolderAsset.Type.Area],
-  primaryAssetTypes: [PrimaryAssetType.Pipe, PrimaryAssetType.Tank]
+  rootAsset: { label: FolderAsset.Enum[FolderAsset.Enum.Area], labels: 'areas' },
+  folderAssetTypes: [FolderAsset.Enum.Area],
+  primaryAssetTypes: [PrimaryAsset.Enum.Pipe, PrimaryAsset.Enum.Tank]
 };
 const general: Config = {
   name: 'IOT_CLOUD_MONITORING_SYSTEM',
   rootAsset: { label: 'ASSET', labels: 'assets' },
-  folderAssetTypes: [FolderAsset.Type.Area, FolderAsset.Type.WindTurbine]
+  folderAssetTypes: [FolderAsset.Enum.Area, FolderAsset.Enum.WindTurbine]
 };
 const vibration: Config = {
   name: 'IOT_CLOUD_MONITORING_SYSTEM',
-  rootAsset: { label: FolderAsset.Type[FolderAsset.Type.Area], labels: 'areas' },
-  folderAssetTypes: [FolderAsset.Type.Area],
-  primaryAssetTypes: PrimaryAssetType.Category.vibrations
+  rootAsset: { label: FolderAsset.Enum[FolderAsset.Enum.Area], labels: 'areas' },
+  folderAssetTypes: [FolderAsset.Enum.Area],
+  primaryAssetTypes: PrimaryAsset.Category.vibrations
 };
 const windTurbine: Config = {
   name: 'WIND_TURBINE_BOLT_MONITORING_SYSTEM',
-  rootAsset: { label: FolderAsset.Type[FolderAsset.Type.WindTurbine], labels: 'wind.turbines' },
-  folderAssetTypes: [FolderAsset.Type.WindTurbine],
-  primaryAssetTypes: [PrimaryAssetType.Flange]
+  rootAsset: { label: FolderAsset.Enum[FolderAsset.Enum.WindTurbine], labels: 'wind.turbines' },
+  folderAssetTypes: [FolderAsset.Enum.WindTurbine],
+  primaryAssetTypes: [PrimaryAsset.Enum.Flange]
 };
 
-const table: { [Key in Type]: Config } = {
+const table: { [Key in Enum]: Config } = {
   bolt: general,
   bridgeBolt: general,
   corrosion,
@@ -63,24 +63,22 @@ const table: { [Key in Type]: Config } = {
   windTurbine,
   windTurbinePro: {
     ...windTurbine,
-    primaryAssetTypes: [PrimaryAssetType.Flange, PrimaryAssetType.Tower]
+    primaryAssetTypes: [PrimaryAsset.Enum.Flange, PrimaryAsset.Enum.Tower]
   }
 };
 
-const get = (type: Type): Config => table[type];
+export const get = (type: Enum): Config => table[type];
 
-export type AppType = Type;
-
-export const AppTypeConfig = {
-  get,
-  getMonitoringPointTypeOptions: (type: Type): { value: MonitoringPointType; label: string }[] => {
-    const { folderAssetTypes, primaryAssetTypes } = get(type);
-    return FolderAsset.getMonitoringPointTypes(folderAssetTypes, primaryAssetTypes).map(
-      (value) => ({ value, label: OMonitoringPoint.Type.getLabel(value) })
-    );
-  },
-  getDeviceTypes: (type: Type): DeviceType[] => {
-    const { folderAssetTypes, primaryAssetTypes } = get(type);
-    return FolderAsset.getDeviceTypes(folderAssetTypes, primaryAssetTypes);
-  }
+export const getMonitoringPointTypeOptions = (
+  type: Enum
+): { value: MonitoringPoint.Type.Enum; label: string }[] => {
+  const { folderAssetTypes, primaryAssetTypes } = get(type);
+  return FolderAsset.getMonitoringPointTypes(folderAssetTypes, primaryAssetTypes).map((value) => ({
+    value,
+    label: MonitoringPoint.Type.getLabel(value)
+  }));
+};
+export const getDeviceTypes = (type: Enum): DeviceType[] => {
+  const { folderAssetTypes, primaryAssetTypes } = get(type);
+  return FolderAsset.getDeviceTypes(folderAssetTypes, primaryAssetTypes);
 };

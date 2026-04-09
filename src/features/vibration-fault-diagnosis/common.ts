@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import request from 'utils/request';
 import { GetResponse } from 'utils/response';
 import { useRequest } from 'ahooks';
-import { FaultTypeConfig } from 'domain/fault-types';
+import * as FaultType from 'domain/fault-types';
 
 enum Confidence {
   Slight = 1,
@@ -134,7 +134,7 @@ export const useHealthStatus = ({
       children:
         status.key === 0 && types.length === 0
           ? intl.get('NONE')
-          : types.map((type) => intl.get(FaultTypeConfig.get(type.key).label)).join(separator)
+          : types.map((type) => intl.get(FaultType.get(type.key).label)).join(separator)
     },
     descriptionWithConfidence: {
       label: intl.get('diagnosis.description'),
@@ -142,7 +142,7 @@ export const useHealthStatus = ({
         status.key === 0 && types.length === 0
           ? intl.get('NONE')
           : faults.map(({ type, confidence, axis }) => {
-              const typeLabel = intl.get(FaultTypeConfig.get(type).label);
+              const typeLabel = intl.get(FaultType.get(type).label);
               const axisLabel = getAxisLabel(axis);
               const confidenceLabel = intl.get(
                 `fault.confidence.${Confidence[confidence].toLowerCase()}`
@@ -162,5 +162,5 @@ export const useHealthStatus = ({
 };
 
 export const flattenFaultTypes = (types: number[]) => {
-  return Array.from(new Set(types)).map(FaultTypeConfig.get);
+  return Array.from(new Set(types)).map(FaultType.get);
 };

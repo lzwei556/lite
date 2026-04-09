@@ -23,12 +23,12 @@ import { Dayjs, getDisplayName, getOptionLabelByValue, getValue, roundValue } fr
 import { autoFillParameter, ProcessType, ProcessTypeKey } from 'process-type';
 import { Language, useLocaleContext } from 'localeProvider';
 import { sourceIdField } from './common';
-import { FaultTypeConfig } from 'domain/fault-types';
-import { TMonitoringPoint } from 'domain/monitoring-point';
+import * as FaultType from 'domain/fault-types';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 type ReasonDetail = { label: string; children: string | number };
 
-export const FillRecords = ({ id, assetId }: TMonitoringPoint.Base) => {
+export const FillRecords = ({ id, assetId }: MonitoringPoint.Types.Entity) => {
   const [type, setType] = React.useState(`${DataType.Characteristic}`);
   const { numberedRange, setRange } = useRange();
   const [from, to] = numberedRange;
@@ -190,5 +190,5 @@ const getFailureReasonOfFeatureData = (reason: number, row: FillRecord): ReasonD
 };
 
 const getFailureReasonOfFault = (reason: number): ReasonDetail => {
-  return { label: intl.get(getOptionLabelByValue(FaultTypeConfig.options, reason)), children: '' };
+  return { label: intl.get(getOptionLabelByValue(FaultType.options, reason)), children: '' };
 };

@@ -14,7 +14,7 @@ export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRo
   const commonProps = { ...rest, fill: assetStatusColor };
   const { colorBgContainerStyle } = useGlobalStyles();
 
-  if (asset.type === FolderAsset.Type.WindTurbine) {
+  if (asset.type === FolderAsset.Enum.WindTurbine) {
     return (
       <Flex
         justify='center'

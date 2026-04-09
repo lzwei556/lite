@@ -7,7 +7,7 @@ import { DeviceSelect } from './device-select';
 import { generateColProps } from 'utils/grid';
 import { useAssets, useType } from './use-basic-form-items';
 import { useComponents } from './hooks';
-import { OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { useAppConfig } from 'providers/app';
 
 export const FormItemsBasic = ({
@@ -84,7 +84,7 @@ export const SensorSelectFormItem = ({ type }: { type?: number }) => {
           onChange={(_, opt?: NonNullable<SelectProps['options']>[number]) => {
             form.setFieldValue('deviceName', opt?.label);
           }}
-          types={type ? OMonitoringPoint.Type.getDeviceTypes(type) : []}
+          types={type ? MonitoringPoint.Type.getDeviceTypes(type) : []}
         />
       </TextFormItem>
       <TextFormItem {...useFormItemBindingsProps({ name: 'deviceName', hidden: true })} />

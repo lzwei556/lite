@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { getMeasurement } from 'monitoring-point';
 import { getAsset, getAssets } from 'asset-common';
-import { AssetTree } from 'domain/asset';
+import { Hooks } from 'domain/asset';
 
 export type ContextProps = {
   assets: AssetRow[];
@@ -25,7 +25,7 @@ const Context = React.createContext<ContextProps>({
 export const useAssetsContext = () => React.useContext(Context);
 
 export function AssetsProvider({ children }: { children?: JSX.Element }) {
-  const { homePathId } = AssetTree.useVirturalAsset();
+  const { homePathId } = Hooks.useVirturalAsset();
   const { id: pathId = homePathId } = useParams();
   const [idStr, typeStr] = pathId.split('-');
   const id = Number(idStr);

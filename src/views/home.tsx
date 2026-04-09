@@ -4,10 +4,10 @@ import { PageWithSideBar } from 'components';
 import { AssetsProvider } from 'providers/assets';
 import { AssetTree } from 'features/asset-tree';
 import { Icon } from 'asset-tree/icon';
-import { AssetTree as AssetTreeConfig } from 'domain/asset';
+import { Hooks } from 'domain/asset';
 
 export default function Index({ children }: { children?: React.ReactNode }) {
-  const { homePathId } = AssetTreeConfig.useVirturalAsset();
+  const { homePathId } = Hooks.useVirturalAsset();
   const { id: pathId = homePathId } = useParams();
 
   return (

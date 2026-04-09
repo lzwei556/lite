@@ -5,10 +5,10 @@ import { PROPERTIES_WITH_ENVELOPE } from './common';
 import { Checkbox, CheckboxChangeEvent, Space } from 'antd';
 import intl from 'react-intl-universal';
 import { useGlobalStyles } from 'styles';
-import { TMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 type Props = {
-  axis: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel;
+  axis: MonitoringPoint.Settings.AxisWithVibrationDirection;
   data: WaveformData;
   filters: JSX.Element[];
   property: WaveformProperty;

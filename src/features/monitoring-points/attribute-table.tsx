@@ -6,16 +6,16 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { getOptionLabelByValue } from 'utils';
 import { basicFieldColumns } from './columns';
-import { TMonitoringPoint, OMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const AttributeTable = ({
   monitoringPoints,
   ...rest
 }: {
-  monitoringPoints: TMonitoringPoint.Base[];
+  monitoringPoints: MonitoringPoint.Types.Entity[];
   onDeleteSuccess: (id: number) => void;
   openCreate: () => void;
-  openUpdate: (point: TMonitoringPoint.Base) => void;
+  openUpdate: (point: MonitoringPoint.Types.Entity) => void;
   createFormModal: React.ReactNode;
   updateFormModal: React.ReactNode;
 }) => {
@@ -24,24 +24,28 @@ export const AttributeTable = ({
   const canDelete = useCan(Permission.MeasurementDelete);
 
   const getColumns = (canEdit: boolean) => {
-    const attributeColumns = OMonitoringPoint.Type.getSettings(monitoringPoints?.[0]?.type).map((attr) => {
-      const { options } = attr;
-      const common = {
-        dataIndex: [`attributes`, attr.name],
-        key: attr.name,
-        title: () => intl.get(attr.label)
-      };
-      return options
-        ? { ...common, render: (axis: string) => intl.get(getOptionLabelByValue(options, axis)) }
-        : common;
-    });
+    const attributeColumns = MonitoringPoint.Type.getSettings(monitoringPoints?.[0]?.type).map(
+      (attr) => {
+        const { options } = attr;
+        const common = {
+          dataIndex: [`attributes`, attr.name],
+          key: attr.name,
+          title: () => intl.get(attr.label)
+        };
+        return options
+          ? { ...common, render: (axis: string) => intl.get(getOptionLabelByValue(options, axis)) }
+          : common;
+      }
+    );
     const columns = [...basicFieldColumns, ...attributeColumns];
     if (canEdit) {
       columns.push({
         key: 'action',
         dataIndex: 'action',
         title: () => intl.get('OPERATION'),
-        render: (_: string, point: TMonitoringPoint.Base) => <OperateCell {...{ ...rest, point }} />
+        render: (_: string, point: MonitoringPoint.Types.Entity) => (
+          <OperateCell {...{ ...rest, point }} />
+        )
       });
     }
     return columns;
@@ -80,7 +84,7 @@ const OperateCell = ({
   onDeleteSuccess,
   openUpdate
 }: {
-  point: TMonitoringPoint.Base;
+  point: MonitoringPoint.Types.Entity;
 } & Omit<Parameters<typeof AttributeTable>[0], 'monitoringPoints'>) => {
   return (
     <Space>

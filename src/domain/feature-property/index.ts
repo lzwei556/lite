@@ -1,8 +1,7 @@
-import { VibrationDirection } from 'domain/vibration-direction';
+import * as VD from '../vibration-direction';
+import type * as Types from './common';
 import { BaseInclination, SA, SAS, TopInclination } from './bolt';
 import {
-  DisaplyFieldProperty,
-  DisplayProperty,
   INCLINATION,
   PITCH,
   ROLL,
@@ -14,15 +13,12 @@ import {
 } from './common';
 import { DC, DC_ULTRA_HIGH_TEMPERATURE } from './corrosion';
 import { SVT_AUDIO, SVT_RS485, SVT_WIRELESS } from './vibration';
-import { TMonitoringPoint } from 'domain/monitoring-point';
 import _ from 'lodash';
+import * as MonitoringPonit from '../monitoring-point';
 
-export namespace Feature {
-  export type Property = DisplayProperty;
-  export type FieldProperty = DisaplyFieldProperty;
-}
+export { Types };
 
-export const FeatureProperty = {
+export const Property = {
   SA,
   SAS,
   DS: { properties: SAS.properties.slice(0, SAS.properties.length - 1) },
@@ -70,13 +66,13 @@ export const FeatureProperty = {
   Roll: ROLL,
   Waggle: WAGGLE,
   appendVibrationDirectionAbbr: (
-    origin: DisplayProperty['fields'],
-    attrs?: TMonitoringPoint.Base['attributes']
+    origin: Types.Property['fields'],
+    attrs?: MonitoringPonit.Types.Entity['attributes']
   ) => {
-    const fields: DisplayProperty['fields'] = [];
+    const fields: Types.Property['fields'] = [];
     if (origin && origin.length > 1) {
-      VibrationDirection.Options.forEach(({ key, abbr }) => {
-        const axisKey = (attrs as TMonitoringPoint.Settings.VibrationDirection)?.[key];
+      VD.Options.forEach(({ key, abbr }) => {
+        const axisKey = (attrs as MonitoringPonit.Settings.VibrationDirection)?.[key];
         const field = origin.find(({ key }) => key.split('_').includes(axisKey));
         if (field) {
           fields.push({ ...field, alias: abbr });
@@ -85,7 +81,7 @@ export const FeatureProperty = {
     }
     return origin && fields.length === origin.length && fields.length > 1 ? fields : origin;
   },
-  getGrouped(properties: readonly DisplayProperty[]) {
+  getGrouped(properties: readonly Types.Property[]) {
     return Object.entries(_.groupBy(properties, (p) => p.group));
   }
 };

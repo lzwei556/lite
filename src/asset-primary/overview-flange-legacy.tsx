@@ -1,7 +1,7 @@
 import { Col } from 'antd';
 import { AssetRow, EmptyMonitoringPoints, StatisticBar } from 'asset-common';
 import { Grid, MutedCard } from 'components';
-import { PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 import {
   CustomizableIntervals,
   FakeVSRealChart,
@@ -26,7 +26,7 @@ export const FlangeOverviewLegacy = ({ asset }: { asset: AssetRow }) => {
               </MutedCard>
             </Col>
             <Col {...generateColProps({ xl: 12, xxl: 15 })}>
-              {PrimaryAssetType.Category.Flange.isPreloadCalculationEnabled(asset) ? (
+              {PrimaryAsset.Category.Flange.isPreloadCalculationEnabled(asset) ? (
                 <FakeVSRealChart asset={asset} />
               ) : (
                 <CustomizableIntervals

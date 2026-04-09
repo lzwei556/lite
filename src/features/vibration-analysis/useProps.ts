@@ -3,10 +3,10 @@ import { TimeDomainData, useTimeDomainList, UseTimeDomainListResult } from './us
 import { OriginalDomainResponse, useOriginalDomain } from './useOriginalDomain';
 import { Property } from './useTrend';
 import { AssetRow } from 'asset-common';
-import { TMonitoringPoint } from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type Filters = {
-  axis: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel;
+  axis: MonitoringPoint.Settings.AxisWithVibrationDirection;
   property: Property;
 };
 
@@ -14,10 +14,10 @@ export type AnalysisProps = {
   monitoringPoint: {
     id: number;
     parent: AssetRow;
-    attributes?: TMonitoringPoint.Base['attributes'];
+    attributes?: MonitoringPoint.Types.Entity['attributes'];
   };
   trend: { timestamp: number; timestamps: number[] };
-  filters: { axis: TMonitoringPoint.Settings.AxisWithVibrationDirectionLabel; property: Property };
+  filters: { axis: MonitoringPoint.Settings.AxisWithVibrationDirection; property: Property };
   intermediateData: AnalysisDataProps;
 };
 

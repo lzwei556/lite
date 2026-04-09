@@ -5,13 +5,13 @@ import { AssetRow } from 'asset-common';
 import { LightSelectFilter, Table } from 'components';
 import { Props as TabsProps } from './settings-table-tabs';
 import { useColumns } from './columns';
-import { PrimaryAsset, PrimaryAssetType } from 'domain/asset';
+import { PrimaryAsset } from 'domain/asset';
 
 type Props = Omit<TabsProps, 'asset'> & { assets: AssetRow[]; type: number };
 
 export const PrimaryAssetSettingsTable = (props: Props) => {
   const { assets, canEdit, type } = props;
-  const category = PrimaryAssetType.get(type);
+  const category = PrimaryAsset.get(type);
   const filterField = category?.filter;
   const { dsFilter, selectProps, values } = useFilter(assets, filterField);
   const columns = useColumns({ ...props, category, canEdit, values });
@@ -33,7 +33,7 @@ export const PrimaryAssetSettingsTable = (props: Props) => {
   );
 };
 
-const useFilter = (assets: AssetRow[], field?: PrimaryAsset.SettingsField) => {
+const useFilter = (assets: AssetRow[], field?: PrimaryAsset.Settings) => {
   const [filter, setFilter] = React.useState(
     getFieldValue(assets[assets.length - 1], field) ?? field?.defaultValue
   );
@@ -52,7 +52,7 @@ const useFilter = (assets: AssetRow[], field?: PrimaryAsset.SettingsField) => {
   };
 };
 
-const getFieldValue = (asset?: AssetRow, field?: PrimaryAsset.SettingsField) => {
+const getFieldValue = (asset?: AssetRow, field?: PrimaryAsset.Settings) => {
   if (asset && field) {
     return asset.attributes?.[field.name as keyof typeof asset.attributes];
   }

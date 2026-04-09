@@ -1,6 +1,6 @@
-import { DisplayProperty, SIGNAL_QUALITY, SIGNAL_STRENGTH, TEMPERATURE, TOF } from './common';
+import { Property, SIGNAL_QUALITY, SIGNAL_STRENGTH, TEMPERATURE, TOF } from './common';
 
-const THICKNESS: DisplayProperty = {
+const THICKNESS: Property = {
   key: 'thickness',
   name: 'FIELD_THICKNESS',
   first: true,
@@ -8,14 +8,14 @@ const THICKNESS: DisplayProperty = {
   precision: 3,
   unit: 'mm'
 };
-const CORROSION_RATE: DisplayProperty = {
+const CORROSION_RATE: Property = {
   key: 'corrosion_rate',
   name: 'FIELD_CORROSION_RATE',
   first: true,
   precision: 3,
   unit: 'mm/a'
 };
-const CORROSION_LOSS: DisplayProperty = {
+const CORROSION_LOSS: Property = {
   key: 'corrosion_loss',
   name: 'FIELD_CORROSION_LOSS',
   interval: 0.2,

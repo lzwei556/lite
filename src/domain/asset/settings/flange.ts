@@ -165,12 +165,12 @@ enum Type {
 
 const PREFIX = 'flange.type';
 
-export type FlangeSettingsField = Omit<Field<FlangeSettings>, 'group'> &
+export type Flange = Omit<Field<FlangeSettings>, 'group'> &
   GroupField & {
     visibleWhen?: (values?: { sub_type?: number }) => boolean;
   };
 
-export const flangeFields: FlangeSettingsField[] = [
+export const flangeFields: Flange[] = [
   {
     label: PREFIX,
     name: 'type',
