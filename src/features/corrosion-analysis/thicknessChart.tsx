@@ -4,7 +4,7 @@ import { useLocaleContext } from '../../localeProvider';
 import { Dayjs } from '../../utils';
 import { roundValue } from '../../utils/format';
 import { ChartBrush, ChartMark, useChartContext } from '../../components';
-import { getThicknessAnalysis, HistoryData, MonitoringPointRow } from '../../asset-common';
+import { getThicknessAnalysis, HistoryData } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
 import { HistoryDataFea } from '..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
@@ -14,7 +14,7 @@ import * as MonitoringPoint from 'domain/monitoring-point';
 import * as Feature from 'domain/feature-property';
 
 export const ThicknessChart = (
-  props: MonitoringPointRow & {
+  props: MonitoringPoint.Types.Entity & {
     history?: HistoryData;
     property: Feature.Types.Property;
     markType: MarkType;

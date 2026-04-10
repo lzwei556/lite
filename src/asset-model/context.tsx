@@ -1,12 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import {
-  AXIS_ALIAS,
-  getDataOfMonitoringPoint,
-  HistoryData,
-  MonitoringPointRow,
-  Point
-} from '../monitoring-point';
+import { AXIS_ALIAS, getDataOfMonitoringPoint, HistoryData, Point } from '../monitoring-point';
 import { AssetRow } from '../asset-common';
 import { Dayjs, getValue } from '../utils';
 import * as MonitoringPoint from 'domain/monitoring-point';
@@ -16,7 +10,7 @@ export type PropertyItem = {
   selected: boolean;
   title: string;
   children: string;
-  self: MonitoringPointRow;
+  self: MonitoringPoint.Types.Entity;
   property?: Feature.Types.Property;
   visibleKeys: string[];
   axisKey?: string;
@@ -100,7 +94,7 @@ const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
     .sort((prev, crt) => {
       const { index: prevIndex } = prev.attributes || { index: 88 };
       const { index: nextIndex } = crt.attributes || { index: 88 };
-      return prevIndex - nextIndex;
+      return (prevIndex as number) - (nextIndex as number);
     })
     .map((m, i) => {
       const properties = MonitoringPoint.Type.getProperties(m);
@@ -117,13 +111,19 @@ const getInitial = (asset: AssetRow): SelectedMonitoringPoint[] => {
     });
 };
 
-export function getPropertyItems(m: MonitoringPointRow, properties: Feature.Types.Property[]) {
+export function getPropertyItems(
+  m: MonitoringPoint.Types.Entity,
+  properties: Feature.Types.Property[]
+) {
   const items: PropertyItem[] = [];
   properties.forEach((p) => items.push(...getPropertyItem(m, p)));
   return items;
 }
 
-const getPropertyItem = (m: MonitoringPointRow, property: Feature.Types.Property): PropertyItem[] => {
+const getPropertyItem = (
+  m: MonitoringPoint.Types.Entity,
+  property: Feature.Types.Property
+): PropertyItem[] => {
   const { fields = [], key, name, precision, unit } = property;
   const self = m;
   const selected = false;
@@ -133,7 +133,7 @@ const getPropertyItem = (m: MonitoringPointRow, property: Feature.Types.Property
   if (fields.length > 1) {
     if (Point.Assert.isVibrationRelated(m.type)) {
       return Object.values(AXIS_ALIAS).map(({ key: aliasKey, abbr }) => {
-        const attrs = m.attributes;
+        const attrs = m.attributes as MonitoringPoint.Settings.Vibration;
         const axisKey = attrs?.[aliasKey];
         const title = `${intl.get(name)} ${intl.get(abbr)}`;
         return {

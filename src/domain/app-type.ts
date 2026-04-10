@@ -3,7 +3,7 @@ import * as FolderAsset from './asset/folder';
 import * as PrimaryAsset from './asset/primary';
 import * as MonitoringPoint from './monitoring-point';
 
-export type Enum =
+export type Type =
   | 'bolt'
   | 'bridgeBolt'
   | 'corrosion'
@@ -48,7 +48,7 @@ const windTurbine: Config = {
   primaryAssetTypes: [PrimaryAsset.Enum.Flange]
 };
 
-const table: { [Key in Enum]: Config } = {
+const table: { [Key in Type]: Config } = {
   bolt: general,
   bridgeBolt: general,
   corrosion,
@@ -67,10 +67,10 @@ const table: { [Key in Enum]: Config } = {
   }
 };
 
-export const get = (type: Enum): Config => table[type];
+export const get = (type: Type): Config => table[type];
 
 export const getMonitoringPointTypeOptions = (
-  type: Enum
+  type: Type
 ): { value: MonitoringPoint.Type.Enum; label: string }[] => {
   const { folderAssetTypes, primaryAssetTypes } = get(type);
   return FolderAsset.getMonitoringPointTypes(folderAssetTypes, primaryAssetTypes).map((value) => ({
@@ -78,7 +78,7 @@ export const getMonitoringPointTypeOptions = (
     label: MonitoringPoint.Type.getLabel(value)
   }));
 };
-export const getDeviceTypes = (type: Enum): DeviceType[] => {
+export const getDeviceTypes = (type: Type): DeviceType[] => {
   const { folderAssetTypes, primaryAssetTypes } = get(type);
   return FolderAsset.getDeviceTypes(folderAssetTypes, primaryAssetTypes);
 };

@@ -97,7 +97,7 @@ const useFeatures = (monitoringPoint: MonitoringPoint.Types.Entity) => {
                       monitoringPoints,
                       initialProcess: {
                         type: ProcessTypeKey.AutoFill,
-                        oilFillerId: monitoringPoint.bindingDevices?.[0]?.id
+                        oilFillerId: monitoringPoint.sensor?.id
                       },
                       onSuccess
                     }}

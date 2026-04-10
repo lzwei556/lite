@@ -3,12 +3,12 @@ import { Col, Empty, Space, Typography } from 'antd';
 import intl from 'react-intl-universal';
 import { Card, Grid } from '../../components';
 import { getValue } from '../../utils/format';
-import { HistoryData, MonitoringPointRow } from '../../asset-common';
+import { HistoryData } from '../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
 import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const Overview = (props: {
-  point: MonitoringPointRow;
+  point: MonitoringPoint.Types.Entity;
   history: HistoryData | undefined;
 }) => {
   const { history, point } = props;

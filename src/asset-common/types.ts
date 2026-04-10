@@ -1,6 +1,6 @@
 import { MotorSettings } from 'domain/asset/settings/motor';
 import { ProcessDTO } from '../features/process/use-services';
-import { MonitoringPointRow } from '../monitoring-point';
+import { Types } from 'domain/monitoring-point';
 import { AssetChildrenStatistics } from './utils/statistics';
 
 export type AssetModel = {
@@ -31,7 +31,7 @@ export type AssetRow = {
   type: number;
   parentId: number;
   projectId: number;
-  monitoringPoints?: MonitoringPointRow[];
+  monitoringPoints?: Types.Entity[];
   children?: AssetRow[];
   label: React.ReactNode;
   value: string | number;
@@ -59,4 +59,4 @@ export type AssetRow = {
   diagnosisPeriod: number;
 };
 
-export type AssetCategory = { type: number; label: string; labelPlural?: string };
+

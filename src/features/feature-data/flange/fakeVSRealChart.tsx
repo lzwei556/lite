@@ -1,11 +1,12 @@
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Card, CardProps, LineChart } from 'components';
-import { AssetRow, MONITORING_POINT, Points } from 'asset-common';
+import { AssetRow, MONITORING_POINT } from 'asset-common';
 import { roundValue } from 'utils/format';
 import { FlangeStatusData } from './use-services';
 import * as MonitoringPoint from 'domain/monitoring-point';
 import * as Feature from 'domain/feature-property';
+import { PrimaryAsset } from 'domain/asset';
 
 export const FakeVSRealChart = ({
   asset,
@@ -51,7 +52,9 @@ export const FakeVSRealChart = ({
 
 const pick = (asset: AssetRow) => {
   const points = asset.monitoringPoints ?? [];
-  const actuals = Points.filter(points).filter((point) => !!point.data);
+  const actuals = PrimaryAsset.Category.Flange.MonitoringPoints.filter(points).filter(
+    (point) => !!point.data
+  );
   const fakes = points
     .filter((point) => MonitoringPoint.Type.isVirtual(point.type))
     .filter((point) => !!point.data);

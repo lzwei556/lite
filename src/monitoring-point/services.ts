@@ -6,41 +6,34 @@ import {
   PostResponse,
   PutResponse
 } from '../utils/response';
-import {
-  DataType,
-  HarmonicData,
-  HistoryData,
-  MonitoringPoint,
-  MonitoringPointRow,
-  VibrationAnalysisRequest
-} from './types';
+import { DataType, HarmonicData, HistoryData, VibrationAnalysisRequest } from './types';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
-export function getMeasurements(filters?: Pick<MonitoringPoint, 'asset_id'>) {
-  return request.get<MonitoringPointRow[]>(`/monitoringPoints`, { ...filters }).then(GetResponse);
+export function getMeasurements(filters?: Pick<MonitoringPoint.Types.PostDTO, 'asset_id'>) {
+  return request
+    .get<MonitoringPoint.Types.Entity[]>(`/monitoringPoints`, { ...filters })
+    .then(GetResponse);
 }
 
 export function getMeasurement(id: number) {
-  return request.get<MonitoringPointRow>(`/monitoringPoints/${id}`).then(GetResponse);
+  return request.get<MonitoringPoint.Types.DTO>(`/monitoringPoints/${id}`).then(GetResponse);
 }
 
-export function addMeasurement(measurement: MonitoringPoint) {
-  return request.post<MonitoringPoint>('/monitoringPoints', measurement).then(PostResponse);
+export function addMeasurement(measurement: MonitoringPoint.Types.PostDTO) {
+  return request
+    .post<MonitoringPoint.Types.PostDTO>('/monitoringPoints', measurement)
+    .then(PostResponse);
 }
 
-export function updateMeasurement(id: MonitoringPoint['id'], measurement: MonitoringPoint) {
+export function updateMeasurement(id: number, measurement: MonitoringPoint.Types.PostDTO) {
   return request.put(`/monitoringPoints/${id}`, measurement).then(PutResponse);
 }
 
-export function deleteMeasurement(id: MonitoringPoint['id']) {
+export function deleteMeasurement(id: number) {
   return request.delete(`/monitoringPoints/${id}`).then(DeleteResponse);
 }
 
-export function bindDevice(
-  id: MonitoringPoint['id'],
-  device_id: number,
-  channel?: number,
-  processId: number = 1
-) {
+export function bindDevice(id: number, device_id: number, channel?: number, processId: number = 1) {
   //TODO
   return request.post(`/monitoringPoints/${id}/bindDevice`, {
     device_id,
@@ -49,13 +42,13 @@ export function bindDevice(
   });
 }
 
-export function unbindDevice(id: MonitoringPoint['id'], device_id: number) {
+export function unbindDevice(id: number, device_id: number) {
   //TODO
   return request.post(`/monitoringPoints/${id}/unbindDevice`, { device_id });
 }
 
 export function getDataOfMonitoringPoint(
-  id: MonitoringPoint['id'],
+  id: number,
   from: number,
   to: number,
   dataType?: DataType
@@ -68,7 +61,7 @@ export function getDataOfMonitoringPoint(
 }
 
 export function getDynamicData<T>(
-  id: MonitoringPoint['id'],
+  id: number,
   timestamp: number,
   dataType?: DataType,
   filter?: { field: string; axis: number }

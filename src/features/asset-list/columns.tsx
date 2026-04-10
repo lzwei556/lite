@@ -58,18 +58,15 @@ export const useColumns = ({
     )
   };
   const settings = category?.settings ?? [];
-  const filterField = category?.filter;
 
   const { language } = useLocaleContext();
   const cols: Column[] = [nameColumn];
   if (settings.length > 0) {
     const settingsColumns = settings
-      .filter((field) =>
-        filterField && field.visibleWhen && values ? field.visibleWhen(values) : true
-      )
+      .filter((field) => (field.visibleWhen ? field.visibleWhen(values) : true))
       .map(({ label, name, options, unit, type }) => {
         const common = {
-          dataIndex: FieldHelper.getNamePath(name),
+          dataIndex: ['attributes'].concat(FieldHelper.getNamePath(name)),
           key: name,
           title: () => getDisplayName({ name: intl.get(label), lang: language, suffix: unit })
         };

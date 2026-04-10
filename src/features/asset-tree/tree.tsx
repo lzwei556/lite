@@ -1,10 +1,10 @@
 import { Spin, Tree, Typography } from 'antd';
 import { AssetRow } from 'asset-common/types';
-import { MonitoringPointRow } from 'monitoring-point/types';
 import { useAssetsContext } from 'providers/assets';
 import { useNavigate } from 'react-router-dom';
 import { mapTree } from 'utils/tree';
 import { Hooks, AssetTree as AT } from 'domain/asset';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const AssetTree = ({
   height,
@@ -15,7 +15,7 @@ export const AssetTree = ({
   height?: number;
   onClick?: () => void;
   selectedKeys?: string[];
-  icon: (node: AssetRow | MonitoringPointRow | undefined) => React.ReactNode;
+  icon: (node: AssetRow | MonitoringPoint.Types.Entity | undefined) => React.ReactNode;
 }) => {
   const { assets, assetsLoading } = useAssetsContext();
   const navigate = useNavigate();

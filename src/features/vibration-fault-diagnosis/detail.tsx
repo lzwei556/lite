@@ -7,15 +7,18 @@ import { generateColProps } from 'utils/grid';
 import { FaultDiagnosisOverview } from './overvew';
 import { ComponentsHealthyList } from './list';
 import { MoniotoringPointData } from './monitoring-point-data';
-import { MonitoringPointRow } from 'asset-common';
 import { ZoneScoreTable } from './iso-zone-table';
 import intl from 'react-intl-universal';
 import { getDisplayName, roundValue } from 'utils';
 import { useLocaleContext } from 'localeProvider';
 import { Component } from 'domain/asset';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const FaultDiagnosisDetail = (
-  props: FaultDiagnosis & { monitoringPoints: MonitoringPointRow[]; rotationSpeed?: number }
+  props: FaultDiagnosis & {
+    monitoringPoints: MonitoringPoint.Types.Entity[];
+    rotationSpeed?: number;
+  }
 ) => {
   const { colorBgContainerStyle } = useGlobalStyles();
   const monitoringPoints = props.monitoringPoints.filter((m) => !!m.componentId);

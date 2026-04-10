@@ -3,10 +3,13 @@ import intl from 'react-intl-universal';
 import { Descriptions, DescriptionsProps, MutedCard } from '../components';
 import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { useAssets } from 'features/monitoring-point-settings/use-basic-form-items';
-import { MonitoringPointRow } from 'asset-common';
 import * as MonitoringPoint from 'domain/monitoring-point';
 
-export const BasicCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
+export const BasicCard = ({
+  monitoringPoint
+}: {
+  monitoringPoint: MonitoringPoint.Types.Entity;
+}) => {
   const { assetId, attributes, type } = monitoringPoint;
   const parent = useAssets({ type }).find((asset) => asset.id === assetId);
   const items: DescriptionsProps['items'] = [

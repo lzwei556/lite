@@ -16,9 +16,11 @@ import { SettingsTableTabs } from 'features/asset-list';
 import { Permission, useCan } from 'providers/access-control';
 import { AssetNavigator } from 'features/asset-tree';
 import { FolderAsset } from 'domain/asset';
+import { useAssetsContext } from 'providers/assets';
 
 export default function Index({ asset }: { asset: AssetRow }) {
-  const updateFolderFormProps = useUpdateFormProps(asset.id);
+  const { refresh } = useAssetsContext();
+  const updateFolderFormProps = useUpdateFormProps(asset.id, refresh);
   const [open, setOpen] = React.useState(false);
   const [editingAsset, setEditingAsset] = React.useState<AssetRow>();
   const commonModalProps = {
@@ -27,10 +29,16 @@ export default function Index({ asset }: { asset: AssetRow }) {
     afterClose: () => setEditingAsset(undefined),
     open,
     onCancel: () => setOpen(false),
-    onSuccess: () => console.log('onSuccess')
+    onSuccess: () => {
+      setOpen(false);
+      refresh();
+    }
   };
-  const createFormProps = useCreateFormProps();
-  const updatePrimaryAssetFormProps = useUpdateFormProps(editingAsset?.id);
+  const createFormProps = useCreateFormProps(commonModalProps.onSuccess);
+  const updatePrimaryAssetFormProps = useUpdateFormProps(
+    editingAsset?.id,
+    commonModalProps.onSuccess
+  );
 
   return (
     <TabsDetail
@@ -74,7 +82,7 @@ export default function Index({ asset }: { asset: AssetRow }) {
                     setOpen(true);
                     setEditingAsset(asset);
                   }}
-                  onDeleteSuccess={(id) => console.log(id)}
+                  onDeleteSuccess={() => refresh()}
                 />
               </Col>
             </Grid>

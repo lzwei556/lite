@@ -14,15 +14,20 @@ import { FolderAsset } from 'domain/asset';
 
 export const FolderAssetsTable = ({
   assets,
+  folderAssetTypes,
+  onImportSuccess,
   ...rest
 }: {
   assets: AssetRow[];
+  folderAssetTypes: FolderAsset.Enum[];
   onDeleteSuccess: (id: number) => void;
+  onImportSuccess: () => void;
   openCreate: () => void;
   openUpdate: (asset: AssetRow) => void;
   createFormModal: React.ReactNode;
   updateFormModal: React.ReactNode;
 }) => {
+  const isAssetEmpty = assets.length === 0;
   const canAdd = useCan(Permission.AssetAdd);
   const canEdit = useCan(Permission.AssetEdit);
   const [open, setOpen] = React.useState(false);
@@ -47,11 +52,14 @@ export const FolderAssetsTable = ({
                 icon={<PlusOutlined />}
                 onClick={rest.openCreate}
                 tooltipProps={{
-                  title: intl.get('CREATE_SOMETHING', { something: intl.get('ASSET') })
+                  title: intl.get('CREATE_SOMETHING', {
+                    something: intl.get(FolderAsset.getTitle(folderAssetTypes))
+                  })
                 }}
                 type='primary'
               />
               <DownloadIconButton
+                disabled={isAssetEmpty}
                 onClick={() => {
                   setOpen(true);
                   setAction('download');
@@ -61,6 +69,7 @@ export const FolderAssetsTable = ({
                 variant='solid'
               />
               <IconButton
+                disabled={isAssetEmpty}
                 icon={<ExportOutlined />}
                 onClick={() => {
                   setOpen(true);
@@ -69,7 +78,7 @@ export const FolderAssetsTable = ({
                 tooltipProps={{ title: intl.get('EXPORT_SETTINGS') }}
                 type='primary'
               />
-              <ImportButton onSuccess={() => console.log('success')} />
+              <ImportButton onSuccess={onImportSuccess} />
             </Space.Compact>
           )
         }}

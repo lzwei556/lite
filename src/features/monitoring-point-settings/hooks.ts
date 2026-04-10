@@ -26,7 +26,7 @@ type SensorBindingOutput = Omit<SensorBindingInput, 'channel'> & {
   parameters?: Pick<SensorBindingInput, 'channel'>;
 };
 
-export const useCreateFormProps = (): CreateFormProps => {
+export const useCreateFormProps = (success: () => void): CreateFormProps => {
   const { loading, runAsync } = useAddMonitoringPoints();
 
   const { messageInstance } = useNotificationContext();
@@ -35,6 +35,7 @@ export const useCreateFormProps = (): CreateFormProps => {
       const data = await runAsync(values);
       if (data.code === 200) {
         messageInstance.success(intl.get('CREATED_SUCCESSFUL'));
+        success();
       } else {
         messageInstance.error(intl.get(data.msg).d(data.msg));
       }
@@ -77,14 +78,14 @@ export const useUpdateFormProps = (
   };
 };
 
-const useUpdateMonitoringPoint = ({ id, device }: MonitoringPoint.Types.Entity) => {
+const useUpdateMonitoringPoint = ({ id, sensor }: MonitoringPoint.Types.Entity) => {
   const unBindSensorRq = useUnBindSensor();
   const bindSensorRq = useBindSensor();
   const updateRq = useRequest(updateMonitoringPoint, { manual: true });
   const [error, setError] = React.useState<string>();
 
   const handleSubmit = async (data: MonitoringPoint.Types.PostDTO) => {
-    const oldSensorId = device?.id;
+    const oldSensorId = sensor?.id;
     const bindingInput = { ...data, process_id: getProcessId(data) };
     let canDoNext = false;
     let error;

@@ -54,6 +54,14 @@ export const getLabel = (type: Enum) => {
   return type ? `${PREFIX}${transformSnake2Dot(toSnake(config.label))}` : `${type}`;
 };
 
+export const getTitle = (types: Enum[]): string => {
+  let title = 'ASSET';
+  if (types.length === 1) {
+    title = getLabel(types[0]);
+  }
+  return title;
+};
+
 const getChildren = (types: Enum[]): PrimaryAsset.Enum[] => {
   const result = new Set<PrimaryAsset.Enum>();
 

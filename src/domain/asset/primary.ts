@@ -11,7 +11,7 @@ import {
   pumpSettings,
   Settings
 } from './settings/capability';
-import { AssetRow, MonitoringPointRow } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import { toSnake } from 'ts-case-convert';
 import { transformSnake2Dot } from 'utils/format';
 import MotorSetImage from './images/motor-set.png';
@@ -228,15 +228,15 @@ export const Category = {
   }
 };
 
-function filter(measurements?: MonitoringPointRow[]) {
+function filter(measurements?: MonitoringPoint.Types.Entity[]) {
   if (!measurements) return [];
   return measurements.filter((point) => !MonitoringPoint.Type.isVirtual(point.type));
 }
 
-function sort(measurements: MonitoringPointRow[]) {
+export function sort(measurements: MonitoringPoint.Types.Entity[]) {
   return measurements.sort((prev, next) => {
     const { index: prevIndex } = prev.attributes || { index: 88 };
     const { index: nextIndex } = next.attributes || { index: 88 };
-    return prevIndex - nextIndex;
+    return (prevIndex as number) - (nextIndex as number);
   });
 }

@@ -1,5 +1,5 @@
 import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
-import { AssetRow, MonitoringPointRow } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import { FolderAsset, PrimaryAsset } from 'domain/asset';
 import * as MonitoringPoint from 'domain/monitoring-point';
 import React from 'react';
@@ -13,10 +13,12 @@ export const NodeIcon = ({
   MonitoringPointIcon,
   ...rest
 }: IconProps & {
-  node?: AssetRow | MonitoringPointRow;
+  node?: AssetRow | MonitoringPoint.Types.Entity;
   AssetFolderIcon: React.ComponentType<IconProps & { asset: AssetRow }>;
   AssetPrimaryIcon: React.ComponentType<IconProps & { asset: AssetRow }>;
-  MonitoringPointIcon: React.ComponentType<IconProps & { monitoringPoint: MonitoringPointRow }>;
+  MonitoringPointIcon: React.ComponentType<
+    IconProps & { monitoringPoint: MonitoringPoint.Types.Entity }
+  >;
 }) => {
   if (!node) return null;
   const type = node.type;
@@ -25,7 +27,7 @@ export const NodeIcon = ({
   } else if (PrimaryAsset.Enums.includes(type)) {
     return <AssetPrimaryIcon asset={node as AssetRow} {...rest} />;
   } else if (MonitoringPoint.Type.Enums.includes(type)) {
-    return <MonitoringPointIcon monitoringPoint={node as MonitoringPointRow} {...rest} />;
+    return <MonitoringPointIcon monitoringPoint={node as MonitoringPoint.Types.Entity} {...rest} />;
   } else {
     return null;
   }

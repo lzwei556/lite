@@ -5,7 +5,7 @@ import { useRequest } from 'ahooks';
 import { useNotificationContext } from 'providers/notification';
 import intl from 'react-intl-universal';
 
-export const useCreateFormProps = () => {
+export const useCreateFormProps = (success: () => void) => {
   const { loading, runAsync } = useAdd();
 
   const { messageInstance } = useNotificationContext();
@@ -14,6 +14,7 @@ export const useCreateFormProps = () => {
       const data = await runAsync(values);
       if (data.code === 200) {
         messageInstance.success(intl.get('CREATED_SUCCESSFUL'));
+        success();
       } else {
         messageInstance.error(intl.get(data.msg).d(data.msg));
       }
@@ -32,7 +33,10 @@ const addAsset = async (asset: AssetModel) => {
   return data;
 };
 
-export const useUpdateFormProps = (id?: number): Omit<UpdateFormProps, 'editingAsset'> => {
+export const useUpdateFormProps = (
+  id?: number,
+  success?: () => void
+): Omit<UpdateFormProps, 'editingAsset'> => {
   const { loading, runAsync } = useUpdate();
 
   const { messageInstance } = useNotificationContext();
@@ -42,6 +46,7 @@ export const useUpdateFormProps = (id?: number): Omit<UpdateFormProps, 'editingA
         const data = await runAsync(id, values);
         if (data.code === 200) {
           messageInstance.success(intl.get('UPDATED_SUCCESSFUL'));
+          success?.();
         } else {
           messageInstance.error(intl.get(data.msg).d(data.msg));
         }

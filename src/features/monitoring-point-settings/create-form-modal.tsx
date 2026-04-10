@@ -14,6 +14,7 @@ import {
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
 import * as MonitoringPoint from 'domain/monitoring-point';
+import { AssetRow } from 'asset-common';
 
 export type CreateFormProps = {
   loading: boolean;
@@ -21,7 +22,7 @@ export type CreateFormProps = {
 };
 
 export const CreateFormModal = ({
-  assetId,
+  asset,
   onSuccess,
   point,
   loading,
@@ -29,9 +30,9 @@ export const CreateFormModal = ({
   ...rest
 }: Omit<ModalFormProps, 'onSuccess'> &
   CreateFormProps & {
-    assetId: number;
+    asset: AssetRow;
     onSuccess: (values: MonitoringPoint.Types.PostDTO) => void;
-    point?: MonitoringPoint.Types.PostDTO;
+    point?: MonitoringPoint.Types.Entity;
   }) => {
   const [form] = Form.useForm();
   const { selectedType: type, ...typeRest } = useType(point?.type);
@@ -49,16 +50,28 @@ export const CreateFormModal = ({
         title: intl.get('CREATE_SOMETHING', { something: intl.get('monitoring.points') })
       }}
     >
-      <Form form={form} layout='vertical' initialValues={point ? point : { asset_id: assetId }}>
+      <Form
+        form={form}
+        layout='vertical'
+        initialValues={
+          point ? MonitoringPoint.Types.transform2PostDTO(point) : { asset_id: asset.id }
+        }
+      >
         <Grid>
           <FormItemsBasic
             {...{
-              assetSelectFormItem: <AssetSelectFormItem {...{ assetId, type }} />,
+              assetSelectFormItem: <AssetSelectFormItem {...{ assetId: asset.id, type }} />,
               sensorSelectFormItem: <SensorSelectFormItem {...{ type }} />,
-              typeSelectFormItem: <TypeSelectFormItem {...{ ...typeRest, disabled: false }} />,
+              typeSelectFormItem: (
+                <TypeSelectFormItem
+                  {...{ ...typeRest, disabled: false, primaryAssetType: asset.type }}
+                />
+              ),
               componentSelectFormItem: type &&
                 MonitoringPoint.Type.Category.getTypes(['vibration']).includes(type) &&
-                type !== MonitoringPoint.Type.Enum.OilFiller && <ComponentSelectFormItem type={type} />
+                type !== MonitoringPoint.Type.Enum.OilFiller && (
+                  <ComponentSelectFormItem type={type} />
+                )
             }}
           />
           {type && <FormItemsAttributes {...{ type }} />}

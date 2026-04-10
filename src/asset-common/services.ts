@@ -1,31 +1,28 @@
 import request from '../utils/request';
-import { DeleteResponse, GetResponse, PostResponse, PutResponse } from '../utils/response';
+import { DeleteResponse, GetResponse, PutResponse } from '../utils/response';
 import { HistoryData } from '.';
-import { AssetModel, AssetRow } from './types';
+import { AssetModel } from './types';
+import { Types } from 'domain/asset';
 
 export function getAssets(filters?: Partial<Pick<AssetModel, 'type' | 'parent_id' | 'id'>>) {
-  return request.get<AssetRow[]>(`/assets`, { ...filters }).then(GetResponse);
+  return request.get<Types.DTO[]>(`/assets`, { ...filters }).then(GetResponse);
 }
 
 export function getAsset(id: number) {
-  return request.get<AssetRow>(`/assets/${id}`).then(GetResponse);
+  return request.get<Types.DTO>(`/assets/${id}`).then(GetResponse);
 }
 
-export function addAsset(asset: AssetModel) {
-  return request.post('/assets', asset).then(PostResponse);
-}
-
-export function updateAsset(id: AssetModel['id'], asset: AssetModel) {
+export function updateAsset(id: number, asset: AssetModel) {
   return request.put(`/assets/${id}`, asset).then(PutResponse);
 }
 
-export function uploadAssetImage(id: AssetModel['id'], data: any) {
+export function uploadAssetImage(id: number, data: any) {
   return request.axios.post(`/assets/${id}/image`, data, {
     headers: { 'Content-type': 'image/png' }
   });
 }
 
-export function deleteAsset(id: AssetModel['id']) {
+export function deleteAsset(id: number) {
   return request.delete(`/assets/${id}`).then(DeleteResponse);
 }
 
@@ -75,12 +72,12 @@ export function downloadHistory(
   }
 }
 
-export function getDataOfAsset(id: AssetRow['id'], from: number, to: number) {
+export function getDataOfAsset(id: number, from: number, to: number) {
   return request
     .get<{ timestamp: number }[]>(`/assets/${id}/data?from=${from}&to=${to}`)
     .then(GetResponse);
 }
 
-export function getFlangeData(id: AssetRow['id'], timestamp: number) {
+export function getFlangeData(id: number, timestamp: number) {
   return request.get<HistoryData[0]>(`/assets/${id}/data/${timestamp}`).then(GetResponse);
 }

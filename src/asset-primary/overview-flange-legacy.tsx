@@ -1,5 +1,5 @@
 import { Col } from 'antd';
-import { AssetRow, EmptyMonitoringPoints, StatisticBar } from 'asset-common';
+import { AssetRow, StatisticBar } from 'asset-common';
 import { Grid, MutedCard } from 'components';
 import { PrimaryAsset } from 'domain/asset';
 import {
@@ -7,6 +7,7 @@ import {
   FakeVSRealChart,
   FlangeMonitoringPointsCircleChart
 } from 'features/feature-data';
+import { EmptyMonitoringPoints } from 'features/monitoring-points';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { generateColProps } from 'utils/grid';

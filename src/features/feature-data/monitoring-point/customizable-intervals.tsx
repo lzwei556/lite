@@ -62,7 +62,7 @@ const useProps = (monitoringPoints: MonitoringPoint.Types.Entity[]) => {
     loading,
     property,
     cardProps: {
-      title: intl.get(property?.name!),
+      title: property ? intl.get(property.name) : '',
       extra: {
         propertySelectProps: {
           onChange: (value: string) => {

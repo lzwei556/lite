@@ -1,10 +1,10 @@
 import { Col } from 'antd';
-import { AssetRow, MonitoringPointRow } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import { Grid } from 'components';
 import React from 'react';
 import { generateColProps } from 'utils/grid';
 import { UpdateFormCard, useUpdateFormProps } from 'features/asset-settings';
-import { AttributeTable } from 'features/monitoring-points/attribute-table';
+import { AttributeTable } from 'features/monitoring-points';
 import {
   CreateFormModal,
   UpdateFormModal,
@@ -13,10 +13,13 @@ import {
 } from 'features/monitoring-point-settings';
 import { ModalFormProps } from 'types/common';
 import { PrimaryAsset } from 'domain/asset';
+import { useAssetsContext } from 'providers/assets';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const Settings = ({ editingAsset }: { editingAsset: AssetRow }) => {
   const settings = PrimaryAsset.getSettings(editingAsset.type);
-  const updateFormProps = useUpdateFormProps(editingAsset.id);
+  const { refresh } = useAssetsContext();
+  const updateFormProps = useUpdateFormProps(editingAsset.id, refresh);
 
   if (settings.length > 0) {
     return (
@@ -25,7 +28,7 @@ export const Settings = ({ editingAsset }: { editingAsset: AssetRow }) => {
           <UpdateFormCard {...{ ...updateFormProps, editingAsset }} />
         </Col>
         <Col {...generateColProps({ xl: 16, xxl: 16 })}>
-          <MonitoringPointsManagement asset={editingAsset} />
+          <MonitoringPointsManagement asset={editingAsset} refresh={refresh} />
         </Col>
       </Grid>
     );
@@ -39,26 +42,35 @@ export const Settings = ({ editingAsset }: { editingAsset: AssetRow }) => {
           />
         </Col>
         <Col span={24}>
-          <MonitoringPointsManagement asset={editingAsset} />
+          <MonitoringPointsManagement asset={editingAsset} refresh={refresh} />
         </Col>
       </Grid>
     );
   }
 };
 
-const MonitoringPointsManagement = ({ asset }: { asset: AssetRow }) => {
+const MonitoringPointsManagement = ({
+  asset,
+  refresh
+}: {
+  asset: AssetRow;
+  refresh: () => void;
+}) => {
   const [open, setOpen] = React.useState(false);
   const monitoringPoints = asset.monitoringPoints ?? [];
-  const [point, setPoint] = React.useState<MonitoringPointRow>();
+  const [point, setPoint] = React.useState<MonitoringPoint.Types.Entity>();
   const commonModalProps = {
     afterClose: () => setPoint(undefined),
-    assetId: asset.id,
+    asset,
     open,
     onCancel: () => setOpen(false),
     point,
-    onSuccess: () => console.log('onSuccess')
+    onSuccess: () => {
+      setOpen(false);
+      refresh();
+    }
   };
-  const createFormProps = useCreateMonitoringPointFormProps();
+  const createFormProps = useCreateMonitoringPointFormProps(commonModalProps.onSuccess);
 
   return (
     <AttributeTable
@@ -72,6 +84,7 @@ const MonitoringPointsManagement = ({ asset }: { asset: AssetRow }) => {
         setPoint(point);
       }}
       monitoringPoints={monitoringPoints}
+      onDeleteSuccess={() => refresh()}
     />
   );
 };
@@ -79,7 +92,7 @@ const MonitoringPointsManagement = ({ asset }: { asset: AssetRow }) => {
 const UpdateFormModalWrapper = ({
   point,
   ...rest
-}: { point: MonitoringPointRow } & ModalFormProps) => {
+}: { point: MonitoringPoint.Types.Entity } & ModalFormProps) => {
   const updateFormProps = useUpdateMonitoringPointFormProps(point);
   return <UpdateFormModal {...{ ...rest, ...updateFormProps }} />;
 };

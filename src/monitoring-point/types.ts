@@ -1,6 +1,3 @@
-import { ProcessDTO } from 'features/process/use-services';
-import { Device } from '../types/device';
-
 export type MonitoringPoint = {
   id: number;
   name: string;
@@ -11,39 +8,6 @@ export type MonitoringPoint = {
   channel?: number;
   device_type?: number;
   component_id?: number;
-};
-
-export type MonitoringPointRow = {
-  id: number;
-  name: string;
-  type: number;
-  assetId: number;
-  componentId?: number;
-  bindingDevices?: (Device & { channel?: number })[];
-  attributes?: {
-    index: number;
-    tower_install_angle?: number;
-    tower_install_height?: number;
-    tower_base_radius?: number;
-    initial_thickness?: number;
-    initial_thickness_enabled?: boolean;
-    critical_thickness?: number;
-    critical_thickness_enabled?: boolean;
-    corrosion_rate_short_term?: number;
-    corrosion_rate_long_term?: number;
-    axial?: string;
-    horizontal?: string;
-    vertical?: string;
-  };
-  assetName: string;
-  properties: Property[];
-  data?: {
-    timestamp: number;
-    values: { [propName: string]: number | number[] };
-  };
-  alertLevel?: number;
-  parentId: number;
-  actions?: ProcessDTO[];
 };
 
 export type Property = {

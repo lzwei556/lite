@@ -5,25 +5,23 @@ import { ModalFormProps } from 'types/common';
 import { Grid } from 'components';
 import { FormItemsBasic } from './form-items-basic';
 import { AssetModel, AssetRow } from 'asset-common';
+import { FolderAsset } from 'domain/asset';
+import intl from 'react-intl-universal';
 
-export type CreateFormProps = {
+type CreateFormProps = {
   parent?: AssetRow;
+  folderAssetTypes: FolderAsset.Enum[];
   loading: boolean;
   handleSubmit: (values: AssetModel) => void;
 };
 
 export const CreateFolderAssetFormModal = ({
   parent,
-  onSuccess,
+  folderAssetTypes,
   loading,
   handleSubmit,
-  title,
   ...rest
-}: Omit<ModalFormProps, 'onSuccess'> &
-  CreateFormProps & {
-    title: string;
-    onSuccess: (values: AssetModel) => void;
-  }) => {
+}: ModalFormProps & CreateFormProps) => {
   const [form] = Form.useForm();
 
   return (
@@ -36,12 +34,14 @@ export const CreateFolderAssetFormModal = ({
         },
         onOk: () => form.validateFields().then((values) => handleSubmit(values)),
         okButtonProps: { loading },
-        title
+        title: intl.get('CREATE_SOMETHING', {
+          something: intl.get(FolderAsset.getTitle(folderAssetTypes))
+        })
       }}
     >
       <Form form={form} layout='vertical'>
         <Grid>
-          <FormItemsBasic />
+          <FormItemsBasic folderAssetTypes={folderAssetTypes} />
         </Grid>
       </Form>
     </ModalWrapper>

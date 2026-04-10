@@ -13,10 +13,11 @@ export type Property = {
 };
 
 export type DTO = {
-  alertLevel: number;
+  alertLevel?: number;
   assetId: number;
-  attributes: Settings;
+  attributes?: Settings;
   bindingDevices: Device[];
+  componentId?: number;
   data: { timestamp: number; values: { [key: string]: number } };
   id: number;
   name: string;
@@ -26,8 +27,9 @@ export type DTO = {
 
 export type PostDTO = {
   asset_id: number;
-  attributes: Settings;
+  attributes?: Settings;
   channel?: number;
+  component_id?: number;
   device_id?: number;
   deviceName?: string;
   name: string;
@@ -35,12 +37,12 @@ export type PostDTO = {
   typeLabel?: string;
 };
 
-export type Entity = Omit<DTO, 'bindingDevices'> & { device?: Device };
+export type Entity = Omit<DTO, 'bindingDevices'> & { parentId?: number; sensor?: Device };
 
 export const transform = (dto: DTO): Entity => {
-  return { ...dto, device: dto?.bindingDevices?.[0] };
+  return { ...dto, sensor: dto?.bindingDevices?.[0] };
 };
 
 export const transform2PostDTO = (point: Entity): PostDTO => {
-  return { ...point, asset_id: point.assetId, device_id: point.device?.id };
+  return { ...point, asset_id: point.assetId, device_id: point.sensor?.id };
 };

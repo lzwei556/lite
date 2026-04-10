@@ -6,12 +6,7 @@ import { useOriginalDomain } from 'features/vibration-analysis/useOriginalDomain
 import { useTimeDomain } from 'features/vibration-analysis/useTimeDomain';
 import { SVT_OPTIONS } from 'features/vibration-analysis/useTrend';
 import { useLocaleContext } from 'localeProvider';
-import {
-  frequency,
-  getDataOfMonitoringPoint,
-  HistoryData,
-  MonitoringPointRow
-} from 'monitoring-point';
+import { frequency, getDataOfMonitoringPoint, HistoryData } from 'monitoring-point';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useGlobalStyles } from 'styles';
@@ -32,7 +27,7 @@ export const MoniotoringPointData = ({
   monitoringPoint,
   rotationSpeed
 }: {
-  monitoringPoint: MonitoringPointRow;
+  monitoringPoint: MonitoringPoint.Types.Entity;
   rotationSpeed?: number;
 }) => {
   const { id, attributes } = monitoringPoint;

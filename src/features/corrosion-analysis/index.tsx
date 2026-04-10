@@ -16,12 +16,11 @@ import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
 import { MarkList } from './markList';
-import { MonitoringPointRow } from 'monitoring-point';
 import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type MarkType = 'point' | 'area';
 
-export const CorrosionAnalysis = (props: MonitoringPointRow) => {
+export const CorrosionAnalysis = (props: MonitoringPoint.Types.Entity) => {
   const { numberedRange, setRange } = useRange(Dayjs.CommonRange.PastYear);
 
   return (
@@ -42,7 +41,7 @@ export const CorrosionAnalysis = (props: MonitoringPointRow) => {
   );
 };
 
-const Content = (props: MonitoringPointRow & { range: Range }) => {
+const Content = (props: MonitoringPoint.Types.Entity & { range: Range }) => {
   const { id, range } = props;
   const { history, loading } = useAnalysisData(id, range);
   const [activeKey, setActiveKey] = React.useState('overview');

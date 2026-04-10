@@ -1,5 +1,6 @@
 import React from 'react';
-import { getMeasurement, getMeasurements, MonitoringPointRow } from 'asset-common';
+import { getMeasurement, getMeasurements, } from 'asset-common';
+import * as MonitoringPoint from 'domain/monitoring-point'
 
 export function useCrossTarget(id: number) {
   const [points, setPoints] = React.useState<
@@ -7,7 +8,7 @@ export function useCrossTarget(id: number) {
       label: string;
       value: number;
       selected?: boolean;
-      attributes?: MonitoringPointRow['attributes'];
+      attributes?: MonitoringPoint.Types.Entity['attributes'];
     }[]
   >();
 

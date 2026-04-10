@@ -229,8 +229,11 @@ export const getProcessId = (type: Enum) => get(type)?.processId;
 
 export const isVirtual = (type: Enum) => type === Enum.FlangeBoltPreload;
 
-export function getProperties({ type, properties = [] }: { type: Enum; properties?: Property[] }) {
-  const config = get(type);
+export function getProperties(
+  monitoringPoint: { type: Enum; properties?: Property[] } | undefined
+) {
+  const { type, properties = [] } = monitoringPoint || {};
+  const config = type ? get(type) : undefined;
   const dispalyProperties = config?.properties;
   if (!dispalyProperties || dispalyProperties.length === 0) {
     return properties
@@ -276,9 +279,9 @@ export const Category = {
   boltsWithoutInclination: [
     Enum.BoltLoosening,
     Enum.BoltPreload,
-    Enum.AnchorPreload,
-    Enum.FlangeBoltPreload,
-    Enum.FlangeAnchorPreload
+    Enum.AnchorPreload
+    // Enum.FlangeBoltPreload,
+    // Enum.FlangeAnchorPreload
   ],
   corrosions: [Enum.Corrosion, Enum.HighTemperatureCorrosion, Enum.UltraHighTemperatureCorrosion],
   vibrations: [

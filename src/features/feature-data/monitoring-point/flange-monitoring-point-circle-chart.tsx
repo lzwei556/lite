@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import intl from 'react-intl-universal';
-import { Asset, AssetRow, MonitoringPointRow, Points } from 'asset-common';
+import { Asset, AssetRow } from 'asset-common';
 import { useGlobalStyles } from 'styles';
 import { buildCustomTooltip, Chart, chartColors } from 'components';
 import { ColorHealth } from 'constants/color';
@@ -24,7 +24,7 @@ export const FlangeMonitoringPointsCircleChart = ({
   const navigate = useNavigate();
   const { colorWhiteStyle } = useGlobalStyles();
   let options;
-  const points = Points.filter(monitoringPoints);
+  const points = PrimaryAsset.Category.Flange.MonitoringPoints.filter(monitoringPoints);
   if (points.length > 0) {
     options = buildCirclePointsChartOfFlange(points, colorWhiteStyle.color, attributes, big);
   }
@@ -48,7 +48,7 @@ export const FlangeMonitoringPointsCircleChart = ({
 };
 
 function buildCirclePointsChartOfFlange(
-  measurements: MonitoringPointRow[],
+  measurements: MonitoringPoint.Types.Entity[],
   color: string,
   attributes?: AssetRow['attributes'],
   isBig: boolean = false
@@ -59,7 +59,7 @@ function buildCirclePointsChartOfFlange(
   const angleAxis: any = [];
   const radiusAxis: any = [];
   const series: any = [];
-  const sortedMeasurements = Points.sort(measurements);
+  const sortedMeasurements = PrimaryAsset.Category.Flange.MonitoringPoints.sort(measurements);
   const outer = generateOuter(sortedMeasurements, color, isBig);
   polar.push(outer.radius);
   angleAxis.push(outer.angleAxis);
@@ -195,7 +195,11 @@ function getMax(max: number, attributes: AssetRow['attributes'], type: number) {
   return final;
 }
 
-function generateOuter(measurements: MonitoringPointRow[], color: string, isBig: boolean = false) {
+function generateOuter(
+  measurements: MonitoringPoint.Types.Entity[],
+  color: string,
+  isBig: boolean = false
+) {
   let radius: any = { radius: isBig ? '80%' : '75%' };
   if (ENV.legacyEnabled === 'true') {
     radius = { radius: isBig ? 180 : 150 };
@@ -262,7 +266,7 @@ function generateOuter(measurements: MonitoringPointRow[], color: string, isBig:
   return { radius, angleAxis, radiusAxis, series };
 }
 
-function generateActuals(measurements: MonitoringPointRow[], isBig: boolean = false) {
+function generateActuals(measurements: MonitoringPoint.Types.Entity[], isBig: boolean = false) {
   let radius: any = { radius: isBig ? '75%' : '70%' };
   if (ENV.legacyEnabled === 'true') {
     radius = { radius: isBig ? 150 : 120 };

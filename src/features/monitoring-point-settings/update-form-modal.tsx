@@ -39,7 +39,7 @@ export const UpdateFormModal = ({
         title: intl.get('EDIT_SOMETHING', { something: intl.get('monitoring.points') })
       }}
     >
-      <Form form={form} layout='vertical' initialValues={monitoringPoint}>
+      <Form form={form} layout='vertical' initialValues={MonitoringPoint.Types.transform2PostDTO(monitoringPoint)}>
         <Grid>
           <FormItemsBasic
             {...{

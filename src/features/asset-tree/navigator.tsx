@@ -3,7 +3,7 @@ import { Breadcrumb, BreadcrumbProps, Dropdown, MenuProps, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { mapTree, tree2List } from '../../utils/tree';
 import { truncate } from '../../utils/format';
-import { MonitoringPointRow } from '../../monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 import { Link } from '../../components';
 import { AssetRow } from 'asset-common/types';
 import { useAssetsContext } from 'providers/assets';
@@ -15,7 +15,7 @@ export type TreeFlatListItem = AssetTree.Node & { path: number[] };
 export const AssetNavigator = ({
   asset,
   showStatus = true
-}: { asset: AssetRow | MonitoringPointRow } & { showStatus?: Boolean }) => {
+}: { asset: AssetRow | MonitoringPoint.Types.Entity } & { showStatus?: Boolean }) => {
   const { id, type, alertLevel } = asset;
   const items: BreadcrumbProps['items'] = [];
   const { assets } = useAssetsContext();

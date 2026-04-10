@@ -6,21 +6,17 @@ import { ModalFormProps } from 'types/common';
 import { FormItemsBasic } from './form-items-basic';
 import { generateColProps } from 'utils/grid';
 import { AssetModel } from 'asset-common';
-import { Grid } from 'components';
+import { Grid, TextFormItem } from 'components';
 import { UpdateFormProps } from '../update-form';
+import { FolderAsset } from 'domain/asset';
 
 export const UpdateFolderAssetFormModal = ({
   editingAsset,
-  onSuccess,
   loading,
   handleSubmit,
   formItemColProps = generateColProps({ xl: 12, xxl: 12 }),
   ...rest
-}: Omit<ModalFormProps, 'onSuccess'> &
-  UpdateFormProps & {
-    onSuccess: (values: AssetModel) => void;
-    formItemColProps?: ColProps;
-  }) => {
+}: ModalFormProps & UpdateFormProps & { formItemColProps?: ColProps }) => {
   const [form] = Form.useForm<AssetModel>();
 
   return (
@@ -32,7 +28,9 @@ export const UpdateFolderAssetFormModal = ({
         },
         onOk: () => form.validateFields().then(handleSubmit),
         okButtonProps: { loading },
-        title: intl.get('EDIT_SOMETHING', { something: intl.get('ASSET') }),
+        title: intl.get('EDIT_SOMETHING', {
+          something: intl.get(FolderAsset.getLabel(editingAsset.type))
+        }),
         width: 600,
         ...rest
       }}
@@ -46,7 +44,12 @@ export const UpdateFolderAssetFormModal = ({
         }}
       >
         <Grid>
-          <FormItemsBasic parentId={editingAsset.parentId} formItemColProps={formItemColProps} />
+          <TextFormItem hidden={true} name='type' />
+          <FormItemsBasic
+            parentId={editingAsset.parentId}
+            folderAssetTypes={[editingAsset.type]}
+            formItemColProps={formItemColProps}
+          />
         </Grid>
       </Form>
     </ModalWrapper>

@@ -176,7 +176,8 @@ export const flangeFields: Flange[] = [
     name: 'type',
     description: '',
     type: 'enum',
-    options: pickOptionsFromNumericEnum(Type, PREFIX)
+    options: pickOptionsFromNumericEnum(Type, PREFIX),
+    defaultValue: Type.Tower
   },
   {
     label: 'INDEX_NUMBER',
@@ -232,7 +233,8 @@ export const flangeFields: Flange[] = [
     name: 'monitoring_points_num',
     description: '',
     type: 'number',
-    visibleWhen: (values) => values?.sub_type === 1
+    visibleWhen: (values) => values?.sub_type === 1,
+    rules: [{ required: true }]
   },
   {
     label: 'SAMPLING_PERIOD',
@@ -240,7 +242,8 @@ export const flangeFields: Flange[] = [
     description: '',
     type: 'enum',
     options: SAMPLING_PERIOD,
-    visibleWhen: (values) => values?.sub_type === 1
+    visibleWhen: (values) => values?.sub_type === 1,
+    rules: [{ required: true }]
   },
   {
     label: 'SAMPLING_OFFSET',
@@ -248,7 +251,8 @@ export const flangeFields: Flange[] = [
     description: '',
     type: 'enum',
     options: SAMPLING_OFFSET,
-    visibleWhen: (values) => values?.sub_type === 1
+    visibleWhen: (values) => values?.sub_type === 1,
+    rules: [{ required: true }]
   },
   {
     label: 'INITIAL_PRELOAD',
@@ -256,7 +260,8 @@ export const flangeFields: Flange[] = [
     description: '',
     type: 'number',
     unit: 'kN',
-    visibleWhen: (values) => values?.sub_type === 1
+    visibleWhen: (values) => values?.sub_type === 1,
+    rules: [{ required: true }]
   },
   {
     label: 'INITIAL_STRESS',
@@ -264,6 +269,7 @@ export const flangeFields: Flange[] = [
     description: '',
     type: 'number',
     unit: 'MPa',
-    visibleWhen: (values) => values?.sub_type === 1
+    visibleWhen: (values) => values?.sub_type === 1,
+    rules: [{ required: true }]
   }
 ];

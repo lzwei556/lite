@@ -4,13 +4,16 @@ import intl from 'react-intl-universal';
 import { Descriptions, Link, MutedCard } from '../components';
 import { SingleDeviceStatus } from '../device/SingleDeviceStatus';
 import { toMac } from '../utils/format';
-import { MonitoringPointRow } from 'asset-common';
 import * as MonitoringPoint from 'domain/monitoring-point';
 
-export const RelatedDeviceCard = ({ monitoringPoint }: { monitoringPoint: MonitoringPointRow }) => {
-  const { device } = MonitoringPoint.Types.transform(monitoringPoint as any);
+export const RelatedDeviceCard = ({
+  monitoringPoint
+}: {
+  monitoringPoint: MonitoringPoint.Types.Entity;
+}) => {
+  const { sensor } = monitoringPoint;
   return (
-    device && (
+    sensor && (
       <MutedCard title={intl.get('SENSOR')}>
         <Descriptions
           items={[
@@ -18,12 +21,12 @@ export const RelatedDeviceCard = ({ monitoringPoint }: { monitoringPoint: Monito
               label: intl.get('NAME'),
               children: (
                 <Space>
-                  <Link to={`/devices/${device.id}`}>{device.name}</Link>
-                  <SingleDeviceStatus device={device} key={device.id} />
+                  <Link to={`/devices/${sensor.id}`}>{sensor.name}</Link>
+                  <SingleDeviceStatus device={sensor} key={sensor.id} />
                 </Space>
               )
             },
-            { label: intl.get('MAC_ADDRESS'), children: toMac(device.macAddress.toUpperCase()) }
+            { label: intl.get('MAC_ADDRESS'), children: toMac(sensor.macAddress.toUpperCase()) }
           ]}
         />
       </MutedCard>

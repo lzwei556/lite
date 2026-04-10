@@ -3,9 +3,9 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { basicFieldColumns, usePropertyColumns } from './columns';
 import { uniq } from 'lodash';
-import { Points } from 'monitoring-point';
 import { AssetRow } from 'asset-common';
 import * as MonitoringPoint from 'domain/monitoring-point';
+import { PrimaryAsset } from 'domain/asset';
 
 export const PropertyTable = ({
   asset,
@@ -15,7 +15,7 @@ export const PropertyTable = ({
   enableSettingColumnsCount?: boolean;
 }) => {
   const { monitoringPoints = [] } = asset;
-  const actualPoints = Points.filter(monitoringPoints);
+  const actualPoints = PrimaryAsset.Category.Flange.MonitoringPoints.filter(monitoringPoints);
 
   const tableProps = {
     cardBordered: true,

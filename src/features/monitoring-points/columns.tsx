@@ -34,8 +34,8 @@ const sensor = {
   dataIndex: 'devices',
   key: 'devices',
   render: (_: string, row: MonitoringPoint.Types.Entity) => {
-    if (row.device) {
-      const { id, name } = row.device;
+    if (row.sensor) {
+      const { id, name } = row.sensor;
       return (
         <Link style={{ display: 'inline-block', minWidth: 120 }} to={`/devices/${id}`} key={id}>
           {name}

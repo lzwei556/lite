@@ -7,9 +7,14 @@ import { FormItemsBasic, ParentSelectFormItem, TypeSelectFormItem } from './form
 import { useType } from './use-basic-form-items';
 import { FormItemsSettings } from './form-items-settings';
 import { generateColProps } from 'utils/grid';
-import { AssetModel } from 'asset-common';
-import { CreateFormProps } from './folder/create-form-modal';
+import { AssetModel, AssetRow } from 'asset-common';
 import { Grid } from 'components';
+
+type CreateFormProps = {
+  parent?: AssetRow;
+  loading: boolean;
+  handleSubmit: (values: AssetModel) => void;
+};
 
 export const CreateFormModal = ({
   parent,

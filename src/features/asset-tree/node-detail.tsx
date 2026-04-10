@@ -1,7 +1,8 @@
 import React from 'react';
 import { useAssetsContext } from 'providers/assets';
-import { AssetRow, MonitoringPointRow } from 'asset-common';
+import { AssetRow } from 'asset-common';
 import { FolderAsset } from 'domain/asset';
+import * as MonitoringPointNS from 'domain/monitoring-point';
 
 export const TreeNodeDetail = ({
   AssetFolder,
@@ -11,7 +12,7 @@ export const TreeNodeDetail = ({
   AssetFolder: React.ComponentType<{ asset: AssetRow }>;
   AssetPrimary: React.ComponentType<{ asset: AssetRow }>;
   MonitoringPoint: React.ComponentType<{
-    monitoringPoint: MonitoringPointRow;
+    monitoringPoint: MonitoringPointNS.Types.Entity;
     onSuccess: (flag?: boolean | undefined) => void;
   }>;
 }) => {
@@ -27,7 +28,7 @@ export const TreeNodeDetail = ({
     } else {
       return (
         <MonitoringPoint
-          monitoringPoint={selectedNode as MonitoringPointRow}
+          monitoringPoint={selectedNode as MonitoringPointNS.Types.Entity}
           onSuccess={contextProps.refresh}
         />
       );

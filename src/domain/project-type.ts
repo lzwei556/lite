@@ -1,5 +1,5 @@
 import { pickOptionsFromNumericEnum } from 'utils';
-import * as AppType from './app-type';
+import * as App from './app-type';
 
 export enum Enum {
   ConditionMonitoring = 0x00,
@@ -15,7 +15,7 @@ export enum Enum {
   BoltMonitoring = 0x34
 }
 
-const map = new Map<Enum, AppType.Enum>([
+const map = new Map<Enum, App.Type>([
   [Enum.WindPowerBoltMonitoring, 'windTurbinePro'],
   [Enum.HydroPowerBoltMonitoring, 'hydroTurbine'],
   [Enum.TowerBoltMonitoring, 'towerBolt'],
@@ -28,5 +28,5 @@ const map = new Map<Enum, AppType.Enum>([
   [Enum.BoltMonitoring, 'bolt']
 ]);
 
-export const getAppType = (type: Enum): AppType.Enum | undefined => map.get(type);
+export const getAppType = (type: Enum): App.Type | undefined => map.get(type);
 export const options = pickOptionsFromNumericEnum(Enum, 'project.type');

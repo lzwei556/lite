@@ -43,7 +43,11 @@ export const UpdateFolderAssetFormCard = ({
         }}
       >
         <Grid>
-          <FormItemsBasic parentId={asset.parentId} formItemColProps={formItemColProps} />
+          <FormItemsBasic
+            parentId={asset.parentId}
+            folderAssetTypes={[asset.type]}
+            formItemColProps={formItemColProps}
+          />
         </Grid>
       </Form>
     </Card>

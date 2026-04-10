@@ -15,21 +15,27 @@ import {
 import { generateColProps } from 'utils/grid';
 import { useAssetsContext } from 'providers/assets';
 import { Hooks } from 'domain/asset';
+import { useAppConfig } from 'providers/app';
 
 export default function Index() {
   const isLegacy = ENV.legacyEnabled === 'true';
   const { assets, refresh } = useAssetsContext();
   const [open, setOpen] = React.useState(false);
   const [editingAsset, setEditingAsset] = React.useState<AssetRow>();
+  const folderAssetTypes = useAppConfig().folderAssetTypes;
   const commonModalProps = {
     afterClose: () => setEditingAsset(undefined),
     open,
     onCancel: () => setOpen(false),
     editingAsset,
-    onSuccess: () => console.log('onSuccess')
+    onSuccess: () => {
+      refresh();
+      setOpen(false);
+    },
+    folderAssetTypes
   };
-  const createFormProps = useCreateFormProps();
-  const updateFolderFormProps = useUpdateFormProps(editingAsset?.id);
+  const createFormProps = useCreateFormProps(commonModalProps.onSuccess);
+  const updateFolderFormProps = useUpdateFormProps(editingAsset?.id, commonModalProps.onSuccess);
 
   return (
     <TabsDetail
@@ -45,6 +51,7 @@ export default function Index() {
           content: (
             <FolderAssetsTable
               assets={assets}
+              folderAssetTypes={folderAssetTypes}
               createFormModal={
                 !editingAsset && (
                   <CreateFolderAssetFormModal {...{ ...commonModalProps, ...createFormProps }} />
@@ -68,7 +75,8 @@ export default function Index() {
                 setOpen(true);
                 setEditingAsset(asset);
               }}
-              onDeleteSuccess={(id) => console.log('id')}
+              onDeleteSuccess={() => refresh()}
+              onImportSuccess={refresh}
             />
           )
         }

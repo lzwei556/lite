@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '../components';
 import { HistoryDataFea } from '../features';
 import { getPropertyItems, useAssetModelContext } from './context';
-import { MonitoringPointRow, Point } from '../monitoring-point';
+import { Point } from '../monitoring-point';
 import * as MonitoringPoint from 'domain/monitoring-point';
 import * as Feature from 'domain/feature-property';
 
@@ -11,7 +11,7 @@ export const SelectedPointPropertyHistory = () => {
   if (selectedMonitoringPoint) {
     const { self, property, axisKey, fieldKey } = selectedMonitoringPoint;
 
-    const getTitle = (m: MonitoringPointRow, property: Feature.Types.Property) => {
+    const getTitle = (m: MonitoringPoint.Types.Entity, property: Feature.Types.Property) => {
       const key = property.key;
       const items = getPropertyItems(m, MonitoringPoint.Type.getProperties(m));
       let title = items.find((item) => item.property?.key === key)?.title;

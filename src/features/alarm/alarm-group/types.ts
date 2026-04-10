@@ -1,4 +1,4 @@
-import { MonitoringPointRow } from '../../../asset-common';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type AlarmRule = {
   id: number;
@@ -19,7 +19,7 @@ export type AlarmRule = {
     category: number;
     metric: any;
   }[];
-  monitoringPoints?: MonitoringPointRow[];
+  monitoringPoints?: MonitoringPoint.Types.Entity[];
   bindedStatus?: boolean;
   bindingStatus?: boolean;
   alertLevel?: number;

@@ -7,6 +7,7 @@ import intl from 'react-intl-universal';
 import { getOptionLabelByValue } from 'utils';
 import { basicFieldColumns } from './columns';
 import * as MonitoringPoint from 'domain/monitoring-point';
+import { deleteMeasurement } from 'monitoring-point/services';
 
 export const AttributeTable = ({
   monitoringPoints,
@@ -94,8 +95,8 @@ const OperateCell = ({
       <CanAccess {...Permission.MeasurementDelete}>
         <DeleteIconButton
           confirmProps={{
-            description: intl.get('DELETE_SOMETHING_PROMPT', { something: point.name })
-            // onConfirm: () => deleteMeasurement(point.id).then(() => onDeleteSuccess(point.id))
+            description: intl.get('DELETE_SOMETHING_PROMPT', { something: point.name }),
+            onConfirm: () => deleteMeasurement(point.id).then(() => onDeleteSuccess(point.id))
           }}
         />
       </CanAccess>

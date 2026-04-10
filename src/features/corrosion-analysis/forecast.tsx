@@ -6,13 +6,13 @@ import { Dayjs, getPluralUnitInEnglish } from '../../utils';
 import { getValue } from '../../utils/format';
 import { useLocaleContext } from '../../localeProvider';
 import { getDurationByDays, Range, useAnalysisData } from './useAnalysis';
-import { MonitoringPointRow } from 'monitoring-point';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export const Forecast = ({
   point,
   range: initialRange
 }: {
-  point: MonitoringPointRow;
+  point: MonitoringPoint.Types.Entity;
   range: Range;
 }) => {
   const { id } = point;

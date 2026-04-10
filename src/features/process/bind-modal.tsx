@@ -7,9 +7,9 @@ import { ProcessFormDataDTO, transform, useBindProcess } from './use-services';
 import { ModalWrapper } from '../../components/modalWrapper';
 import { ParameterFormItem, ProcessType } from '../../process-type';
 import { SelectFormItem, TextFormItem } from '../../components';
-import { MonitoringPointRow } from '../../monitoring-point';
 import { CommonProps, sourceIdField, typeField } from './common';
 import { Option } from 'common/types';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 type Props = ModalFormProps & CommonProps;
 
@@ -117,7 +117,7 @@ const useSourceIdSelectFormItemProps = ({
 }: {
   type?: number;
   disabled: boolean;
-  monitoringPoints: MonitoringPointRow[];
+  monitoringPoints: MonitoringPoint.Types.Entity[];
 }) => {
   return {
     ...useFormItemBindingsProps({ ...sourceIdField, rules: [{ required: true }] }),

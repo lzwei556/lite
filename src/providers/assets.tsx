@@ -1,17 +1,17 @@
-import { AssetRow } from 'asset-common/types';
-import { MonitoringPointRow } from 'monitoring-point/types';
+
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { getMeasurement } from 'monitoring-point';
 import { getAsset, getAssets } from 'asset-common';
-import { Hooks } from 'domain/asset';
+import {Types, Hooks } from 'domain/asset';
+import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type ContextProps = {
-  assets: AssetRow[];
+  assets: Types.Entity[];
   assetsLoading: boolean;
   loading: boolean;
   refresh: (flag?: boolean) => void;
-  selectedNode: AssetRow | MonitoringPointRow | undefined;
+  selectedNode: Types.Entity | MonitoringPoint.Types.Entity | undefined;
 };
 
 const Context = React.createContext<ContextProps>({
@@ -49,14 +49,19 @@ export function AssetsProvider({ children }: { children?: JSX.Element }) {
   const fetchAsset = (id: number) => {
     setLoading(true);
     getAsset(id)
-      .then(setSelectedNode)
+      .then((asset) =>
+        setSelectedNode({
+          ...asset,
+          monitoringPoints: (asset.monitoringPoints ?? []).map(MonitoringPoint.Types.transform)
+        })
+      )
       .finally(() => setLoading(false));
   };
 
   const fetchPoint = (id: number) => {
     setLoading(true);
     getMeasurement(id)
-      .then(setSelectedNode)
+      .then((point) => setSelectedNode(MonitoringPoint.Types.transform(point)))
       .finally(() => setLoading(false));
   };
 

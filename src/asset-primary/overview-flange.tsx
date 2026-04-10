@@ -1,10 +1,5 @@
 import { Col } from 'antd';
-import {
-  AlarmsObjectStatistics,
-  AssetRow,
-  EmptyMonitoringPoints,
-  SensorsStatistics
-} from 'asset-common';
+import { AlarmsObjectStatistics, AssetRow, SensorsStatistics } from 'asset-common';
 import { Grid, MutedCard } from 'components';
 import { PrimaryAsset } from 'domain/asset';
 import {
@@ -12,6 +7,7 @@ import {
   FakeVSRealChart,
   FlangeMonitoringPointsCircleChart
 } from 'features/feature-data';
+import { EmptyMonitoringPoints } from 'features/monitoring-points';
 import React from 'react';
 import intl from 'react-intl-universal';
 

@@ -1,6 +1,6 @@
 import { AssetRow } from 'asset-common';
 import { TabsDetail, TabsDetailsItems } from 'components';
-import { PropertyTable } from 'features/monitoring-points/property-table';
+import { EmptyMonitoringPoints, PropertyTable } from 'features/monitoring-points';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Settings } from './settings';
@@ -123,7 +123,9 @@ const useHistory = (asset: AssetRow) => {
         key: 'history',
         label: intl.get('HISTORY_DATA'),
         content: (
-          <CustomizableIntervals monitoringPoints={asset.monitoringPoints ?? []} key={asset.id} />
+          <EmptyMonitoringPoints asset={asset}>
+            <CustomizableIntervals monitoringPoints={asset.monitoringPoints ?? []} key={asset.id} />
+          </EmptyMonitoringPoints>
         )
       }
     ];

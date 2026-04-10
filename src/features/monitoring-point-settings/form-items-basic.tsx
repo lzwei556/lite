@@ -8,7 +8,7 @@ import { generateColProps } from 'utils/grid';
 import { useAssets, useType } from './use-basic-form-items';
 import { useComponents } from './hooks';
 import * as MonitoringPoint from 'domain/monitoring-point';
-import { useAppConfig } from 'providers/app';
+import { PrimaryAsset } from 'domain/asset';
 
 export const FormItemsBasic = ({
   assetSelectFormItem,
@@ -42,7 +42,9 @@ export const FormItemsBasic = ({
   );
 };
 
-export const TypeSelectFormItem = (param: Omit<ReturnType<typeof useType>, 'selectedType'>) => {
+export const TypeSelectFormItem = (
+  param: Omit<ReturnType<typeof useType>, 'selectedType'> & { primaryAssetType: PrimaryAsset.Enum }
+) => {
   const form = Form.useFormInstance();
   return (
     <>
@@ -60,7 +62,10 @@ export const TypeSelectFormItem = (param: Omit<ReturnType<typeof useType>, 'sele
               form.setFieldValue('typeLabel', opt?.label);
               form.setFieldValue('device_id', null);
             },
-            options: useAppConfig().monitoringPointTypeOptions
+            options: PrimaryAsset.getMonitoringPointTypes([param.primaryAssetType]).map((type) => ({
+              label: intl.get(MonitoringPoint.Type.getLabel(type)),
+              value: type
+            }))
           }
         }}
       />
