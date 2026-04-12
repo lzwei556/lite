@@ -22,29 +22,26 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
 });
 
 axios.interceptors.response.use(
-  <T>(response: AxiosResponse<T>) => {
-    if (response.status === 200) {
-      return response;
+  <T>(response: AxiosResponse<ResponseResult<T>>) => {
+    const res = response.data;
+    if (res?.code !== 200) {
+      message.error('')
+      return Promise.reject(new Error(res.msg || 'request.failed'));
     }
-    return response;
+    return res.data;
   },
   (error) => {
-    const { status } = error.response;
-    switch (status) {
-      case 403:
-        window.location.hash = '/403';
-        break;
-      case 404:
-        window.location.hash = '/404';
-        break;
-      case 500:
-        window.location.hash = '/500';
-        break;
-      case 400:
-        message.error(`${error.response.data.msg}`);
-        break;
-      default:
-        break;
+    const status = error.response?.status;
+    if (status === 400) {
+      message.error('');
+    }
+    if (status === 401) {
+    }
+    if (status === 403) {
+      message.error('');
+    }
+    if (status >= 500) {
+      message.error('');
     }
     return Promise.reject(error);
   }
