@@ -1,14 +1,11 @@
 import React from 'react';
-import request from '../utils/request';
 import { useRequest } from 'ahooks';
 import { useGetIdentity } from './auth';
+import { getMyCasbin } from 'domain/profile';
 
 type CanParams = { resource: string; action: string };
-type CanResponse = { rules: string };
 
-const AccessControlContext = React.createContext<
-  Partial<{ can: (params: CanParams) => Promise<CanResponse> }>
->({});
+const AccessControlContext = React.createContext<Partial<{ can: typeof getMyCasbin }>>({});
 
 export const AccessControlProvider = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -48,10 +45,6 @@ export const useCan = (params: CanParams) => {
     );
   }
   return res;
-};
-
-const getMyCasbin = async () => {
-  return request.get<CanResponse>(`/my/casbin`).then((res) => res.data.data);
 };
 
 export const Permission = {

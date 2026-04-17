@@ -1,12 +1,11 @@
 import { Menu as AntdMenu, MenuProps } from 'antd';
 import intl from 'react-intl-universal';
-import { Menu } from '../../types/menu';
 import { FontIcon, Link } from '../../components';
-import { useRequest } from 'ahooks';
-import request from '../../utils/request';
 import { useLocation } from 'react-router-dom';
 import { mapTree } from '../../utils/tree';
 import { AssetTree } from 'domain/asset';
+import { useMyMenus } from 'domain/profile';
+import { Menu } from 'domain/menu';
 
 // UI related logic begin
 
@@ -71,14 +70,3 @@ const useMenuProps = (
   };
 };
 // props end
-
-// state begin
-const useMyMenus = () => useRequest(getMyMenus);
-// state end
-
-// api begin
-const getMyMenus = async () => {
-  const res = await request.get<Menu[]>('/my/menus');
-  return res.data.data;
-};
-// api end

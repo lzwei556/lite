@@ -8,10 +8,6 @@ export function getAssets(filters?: Partial<Pick<AssetModel, 'type' | 'parent_id
   return request.get<Types.DTO[]>(`/assets`, { ...filters }).then(GetResponse);
 }
 
-export function getAsset(id: number) {
-  return request.get<Types.DTO>(`/assets/${id}`).then(GetResponse);
-}
-
 export function updateAsset(id: number, asset: AssetModel) {
   return request.put(`/assets/${id}`, asset).then(PutResponse);
 }
@@ -50,7 +46,7 @@ export type ProjectStatistics = {
 };
 
 export function getProjectStatistics() {
-  return request.get<ProjectStatistics>(`/statistics/all`).then(GetResponse);
+  return request.get<ProjectStatistics>(`/statistics/all`);
 }
 
 export function downloadHistory(

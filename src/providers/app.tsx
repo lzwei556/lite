@@ -4,34 +4,18 @@ import React from 'react';
 import request from 'utils/request';
 import { useAppTypeMappingWithSelectedProject } from './user-profile';
 import intl from 'react-intl-universal';
+import { useRequest } from 'ahooks';
 
 type ContextProps = { type: App.Type; analysisEnabled?: boolean };
 
 const Context = React.createContext<ContextProps>({ type: 'windTurbine' });
 
 export function AppProvider({ children }: { children?: JSX.Element }) {
-  const [loading, setLoading] = React.useState(true);
-  const [config, setConfig] = React.useState<ContextProps>();
-  React.useEffect(() => {
-    request
-      .get<ContextProps>('webConfig')
-      .then((res) => {
-        if (res.data.code === 200) {
-          setConfig(res.data.data);
-          // setConfig({type:'vibration'});
-        } else {
-          throw Error(`API: webConfig occur errors`);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => setLoading(false));
-  }, []);
+  const { loading, data } = useWebConfig();
 
   return (
     <Spin spinning={loading}>
-      {config && <Context.Provider value={config}>{children}</Context.Provider>}
+      {data && <Context.Provider value={data}>{children}</Context.Provider>}
     </Spin>
   );
 }
@@ -65,3 +49,7 @@ const useAppType = () => {
   }
   return appType;
 };
+
+const useWebConfig = () => useRequest(getWebConfig);
+
+const getWebConfig = async () => request.get<ContextProps>('webConfig');

@@ -25,7 +25,7 @@ axios.interceptors.response.use(
   <T>(response: AxiosResponse<ResponseResult<T>>) => {
     const res = response.data;
     if (res?.code !== 200) {
-      message.error('')
+      message.error(res.msg);
       return Promise.reject(new Error(res.msg || 'request.failed'));
     }
     return res.data;
@@ -33,37 +33,33 @@ axios.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     if (status === 400) {
-      message.error('');
+      message.error('400');
     }
     if (status === 401) {
+      //logout()
     }
     if (status === 403) {
-      message.error('');
+      message.error('403');
     }
     if (status >= 500) {
-      message.error('');
+      message.error('500');
     }
     return Promise.reject(error);
   }
 );
 
-function request<T>(method: Method, url: string, params: any) {
+async function request<T>(method: Method, url: string, params: any) {
   if (params) {
     params = filterNull(params);
   }
-  return new Promise<AxiosResponse<T>>((resolve, reject) => {
-    axios
-      .request({
-        url: url,
-        data:
-          method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE'
-            ? params
-            : null,
-        params: method === 'GET' ? params : null,
-        method: method
-      })
-      .then((res) => resolve(res))
-      .catch((error) => reject(error));
+  return await axios.request<any, T>({
+    url: url,
+    data:
+      method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE'
+        ? params
+        : null,
+    params: method === 'GET' ? params : null,
+    method: method
   });
 }
 
@@ -136,7 +132,7 @@ export default {
     return upload<ResponseResult<T>>(url, params);
   },
   get: <T>(url: string, params: any = null) => {
-    return request<ResponseResult<T>>('GET', url, params);
+    return request<T>('GET', url, params);
   },
   post: <T>(url: string, params: any) => {
     return request<ResponseResult<T>>('POST', url, params);

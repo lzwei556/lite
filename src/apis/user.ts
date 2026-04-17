@@ -1,7 +1,7 @@
 import request from '../utils/request';
 import { PageResult } from '../types/page';
 import { User } from '../types/user';
-import { LoginResponse } from '../types/login';
+
 import { DeleteResponse, GetResponse, PostResponse, PutResponse } from '../utils/response';
 
 export function PagingUsersRequest(page: number, size: number) {
@@ -24,6 +24,4 @@ export function UpdateUserRequest(id: number, user: any) {
   return request.put<User>(`/users/${id}`, user).then(PutResponse);
 }
 
-export function LoginRequest(username: string, password: string) {
-  return request.post<LoginResponse>('/login', { username, password }).then((res) => res.data);
-}
+

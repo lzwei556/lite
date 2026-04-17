@@ -84,7 +84,7 @@ export function Table<T>({
           pagination && {
             ...pagination,
             showSizeChanger: true,
-            pageSizeOptions: ['10', '20', '30', '40', '50', '100'],
+            pageSizeOptions: ['5', '10', '20'],
             style: { marginBlockEnd: 0 }
           }
         }

@@ -1,19 +1,13 @@
-import { useEffect, useState } from 'react';
 import { Col, Progress, Row, Statistic, Tag, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import intl from 'react-intl-universal';
-import { GetSystemRequest } from '../../apis/system';
 import { Chart, Descriptions, Grid, MutedCard } from '../../components';
 import { generateColProps } from '../../utils/grid';
-import { System } from '../../types/system';
 import { ColorHealth } from '../../constants/color';
+import { useOne } from 'domain/system';
 
 const SystemPage = () => {
-  const [data, setData] = useState<System>();
-
-  useEffect(() => {
-    GetSystemRequest().then(setData);
-  }, []);
+  const { data } = useOne();
 
   const renderUsedChart = (value: number) => {
     const option = {

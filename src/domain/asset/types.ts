@@ -1,5 +1,6 @@
 import { Types } from 'domain/monitoring-point';
 import { Settings } from './settings/capability';
+import * as MonitoringPoint from '../monitoring-point';
 
 export type DTO = {
   alertLevel: number;
@@ -25,4 +26,7 @@ type Statistics = {
   offlineDeviceNum: number;
 };
 
-export type Entity = DTO
+export type Entity = Omit<DTO, 'children' | 'monitoringPoints'> & {
+  children?: Entity[];
+  monitoringPoints?: MonitoringPoint.Types.Entity[];
+};

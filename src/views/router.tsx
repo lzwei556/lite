@@ -21,7 +21,7 @@ const DeviceDetail = lazy(() => import('../features/device/detail'));
 const ImportNetwork = lazy(() => import('../network/import'));
 const AlarmRecord = lazy(() => import('../features/alarm/record'));
 const Firmware = lazy(() => import('./firmware'));
-const User = lazy(() => import('./user'));
+const Users = lazy(() => import('../features/user/table'));
 const Me = lazy(() => import('./me'));
 const Role = lazy(() => import('./system/role'));
 const System = lazy(() => import('./system'));
@@ -131,7 +131,7 @@ const AppRouter = () => {
               path='users'
               element={
                 <ProjectVerification>
-                  <User />
+                  <Users />
                 </ProjectVerification>
               }
             />

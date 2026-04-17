@@ -1,9 +1,7 @@
-
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { getMeasurement } from 'monitoring-point';
-import { getAsset, getAssets } from 'asset-common';
-import {Types, Hooks } from 'domain/asset';
+import { Types, Hooks, Services } from 'domain/asset';
 import * as MonitoringPoint from 'domain/monitoring-point';
 
 export type ContextProps = {
@@ -30,39 +28,18 @@ export function AssetsProvider({ children }: { children?: JSX.Element }) {
   const [idStr, typeStr] = pathId.split('-');
   const id = Number(idStr);
   const type = Number(typeStr);
-  const [assets, setAssets] = React.useState<ContextProps['assets']>([]);
-  const [loading, setLoading] = React.useState(false);
-  const [assetsLoading, setAssetsLoading] = React.useState(false);
+  const { loading, runAsync: fetchAsset } = Services.useOne();
   const [selectedNode, setSelectedNode] = React.useState<ContextProps['selectedNode']>();
 
-  const fetchAssets = () => {
-    setAssetsLoading(true);
-    getAssets({ parent_id: 0 })
-      .then(setAssets)
-      .finally(() => setAssetsLoading(false));
-  };
+  const { loading: assetsLoading, data: assets = [], runAsync: fetchAssets } = Services.useList();
 
-  React.useEffect(() => {
-    fetchAssets();
-  }, []);
 
-  const fetchAsset = (id: number) => {
-    setLoading(true);
-    getAsset(id)
-      .then((asset) =>
-        setSelectedNode({
-          ...asset,
-          monitoringPoints: (asset.monitoringPoints ?? []).map(MonitoringPoint.Types.transform)
-        })
-      )
-      .finally(() => setLoading(false));
-  };
 
   const fetchPoint = (id: number) => {
-    setLoading(true);
+
     getMeasurement(id)
       .then((point) => setSelectedNode(MonitoringPoint.Types.transform(point)))
-      .finally(() => setLoading(false));
+
   };
 
   const fetchNode = React.useCallback((id: number, type: number) => {
@@ -84,7 +61,7 @@ export function AssetsProvider({ children }: { children?: JSX.Element }) {
         fetchNode(id, type);
       }
     },
-    [id, type, fetchNode]
+    [id, type, fetchAssets, fetchNode]
   );
 
   React.useEffect(() => {

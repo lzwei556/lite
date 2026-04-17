@@ -31,7 +31,14 @@ type DeepPath<T> = T extends object
     }[keyof T & (string | number)]
   : never;
 
-type FieldType = 'string' | 'number' | 'boolean' | 'enum' | 'number-switcher' | 'number-array';
+type FieldType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'enum'
+  | 'number-switcher'
+  | 'number-array'
+  | 'password';
 
 export type Field<Entity extends Object> = {
   name: DeepPath<Entity>;

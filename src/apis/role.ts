@@ -27,10 +27,5 @@ export function AllocPermissionsRequest(id: number, ids: number[]) {
   return request.patch(`/roles/${id}/permissions`, { ids }).then(PutResponse);
 }
 
-export function GetCasbinRequest() {
-  return request.get<any>(`/my/casbin`).then(GetResponse);
-}
 
-export function RemoveRoleRequest(id: number) {
-  return request.delete(`/roles/${id}`).then(DeleteResponse);
-}
+

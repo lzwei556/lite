@@ -3,15 +3,14 @@ import request from '../utils/request';
 import { useRequest } from 'ahooks';
 import { GlobalStore } from '../utils/global-store';
 import { ENV } from '../utils/env';
-import { ResponseResult } from '../types/response';
+import { AuthIdentity, getIndentity } from 'domain/profile';
 
 const store = GlobalStore.getInstance(true);
 
 export type LoginResponse = { token: string };
-export type AuthIdentity = { id: number; username: string; role: number };
 
 type AuthProviderProps = {
-  login: (params: LoginInput) => Promise<ResponseResult<LoginResponse>>;
+  login: (params: LoginInput) => Promise<LoginResponse>;
   logout: (onSuccess: () => void) => void;
   check: () => boolean;
   getIndentity: () => Promise<AuthIdentity>;
@@ -43,12 +42,8 @@ export const useLogin = (onSuccess: () => void, onError: (e: Error) => void) => 
   return useRequest(login!, {
     manual: true,
     onSuccess: (res) => {
-      if (res && res.code === 200) {
-        store.set('authToken', res.data.token);
-        onSuccess();
-      } else {
-        onError(new Error(res.msg));
-      }
+      store.set('authToken', res.token);
+      onSuccess();
     },
     onError: (e) => onError(e)
   });
@@ -83,8 +78,4 @@ const login = async (params: LoginInput) => {
 
 const check = () => {
   return !!store.get('authToken');
-};
-
-const getIndentity = async () => {
-  return request.get<AuthIdentity>('/my/profile').then((res) => res.data.data);
 };

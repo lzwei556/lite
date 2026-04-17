@@ -2,9 +2,9 @@ import React from 'react';
 import { Project } from '../types/project';
 import { Result, SelectProps, Spin } from 'antd';
 import { GlobalStore } from '../utils/global-store';
-import request from '../utils/request';
 import intl from 'react-intl-universal';
 import * as ProjectType from 'domain/project-type';
+import { getMyProject, getMyProjects } from 'domain/profile';
 
 const store = GlobalStore.getInstance(true);
 
@@ -95,11 +95,6 @@ export const useInit = (
   return { init, loading };
 };
 
-const getMyProjects = async () => {
-  const res = await request.get<Project[]>('/my/projects');
-  return res.data.data;
-};
-
 export const useProjectsSelectProps = (onSuccess: () => void): SelectProps | undefined => {
   const { projects, selectedProject, changeProject } = React.useContext(ProfileContext);
   return selectedProject
@@ -118,11 +113,6 @@ export const useProjectsSelectProps = (onSuccess: () => void): SelectProps | und
         variant: 'borderless'
       }
     : undefined;
-};
-
-const getMyProject = async (id: number) => {
-  const res = await request.get<Project>(`/my/projects/${id}`);
-  return res.data.data;
 };
 
 export const useAppTypeMappingWithSelectedProject = () => {

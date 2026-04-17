@@ -1,11 +1,10 @@
 import { Button, Drawer, DrawerProps, Space, Tree } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { Role } from '../../../types/role';
-import { GetMenusTreeRequest } from '../../../apis/menu';
-import { Menu } from '../../../types/menu';
 import { AllocMenusRequest } from '../../../apis/role';
 import intl from 'react-intl-universal';
 import { CanAccess, Permission } from '../../../providers/access-control';
+import { getTree, Menu } from 'domain/menu';
 
 export interface MenuDrawerProps extends DrawerProps {
   role: Role;
@@ -19,7 +18,7 @@ const MenuDrawer: FC<MenuDrawerProps> = (props) => {
 
   useEffect(() => {
     if (open) {
-      GetMenusTreeRequest().then((data) => {
+      getTree().then((data) => {
         setMenus(data);
         setCheckMenus(role.menus);
       });
