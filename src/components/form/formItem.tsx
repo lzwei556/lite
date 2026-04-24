@@ -17,6 +17,8 @@ import {
   NumberFormItemWithSwitcher,
   NumberFormItemWithSwitcherProps
 } from './numberFormItemWithSwitcher';
+import { TextAreaProps } from 'antd/es/input';
+import { TextAreaFormItem } from './textareaFormItem';
 
 export type UniversalFormItemProps = FormItemProps & {
   checkboxGroupProps?: CheckboxGroupProps;
@@ -26,6 +28,7 @@ export type UniversalFormItemProps = FormItemProps & {
   selectProps?: SelectProps;
   numberFormItemWithSwitcherProps?: NumberFormItemWithSwitcherProps;
   numbersProps?: FormItemProps & { defaultValue?: unknown };
+  textareaProps?: TextAreaProps;
 };
 
 export const FormItem = (props: UniversalFormItemProps) => {
@@ -37,6 +40,7 @@ export const FormItem = (props: UniversalFormItemProps) => {
     selectProps,
     numberFormItemWithSwitcherProps,
     numbersProps,
+    textareaProps,
     ...rest
   } = props;
 
@@ -69,6 +73,8 @@ export const FormItem = (props: UniversalFormItemProps) => {
         </Space.Compact>
       </TextFormItem>
     );
+  } else if (textareaProps) {
+    return <TextAreaFormItem textareaProps={textareaProps} {...rest} />;
   } else {
     return <TextFormItem inputProps={inputProps} {...rest} />;
   }

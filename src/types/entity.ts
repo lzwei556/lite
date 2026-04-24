@@ -38,7 +38,8 @@ type FieldType =
   | 'enum'
   | 'number-switcher'
   | 'number-array'
-  | 'password';
+  | 'password'
+  | 'string-textarea';
 
 export type Field<Entity extends Object> = {
   name: DeepPath<Entity>;
@@ -53,18 +54,36 @@ export type Field<Entity extends Object> = {
   nameMode?: NameMode;
   rules?: FormItemProps['rules'];
   group?: string | number;
+  dependencies?: any[];
+  valueToLabel?: (...value: any[]) => string;
 };
 
-export const toUniversalFormItemProps = <Entity extends Object>(
-  field: Field<Entity>,
-  formItemProps?: FormItemProps
-): UniversalFormItemProps => {
-  const { type, optionType, label, defaultValue, unit, translatingUnit, rules } = field;
+export const toUniversalFormItemProps = <Entity extends Object>({
+  field,
+  formItemProps,
+  disabled
+}: {
+  field: Field<Entity>;
+  formItemProps?: FormItemProps;
+  disabled?: boolean;
+}): UniversalFormItemProps => {
+  const {
+    type,
+    optionType,
+    label,
+    defaultValue,
+    unit,
+    translatingUnit,
+    rules,
+    valueToLabel,
+    ...rest
+  } = field;
   const options = field.options?.map((opt) => ({
     ...opt,
     label: intl.get(opt.label).d(opt.label)
   }));
   const props = {
+    ...rest,
     label,
     initialValue: defaultValue,
     ...formItemProps,
@@ -78,14 +97,18 @@ export const toUniversalFormItemProps = <Entity extends Object>(
       return { ...props, inputNumberProps: { addonAfter: getUnit(unit, translatingUnit) } };
     case 'enum':
       if (optionType === 'checkbox') {
-        return { ...props, checkboxGroupProps: { options } };
+        return { ...props, checkboxGroupProps: { options, disabled } };
       } else {
-        return { ...props, selectProps: { options } };
+        return { ...props, selectProps: { options, disabled } };
       }
     case 'number-switcher':
       return { numberFormItemWithSwitcherProps: { ...props, nameMode: field.nameMode } };
     case 'number-array':
       return { numbersProps: { ...props, defaultValue: field.defaultValue } };
+    case 'password':
+      return { ...props, inputProps: { type: 'password' } };
+    case 'string-textarea':
+      return { ...props, textareaProps: {} };
     case 'string':
       return props;
     default:

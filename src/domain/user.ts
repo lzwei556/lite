@@ -1,8 +1,7 @@
-import { useRequest } from 'ahooks';
 import { RuleObject } from 'antd/es/form';
 import intl from 'react-intl-universal';
 import { Field } from 'types';
-import { PageParameter, PageResult, useSearchPageInfo } from 'types/page';
+import { PageParameter, PageResult } from 'types/page';
 import request from 'utils/request';
 import { Role } from './role';
 
@@ -24,35 +23,31 @@ export type CreateData = {
   projects: number[];
 };
 
-export type UpdateData = Pick<CreateData, 'username' | 'role' | 'phone' | 'email'>;
+export type UpdateData = {
+  id: number;
+  data: Pick<CreateData, 'username' | 'role' | 'phone' | 'email'>;
+};
 
-export const create = async (data: any) => {
-  return await request.post('/users', data);
+export const create = async (data: CreateData) => {
+  return request.post('/users', data);
 };
 
 export const getList = async (param: PageParameter) => {
-  return await request.get<PageResult<User[]>>('/users', param);
+  return request.get<PageResult<User>>('/users', param);
 };
 
 export const get = async (id: number) => {
-  return await request.get<User>(`/users/${id}`);
+  return request.get<User>(`/users/${id}`);
 };
 
-export const update = async (id: number, data: any) => {
-  return await request.put<User>(`/users/${id}`, data);
+export const update = async (params: UpdateData) => {
+  const { id, data } = params;
+  return request.put<User>(`/users/${id}`, data);
 };
 
-export const deleteOne = async (id: number) => {
-  return await request.delete(`/users/${id}`);
+export const deleteOne = async ({ id }: { id: number }) => {
+  return request.delete(`/users/${id}`);
 };
-
-export const useCreate = () => useRequest(create);
-
-export const useList = () => {
-  return useRequest(getList, { defaultParams: [useSearchPageInfo()] });
-};
-
-export const useUpdate = () => useRequest(update);
 
 export const Fields = {
   Username: {
@@ -84,14 +79,19 @@ export const Fields = {
       })
     ],
     type: 'password',
-    description: ''
+    description: '',
+    dependencies: ['password']
   } as Field<CreateData>,
   Role: {
     name: 'role',
-    label: 'USER_ROLE',
+    label: 'ROLE',
     rules: [{ required: true }],
     type: 'enum',
-    description: ''
+    description: '',
+    valueToLabel: (value: number, roles: Role[]) => {
+      const role = roles.find((role) => role.id === value);
+      return role ? intl.get(role.name) : '';
+    }
   } as Field<CreateData>,
   Phone: {
     name: 'phone',
@@ -110,7 +110,6 @@ export const Fields = {
   Projects: {
     name: 'projects',
     label: 'BIND_PROJECT',
-    rules: [{ required: true }, { min: 4, max: 16 }],
     type: 'enum',
     description: ''
   } as Field<CreateData>

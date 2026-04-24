@@ -15,7 +15,7 @@ export const FormItemsAttributes = ({
   formItemProps?: FormItemProps;
 }) => {
   return MonitoringPoint.Type.getSettings(type)
-    .map((attr) => toUniversalFormItemProps(attr, formItemProps))
+    .map((attr) => toUniversalFormItemProps({ field: attr, formItemProps }))
     .map((props, index) => (
       <Col key={index} {...formItemColProps}>
         <FormItem {...props} />

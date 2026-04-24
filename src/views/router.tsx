@@ -21,11 +21,11 @@ const DeviceDetail = lazy(() => import('../features/device/detail'));
 const ImportNetwork = lazy(() => import('../network/import'));
 const AlarmRecord = lazy(() => import('../features/alarm/record'));
 const Firmware = lazy(() => import('./firmware'));
-const Users = lazy(() => import('../features/user/table'));
+const Users = lazy(() => import('../features/user'));
 const Me = lazy(() => import('./me'));
 const Role = lazy(() => import('./system/role'));
 const System = lazy(() => import('./system'));
-const Project = lazy(() => import('./project'));
+const Projects = lazy(() => import('../features/project'));
 const Unauthorized = lazy(() => import('./403'));
 const NotFound = lazy(() => import('./404'));
 const ServerError = lazy(() => import('./500'));
@@ -126,7 +126,7 @@ const AppRouter = () => {
               <Route index element={<ReportList />} />
               <Route path=':id' element={<Report />} />
             </Route>
-            <Route path='projects' element={<Project />} />
+            <Route path='projects' element={<Projects />} />
             <Route
               path='users'
               element={

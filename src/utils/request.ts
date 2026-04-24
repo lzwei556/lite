@@ -25,8 +25,9 @@ axios.interceptors.response.use(
   <T>(response: AxiosResponse<ResponseResult<T>>) => {
     const res = response.data;
     if (res?.code !== 200) {
-      message.error(res.msg);
-      return Promise.reject(new Error(res.msg || 'request.failed'));
+      const error = new Error(res.msg || 'request.failed') as any;
+      error.code = res.code;
+      return Promise.reject(error);
     }
     return res.data;
   },

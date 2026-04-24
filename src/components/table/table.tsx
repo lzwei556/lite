@@ -14,7 +14,7 @@ import intl from 'react-intl-universal';
 import { Grid } from '../grid';
 import { Flex } from '../flex';
 import { Card, CardProps } from '../card/card';
-import { PageResult } from '../../types/page';
+import { PAGE_SIZES, PageResult } from '../../types/page';
 import { IconButton } from '../icon-button';
 import { CheckboxFormItem } from '../form/checkboxFormItem';
 import { GlobalStyle } from 'styles';
@@ -84,7 +84,7 @@ export function Table<T>({
           pagination && {
             ...pagination,
             showSizeChanger: true,
-            pageSizeOptions: ['5', '10', '20'],
+            pageSizeOptions: PAGE_SIZES,
             style: { marginBlockEnd: 0 }
           }
         }

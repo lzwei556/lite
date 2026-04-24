@@ -5,6 +5,9 @@ import { GlobalStore } from '../utils/global-store';
 import intl from 'react-intl-universal';
 import * as ProjectType from 'domain/project-type';
 import { getMyProject, getMyProjects } from 'domain/profile';
+import { getList, Role } from 'domain/role';
+import { usePaginationList } from 'hooks/data';
+import { transform } from 'types/page';
 
 const store = GlobalStore.getInstance(true);
 
@@ -27,11 +30,13 @@ export const ProfileContext = React.createContext<{
   setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
   selectedProject?: Project;
   changeProject: (id: number) => void;
+  roles: Role[]; //因为roles是在服务器端自动生成，并且用户无法自定义，所以可以当作是profile
 }>({
   projects: [],
   setProjects: () => {},
   selectedProject: undefined,
-  changeProject: () => {}
+  changeProject: () => {},
+  roles: []
 });
 
 export const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
@@ -40,9 +45,16 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
   const selectedProject = projects.find(
     (p) => p.id === (selectedProjectId ?? store.get('selectedProjectId'))
   );
+  const { data } = usePaginationList(getList, { syncUrl: false });
   return (
     <ProfileContext.Provider
-      value={{ projects, setProjects, selectedProject, changeProject: setSelectedProjectId }}
+      value={{
+        projects,
+        setProjects,
+        selectedProject,
+        changeProject: setSelectedProjectId,
+        roles: transform(data).list
+      }}
     >
       <Spin spinning={loading}>{!loading && children}</Spin>
     </ProfileContext.Provider>

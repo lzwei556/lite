@@ -1,12 +1,10 @@
-import { Form, ModalProps } from 'antd';
+import { ModalProps, Form } from 'antd';
 import { FormItem } from 'components';
 import { ModalWrapper } from 'components/modalWrapper';
-import { CreateData, Fields } from 'domain/user';
+import { CreateData, Fields, useProjectTypeField } from 'domain/project';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { ActionState } from 'types/common';
-import { RolesSelectFormItem } from './roles-select-form-item';
-import { ProjectsSelectFormItem } from './projects-select-form-item';
 import { toUniversalFormItemProps } from 'types';
 
 export const CreateFormModal = ({
@@ -16,6 +14,8 @@ export const CreateFormModal = ({
   ...rest
 }: ModalProps & ActionState<CreateData> & { close: () => void }) => {
   const [form] = Form.useForm<CreateData>();
+  const typeField = useProjectTypeField();
+
   return (
     <ModalWrapper
       {...rest}
@@ -31,18 +31,13 @@ export const CreateFormModal = ({
       }
       okText={intl.get('CREATE')}
       confirmLoading={loading}
-      title={intl.get('CREATE_USER')}
+      title={intl.get('CREATE_PROJECT')}
     >
       <Form form={form} layout='vertical'>
-        {Object.values(Fields).map((field) => {
-          return field.name === Fields.Role.name ? (
-            <RolesSelectFormItem key={field.name} />
-          ) : field.name === Fields.Projects.name ? (
-            <ProjectsSelectFormItem key={field.name} />
-          ) : (
-            <FormItem key={field.name} {...toUniversalFormItemProps({ field })} />
-          );
-        })}
+        {[Fields.Name, Fields.Description].map((field) => (
+          <FormItem key={field.name} {...toUniversalFormItemProps({ field })} />
+        ))}
+        {typeField && <FormItem {...toUniversalFormItemProps({ field: typeField })} />}
       </Form>
     </ModalWrapper>
   );

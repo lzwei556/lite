@@ -1,5 +1,6 @@
-import { pickOptionsFromNumericEnum } from 'utils';
+import { pickOptionsFromNumericEnum, transformSnake2Dot } from 'utils';
 import * as App from './app-type';
+import { toSnake } from 'ts-case-convert';
 
 export enum Enum {
   ConditionMonitoring = 0x00,
@@ -28,5 +29,10 @@ const map = new Map<Enum, App.Type>([
   [Enum.BoltMonitoring, 'bolt']
 ]);
 
+const PREFIX = 'project.type';
+
+export const getLabel = (type: Enum) => {
+  return `${PREFIX}.${transformSnake2Dot(toSnake(Enum[type]))}`;
+};
 export const getAppType = (type: Enum): App.Type | undefined => map.get(type);
-export const options = pickOptionsFromNumericEnum(Enum, 'project.type');
+export const options = pickOptionsFromNumericEnum(Enum, PREFIX);

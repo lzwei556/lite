@@ -21,7 +21,7 @@ export function AppProvider({ children }: { children?: JSX.Element }) {
 }
 
 export const useAppConfig = () => {
-  const { analysisEnabled } = React.useContext(Context);
+  const { analysisEnabled, type: appTypeFromServer } = React.useContext(Context);
   const type = useAppType();
   const { name, rootAsset, folderAssetTypes } = App.get(type);
   const monitoringPointTypeOptions = App.getMonitoringPointTypeOptions(type).map((opt) => ({
@@ -31,6 +31,7 @@ export const useAppConfig = () => {
   const deviceTypes = App.getDeviceTypes(type);
   return {
     type,
+    appTypeFromServer,
     analysisEnabled,
     name,
     rootAsset,

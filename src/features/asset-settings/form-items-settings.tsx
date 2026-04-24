@@ -37,7 +37,9 @@ export const FormItemsSettings = ({
           if (!visible) return null;
           return (
             <Col {...getFormItemColProps(field.name)} key={field.name}>
-              <FormItem {...toUniversalFormItemProps(field, { name: ['attributes'] })} />
+              <FormItem
+                {...toUniversalFormItemProps({ field, formItemProps: { name: ['attributes'] } })}
+              />
             </Col>
           );
         })}
