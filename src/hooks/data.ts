@@ -4,10 +4,13 @@ import { useNotificationContext } from 'providers/notification';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useSearchParams } from 'react-router-dom';
-import { ActionState } from 'types/common';
 import { PageParameter, PageResult, transform, useSearchPageInfo } from 'types/page';
 
-type RequestFn<P, R> = (params: P) => Promise<R>;
+export type RequestFn<P, R> = (params: P) => Promise<R>;
+type RequestOptions<TData, TParams> = {
+  onSuccess?: (params: { data: TData; params: TParams; messageInstance?: MessageInstance }) => void;
+  onError?: (e: any) => void;
+};
 
 export const useList = <P, T>(
   getList: RequestFn<P, T[]>,
@@ -37,7 +40,8 @@ export const usePaginationList = <P extends Record<string, any>, T>(
     manual?: boolean;
     defaultParams?: P;
     syncUrl?: boolean;
-  }
+    ready?: boolean;
+  } & RequestOptions<PageResult<T>, P>
 ) => {
   const paged = useSearchPageInfo(options?.syncUrl ?? true);
   const [page, setPage] = React.useState(paged.page);
@@ -60,7 +64,9 @@ export const usePaginationList = <P extends Record<string, any>, T>(
     },
     {
       manual: options?.manual ?? false,
-      refreshDeps: [page, pageSize, params]
+      refreshDeps: [page, pageSize, params],
+      ready: options?.ready,
+      onSuccess: (data) => options?.onSuccess?.({ data, params: params?.[0] })
     }
   );
 
@@ -103,55 +109,48 @@ const getNext = (paged: PageParameter & { total: number }, action: 'prev' | 'nex
   return index;
 };
 
-export const useCreate = <P, T>(
-  create: RequestFn<P, T>,
-  options?: {
-    onSuccess?: (data: T) => void;
-    onError?: (e: any) => void;
-  }
-) => {
+export const useCreate = <P, T>(create: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
   const { messageInstance } = useNotificationContext();
   return useRequest(create, {
     manual: true,
-    onSuccess: (data) => {
+    onSuccess: (data, params) => {
       messageInstance.success(intl.get('CREATED_SUCCESSFUL'));
-      options?.onSuccess?.(data);
+      options?.onSuccess?.({ data, params: params?.[0] });
     },
     onError: (e) => handleError(e, messageInstance, options?.onError)
   });
 };
 
-export const useUpdate = <P, T>(
-  update: RequestFn<P, T>,
-  options?: {
-    onSuccess?: (data: T) => void;
-    onError?: (e: any) => void;
-  }
-) => {
+export const useUpdate = <P, T>(update: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
   const { messageInstance } = useNotificationContext();
   return useRequest(update, {
     manual: true,
-    onSuccess: (data) => {
+    onSuccess: (data, params) => {
       messageInstance.success(intl.get('UPDATED_SUCCESSFUL'));
-      options?.onSuccess?.(data);
+      options?.onSuccess?.({ data, params: params?.[0] });
     },
     onError: (e) => handleError(e, messageInstance, options?.onError)
   });
 };
 
-export const useDelete = <P>(
-  deleteFn: (params: P) => Promise<any>,
-  options?: {
-    onSuccess?: () => void;
-    onError?: (e: any) => void;
-  }
-) => {
+export const useDelete = <P, T>(deleteFn: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
   const { messageInstance } = useNotificationContext();
   return useRequest(deleteFn, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (data, params) => {
       messageInstance.success(intl.get('DELETED_SUCCESSFUL'));
-      options?.onSuccess?.();
+      options?.onSuccess?.({ data, params: params?.[0] });
+    },
+    onError: (e) => handleError(e, messageInstance, options?.onError)
+  });
+};
+
+export const useDataFetch = <P, T>(fetchFn: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
+  const { messageInstance } = useNotificationContext();
+  return useRequest(fetchFn, {
+    manual: true,
+    onSuccess: (data, params) => {
+      options?.onSuccess?.({ data, params: params?.[0], messageInstance });
     },
     onError: (e) => handleError(e, messageInstance, options?.onError)
   });
@@ -161,34 +160,22 @@ const handleError = (e: Error, messageInstance: MessageInstance, onError?: (e: a
   if (onError) {
     onError(e);
   } else {
-    messageInstance.error(e.message ?? 'request.failure');
+    messageInstance.error(intl.get(e.message ?? 'request.failure'));
   }
 };
 
-export function createActionState<T>(req: {
-  loading: boolean;
-  runAsync: (...params: any) => Promise<any>;
-}): ActionState<T>;
+type MaybePromise<T> = T | Promise<T>;
 
-export function createActionState(req: {
-  loading: boolean;
-  runAsync: () => Promise<any>;
-}): ActionState<void>;
-
-export function createActionState(req: {
-  loading: boolean;
-  runAsync: (...args: any[]) => Promise<any>;
-}): ActionState<any> {
-  return {
-    loading: req.loading,
-    submit: (async (params?: any) => {
-      // 无参数
-      if (params === undefined) {
-        await req.runAsync();
-      } else {
-        // 单参数（推荐标准用法）
-        await req.runAsync(params);
+export const createSubmitHandler = <TValues>(
+  onSubmit?: (values: TValues) => MaybePromise<void>,
+  onSuccess?: () => void
+) => {
+  return async (values: TValues) => {
+    try {
+      if (onSubmit) {
+        await onSubmit(values);
+        onSuccess?.();
       }
-    }) as any
+    } catch (error) {}
   };
-}
+};

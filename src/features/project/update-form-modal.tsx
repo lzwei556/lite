@@ -1,31 +1,40 @@
 import React from 'react';
-import { ActionState } from 'types/common';
+import { ActionModalContext } from 'common/action';
 import { Fields, UpdateData, Project } from 'domain/project';
 import { ModalWrapper } from 'components/modalWrapper';
 import { ModalProps, Form } from 'antd';
 import intl from 'react-intl-universal';
 import { FormItem } from 'components';
 import { toUniversalFormItemProps } from 'types';
+import { createSubmitHandler } from 'hooks/data';
 
 export const UpdateFormModal = ({
-  project,
+  record: project,
   loading,
   submit,
+  close,
   ...rest
-}: ModalProps & ActionState<UpdateData> & { project: Project }) => {
+}: ModalProps & ActionModalContext<Project, UpdateData>) => {
   const [form] = Form.useForm<UpdateData['data']>();
-  debugger;
+
   return (
     <ModalWrapper
       {...rest}
-      afterClose={() => {
-        rest.afterClose?.();
-        form.resetFields();
-      }}
-      title={intl.get('EDIT_PROJECT')}
+      afterClose={() => form.resetFields()}
+      onCancel={close}
       okText={intl.get('SAVE')}
-      onOk={() => form.validateFields().then((values) => submit({ id: project.id, data: values }))}
+      onOk={() =>
+        form
+          .validateFields()
+          .then(
+            createSubmitHandler(
+              project ? (values) => submit({ id: project.id, data: values }) : undefined,
+              close
+            )
+          )
+      }
       confirmLoading={loading}
+      title={intl.get('EDIT_PROJECT')}
     >
       <Form form={form} layout='vertical' initialValues={project}>
         {[Fields.Name, Fields.Description].map((field) => (

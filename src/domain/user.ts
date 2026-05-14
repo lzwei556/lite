@@ -5,12 +5,14 @@ import { PageParameter, PageResult } from 'types/page';
 import request from 'utils/request';
 import { Role } from './role';
 
-export type User = {
-  id: number;
-  username: string;
-  email: string;
-  phone: string;
-  role: Role;
+export type DTO = { id: number; username: string; email: string; phone: string; role: number };
+
+export type User = DTO & {
+  roleText?: string;
+};
+
+export const transform = (dto: DTO, roles: Role[]): User => {
+  return { ...dto, roleText: roles.find((r) => r.id === dto.role)?.name };
 };
 
 export type CreateData = {
@@ -33,15 +35,11 @@ export const create = async (data: CreateData) => {
 };
 
 export const getList = async (param: PageParameter) => {
-  return request.get<PageResult<User>>('/users', param);
+  return request.get<PageResult<DTO>>('/users', param);
 };
 
-export const get = async (id: number) => {
-  return request.get<User>(`/users/${id}`);
-};
-
-export const update = async (params: UpdateData) => {
-  const { id, data } = params;
+export const update = async (param: UpdateData) => {
+  const { id, data } = param;
   return request.put<User>(`/users/${id}`, data);
 };
 
@@ -87,12 +85,12 @@ export const Fields = {
     label: 'ROLE',
     rules: [{ required: true }],
     type: 'enum',
-    description: '',
-    valueToLabel: (value: number, roles: Role[]) => {
-      const role = roles.find((role) => role.id === value);
-      return role ? intl.get(role.name) : '';
-    }
+    description: ''
   } as Field<CreateData>,
+  RoleText: {
+    label: 'ROLE',
+    name: 'roleText'
+  } as Field<User>,
   Phone: {
     name: 'phone',
     label: 'CELLPHONE',

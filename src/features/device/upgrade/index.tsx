@@ -1,8 +1,6 @@
 import { Divider, Form, message } from 'antd';
 import { FC, useEffect, useState } from 'react';
-import { Firmware } from '../../../types/firmware';
 import { Device } from '../../../types/device';
-import { GetDeviceFirmwaresRequest } from '../../../apis/firmware';
 import { Dayjs } from '../../../utils';
 import { DeviceUpgradeRequest } from '../../../apis/device';
 import { DeviceCommand } from '../../../types/device_command';

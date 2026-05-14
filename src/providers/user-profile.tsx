@@ -1,5 +1,5 @@
 import React from 'react';
-import { Project } from '../types/project';
+import { Project } from 'domain/project';
 import { Result, SelectProps, Spin } from 'antd';
 import { GlobalStore } from '../utils/global-store';
 import intl from 'react-intl-universal';
@@ -8,6 +8,7 @@ import { getMyProject, getMyProjects } from 'domain/profile';
 import { getList, Role } from 'domain/role';
 import { usePaginationList } from 'hooks/data';
 import { transform } from 'types/page';
+import { Permission, useCan } from './access-control';
 
 const store = GlobalStore.getInstance(true);
 
@@ -45,7 +46,11 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
   const selectedProject = projects.find(
     (p) => p.id === (selectedProjectId ?? store.get('selectedProjectId'))
   );
-  const { data } = usePaginationList(getList, { syncUrl: false });
+  const canGetRoles = useCan(Permission.RoleList);
+  const { data } = usePaginationList(getList, {
+    syncUrl: false,
+    ready: !!selectedProject && canGetRoles
+  });
   return (
     <ProfileContext.Provider
       value={{
@@ -69,15 +74,6 @@ const useInitSelectedProject = () => {
     init();
   }, [init]);
   return { loading, projects, setProjects, selectedProjectId, setSelectedProjectId };
-};
-
-export const useDeleteProject = () => {
-  const { setProjects, changeProject } = React.useContext(ProfileContext);
-  const { init } = useInit(setProjects, changeProject);
-  return React.useCallback(() => {
-    store.remove('selectedProjectId');
-    return init();
-  }, [init]);
 };
 
 export const useInit = (

@@ -1,71 +1,66 @@
-import { TableWithOperations } from 'components';
+import { ResourceTable } from 'components';
 import { Permission, useCan } from 'providers/access-control';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { CreateFormModal } from './create-form-modal';
 import { UpdateFormModal } from './update-form-modal';
-import { ACCOUNT_SUPER_ADMIN, create, deleteOne, Fields, getList, update, User } from 'domain/user';
-import { createActionState, useCreate, useDelete, usePaginationList, useUpdate } from 'hooks/data';
+import {
+  ACCOUNT_SUPER_ADMIN,
+  create,
+  deleteOne,
+  Fields,
+  getList,
+  transform,
+  update
+} from 'domain/user';
+import { usePaginationList } from 'hooks/data';
 import { Content } from 'antd/es/layout/layout';
-import { TableColumnsType, Typography } from 'antd';
+import { Typography } from 'antd';
 import { ProfileContext } from 'providers/user-profile';
 
 export default function Users() {
   const list = usePaginationList(getList);
   const { roles } = React.useContext(ProfileContext);
-
-  const createState = createActionState(
-    useCreate(create, {
-      onSuccess: () => {
-        list.search('next');
-      }
-    })
-  );
-  const updateState = createActionState(
-    useUpdate(update, {
-      onSuccess: () => {
-        list.refresh();
-      }
-    })
-  );
-  const deleteState = createActionState(
-    useDelete(deleteOne, { onSuccess: () => list.search('prev') })
-  );
+  const transformedList = React.useMemo(() => {
+    if (!list.data || roles.length === 0) {
+      return [];
+    }
+    return list.data.result.map((u) => {
+      const user = transform(u, roles);
+      return { ...user, roleText: user.roleText ? intl.get(user.roleText) : '' };
+    });
+  }, [list.data, roles]);
 
   return (
     <Content>
       <Typography.Title level={4}>{intl.get('MENU_USER_MANAGEMENT')}</Typography.Title>
-      <TableWithOperations
-        columns={(
-          [Fields.Username, Fields.Phone, Fields.Email].map((field) => ({
-            dataIndex: field.name,
-            title: intl.get(field.label)
-          })) as TableColumnsType<User>
-        ).concat([
-          {
-            dataIndex: Fields.Role.name,
-            title: intl.get(Fields.Role.label),
-            render: (id: number) => Fields.Role.valueToLabel?.(id, roles)
-          }
-        ])}
-        listProps={{
-          dataSource: list.data,
+      <ResourceTable
+        columns={[Fields.Username, Fields.Phone, Fields.Email, Fields.RoleText].map((field) => ({
+          dataIndex: field.name,
+          title: intl.get(field.label)
+        }))}
+        actionController={{
+          list: { ...list, data: transformedList },
+          api: { create, update, delete: deleteOne },
           actions: {
             create: {
               can: useCan(Permission.UserAdd),
-              modal: ({ open, close }) => <CreateFormModal {...{ open, close, ...createState }} />
+              modal: (ctx) => <CreateFormModal {...ctx} />,
+              onSuccess: () => list.search('next')
             },
             update: {
               can: useCan(Permission.UserEdit),
-              modal: ({ open, close, record }) => (
-                <UpdateFormModal {...{ open, close, ...updateState, user: record }} />
-              )
+              modal: (ctx) => <UpdateFormModal {...ctx} />,
+              hidden: (user) => user.id === ACCOUNT_SUPER_ADMIN.id
             },
-            delete: { can: useCan(Permission.UserDelete), state: deleteState }
+            delete: {
+              can: useCan(Permission.UserDelete),
+              onSuccess: () => list.search('prev'),
+              hidden: (user) => user.id === ACCOUNT_SUPER_ADMIN.id
+            }
           }
         }}
         pagination={list.pagination}
-        hideOperateionCell={(user) => user.id === ACCOUNT_SUPER_ADMIN.id}
       />
     </Content>
   );

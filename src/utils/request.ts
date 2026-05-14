@@ -130,21 +130,21 @@ export default {
     return download<T>('GET', url, params);
   },
   upload: <T>(url: string, params: any) => {
-    return upload<ResponseResult<T>>(url, params);
+    return upload<T>(url, params);
   },
   get: <T>(url: string, params: any = null) => {
     return request<T>('GET', url, params);
   },
   post: <T>(url: string, params: any) => {
-    return request<ResponseResult<T>>('POST', url, params);
+    return request<T>('POST', url, params);
   },
   put: <T>(url: string, params: any) => {
-    return request<ResponseResult<T>>('PUT', url, params);
+    return request<T>('PUT', url, params);
   },
   patch: <T>(url: string, params: any) => {
-    return request<ResponseResult<T>>('PATCH', url, params);
+    return request<T>('PATCH', url, params);
   },
   delete: <T>(url: string, params: any = null) => {
-    return request<ResponseResult<T>>('DELETE', url, params);
+    return request<T>('DELETE', url, params);
   }
 };

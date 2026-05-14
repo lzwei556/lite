@@ -4,13 +4,16 @@ import { useRequest } from 'ahooks';
 import { GlobalStore } from '../utils/global-store';
 import { ENV } from '../utils/env';
 import { AuthIdentity, getIndentity } from 'domain/profile';
+import { createActionState } from 'common/action';
+import { RequestFn, useDataFetch } from 'hooks';
+import intl from 'react-intl-universal';
 
 const store = GlobalStore.getInstance(true);
 
 export type LoginResponse = { token: string };
 
 type AuthProviderProps = {
-  login: (params: LoginInput) => Promise<LoginResponse>;
+  login: RequestFn<LoginInput, LoginResponse>;
   logout: (onSuccess: () => void) => void;
   check: () => boolean;
   getIndentity: () => Promise<AuthIdentity>;
@@ -37,16 +40,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useLogin = (onSuccess: () => void, onError: (e: Error) => void) => {
+export const useLogin = (onSuccess: () => void) => {
   const { login } = React.useContext(AuthContext);
-  return useRequest(login!, {
-    manual: true,
-    onSuccess: (res) => {
-      store.set('authToken', res.token);
-      onSuccess();
-    },
-    onError: (e) => onError(e)
-  });
+  return createActionState(
+    useDataFetch(login!, {
+      onSuccess: ({ data, messageInstance }) => {
+        store.set('authToken', data.token);
+        messageInstance?.success(intl.get('LOGIN_SUCCEEDED'));
+        onSuccess();
+      }
+    })
+  );
 };
 
 export const useLogout = () => {
@@ -73,7 +77,7 @@ export const useGetIdentity = () => {
 type LoginInput = { username: string; password: string };
 
 const login = async (params: LoginInput) => {
-  return request.post<LoginResponse>('/login', params).then((res) => res.data);
+  return request.post<LoginResponse>('/login', params);
 };
 
 const check = () => {

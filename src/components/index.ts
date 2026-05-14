@@ -28,3 +28,4 @@ export * from './link';
 export * from './rangeDatePicker';
 export * from './icon-button';
 export * from './term';
+export * from './upload';

@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
 import { GlobalStore } from 'utils';
 import request from 'utils/request';
-import { Project } from './project';
+import { DTO, Project, transform } from './project';
 import { Menu } from './menu';
 
 export type AuthIdentity = { id: number; username: string; role: number };
@@ -9,27 +9,28 @@ export type AuthIdentity = { id: number; username: string; role: number };
 const store = GlobalStore.getInstance(true);
 
 export const getMyProjects = async () => {
-  return await request.get<Project[]>('/my/projects');
+  const data = await request.get<DTO[]>('/my/projects');
+  return data.map(transform);
 };
 
 export const getMyProject = async (id: number) => {
-  return await request.get<Project>(`/my/projects/${id}`);
+  return request.get<Project>(`/my/projects/${id}`);
 };
 
 export const getIndentity = async () => {
-  return await request.get<AuthIdentity>('/my/profile');
+  return request.get<AuthIdentity>('/my/profile');
 };
 
 export const useMyMenus = () => useRequest(getMyMenus);
 
 const getMyMenus = async () => {
-  return await request.get<Menu[]>('/my/menus');
+  return request.get<Menu[]>('/my/menus');
 };
 
 type CanResponse = { rules: string };
 
 export const getMyCasbin = async () => {
-  return await request.get<CanResponse>(`/my/casbin`);
+  return request.get<CanResponse>(`/my/casbin`);
 };
 
 export const getInitFn = (

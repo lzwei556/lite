@@ -1,30 +1,39 @@
 import React from 'react';
-import { ActionState } from 'types/common';
+import { ActionModalContext } from 'common/action';
 import { Fields, UpdateData, User } from 'domain/user';
 import { ModalWrapper } from 'components/modalWrapper';
 import { Form, ModalProps } from 'antd';
 import intl from 'react-intl-universal';
 import { FormItem, TextFormItem } from 'components';
 import { RolesSelectFormItem } from './roles-select-form-item';
+import { createSubmitHandler } from 'hooks/data';
 
 export const UpdateFormModal = ({
-  user,
+  record: user,
   loading,
   submit,
+  close,
   ...rest
-}: ModalProps & ActionState<UpdateData> & { user: User }) => {
+}: ModalProps & ActionModalContext<User, UpdateData>) => {
   const [form] = Form.useForm<UpdateData['data']>();
   return (
     <ModalWrapper
       {...rest}
-      afterClose={() => {
-        rest.afterClose?.();
-        form.resetFields();
-      }}
-      title={intl.get('EDIT_USER')}
+      afterClose={() => form.resetFields()}
+      onCancel={close}
       okText={intl.get('SAVE')}
-      onOk={() => form.validateFields().then((values) => submit({ id: user.id, data: values }))}
+      onOk={() =>
+        form
+          .validateFields()
+          .then(
+            createSubmitHandler(
+              user ? (values) => submit({ id: user.id, data: values }) : undefined,
+              close
+            )
+          )
+      }
       confirmLoading={loading}
+      title={intl.get('EDIT_USER')}
     >
       <Form form={form} layout='vertical' initialValues={user}>
         <TextFormItem {...Fields.Username} inputProps={{ readOnly: true }} />

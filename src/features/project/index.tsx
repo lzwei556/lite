@@ -1,65 +1,92 @@
-import { TableWithOperations } from 'components';
+import { Link, ResourceTable } from 'components';
 import { Permission, useCan } from 'providers/access-control';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { CreateFormModal } from './create-form-modal';
 import { UpdateFormModal } from './update-form-modal';
-import { create, deleteOne, Fields, update } from 'domain/project';
-import { createActionState, useCreate, useDelete, useList, useUpdate } from 'hooks/data';
+import { assignUsers, create, deleteOne, Fields, generateToken, update } from 'domain/project';
+import { useDataFetch, useList } from 'hooks/data';
 import { Content } from 'antd/es/layout/layout';
-import { Typography, TableColumnsType } from 'antd';
-import { Project } from 'domain/project';
+import { Typography } from 'antd';
 import { getMyProjects } from 'domain/profile';
+import { createActionState } from 'common/action';
+import { TokenModal } from './token-modal';
+import { AssignUsersDrawer } from './assign-users-drawer';
+import { useDeleteProject, useUpdateMyProjects } from './hooks';
 
 export default function Projects() {
   const list = useList(getMyProjects);
-
-  const createState = createActionState(
-    useCreate(create, {
-      onSuccess: () => {
-        list.refresh();
-      }
-    })
+  const deleteProject = useDeleteProject();
+  const updateMyProjects = useUpdateMyProjects();
+  const generateTokenState = createActionState(
+    useDataFetch(generateToken, { onSuccess: () => list.refresh() })
   );
-  const updateState = createActionState(
-    useUpdate(update, {
-      onSuccess: () => {
-        list.refresh();
-      }
-    })
-  );
-  const deleteState = createActionState(useDelete(deleteOne, { onSuccess: () => list.refresh() }));
 
   return (
     <Content>
       <Typography.Title level={4}>{intl.get('MENU_PROJECT_MANAGEMENT')}</Typography.Title>
-      <TableWithOperations
-        columns={(
-          [Fields.Name, Fields.Description].map((field) => ({
-            dataIndex: field.name,
-            title: intl.get(field.label)
-          })) as TableColumnsType<Project>
-        ).concat([
-          {
-            dataIndex: Fields.Type.name,
-            title: intl.get(Fields.Type.label),
-            render: Fields.Type.valueToLabel
-          }
-        ])}
-        listProps={{
-          dataSource: list.data,
+      <ResourceTable
+        columns={[Fields.Name, Fields.Description, Fields.TypeText].map((field) => ({
+          dataIndex: field.name,
+          title: intl.get(field.label)
+        }))}
+        actionController={{
+          list,
+          api: { create, update, delete: deleteOne },
           actions: {
             create: {
               can: useCan(Permission.ProjectAdd),
-              modal: ({ open, close }) => <CreateFormModal {...{ open, close, ...createState }} />
+              modal: (ctx) => <CreateFormModal {...ctx} />
             },
             update: {
               can: useCan(Permission.ProjectEdit),
-              modal: ({ open, close, record }) => (
-                <UpdateFormModal {...{ open, close, ...updateState, project: record }} />
-              )
+              modal: (ctx) => <UpdateFormModal {...ctx} />
             },
-            delete: { can: useCan(Permission.ProjectDelete), state: deleteState }
+            delete: {
+              can: useCan(Permission.ProjectDelete),
+              onSuccess: ({ id }) => {
+                deleteProject(id);
+              }
+            },
+            generateToken: {
+              position: 'row',
+              modal: (ctx) => <TokenModal {...ctx} />,
+              render: ({ record, open }) => {
+                if (record.token.length > 0) {
+                  return (
+                    <Link onClick={() => open('generateToken', record)} variant='button'>
+                      {intl.get('CLICK_TO_VIEW')}
+                    </Link>
+                  );
+                } else {
+                  return (
+                    <Link
+                      onClick={() => generateTokenState.submit({ id: record.id })}
+                      variant='button'
+                    >
+                      {intl.get('CLICK_TO_GENERATE_ACCESS_CREDENTIAL')}
+                    </Link>
+                  );
+                }
+              }
+            },
+            assign: {
+              position: 'row',
+              modal: (ctx) => <AssignUsersDrawer {...ctx} />,
+              render: ({ open, record }) => (
+                <Link onClick={() => open('assign', record)} variant='button'>
+                  {intl.get('ASSIGN_USERS')}
+                </Link>
+              ),
+              state: createActionState(
+                useDataFetch(assignUsers, {
+                  onSuccess: ({ params, messageInstance }) => {
+                    updateMyProjects(params.data);
+                    messageInstance?.success('save.success');
+                  }
+                })
+              )
+            }
           }
         }}
         scroll={{ y: 600 }}

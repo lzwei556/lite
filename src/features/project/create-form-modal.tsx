@@ -4,15 +4,16 @@ import { ModalWrapper } from 'components/modalWrapper';
 import { CreateData, Fields, useProjectTypeField } from 'domain/project';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { ActionState } from 'types/common';
+import { ActionModalContext } from 'common/action';
 import { toUniversalFormItemProps } from 'types';
+import { createSubmitHandler } from 'hooks';
 
 export const CreateFormModal = ({
   loading,
   submit,
   close,
   ...rest
-}: ModalProps & ActionState<CreateData> & { close: () => void }) => {
+}: ModalProps & ActionModalContext<any, CreateData>) => {
   const [form] = Form.useForm<CreateData>();
   const typeField = useProjectTypeField();
 
@@ -21,14 +22,7 @@ export const CreateFormModal = ({
       {...rest}
       afterClose={() => form.resetFields()}
       onCancel={close}
-      onOk={() =>
-        form.validateFields().then(async (values) => {
-          try {
-            await submit(values);
-            close();
-          } catch (error) {}
-        })
-      }
+      onOk={() => form.validateFields().then(createSubmitHandler(submit, close))}
       okText={intl.get('CREATE')}
       confirmLoading={loading}
       title={intl.get('CREATE_PROJECT')}
