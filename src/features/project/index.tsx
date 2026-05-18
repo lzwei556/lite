@@ -19,7 +19,7 @@ export default function Projects() {
   const deleteProject = useDeleteProject();
   const updateMyProjects = useUpdateMyProjects();
   const generateTokenState = createActionState(
-    useDataFetch(generateToken, { onSuccess: () => list.refresh() })
+    useDataFetch(generateToken, { manual: true, onSuccess: () => list.refresh() })
   );
 
   return (
@@ -80,8 +80,9 @@ export default function Projects() {
               ),
               state: createActionState(
                 useDataFetch(assignUsers, {
+                  manual: true,
                   onSuccess: ({ params, messageInstance }) => {
-                    updateMyProjects(params.data);
+                    updateMyProjects(params.user_ids);
                     messageInstance?.success('save.success');
                   }
                 })

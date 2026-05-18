@@ -27,10 +27,7 @@ export type UpdateData = {
   data: Pick<CreateData, 'name' | 'description'>;
 };
 
-export type UserAssignmentData = {
-  id: number;
-  data: { user_ids: number[] };
-};
+export type UserAssignmentData = { id: number; user_ids: number[] };
 
 export const create = async (data: CreateData) => {
   return request.post('/projects', data);
@@ -54,8 +51,8 @@ export const getAssignedUsers = async ({ id }: { id: number }) => {
 };
 
 export function assignUsers(param: UserAssignmentData) {
-  const { id, data } = param;
-  return request.patch(`/projects/${id}/users`, data);
+  const { id, user_ids } = param;
+  return request.patch(`/projects/${id}/users`, { user_ids });
 }
 
 export const Fields = {
@@ -87,7 +84,7 @@ export const Fields = {
     label: '',
     type: 'enum',
     description: ''
-  } as Field<UserAssignmentData['data']>
+  } as Field<UserAssignmentData>
 };
 
 export const useProjectTypeField = () => {

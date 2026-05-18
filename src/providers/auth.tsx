@@ -44,6 +44,7 @@ export const useLogin = (onSuccess: () => void) => {
   const { login } = React.useContext(AuthContext);
   return createActionState(
     useDataFetch(login!, {
+      manual: true,
       onSuccess: ({ data, messageInstance }) => {
         store.set('authToken', data.token);
         messageInstance?.success(intl.get('LOGIN_SUCCEEDED'));

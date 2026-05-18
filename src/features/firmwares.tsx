@@ -11,6 +11,7 @@ export default function Firmwares() {
   const list = usePaginationList(getList);
   const uploadState = createActionState(
     useDataFetch(upload, {
+      manual: true,
       onSuccess: ({ messageInstance }) => {
         list.refresh();
         messageInstance?.success('upload.success');

@@ -10,7 +10,7 @@ export const useUpdateMyProjects = () => {
   const crtUser = useGetIdentity();
 
   return React.useCallback(
-    ({ user_ids }: { user_ids: number[] }) => {
+    (user_ids: number[]) => {
       if (crtUser && user_ids.includes(crtUser.id)) {
         init();
       }

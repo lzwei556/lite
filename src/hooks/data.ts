@@ -8,6 +8,10 @@ import { PageParameter, PageResult, transform, useSearchPageInfo } from 'types/p
 
 export type RequestFn<P, R> = (params: P) => Promise<R>;
 type RequestOptions<TData, TParams> = {
+  manual?: boolean;
+  defaultParams?: TParams;
+  ready?: boolean;
+  refreshDeps?: any[];
   onSuccess?: (params: { data: TData; params: TParams; messageInstance?: MessageInstance }) => void;
   onError?: (e: any) => void;
 };
@@ -17,14 +21,10 @@ export const useList = <P, T>(
   options?: {
     manual?: boolean;
     defaultParams?: P;
-    onError?: (e: any) => void;
-  }
+  } & RequestOptions<T[], P>
 ) => {
-  const request = useRequest(getList, {
-    manual: options?.manual ?? false,
-    defaultParams: options?.defaultParams ? [options.defaultParams] : undefined,
-    onError: options?.onError
-  });
+  const { messageInstance } = useNotificationContext();
+  const request = useRequest(getList, buildRequestOptions({ options, messageInstance }));
 
   return {
     ...request,
@@ -37,10 +37,7 @@ export const usePaginationList = <P extends Record<string, any>, T>(
   api: RequestFn<P & PageParameter, PageResult<T>>,
   options?: {
     defaultPageSize?: number;
-    manual?: boolean;
-    defaultParams?: P;
     syncUrl?: boolean;
-    ready?: boolean;
   } & RequestOptions<PageResult<T>, P>
 ) => {
   const paged = useSearchPageInfo(options?.syncUrl ?? true);
@@ -48,27 +45,19 @@ export const usePaginationList = <P extends Record<string, any>, T>(
   const [pageSize, setPageSize] = React.useState(options?.defaultPageSize || paged.size);
   const [params, setParams] = React.useState<P | undefined>(options?.defaultParams);
   const [, setUrlState] = useSearchParams();
+  const { messageInstance } = useNotificationContext();
+  const request = useRequest(async (extra?: P) => {
+    const mergedParams = {
+      ...(params || {}),
+      ...(extra || {})
+    };
 
-  const request = useRequest(
-    async (extra?: P) => {
-      const mergedParams = {
-        ...(params || {}),
-        ...(extra || {})
-      };
-
-      return await api({
-        ...mergedParams,
-        page,
-        size: pageSize
-      } as P & PageParameter);
-    },
-    {
-      manual: options?.manual ?? false,
-      refreshDeps: [page, pageSize, params],
-      ready: options?.ready,
-      onSuccess: (data) => options?.onSuccess?.({ data, params: params?.[0] })
-    }
-  );
+    return await api({
+      ...mergedParams,
+      page,
+      size: pageSize
+    } as P & PageParameter);
+  }, buildRequestOptions({ options: { ...options, refreshDeps: [page, pageSize, params] }, messageInstance }));
 
   const search = (action: 'prev' | 'next', p?: P) => {
     if (request.data) {
@@ -111,50 +100,67 @@ const getNext = (paged: PageParameter & { total: number }, action: 'prev' | 'nex
 
 export const useCreate = <P, T>(create: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
   const { messageInstance } = useNotificationContext();
-  return useRequest(create, {
-    manual: true,
-    onSuccess: (data, params) => {
-      messageInstance.success(intl.get('CREATED_SUCCESSFUL'));
-      options?.onSuccess?.({ data, params: params?.[0] });
-    },
-    onError: (e) => handleError(e, messageInstance, options?.onError)
-  });
+  return useRequest(
+    create,
+    buildRequestOptions({
+      options: { ...options, manual: true },
+      messageInstance,
+      successMessage: 'CREATED_SUCCESSFUL'
+    })
+  );
 };
 
 export const useUpdate = <P, T>(update: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
   const { messageInstance } = useNotificationContext();
-  return useRequest(update, {
-    manual: true,
-    onSuccess: (data, params) => {
-      messageInstance.success(intl.get('UPDATED_SUCCESSFUL'));
-      options?.onSuccess?.({ data, params: params?.[0] });
-    },
-    onError: (e) => handleError(e, messageInstance, options?.onError)
-  });
+  return useRequest(
+    update,
+    buildRequestOptions({
+      options: { ...options, manual: true },
+      messageInstance,
+      successMessage: 'UPDATED_SUCCESSFUL'
+    })
+  );
 };
 
 export const useDelete = <P, T>(deleteFn: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
   const { messageInstance } = useNotificationContext();
-  return useRequest(deleteFn, {
-    manual: true,
-    onSuccess: (data, params) => {
-      messageInstance.success(intl.get('DELETED_SUCCESSFUL'));
-      options?.onSuccess?.({ data, params: params?.[0] });
-    },
-    onError: (e) => handleError(e, messageInstance, options?.onError)
-  });
+  return useRequest(
+    deleteFn,
+    buildRequestOptions({
+      options: { ...options, manual: true },
+      messageInstance,
+      successMessage: 'DELETED_SUCCESSFUL'
+    })
+  );
 };
 
 export const useDataFetch = <P, T>(fetchFn: RequestFn<P, T>, options?: RequestOptions<T, P>) => {
   const { messageInstance } = useNotificationContext();
-  return useRequest(fetchFn, {
-    manual: true,
-    onSuccess: (data, params) => {
-      options?.onSuccess?.({ data, params: params?.[0], messageInstance });
-    },
-    onError: (e) => handleError(e, messageInstance, options?.onError)
-  });
+  return useRequest(fetchFn, buildRequestOptions({ options, messageInstance }));
 };
+
+const buildRequestOptions = <P, T>({
+  options,
+  messageInstance,
+  successMessage
+}: {
+  options: any;
+  messageInstance: MessageInstance;
+  successMessage?: string;
+}) => ({
+  manual: options?.manual ?? false,
+  defaultParams: options?.defaultParams ? [options.defaultParams] : (undefined as any),
+  ready: options?.ready ?? true,
+  refreshDeps: options?.refreshDeps,
+  onSuccess: (data: T, param: any[]) => {
+    if (successMessage) {
+      messageInstance.success(intl.get(successMessage));
+    } else {
+      options?.onSuccess?.({ data, params: param?.[0] as P, messageInstance });
+    }
+  },
+  onError: (e: Error) => handleError(e, messageInstance, options?.onError)
+});
 
 const handleError = (e: Error, messageInstance: MessageInstance, onError?: (e: any) => void) => {
   if (onError) {

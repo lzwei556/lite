@@ -13,7 +13,7 @@ export const AssignUsersDrawer = ({
   submit,
   ...rest
 }: DrawerProps & ActionModalContext<Project, UserAssignmentData>) => {
-  const [form] = Form.useForm<UserAssignmentData['data']>();
+  const [form] = Form.useForm<Omit<UserAssignmentData, 'id'>>();
   const list = useList(getAssignedUsers, { defaultParams: { id: project?.id ?? 0 } });
   const userOptions = (list.data ?? []).map((u) => ({ label: u.user.username, value: u.user.id }));
   const oldUserIds = (list.data ?? []).filter((u) => u.isAllocated).map((u) => u.user.id);
@@ -23,12 +23,13 @@ export const AssignUsersDrawer = ({
       {...rest}
       extra={
         <SaveIconButton
+          loading={loading}
           onClick={() =>
             form
               .validateFields()
               .then(
                 createSubmitHandler(
-                  project ? (values) => submit({ id: project.id, data: values }) : undefined,
+                  project ? (values) => submit({ id: project.id, ...values }) : undefined,
                   close
                 )
               )

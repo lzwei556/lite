@@ -19,7 +19,7 @@ export * from './grid';
 export * from './card/card';
 export * from './card/muted-card';
 export * from './lightSelectFilter';
-export * from './table/table-with-operations';
+export * from './table/resource-table';
 export * from './table/table';
 export * from './tabs/detail';
 export * from './tabs/tabs';
