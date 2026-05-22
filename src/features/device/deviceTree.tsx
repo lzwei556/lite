@@ -6,7 +6,7 @@ import { Device } from '../../types/device';
 import useSocket, { SocketTopic } from '../../socket';
 import { toMac, truncate } from '../../utils/format';
 import { DeviceNS } from './util';
-import { useContext } from '.';
+import { useContext } from './provider';
 import { useVirtualRootDevice } from './virtual';
 
 export const DeviceTree = ({

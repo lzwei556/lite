@@ -17,8 +17,26 @@ tbody.ant-table-tbody > tr.ant-table-row:hover > td {
   margin-inline-end: 0;
 }
 .ant-tree .ant-tree-node-content-wrapper {
-  padding-inline: 4px;
+  padding-inline: 1px;
 }
 .ant-select.unselected .ant-select-prefix {
   margin-inline-end: 0;
+}
+@media (max-width: 576px) {
+  .ant-layout.ant-layout-has-sider aside.sider {
+    display: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 1em;
+  background-color: rgba(50, 50, 50, 0.3);
+}
+::-webkit-scrollbar-track {
+  border-radius: 1em;
+  background-color: rgba(50, 50, 50, 0.1);
 }

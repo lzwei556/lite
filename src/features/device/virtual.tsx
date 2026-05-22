@@ -10,7 +10,7 @@ import { DeviceType } from '../../types/device_type';
 import { SingleDeviceStatus } from '../../device/SingleDeviceStatus';
 import { useLocaleContext } from '../../localeProvider';
 import { DeviceNS } from './util';
-import { useContext } from '.';
+import { useContext } from './provider';
 import { useSelectedProject } from '../../providers/user-profile';
 import { CanAccess, Permission } from '../../providers/access-control';
 

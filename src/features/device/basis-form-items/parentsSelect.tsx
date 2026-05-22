@@ -5,7 +5,7 @@ import { DeviceType } from '../../../types/device_type';
 import { Device } from '../../../types/device';
 import { foreachTree } from '../../../utils/tree';
 import { DeviceTreeNode } from '../deviceTree';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { useAppConfig } from 'providers/app';
 
 type Parent = Device & { gatewayId: number };

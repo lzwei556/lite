@@ -70,6 +70,7 @@ export type ECOptions = ComposeOption<
   | LineSeriesOption
   | ScatterSeriesOption
   | TreeSeriesOption
+  | GaugeSeriesOption
 >;
 
 export type ECSerionOptions =

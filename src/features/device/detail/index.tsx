@@ -6,7 +6,7 @@ import { Device } from '../../../types/device';
 import { DeviceType } from '../../../types/device_type';
 import { Network } from '../../../types/network';
 import { DeviceNavigator } from '../navigator';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { RuntimeChart } from '../RuntimeChart';
 import { QueryEventTable } from '../event';
 import { Index } from '../edit';

@@ -11,7 +11,7 @@ import {
   useDeviceTreeData
 } from '../../features/device/deviceTree';
 import { Device } from '../../types/device';
-import { useContext } from '../../features/device';
+import { useContext } from '../../features/device/provider';
 import { useGlobalStyles } from '../../styles';
 import { Card } from '../../components';
 import { DevicesTable } from '../devicesTable';

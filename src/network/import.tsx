@@ -7,7 +7,7 @@ import { DeviceType } from '../types/device_type';
 import { generateColProps } from '../utils/grid';
 import { Card, Grid, JsonImporter, Link, SaveIconButton, TitleExtraLayout } from '../components';
 import * as WSN from '../wsn';
-import { useContext } from '../features/device';
+import { useContext } from '../features/device/provider';
 import { Preview } from './topology/preview';
 import { WanProtocol } from '../features/device/basis-form-items';
 import { useVirtualRootDevice } from '../features/device/virtual';

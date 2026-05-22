@@ -22,7 +22,7 @@ import {
 import { HistoryDataFea } from '../..';
 import { HistoryData } from '../../../asset-common';
 import { getDisplayProperties } from '../util';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { CanAccess, Permission } from '../../../providers/access-control';
 import * as Feature from 'domain/feature-property';
 

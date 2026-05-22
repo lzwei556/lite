@@ -7,7 +7,7 @@ import { useModalBindingsProps } from '../../../hooks';
 import { UpdateDeviceSettingRequest } from '../../../apis/device';
 import { DeviceType } from '../../../types/device_type';
 import { FormCommonProps, transformSettings } from '../settings-common';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { useSelectAll } from 'hooks/select-all';
 
 type Props = Omit<ButtonProps, 'form'> & FormCommonProps;

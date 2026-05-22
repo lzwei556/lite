@@ -9,10 +9,10 @@ import { useLocaleContext } from './localeProvider';
 import en_US from './locales/en-US.json';
 import zh_CN from './locales/zh-CN.json';
 import { Dayjs } from './utils';
-import AppRouter from './views/router';
 import { AuthProvider } from './providers/auth';
 import { AccessControlProvider } from './providers/access-control';
 import { NotificationProvider } from 'providers/notification';
+import { AppRouter } from 'router';
 import { useAppConfig } from 'providers/app';
 
 export const Main = () => {

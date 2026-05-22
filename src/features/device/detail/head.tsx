@@ -9,7 +9,7 @@ import { DeleteIconButton, DownloadIconButton, IconButton } from '../../../compo
 import { DeleteNetworkRequest, ExportNetworkRequest } from '../../../apis/network';
 import { DeleteDeviceRequest } from '../../../apis/device';
 import { Network } from '../../../network';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { CommandDropdown } from '../commandDropdown';
 import DownloadModal from './downloadModal';
 import { CanAccess, Permission } from '../../../providers/access-control';

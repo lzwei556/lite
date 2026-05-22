@@ -36,3 +36,5 @@ export const pickId = (id: string | number) => {
 };
 
 export const Path = { Assets: 'assets' };
+
+export const RootNode = { id: 0, type: 0 };

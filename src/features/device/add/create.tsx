@@ -6,7 +6,7 @@ import * as WSN from '../../../wsn';
 import { useVirtualRootDevice } from '../virtual';
 import * as Basis from '../basis-form-items';
 import { isBLEGateway, SettingsFormItems } from '../settings-common';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { DeviceNavigator } from '../navigator';
 import { useProps2 } from './hooks';
 

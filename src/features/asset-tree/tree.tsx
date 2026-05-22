@@ -49,7 +49,7 @@ export const AssetTree = ({
           titleRender={(props: any) => {
             const { name } = props;
             return (
-              <Typography.Text ellipsis={true} style={{ maxWidth: 200 }}>
+              <Typography.Text ellipsis={true} style={{ maxWidth: 175 }}>
                 {name}
               </Typography.Text>
             );

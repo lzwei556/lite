@@ -6,7 +6,7 @@ import { BatchDeleteDeviceEventsRequest, PagingDeviceEventsRequest } from '../..
 import { Device } from '../../../types/device';
 import { Dayjs } from '../../../utils';
 import { useButtonBindingsProps } from '../../../hooks';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { useGetIdentity } from '../../../providers/auth';
 import { Permission, useCan } from '../../../providers/access-control';
 

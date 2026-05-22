@@ -12,6 +12,8 @@ type RequestOptions<TData, TParams> = {
   defaultParams?: TParams;
   ready?: boolean;
   refreshDeps?: any[];
+  cacheKey?: string;
+  staleTime?: number;
   onSuccess?: (params: { data: TData; params: TParams; messageInstance?: MessageInstance }) => void;
   onError?: (e: any) => void;
 };
@@ -150,6 +152,8 @@ const buildRequestOptions = <P, T>({
 }) => ({
   manual: options?.manual ?? false,
   defaultParams: options?.defaultParams ? [options.defaultParams] : (undefined as any),
+  cacheKey: options?.cacheKey,
+  staleTime: options?.staleTime,
   ready: options?.ready ?? true,
   refreshDeps: options?.refreshDeps,
   onSuccess: (data: T, param: any[]) => {

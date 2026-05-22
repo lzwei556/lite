@@ -9,7 +9,7 @@ import { ModalWrapper } from '../../../components/modalWrapper';
 import { getDisplayProperties } from '../util';
 import { DeviceType } from '../../../types/device_type';
 import { DownloadDeviceDataRequest } from '../../../apis/device';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { downloadFile } from 'utils';
 import * as Feature from 'domain/feature-property';
 

@@ -47,6 +47,28 @@ export const deleteOne = async ({ id }: { id: number }) => {
   return request.delete(`/users/${id}`);
 };
 
+export const createPasswordConfirmField = (options?: { dependsOn?: string }): Field<CreateData> => {
+  const dependsOn = options?.dependsOn ?? 'password';
+  return {
+    name: 'confirmPwd',
+    label: 'CONFIRM_PASSWORD',
+    rules: [
+      { required: true, message: intl.get('PLEASE_CONFIRM_PASSWORD') },
+      ({ getFieldValue }: any) => ({
+        validator(_: RuleObject, value: any) {
+          if (!value || getFieldValue(dependsOn) === value) {
+            return Promise.resolve();
+          }
+          return Promise.reject(new Error(intl.get('PASSWORDS_ARE_INCONSISTENT')));
+        }
+      })
+    ],
+    type: 'password',
+    description: '',
+    dependencies: [dependsOn]
+  } as Field<CreateData>;
+};
+
 export const Fields = {
   Username: {
     name: 'username',
@@ -62,24 +84,7 @@ export const Fields = {
     type: 'password',
     description: ''
   } as Field<CreateData>,
-  PasswordConfirm: {
-    name: 'confirmPwd',
-    label: 'CONFIRM_PASSWORD',
-    rules: [
-      { required: true, message: intl.get('PLEASE_CONFIRM_PASSWORD') },
-      ({ getFieldValue }: any) => ({
-        validator(_: RuleObject, value: any) {
-          if (!value || getFieldValue('password') === value) {
-            return Promise.resolve();
-          }
-          return Promise.reject(new Error(intl.get('PASSWORDS_ARE_INCONSISTENT')));
-        }
-      })
-    ],
-    type: 'password',
-    description: '',
-    dependencies: ['password']
-  } as Field<CreateData>,
+  PasswordConfirm: createPasswordConfirmField(),
   Role: {
     name: 'role',
     label: 'ROLE',
@@ -87,10 +92,6 @@ export const Fields = {
     type: 'enum',
     description: ''
   } as Field<CreateData>,
-  RoleText: {
-    label: 'ROLE',
-    name: 'roleText'
-  } as Field<User>,
   Phone: {
     name: 'phone',
     label: 'CELLPHONE',
@@ -114,5 +115,7 @@ export const Fields = {
 };
 
 export const ACCOUNT_SUPER_ADMIN = {
-  id: 1
-};
+  id: 1,
+  username: 'admin',
+  role: 0
+} as User;

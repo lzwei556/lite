@@ -1,22 +1,20 @@
 import React from 'react';
-import request from '../utils/request';
-import { useRequest } from 'ahooks';
 import { GlobalStore } from '../utils/global-store';
 import { ENV } from '../utils/env';
-import { AuthIdentity, getIndentity } from 'domain/profile';
+import { getIndentity, login, updatePassword } from 'domain/auth';
 import { createActionState } from 'common/action';
-import { RequestFn, useDataFetch } from 'hooks';
+import { useDataFetch, useUpdate } from 'hooks/data';
 import intl from 'react-intl-universal';
+import { ACCOUNT_SUPER_ADMIN } from 'domain/user';
 
 const store = GlobalStore.getInstance(true);
 
-export type LoginResponse = { token: string };
-
 type AuthProviderProps = {
-  login: RequestFn<LoginInput, LoginResponse>;
+  login: typeof login;
   logout: (onSuccess: () => void) => void;
   check: () => boolean;
-  getIndentity: () => Promise<AuthIdentity>;
+  getIndentity: typeof getIndentity;
+  updatePassword: typeof updatePassword;
 };
 
 const AuthContext = React.createContext<Partial<AuthProviderProps>>({});
@@ -32,7 +30,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           onSuccess();
         },
         check,
-        getIndentity
+        getIndentity,
+        updatePassword
       }}
     >
       {children}
@@ -68,19 +67,19 @@ export const getAuthToken = () => store.get('authToken');
 
 export const useGetIdentity = () => {
   const { getIndentity } = React.useContext(AuthContext);
-  const { data } = useRequest(getIndentity!, {
+  const { data } = useDataFetch(getIndentity!, {
     cacheKey: `${getAuthToken()}_profile`,
     staleTime: -1
   });
-  return ENV.authenticated === 'true' ? { id: 1, username: 'admin', role: 0 } : data;
-};
-
-type LoginInput = { username: string; password: string };
-
-const login = async (params: LoginInput) => {
-  return request.post<LoginResponse>('/login', params);
+  return ENV.authenticated === 'true' ? ACCOUNT_SUPER_ADMIN : data;
 };
 
 const check = () => {
   return !!store.get('authToken');
 };
+
+export const useUpdatePassword = () =>
+  useUpdate(updatePassword, {
+    manual: true,
+    onSuccess: ({ messageInstance }) => messageInstance?.success('password.update.success')
+  });

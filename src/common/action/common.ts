@@ -43,7 +43,7 @@ export type ActionConfig = {
 const noop = async () => {};
 
 export type ActionControllerOptions<T extends BaseEntity, C = any, U = any> = {
-  list: {
+  list?: {
     data?: T[] | PageResult<T>;
     loading?: boolean;
     refresh: () => void;
@@ -63,19 +63,19 @@ export function useActionController<T extends BaseEntity, C = any, U = any>(
 
   const createReq = useCreate(api?.create ?? noop, {
     onSuccess: () => {
-      list.refresh();
+      list?.refresh();
       actions.create.onSuccess?.();
     }
   });
   const updateReq = useUpdate(api?.update ?? noop, {
     onSuccess: () => {
-      list.refresh();
+      list?.refresh();
       actions.update.onSuccess?.();
     }
   });
   const deleteReq = useDelete(api?.delete ?? noop, {
     onSuccess: ({ params }) => {
-      list.refresh();
+      list?.refresh();
       actions.delete.onSuccess?.(params);
     }
   });
@@ -119,8 +119,8 @@ export function useActionController<T extends BaseEntity, C = any, U = any>(
   const { open, close, modalNode, current } = useActionModal<T, typeof actions>(actions);
 
   return {
-    dataSource: list.data,
-    loading: list.loading,
+    dataSource: list?.data,
+    loading: list?.loading,
 
     actions,
     open,
@@ -129,7 +129,7 @@ export function useActionController<T extends BaseEntity, C = any, U = any>(
     modalNode,
     current,
 
-    refresh: list.refresh
+    refresh: list?.refresh
   };
 }
 

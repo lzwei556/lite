@@ -10,7 +10,7 @@ import { AddDeviceRequest } from '../../../apis/device';
 import { transform, transform2UpdateDTO } from '../../../wsn';
 import { FormCommonProps, transformSettings, useGroupCardProps } from '../settings-common';
 import * as Basis from '../basis-form-items';
-import { useContext } from '..';
+import { useContext } from '../provider';
 
 export const useProps2 = (onSuccess: () => void) => {
   const formProps = useFormBindingsProps({

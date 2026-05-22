@@ -11,7 +11,7 @@ import { tree2List } from '../../../utils/tree';
 import { CommandDropdown } from '../commandDropdown';
 import { useDeviceOnlineLiving, useDeviceTreeData } from '../deviceTree';
 import { SingleDeviceStatus } from '../../../device/SingleDeviceStatus';
-import { useContext } from '..';
+import { useContext } from '../provider';
 import { BasisModalForm } from './basisModalForm';
 import { SettingsModalForm } from './settingsModalForm';
 import { CanAccess, Permission, useCan } from '../../../providers/access-control';
