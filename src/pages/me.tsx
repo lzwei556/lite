@@ -3,6 +3,12 @@ import { Col, Form, Space, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import intl from 'react-intl-universal';
 import {
+  createActionState,
+  createSubmitHandler,
+  useActionController,
+  useDataFetch
+} from 'resource';
+import {
   EditIconButton,
   Grid,
   InlineEditFormItem,
@@ -10,10 +16,8 @@ import {
   TextFormItem,
   Descriptions
 } from 'components';
-import { useActionController, createActionState } from 'common/action';
 import { useGetIdentity, useUpdatePassword } from 'providers/auth';
 import { UpdatePasswordModal } from 'features/auth';
-import { createSubmitHandler, useDataFetch } from 'hooks/data';
 import { updateProfile } from 'domain/profile';
 import { Fields } from 'domain/user';
 

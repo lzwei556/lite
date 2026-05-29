@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { Dayjs } from '../../utils';
 import { GetAlertStatisticsRequest } from '../../apis/statistic';
 import { Chart, getOptions, MutedCard, useBarPieOptions } from '../../components';
-import { AlarmLevel, getColorByValue, getLabelByValue } from '../../features/alarm';
+import { get, Enum } from 'domain/alarm-level';
 
 type Statistics = { timestamp: number; info: number; warn: number; critical: number };
 export const AlarmTrend = ({
@@ -30,6 +30,9 @@ export const AlarmTrend = ({
     return true;
   };
   const barPieOpts = useBarPieOptions();
+  const minor = get(Enum.Minor);
+  const major = get(Enum.Major);
+  const critical = get(Enum.Critical);
   const options = hasValidData(countAlarm)
     ? getOptions(barPieOpts, {
         title: {
@@ -46,21 +49,21 @@ export const AlarmTrend = ({
         series: [
           {
             type: 'bar',
-            name: intl.get(getLabelByValue(AlarmLevel.Minor)),
+            name: intl.get(minor.label),
             data: getData(countAlarm).info,
-            color: getColorByValue(AlarmLevel.Minor)
+            color: minor.color
           },
           {
             type: 'bar',
-            name: intl.get(getLabelByValue(AlarmLevel.Major)),
+            name: intl.get(major.label),
             data: getData(countAlarm).warn,
-            color: getColorByValue(AlarmLevel.Major)
+            color: major.color
           },
           {
             type: 'bar',
-            name: intl.get(getLabelByValue(AlarmLevel.Critical)),
+            name: intl.get(critical.label),
             data: getData(countAlarm).danger,
-            color: getColorByValue(AlarmLevel.Critical)
+            color: critical.color
           }
         ]
       })

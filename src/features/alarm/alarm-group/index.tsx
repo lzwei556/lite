@@ -12,8 +12,6 @@ import {
   JsonImporter,
   IconButton
 } from '../../../components';
-import { AlarmLevelLightSelectFilter } from '../alarmLevelLightSelectFilter';
-import { AlarmLevelTag } from '..';
 import { CreateModal } from './createModal';
 import { UpdateModal } from './updateModal';
 import { BindMonitoringPoints } from './bindMonitoringPoints';
@@ -23,6 +21,7 @@ import { AlarmRule } from './types';
 import { useGlobalStyles } from '../../../styles';
 import { CanAccess, Permission } from '../../../providers/access-control';
 import { useAppConfig } from 'providers/app';
+import { AlarmLevelSelect, AlarmLevelTag } from 'domain/alarm-level';
 
 export default function AlarmRuleList() {
   const [type, setType] = React.useState<string | undefined>();
@@ -192,7 +191,7 @@ export default function AlarmRuleList() {
         header={{
           toolbar: (
             <>
-              <AlarmLevelLightSelectFilter onChange={setLevels} value={levels} />
+              <AlarmLevelSelect onChange={setLevels} value={levels} />
               <Button.Group>
                 <CanAccess {...Permission.AlarmRuleGroupAdd}>
                   <IconButton

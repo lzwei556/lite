@@ -1,12 +1,11 @@
 import React from 'react';
-import { ActionModalContext } from 'common/action';
+import { ActionModalContext, createSubmitHandler } from 'resource';
 import { Fields, UpdateData, User } from 'domain/user';
 import { ModalWrapper } from 'components/modalWrapper';
 import { Form, ModalProps } from 'antd';
 import intl from 'react-intl-universal';
 import { FormItem, TextFormItem } from 'components';
 import { RolesSelectFormItem } from './roles-select-form-item';
-import { createSubmitHandler } from 'hooks/data';
 
 export const UpdateFormModal = ({
   record: user,

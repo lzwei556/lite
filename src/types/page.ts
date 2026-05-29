@@ -1,5 +1,4 @@
 import { TablePaginationConfig } from 'antd';
-import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 export type PageResult<T> = {
@@ -23,17 +22,6 @@ export const transform = <T>(
 };
 
 export type PageParameter = { page: number; size: number };
-
-export const useGo = (paged: PageParameter & { total: number }, action: 'prev' | 'next') => {
-  const { total, page, size } = paged;
-  const [index, setIndex] = React.useState(page);
-  const pageCount = Math.ceil((total + (action === 'next' ? 1 : -1)) / size);
-  const nextIndex = action === 'next' ? pageCount : pageCount < page ? pageCount : page;
-  if (nextIndex !== page) {
-    setIndex(nextIndex);
-  }
-  return index;
-};
 
 export const PAGE_SIZES = [10, 20, 30, 40, 50, 100];
 

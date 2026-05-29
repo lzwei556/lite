@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useList } from 'hooks/data';
+import { useSimpleList } from 'resource';
 import { getTree, Menu } from 'domain/menu';
 import intl from 'react-intl-universal';
 import { Role } from 'domain/role';
@@ -12,7 +12,7 @@ interface MenusTreeReturn {
 }
 
 export const useMenusTree = (role?: Role): MenusTreeReturn => {
-  const { list: menus, loading } = useList(getTree, {
+  const { dataSource: menus, loading } = useSimpleList(getTree, {
     ready: !!role
   });
 

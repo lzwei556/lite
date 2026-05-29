@@ -9,9 +9,9 @@ import {
   unbindMeasurementsToAlarmRule
 } from '../features/alarm/alarm-group/services';
 import { Table } from '../components';
-import { AlarmLevelTag } from '../features/alarm';
 import { useMonitoringPointContext } from './provider';
 import * as MonitoringPoint from 'domain/monitoring-point';
+import { AlarmLevelTag } from 'domain/alarm-level';
 
 export const AlarmRuleSetting = ({ point }: { point: MonitoringPoint.Types.Entity }) => {
   const [rules, setRules] = React.useState<AlarmRule[]>();

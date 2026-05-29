@@ -1,10 +1,9 @@
 import { Drawer, DrawerProps, Tree, Spin } from 'antd';
 import { useState } from 'react';
-import { ActionModalContext } from 'common/action';
+import { ActionModalContext, createSubmitHandler, useDataFetch } from 'resource';
 import { get, MenuAssignmentData, Role } from 'domain/role';
 import intl from 'react-intl-universal';
 import { CanAccess, Permission } from 'providers/access-control';
-import { createSubmitHandler, useDataFetch } from 'hooks/data';
 import { SaveIconButton } from 'components';
 import { useMenusTree } from './hooks';
 

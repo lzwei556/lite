@@ -1,7 +1,7 @@
-import { AlarmLevel } from 'features/alarm/alarmLevel';
 import { Field } from 'types';
 import { pickOptionsFromNumericEnum } from 'utils';
 import { GroupField } from './group';
+import * as AlarmLevel from 'domain/alarm-level';
 
 const millisecond = 1000;
 
@@ -197,21 +197,21 @@ export const flangeFields: Flange[] = [
     type: 'number-switcher'
   },
   {
-    label: `leveled.alarm.${AlarmLevel.Minor}`,
+    label: `leveled.alarm.${AlarmLevel.Enum.Minor}`,
     name: 'info',
     nameMode: 'mixed',
     description: '',
     type: 'number-switcher'
   },
   {
-    label: `leveled.alarm.${AlarmLevel.Major}`,
+    label: `leveled.alarm.${AlarmLevel.Enum.Major}`,
     name: 'warn',
     nameMode: 'mixed',
     description: '',
     type: 'number-switcher'
   },
   {
-    label: `leveled.alarm.${AlarmLevel.Critical}`,
+    label: `leveled.alarm.${AlarmLevel.Enum.Critical}`,
     name: 'danger',
     nameMode: 'mixed',
     description: '',

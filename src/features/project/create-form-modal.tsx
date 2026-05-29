@@ -4,9 +4,8 @@ import { ModalWrapper } from 'components/modalWrapper';
 import { CreateData, Fields, useProjectTypeField } from 'domain/project';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { ActionModalContext } from 'common/action';
+import { ActionModalContext, createSubmitHandler } from 'resource';
 import { toUniversalFormItemProps } from 'types';
-import { createSubmitHandler } from 'hooks';
 
 export const CreateFormModal = ({
   loading,

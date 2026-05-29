@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActionConfig, ActionModalOpen, BaseEntity } from './common';
+import { ActionConfig, ActionModalOpen, BaseEntity } from '../types';
 import { Button } from 'antd';
 import intl from 'react-intl-universal';
 import { DeleteIconButton, EditIconButton, IconButton } from 'components';

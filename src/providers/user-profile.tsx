@@ -6,7 +6,7 @@ import intl from 'react-intl-universal';
 import * as ProjectType from 'domain/project-type';
 import { getMyProject, getMyProjects } from 'domain/profile';
 import { getList, Role } from 'domain/role';
-import { usePaginationList } from 'hooks/data';
+import { useResourceList, useResourceQuery } from 'resource';
 import { transform } from 'types/page';
 import { Permission, useCan } from './access-control';
 
@@ -47,8 +47,7 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
     (p) => p.id === (selectedProjectId ?? store.get('selectedProjectId'))
   );
   const canGetRoles = useCan(Permission.RoleList);
-  const { data } = usePaginationList(getList, {
-    syncUrl: false,
+  const { data } = useResourceList(getList, useResourceQuery({ syncUrl: false }).query, {
     ready: !!selectedProject && canGetRoles
   });
   return (

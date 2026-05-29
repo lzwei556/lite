@@ -1,13 +1,17 @@
+import {
+  createActionState,
+  ResourceTable,
+  useDataFetch,
+  useResourceList,
+  ActionConfig
+} from 'resource';
 import React, { useMemo } from 'react';
 import { Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import intl from 'react-intl-universal';
-import { Link, ResourceTable } from 'components';
+import { Link } from 'components';
 import { Permission, useCan } from 'providers/access-control';
 import { assignMenus, getList } from 'domain/role';
-import { useDataFetch, usePaginationList } from 'hooks/data';
-import { createActionState } from 'common/action';
-import type { ActionConfig } from 'common/action';
 import { AssginMenusDrawer } from 'features/role';
 
 // Extract action state management logic
@@ -23,7 +27,7 @@ const useAssignMenusActionState = () => {
 };
 
 export default function Roles() {
-  const list = usePaginationList(getList);
+  const list = useResourceList(getList);
   const assignMenusState = useAssignMenusActionState();
   // const canAssignMenus = useCan(Permission.RoleAllocMenus); // 目前权限控制不完善
   const canAssignMenus = useCan(Permission.RoleList);
@@ -61,11 +65,8 @@ export default function Roles() {
             render: (value: string) => intl.get(value).d(value)
           }
         ]}
-        actionController={{
-          list,
-          actions: actionConfig
-        }}
-        pagination={list.pagination}
+        actionController={{ actions: actionConfig }}
+        list={list}
       />
     </Content>
   );

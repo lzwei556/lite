@@ -1,12 +1,11 @@
 import React from 'react';
-import { ActionModalContext } from 'common/action';
+import { ActionModalContext, createSubmitHandler } from 'resource';
 import { Fields, UpdateData, Project } from 'domain/project';
 import { ModalWrapper } from 'components/modalWrapper';
 import { ModalProps, Form } from 'antd';
 import intl from 'react-intl-universal';
 import { FormItem } from 'components';
 import { toUniversalFormItemProps } from 'types';
-import { createSubmitHandler } from 'hooks/data';
 
 export const UpdateFormModal = ({
   record: project,

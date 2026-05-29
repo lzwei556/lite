@@ -7,7 +7,7 @@ import type { LineSeriesOption } from 'echarts/charts';
 import type { ECOptions, ECSerionOptions } from './chart';
 import type { YAxisMeta } from './useYAxisOptions';
 import { chartColors } from './utils';
-import { AlarmLevel, getColorByValue } from '../../features/alarm';
+import * as AlarmLevel from 'domain/alarm-level'
 
 export interface SeriesOption {
   data: { [name: string]: number[] };
@@ -17,7 +17,7 @@ export interface SeriesOption {
 
 export type SeriesAlarm = {
   seriesIndex: number;
-  rules: { value: number; condition: '>' | '>=' | '<' | '<='; level: AlarmLevel }[];
+  rules: { value: number; condition: '>' | '>=' | '<' | '<='; level: AlarmLevel.Enum }[];
 };
 
 export function useLinedSeriesOptions({
@@ -176,6 +176,6 @@ function getRanges(rules: SeriesAlarm['rules'], color: string) {
     if (gt && i !== 0) {
       level = rules.sort((r1, r2) => r1.value - r2.value)[i - 1].level;
     }
-    return { ...r, color: level ? getColorByValue(level) : color };
+    return { ...r, color: level ? AlarmLevel.get(level).color : color };
   });
 }

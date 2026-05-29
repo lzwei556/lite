@@ -5,11 +5,11 @@ import { Asset, AssetRow } from 'asset-common';
 import { useGlobalStyles } from 'styles';
 import { buildCustomTooltip, Chart, chartColors } from 'components';
 import { ColorHealth } from 'constants/color';
-import { AlarmLevel, getColorByValue } from 'features/alarm/alarmLevel';
 import { isMobile } from 'utils/deviceDetection';
 import { ENV, getValue, roundValue } from 'utils';
 import * as MonitoringPoint from 'domain/monitoring-point';
 import { AssetTree, PrimaryAsset } from 'domain/asset';
+import * as AlarmLevel from 'domain/alarm-level';
 
 export const FlangeMonitoringPointsCircleChart = ({
   asset,
@@ -103,31 +103,35 @@ function buildCirclePointsChartOfFlange(
     series.push(initial.series);
   }
 
+  const minor = AlarmLevel.get(AlarmLevel.Enum.Minor);
+  const major = AlarmLevel.get(AlarmLevel.Enum.Major);
+  const critical = AlarmLevel.get(AlarmLevel.Enum.Critical);
+
   if (checkValidAttr(attributes, 'info', min)) {
-    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Minor}`)} ${
+    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Enum.Minor}`)} ${
       attributes?.info?.value
     }${unit}`;
-    const color = getColorByValue(AlarmLevel.Minor);
+    const color = minor.color;
     const info = getSeries(color, attributes?.info?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color } });
     series.push(info.series);
   }
 
   if (checkValidAttr(attributes, 'warn', min)) {
-    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Major}`)}  ${
+    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Enum.Major}`)}  ${
       attributes?.warn?.value
     }${unit}`;
-    const color = getColorByValue(AlarmLevel.Major);
+    const color = major.color;
     const warn = getSeries(color, attributes?.warn?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color } });
     series.push(warn.series);
   }
 
   if (checkValidAttr(attributes, 'danger', min)) {
-    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Critical}`)} ${
+    const seriesName = `${intl.get(`leveled.alarm.${AlarmLevel.Enum.Critical}`)} ${
       attributes?.danger?.value
     }${unit}`;
-    const color = getColorByValue(AlarmLevel.Critical);
+    const color = critical.color;
     const danger = getSeries(color, attributes?.danger?.value, seriesName);
     legends.push({ name: seriesName, itemStyle: { color } });
     series.push(danger.series);

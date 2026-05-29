@@ -10,7 +10,6 @@ import {
 import { MonitoringPointProvider, useGetSeriesAlarm } from './provider';
 import { VibrationAnalysis } from 'features/vibration-analysis';
 import { CorrosionAnalysis } from 'features/corrosion-analysis';
-import { FilterableAlarmRecordTable } from 'features/alarm';
 import { Col } from 'antd';
 import { generateColProps } from 'utils/grid';
 import { UpdateFormCard, useUpdateFormProps } from 'features/monitoring-point-settings';
@@ -21,6 +20,7 @@ import { AlarmRuleSetting } from './alarm';
 import * as MonitoringPoint from 'domain/monitoring-point';
 import { useAppConfig } from 'providers/app';
 import { Hooks } from 'domain/asset';
+import { AlarmRecordsTable } from 'features/alarm-record';
 
 export default function Index2({
   monitoringPoint,
@@ -64,7 +64,7 @@ const useFeatures = (monitoringPoint: MonitoringPoint.Types.Entity) => {
     key: 'alerts',
     label: intl.get('ALARM_RECORDS'),
     content: (
-      <FilterableAlarmRecordTable
+      <AlarmRecordsTable
         sourceId={monitoringPoint.id}
         storeKey='monitoringPointAlarmRecordList'
         key={id}

@@ -1,6 +1,7 @@
+import { useSimpleList, createActionState, ResourceTable, useDataFetch } from 'resource';
 import { Content } from 'antd/es/layout/layout';
 import { Typography } from 'antd';
-import { Link, ResourceTable } from 'components';
+import { Link } from 'components';
 import { Permission, useCan } from 'providers/access-control';
 import React from 'react';
 import intl from 'react-intl-universal';
@@ -13,16 +14,14 @@ import {
   useUpdateMyProjects
 } from 'features/project';
 import { assignUsers, create, deleteOne, Fields, generateToken, update } from 'domain/project';
-import { useDataFetch, useList } from 'hooks/data';
 import { getMyProjects } from 'domain/profile';
-import { createActionState } from 'common/action';
 
 export default function Projects() {
-  const list = useList(getMyProjects);
+  const list = useSimpleList(getMyProjects);
   const deleteProject = useDeleteProject();
   const updateMyProjects = useUpdateMyProjects();
   const generateTokenState = createActionState(
-    useDataFetch(generateToken, { manual: true, onSuccess: () => list.refresh() })
+    useDataFetch(generateToken, { manual: true, onSuccess: list.refresh })
   );
 
   return (
@@ -34,20 +33,22 @@ export default function Projects() {
           title: intl.get(field.label)
         }))}
         actionController={{
-          list,
           api: { create, update, delete: deleteOne },
           actions: {
             create: {
               can: useCan(Permission.ProjectAdd),
-              modal: (ctx) => <CreateFormModal {...ctx} />
+              modal: (ctx) => <CreateFormModal {...ctx} />,
+              onSuccess: list.refresh
             },
             update: {
               can: useCan(Permission.ProjectEdit),
-              modal: (ctx) => <UpdateFormModal {...ctx} />
+              modal: (ctx) => <UpdateFormModal {...ctx} />,
+              onSuccess: list.refresh
             },
             delete: {
               can: useCan(Permission.ProjectDelete),
               onSuccess: ({ id }) => {
+                list.refresh();
                 deleteProject(id);
               }
             },
@@ -93,6 +94,7 @@ export default function Projects() {
             }
           }
         }}
+        list={list}
         scroll={{ y: 600 }}
       />
     </Content>

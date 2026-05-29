@@ -7,7 +7,6 @@ import { Grid, IconButton, SelectFormItem, Table, TextFormItem } from '../../../
 import { generateColProps } from '../../../utils/grid';
 import { ModalWrapper } from '../../../components/modalWrapper';
 import { ModalFormProps } from '../../../types/common';
-import { AlarmLevel } from '../alarmLevel';
 import { getPropertiesByMeasurementType } from './services';
 import { AlarmRule } from './types';
 import { addAlarmRule } from './services';
@@ -19,6 +18,7 @@ import { IndexFormItem } from './indexFormItem';
 import * as MonitoringPoint from 'domain/monitoring-point';
 import { useAppConfig } from 'providers/app';
 import * as Feature from 'domain/feature-property';
+import * as AlarmLevel from 'domain/alarm-level';
 
 export function CreateModal(props: ModalFormProps) {
   const monitoringPointTypeOptions = useAppConfig().monitoringPointTypeOptions;
@@ -26,7 +26,7 @@ export function CreateModal(props: ModalFormProps) {
   const [properties, setProperties] = React.useState<Feature.Types.Property[]>([]);
   const [metric, setMetric] = React.useState<{ key: string; name: string; unit?: string }[]>([]);
 
-  const defaultValues = { duration: 1, operation: '>=', level: AlarmLevel.Critical };
+  const defaultValues = { duration: 1, operation: '>=', level: AlarmLevel.Enum.Critical };
 
   return (
     <ModalWrapper

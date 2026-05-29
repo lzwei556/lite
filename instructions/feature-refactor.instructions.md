@@ -19,7 +19,7 @@
    - 包含数据转换函数
    - 包含 API 请求函数
 3. 查找旧组件
-4. 迁移组件到 `features/<feature>/`
+4. 迁移组件到 `features/<feature>/`，如果存在路由入口组件，则迁移至 `pages/<feature>/` 下
 5. 删除未实际使用的组件、方法、API
 6. 遵循组件开发规范（见 `component-guide.instructions.md`）
 7. 更新路由表中对旧组件的引用

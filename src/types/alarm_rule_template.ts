@@ -1,11 +1,4 @@
-export type AlarmRuleTemplate = {
-  id: number;
-  name: string;
-  measurementType: number;
-  rule: AlarmRule;
-  level: number;
-  description: string;
-};
+
 
 export type AlarmRule = {
   id: number;

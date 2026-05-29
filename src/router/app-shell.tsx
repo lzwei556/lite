@@ -3,8 +3,8 @@ import { Outlet } from 'react-router-dom';
 import { createStyles } from 'antd-style';
 import AlertMessageNotification from '../components/notification/alert';
 import { Header, MobileDrawer } from 'features/layout';
-import { useActionController } from 'common/action';
-import { Brand } from 'common/components/brand';
+import { useActionController } from 'resource';
+import { Brand } from 'domain/brand';
 
 const useStyles = createStyles(({ css }) => ({
   content: css`

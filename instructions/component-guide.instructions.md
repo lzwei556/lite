@@ -25,7 +25,7 @@
    - 命名导出，`export const ComponentName = () => {}`
 4. UI 组件确保单一职责，目的明确，边界清晰
 5. 业务组件，将页面逻辑与展示逻辑分离
-   - fetch 请求状态，请使用 `useDataFetch/usePaginationList/useList` 等 hooks 抽离
+   - fetch 请求状态，请使用 `useDataFetch/useResourceList/useSimpleList` 等 hooks 抽离
    - 表格组件遵循 `ActionControllerOptions`
    - 禁止手动处理 modal 的 open 状态，请通过 `useActionController` 或 `ActionModalContext` 进行控制
    - 禁止在组件中直接应用css文件，请使用 `antd-style` 方案进行样式编写

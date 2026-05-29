@@ -2,10 +2,9 @@ import React from 'react';
 import { GlobalStore } from '../utils/global-store';
 import { ENV } from '../utils/env';
 import { getIndentity, login, updatePassword } from 'domain/auth';
-import { createActionState } from 'common/action';
-import { useDataFetch, useUpdate } from 'hooks/data';
 import intl from 'react-intl-universal';
 import { ACCOUNT_SUPER_ADMIN } from 'domain/user';
+import { createActionState, useDataFetch, useUpdate } from 'resource';
 
 const store = GlobalStore.getInstance(true);
 

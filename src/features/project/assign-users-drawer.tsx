@@ -1,8 +1,7 @@
 import { Checkbox, Col, Drawer, DrawerProps, Form, Spin } from 'antd';
-import { ActionModalContext } from 'common/action';
+import { ActionModalContext, createSubmitHandler, useSimpleList } from 'resource';
 import { CheckboxFormItem, Grid, MutedCard, SaveIconButton } from 'components';
 import { Fields, getAssignedUsers, Project, UserAssignmentData } from 'domain/project';
-import { createSubmitHandler, useList } from 'hooks/data';
 import React from 'react';
 import intl from 'react-intl-universal';
 
@@ -14,7 +13,7 @@ export const AssignUsersDrawer = ({
   ...rest
 }: DrawerProps & ActionModalContext<Project, UserAssignmentData>) => {
   const [form] = Form.useForm<Omit<UserAssignmentData, 'id'>>();
-  const list = useList(getAssignedUsers, { defaultParams: { id: project?.id ?? 0 } });
+  const list = useSimpleList(getAssignedUsers, { defaultParams: { id: project?.id ?? 0 } });
   const userOptions = (list.data ?? []).map((u) => ({ label: u.user.username, value: u.user.id }));
   const oldUserIds = (list.data ?? []).filter((u) => u.isAllocated).map((u) => u.user.id);
 

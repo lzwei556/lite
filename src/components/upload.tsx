@@ -2,8 +2,8 @@ import React from 'react';
 import { Upload as AntdUpload, UploadProps } from 'antd';
 import { IconButton } from './icon-button';
 import { UploadOutlined } from '@ant-design/icons';
-import { ActionState } from 'common/action';
-import { createSubmitHandler } from 'hooks/data';
+import { ActionState, createSubmitHandler } from 'resource';
+
 
 type CustomRequestOptions = Parameters<NonNullable<UploadProps['customRequest']>>[0];
 

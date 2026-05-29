@@ -1,18 +1,18 @@
 import { ColorHealth } from '../constants/color';
-import * as Alarm from '../features/alarm';
+import * as AlarmLevel from 'domain/alarm-level';
 
 enum AssetSpecificStatus {
   Normal
 }
 
-export type AssetStatus = AssetSpecificStatus | Alarm.AlarmLevel;
+export type AssetStatus = AssetSpecificStatus | AlarmLevel.Enum;
 
 export const getLabelByValue = (status: AssetStatus) => {
   switch (status) {
     case AssetSpecificStatus.Normal:
       return 'asset.status.normal';
     default:
-      return Alarm.getLabelByValue(status);
+      return AlarmLevel.get(status).label;
   }
 };
 
@@ -21,6 +21,6 @@ export const getColorByValue = (status: AssetStatus) => {
     case AssetSpecificStatus.Normal:
       return ColorHealth;
     default:
-      return Alarm.getColorByValue(status);
+      return AlarmLevel.get(status).color;
   }
 };

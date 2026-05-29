@@ -5,9 +5,9 @@ import { ModalWrapper } from 'components/modalWrapper';
 import { FormItem } from 'components';
 import { toUniversalFormItemProps } from 'types';
 import { Fields, createPasswordConfirmField } from 'domain/user';
-import type { ActionModalContext } from 'common/action';
 import { UpdatePasswordData } from 'domain/auth';
-import { createSubmitHandler } from 'hooks/data';
+import { ActionModalContext, createSubmitHandler } from 'resource';
+
 
 export function UpdatePasswordModal(ctx: ActionModalContext<any, UpdatePasswordData>) {
   const { open, close, submit, loading } = ctx;

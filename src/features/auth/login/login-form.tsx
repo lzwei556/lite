@@ -5,7 +5,7 @@ import { KeyOutlined, UserOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { useLogin } from '../../../providers/auth';
 import { useNavigate } from 'react-router-dom';
-import { createSubmitHandler } from 'hooks';
+import { createSubmitHandler } from 'resource';
 
 export const LoginForm = ({ className }: { className?: string }) => {
   const username = intl.get('USERNAME');

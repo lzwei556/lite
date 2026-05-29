@@ -1,24 +1,35 @@
 import { Space, TableProps } from 'antd';
-import { Table } from './table';
 import React from 'react';
 import intl from 'react-intl-universal';
-import {
-  BaseEntity,
-  ActionControllerOptions,
-  useActionController,
-  ActionButton
-} from 'common/action';
-import { transform } from 'types/page';
+import { PageResult, transform } from 'types/page';
+import { BaseEntity } from './types';
+import { ActionControllerOptions, useActionController } from './action/controller';
+import { Table } from 'components';
+import { ActionButton } from './action/button';
+import { ResourceQuery } from './use-query';
 
 export const ResourceTable = <T extends BaseEntity>({
   actionController,
   columns,
-  pagination = false,
+  list,
+  queryController,
   ...rest
 }: TableProps<T> & {
+  list: {
+    data?: T[] | PageResult<T>;
+    loading?: boolean;
+    total?: number;
+  };
   actionController: ActionControllerOptions<T>;
+  queryController?: {
+    query: ResourceQuery;
+    setFilters: (filters: any) => void;
+    setSorter: (sorter: any) => void;
+    setPagination: (page: number, pageSize: number) => void;
+  };
 }) => {
-  const { dataSource, loading, actions, open, modalNode } = useActionController(actionController);
+  const { data, loading } = list;
+  const { actions, open, modalNode } = useActionController(actionController);
 
   const toolbarActions = React.useMemo(() => {
     return Object.entries(actions ?? {}).filter(([_, action]) => {
@@ -76,14 +87,39 @@ export const ResourceTable = <T extends BaseEntity>({
   }, [columns, actionColumn]);
 
   const getDataSource = () => {
-    if (dataSource) {
-      if (Array.isArray(dataSource)) {
-        return dataSource;
+    if (data) {
+      if (Array.isArray(data)) {
+        return data;
       } else {
-        return transform(dataSource).list;
+        return transform(data).list;
       }
     }
   };
+
+  const handleTableChange: TableProps['onChange'] = (pagination, filters, sorter) => {
+    queryController?.setPagination(pagination.current!, pagination.pageSize!);
+    if (Object.keys(filters).length > 0) {
+      queryController?.setFilters(filters);
+    }
+    if (Object.keys(sorter).length > 0 && !Array.isArray(sorter)) {
+      queryController?.setSorter({
+        field: sorter.field as string,
+        order: sorter.order ?? undefined
+      });
+    }
+  };
+
+  const pagination = React.useMemo(() => {
+    if (queryController) {
+      const query = queryController.query;
+      return {
+        current: query.page,
+        pageSize: query.size,
+        total: list?.total
+      };
+    }
+    return false
+  }, [queryController, list.total]);
 
   return (
     <>
@@ -97,6 +133,7 @@ export const ResourceTable = <T extends BaseEntity>({
           ))
         }}
         loading={loading}
+        onChange={handleTableChange}
         pagination={pagination}
         rowKey={(row) => row.id}
       />
