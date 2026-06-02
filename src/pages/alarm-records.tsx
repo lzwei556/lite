@@ -1,7 +1,7 @@
-import { Typography } from "antd";
-import { Content } from "antd/es/layout/layout";
-import { AlarmRecordsTable } from "features/alarm-record";
-import intl from "react-intl-universal";
+import { Typography } from 'antd';
+import { Content } from 'antd/es/layout/layout';
+import { AlarmRecordsTable } from 'features/alarm-records-query';
+import intl from 'react-intl-universal';
 
 export default function AlarmRecord() {
   return (

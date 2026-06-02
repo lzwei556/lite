@@ -12,7 +12,7 @@ import intl from 'react-intl-universal';
 import { Link } from 'components';
 import { Permission, useCan } from 'providers/access-control';
 import { assignMenus, getList } from 'domain/role';
-import { AssginMenusDrawer } from 'features/role';
+import { AssginMenusDrawer } from 'features/role-management';
 
 // Extract action state management logic
 const useAssignMenusActionState = () => {

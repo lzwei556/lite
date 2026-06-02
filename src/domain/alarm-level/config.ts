@@ -22,5 +22,5 @@ const table: { [Key in Enum]: Config } = {
 
 export const get = (level: Enum): Config => {
   const config = table[level];
-  return { ...config, label: `${PREFIX}${transformSnake2Dot(toSnake(config.label))}` };
+  return { ...config, label: `${PREFIX}.${transformSnake2Dot(toSnake(config.label))}` };
 };

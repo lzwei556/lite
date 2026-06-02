@@ -1,4 +1,4 @@
-import { Input, Typography } from 'antd';
+import { Input, Space, Typography } from 'antd';
 import { LightSelectFilter, RangeDatePicker } from 'components';
 import { MONITORING_POINT } from 'monitoring-point';
 import { useAppConfig } from 'providers/app';
@@ -7,24 +7,26 @@ import intl from 'react-intl-universal';
 import { Dayjs } from 'utils';
 
 export const Filters = ({
-  onNameChange,
+  nameFilter,
   typesFilter,
-  onRangeChange
+  rangeFilter
 }: {
-  onNameChange: (name: string) => void;
-  typesFilter?: { enabled: boolean; onChange: (types: number[]) => void };
-  onRangeChange: (range: [number, number]) => void;
+  nameFilter?: { value?: string; onChange: (name: string) => void };
+  typesFilter?: { enabled: boolean; value?: number[]; onChange: (types: number[]) => void };
+  rangeFilter?: { value?: [number, number]; onChange: (range: [number, number]) => void };
 }) => {
   const options = useAppConfig().monitoringPointTypeOptions;
 
   return (
-    <>
+    <Space>
       <Input
-        onBlur={(e) => onNameChange(e.target.value)}
+        onChange={(e) => nameFilter?.onChange(e.target.value)}
         prefix={<Typography.Text type='secondary'>{intl.get('ALARM_NAME')}</Typography.Text>}
+        value={nameFilter?.value}
       />
       {typesFilter?.enabled && (
         <LightSelectFilter
+          value={typesFilter?.value}
           maxTagCount={2}
           mode='multiple'
           onChange={typesFilter?.onChange}
@@ -32,7 +34,10 @@ export const Filters = ({
           prefix={intl.get('OBJECT_TYPE', { object: intl.get(MONITORING_POINT) })}
         />
       )}
-      <RangeDatePicker onChange={(range) => onRangeChange(Dayjs.toRange(range))} />
-    </>
+      <RangeDatePicker
+        value={rangeFilter?.value ? Dayjs.toRangeValue(rangeFilter?.value) : undefined}
+        onChange={(range) => rangeFilter?.onChange(Dayjs.toRange(range))}
+      />
+    </Space>
   );
 };

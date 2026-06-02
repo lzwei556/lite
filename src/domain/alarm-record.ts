@@ -5,6 +5,8 @@ import request from 'utils/request';
 import intl from 'react-intl-universal';
 import { getValue } from 'utils/format';
 import { Dayjs, pickOptionsFromNumericEnum } from 'utils';
+import { z } from 'zod';
+import { zq } from 'resource';
 
 type Metric = {
   key: string;
@@ -72,7 +74,7 @@ export enum Status {
   AutoProcessed = 2
 }
 
-export const options = pickOptionsFromNumericEnum(Status, 'alarm.record')
+export const options = pickOptionsFromNumericEnum(Status, 'alarm.record');
 
 const transform = (dto: DTO): AlarmRecord => {
   return {
@@ -112,32 +114,45 @@ const translateMetricName = (name: string) => {
 };
 
 type Filters = {
-  from: number;
-  to: number;
-  types?: string;
+  createAt?: [number, number];
+  types?: number[];
   name?: string;
   sourceId?: number;
+  level?: number[];
+  status?: number[];
+};
+
+type FiltersData = Omit<Filters, 'createAt' | 'name' | 'types' | 'level' | 'status'> & {
+  from?: number;
+  to?: number;
+  monitoring_point_name_like?: string;
+  monitoring_point_types?: string;
   levels?: string;
   status?: string;
 };
 
-type FiltersData = Omit<Filters, 'name' | 'types'> & {
-  monitoring_point_name_like?: string;
-  monitoring_point_types: number[];
-};
-
 const transformFilters = (filters: Filters): FiltersData => {
-  const { name, types, ...rest } = filters;
-  const data: FiltersData = { ...rest, monitoring_point_types: [] };
+  const { createAt, name, types, level, status, ...rest } = filters;
+  const data: FiltersData = { ...rest };
+  if (createAt) {
+    data.from = createAt[0];
+    data.to = createAt[1];
+  }
   if (name) {
     data.monitoring_point_name_like = name;
   } else {
     delete data.monitoring_point_name_like;
   }
   if (types) {
-    data.monitoring_point_types = types.split(',').map(Number);
+    data.monitoring_point_types = types.join();
   } else {
-    data.monitoring_point_types = [];
+    delete data.monitoring_point_types;
+  }
+  if (level) {
+    data.levels = level.join();
+  }
+  if (status) {
+    data.status = status.join();
   }
   return data;
 };
@@ -154,3 +169,11 @@ export const getList = async ({ page, size, ...filters }: PageParameter & Filter
 export const deleteOne = async ({ id }: { id: number }) => {
   return request.delete(`/alarmRecords/${id}`);
 };
+
+export const querySchema = z.object({
+  name: zq.string(),
+  types: zq.numberArray(),
+  createAt: zq.timestampRange(),
+  level: zq.numberArray(),
+  status: zq.numberArray()
+});

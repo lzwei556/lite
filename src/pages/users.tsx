@@ -4,7 +4,7 @@ import { Typography } from 'antd';
 import { Permission, useCan } from 'providers/access-control';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { CreateFormModal, UpdateFormModal } from 'features/user';
+import { CreateFormModal, UpdateFormModal } from 'features/user-management';
 import {
   ACCOUNT_SUPER_ADMIN,
   create,
@@ -41,7 +41,8 @@ export default function Users() {
           { name: 'roleText', label: 'ROLE' }
         ].map((field) => ({
           dataIndex: field.name,
-          title: intl.get(field.label)
+          title: intl.get(field.label),
+          width: '20%'
         }))}
         actionController={{
           api: { create, update, delete: deleteOne },

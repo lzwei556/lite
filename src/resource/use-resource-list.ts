@@ -1,30 +1,35 @@
+import * as React from 'react';
+import { useRequest } from 'ahooks';
 import { PAGE_SIZES, PageParameter, PageResult } from 'types/page';
+import { useNotificationContext } from 'providers/notification';
+import { buildRequestOptions } from './action/data';
 import { RequestFn, RequestOptions } from './types';
 import { ResourceQuery } from './use-query';
-import { useNotificationContext } from 'providers/notification';
-import { useRequest } from 'ahooks';
-import { buildRequestOptions } from './action/data';
 
-const DEFAULT_QUERY: ResourceQuery<any> = {
+const DEFAULT_QUERY = {
   page: 1,
   size: Math.min(...PAGE_SIZES),
   filters: {}
 };
 
-export const useResourceList = <TFilters extends Record<string, any>, T>(
-  api: RequestFn<
-    TFilters &
-      PageParameter & {
-        sortField?: string;
-        sortOrder?: string;
-      },
-    PageResult<T>
-  >,
+type ApiQuery<TFilters extends Record<string, unknown>> = TFilters &
+  PageParameter & {
+    sortField?: string;
+    sortOrder?: string;
+  };
+
+export const useResourceList = <TFilters extends Record<string, unknown>, T>(
+  api: RequestFn<ApiQuery<TFilters>, PageResult<T>>,
   query?: ResourceQuery<TFilters>,
   requestOptions?: RequestOptions<PageResult<T>, any>
 ) => {
-  const finalQuery = query ?? (DEFAULT_QUERY as ResourceQuery<TFilters>);
   const { messageInstance } = useNotificationContext();
+  const finalQuery = query ?? (DEFAULT_QUERY as ResourceQuery<TFilters>);
+
+  /**
+   * stable refresh deps
+   */
+  const queryKey = React.useMemo(() => JSON.stringify(finalQuery), [finalQuery]);
 
   const request = useRequest(
     async () => {
@@ -40,15 +45,19 @@ export const useResourceList = <TFilters extends Record<string, any>, T>(
     buildRequestOptions({
       options: {
         ...requestOptions,
-        refreshDeps: [finalQuery]
+        refreshDeps: [queryKey]
       },
       messageInstance
     })
   );
 
   const dataSource = request.data?.result ?? [];
+
   const total = request.data?.total ?? 0;
 
+  /**
+   * create success
+   */
   const handleCreated = (
     setQuery?: (updater: (prev: ResourceQuery<TFilters>) => ResourceQuery<TFilters>) => void
   ) => {
@@ -64,11 +73,16 @@ export const useResourceList = <TFilters extends Record<string, any>, T>(
         ...prev,
         page: prev.page + 1
       }));
-    } else {
-      request.refresh();
+
+      return;
     }
+
+    request.refresh();
   };
 
+  /**
+   * delete success
+   */
   const handleDeleted = (
     setQuery?: (updater: (prev: ResourceQuery<TFilters>) => ResourceQuery<TFilters>) => void
   ) => {
@@ -84,9 +98,10 @@ export const useResourceList = <TFilters extends Record<string, any>, T>(
         ...prev,
         page: prev.page - 1
       }));
-    } else {
-      request.refresh();
+      return;
     }
+
+    request.refresh();
   };
 
   return {

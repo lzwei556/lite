@@ -20,7 +20,7 @@ import { AlarmRuleSetting } from './alarm';
 import * as MonitoringPoint from 'domain/monitoring-point';
 import { useAppConfig } from 'providers/app';
 import { Hooks } from 'domain/asset';
-import { AlarmRecordsTable } from 'features/alarm-record';
+import { AlarmRecordsTable } from 'features/alarm-records-query';
 
 export default function Index2({
   monitoringPoint,

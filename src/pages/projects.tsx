@@ -12,7 +12,7 @@ import {
   UpdateFormModal,
   useDeleteProject,
   useUpdateMyProjects
-} from 'features/project';
+} from 'features/project-management';
 import { assignUsers, create, deleteOne, Fields, generateToken, update } from 'domain/project';
 import { getMyProjects } from 'domain/profile';
 
@@ -95,7 +95,7 @@ export default function Projects() {
           }
         }}
         list={list}
-        scroll={{ y: 600 }}
+        scroll={{ x: 1000, y: 600 }}
       />
     </Content>
   );

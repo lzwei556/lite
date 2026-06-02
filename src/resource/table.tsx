@@ -11,10 +11,12 @@ import { ResourceQuery } from './use-query';
 export const ResourceTable = <T extends BaseEntity>({
   actionController,
   columns,
+  header,
   list,
   queryController,
   ...rest
 }: TableProps<T> & {
+  header?: React.ReactNode;
   list: {
     data?: T[] | PageResult<T>;
     loading?: boolean;
@@ -23,7 +25,7 @@ export const ResourceTable = <T extends BaseEntity>({
   actionController: ActionControllerOptions<T>;
   queryController?: {
     query: ResourceQuery;
-    setFilters: (filters: any) => void;
+    patchFilters: (filters: any) => void;
     setSorter: (sorter: any) => void;
     setPagination: (page: number, pageSize: number) => void;
   };
@@ -99,7 +101,7 @@ export const ResourceTable = <T extends BaseEntity>({
   const handleTableChange: TableProps['onChange'] = (pagination, filters, sorter) => {
     queryController?.setPagination(pagination.current!, pagination.pageSize!);
     if (Object.keys(filters).length > 0) {
-      queryController?.setFilters(filters);
+      queryController?.patchFilters(filters);
     }
     if (Object.keys(sorter).length > 0 && !Array.isArray(sorter)) {
       queryController?.setSorter({
@@ -118,7 +120,7 @@ export const ResourceTable = <T extends BaseEntity>({
         total: list?.total
       };
     }
-    return false
+    return false;
   }, [queryController, list.total]);
 
   return (
@@ -128,9 +130,11 @@ export const ResourceTable = <T extends BaseEntity>({
         columns={mergedColumns}
         dataSource={getDataSource()}
         header={{
-          toolbar: toolbarActions.map(([key, action]) => (
-            <ActionButton key={key} actionKey={key} action={action} open={open} />
-          ))
+          toolbar:
+            header ??
+            toolbarActions.map(([key, action]) => (
+              <ActionButton key={key} actionKey={key} action={action} open={open} />
+            ))
         }}
         loading={loading}
         onChange={handleTableChange}

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { z } from 'zod';
+
 import { PAGE_SIZES, PageParameter } from 'types/page';
 
 export type ResourceSorter = {
@@ -7,78 +9,115 @@ export type ResourceSorter = {
   order?: 'ascend' | 'descend';
 };
 
-export type ResourceQuery<TFilters extends Record<string, any> = Record<string, any>> =
+export type ResourceQuery<TFilters extends Record<string, unknown> = Record<string, unknown>> =
   PageParameter & {
-    filters: TFilters;
     sorter?: ResourceSorter;
+    filters: TFilters;
   };
 
-type UseResourceQueryOptions<TFilters extends Record<string, any>> = {
-  defaultQuery?: Partial<ResourceQuery<TFilters>>;
+export type ResourceQueryController<TFilters extends Record<string, unknown>> = {
+  query: ResourceQuery<TFilters>;
+  setQuery: (
+    updater:
+      | Partial<ResourceQuery<TFilters>>
+      | ((prev: ResourceQuery<TFilters>) => Partial<ResourceQuery<TFilters>>)
+  ) => void;
+  patchFilters: (patch: Partial<TFilters>) => void;
+  replaceFilters: (filters: TFilters) => void;
+  resetFilters: () => void;
+  setPagination: (page: number, size: number) => void;
+  setSorter: (sorter?: ResourceSorter) => void;
+  reset: () => void;
+};
+
+type UseResourceQueryOptions<TFilters extends Record<string, unknown>> = {
+  schema?: z.ZodType<TFilters>;
+  defaultFilters?: Partial<TFilters>;
+  defaultPage?: number;
+  defaultSize?: number;
   syncUrl?: boolean;
 };
 
-const DEFAULT_QUERY: ResourceQuery<any> = {
-  page: 1,
-  size: Math.min(...PAGE_SIZES),
-  filters: {}
-};
+type QueryUpdater<TFilters extends Record<string, unknown>> =
+  | Partial<ResourceQuery<TFilters>>
+  | ((prev: ResourceQuery<TFilters>) => Partial<ResourceQuery<TFilters>>);
 
-export const useResourceQuery = <TFilters extends Record<string, any>>(
-  options?: UseResourceQueryOptions<TFilters>
-) => {
-  const syncUrl = options?.syncUrl ?? true;
+const RESERVED_KEYS = new Set(['page', 'size', 'sortField', 'sortOrder']);
+
+/**
+ * overloads
+ */
+export function useResourceQuery(): ResourceQueryController<Record<string, unknown>>;
+
+export function useResourceQuery<TFilters extends Record<string, unknown>>(
+  options: UseResourceQueryOptions<TFilters>
+): ResourceQueryController<TFilters>;
+
+export function useResourceQuery<
+  TFilters extends Record<string, unknown> = Record<string, unknown>
+>(options?: UseResourceQueryOptions<TFilters>): ResourceQueryController<TFilters> {
+  const {
+    schema,
+    defaultFilters,
+    defaultPage = 1,
+    defaultSize = Math.min(...PAGE_SIZES),
+    syncUrl = true
+  } = options ?? {};
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  /**
-   * merged default query
-   */
   const defaultQuery = React.useMemo<ResourceQuery<TFilters>>(
     () => ({
-      ...DEFAULT_QUERY,
-      ...(options?.defaultQuery || {})
+      page: defaultPage,
+      size: defaultSize,
+      filters: (defaultFilters ?? {}) as TFilters
     }),
-    [options?.defaultQuery]
+    [defaultFilters, defaultPage, defaultSize]
   );
 
   /**
-   * url -> query
-   *
-   * source of truth
+   * local mode
    */
-  const query = React.useMemo<ResourceQuery<TFilters>>(() => {
-    if (!syncUrl) {
-      return defaultQuery;
-    }
+  const [localQuery, setLocalQuery] = React.useState(defaultQuery);
 
-    const page = parsePositiveInt(searchParams.get('page'), defaultQuery.page, 1);
+  /**
+   * url mode
+   */
+  const urlQuery = React.useMemo<ResourceQuery<TFilters>>(() => {
+    const rawFilters: Record<string, string> = {};
 
-    const size = Math.min(
-      parsePositiveInt(searchParams.get('size'), defaultQuery.size, DEFAULT_QUERY.size),
-      Math.max(...PAGE_SIZES)
-    );
-
-    const sortField = searchParams.get('sortField') ?? undefined;
-
-    const sortOrder = searchParams.get('sortOrder') as 'ascend' | 'descend' | null;
-
-    const filtersStr = searchParams.get('filters');
-
-    let filters = defaultQuery.filters;
-
-    if (filtersStr) {
-      try {
-        filters = JSON.parse(filtersStr);
-      } catch {
-        filters = defaultQuery.filters;
+    searchParams.forEach((value, key) => {
+      if (RESERVED_KEYS.has(key)) {
+        return;
       }
+
+      rawFilters[key] = value;
+    });
+
+    let parsedFilters: Partial<TFilters> = {};
+
+    if (schema) {
+      const result = schema.safeParse(rawFilters);
+
+      if (result.success) {
+        parsedFilters = result.data;
+      }
+    } else {
+      parsedFilters = rawFilters as Partial<TFilters>;
     }
+
+    const page = parsePositiveInt(searchParams.get('page'), defaultPage, 1);
+    const size = parsePositiveInt(searchParams.get('size'), defaultSize, 1);
+    const sortField = searchParams.get('sortField') ?? undefined;
+    const sortOrder = searchParams.get('sortOrder') as 'ascend' | 'descend' | null;
 
     return {
       page,
       size,
-      filters,
+      filters: {
+        ...(defaultFilters ?? {}),
+        ...parsedFilters
+      } as TFilters,
       sorter: sortField
         ? {
             field: sortField,
@@ -86,41 +125,28 @@ export const useResourceQuery = <TFilters extends Record<string, any>>(
           }
         : undefined
     };
-  }, [defaultQuery, searchParams, syncUrl]);
+  }, [searchParams, schema, defaultFilters, defaultPage, defaultSize]);
 
-  /**
-   * query -> url
-   */
+  const query = syncUrl ? urlQuery : localQuery;
+
   const updateQuery = React.useCallback(
-    (
-      updater:
-        | Partial<ResourceQuery<TFilters>>
-        | ((prev: ResourceQuery<TFilters>) => ResourceQuery<TFilters>)
-    ) => {
-      const nextQuery =
-        typeof updater === 'function'
-          ? updater(query)
-          : {
-              ...query,
-              ...updater
-            };
+    (updater: QueryUpdater<TFilters>) => {
+      const patch = typeof updater === 'function' ? updater(query) : updater;
+
+      const nextQuery = {
+        ...query,
+        ...patch
+      };
 
       if (!syncUrl) {
+        setLocalQuery(nextQuery);
         return;
       }
 
       const next = new URLSearchParams();
+      next.set('page', String(nextQuery.page));
+      next.set('size', String(nextQuery.size));
 
-      /**
-       * pagination
-       */
-      next.set('page', `${nextQuery.page}`);
-
-      next.set('size', `${nextQuery.size}`);
-
-      /**
-       * sorter
-       */
       if (nextQuery.sorter?.field) {
         next.set('sortField', nextQuery.sorter.field);
       }
@@ -129,24 +155,57 @@ export const useResourceQuery = <TFilters extends Record<string, any>>(
         next.set('sortOrder', nextQuery.sorter.order);
       }
 
-      /**
-       * filters
-       */
-      if (Object.keys(nextQuery.filters).length > 0) {
-        next.set('filters', JSON.stringify(nextQuery.filters));
-      }
+      Object.entries(nextQuery.filters).forEach(([key, value]) => {
+        if (value == null) {
+          return;
+        }
+        if (value === '') {
+          return;
+        }
+        if (Array.isArray(value) && value.length === 0) {
+          return;
+        }
+        next.set(key, serialize(value));
+      });
 
-      /**
-       * avoid useless navigation
-       */
       if (next.toString() !== searchParams.toString()) {
         setSearchParams(next, {
           replace: true
         });
       }
     },
-    [query, searchParams, setSearchParams, syncUrl]
+    [query, syncUrl, searchParams, setSearchParams]
   );
+
+  const patchFilters = React.useCallback(
+    (patch: Partial<TFilters>) => {
+      updateQuery((prev) => ({
+        page: 1,
+        filters: {
+          ...prev.filters,
+          ...patch
+        }
+      }));
+    },
+    [updateQuery]
+  );
+
+  const replaceFilters = React.useCallback(
+    (filters: TFilters) => {
+      updateQuery({
+        page: 1,
+        filters
+      });
+    },
+    [updateQuery]
+  );
+
+  const resetFilters = React.useCallback(() => {
+    updateQuery({
+      page: 1,
+      filters: (defaultFilters ?? {}) as TFilters
+    });
+  }, [defaultFilters, updateQuery]);
 
   const setPagination = React.useCallback(
     (page: number, size: number) => {
@@ -157,28 +216,6 @@ export const useResourceQuery = <TFilters extends Record<string, any>>(
     },
     [updateQuery]
   );
-
-  const setFilters = React.useCallback(
-    (filters: Partial<TFilters>) => {
-      updateQuery((prev) => ({
-        ...prev,
-        page: 1,
-        filters: {
-          ...prev.filters,
-          ...filters
-        }
-      }));
-    },
-    [updateQuery]
-  );
-
-  const resetFilters = React.useCallback(() => {
-    updateQuery((prev) => ({
-      ...prev,
-      page: 1,
-      filters: defaultQuery.filters
-    }));
-  }, [defaultQuery.filters, updateQuery]);
 
   const setSorter = React.useCallback(
     (sorter?: ResourceSorter) => {
@@ -191,26 +228,46 @@ export const useResourceQuery = <TFilters extends Record<string, any>>(
   );
 
   const reset = React.useCallback(() => {
-    updateQuery(defaultQuery);
-  }, [defaultQuery, updateQuery]);
+    if (!syncUrl) {
+      setLocalQuery(defaultQuery);
+      return;
+    }
+
+    setSearchParams(new URLSearchParams(), {
+      replace: true
+    });
+  }, [defaultQuery, setSearchParams, syncUrl]);
 
   return {
     query,
     setQuery: updateQuery,
-    setPagination,
-    setFilters,
+    patchFilters,
+    replaceFilters,
     resetFilters,
+    setPagination,
     setSorter,
     reset
   };
-};
+}
 
-const parsePositiveInt = (value: string | null, fallback: number, min: number) => {
-  const parsed = Number.parseInt(value || '');
+function parsePositiveInt(value: string | null, fallback: number, min: number) {
+  const parsed = Number.parseInt(value ?? '');
 
   if (Number.isNaN(parsed)) {
     return fallback;
   }
 
   return Math.max(parsed, min);
-};
+}
+
+function serialize(value: unknown): string {
+  if (Array.isArray(value)) {
+    return value.join(',');
+  }
+
+  if (typeof value === 'boolean') {
+    return value ? 'true' : 'false';
+  }
+
+  return String(value);
+}

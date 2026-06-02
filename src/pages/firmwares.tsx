@@ -30,10 +30,13 @@ export default function Firmwares() {
     <Content>
       <Typography.Title level={4}>{intl.get('MENU_FIRMWARE_LIST')}</Typography.Title>
       <ResourceTable
-        columns={Object.values(Fields).map((field) => ({
-          dataIndex: field.name,
-          title: intl.get(field.label)
-        }))}
+        columns={[
+          { dataIndex: Fields.Name.name, title: intl.get(Fields.Name.label), width: '35%' },
+          { dataIndex: Fields.Version.name, title: intl.get(Fields.Version.label), width: 200 },
+          { dataIndex: Fields.ProductId.name, title: intl.get(Fields.ProductId.label), width: 200 },
+          { dataIndex: Fields.Crc.name, title: intl.get(Fields.Crc.label), width: 200 },
+          { dataIndex: Fields.BuildTime.name, title: intl.get(Fields.BuildTime.label), width: 200 }
+        ]}
         actionController={{
           api: { delete: deleteOne },
           actions: {

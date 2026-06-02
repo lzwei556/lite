@@ -10,7 +10,7 @@ import { NotFound } from 'pages/not-found';
 import { AssetTree } from 'domain/asset';
 
 const AlarmRuleGroups = lazy(() => import('features/alarm/alarm-group/index'));
-const AlarmRecord = lazy(() => import('pages/alarm-record'));
+const AlarmRecord = lazy(() => import('pages/alarm-records'));
 const Firmwares = lazy(() => import('pages/firmwares'));
 const Users = lazy(() => import('pages/users'));
 const Me = lazy(() => import('pages/me'));
