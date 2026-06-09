@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { Device } from '../../types/device';
 import { PageResult } from 'types/page';
 import { pickOptionsFromNumericEnum } from 'utils';
-import * as FaultType from 'domain/fault-types';
+import * as FaultType from 'domains/fault-types';
 
 type AutoFillParameter = { [Key in keyof typeof autoFillParameter]: number };
 

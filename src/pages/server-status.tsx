@@ -5,7 +5,7 @@ import { Chart, Descriptions, Grid, MutedCard } from 'components';
 import { generateColProps } from 'utils/grid';
 import { ColorHealth } from 'constants/color';
 import { useDataFetch } from 'resource';
-import { get } from 'domain/server-status';
+import { get } from 'domains/server-status';
 
 const getUsedChartOptions = (value: number) => ({
   series: [

@@ -7,9 +7,9 @@ import { buildCustomTooltip, Chart, chartColors } from 'components';
 import { ColorHealth } from 'constants/color';
 import { isMobile } from 'utils/deviceDetection';
 import { ENV, getValue, roundValue } from 'utils';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { AssetTree, PrimaryAsset } from 'domain/asset';
-import * as AlarmLevel from 'domain/alarm-level';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { AssetTree, PrimaryAsset } from 'domains/asset';
+import * as AlarmLevel from 'domains/alarm-level';
 
 export const FlangeMonitoringPointsCircleChart = ({
   asset,

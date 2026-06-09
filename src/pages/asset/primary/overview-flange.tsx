@@ -1,7 +1,7 @@
 import { Col } from 'antd';
 import { AlarmsObjectStatistics, AssetRow, SensorsStatistics } from 'asset-common';
 import { Grid, MutedCard } from 'components';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 import {
   CustomizableIntervals,
   FakeVSRealChart,

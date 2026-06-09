@@ -6,7 +6,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { getOptionLabelByValue } from 'utils';
 import { basicFieldColumns } from './columns';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 import { deleteMeasurement } from 'monitoring-point/services';
 
 export const AttributeTable = ({

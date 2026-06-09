@@ -1,13 +1,12 @@
 import React from 'react';
 import { ReportTable } from '../components/table';
 import intl from 'react-intl-universal';
-import { getAlarmDetail } from '../../alarm/alarm-group';
+import { getAlarmDetail } from 'domains/alarm-rule';
 import { Dayjs } from '../../../utils';
 import { ReportSection } from '../components/section';
-import { AlarmLevelTag } from 'domain/alarm-level';
+import { AlarmLevelTag } from 'domains/alarm-level';
 
 export const AlarmRecordsSection = ({ alarmRecords }: { alarmRecords: any }) => {
-
   return (
     <ReportSection title='未处理报警小结'>
       <ReportTable

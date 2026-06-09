@@ -3,8 +3,8 @@ import intl from 'react-intl-universal';
 import { AXIS_ALIAS, getDataOfMonitoringPoint, HistoryData, Point } from '../monitoring-point';
 import { AssetRow } from '../asset-common';
 import { Dayjs, getValue } from '../utils';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Feature from 'domains/feature-property';
 
 export type PropertyItem = {
   selected: boolean;

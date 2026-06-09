@@ -15,7 +15,7 @@ import { AssetsWindTurbine } from './wind-turbine/assets';
 import { SettingsTableTabs } from 'features/asset-list';
 import { Permission, useCan } from 'providers/access-control';
 import { AssetNavigator } from 'features/asset-tree';
-import { FolderAsset } from 'domain/asset';
+import { FolderAsset } from 'domains/asset';
 import { useAssetsContext } from 'providers/assets';
 
 export default function Index({ asset }: { asset: AssetRow }) {

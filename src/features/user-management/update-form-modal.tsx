@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActionModalContext, createSubmitHandler } from 'resource';
-import { Fields, UpdateData, User } from 'domain/user';
+import { Fields, UpdateData, User } from 'domains/user';
 import { ModalWrapper } from 'components/modalWrapper';
 import { Form, ModalProps } from 'antd';
 import intl from 'react-intl-universal';

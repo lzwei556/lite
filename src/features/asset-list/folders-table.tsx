@@ -10,7 +10,7 @@ import { ExportModal } from './export-modal';
 import intl from 'react-intl-universal';
 import { ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import { mapTree } from 'utils/tree';
-import { FolderAsset } from 'domain/asset';
+import { FolderAsset } from 'domains/asset';
 
 export const FolderAssetsTable = ({
   assets,

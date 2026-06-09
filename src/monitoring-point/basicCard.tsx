@@ -3,7 +3,7 @@ import intl from 'react-intl-universal';
 import { Descriptions, DescriptionsProps, MutedCard } from '../components';
 import { getOptionLabelByValue, getValue, truncate } from '../utils';
 import { useAssets } from 'features/monitoring-point-settings/use-basic-form-items';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const BasicCard = ({
   monitoringPoint

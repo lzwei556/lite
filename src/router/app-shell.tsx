@@ -4,7 +4,7 @@ import { createStyles } from 'antd-style';
 import AlertMessageNotification from '../components/notification/alert';
 import { Header, MobileDrawer } from 'features/layout';
 import { useActionController } from 'resource';
-import { Brand } from 'domain/brand';
+import { Brand } from 'domains/brand';
 
 const useStyles = createStyles(({ css }) => ({
   content: css`

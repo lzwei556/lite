@@ -1,5 +1,5 @@
 import { SelectFormItem } from 'components';
-import { Fields } from 'domain/user';
+import { Fields } from 'domains/user';
 import { ProfileContext } from 'providers/user-profile';
 import React from 'react';
 

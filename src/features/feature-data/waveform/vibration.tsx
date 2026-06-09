@@ -5,7 +5,7 @@ import { PROPERTIES_WITH_ENVELOPE } from './common';
 import { Checkbox, CheckboxChangeEvent, Space } from 'antd';
 import intl from 'react-intl-universal';
 import { useGlobalStyles } from 'styles';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 type Props = {
   axis: MonitoringPoint.Settings.AxisWithVibrationDirection;

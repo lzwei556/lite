@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRequest } from 'ahooks';
 import { useGetIdentity } from './auth';
-import { getMyCasbin } from 'domain/profile';
+import { getMyCasbin } from 'domains/profile';
 
 type CanParams = { resource: string; action: string };
 

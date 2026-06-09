@@ -9,7 +9,7 @@ import {
   getOptions,
   SeriesAlarm
 } from '../../components';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export const PropertyChart = (
   props: {

@@ -5,7 +5,7 @@ import { AssetRow } from 'asset-common';
 import { LightSelectFilter, Table } from 'components';
 import { Props as TabsProps } from './settings-table-tabs';
 import { useColumns } from './columns';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 type Props = Omit<TabsProps, 'asset'> & { assets: AssetRow[]; type: number };
 

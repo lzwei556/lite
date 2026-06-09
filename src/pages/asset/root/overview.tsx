@@ -8,7 +8,7 @@ import { generateColProps } from 'utils/grid';
 import { Icon } from '../folder/icons';
 import { useAssetsContext } from 'providers/assets';
 import { useAppConfig } from 'providers/app';
-import { AssetTree } from 'domain/asset';
+import { AssetTree } from 'domains/asset';
 
 export const Overview = () => {
   const { assets } = useAssetsContext();
@@ -27,7 +27,9 @@ export const Overview = () => {
                     title={
                       <Space size={24}>
                         <Icon asset={item} height={30} width={30} />
-                        <Link to={`/${AssetTree.Path.Assets}/${item.id}-${item.type}`}>{item.name}</Link>
+                        <Link to={`/${AssetTree.Path.Assets}/${item.id}-${item.type}`}>
+                          {item.name}
+                        </Link>
                       </Space>
                     }
                   >

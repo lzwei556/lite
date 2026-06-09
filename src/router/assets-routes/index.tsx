@@ -1,4 +1,4 @@
-import { AssetTree } from 'domain/asset';
+import { AssetTree } from 'domains/asset';
 import { lazy } from 'react';
 import { Navigate, Route } from 'react-router-dom';
 

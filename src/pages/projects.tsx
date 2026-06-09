@@ -13,8 +13,8 @@ import {
   useDeleteProject,
   useUpdateMyProjects
 } from 'features/project-management';
-import { assignUsers, create, deleteOne, Fields, generateToken, update } from 'domain/project';
-import { getMyProjects } from 'domain/profile';
+import { assignUsers, create, deleteOne, Fields, generateToken, update } from 'domains/project';
+import { getMyProjects } from 'domains/profile';
 
 export default function Projects() {
   const list = useSimpleList(getMyProjects);

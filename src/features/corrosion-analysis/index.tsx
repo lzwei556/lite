@@ -16,7 +16,7 @@ import { Range, useAnalysisData } from './useAnalysis';
 import { Overview } from './overview';
 import { ThicknessChart } from './thicknessChart';
 import { MarkList } from './markList';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export type MarkType = 'point' | 'area';
 

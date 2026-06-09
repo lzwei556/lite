@@ -6,8 +6,8 @@ import { PropertyLightSelectFilter } from 'asset-common';
 import { CustmizableIntervalLayout } from '../custmizable-interval-layout';
 import { useCustomizableIntervals } from '../use-services';
 import intl from 'react-intl-universal';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Feature from 'domains/feature-property';
 
 export const CustomizableIntervals = ({
   monitoringPoints,

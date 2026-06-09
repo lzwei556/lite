@@ -4,7 +4,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { generateColProps } from 'utils/grid';
 import { toUniversalFormItemProps } from 'types';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export const FormItemsSettings = ({
   type,

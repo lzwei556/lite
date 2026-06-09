@@ -1,5 +1,5 @@
 import { ColorHealth } from '../constants/color';
-import * as AlarmLevel from 'domain/alarm-level';
+import * as AlarmLevel from 'domains/alarm-level';
 
 enum AssetSpecificStatus {
   Normal

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Project } from 'domain/project';
+import { Project } from 'domains/project';
 import { Result, SelectProps, Spin } from 'antd';
 import { GlobalStore } from '../utils/global-store';
 import intl from 'react-intl-universal';
-import * as ProjectType from 'domain/project-type';
-import { getMyProject, getMyProjects } from 'domain/profile';
-import { getList, Role } from 'domain/role';
+import * as ProjectType from 'domains/project-type';
+import { getMyProject, getMyProjects } from 'domains/profile';
+import { getList, Role } from 'domains/role';
 import { useResourceList, useResourceQuery } from 'resource';
 import { transform } from 'types/page';
 import { Permission, useCan } from './access-control';

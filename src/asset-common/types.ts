@@ -1,6 +1,6 @@
-import { MotorSettings } from 'domain/asset/settings/motor';
+import { MotorSettings } from 'domains/asset/settings/motor';
 import { ProcessDTO } from '../features/process/use-services';
-import { Types } from 'domain/monitoring-point';
+import { Types } from 'domains/monitoring-point';
 import { AssetChildrenStatistics } from './utils/statistics';
 
 export type AssetModel = {
@@ -58,5 +58,3 @@ export type AssetRow = {
   diagnosisIsEnabled: boolean;
   diagnosisPeriod: number;
 };
-
-

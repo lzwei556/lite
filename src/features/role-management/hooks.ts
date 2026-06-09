@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSimpleList } from 'resource';
-import { getTree, Menu } from 'domain/menu';
+import { getTree, Menu } from 'domains/menu';
 import intl from 'react-intl-universal';
-import { Role } from 'domain/role';
+import { Role } from 'domains/role';
 
 interface MenusTreeReturn {
   treeData: any[];

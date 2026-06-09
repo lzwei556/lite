@@ -1,6 +1,6 @@
-import { Asset,  AssetRow } from 'asset-common';
+import { Asset, AssetRow } from 'asset-common';
 import { Card, Descriptions, Link } from 'components';
-import { AssetTree, PrimaryAsset } from 'domain/asset';
+import { AssetTree, PrimaryAsset } from 'domains/asset';
 import { FlangeMonitoringPointsCircleChart, InclinationOffsetsChart } from 'features/feature-data';
 import { Icon } from 'pages/asset/primary/icons';
 import React from 'react';

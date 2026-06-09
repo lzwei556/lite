@@ -5,7 +5,7 @@ import { useModalBindingsProps } from 'hooks';
 import intl from 'react-intl-universal';
 import { ButtonProps } from 'antd';
 import { clearData, URLPathname, useCustomizableInterval } from '../use-services';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export type CustomizableIntervalProps = ReturnType<typeof useCustomizableInterval> & {
   urlPathname: URLPathname;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { notification, Space } from 'antd';
 import intl from 'react-intl-universal';
 import useSocket, { SocketTopic } from '../../socket';
-import { translateMetricName } from '../../features/alarm/alarm-group';
+import { translateMetricName } from 'domains/alarm-rule';
 import { useSelectedProject } from '../../providers/user-profile';
 
 const AlertMessageNotification = () => {

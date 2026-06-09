@@ -24,7 +24,7 @@ import { HistoryData } from '../../../asset-common';
 import { getDisplayProperties } from '../util';
 import { useContext } from '../provider';
 import { CanAccess, Permission } from '../../../providers/access-control';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 const batteryVoltage: Feature.Types.Property = {
   key: 'batteryVoltage',

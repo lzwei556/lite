@@ -12,7 +12,7 @@ import { FormItemsSettings } from './form-items-settings';
 import { useType } from './use-basic-form-items';
 import { AssetModel, AssetRow } from 'asset-common';
 import { generateColProps } from 'utils/grid';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export type UpdateFormProps = {
   loading: boolean;

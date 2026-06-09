@@ -11,7 +11,7 @@ import { DeviceType } from '../../../types/device_type';
 import { DownloadDeviceDataRequest } from '../../../apis/device';
 import { useContext } from '../provider';
 import { downloadFile } from 'utils';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export interface DownloadModalProps extends ModalProps {
   device: Device;

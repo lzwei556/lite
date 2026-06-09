@@ -9,7 +9,7 @@ import { getMarkTypeColor, getMarkTypeLabel, MarkType } from './mark-types';
 import { Property } from '../useTrend';
 import { FaultFrequency } from '../useFaultFrequency';
 import intl from 'react-intl-universal';
-import * as FaultType from 'domain/fault-types';
+import * as FaultType from 'domains/fault-types';
 
 export type MarkParams = {
   x: number[];

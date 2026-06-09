@@ -6,7 +6,7 @@ import { ValuesPropertyName } from 'asset-common';
 import { TrendDataProps } from './useTrend';
 import { useDownloadRawDataHandler } from './useDownladRawDataHandler';
 import { PropertiesSelect, usePropertiesFilters } from './filters';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const Trend = ({
   id,

@@ -5,8 +5,8 @@ import { UpdateFormProps } from './update-form';
 import { useNotificationContext } from 'providers/notification';
 import intl from 'react-intl-universal';
 import { CreateFormProps } from './create-form-modal';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { Component, PrimaryAsset } from 'domain/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { Component, PrimaryAsset } from 'domains/asset';
 
 export const useComponents = (type: number) => {
   const assetCategories = PrimaryAsset.getTypesByMonitoringPointTypes([type]);

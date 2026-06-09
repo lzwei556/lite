@@ -13,7 +13,7 @@ import {
   getList,
   transform,
   update
-} from 'domain/user';
+} from 'domains/user';
 import { ProfileContext } from 'providers/user-profile';
 
 export default function Users() {

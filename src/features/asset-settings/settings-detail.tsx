@@ -2,7 +2,7 @@ import intl from 'react-intl-universal';
 import { getOptionLabelByValue, getValue, truncate } from 'utils';
 import { Descriptions, DescriptionsProps } from 'components';
 import { FieldHelper } from 'types';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export const PrimaryAssetSettingsDetail = ({
   attributes,

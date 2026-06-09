@@ -1,5 +1,5 @@
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { HistoryData,  } from './types';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { HistoryData } from './types';
 
 export const Point = {
   Assert: {

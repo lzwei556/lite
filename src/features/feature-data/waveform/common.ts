@@ -1,6 +1,6 @@
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 import { VibrationPropertyKey, Waveform, WaveformProperty } from '../types';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 const amplitude: WaveformProperty = {
   key: 'mv',

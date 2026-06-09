@@ -18,8 +18,8 @@ import {
 } from 'components';
 import { useGetIdentity, useUpdatePassword } from 'providers/auth';
 import { UpdatePasswordModal } from 'features/auth';
-import { updateProfile } from 'domain/profile';
-import { Fields } from 'domain/user';
+import { updateProfile } from 'domains/profile';
+import { Fields } from 'domains/user';
 
 export default function Me() {
   const [phoneForm] = Form.useForm();

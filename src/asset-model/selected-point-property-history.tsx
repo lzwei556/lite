@@ -3,8 +3,8 @@ import { Card } from '../components';
 import { HistoryDataFea } from '../features';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { Point } from '../monitoring-point';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Feature from 'domains/feature-property';
 
 export const SelectedPointPropertyHistory = () => {
   const { selectedMonitoringPoint, loading, historyData } = useAssetModelContext();

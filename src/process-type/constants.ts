@@ -1,6 +1,6 @@
 import { DeviceType } from '../types/device_type';
 import { ProcessType } from './types';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export enum ProcessTypeKey {
   AutoFill = 101

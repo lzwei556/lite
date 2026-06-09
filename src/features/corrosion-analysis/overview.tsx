@@ -5,7 +5,7 @@ import { Card, Grid } from '../../components';
 import { getValue } from '../../utils/format';
 import { HistoryData } from '../../asset-common';
 import { isCriticalThicknessValid, isInitialThicknessValid } from './useAnalysis';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const Overview = (props: {
   point: MonitoringPoint.Types.Entity;

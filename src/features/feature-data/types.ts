@@ -1,6 +1,6 @@
 import { DataType } from './use-services';
-import * as Axis from 'domain/axis';
-import * as Feature from 'domain/feature-property';
+import * as Axis from 'domains/axis';
+import * as Feature from 'domains/feature-property';
 
 export type Property = {
   key: string;

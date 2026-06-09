@@ -5,7 +5,7 @@ import intl from 'react-intl-universal';
 import { useGlobalStyles } from 'styles';
 import { AssetRow } from 'asset-common';
 import { useCustomizableIntervals } from '../../use-services';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const InclinationGridItem = (props: Props & { colProps?: ColProps }) => {
   const { visible, chartCardProps } = useInclinationGridItemProps(props);

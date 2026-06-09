@@ -1,13 +1,13 @@
 import { Tag } from 'antd';
 import { ResourceTable, useResourceList, useResourceQuery } from 'resource';
-import { AlarmLevelTag, options } from 'domain/alarm-level';
+import { AlarmLevelTag, options } from 'domains/alarm-level';
 import {
   querySchema,
   deleteOne,
   getList,
   Status,
   options as statusOptions
-} from 'domain/alarm-record';
+} from 'domains/alarm-record';
 import { Permission, useCan } from 'providers/access-control';
 import React from 'react';
 import intl from 'react-intl-universal';

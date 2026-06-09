@@ -130,11 +130,14 @@ export const ResourceTable = <T extends BaseEntity>({
         columns={mergedColumns}
         dataSource={getDataSource()}
         header={{
-          toolbar:
-            header ??
-            toolbarActions.map(([key, action]) => (
-              <ActionButton key={key} actionKey={key} action={action} open={open} />
-            ))
+          toolbar: (
+            <>
+              {header}
+              {toolbarActions.map(([key, action]) => (
+                <ActionButton key={key} actionKey={key} action={action} open={open} />
+              ))}
+            </>
+          )
         }}
         loading={loading}
         onChange={handleTableChange}

@@ -10,8 +10,8 @@ import { HistoryDataFea } from '..';
 import { getDefaultLines, transformAnalysis } from './useAnalysis';
 import { Toolbar } from './toolbar';
 import { MarkType } from '.';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Feature from 'domains/feature-property';
 
 export const ThicknessChart = (
   props: MonitoringPoint.Types.Entity & {

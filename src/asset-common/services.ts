@@ -2,7 +2,7 @@ import request from '../utils/request';
 import { DeleteResponse, GetResponse, PutResponse } from '../utils/response';
 import { HistoryData } from '.';
 import { AssetModel } from './types';
-import { Types } from 'domain/asset';
+import { Types } from 'domains/asset';
 
 export function getAssets(filters?: Partial<Pick<AssetModel, 'type' | 'parent_id' | 'id'>>) {
   return request.get<Types.DTO[]>(`/assets`, { ...filters }).then(GetResponse);

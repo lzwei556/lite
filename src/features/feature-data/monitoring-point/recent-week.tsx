@@ -3,8 +3,8 @@ import { RecentWeek } from '../common/recent-week';
 import { useRecentWeek } from '../use-services';
 import { InclinationGridItem } from './inclination/inclination-offset';
 import { getColProps } from '../common/use-recent-week-props';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Feature from 'domains/feature-property';
 
 export const RecentWeekMonitoringPointData = ({
   id,

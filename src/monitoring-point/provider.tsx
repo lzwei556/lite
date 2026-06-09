@@ -1,9 +1,8 @@
 import React from 'react';
 import { Spin } from 'antd';
-import { AlarmRule } from '../features/alarm/alarm-group/types';
+import { AlarmRule, getList } from 'domains/alarm-rule';
 import { SeriesAlarm } from '../components';
-import { getAlarmRules } from '../features/alarm/alarm-group/services';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 const MonitorPointContext = React.createContext<{
   ruleGroups: AlarmRule[];
@@ -21,13 +20,13 @@ export const MonitoringPointProvider = ({
   const [ruleGroups, setRuleGroups] = React.useState<AlarmRule[]>([]);
   React.useEffect(() => {
     setLoading(true);
-    getAlarmRules(id)
+    getList(id)
       .then(setRuleGroups)
       .finally(() => setLoading(false));
   }, [id]);
 
   const refresh = () => {
-    getAlarmRules(id).then(setRuleGroups);
+    getList(id).then(setRuleGroups);
   };
   return (
     <MonitorPointContext.Provider value={{ ruleGroups, refresh }}>

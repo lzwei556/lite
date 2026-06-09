@@ -5,7 +5,7 @@ import { Col, Progress, Space } from 'antd';
 import { generateColProps } from 'utils/grid';
 import BoxSvg from './box.svg';
 import React from 'react';
-import { Component } from 'domain/asset';
+import { Component } from 'domains/asset';
 
 export const ComponentsHealthyList = ({
   cardProps,

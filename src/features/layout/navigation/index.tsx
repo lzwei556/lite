@@ -1,8 +1,8 @@
 import { MenuProps, Menu as AntdMenu } from 'antd';
 import { Link } from 'components';
-import { AssetTree } from 'domain/asset';
-import { Menu } from 'domain/menu';
-import { useMyMenus } from 'domain/profile';
+import { AssetTree } from 'domains/asset';
+import { Menu } from 'domains/menu';
+import { useMyMenus } from 'domains/profile';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { useLocation } from 'react-router-dom';

@@ -4,10 +4,9 @@ import intl from 'react-intl-universal';
 import { ModalWrapper } from 'components/modalWrapper';
 import { FormItem } from 'components';
 import { toUniversalFormItemProps } from 'types';
-import { Fields, createPasswordConfirmField } from 'domain/user';
-import { UpdatePasswordData } from 'domain/auth';
+import { Fields, createPasswordConfirmField } from 'domains/user';
+import { UpdatePasswordData } from 'domains/auth';
 import { ActionModalContext, createSubmitHandler } from 'resource';
-
 
 export function UpdatePasswordModal(ctx: ActionModalContext<any, UpdatePasswordData>) {
   const { open, close, submit, loading } = ctx;

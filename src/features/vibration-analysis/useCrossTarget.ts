@@ -1,6 +1,6 @@
 import React from 'react';
-import { getMeasurement, getMeasurements, } from 'asset-common';
-import * as MonitoringPoint from 'domain/monitoring-point'
+import { getMeasurement, getMeasurements } from 'asset-common';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export function useCrossTarget(id: number) {
   const [points, setPoints] = React.useState<

@@ -1,8 +1,8 @@
 import { AssetStatusTag } from 'asset-common';
 import { Link } from 'components';
-import { AssetTree } from 'domain/asset';
-import * as Feature from 'domain/feature-property';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import { AssetTree } from 'domains/asset';
+import * as Feature from 'domains/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
 import { useLocaleContext } from 'localeProvider';
 import intl from 'react-intl-universal';
 import { getDisplayName, getValue } from 'utils';

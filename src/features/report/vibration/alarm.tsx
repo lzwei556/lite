@@ -1,6 +1,6 @@
 import React from 'react';
 import intl from 'react-intl-universal';
-import { getAlarmDetail } from '../../alarm/alarm-group';
+import { getAlarmDetail } from 'domains/alarm-rule';
 import { Dayjs } from '../../../utils';
 import { Table } from '../../../components';
 import { getLabelByValue } from '../../alarm';

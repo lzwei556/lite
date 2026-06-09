@@ -17,9 +17,9 @@ import { FillRecords, ProcessList } from 'features/process';
 import { ProcessTypeKey } from 'process-type';
 import { AssetNavigator } from 'features/asset-tree';
 import { AlarmRuleSetting } from './alarm';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 import { useAppConfig } from 'providers/app';
-import { Hooks } from 'domain/asset';
+import { Hooks } from 'domains/asset';
 import { AlarmRecordsTable } from 'features/alarm-records-query';
 
 export default function Index2({

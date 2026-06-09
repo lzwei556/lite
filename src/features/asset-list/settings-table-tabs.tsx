@@ -7,7 +7,7 @@ import intl from 'react-intl-universal';
 import { PrimaryAssetSettingsTable } from './settings-table';
 import { CanAccess, Permission } from 'providers/access-control';
 import { PlusOutlined } from '@ant-design/icons';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export type Props = {
   asset: AssetRow;

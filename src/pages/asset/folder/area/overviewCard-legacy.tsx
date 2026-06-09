@@ -6,8 +6,8 @@ import { useGlobalStyles } from 'styles';
 import { Card, Flex, Link } from 'components';
 import { getValue } from 'utils/format';
 import { Icon as PrimaryIcon } from '../../primary/icons';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { AssetTree } from 'domain/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { AssetTree } from 'domains/asset';
 
 export const OverviewCardLegacy = ({ asset }: { asset: AssetRow }) => {
   const { id, monitoringPoints = [], name, type } = asset;

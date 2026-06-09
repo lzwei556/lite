@@ -1,5 +1,5 @@
 import { AssetRow } from 'asset-common';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 import { useAssetsContext } from 'providers/assets';
 import React from 'react';
 import { mapTree } from 'utils/tree';

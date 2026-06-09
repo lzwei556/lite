@@ -9,8 +9,8 @@ import { mapTree, tree2List } from 'utils/tree';
 import { downloadFile } from 'utils/download';
 import { getFilename } from 'utils';
 import { ModalWrapper } from 'components/modalWrapper';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { AssetTree } from 'domain/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { AssetTree } from 'domains/asset';
 
 export const DownloadModal = ({ assets, ...rest }: { assets: AssetRow[] } & ModalProps) => {
   const { numberedRange, setRange } = useRange();

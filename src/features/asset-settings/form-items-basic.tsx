@@ -6,7 +6,7 @@ import { useParents, useType } from './use-basic-form-items';
 import { useFormItemBindingsProps } from 'hooks';
 import intl from 'react-intl-universal';
 import { AssetRow } from 'asset-common';
-import { FolderAsset, PrimaryAsset } from 'domain/asset';
+import { FolderAsset, PrimaryAsset } from 'domains/asset';
 
 export const FormItemsBasic = ({
   formItemColProps = generateColProps({}),

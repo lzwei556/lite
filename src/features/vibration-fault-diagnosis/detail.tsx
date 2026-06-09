@@ -11,8 +11,8 @@ import { ZoneScoreTable } from './iso-zone-table';
 import intl from 'react-intl-universal';
 import { getDisplayName, roundValue } from 'utils';
 import { useLocaleContext } from 'localeProvider';
-import { Component } from 'domain/asset';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import { Component } from 'domains/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const FaultDiagnosisDetail = (
   props: FaultDiagnosis & {

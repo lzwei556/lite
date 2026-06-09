@@ -4,9 +4,9 @@ import { Card, CardProps, LineChart } from 'components';
 import { AssetRow, MONITORING_POINT } from 'asset-common';
 import { roundValue } from 'utils/format';
 import { FlangeStatusData } from './use-services';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Feature from 'domain/feature-property';
-import { PrimaryAsset } from 'domain/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Feature from 'domains/feature-property';
+import { PrimaryAsset } from 'domains/asset';
 
 export const FakeVSRealChart = ({
   asset,

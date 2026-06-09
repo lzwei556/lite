@@ -5,7 +5,7 @@ import { MarkList, MarkType } from './mark';
 import { AssetRow } from 'asset-common';
 import { PrimaryAssetSettingsDetail } from 'features/asset-settings';
 import { AnalysisSidebarCollapse } from 'components';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export const SidebarMarkList = ({ asset, markType }: { asset: AssetRow; markType: MarkType }) => {
   return (
@@ -25,10 +25,7 @@ export const SidebarMarkList = ({ asset, markType }: { asset: AssetRow; markType
               <PrimaryAssetSettingsDetail
                 attributes={asset.attributes}
                 type={asset.type}
-                groups={[
-                  PrimaryAsset.SettingsGroup.Motor,
-                  PrimaryAsset.SettingsGroup.Bearing
-                ]}
+                groups={[PrimaryAsset.SettingsGroup.Motor, PrimaryAsset.SettingsGroup.Bearing]}
                 maxHeight={400}
                 labelStyle={{ minWidth: '5em' }}
                 contentStyle={{ justifyContent: 'flex-start' }}

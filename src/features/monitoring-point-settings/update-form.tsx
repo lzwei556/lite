@@ -11,7 +11,7 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { useType } from './use-basic-form-items';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export type UpdateFormProps = {
   loading: boolean;

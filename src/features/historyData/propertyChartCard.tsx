@@ -7,7 +7,7 @@ import { getDisplayName, getValue } from '../../utils/format';
 import { HistoryData } from '../../asset-common';
 import { useGlobalStyles } from '../../styles';
 import { PropertyChart, transform } from './propertyChart';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export const PropertyChartCard = (props: {
   data?: HistoryData;

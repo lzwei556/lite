@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from '../components';
 import { getPropertyItems, useAssetModelContext } from './context';
 import { Dayjs } from '../utils';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { AssetTree } from 'domain/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { AssetTree } from 'domains/asset';
 
 export const usePlaceCards = (selected?: boolean) => {
   const { monitoringPoints, setMonitoringPoints } = useAssetModelContext();

@@ -5,7 +5,7 @@ import { ModalFormProps } from 'types/common';
 import { Grid } from 'components';
 import { FormItemsBasic } from './form-items-basic';
 import { AssetModel, AssetRow } from 'asset-common';
-import { FolderAsset } from 'domain/asset';
+import { FolderAsset } from 'domains/asset';
 import intl from 'react-intl-universal';
 
 type CreateFormProps = {

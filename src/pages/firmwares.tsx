@@ -8,7 +8,7 @@ import {
 import { Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { Upload } from 'components';
-import { deleteOne, Fields, getList, upload } from 'domain/firmware';
+import { deleteOne, Fields, getList, upload } from 'domains/firmware';
 import { Permission, useCan } from 'providers/access-control';
 import React from 'react';
 import intl from 'react-intl-universal';

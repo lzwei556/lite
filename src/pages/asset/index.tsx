@@ -1,4 +1,4 @@
-import { Hooks } from 'domain/asset';
+import { Hooks } from 'domains/asset';
 import { TreeNodeDetail } from 'features/asset-tree';
 import { lazy } from 'react';
 import { useParams } from 'react-router-dom';

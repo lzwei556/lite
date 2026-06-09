@@ -2,7 +2,7 @@ import { GlobalStyles, useGlobalStyles } from 'styles';
 import { generateColProps } from 'utils/grid';
 import { CollapseProps, ColProps } from 'antd';
 import { FeatureDataDTO } from '../types';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export type RecentWeekProps = {
   properties: Feature.Types.Property[];

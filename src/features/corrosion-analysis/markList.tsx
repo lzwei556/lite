@@ -9,7 +9,7 @@ import {
 } from '../../components';
 import { useLocaleContext } from '../../localeProvider';
 import { MarkType } from '.';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export const MarkList = ({
   property,

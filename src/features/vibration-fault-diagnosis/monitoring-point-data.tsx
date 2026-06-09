@@ -1,7 +1,7 @@
 import { Empty, Space, Typography } from 'antd';
 import { LineChart, MutedCard } from 'components';
-import * as Feature from 'domain/feature-property';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as Feature from 'domains/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
 import { useOriginalDomain } from 'features/vibration-analysis/useOriginalDomain';
 import { useTimeDomain } from 'features/vibration-analysis/useTimeDomain';
 import { SVT_OPTIONS } from 'features/vibration-analysis/useTrend';

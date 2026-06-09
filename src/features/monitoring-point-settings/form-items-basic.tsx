@@ -7,8 +7,8 @@ import { DeviceSelect } from './device-select';
 import { generateColProps } from 'utils/grid';
 import { useAssets, useType } from './use-basic-form-items';
 import { useComponents } from './hooks';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { PrimaryAsset } from 'domain/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { PrimaryAsset } from 'domains/asset';
 
 export const FormItemsBasic = ({
   assetSelectFormItem,

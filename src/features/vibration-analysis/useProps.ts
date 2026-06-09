@@ -3,7 +3,7 @@ import { TimeDomainData, useTimeDomainList, UseTimeDomainListResult } from './us
 import { OriginalDomainResponse, useOriginalDomain } from './useOriginalDomain';
 import { Property } from './useTrend';
 import { AssetRow } from 'asset-common';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export type Filters = {
   axis: MonitoringPoint.Settings.AxisWithVibrationDirection;

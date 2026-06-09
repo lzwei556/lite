@@ -3,7 +3,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import { AssetsProvider } from 'providers/assets';
 import { AssetTree } from 'features/asset-tree';
 import { Icon } from 'pages/asset/tree-icon';
-import { Hooks } from 'domain/asset';
+import { Hooks } from 'domains/asset';
 import { PageWithSideBar } from 'features/layout';
 
 export default function Layout({ children }: { children?: React.ReactNode }) {

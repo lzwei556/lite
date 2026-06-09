@@ -1,7 +1,7 @@
 import { Col } from 'antd';
 import { AssetRow, StatisticBar } from 'asset-common';
 import { Grid, MutedCard } from 'components';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 import {
   CustomizableIntervals,
   FakeVSRealChart,

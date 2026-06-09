@@ -7,7 +7,7 @@ import {
   PutResponse
 } from '../utils/response';
 import { DataType, HarmonicData, HistoryData, VibrationAnalysisRequest } from './types';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export function getMeasurements(filters?: Pick<MonitoringPoint.Types.PostDTO, 'asset_id'>) {
   return request

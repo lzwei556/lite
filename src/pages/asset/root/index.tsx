@@ -14,7 +14,7 @@ import {
 } from 'features/asset-settings';
 import { generateColProps } from 'utils/grid';
 import { useAssetsContext } from 'providers/assets';
-import { Hooks } from 'domain/asset';
+import { Hooks } from 'domains/asset';
 import { useAppConfig } from 'providers/app';
 
 export default function Index() {

@@ -8,7 +8,7 @@ import { generateColProps } from 'utils/grid';
 import { AssetModel } from 'asset-common';
 import { Grid, TextFormItem } from 'components';
 import { UpdateFormProps } from '../update-form';
-import { FolderAsset } from 'domain/asset';
+import { FolderAsset } from 'domains/asset';
 
 export const UpdateFolderAssetFormModal = ({
   editingAsset,

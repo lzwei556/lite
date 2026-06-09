@@ -3,12 +3,12 @@ import { Breadcrumb, BreadcrumbProps, Dropdown, MenuProps, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { mapTree, tree2List } from '../../utils/tree';
 import { truncate } from '../../utils/format';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 import { Link } from '../../components';
 import { AssetRow } from 'asset-common/types';
 import { useAssetsContext } from 'providers/assets';
 import { AssetStatusTag } from 'asset-common/components';
-import { AssetTree, Hooks } from 'domain/asset';
+import { AssetTree, Hooks } from 'domains/asset';
 
 export type TreeFlatListItem = AssetTree.Node & { path: number[] };
 

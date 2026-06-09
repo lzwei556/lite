@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import { Descriptions, Link, MutedCard } from '../components';
 import { SingleDeviceStatus } from '../device/SingleDeviceStatus';
 import { toMac } from '../utils/format';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const RelatedDeviceCard = ({
   monitoringPoint

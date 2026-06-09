@@ -7,9 +7,9 @@ import { assetsRoutes } from './assets-routes';
 import { devicesRoutes } from './devices-routes';
 import { reportsRoutes } from './routes/reports';
 import { NotFound } from 'pages/not-found';
-import { AssetTree } from 'domain/asset';
+import { AssetTree } from 'domains/asset';
 
-const AlarmRuleGroups = lazy(() => import('features/alarm/alarm-group/index'));
+const AlarmRuleGroups = lazy(() => import('pages/alarm-rules'));
 const AlarmRecord = lazy(() => import('pages/alarm-records'));
 const Firmwares = lazy(() => import('pages/firmwares'));
 const Users = lazy(() => import('pages/users'));

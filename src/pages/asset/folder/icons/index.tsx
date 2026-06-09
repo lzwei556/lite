@@ -6,7 +6,7 @@ import { useGlobalStyles } from 'styles';
 import { Flex } from 'components';
 import { ReactComponent as WindSvg } from './wind_turbine.svg';
 import { ReactComponent as GeneralSvg } from './general.svg';
-import { FolderAsset } from 'domain/asset';
+import { FolderAsset } from 'domains/asset';
 
 export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRow }) => {
   const { asset, ...rest } = props;

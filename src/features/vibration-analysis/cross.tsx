@@ -9,7 +9,7 @@ import { useOriginalDomain } from './useOriginalDomain';
 import { cross } from 'monitoring-point/services';
 import { getValue } from 'utils';
 import { AnalysisProps } from './useProps';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const Cross = ({
   monitoringPoint: { id },

@@ -7,7 +7,7 @@ import type { LineSeriesOption } from 'echarts/charts';
 import type { ECOptions, ECSerionOptions } from './chart';
 import type { YAxisMeta } from './useYAxisOptions';
 import { chartColors } from './utils';
-import * as AlarmLevel from 'domain/alarm-level'
+import * as AlarmLevel from 'domains/alarm-level';
 
 export interface SeriesOption {
   data: { [name: string]: number[] };

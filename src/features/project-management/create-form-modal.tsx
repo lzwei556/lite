@@ -1,7 +1,7 @@
 import { ModalProps, Form } from 'antd';
 import { FormItem } from 'components';
 import { ModalWrapper } from 'components/modalWrapper';
-import { CreateData, Fields, useProjectTypeField } from 'domain/project';
+import { CreateData, Fields, useProjectTypeField } from 'domains/project';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { ActionModalContext, createSubmitHandler } from 'resource';

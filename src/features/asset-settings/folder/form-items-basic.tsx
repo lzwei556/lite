@@ -1,7 +1,7 @@
 import { Col, ColProps } from 'antd';
 import { AssetRow } from 'asset-common';
 import { SelectFormItem, TextFormItem } from 'components';
-import { FolderAsset } from 'domain/asset';
+import { FolderAsset } from 'domains/asset';
 import { useAssetsContext } from 'providers/assets';
 import intl from 'react-intl-universal';
 import { generateColProps } from 'utils/grid';

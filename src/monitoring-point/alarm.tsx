@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { Button, Space, Spin, TableProps, Tag } from 'antd';
 import intl from 'react-intl-universal';
-import { AlarmRule } from '../features/alarm/alarm-group/types';
-import { translateMetricName } from '../features/alarm/alarm-group';
-import {
-  bindMeasurementsToAlarmRule,
-  getAlarmRules,
-  unbindMeasurementsToAlarmRule
-} from '../features/alarm/alarm-group/services';
+import { AlarmRule, bind, getList, translateMetricName, unbind } from 'domains/alarm-rule';
 import { Table } from '../components';
 import { useMonitoringPointContext } from './provider';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { AlarmLevelTag } from 'domain/alarm-level';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { AlarmLevelTag } from 'domains/alarm-level';
 
 export const AlarmRuleSetting = ({ point }: { point: MonitoringPoint.Types.Entity }) => {
   const [rules, setRules] = React.useState<AlarmRule[]>();
@@ -87,12 +81,10 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPoint.Types.Entit
                 danger={true}
                 onClick={() => {
                   updateRow(row.id, { bindingStatus: true });
-                  unbindMeasurementsToAlarmRule(row.id, { monitoring_point_ids: [point.id] }).then(
-                    () => {
-                      updateRow(row.id, { bindedStatus: false, bindingStatus: false });
-                      refresh();
-                    }
-                  );
+                  unbind(row.id, { monitoring_point_ids: [point.id] }).then(() => {
+                    updateRow(row.id, { bindedStatus: false, bindingStatus: false });
+                    refresh();
+                  });
                 }}
               >
                 {row.bindingStatus ? <Spin /> : intl.get('REMOVE')}
@@ -104,12 +96,10 @@ export const AlarmRuleSetting = ({ point }: { point: MonitoringPoint.Types.Entit
                 title={intl.get('BIND')}
                 onClick={() => {
                   updateRow(row.id, { bindingStatus: true });
-                  bindMeasurementsToAlarmRule(row.id, { monitoring_point_ids: [point.id] }).then(
-                    () => {
-                      updateRow(row.id, { bindedStatus: true, bindingStatus: false });
-                      refresh();
-                    }
-                  );
+                  bind(row.id, { monitoring_point_ids: [point.id] }).then(() => {
+                    updateRow(row.id, { bindedStatus: true, bindingStatus: false });
+                    refresh();
+                  });
                 }}
               >
                 {row.bindingStatus ? <Spin /> : intl.get('BIND')}

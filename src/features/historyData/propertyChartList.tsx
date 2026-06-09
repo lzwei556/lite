@@ -3,7 +3,7 @@ import { LineChart, LineChartProps, SeriesOption } from '../../components';
 import { Dayjs } from '../../utils';
 import { hasData, HistoryData } from '../../asset-common';
 import { transform } from './propertyChart';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export const PropertyChartList = (
   props: {

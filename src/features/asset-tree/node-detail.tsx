@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAssetsContext } from 'providers/assets';
 import { AssetRow } from 'asset-common';
-import { FolderAsset } from 'domain/asset';
-import * as MonitoringPointNS from 'domain/monitoring-point';
+import { FolderAsset } from 'domains/asset';
+import * as MonitoringPointNS from 'domains/monitoring-point';
 
 export const TreeNodeDetail = ({
   AssetFolder,

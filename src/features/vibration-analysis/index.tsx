@@ -9,9 +9,13 @@ import { Trend } from './trend';
 import { SidebarProvider } from './mark/sidebar';
 import { AxisSelect, PropertiesSelect, useAxisFilters, usePropertiesFilters } from './filters';
 import { useAnalysisDataProps, useAnalysisTabsProps } from './useProps';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
-type Props = { id: number; attributes: MonitoringPoint.Types.Entity['attributes']; asset: AssetRow };
+type Props = {
+  id: number;
+  attributes: MonitoringPoint.Types.Entity['attributes'];
+  asset: AssetRow;
+};
 
 export const VibrationAnalysis = (props: Props) => {
   const { numberedRange, setRange } = useRange();

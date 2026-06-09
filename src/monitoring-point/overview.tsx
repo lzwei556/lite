@@ -6,9 +6,13 @@ import { RelatedDeviceCard } from './relatedDeviceCard';
 import intl from 'react-intl-universal';
 import { RecentWeekMonitoringPointData } from 'features/feature-data';
 import { useGetSeriesAlarm } from './provider';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
-export const Overview = ({ monitoringPoint }: { monitoringPoint: MonitoringPoint.Types.Entity }) => {
+export const Overview = ({
+  monitoringPoint
+}: {
+  monitoringPoint: MonitoringPoint.Types.Entity;
+}) => {
   return (
     <Grid wrap={false}>
       <Col flex='auto'>

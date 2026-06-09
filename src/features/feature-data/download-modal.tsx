@@ -13,7 +13,7 @@ import {
   URLPathname,
   useDownloadSubmit
 } from './use-services';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 type Props = ModalFormProps & {
   id: number;

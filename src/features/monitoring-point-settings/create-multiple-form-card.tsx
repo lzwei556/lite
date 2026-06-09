@@ -12,7 +12,7 @@ import React from 'react';
 import intl from 'react-intl-universal';
 import { truncate } from 'utils';
 import { CreateFormModal } from './create-form-modal';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 type Item = { _id: string } & MonitoringPoint.Types.PostDTO;
 

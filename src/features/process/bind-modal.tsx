@@ -9,7 +9,7 @@ import { ParameterFormItem, ProcessType } from '../../process-type';
 import { SelectFormItem, TextFormItem } from '../../components';
 import { CommonProps, sourceIdField, typeField } from './common';
 import { Option } from 'common/types';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 type Props = ModalFormProps & CommonProps;
 

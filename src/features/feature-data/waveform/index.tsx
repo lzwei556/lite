@@ -8,8 +8,8 @@ import { VibrationPropertyKey } from '../types';
 import intl from 'react-intl-universal';
 import { PropertyLightSelectFilter } from 'asset-common';
 import { Select } from 'antd';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Axis from 'domain/axis';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Axis from 'domains/axis';
 
 export const MonitoringPointWaveform = (props: MonitoringPoint.Types.Entity) => {
   const { getAxisSelectProps, getPropertiesSelectProps, vibrationFilters, ...rest } =

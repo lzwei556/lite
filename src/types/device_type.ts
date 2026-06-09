@@ -1,4 +1,4 @@
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export enum DeviceType {
   Gateway = 0x1,

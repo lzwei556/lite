@@ -7,7 +7,7 @@ import { ReactComponent as CorrosionSvg } from './corrosion.svg';
 import { ReactComponent as DeviceSvg } from './device.svg';
 import { ReactComponent as FlangeSvg } from './flange.svg';
 import { ReactComponent as TowerSvg } from './tower.svg';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export const Icon = (props: Partial<CustomIconComponentProps> & { asset: AssetRow }) => {
   const { asset, ...rest } = props;

@@ -14,7 +14,7 @@ import {
 } from './form-items-basic';
 import { FormItemsAttributes } from './form-items-attributes';
 import { UpdateFormProps } from './update-form';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const UpdateFormModal = ({
   onSuccess,
@@ -39,7 +39,11 @@ export const UpdateFormModal = ({
         title: intl.get('EDIT_SOMETHING', { something: intl.get('monitoring.points') })
       }}
     >
-      <Form form={form} layout='vertical' initialValues={MonitoringPoint.Types.transform2PostDTO(monitoringPoint)}>
+      <Form
+        form={form}
+        layout='vertical'
+        initialValues={MonitoringPoint.Types.transform2PostDTO(monitoringPoint)}
+      >
         <Grid>
           <FormItemsBasic
             {...{

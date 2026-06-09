@@ -3,7 +3,7 @@ import { floor } from 'lodash';
 import { Dayjs } from '../../utils';
 import { ColorHealth } from '../../constants/color';
 import { getThicknessAnalysis, HistoryData, ThicknessAnalysis } from '../../asset-common';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export type Range = [number, number];
 type Line = [start: [string, number], end: [string, number]];

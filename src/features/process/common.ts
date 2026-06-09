@@ -1,6 +1,6 @@
 import { Device } from '../../types/device';
 import { ProcessDTO } from './use-services';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const typeField = {
   label: 'process.type',

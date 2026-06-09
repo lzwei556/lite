@@ -1,6 +1,6 @@
 import { Col, ColProps, FormItemProps } from 'antd';
 import { FormItem } from 'components';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 import React from 'react';
 import { toUniversalFormItemProps } from 'types';
 import { generateColProps } from 'utils/grid';

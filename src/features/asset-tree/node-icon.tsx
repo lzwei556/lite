@@ -1,7 +1,7 @@
 import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 import { AssetRow } from 'asset-common';
-import { FolderAsset, PrimaryAsset } from 'domain/asset';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import { FolderAsset, PrimaryAsset } from 'domains/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
 import React from 'react';
 
 type IconProps = Partial<CustomIconComponentProps>;

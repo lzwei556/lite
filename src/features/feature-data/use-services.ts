@@ -3,7 +3,7 @@ import { FeatureDataDTO, VibrationWaveformFilters, WaveformData } from './types'
 import { useRequest } from 'ahooks';
 import { Dayjs } from 'utils';
 import React from 'react';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 const CUSTOM_RANGE = Dayjs.CommonRange.PastWeek;
 const RECENT_RANGE = Dayjs.CommonRange.PastWeek;

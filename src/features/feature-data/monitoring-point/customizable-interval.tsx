@@ -1,8 +1,8 @@
 import React from 'react';
 import { CustomizableInterval } from '../common/customizable-interval';
 import { useCustomizableInterval } from '../use-services';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Feature from 'domain/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Feature from 'domains/feature-property';
 
 export const CustomizableIntervalMonitoringPointData = ({
   id,

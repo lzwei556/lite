@@ -7,7 +7,7 @@ import { useRange } from 'components';
 import { Dayjs } from 'utils';
 import { AssetRow, PropertyLightSelectFilter } from 'asset-common';
 import { FakeVSRealChart } from './fakeVSRealChart';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const FlangeStatus = (props: AssetRow) => {
   const { timestamps, ...rest } = useLayoutProps(props.id);

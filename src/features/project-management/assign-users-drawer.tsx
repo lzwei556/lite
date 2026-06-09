@@ -1,7 +1,7 @@
 import { Checkbox, Col, Drawer, DrawerProps, Form, Spin } from 'antd';
 import { ActionModalContext, createSubmitHandler, useSimpleList } from 'resource';
 import { CheckboxFormItem, Grid, MutedCard, SaveIconButton } from 'components';
-import { Fields, getAssignedUsers, Project, UserAssignmentData } from 'domain/project';
+import { Fields, getAssignedUsers, Project, UserAssignmentData } from 'domains/project';
 import React from 'react';
 import intl from 'react-intl-universal';
 

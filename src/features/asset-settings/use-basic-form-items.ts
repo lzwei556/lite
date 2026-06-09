@@ -2,7 +2,7 @@ import { AssetRow } from 'asset-common';
 import React from 'react';
 import { mapTree } from 'utils/tree';
 import { useAssetsContext } from 'providers/assets';
-import { FolderAsset } from 'domain/asset';
+import { FolderAsset } from 'domains/asset';
 
 export const useType = (type?: number) => {
   const [selectedType, setSelectedType] = React.useState(type);

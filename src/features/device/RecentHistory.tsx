@@ -11,7 +11,7 @@ import { useGlobalStyles } from '../../styles';
 import { HistoryData } from '../../asset-common';
 import { HistoryDataFea } from '..';
 import { getDisplayProperties } from './util';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
   const channels = DeviceType.getChannels(device.typeId);
@@ -56,7 +56,9 @@ export const RecentHistory: React.FC<{ device: Device }> = ({ device }) => {
       </Card>
     );
   } else if (DeviceType.isVibration(device.typeId)) {
-    const groups = Feature.Property.getGrouped(getDisplayProperties(device.properties, device.typeId));
+    const groups = Feature.Property.getGrouped(
+      getDisplayProperties(device.properties, device.typeId)
+    );
     return (
       <Collapse
         bordered={false}

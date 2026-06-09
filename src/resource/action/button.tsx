@@ -28,7 +28,9 @@ export const ActionButton = <T extends BaseEntity>({
       <IconButton
         icon={<PlusOutlined />}
         onClick={() => open(key)}
-        tooltipProps={{ title: intl.get('CREATE_USER') }}
+        tooltipProps={{
+          title: action.label ? intl.get(action.label).d(action.label) : action.label
+        }}
         type='primary'
       />
     );

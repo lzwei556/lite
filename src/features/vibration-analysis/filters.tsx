@@ -2,8 +2,8 @@ import { LightSelectFilter } from 'components';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { Property, useProperty } from './useTrend';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import * as Axis from 'domain/axis';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import * as Axis from 'domains/axis';
 
 export type PropertyFilters = {
   property: Property;

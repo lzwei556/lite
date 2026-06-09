@@ -3,8 +3,8 @@ import { getValue, roundValue } from 'utils';
 import { ChartProps, getOptions } from 'components';
 import intl from 'react-intl-universal';
 import { FeatureDataDTO } from '../../types';
-import * as Feature from 'domain/feature-property';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as Feature from 'domains/feature-property';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 const INCLINATION_OFFSET_PROPERTY = {
   displacement: {

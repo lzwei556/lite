@@ -14,7 +14,7 @@ import { UpdateFormProps } from './update-form';
 import { FormItemsSettings } from './form-items-settings';
 import { generateColProps } from 'utils/grid';
 import { Grid } from 'components';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export const UpdateFormModal = ({
   onSuccess,

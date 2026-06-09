@@ -8,7 +8,7 @@ import { generateColProps } from 'utils/grid';
 import { Icon } from '../folder/icons';
 import { useAssetsContext } from 'providers/assets';
 import { useAppConfig } from 'providers/app';
-import { AssetTree } from 'domain/asset';
+import { AssetTree } from 'domains/asset';
 
 export const OverviewLegacy = () => {
   const { assets } = useAssetsContext();
@@ -67,7 +67,9 @@ export const OverviewLegacy = () => {
                       />
                     }
                     title={
-                      <Link to={`/${AssetTree.Path.Assets}/${item.id}-${item.type}`}>{item.name}</Link>
+                      <Link to={`/${AssetTree.Path.Assets}/${item.id}-${item.type}`}>
+                        {item.name}
+                      </Link>
                     }
                   />
                 </Card>

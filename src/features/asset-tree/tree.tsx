@@ -3,8 +3,8 @@ import { AssetRow } from 'asset-common/types';
 import { useAssetsContext } from 'providers/assets';
 import { useNavigate } from 'react-router-dom';
 import { mapTree } from 'utils/tree';
-import { Hooks, AssetTree as AT } from 'domain/asset';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import { Hooks, AssetTree as AT } from 'domains/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const AssetTree = ({
   height,

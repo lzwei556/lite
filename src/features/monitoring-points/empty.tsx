@@ -1,7 +1,7 @@
 import { Empty } from 'antd';
 import { AssetRow } from 'asset-common';
 import { Card } from 'components';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export const EmptyMonitoringPoints = ({
   asset,

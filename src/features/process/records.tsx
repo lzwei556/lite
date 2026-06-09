@@ -23,8 +23,8 @@ import { Dayjs, getDisplayName, getOptionLabelByValue, getValue, roundValue } fr
 import { autoFillParameter, ProcessType, ProcessTypeKey } from 'process-type';
 import { Language, useLocaleContext } from 'localeProvider';
 import { sourceIdField } from './common';
-import * as FaultType from 'domain/fault-types';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as FaultType from 'domains/fault-types';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 type ReasonDetail = { label: string; children: string | number };
 

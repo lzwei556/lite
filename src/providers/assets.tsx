@@ -1,8 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { getMeasurement } from 'monitoring-point';
-import { Types, Hooks, Services } from 'domain/asset';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import { Types, Hooks, Services } from 'domains/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export type ContextProps = {
   assets: Types.Entity[];
@@ -33,13 +33,8 @@ export function AssetsProvider({ children }: { children?: JSX.Element }) {
 
   const { loading: assetsLoading, data: assets = [], runAsync: fetchAssets } = Services.useList();
 
-
-
   const fetchPoint = (id: number) => {
-
-    getMeasurement(id)
-      .then((point) => setSelectedNode(MonitoringPoint.Types.transform(point)))
-
+    getMeasurement(id).then((point) => setSelectedNode(MonitoringPoint.Types.transform(point)));
   };
 
   const fetchNode = React.useCallback((id: number, type: number) => {

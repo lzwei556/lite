@@ -3,7 +3,7 @@ import AntIcon from '@ant-design/icons';
 import { CustomIconComponentProps } from '@ant-design/icons/lib/components/Icon';
 import { Asset } from '../asset-common';
 import { ReactComponent as SVG } from './monitoring_point.svg';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const Icon = (
   props: Partial<CustomIconComponentProps> & { monitoringPoint: MonitoringPoint.Types.Entity }

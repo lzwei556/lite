@@ -1,7 +1,6 @@
 import request from '../utils/request';
 import { Network } from '../types/network';
 import { DeleteResponse, GetResponse, PostResponse, PutResponse } from '../utils/response';
-import { PageResult } from '../types/page';
 
 export function GetNetworkRequest(id: number) {
   return request.get<Network>(`/networks/${id}`).then(GetResponse);
@@ -9,24 +8,6 @@ export function GetNetworkRequest(id: number) {
 
 export function GetNetworksRequest() {
   return request.get<Network[]>('/networks').then(GetResponse);
-}
-
-export function PagingNetworksRequest(filter: any, page: number, size: number) {
-  return request
-    .get<PageResult<Network[]>>(`/networks`, { ...filter, page, size })
-    .then(GetResponse);
-}
-
-export function AccessDevicesRequest(networkId: number, params: any) {
-  return request.patch(`/networks/${networkId}/devices`, params).then(PutResponse);
-}
-
-export function AddDeviceRequest(id: number, param: any) {
-  return request.post(`/networks/${id}/devices`, param).then(PostResponse);
-}
-
-export function RemoveDevicesRequest(networkId: number, params: any) {
-  return request.delete(`/networks/${networkId}/devices`, params).then(DeleteResponse);
 }
 
 export function ImportNetworkRequest(params: any) {
@@ -39,10 +20,6 @@ export function CreateNetworkRequest(params: any) {
 
 export function ExportNetworkRequest(id: number) {
   return request.download<any>(`/networks/${id}/export`);
-}
-
-export function UpdateNetworkSettingRequest(gatewayId: number, wsn: any) {
-  return request.put(`/networks/setting?gatewayId=${gatewayId}`, wsn).then(PutResponse);
 }
 
 export function UpdateNetworkRequest(id: number, params: any) {

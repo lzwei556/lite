@@ -4,8 +4,8 @@ import intl from 'react-intl-universal';
 import { basicFieldColumns, usePropertyColumns } from './columns';
 import { uniq } from 'lodash';
 import { AssetRow } from 'asset-common';
-import * as MonitoringPoint from 'domain/monitoring-point';
-import { PrimaryAsset } from 'domain/asset';
+import * as MonitoringPoint from 'domains/monitoring-point';
+import { PrimaryAsset } from 'domains/asset';
 
 export const PropertyTable = ({
   asset,

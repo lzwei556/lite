@@ -1,6 +1,6 @@
 import { Flex } from 'components';
 import { LangSwitcher } from '../localeProvider';
-import { Brand } from 'domain/brand';
+import { Brand } from 'domains/brand';
 import { LoginForm, useLoginStyles } from 'features/auth';
 
 export default function Login() {

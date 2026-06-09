@@ -18,7 +18,7 @@ import {
   useAssetDiagnosis
 } from 'features/vibration-fault-diagnosis';
 import { AssetNavigator } from 'features/asset-tree';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 
 export default function Index({ asset }: { asset: AssetRow }) {
   return (

@@ -4,7 +4,7 @@ import intl from 'react-intl-universal';
 import request from 'utils/request';
 import { GetResponse } from 'utils/response';
 import { useRequest } from 'ahooks';
-import * as FaultType from 'domain/fault-types';
+import * as FaultType from 'domains/fault-types';
 
 enum Confidence {
   Slight = 1,

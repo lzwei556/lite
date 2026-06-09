@@ -2,7 +2,7 @@ import { Device } from '../../types/device';
 import { Property } from '../../types/property';
 import { DeviceType, SENSOR_DISPLAY_PROPERTIES } from '../../types/device_type';
 import { getValue } from '../../utils/format';
-import * as Feature from 'domain/feature-property';
+import * as Feature from 'domains/feature-property';
 
 export const getValueOfFirstClassProperty = (device: Device) => {
   const properties = getDisplayProperties(device.properties, device.typeId).filter((p) => p.first);

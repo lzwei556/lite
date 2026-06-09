@@ -5,7 +5,7 @@ import { Asset, AssetRow, AssetStatusTag } from 'asset-common';
 import { useGlobalStyles } from 'styles';
 import { Card, Flex, Grid, Link } from 'components';
 import { getAssetImage } from 'asset-model/utils';
-import { AssetTree } from 'domain/asset';
+import { AssetTree } from 'domains/asset';
 
 export const OverviewCard = ({ asset }: { asset: AssetRow }) => {
   const { id, name, type, statistics } = asset;

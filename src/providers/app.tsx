@@ -1,5 +1,5 @@
 import { Spin } from 'antd';
-import * as App from 'domain/app-type';
+import * as App from 'domains/app-type';
 import React from 'react';
 import request from 'utils/request';
 import { useAppTypeMappingWithSelectedProject } from './user-profile';

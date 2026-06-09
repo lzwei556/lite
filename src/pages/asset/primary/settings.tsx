@@ -12,9 +12,9 @@ import {
   useUpdateFormProps as useUpdateMonitoringPointFormProps
 } from 'features/monitoring-point-settings';
 import { ModalFormProps } from 'types/common';
-import { PrimaryAsset } from 'domain/asset';
+import { PrimaryAsset } from 'domains/asset';
 import { useAssetsContext } from 'providers/assets';
-import * as MonitoringPoint from 'domain/monitoring-point';
+import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const Settings = ({ editingAsset }: { editingAsset: AssetRow }) => {
   const settings = PrimaryAsset.getSettings(editingAsset.type);

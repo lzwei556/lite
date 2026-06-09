@@ -1,7 +1,7 @@
 import { Space, TableProps } from 'antd';
 import { AssetRow, deleteAsset } from 'asset-common';
 import { DeleteIconButton, EditIconButton, Link } from 'components';
-import { AssetTree, PrimaryAsset } from 'domain/asset';
+import { AssetTree, PrimaryAsset } from 'domains/asset';
 import { useLocaleContext } from 'localeProvider';
 import { CanAccess, Permission, useCan } from 'providers/access-control';
 import intl from 'react-intl-universal';
