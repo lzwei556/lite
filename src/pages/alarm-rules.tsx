@@ -4,8 +4,7 @@ import { Content } from 'antd/es/layout/layout';
 import { ExportOutlined, MoreOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
 import { Table, IconButton } from 'components';
-import { CreateModal } from 'features/alarm-rule-management/mutation/create-form-modal';
-import { UpdateModal } from 'features/alarm-rule-management/mutation/update-form-modal';
+import { CreateFormModal, UpdateFormModal } from 'features/alarm-rule-management';
 import { BindMonitoringPoints } from 'features/alarm-rule-management/bind-monitoring-points-modal';
 import { SelectRules } from 'features/alarm-rule-management/export-form-modal';
 import {
@@ -93,12 +92,12 @@ export default function AlarmRules() {
           actions: {
             create: {
               can: useCan(Permission.AlarmRuleGroupAdd),
-              modal: (ctx) => <CreateModal {...ctx} />,
+              modal: (ctx) => <CreateFormModal {...ctx} />,
               onSuccess: refresh
             },
             update: {
               can: useCan(Permission.AlarmRuleGroupEdit),
-              modal: (ctx: any) => <UpdateModal {...ctx} />,
+              modal: (ctx: any) => <UpdateFormModal {...ctx} />,
               onSuccess: refresh
             },
             delete: {
@@ -115,7 +114,8 @@ export default function AlarmRules() {
                   size='small'
                   onClick={() => open('bind', record)}
                 />
-              )
+              ),
+              sort: 8
             },
             export: {
               can: useCan(Permission.AlarmRuleGroupDelete),

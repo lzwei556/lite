@@ -2,20 +2,10 @@ import { getValue } from 'utils';
 import intl from 'react-intl-universal';
 import request from 'utils/request';
 import { Property } from 'asset-common';
-import { AlarmRule, buildMetricData, CreateData, Query, UpdateData } from './types';
-import * as Feature from 'domains/feature-property';
+import { AlarmRule, buildMetric, CreateData, Query, UpdateData } from './types';
 
-export const create = async ({
-  properties,
-  ...data
-}: CreateData & { properties: Feature.Types.Property[] }) => {
-  const transform = {
-    ...data,
-    rules: data.rules.map((r) => ({
-      ...r,
-      metric: buildMetricData(r.metric, properties)
-    }))
-  };
+export const create = async ({ properties, ...data }: CreateData) => {
+ 
   return request.post(`alarmRuleGroups`, transform);
 };
 

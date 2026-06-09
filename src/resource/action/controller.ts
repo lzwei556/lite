@@ -54,7 +54,7 @@ export function useActionController<T extends BaseEntity, C = any, U = any>(
       update: {
         label: 'Edit',
         position: 'row',
-        sort: 9,
+        sort: 4,
         state: updateState
       }
     }),
@@ -63,7 +63,7 @@ export function useActionController<T extends BaseEntity, C = any, U = any>(
       delete: {
         label: 'Delete',
         position: 'row',
-        sort: 10,
+        sort: 5,
         state: deleteState
       }
     })

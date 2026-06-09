@@ -1,21 +1,20 @@
 import * as React from 'react';
-import { Col, Form, ModalProps } from 'antd';
+import { Form, ModalProps } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import intl from 'react-intl-universal';
-import { FormItem, Grid, IconButton, Table } from 'components';
-import { generateColProps } from 'utils/grid';
+import { IconButton } from 'components';
 import { ModalWrapper } from 'components/modalWrapper';
 import * as AlarmLevel from 'domains/alarm-level';
 import { ActionModalContext, createSubmitHandler } from 'resource';
-import { AlarmRuleGroupFields, CreateData } from 'domains/alarm-rule';
+import { CreateData } from 'domains/alarm-rule';
 import { useSelectMonitoringPointType } from './use-select-monitoring-point-type';
-import { getRuleColumns } from './rule-columns';
+import { GroupFormItems } from '../form-items/group';
+import { EditTable } from '../form-items/edit-table';
 import { NameFormItem } from '../form-items/name';
 import { MetricFormItem } from '../form-items/metric';
 import { DurationFormItem } from '../form-items/duration';
 import { ConditionFormItem } from '../form-items/trigger-condition';
 import { AlarmLevelsFormItem } from '../form-items/levels-select';
-import { toUniversalFormItemProps } from 'types';
 
 // ---------- 表单默认值 ----------
 const defaultRule = {
@@ -24,12 +23,12 @@ const defaultRule = {
   level: AlarmLevel.Enum.Critical
 };
 
-export function CreateModal({
+export const CreateFormModal = ({
   loading,
   submit,
   close,
   ...rest
-}: ModalProps & ActionModalContext<any, CreateData>) {
+}: ModalProps & ActionModalContext<any, CreateData>) => {
   const [form] = Form.useForm<CreateData>();
   const [unit, setUnit] = React.useState<string>();
   const { properties, ...monitoringPointSelectProps } = useSelectMonitoringPointType(form, setUnit);
@@ -49,38 +48,26 @@ export function CreateModal({
       width={860}
     >
       <Form form={form} layout='vertical'>
-        <Grid>
-          <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-            <FormItem {...toUniversalFormItemProps({ field: AlarmRuleGroupFields.Name })} />
-          </Col>
-          <Col {...generateColProps({ xl: 12, xxl: 12 })}>
-            <FormItem
-              {...toUniversalFormItemProps({ field: AlarmRuleGroupFields.Type })}
-              selectProps={monitoringPointSelectProps}
-            />
-          </Col>
-          <Col {...generateColProps({})}>
-            <FormItem {...toUniversalFormItemProps({ field: AlarmRuleGroupFields.Description })} />
-          </Col>
-        </Grid>
+        <GroupFormItems {...monitoringPointSelectProps} />
         <Form.List name='rules' initialValue={[defaultRule]}>
           {(fields, { add, remove }, { errors }) => (
             <>
-              <Table
-                cardProps={{ style: { marginBottom: 16 } }}
-                columns={getRuleColumns({
+              <EditTable
+                {...{
+                  fields,
                   onRemove: remove,
-                  renderNameFormItem: (index) => <NameFormItem nameIndex={index} />,
-                  renderIndexFormItem: (index) => (
+                  renderNameFormItem: (index: number) => <NameFormItem nameIndex={index} />,
+                  renderIndexFormItem: (index: number) => (
                     <MetricFormItem nameIndex={index} onChange={setUnit} properties={properties} />
                   ),
-                  renderDurationFormItem: (index) => <DurationFormItem nameIndex={index} />,
-                  renderConditionFormItem: (index) => (
+                  renderDurationFormItem: (index: number) => <DurationFormItem nameIndex={index} />,
+                  renderConditionFormItem: (index: number) => (
                     <ConditionFormItem nameIndex={index} unit={unit} />
                   ),
-                  renderSeverityFormItem: (index) => <AlarmLevelsFormItem nameIndex={index} />
-                })}
-                dataSource={fields}
+                  renderSeverityFormItem: (index: number) => (
+                    <AlarmLevelsFormItem nameIndex={index} />
+                  )
+                }}
                 footer={() => (
                   <IconButton
                     icon={<PlusCircleOutlined />}
@@ -88,9 +75,6 @@ export function CreateModal({
                     onClick={() => add(defaultRule)}
                   />
                 )}
-                header={{ title: intl.get('sub.rules') }}
-                noScroll
-                pagination={false}
               />
               <Form.ErrorList errors={errors} />
             </>
@@ -99,4 +83,4 @@ export function CreateModal({
       </Form>
     </ModalWrapper>
   );
-}
+};

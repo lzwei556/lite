@@ -5,12 +5,18 @@ import { zq } from 'resource';
 import { Option } from 'common/types';
 import * as Feature from 'domains/feature-property';
 
+const Category = {
+  Custom: 2
+} as const;
+
 // alarm rule begin
 type MetricInput = string[];
 
 export type Metric = { key: string; name: string; unit: string };
 
-export const buildMetricData = (
+const KEY_SEPARATOR = '.';
+
+export const buildMetric = (
   values: MetricInput,
   properties: Feature.Types.Property[]
 ): Metric | undefined => {
@@ -19,13 +25,17 @@ export const buildMetricData = (
     if (property) {
       const field = (property.fields ?? []).find((f) => f.key === values?.[1]);
       const metric = {
-        key: (values.length === 1 ? values.concat(values) : values).join('.'),
+        key: (values.length === 1 ? values.concat(values) : values).join(KEY_SEPARATOR),
         name: (field ? [property.name, field.name] : [property.name]).join(':'),
         unit: property.unit ? intl.get(property.unit).d(property.unit) : property.unit || ''
       };
       return metric;
     }
   }
+};
+
+export const parseMetric = (value: Metric): MetricInput => {
+  return value.key.split(KEY_SEPARATOR).slice(0, 1);
 };
 
 type RuleEditablePart = {
@@ -36,15 +46,30 @@ type RuleEditablePart = {
   threshold: number;
 };
 
-export type CreateData = {
-  category: number;
+export type SubmitDataInput = {
   description: string;
   name: string;
   rules: (RuleEditablePart & { metric: MetricInput })[];
   type: number;
 };
 
-export type UpdateData = CreateData;
+export type SubmitData = SubmitDataInput & {
+  category: number;
+  rules: (RuleEditablePart & { metric: Metric })[];
+  // TO-DO
+  properties: Feature.Types.Property[];
+};
+
+export const transform2SubmitData = (data: SubmitData, properties: Feature.Types.Property[]) => {
+  return {
+    ...data,
+    category: Category.Custom,
+    rules: data.rules.map((r) => ({
+      ...r,
+      metric: buildMetric(r.metric, properties)
+    }))
+  };
+};
 
 type RuleDTO = RuleEditablePart & {
   category: number;

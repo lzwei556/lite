@@ -8,12 +8,12 @@ export const MetricFormItem = ({
   disabled,
   nameIndex,
   onChange,
-  properties
+  properties = []
 }: {
   disabled?: boolean;
   nameIndex: number;
-  onChange: (unit?: string) => void;
-  properties: Feature.Types.Property[];
+  onChange?: (unit?: string) => void;
+  properties?: Feature.Types.Property[];
 }) => {
   return (
     <TextFormItem

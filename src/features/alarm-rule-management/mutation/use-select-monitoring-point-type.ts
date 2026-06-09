@@ -7,7 +7,7 @@ import * as MonitoringPoint from 'domains/monitoring-point';
 
 export const useSelectMonitoringPointType = (
   form: FormInstance,
-  setUnit: (unit?: string) => void
+  setUnit?: (unit?: string) => void
 ) => {
   const [properties, setProperties] = React.useState<Feature.Types.Property[]>([]);
 
@@ -18,7 +18,7 @@ export const useSelectMonitoringPointType = (
       const rules: Rule[] = (form.getFieldValue('rules') ?? []).filter((r: Rule) => !!r.metric);
       if (rules.length) {
         form.resetFields(['rules']);
-        setUnit(undefined);
+        setUnit?.(undefined);
       }
 
       // 获取并设置新属性列表
